@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — IT Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#04040a;--surface:#0a0a14;--surface2:#111120;
+    --border:rgba(255,255,255,0.07);--border-active:rgba(200,241,53,0.4);
+    --lime:#c8f135;--lime-dim:rgba(200,241,53,0.12);--lime-glow:rgba(200,241,53,0.25);
+    --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;--red:#ff5f56;
+    --gold:#f7b731;--gold-dim:rgba(247,183,49,0.12);
+    --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box; cursor: none !important;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
+  .ambient{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+  .ambient-1{width:500px;height:500px;background:rgba(200,241,53,0.06);top:-100px;left:-100px;}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,10,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:0.12em;color:var(--text);text-decoration:none;}
+  .nav-logo span{color:var(--lime);}
+  .nav-back{font-family:var(--ff-mono);font-size:12px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
+  .nav-back:hover{color:var(--lime);}
+
+  /* LAYOUT */
+  .layout{position:relative;z-index:1;display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 64px);}
+
+  /* SIDEBAR */
+  .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:32px 24px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
+  .sidebar-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;padding:0 12px;margin-bottom:8px;}
+  .sidebar-progress{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;}
+  .sp-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+  .sp-label{font-size:12px;color:var(--muted2);font-family:var(--ff-mono);}
+  .sp-value{font-family:var(--ff-display);font-size:26px;color:var(--lime);line-height:1;}
+  .pbar{width:100%;height:5px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden;}
+  .pbar-fill{height:100%;background:linear-gradient(90deg,var(--lime),#a8e020);border-radius:99px;width:0%;transition:width 0.1s linear;}
+
+  .toc-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;background:transparent;border:1px solid transparent;border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:left;width:100%;color:var(--muted2);text-decoration:none;}
+  .toc-btn:hover{background:var(--lime-dim);color:var(--text);transform:translateX(3px);}
+  .toc-btn.active{background:var(--lime-dim);border-color:var(--border-active);color:var(--lime);}
+  .lb-num{width:26px;height:26px;border-radius:7px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--ff-mono);font-size:11px;font-weight:600;flex-shrink:0;}
+
+  /* MAIN */
+  .main{padding:48px;display:flex;flex-direction:column;gap:60px;max-width:900px;}
+
+  /* HERO */
+  .hero-eyebrow{font-family:var(--ff-mono);font-size:11px;letter-spacing:0.18em;color:var(--lime);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .hero-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--lime);}
+  .hero-title{font-family:var(--ff-display);font-size:clamp(40px,5vw,64px);font-weight:800;line-height:1;letter-spacing:-0.02em;color:var(--text);margin-bottom:20px;}
+  .hero-title em{font-style:normal;color:var(--lime);}
+  .hero-desc{color:var(--muted2);font-size:15px;line-height:1.75;}
+
+  /* POLICY CONTENT */
+  .policy-section{scroll-margin-top:100px;display:flex;flex-direction:column;gap:20px;}
+  .section-label{font-family:var(--ff-mono);font-size:11px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+  .policy-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:32px;transition:border-color 0.3s;}
+  .policy-card:hover{border-color:var(--border-active);}
+  .pc-title{font-family:var(--ff-display);font-size:28px;font-weight:800;margin-bottom:16px;color:var(--text);}
+  .pc-body{font-size:15px;line-height:1.85;color:var(--muted2);}
+  .pc-body strong{color:var(--text);}
+  .pc-body ul{margin-top:16px;list-style:none;display:flex;flex-direction:column;gap:12px;}
+  .pc-body li{display:flex;gap:12px;align-items:flex-start;}
+  .pc-body li::before{content:'→';color:var(--lime);font-family:var(--ff-mono);}
+
+  /* FOOTER NOTE */
+  .legal-footer{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;}
+  .legal-footer p{font-size:13px;color:var(--muted);font-family:var(--ff-mono);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .fade-up{animation:fadeUp 0.5s ease forwards;opacity:0;}
+
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+    .main{padding:24px;}
+  }
+</style>
+</head>
+<body>
+<div class="ambient ambient-1"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back Home
+  </a>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <p class="sidebar-label">Read Status</p>
+    <div class="sidebar-progress">
+      <div class="sp-row">
+        <span class="sp-label">Completion</span>
+        <span class="sp-value" id="readPercent">0%</span>
+      </div>
+      <div class="pbar"><div class="pbar-fill" id="readFill"></div></div>
+    </div>
+
+    <p class="sidebar-label">Sections</p>
+    <a href="#section-1" class="toc-btn active">
+      <div class="lb-num">01</div>
+      <span style="font-size:13px;">Data Collection</span>
+    </a>
+    <a href="#section-2" class="toc-btn">
+      <div class="lb-num">02</div>
+      <span style="font-size:13px;">Usage of Data</span>
+    </a>
+    <a href="#section-3" class="toc-btn">
+      <div class="lb-num">03</div>
+      <span style="font-size:13px;">Cookies Policy</span>
+    </a>
+    <a href="#section-4" class="toc-btn">
+      <div class="lb-num">04</div>
+      <span style="font-size:13px;">Third Parties</span>
+    </a>
+  </aside>
+
+  <main class="main">
+    <section class="hero fade-up">
+      <div class="hero-eyebrow">Legal · Version 2.0</div>
+      <h1 class="hero-title">Privacy<br><em>Policy</em></h1>
+      <p class="hero-desc">At IT Study Hub, we value your privacy as much as your education. This document outlines how we collect, protect, and handle your data across our platforms.</p>
+    </section>
+
+    <div id="section-1" class="policy-section fade-up" style="animation-delay:0.1s;">
+      <div class="section-label">Section 01</div>
+      <div class="policy-card">
+        <h2 class="pc-title">Information Collection</h2>
+        <div class="pc-body">
+          We collect information that you provide directly to us when you create an account, purchase a premium module, or contact support. 
+          <strong>The types of information we may collect include:</strong>
+          <ul>
+            <li>Name and contact information (Email address).</li>
+            <li>Academic progress and course completion data.</li>
+            <li>Payment metadata (handled via secure encrypted gateways).</li>
+            <li>Technical log data (IP address, browser type).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="section-2" class="policy-section fade-up" style="animation-delay:0.2s;">
+      <div class="section-label">Section 02</div>
+      <div class="policy-card">
+        <h2 class="pc-title">How We Use Data</h2>
+        <div class="pc-body">
+          Your data is primarily used to provide a seamless learning experience. We do not sell your personal data to third-party advertisers. 
+          <strong>We use your data to:</strong>
+          <ul>
+            <li>Track your progress across C, Java, and Python modules.</li>
+            <li>Provide certificates of completion.</li>
+            <li>Send critical platform updates and security alerts.</li>
+            <li>Personalize your dashboard and "Study Materials" recommendations.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="section-3" class="policy-section fade-up" style="animation-delay:0.3s;">
+      <div class="section-label">Section 03</div>
+      <div class="policy-card">
+        <h2 class="pc-title">Cookies & Tracking</h2>
+        <div class="pc-body">
+          We use <strong>local storage</strong> and cookies to remember your progress (like the "Mark as Complete" status) and keep you logged in. These are essential for the platform's core functionality. You can disable cookies in your browser settings, but some features of the IT Study Hub may stop working.
+        </div>
+      </div>
+    </div>
+
+    <div id="section-4" class="policy-section fade-up" style="animation-delay:0.4s;">
+      <div class="section-label">Section 04</div>
+      <div class="policy-card">
+        <h2 class="pc-title">Third-Party Services</h2>
+        <div class="pc-body">
+          We may use third-party analytics (like Google Analytics) to understand platform traffic and secure payment processors for premium upgrades. These services have their own privacy policies and we encourage you to review them.
+        </div>
+      </div>
+    </div>
+
+    <footer class="legal-footer fade-up" style="animation-delay:0.5s;">
+      <p>Last Updated: May 2026 · IT Study Hub Legal Team</p>
+    </footer>
+  </main>
+</div>
+
+<script>
+  // Update progress bar based on scroll
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = Math.round((winScroll / height) * 100);
+    
+    document.getElementById("readFill").style.width = scrolled + "%";
+    document.getElementById("readPercent").textContent = scrolled + "%";
+
+    // Update active state in sidebar
+    const sections = document.querySelectorAll('.policy-section');
+    const navLinks = document.querySelectorAll('.toc-btn');
+    
+    let current = "";
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      if (pageYOffset >= sectionTop - 120) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href').includes(current)) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+<!-- Custom Cursor -->
+<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
+<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+
+<script>
+const c = document.getElementById('cur');
+const r = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function anim(){
+  c.style.left=(mx-5)+'px'; c.style.top=(my-5)+'px';
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  r.style.left=(rx-18)+'px'; r.style.top=(ry-18)+'px';
+  requestAnimationFrame(anim);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');
+  el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');
+});
+</script>
+</body>
+</html>

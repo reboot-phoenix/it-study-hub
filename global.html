@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Dashboard — IT Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#04040a;--surface:#0a0a14;--surface2:#111120;
+    --border:rgba(255,255,255,0.07);--border-active:rgba(200,241,53,0.4);
+    --lime:#c8f135;--lime-dim:rgba(200,241,53,0.12);--lime-glow:rgba(200,241,53,0.25);
+    --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;--gold:#f7b731;
+    --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box; cursor: none !important;}
+  body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,10,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:0.12em;color:var(--text);text-decoration:none;}
+  .nav-logo span{color:var(--lime);}
+  .nav-back{font-family:var(--ff-mono);font-size:12px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
+  .nav-back:hover{color:var(--lime);}
+
+  /* LAYOUT */
+  .layout{position:relative;z-index:1;display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 64px);}
+
+  /* SIDEBAR (Quick Stats) */
+  .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:32px 24px;position:sticky;top:64px;height:calc(100vh - 64px);}
+  .sidebar-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-bottom:12px;display:block;}
+  
+  .stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;}
+  .stat-val{font-family:var(--ff-display);font-size:24px;color:var(--lime);}
+  .stat-lab{font-size:11px;color:var(--muted2);font-family:var(--ff-mono);}
+
+  /* MAIN CONTENT */
+  .main{padding:48px;display:flex;flex-direction:column;gap:40px;}
+  .hero-title{font-family:var(--ff-display);font-size:48px;font-weight:800;line-height:1;margin-bottom:8px;}
+  .hero-title em{font-style:normal;color:var(--lime);}
+
+  /* ACHIEVEMENT GRID */
+  .grid-2{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;}
+
+  /* LEADERBOARD TABLE */
+  .leaderboard{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+  .lb-header{padding:24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .lb-table{width:100%;border-collapse:collapse;}
+  .lb-table th{text-align:left;padding:16px 24px;font-family:var(--ff-mono);font-size:11px;color:var(--muted);text-transform:uppercase;}
+  .lb-table td{padding:16px 24px;border-top:1px solid var(--border);font-size:14px;}
+  .lb-row-me{background:var(--lime-dim);}
+  
+  .rank-badge{width:24px;height:24px;border-radius:6px;background:var(--surface2);display:inline-flex;align-items:center;justify-content:center;font-family:var(--ff-mono);font-size:11px;margin-right:10px;}
+  .xp-tag{color:var(--lime);font-family:var(--ff-mono);font-weight:600;}
+
+  /* BADGES */
+  .badge-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(80px, 1fr));gap:16px;}
+  .badge-item{aspect-ratio:1;background:var(--surface2);border:1px solid var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;position:relative;transition:all 0.2s;cursor:help;}
+  .badge-item:hover{border-color:var(--lime);transform:scale(1.05);}
+  .badge-locked{opacity:0.2;filter:grayscale(1);}
+  .badge-locked::after{content:'🔒';position:absolute;font-size:12px;bottom:8px;right:8px;opacity:1;}
+
+  .section-label{font-family:var(--ff-mono);font-size:11px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .fade-up{animation:fadeUp 0.5s ease forwards;}
+
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+    .grid-2{grid-template-columns:1fr;}
+    .main{padding:24px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back Home
+  </a>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <span class="sidebar-label">Your Standing</span>
+    <div class="stat-card">
+        <div class="stat-val">#1,402</div>
+        <div class="stat-lab">GLOBAL RANK</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-val">4,250</div>
+        <div class="stat-lab">TOTAL XP</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-val">82%</div>
+        <div class="stat-lab">ACCURACY</div>
+    </div>
+    <div class="stat-card" style="border-color:var(--gold);">
+        <div class="stat-val" style="color:var(--gold);">5</div>
+        <div class="stat-lab" style="color:var(--gold);">DAY STREAK 🔥</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="fade-up">
+      <div style="font-family:var(--ff-mono); font-size:11px; color:var(--lime); margin-bottom:8px;">STUDENT PERFORMANCE</div>
+      <h1 class="hero-title">Global <em>Leaderboard</em></h1>
+      <p style="color:var(--muted2); font-size:15px; max-width:550px;">Compete with students worldwide. XP is earned by completing modules, passing quizzes, and helping others in the community.</p>
+    </header>
+
+    <div class="grid-2">
+      <!-- Leaderboard -->
+      <section class="fade-up" style="animation-delay:0.1s;">
+        <div class="section-label">Top Scholars</div>
+        <div class="leaderboard">
+            <div class="lb-header">
+                <div style="font-family:var(--ff-display); font-size:18px;">Season 04</div>
+                <div style="font-family:var(--ff-mono); font-size:11px; color:var(--muted);">Ends in 12 Days</div>
+            </div>
+            <table class="lb-table">
+                <thead>
+                    <tr><th>Rank</th><th>Developer</th><th>XP</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="rank-badge">01</span> NullPointer_Ex</td><td class="xp-tag">12,400</td><td>Lvl 45</td></tr>
+                    <tr><td><span class="rank-badge">02</span> PythonQueen</td><td class="xp-tag">11,850</td><td>Lvl 42</td></tr>
+                    <tr><td><span class="rank-badge">03</span> Ritchie_Fan_72</td><td class="xp-tag">10,200</td><td>Lvl 39</td></tr>
+                    <tr class="lb-row-me"><td><span class="rank-badge" style="background:var(--lime); color:#000;">1402</span> Developer.exe (You)</td><td class="xp-tag">4,250</td><td>Lvl 18</td></tr>
+                    <tr><td><span class="rank-badge">1403</span> CodeWarrior_9</td><td class="xp-tag">4,210</td><td>Lvl 17</td></tr>
+                </tbody>
+            </table>
+        </div>
+      </section>
+
+      <!-- Badge Collection -->
+      <section class="fade-up" style="animation-delay:0.2s;">
+        <div class="section-label">Milestones</div>
+        <div class="badge-grid">
+            <div class="badge-item" title="Hello World: Completed first module">🌟</div>
+            <div class="badge-item" title="C-Master: Completed all C lessons">⚙️</div>
+            <div class="badge-item badge-locked" title="Locked: Complete Java OOPs">☕</div>
+            <div class="badge-item badge-locked" title="Locked: Achieve a 10-day streak">🔥</div>
+            <div class="badge-item" title="Bug Hunter: Passed first quiz with 100%">🐞</div>
+            <div class="badge-item badge-locked" title="Locked: Complete 5 course roadmaps">🏆</div>
+            <div class="badge-item" title="Night Owl: Code after 12 AM">🦉</div>
+            <div class="badge-item badge-locked" title="Locked: Contribute to a project">🤝</div>
+        </div>
+        
+        <div style="margin-top:30px; background:var(--surface2); border:1px solid var(--border); padding:24px; border-radius:20px;">
+            <div class="section-label" style="margin-bottom:12px;">Skill Breakdown</div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <div style="font-size:12px;">Low Level (C/C++) <span style="float:right; color:var(--lime);">75%</span></div>
+                <div style="width:100%; height:4px; background:var(--bg); border-radius:2px;"><div style="width:75%; height:100%; background:var(--lime);"></div></div>
+                
+                <div style="font-size:12px;">Object Oriented (Java/C#) <span style="float:right; color:var(--lime);">30%</span></div>
+                <div style="width:100%; height:4px; background:var(--bg); border-radius:2px;"><div style="width:30%; height:100%; background:var(--lime);"></div></div>
+            </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+<!-- Custom Cursor -->
+<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
+<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+
+<script>
+const c = document.getElementById('cur');
+const r = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function anim(){
+  c.style.left=(mx-5)+'px'; c.style.top=(my-5)+'px';
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  r.style.left=(rx-18)+'px'; r.style.top=(ry-18)+'px';
+  requestAnimationFrame(anim);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');
+  el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');
+});
+</script>
+</body>
+</html>

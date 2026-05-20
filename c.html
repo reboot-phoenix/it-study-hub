@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C Programming — IT Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#04040a;--surface:#0a0a14;--surface2:#111120;
+    --border:rgba(255,255,255,0.07);--border-active:rgba(200,241,53,0.4);
+    --lime:#c8f135;--lime-dim:rgba(200,241,53,0.12);--lime-glow:rgba(200,241,53,0.25);
+    --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;--red:#ff5f56;
+    --gold:#f7b731;--gold-dim:rgba(247,183,49,0.12);
+    --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor: none !important;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
+  .ambient{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+  .ambient-1{width:500px;height:500px;background:rgba(200,241,53,0.06);top:-100px;left:-100px;}
+  .ambient-2{width:400px;height:400px;background:rgba(100,80,200,0.05);bottom:200px;right:-100px;}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,10,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:0.12em;color:var(--text);text-decoration:none;}
+  .nav-logo span{color:var(--lime);}
+  .nav-back{font-family:var(--ff-mono);font-size:12px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
+  .nav-back:hover{color:var(--lime);}
+
+  /* LAYOUT */
+  .layout{position:relative;z-index:1;display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 64px);}
+
+  /* SIDEBAR */
+  .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:32px 24px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
+  .sidebar::-webkit-scrollbar{width:4px;}
+  .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+  .sidebar-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;padding:0 12px;margin-bottom:8px;}
+  .sidebar-progress{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;}
+  .sp-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+  .sp-label{font-size:12px;color:var(--muted2);font-family:var(--ff-mono);}
+  .sp-value{font-family:var(--ff-display);font-size:26px;color:var(--lime);line-height:1;}
+  .pbar{width:100%;height:5px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden;}
+  .pbar-fill{height:100%;background:linear-gradient(90deg,var(--lime),#a8e020);border-radius:99px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1);width:0%;}
+
+  .lesson-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;background:transparent;border:1px solid transparent;border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:left;width:100%;color:var(--muted2);}
+  .lesson-btn:hover:not(.locked){background:var(--lime-dim);border-color:var(--border-active);color:var(--text);transform:translateX(3px);}
+  .lesson-btn.active{background:var(--lime-dim);border-color:var(--border-active);color:var(--lime);}
+  .lesson-btn.done .lb-num{background:var(--lime);color:#000;}
+  .lesson-btn.locked{opacity:0.35;cursor:not-allowed;}
+  .lb-num{width:26px;height:26px;border-radius:7px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--ff-mono);font-size:11px;font-weight:600;flex-shrink:0;transition:all 0.2s;}
+  .lb-info{flex:1;}
+  .lb-title{font-size:13px;font-weight:500;font-family:var(--ff-body);line-height:1.3;display:block;}
+  .lb-sub{font-size:11px;color:var(--muted);display:block;margin-top:2px;font-family:var(--ff-mono);}
+  .lb-badge{font-size:10px;font-family:var(--ff-mono);padding:2px 7px;border-radius:4px;background:var(--red);color:#fff;}
+  .lb-badge.premium-badge{background:var(--gold);color:#000;}
+
+  /* PREMIUM LOCKED SIDEBAR */
+  .sidebar-premium-note{background:var(--gold-dim);border:1px solid rgba(247,183,49,0.25);border-radius:10px;padding:14px;margin-top:8px;}
+  .spn-title{font-family:var(--ff-mono);font-size:11px;color:var(--gold);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+  .spn-text{font-size:12px;color:var(--muted2);line-height:1.5;}
+  .spn-btn{display:block;margin-top:10px;padding:8px 12px;background:var(--gold);color:#000;font-family:var(--ff-mono);font-size:11px;font-weight:700;border-radius:6px;text-align:center;text-decoration:none;transition:opacity 0.2s;cursor:pointer;border:none;width:100%;}
+  .spn-btn:hover{opacity:0.85;}
+
+  /* MAIN */
+  .main{padding:48px;display:flex;flex-direction:column;gap:40px;}
+
+  /* HERO */
+  .hero-eyebrow{font-family:var(--ff-mono);font-size:11px;letter-spacing:0.18em;color:var(--lime);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .hero-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--lime);}
+  .hero-title{font-family:var(--ff-display);font-size:clamp(48px,6vw,80px);font-weight:800;line-height:0.95;letter-spacing:-0.02em;color:var(--text);margin-bottom:20px;}
+  .hero-title em{font-style:normal;color:var(--lime);}
+  .hero-desc{color:var(--muted2);font-size:15px;line-height:1.75;max-width:520px;}
+  .hero-stats{display:flex;gap:32px;margin-top:28px;}
+  .stat{display:flex;flex-direction:column;gap:4px;}
+  .stat-num{font-family:var(--ff-display);font-size:28px;color:var(--lime);line-height:1;}
+  .stat-label{font-size:12px;color:var(--muted);font-family:var(--ff-mono);}
+
+  /* LESSON VIEWER */
+  .lesson-viewer{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;min-height:320px;display:flex;flex-direction:column;transition:border-color 0.3s;}
+  .lesson-viewer.active-lesson{border-color:var(--border-active);}
+  .lv-header{padding:24px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .lv-breadcrumb{font-family:var(--ff-mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+  .lv-breadcrumb span{color:var(--lime);}
+  .lv-body{padding:36px 28px;flex:1;}
+  .lv-placeholder{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;min-height:220px;}
+  .lv-placeholder-icon{width:56px;height:56px;border-radius:16px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:24px;}
+  .lv-placeholder h3{font-family:var(--ff-display);font-size:22px;color:var(--muted2);font-weight:700;}
+  .lv-placeholder p{font-size:14px;color:var(--muted);max-width:300px;line-height:1.6;}
+  .lv-lesson-title{font-family:var(--ff-display);font-size:34px;font-weight:800;margin-bottom:6px;color:var(--text);}
+  .lv-lesson-tag{font-family:var(--ff-mono);font-size:11px;color:var(--lime);background:var(--lime-dim);padding:4px 10px;border-radius:99px;display:inline-block;margin-bottom:20px;border:1px solid var(--border-active);}
+  .lv-lesson-tag.premium-tag{color:var(--gold);background:var(--gold-dim);border-color:rgba(247,183,49,0.3);}
+  .lv-lesson-body{font-size:15px;line-height:1.85;color:var(--muted2);max-width:620px;}
+  .lv-lesson-body strong{color:var(--text);font-weight:500;}
+  .lv-topics{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+  .lv-topic{font-family:var(--ff-mono);font-size:12px;padding:6px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted2);}
+  .lv-footer{padding:20px 28px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+
+  /* PREMIUM LOCKED VIEW */
+  .lv-premium-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;min-height:220px;padding:40px;}
+  .lock-icon{width:64px;height:64px;border-radius:18px;background:var(--gold-dim);border:1px solid rgba(247,183,49,0.3);display:flex;align-items:center;justify-content:center;font-size:28px;}
+  .lock-title{font-family:var(--ff-display);font-size:26px;color:var(--gold);}
+  .lock-text{font-size:14px;color:var(--muted2);max-width:360px;line-height:1.7;}
+  .lock-btn{padding:12px 28px;background:var(--gold);color:#000;font-family:var(--ff-mono);font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;}
+  .lock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(247,183,49,0.3);}
+
+  .btn-primary{padding:11px 24px;background:var(--lime);color:#000;font-family:var(--ff-mono);font-size:13px;font-weight:600;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;text-decoration:none;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--lime-glow);}
+  .btn-ghost{padding:11px 20px;background:transparent;color:var(--muted2);font-family:var(--ff-mono);font-size:13px;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.2s;}
+  .btn-ghost:hover{border-color:var(--border-active);color:var(--lime);}
+  .done-msg{font-family:var(--ff-mono);font-size:12px;color:var(--lime);display:none;align-items:center;gap:6px;}
+  .done-msg.show{display:flex;}
+
+  /* SECTION */
+  .section-label{font-family:var(--ff-mono);font-size:11px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+  /* MODULES GRID */
+  .modules-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .module-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;}
+  .module-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--lime),transparent);opacity:0;transition:opacity 0.25s;}
+  .module-card:hover:not(.mc-locked){border-color:var(--border-active);background:var(--surface2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.4);}
+  .module-card:hover:not(.mc-locked)::before{opacity:1;}
+  .module-card.mc-locked{opacity:0.5;cursor:not-allowed;}
+  .module-card.mc-premium{border-color:rgba(247,183,49,0.2);}
+  .module-card.mc-premium::before{background:linear-gradient(90deg,var(--gold),transparent);}
+  .module-card.mc-premium:hover:not(.mc-locked){border-color:rgba(247,183,49,0.5);}
+  .mc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;}
+  .mc-icon{width:40px;height:40px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .mc-badge{font-family:var(--ff-mono);font-size:10px;padding:4px 8px;border-radius:6px;font-weight:600;}
+  .mc-badge.start{background:var(--lime-dim);color:var(--lime);border:1px solid var(--border-active);}
+  .mc-badge.locked-b{background:rgba(255,95,86,0.12);color:var(--red);border:1px solid rgba(255,95,86,0.2);}
+  .mc-badge.done-b{background:rgba(200,241,53,0.2);color:var(--lime);border:1px solid var(--border-active);}
+  .mc-badge.premium-b{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(247,183,49,0.3);}
+  .mc-title{font-family:var(--ff-display);font-size:18px;font-weight:800;margin-bottom:4px;color:var(--text);}
+  .mc-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .mc-lessons{font-family:var(--ff-mono);font-size:11px;color:var(--muted);margin-top:12px;}
+
+  /* MATERIALS */
+  .materials-list{display:flex;flex-direction:column;gap:10px;}
+  .material-item{display:flex;align-items:center;gap:16px;padding:16px 18px;background:var(--surface);border:1px solid var(--border);border-radius:12px;transition:all 0.2s;text-decoration:none;}
+  .material-item:hover{border-color:var(--border-active);background:var(--surface2);transform:translateX(4px);}
+  .material-item.premium-item{border-color:rgba(247,183,49,0.2);}
+  .material-item.premium-item:hover{border-color:rgba(247,183,49,0.5);}
+  .mat-icon{width:38px;height:38px;border-radius:9px;background:var(--lime-dim);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .mat-icon.premium-icon{background:var(--gold-dim);border-color:rgba(247,183,49,0.3);}
+  .mat-info{flex:1;}
+  .mat-title{font-size:14px;font-weight:500;color:var(--text);display:block;margin-bottom:2px;}
+  .mat-desc{font-size:12px;color:var(--muted);font-family:var(--ff-mono);}
+  .mat-action{font-family:var(--ff-mono);font-size:11px;color:var(--lime);background:var(--lime-dim);border:1px solid var(--border-active);padding:6px 14px;border-radius:7px;white-space:nowrap;transition:all 0.2s;text-decoration:none;}
+  .material-item:hover .mat-action{background:var(--lime);color:#000;}
+  .mat-action.premium-action{color:var(--gold);background:var(--gold-dim);border-color:rgba(247,183,49,0.3);}
+  .material-item.premium-item:hover .mat-action.premium-action{background:var(--gold);color:#000;}
+  .mat-lock{font-size:14px;}
+
+  /* OUTCOMES */
+  .outcomes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .outcome-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color 0.2s;}
+  .outcome-card:hover{border-color:var(--border-active);}
+  .oc-icon{font-size:22px;margin-bottom:12px;}
+  .oc-title{font-family:var(--ff-display);font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text);}
+  .oc-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:32px;right:32px;background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text);z-index:999;transform:translateY(80px);opacity:0;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);pointer-events:none;max-width:320px;}
+  .toast.show{transform:translateY(0);opacity:1;}
+  .toast-msg{font-family:var(--ff-mono);font-size:12px;color:var(--lime);}
+  .toast.gold-toast{border-color:rgba(247,183,49,0.4);}
+  .toast.gold-toast .toast-msg{color:var(--gold);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .fade-up{animation:fadeUp 0.5s ease forwards;opacity:0;}
+  .delay-1{animation-delay:0.1s;}.delay-2{animation-delay:0.2s;}.delay-3{animation-delay:0.3s;}.delay-4{animation-delay:0.4s;}
+
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr;}
+    .sidebar{position:relative;top:0;height:auto;border-right:none;border-bottom:1px solid var(--border);flex-direction:row;flex-wrap:wrap;padding:16px;}
+    .sidebar-progress{width:100%;}
+    .modules-grid{grid-template-columns:1fr;}
+    .outcomes-grid{grid-template-columns:1fr;}
+    .main{padding:24px;}
+    nav{padding:0 24px;}
+  }
+</style>
+</head>
+<body>
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back Home
+  </a>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <p class="sidebar-label">Progress</p>
+    <div class="sidebar-progress">
+      <div class="sp-row">
+        <span class="sp-label">Completed</span>
+        <span class="sp-value" id="sidebarPercent">0%</span>
+      </div>
+      <div class="pbar"><div class="pbar-fill" id="sidebarFill"></div></div>
+    </div>
+
+    <p class="sidebar-label">Free Lessons</p>
+    <button class="lesson-btn" id="sbtn-1" onclick="openLesson(1)">
+      <div class="lb-num" id="lnum-1">1</div>
+      <div class="lb-info"><span class="lb-title">Intro to C</span><span class="lb-sub">History & Setup</span></div>
+    </button>
+    <button class="lesson-btn" id="sbtn-2" onclick="openLesson(2)">
+      <div class="lb-num" id="lnum-2">2</div>
+      <div class="lb-info"><span class="lb-title">Variables & Types</span><span class="lb-sub">Data & Memory</span></div>
+    </button>
+    <button class="lesson-btn" id="sbtn-3" onclick="openLesson(3)">
+      <div class="lb-num" id="lnum-3">3</div>
+      <div class="lb-info"><span class="lb-title">Control Flow</span><span class="lb-sub">if, loops, switch</span></div>
+    </button>
+
+    <p class="sidebar-label" style="margin-top:8px;">Premium Lessons</p>
+    <button class="lesson-btn" id="sbtn-4" onclick="openLesson(4)">
+      <div class="lb-num" id="lnum-4">4</div>
+      <div class="lb-info"><span class="lb-title">Functions & Scope</span><span class="lb-sub">Modular Code</span></div>
+      <span class="lb-badge premium-badge">★</span>
+    </button>
+    <button class="lesson-btn" id="sbtn-5" onclick="openLesson(5)">
+      <div class="lb-num" id="lnum-5">5</div>
+      <div class="lb-info"><span class="lb-title">Pointers</span><span class="lb-sub">Memory Addresses</span></div>
+      <span class="lb-badge premium-badge">★</span>
+    </button>
+    <button class="lesson-btn" id="sbtn-6" onclick="openLesson(6)">
+      <div class="lb-num" id="lnum-6">6</div>
+      <div class="lb-info"><span class="lb-title">Arrays & Strings</span><span class="lb-sub">Data Collections</span></div>
+      <span class="lb-badge premium-badge">★</span>
+    </button>
+
+    <div class="sidebar-premium-note" id="premiumNote" style="display:none;">
+      <div class="spn-title">⭐ Go Premium</div>
+      <div class="spn-text">Unlock all 6 lessons, advanced PDFs, and coding problems.</div>
+      <button class="spn-btn" onclick="showPremiumToast()">Upgrade Now</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="hero fade-up">
+      <div class="hero-eyebrow">Systems Programming · Subject 01</div>
+      <h1 class="hero-title">C<br><em>Programming</em></h1>
+      <p class="hero-desc">Master the language that powers operating systems, embedded devices, and the foundations of modern computing. Learn pointers, memory, and low-level logic.</p>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">6</div><div class="stat-label">Modules</div></div>
+        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Free</div></div>
+        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Premium</div></div>
+      </div>
+    </section>
+
+    <section class="fade-up delay-1">
+      <div class="section-label">Current Lesson</div>
+      <div class="lesson-viewer" id="lessonViewer">
+        <div class="lv-header">
+          <div class="lv-breadcrumb">C Programming <span>/</span> <span id="lv-crumb">—</span></div>
+        </div>
+        <div class="lv-body" id="lv-body">
+          <div class="lv-placeholder">
+            <div class="lv-placeholder-icon">⚙️</div>
+            <h3>Select a Lesson</h3>
+            <p>Choose a module from the sidebar or the cards below to begin learning.</p>
+          </div>
+        </div>
+        <div class="lv-footer" id="lv-footer" style="display:none;">
+          <button class="btn-primary" onclick="markComplete()" id="completeBtn">Mark as Complete ✓</button>
+          <button class="btn-ghost" onclick="nextLesson()">Next →</button>
+          <div class="done-msg" id="doneMsg">✓ Completed!</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="fade-up delay-2">
+      <div class="section-label">All Modules</div>
+      <div class="modules-grid">
+        <div class="module-card" id="mc-1" onclick="openLesson(1)">
+          <div class="mc-top"><div class="mc-icon">📖</div><span class="mc-badge start" id="mc-badge-1">FREE</span></div>
+          <div class="mc-title">Intro to C</div><div class="mc-desc">History, setup, your first program.</div>
+          <div class="mc-lessons">Beginner · Free</div>
+        </div>
+        <div class="module-card" id="mc-2" onclick="openLesson(2)">
+          <div class="mc-top"><div class="mc-icon">🔢</div><span class="mc-badge start" id="mc-badge-2">FREE</span></div>
+          <div class="mc-title">Variables & Types</div><div class="mc-desc">int, float, char, and memory basics.</div>
+          <div class="mc-lessons">Beginner · Free</div>
+        </div>
+        <div class="module-card" id="mc-3" onclick="openLesson(3)">
+          <div class="mc-top"><div class="mc-icon">🔀</div><span class="mc-badge start" id="mc-badge-3">FREE</span></div>
+          <div class="mc-title">Control Flow</div><div class="mc-desc">Conditions, loops, and switch statements.</div>
+          <div class="mc-lessons">Beginner · Free</div>
+        </div>
+        <div class="module-card mc-premium" id="mc-4" onclick="openLesson(4)">
+          <div class="mc-top"><div class="mc-icon">🧩</div><span class="mc-badge premium-b" id="mc-badge-4">★ PREMIUM</span></div>
+          <div class="mc-title">Functions & Scope</div><div class="mc-desc">Modular code, recursion, and variable scope.</div>
+          <div class="mc-lessons">Intermediate · Premium</div>
+        </div>
+        <div class="module-card mc-premium" id="mc-5" onclick="openLesson(5)">
+          <div class="mc-top"><div class="mc-icon">👉</div><span class="mc-badge premium-b" id="mc-badge-5">★ PREMIUM</span></div>
+          <div class="mc-title">Pointers</div><div class="mc-desc">Memory addresses, pointer arithmetic, and dynamic allocation.</div>
+          <div class="mc-lessons">Advanced · Premium</div>
+        </div>
+        <div class="module-card mc-premium" id="mc-6" onclick="openLesson(6)">
+          <div class="mc-top"><div class="mc-icon">📦</div><span class="mc-badge premium-b" id="mc-badge-6">★ PREMIUM</span></div>
+          <div class="mc-title">Arrays & Strings</div><div class="mc-desc">1D/2D arrays, string functions, and char arrays.</div>
+          <div class="mc-lessons">Advanced · Premium</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="fade-up delay-3">
+      <div class="section-label">Study Materials</div>
+      <div class="materials-list">
+        <a href="pdfs/c-notes-basics.pdf" target="_blank" class="material-item">
+          <div class="mat-icon">📝</div>
+          <div class="mat-info"><span class="mat-title">Lecture Notes — Basics</span><span class="mat-desc">Intro to C, Variables, Control Flow · Free</span></div>
+          <span class="mat-action">↓ Download</span>
+        </a>
+        <a href="pdfs/c-practice-basic.pdf" target="_blank" class="material-item">
+          <div class="mat-icon">💡</div>
+          <div class="mat-info"><span class="mat-title">Practice Set — Beginner</span><span class="mat-desc">25 MCQs + 5 coding problems · Free</span></div>
+          <span class="mat-action">↓ Download</span>
+        </a>
+        <div class="material-item premium-item" onclick="showPremiumToast()">
+          <div class="mat-icon premium-icon">⭐</div>
+          <div class="mat-info"><span class="mat-title">Advanced Notes — Pointers & Memory</span><span class="mat-desc">Deep dive into memory management · Premium</span></div>
+          <span class="mat-action premium-action">🔒 Unlock</span>
+        </div>
+        <div class="material-item premium-item" onclick="showPremiumToast()">
+          <div class="mat-icon premium-icon">⭐</div>
+          <div class="mat-info"><span class="mat-title">Placement Question Bank</span><span class="mat-desc">100+ interview-level questions · Premium</span></div>
+          <span class="mat-action premium-action">🔒 Unlock</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="fade-up delay-4">
+      <div class="section-label">What You'll Build</div>
+      <div class="outcomes-grid">
+        <div class="outcome-card"><div class="oc-icon">🖥️</div><div class="oc-title">CLI Programs</div><div class="oc-desc">Build functional command-line tools and utilities.</div></div>
+        <div class="outcome-card"><div class="oc-icon">🧠</div><div class="oc-title">Memory Mastery</div><div class="oc-desc">Understand how programs use RAM at the lowest level.</div></div>
+        <div class="outcome-card"><div class="oc-icon">🚀</div><div class="oc-title">Placement Ready</div><div class="oc-desc">Strong C foundation for technical interviews at top companies.</div></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast">
+  <span id="toastIcon">✅</span>
+  <div><div style="font-size:13px;font-weight:500;" id="toastTitle">Done!</div><div class="toast-msg" id="toastMsg"></div></div>
+</div>
+
+<script>
+const TOTAL_FREE = 3;
+const TOTAL = 6;
+let completed = JSON.parse(localStorage.getItem("ish_c_progress") || "[]");
+let currentLesson = null;
+const isPremium = JSON.parse(localStorage.getItem("ish_premium") || "false");
+
+const lessons = {
+  1:{title:"Intro to C",tag:"Module 1 · Beginner · Free",premium:false,body:`<strong>C</strong> is one of the oldest and most influential programming languages, created by Dennis Ritchie in 1972. It powers operating systems like Linux and Windows, embedded systems, and serves as the foundation for C++, Java, and Python.<br><br>In this lesson you'll set up your environment, understand the <strong>compilation process</strong>, and write your first program using <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">printf()</code> and basic I/O.`,topics:["History of C","GCC Compiler Setup","Hello World","printf & scanf","Basic Syntax","Comments"]},
+  2:{title:"Variables & Types",tag:"Module 2 · Beginner · Free",premium:false,body:`In C, <strong>every variable must be declared</strong> with a specific data type before use. This tells the compiler how much memory to allocate and how to interpret the stored bits.<br><br>You'll learn the core types — <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">int</code>, <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">float</code>, <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">char</code>, <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">double</code> — and how <strong>type casting, constants, and operators</strong> work in practice.`,topics:["int, float, char, double","Variable Declaration","Constants & #define","Arithmetic Operators","Type Casting","sizeof()"]},
+  3:{title:"Control Flow",tag:"Module 3 · Beginner · Free",premium:false,body:`Control flow determines the <strong>order in which statements execute</strong>. C gives you powerful tools — conditional branches, loops, and switches — to write logic that responds to data.<br><br>You'll master <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">if/else</code>, <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">for</code>, <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">while</code>, <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">do-while</code>, and <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">switch</code> statements, along with <strong>break and continue</strong> for precise loop control.`,topics:["if / else / else if","for Loop","while Loop","do-while Loop","switch Statement","break & continue"]},
+  4:{title:"Functions & Scope",tag:"Module 4 · Intermediate · Premium",premium:true,body:`<strong>Functions</strong> are the building blocks of modular C programs. They let you break complex problems into smaller, reusable pieces — a critical skill for writing maintainable code.<br><br>This premium lesson covers <strong>function declarations, return types, parameter passing</strong> (by value vs by reference), recursion, and how variable scope works across your program.`,topics:["Function Declaration","Parameters & Return","Pass by Value/Reference","Recursion","Local vs Global Scope","Static Variables"]},
+  5:{title:"Pointers",tag:"Module 5 · Advanced · Premium",premium:true,body:`<strong>Pointers</strong> are what make C unique and powerful. A pointer stores the <em>memory address</em> of another variable, giving you direct access to RAM — a skill no other high-level language teaches as clearly.<br><br>You'll learn pointer declaration, dereferencing, pointer arithmetic, and how pointers relate to arrays and strings. This is the topic that separates good C programmers from great ones.`,topics:["Pointer Declaration","& and * Operators","Pointer Arithmetic","Pointers & Arrays","Double Pointers","void Pointers"]},
+  6:{title:"Arrays & Strings",tag:"Module 6 · Advanced · Premium",premium:true,body:`<strong>Arrays</strong> store multiple values of the same type in contiguous memory, while <strong>strings</strong> in C are simply arrays of characters terminated by a null byte.<br><br>This lesson covers 1D and 2D arrays, string manipulation using <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">string.h</code> functions, and common patterns used in placement interviews.`,topics:["1D & 2D Arrays","Array with Pointers","String Declaration","strlen, strcpy, strcat","strcmp & strrev","Character Arrays"]}
+};
+
+function openLesson(id) {
+  const lesson = lessons[id];
+  if (lesson.premium && !isPremium) {
+    currentLesson = id;
+    document.getElementById('lv-crumb').textContent = lesson.title;
+    document.getElementById('lessonViewer').classList.add('active-lesson');
+    document.getElementById('lv-body').innerHTML = `
+      <div class="lv-premium-lock">
+        <div class="lock-icon">⭐</div>
+        <div class="lock-title">Premium Content</div>
+        <div class="lock-text">This lesson is part of the Premium track. Upgrade to access all advanced modules, PDFs, and placement question banks.</div>
+        <button class="lock-btn" onclick="showPremiumToast()">Upgrade to Premium</button>
+      </div>`;
+    document.getElementById('lv-footer').style.display = 'none';
+    document.getElementById('premiumNote').style.display = 'block';
+    [1,2,3,4,5,6].forEach(i => document.getElementById(`sbtn-${i}`)?.classList.remove('active'));
+    document.getElementById(`sbtn-${id}`)?.classList.add('active');
+    return;
+  }
+  currentLesson = id;
+  document.getElementById('lv-crumb').textContent = lesson.title;
+  document.getElementById('lessonViewer').classList.add('active-lesson');
+  document.getElementById('lv-body').innerHTML = `
+    <div class="lv-lesson-title">${lesson.title}</div>
+    <div class="lv-lesson-tag ${lesson.premium ? 'premium-tag' : ''}">${lesson.tag}</div>
+    <div class="lv-lesson-body">${lesson.body}</div>
+    <div class="lv-topics">${lesson.topics.map(t=>`<span class="lv-topic">${t}</span>`).join('')}</div>`;
+  document.getElementById('lv-footer').style.display = 'flex';
+  const done = completed.includes(id);
+  document.getElementById('doneMsg').classList.toggle('show', done);
+  document.getElementById('completeBtn').style.opacity = done ? '0.4' : '1';
+  document.getElementById('completeBtn').style.pointerEvents = done ? 'none' : 'auto';
+  [1,2,3,4,5,6].forEach(i => document.getElementById(`sbtn-${i}`)?.classList.remove('active'));
+  document.getElementById(`sbtn-${id}`)?.classList.add('active');
+}
+
+function markComplete() {
+  if (!currentLesson || lessons[currentLesson].premium && !isPremium) return;
+  if (!completed.includes(currentLesson)) completed.push(currentLesson);
+  localStorage.setItem("ish_c_progress", JSON.stringify(completed));
+  updateProgress();
+  openLesson(currentLesson);
+  showToast('Module Complete! 🎉', 'Progress saved.');
+}
+
+function nextLesson() {
+  if (currentLesson && currentLesson < TOTAL) openLesson(currentLesson + 1);
+}
+
+function updateProgress() {
+  const count = completed.filter(c => c <= TOTAL_FREE).length;
+  const pct = Math.round((count / TOTAL_FREE) * 100);
+  document.getElementById('sidebarFill').style.width = pct + '%';
+  document.getElementById('sidebarPercent').textContent = pct + '%';
+  [1,2,3].forEach(i => {
+    if (completed.includes(i)) {
+      document.getElementById(`sbtn-${i}`)?.classList.add('done');
+      const num = document.getElementById(`lnum-${i}`);
+      if (num) num.textContent = '✓';
+      const badge = document.getElementById(`mc-badge-${i}`);
+      if (badge) { badge.className = 'mc-badge done-b'; badge.textContent = 'DONE'; }
+    }
+  });
+}
+
+function showToast(title, msg, gold=false) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = 'toast' + (gold ? ' gold-toast' : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function showPremiumToast() {
+  showToast('⭐ Premium Feature', 'Payment integration coming soon! Contact your professor.', true);
+}
+
+window.addEventListener('load', updateProgress);
+</script>
+<!-- Custom Cursor -->
+<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
+<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+
+<script>
+const c = document.getElementById('cur');
+const r = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function anim(){
+  c.style.left=(mx-5)+'px'; c.style.top=(my-5)+'px';
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  r.style.left=(rx-18)+'px'; r.style.top=(ry-18)+'px';
+  requestAnimationFrame(anim);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');
+  el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');
+});
+</script>
+<!-- Custom Cursor -->
+<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
+<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+
+<script>
+const c = document.getElementById('cur');
+const r = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function anim(){
+  c.style.left=(mx-5)+'px'; c.style.top=(my-5)+'px';
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  r.style.left=(rx-18)+'px'; r.style.top=(ry-18)+'px';
+  requestAnimationFrame(anim);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');
+  el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');
+});
+</script>
+</body>
+</html>

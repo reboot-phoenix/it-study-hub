@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Study Hub – Placement Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --card: #111118;
+    --border: #1e1e2e;
+    --accent: #6c63ff;
+    --accent2: #ff6584;
+    --accent3: #43e97b;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --beginner: #43e97b;
+    --intermediate: #f7b731;
+    --advanced: #ff6584;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated bg grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(108,99,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,99,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .header .badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 18px;
+  }
+
+  .header h1 {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+
+  .header h1 span { color: var(--accent); }
+
+  .header p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ── SUBJECT SELECTOR ── */
+  #subjectScreen { animation: fadeUp 0.5s ease both; }
+
+  .subject-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  .subject-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .subject-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.25s ease;
+    transform-origin: left;
+  }
+
+  .subject-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(108,99,255,0.15);
+  }
+
+  .subject-card:hover::before { transform: scaleX(1); }
+
+  .subject-card .icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .subject-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .subject-card p {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── QUIZ SCREEN ── */
+  #quizScreen { display: none; animation: fadeUp 0.4s ease both; }
+
+  .quiz-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .quiz-subject-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .quiz-progress-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .progress-bar-wrap {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 36px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .level-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  .level-tag.beginner { background: rgba(67,233,123,0.1); color: var(--beginner); border: 1px solid rgba(67,233,123,0.3); }
+  .level-tag.intermediate { background: rgba(247,183,49,0.1); color: var(--intermediate); border: 1px solid rgba(247,183,49,0.3); }
+  .level-tag.advanced { background: rgba(255,101,132,0.1); color: var(--advanced); border: 1px solid rgba(255,101,132,0.3); }
+
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 28px;
+    margin-bottom: 20px;
+  }
+
+  .question-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .question-text {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+
+  .code-block {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: #a8b2d8;
+    line-height: 1.6;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  @media (max-width: 500px) { .options-grid { grid-template-columns: 1fr; } }
+
+  .option-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .option-btn .opt-letter {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 18px;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.08);
+    transform: translateX(3px);
+  }
+
+  .option-btn.correct {
+    border-color: var(--beginner);
+    background: rgba(67,233,123,0.1);
+    color: var(--beginner);
+  }
+
+  .option-btn.wrong {
+    border-color: var(--advanced);
+    background: rgba(255,101,132,0.1);
+    color: var(--advanced);
+  }
+
+  .option-btn.reveal-correct {
+    border-color: var(--beginner);
+    background: rgba(67,233,123,0.06);
+  }
+
+  .option-btn:disabled { cursor: default; }
+
+  .feedback-bar {
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .feedback-bar.correct { background: rgba(67,233,123,0.1); color: var(--beginner); border: 1px solid rgba(67,233,123,0.2); }
+  .feedback-bar.wrong { background: rgba(255,101,132,0.1); color: var(--advanced); border: 1px solid rgba(255,101,132,0.2); }
+
+  .next-btn {
+    display: block;
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.5px;
+    display: none;
+  }
+
+  .next-btn:hover { background: #8078ff; transform: translateY(-1px); }
+
+  /* ── RESULT SCREEN ── */
+  #resultScreen {
+    display: none;
+    text-align: center;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px 36px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(108,99,255,0.12), transparent 60%);
+    pointer-events: none;
+  }
+
+  .result-level-badge {
+    font-size: 56px;
+    margin-bottom: 16px;
+  }
+
+  .result-level-name {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+
+  .result-level-name.beginner { color: var(--beginner); }
+  .result-level-name.intermediate { color: var(--intermediate); }
+  .result-level-name.advanced { color: var(--advanced); }
+
+  .result-subject {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .score-display {
+    font-family: 'Space Mono', monospace;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .score-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .result-description {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 460px;
+    margin: 0 auto 32px;
+  }
+
+  .score-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .breakdown-item {
+    background: #0d0d14;
+    border-radius: 10px;
+    padding: 16px 10px;
+  }
+
+  .breakdown-item .bd-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .breakdown-item .bd-val {
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .breakdown-item.b .bd-val { color: var(--beginner); }
+  .breakdown-item.i .bd-val { color: var(--intermediate); }
+  .breakdown-item.a .bd-val { color: var(--advanced); }
+
+  .action-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 28px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover { background: #8078ff; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 28px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 13px;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .screen-transition {
+    animation: fadeUp 0.4s ease both;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="badge">IT Study Hub · TIU</div>
+    <h1>Find Your <span>Level</span><br>Before You Learn</h1>
+    <p>Take a short placement quiz on any subject. We'll tell you if you're a Beginner, Intermediate, or Advanced learner — so you buy the right course.</p>
+  </div>
+
+  <!-- SUBJECT SELECTOR -->
+  <div id="subjectScreen">
+    <div class="section-title">Choose a Subject</div>
+    <div class="subject-grid">
+      <div class="subject-card" onclick="startQuiz('c')">
+        <span class="icon">⚙️</span>
+        <h3>C Programming</h3>
+        <p>25 Questions · ~10 min</p>
+      </div>
+      <div class="subject-card" onclick="startQuiz('java')">
+        <span class="icon">☕</span>
+        <h3>OOPs Using Java</h3>
+        <p>25 Questions · ~10 min</p>
+      </div>
+      <div class="subject-card" onclick="startQuiz('python')">
+        <span class="icon">🐍</span>
+        <h3>Python Programming</h3>
+        <p>25 Questions · ~10 min</p>
+      </div>
+      <div class="subject-card" onclick="startQuiz('cpp')">
+        <span class="icon">➕</span>
+        <h3>C++ Programming</h3>
+        <p>25 Questions · ~10 min</p>
+      </div>
+      <div class="subject-card" onclick="startQuiz('csharp')">
+        <span class="icon">🔷</span>
+        <h3>C# Programming</h3>
+        <p>25 Questions · ~10 min</p>
+      </div>
+      <div class="subject-card" onclick="startQuiz('web')">
+        <span class="icon">🌐</span>
+        <h3>HTML + CSS + JS</h3>
+        <p>25 Questions · ~10 min</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quizScreen">
+    <div class="quiz-top">
+      <div class="quiz-subject-label" id="quizSubjectLabel"></div>
+      <div class="quiz-progress-text" id="quizProgressText"></div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div id="levelTag" class="level-tag beginner">Beginner</div>
+    <div class="question-card">
+      <div class="question-num" id="questionNum"></div>
+      <div class="question-text" id="questionText"></div>
+      <div id="codeBlock" class="code-block" style="display:none"></div>
+      <div class="options-grid" id="optionsGrid"></div>
+    </div>
+    <div class="feedback-bar" id="feedbackBar"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="resultScreen">
+    <div class="result-card">
+      <div class="result-level-badge" id="resultEmoji"></div>
+      <div class="result-level-name" id="resultLevelName"></div>
+      <div class="result-subject" id="resultSubject"></div>
+      <div class="score-display" id="scoreDisplay"></div>
+      <div class="score-label">Total Score</div>
+      <div class="score-breakdown">
+        <div class="breakdown-item b">
+          <div class="bd-label">Beginner</div>
+          <div class="bd-val" id="bdBeginner">0/3</div>
+        </div>
+        <div class="breakdown-item i">
+          <div class="bd-label">Intermediate</div>
+          <div class="bd-val" id="bdIntermediate">0/3</div>
+        </div>
+        <div class="breakdown-item a">
+          <div class="bd-label">Advanced</div>
+          <div class="bd-val" id="bdAdvanced">0/2</div>
+        </div>
+      </div>
+      <div class="result-description" id="resultDesc"></div>
+      <div class="action-row">
+        <button class="btn-primary" onclick="retryQuiz()">🔁 Retry This Quiz</button>
+        <button class="btn-secondary" onclick="backToSubjects()">← Choose Another Subject</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// QUIZ DATA — 25 questions per subject
+// ─────────────────────────────────────────────
+
+const QUIZZES = {
+  c: {
+    name: "C Programming",
+    questions: [
+      { level:"beginner", text:"Which symbol is used to end a statement in C?", options:["A) :", "B) ;", "C) .", "D) #"], answer:1 },
+      { level:"beginner", text:"Which function is the entry point of a C program?", options:["A) start()", "B) main()", "C) run()", "D) init()"], answer:1 },
+      { level:"beginner", text:"Which header file is required for printf()?", options:["A) math.h", "B) conio.h", "C) stdio.h", "D) string.h"], answer:2 },
+      { level:"beginner", text:"Which of these is NOT a valid C data type?", options:["A) int", "B) float", "C) real", "D) char"], answer:2 },
+      { level:"beginner", text:"What is the size of char in C?", options:["A) 1 byte", "B) 2 bytes", "C) 4 bytes", "D) 8 bytes"], answer:0 },
+      { level:"beginner", text:"Which operator is used for assignment?", options:["A) ==", "B) =", "C) :=", "D) ==="], answer:1 },
+      { level:"beginner", text:"Which loop executes at least once?", options:["A) for", "B) while", "C) do-while", "D) none"], answer:2 },
+      { level:"beginner", text:"Which keyword is used to declare constant variables?", options:["A) final", "B) constant", "C) const", "D) fixed"], answer:2 },
+
+      { level:"intermediate", text:"What is the output?\nint a=5; printf(\"%d\", a++);", options:["A) 6", "B) 5", "C) Error", "D) Garbage"], answer:1 },
+      { level:"intermediate", text:"Which function is used to allocate memory dynamically?", options:["A) alloc()", "B) malloc()", "C) create()", "D) new()"], answer:1 },
+      { level:"intermediate", text:"Which of the following is a pointer declaration?", options:["A) int p;", "B) int *p;", "C) pointer p;", "D) ptr int p;"], answer:1 },
+      { level:"intermediate", text:"Which keyword prevents variable modification?", options:["A) static", "B) const", "C) volatile", "D) register"], answer:1 },
+      { level:"intermediate", text:"What does strlen() return?", options:["A) size of array", "B) length of string", "C) characters + NULL", "D) ASCII value"], answer:1 },
+      { level:"intermediate", text:"What is the default return type of functions in old C?", options:["A) void", "B) int", "C) char", "D) float"], answer:1 },
+      { level:"intermediate", text:"Which storage class keeps variable value between function calls?", options:["A) auto", "B) static", "C) register", "D) extern"], answer:1 },
+      { level:"intermediate", text:"Which operator is used to access value at address?", options:["A) &", "B) *", "C) ->", "D) ."], answer:1 },
+      { level:"intermediate", text:"What is recursion?", options:["A) Loop inside loop", "B) Function calling itself", "C) Pointer operation", "D) Memory allocation"], answer:1 },
+
+      { level:"advanced", text:"What is the output?\nprintf(\"%d\", sizeof('A'));", options:["A) 1", "B) 2", "C) 4", "D) Depends on compiler"], answer:2 },
+      { level:"advanced", text:"What is dangling pointer?", options:["A) Null pointer", "B) Pointer to freed memory", "C) Pointer to constant", "D) Pointer to array"], answer:1 },
+      { level:"advanced", text:"What is the output?\nint x=10; printf(\"%d %d\", x, x++);", options:["A) 10 11", "B) 11 10", "C) Undefined behavior", "D) 10 10"], answer:2 },
+      { level:"advanced", text:"Which function frees allocated memory?", options:["A) delete()", "B) remove()", "C) free()", "D) destroy()"], answer:2 },
+      { level:"advanced", text:"What is function pointer?", options:["A) Pointer to variable", "B) Pointer storing function address", "C) Array pointer", "D) Null pointer"], answer:1 },
+      { level:"advanced", text:"What is the output?\nint arr[3]={1,2,3}; printf(\"%d\", *(arr+1));", options:["A) 1", "B) 2", "C) 3", "D) Error"], answer:1 },
+      { level:"advanced", text:"Which is true about structures?", options:["A) Store different data types", "B) Store same data types", "C) Cannot contain functions", "D) A & C"], answer:3 },
+      { level:"advanced", text:"What is segmentation fault?", options:["A) Syntax error", "B) Memory access violation", "C) Runtime math error", "D) Compiler error"], answer:1 }
+    ]
+  },
+  java: {
+    name: "OOPs Using Java",
+    questions: [
+      { level:"beginner", text:"Java is a ____ language.", options:["A) Procedural","B) Object-Oriented","C) Functional only","D) Assembly"], answer:1 },
+      { level:"beginner", text:"Which method is the entry point of a Java program?", options:["A) start()","B) main()","C) run()","D) init()"], answer:1 },
+      { level:"beginner", text:"Which keyword is used to create an object?", options:["A) create","B) new","C) object","D) make"], answer:1 },
+      { level:"beginner", text:"Which of these is NOT a primitive type?", options:["A) int","B) float","C) String","D) char"], answer:2 },
+      { level:"beginner", text:"Java code is compiled into?", options:["A) Machine code","B) Bytecode","C) Assembly","D) Binary"], answer:1 },
+      { level:"beginner", text:"Which symbol is used to end statements?", options:["A) :","B) ;","C) .","D) #"], answer:1 },
+      { level:"beginner", text:"Which keyword is used to inherit a class?", options:["A) implement","B) inherit","C) extends","D) super"], answer:2 },
+      { level:"beginner", text:"Which keyword is used to print output?", options:["A) print()","B) echo","C) System.out.println()","D) cout"], answer:2 },
+
+      { level:"intermediate", text:"Which is NOT an OOP principle?", options:["A) Encapsulation","B) Inheritance","C) Compilation","D) Polymorphism"], answer:2 },
+      { level:"intermediate", text:"What is method overloading?", options:["A) Same method name, different parameters","B) Same method name, same parameters","C) Different name, same parameters","D) None"], answer:0 },
+      { level:"intermediate", text:"What is method overriding?", options:["A) Child redefining parent method","B) Same class methods","C) Constructor call","D) Loop"], answer:0 },
+      { level:"intermediate", text:"Which keyword prevents inheritance?", options:["A) static","B) final","C) private","D) const"], answer:1 },
+      { level:"intermediate", text:"Which access modifier is most restrictive?", options:["A) public","B) protected","C) private","D) default"], answer:2 },
+      { level:"intermediate", text:"What does JVM stand for?", options:["A) Java Variable Machine","B) Java Virtual Machine","C) Java Verified Machine","D) Just Virtual Machine"], answer:1 },
+      { level:"intermediate", text:"Which collection stores unique elements?", options:["A) List","B) Set","C) ArrayList","D) Vector"], answer:1 },
+      { level:"intermediate", text:"Which exception is checked?", options:["A) ArithmeticException","B) NullPointerException","C) IOException","D) ArrayIndexOutOfBoundsException"], answer:2 },
+      { level:"intermediate", text:"Which keyword refers to parent class object?", options:["A) parent","B) super","C) base","D) this"], answer:1 },
+
+      { level:"advanced", text:"Java supports multiple inheritance using?", options:["A) Classes","B) Interfaces","C) Objects","D) Constructors"], answer:1 },
+      { level:"advanced", text:"What is abstraction?", options:["A) Hiding implementation details","B) Showing all data","C) Memory allocation","D) Looping"], answer:0 },
+      { level:"advanced", text:"Which keyword is used for interface implementation?", options:["A) extends","B) implements","C) inherits","D) interface"], answer:1 },
+      { level:"advanced", text:"Which is thread creation method?", options:["A) run() only","B) start()","C) execute()","D) begin()"], answer:1 },
+      { level:"advanced", text:"What is synchronization used for?", options:["A) Speed increase","B) Thread safety","C) Memory freeing","D) Compilation"], answer:1 },
+      { level:"advanced", text:"Which memory area stores objects?", options:["A) Stack","B) Heap","C) Code","D) Register"], answer:1 },
+      { level:"advanced", text:"What is garbage collection?", options:["A) Delete files","B) Remove unused objects","C) Stop program","D) Debug code"], answer:1 },
+      { level:"advanced", text:"Which concept allows one interface many methods?", options:["A) Encapsulation","B) Polymorphism","C) Abstraction","D) Inheritance"], answer:1 }
+    ]
+  },
+  python: {
+    name: "Python Programming",
+    questions: [
+      { level:"beginner", text:"Python is a ____ language.", options:["A) Compiled","B) Interpreted","C) Assembly","D) Machine"], answer:1 },
+      { level:"beginner", text:"Which symbol is used for comments in Python?", options:["A) //","B) /* */","C) #","D) --"], answer:2 },
+      { level:"beginner", text:"Which function prints output?", options:["A) echo()","B) printf()","C) print()","D) output()"], answer:2 },
+      { level:"beginner", text:"Which of these is NOT a Python data type?", options:["A) int","B) float","C) char","D) list"], answer:2 },
+      { level:"beginner", text:"Which bracket is used for lists?", options:["A) ()","B) []","C) {}","D) <>"], answer:1 },
+      { level:"beginner", text:"What is the output?\nprint(type(10))", options:["A) int","B) <class 'int'>","C) number","D) integer"], answer:1 },
+      { level:"beginner", text:"Which keyword is used for loops?", options:["A) repeat","B) for","C) loop","D) iterate"], answer:1 },
+      { level:"beginner", text:"Which operator is used for exponentiation?", options:["A) ^","B) **","C) ^^","D) pow"], answer:1 },
+
+      { level:"intermediate", text:"What is the output?\nx = \"5\"; y = 5; print(x == y)", options:["A) True","B) False","C) Error","D) 5"], answer:1 },
+      { level:"intermediate", text:"Which keyword defines a function?", options:["A) function","B) define","C) def","D) func"], answer:2 },
+      { level:"intermediate", text:"What does len() return?", options:["A) Memory size","B) Number of elements","C) Data type","D) ASCII value"], answer:1 },
+      { level:"intermediate", text:"Which structure stores key–value pairs?", options:["A) List","B) Tuple","C) Dictionary","D) Set"], answer:2 },
+      { level:"intermediate", text:"Which keyword handles exceptions?", options:["A) catch","B) except","C) error","D) handle"], answer:1 },
+      { level:"intermediate", text:"What is list slicing?", options:["A) Removing elements","B) Accessing subset of list","C) Sorting list","D) Reversing list"], answer:1 },
+      { level:"intermediate", text:"Which is immutable?", options:["A) List","B) Dictionary","C) Tuple","D) Set"], answer:2 },
+      { level:"intermediate", text:"Which keyword is used for classes?", options:["A) object","B) class","C) define","D) new"], answer:1 },
+      { level:"intermediate", text:"Which loop runs while condition is true?", options:["A) for","B) do-while","C) while","D) repeat"], answer:2 },
+
+      { level:"advanced", text:"What is the output?\nprint([i*i for i in range(3)])", options:["A) [1,4,9]","B) [0,1,4]","C) [0,1,4,9]","D) Error"], answer:1 },
+      { level:"advanced", text:"What is a lambda function?", options:["A) Named function","B) Anonymous function","C) Recursive function","D) Built-in function"], answer:1 },
+      { level:"advanced", text:"What is the output?\ndef f(x, lst=[]): lst.append(x); return lst\nprint(f(1)); print(f(2))", options:["A) [1] [2]","B) [1] [1,2]","C) [1,2] [2]","D) Error"], answer:1 },
+      { level:"advanced", text:"What is GIL in Python?", options:["A) Global Interpreter Lock","B) General Input Loop","C) Global Internal Logic","D) General Interpreter Layer"], answer:0 },
+      { level:"advanced", text:"Which module handles regular expressions?", options:["A) regex","B) pyregex","C) re","D) pattern"], answer:2 },
+      { level:"advanced", text:"What does __init__ do?", options:["A) Deletes object","B) Constructor method","C) Static method","D) Destructor"], answer:1 },
+      { level:"advanced", text:"Which method converts string to list?", options:["A) split()","B) slice()","C) join()","D) convert()"], answer:0 },
+      { level:"advanced", text:"What is generator?", options:["A) Function returning multiple values","B) Function using yield","C) Loop","D) Module"], answer:1 }
+    ]
+  },
+  cpp: {
+    name: "C++ Programming",
+    questions: [
+      { level:"beginner", text:"C++ is an extension of which language?", options:["A) Java","B) Python","C) C","D) C#"], answer:2 },
+      { level:"beginner", text:"Which symbol is used for output in C++?", options:["A) printf","B) echo","C) cout","D) print"], answer:2 },
+      { level:"beginner", text:"Which header is required for cout?", options:["A) stdio.h","B) iostream","C) conio.h","D) string.h"], answer:1 },
+      { level:"beginner", text:"Which namespace is commonly used in C++?", options:["A) std","B) main","C) system","D) global"], answer:0 },
+      { level:"beginner", text:"Which operator is used for input?", options:["A) >>","B) <<","C) <>","D) ::"], answer:0 },
+      { level:"beginner", text:"Which keyword creates a class?", options:["A) object","B) class","C) define","D) struct"], answer:1 },
+      { level:"beginner", text:"Which function is entry point?", options:["A) start()","B) run()","C) main()","D) init()"], answer:2 },
+      { level:"beginner", text:"Which of these is NOT a C++ data type?", options:["A) int","B) float","C) string","D) real"], answer:3 },
+
+      { level:"intermediate", text:"What is encapsulation?", options:["A) Wrapping data + methods","B) Looping","C) Memory allocation","D) Inheritance"], answer:0 },
+      { level:"intermediate", text:"Which keyword is used for inheritance?", options:["A) inherit","B) extends","C) :","D) super"], answer:2 },
+      { level:"intermediate", text:"What is function overloading?", options:["A) Same name, diff parameters","B) Same name, same parameters","C) Different names","D) Constructor"], answer:0 },
+      { level:"intermediate", text:"Which operator is used for dynamic memory?", options:["A) malloc","B) alloc","C) new","D) create"], answer:2 },
+      { level:"intermediate", text:"Which keyword deletes memory?", options:["A) remove","B) free","C) delete","D) clear"], answer:2 },
+      { level:"intermediate", text:"Which concept allows many forms?", options:["A) Encapsulation","B) Polymorphism","C) Abstraction","D) Inheritance"], answer:1 },
+      { level:"intermediate", text:"Which access specifier is default in class?", options:["A) public","B) private","C) protected","D) default"], answer:1 },
+      { level:"intermediate", text:"What is constructor?", options:["A) Destructor","B) Function initializing object","C) Loop","D) Pointer"], answer:1 },
+      { level:"intermediate", text:"Which operator is scope resolution?", options:["A) .","B) ->","C) ::","D) &"], answer:2 },
+
+      { level:"advanced", text:"Which supports multiple inheritance?", options:["A) Java","B) Python","C) C++","D) C"], answer:2 },
+      { level:"advanced", text:"What is virtual function?", options:["A) Static function","B) Runtime polymorphism function","C) Constructor","D) Inline function"], answer:1 },
+      { level:"advanced", text:"What is pure virtual function?", options:["A) Function without body","B) Static function","C) Inline function","D) Friend function"], answer:0 },
+      { level:"advanced", text:"Which pointer refers to current object?", options:["A) self","B) this","C) current","D) obj"], answer:1 },
+      { level:"advanced", text:"What is template?", options:["A) Generic programming","B) Loop","C) Memory allocation","D) Pointer"], answer:0 },
+      { level:"advanced", text:"What is operator overloading?", options:["A) Redefine operator behavior","B) Delete operator","C) Create new operator","D) Loop operator"], answer:0 },
+      { level:"advanced", text:"Which allows compile-time polymorphism?", options:["A) Virtual function","B) Function overloading","C) Inheritance","D) Encapsulation"], answer:1 },
+      { level:"advanced", text:"What is destructor?", options:["A) Constructor","B) Function freeing object","C) Loop","D) Pointer"], answer:1 }
+    ]
+  },
+  csharp: {
+    name: "C# Programming",
+    questions: [
+      { level:"beginner", text:"C# was developed by which company?", options:["A) Apple","B) Microsoft","C) Google","D) IBM"], answer:1 },
+      { level:"beginner", text:"C# runs on which framework?", options:["A) JVM","B) .NET","C) Node","D) Python VM"], answer:1 },
+      { level:"beginner", text:"Which method is the entry point of a C# program?", options:["A) start()","B) run()","C) Main()","D) init()"], answer:2 },
+      { level:"beginner", text:"Which keyword creates an object?", options:["A) create","B) new","C) object","D) make"], answer:1 },
+      { level:"beginner", text:"Which symbol ends a statement?", options:["A) :","B) ;","C) .","D) #"], answer:1 },
+      { level:"beginner", text:"Which keyword declares a class?", options:["A) object","B) class","C) define","D) struct"], answer:1 },
+      { level:"beginner", text:"Which keyword is used to print output?", options:["A) print()","B) Console.WriteLine()","C) echo()","D) cout"], answer:1 },
+      { level:"beginner", text:"Which data type stores true/false?", options:["A) bit","B) bool","C) logical","D) binary"], answer:1 },
+
+      { level:"intermediate", text:"Which concept hides data?", options:["A) Encapsulation","B) Polymorphism","C) Abstraction","D) Inheritance"], answer:0 },
+      { level:"intermediate", text:"Which keyword is used for inheritance?", options:["A) inherit","B) extends","C) :","D) super"], answer:2 },
+      { level:"intermediate", text:"Which keyword prevents inheritance?", options:["A) static","B) final","C) sealed","D) const"], answer:2 },
+      { level:"intermediate", text:"Which keyword is used for exception handling?", options:["A) catch","B) try","C) finally","D) All of the above"], answer:3 },
+      { level:"intermediate", text:"Which collection stores key-value pairs?", options:["A) List","B) Dictionary","C) ArrayList","D) Stack"], answer:1 },
+      { level:"intermediate", text:"Which type is reference type?", options:["A) int","B) float","C) class","D) bool"], answer:2 },
+      { level:"intermediate", text:"Which keyword creates constant?", options:["A) readonly","B) const","C) static","D) fixed"], answer:1 },
+      { level:"intermediate", text:"What is method overloading?", options:["A) Same name different parameters","B) Same name same parameters","C) Different names","D) Constructor"], answer:0 },
+      { level:"intermediate", text:"Which loop checks condition first?", options:["A) do-while","B) while","C) foreach","D) none"], answer:1 },
+
+      { level:"advanced", text:"Which feature allows runtime polymorphism?", options:["A) Overloading","B) Overriding","C) Encapsulation","D) Abstraction"], answer:1 },
+      { level:"advanced", text:"Which keyword is used to override method?", options:["A) override","B) virtual","C) base","D) super"], answer:0 },
+      { level:"advanced", text:"Which keyword defines abstract class?", options:["A) virtual","B) abstract","C) interface","D) base"], answer:1 },
+      { level:"advanced", text:"What is interface?", options:["A) Class with implementation","B) Class without methods","C) Contract without implementation","D) Loop"], answer:2 },
+      { level:"advanced", text:"Which keyword is used to implement interface?", options:["A) implements","B) :","C) extends","D) using"], answer:1 },
+      { level:"advanced", text:"Which memory stores objects?", options:["A) Stack","B) Heap","C) Cache","D) Register"], answer:1 },
+      { level:"advanced", text:"What is LINQ?", options:["A) Loop query","B) Language Integrated Query","C) Local Indexed Query","D) Logical Input Query"], answer:1 },
+      { level:"advanced", text:"Which keyword refers to parent class?", options:["A) parent","B) base","C) super","D) this"], answer:1 }
+    ]
+  },
+  web: {
+    name: "HTML + CSS + JS",
+    questions: [
+      { level: "beginner", text: "HTML stands for?", options: ["Hyper Trainer Marking Language", "Hyper Text Markup Language", "High Text Markup Language", "Hyper Tool Markup Language"], answer: 1 },
+      { level: "beginner", text: "CSS stands for?", options: ["Computer Style Sheets", "Creative Style Sheets", "Cascading Style Sheets", "Colorful Style Sheets"], answer: 2 },
+      { level: "beginner", text: "Which language adds interactivity to websites?", options: ["HTML", "CSS", "JavaScript", "SQL"], answer: 2 },
+      { level: "intermediate", text: "What does DOM stand for?", options: ["Document Object Model", "Data Object Model", "Display Object Model", "Document Order Model"], answer: 0 },
+      { level: "intermediate", text: "Which CSS makes flexible layout?", options: ["Grid", "Flexbox", "Float", "Inline"], answer: 1 },
+      { level: "intermediate", text: "Which method selects element by id?", options: ["getElement()", "getElementById()", "query()", "selectId()"], answer: 1 },
+      { level: "advanced", text: "What is event bubbling?", options: ["Event moves child → parent", "Event moves parent → child", "Page reload", "Animation"], answer: 0 },
+      { level: "advanced", text: "Which JS method converts JSON to object?", options: ["JSON.toObject()", "JSON.parse()", "JSON.stringify()", "parseJSON()"], answer: 1 },
+      { level: "beginner", text: "Which tag creates a hyperlink?", options: ["＜link＞", "＜a＞", "＜href＞", "＜url＞"], answer: 1 },
+      { level: "beginner", text: "Which tag inserts an image?", options: ["＜pic＞", "＜img＞", "＜image＞", "＜src＞"], answer: 1 },
+      { level: "beginner", text: "Which CSS property changes text color?", options: ["font-color", "text-color", "color", "text-style"], answer: 2 },
+      { level: "beginner", text: "Which symbol is used for JavaScript single-line comments?", options: ["#", "//", "＜!-- --＞", "**"], answer: 1 },
+      { level: "beginner", text: "Which tag includes JavaScript in HTML?", options: ["＜js＞", "＜script＞", "＜javascript＞", "＜code＞"], answer: 1 },
+      { level: "intermediate", text: "Which HTML element is block-level?", options: ["span", "a", "div", "img"], answer: 2 },
+      { level: "beginner", text: "Which CSS property controls spacing outside an element?", options: ["padding", "margin", "border", "spacing"], answer: 1 },
+      { level: "intermediate", text: "Which CSS position removes an element from normal flow?", options: ["static", "relative", "absolute", "inherit"], answer: 2 },
+      { level: "beginner", text: "Which JavaScript keyword declares variables?", options: ["var", "let", "const", "All of the above"], answer: 3 },
+      { level: "beginner", text: "Which event occurs when a button is clicked?", options: ["onchange", "onmouse", "onclick", "onsubmit"], answer: 2 },
+      { level: "beginner", text: "Which symbol is used for ID selector in CSS?", options: [".", "#", "*", "@"], answer: 1 },
+      { level: "intermediate", text: "Which is a valid Promise state?", options: ["pending", "fulfilled", "rejected", "All of the above"], answer: 3 },
+      { level: "intermediate", text: "Which CSS unit is relative?", options: ["px", "cm", "em", "mm"], answer: 2 },
+      { level: "intermediate", text: "Which JavaScript keyword handles async errors?", options: ["catch", "try", "await", "async"], answer: 0 },
+      { level: "intermediate", text: "Which HTML API stores data locally in browser?", options: ["cookies", "sessionStorage", "localStorage", "Both sessionStorage & localStorage"], answer: 3 },
+      { level: "intermediate", text: "Which HTTP method sends data securely?", options: ["GET", "POST", "FETCH", "SEND"], answer: 1 },
+      { level: "advanced", text: "What is a JavaScript closure?", options: ["Function with memory of outer scope", "Loop", "Object method", "Event"], answer: 0 }
+    ]
+  }
+};
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let currentSubject = null;
+let currentQuestions = [];
+let currentIndex = 0;
+let scores = { beginner: 0, intermediate: 0, advanced: 0 };
+let answered = false;
+
+// ─────────────────────────────────────────────
+// FUNCTIONS
+// ─────────────────────────────────────────────
+
+function startQuiz(subject) {
+  currentSubject = subject;
+  currentQuestions = QUIZZES[subject].questions;
+  currentIndex = 0;
+  scores = { beginner: 0, intermediate: 0, advanced: 0 };
+
+  document.getElementById('subjectScreen').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('quizScreen').style.display = 'block';
+  document.getElementById('quizSubjectLabel').textContent = QUIZZES[subject].name;
+
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = currentQuestions[currentIndex];
+  const total = currentQuestions.length;
+
+  document.getElementById('quizProgressText').textContent = `Q${currentIndex + 1} of ${total}`;
+  document.getElementById('progressFill').style.width = `${((currentIndex) / total) * 100}%`;
+  document.getElementById('questionNum').textContent = `Question ${currentIndex + 1}`;
+
+  // Level tag
+  const tag = document.getElementById('levelTag');
+  tag.textContent = q.level.charAt(0).toUpperCase() + q.level.slice(1);
+  tag.className = 'level-tag ' + q.level;
+
+  // Split out code blocks cleanly from string lines
+  const codeEl = document.getElementById('codeBlock');
+  if (q.text.includes('\n')) {
+    const parts = q.text.split('\n');
+    document.getElementById('questionText').textContent = parts[0];
+    codeEl.textContent = parts.slice(1).join('\n');
+    codeEl.style.display = 'block';
+  } else {
+    document.getElementById('questionText').textContent = q.text;
+    codeEl.style.display = 'none';
+  }
+
+  // Options
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    const text = opt.replace(/^[A-D]\)\s*/, '');
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span>${text}`;
+    btn.onclick = () => selectAnswer(i, btn);
+    grid.appendChild(btn);
+  });
+
+  // Hide feedback & next
+  const fb = document.getElementById('feedbackBar');
+  fb.style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+}
+
+function selectAnswer(selectedIndex, clickedBtn) {
+  if (answered) return;
+  answered = true;
+
+  const q = currentQuestions[currentIndex];
+  const correct = q.answer;
+  const allBtns = document.querySelectorAll('.option-btn');
+
+  allBtns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correct) btn.classList.add('reveal-correct');
+  });
+
+  const fb = document.getElementById('feedbackBar');
+
+  if (selectedIndex === correct) {
+    clickedBtn.classList.add('correct');
+    scores[q.level]++;
+    fb.textContent = '✓ Correct!';
+    fb.className = 'feedback-bar correct';
+  } else {
+    clickedBtn.classList.add('wrong');
+    const correctText = q.options[correct].replace(/^[A-D]\)\s*/, '');
+    fb.textContent = `✗ Incorrect. Correct answer: ${correctText}`;
+    fb.className = 'feedback-bar wrong';
+  }
+
+  fb.style.display = 'block';
+  document.getElementById('nextBtn').style.display = 'block';
+  const isLast = currentIndex === currentQuestions.length - 1;
+  document.getElementById('nextBtn').textContent = isLast ? 'See My Results →' : 'Next Question →';
+}
+
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex >= currentQuestions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quizScreen').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'block';
+
+  const total = currentQuestions.length;
+  const totalScore = scores.beginner + scores.intermediate + scores.advanced;
+
+  const bMax = currentQuestions.filter(q => q.level === 'beginner').length;
+  const iMax = currentQuestions.filter(q => q.level === 'intermediate').length;
+  const aMax = currentQuestions.filter(q => q.level === 'advanced').length;
+
+  const bPct = bMax > 0 ? scores.beginner / bMax : 0;
+  const iPct = iMax > 0 ? scores.intermediate / iMax : 0;
+  const aPct = aMax > 0 ? scores.advanced / aMax : 0;
+
+  let level, emoji, desc;
+
+  if (aPct >= 0.5 && iPct >= 0.5) {
+    level = 'advanced';
+    emoji = '🚀';
+    desc = "You clearly know your stuff! You're ready for the Advanced course — skip the basics and dive straight into complex topics, projects, and real-world challenges.";
+  } else if (iPct >= 0.5 || (bPct >= 0.67 && iPct >= 0.33)) {
+    level = 'intermediate';
+    emoji = '⚡';
+    desc = "You have a solid foundation! The Intermediate course is perfect for you — it'll reinforce what you know and push you into more challenging concepts.";
+  } else {
+    level = 'beginner';
+    emoji = '🌱';
+    desc = "No worries — everyone starts somewhere! The Beginner course will give you a strong foundation with step-by-step guidance from the ground up.";
+  }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultLevelName').textContent = level.charAt(0).toUpperCase() + level.slice(1) + ' Level';
+  document.getElementById('resultLevelName').className = 'result-level-name ' + level;
+  document.getElementById('resultSubject').textContent = QUIZZES[currentSubject].name;
+  document.getElementById('scoreDisplay').textContent = `${totalScore}/${total}`;
+  document.getElementById('resultDesc').textContent = desc;
+  document.getElementById('bdBeginner').textContent = `${scores.beginner}/${bMax}`;
+  document.getElementById('bdIntermediate').textContent = `${scores.intermediate}/${iMax}`;
+  document.getElementById('bdAdvanced').textContent = `${scores.advanced}/${aMax}`;
+}
+
+function retryQuiz() {
+  startQuiz(currentSubject);
+}
+
+function backToSubjects() {
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('quizScreen').style.display = 'none';
+  document.getElementById('subjectScreen').style.display = 'block';
+  document.getElementById('subjectScreen').classList.add('screen-transition');
+}
+</script>
+
+<!-- Custom Cursor Blocks -->
+<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
+<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+
+<script>
+const c = document.getElementById('cur');
+const r = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; 
+  my = e.clientY;
+});
+
+(function anim(){
+  if (c && r) {
+    c.style.left = (mx - 5) + 'px'; 
+    c.style.top = (my - 5) + 'px';
+    rx += (mx - rx) * 0.12; 
+    ry += (my - ry) * 0.12;
+    r.style.left = (rx - 18) + 'px'; 
+    r.style.top = (ry - 18) + 'px';
+  }
+  requestAnimationFrame(anim);
+})();
+
+document.addEventListener('mouseover', e => {
+  if (c && e.target.closest('a, button, .subject-card')) {
+    c.style.transform = 'scale(2)';
+  }
+});
+
+document.addEventListener('mouseout', e => {
+  if (c && e.target.closest('a, button, .subject-card')) {
+    c.style.transform = 'scale(1)';
+  }
+});
+</script>
+</body>
+</html>
