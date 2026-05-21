@@ -576,24 +576,38 @@
 
   </div>
 </div>
-
 <script type="module" src="login.js"></script>
+
+<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
+<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <script>
 const c = document.getElementById('cur');
 const r = document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; 
+  my = e.clientY;
+});
+
 (function anim(){
   if(c && r){
-    c.style.left=(mx-5)+'px'; c.style.top=(my-5)+'px';
-    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-    r.style.left=(rx-18)+'px'; r.style.top=(ry-18)+'px';
+    c.style.left = (mx-5) + 'px'; 
+    c.style.top = (my-5) + 'px';
+    rx += (mx-rx) * 0.12; 
+    ry += (my-ry) * 0.12;
+    r.style.left = (rx-18) + 'px'; 
+    r.style.top = (ry-18) + 'px';
   }
   requestAnimationFrame(anim);
 })();
+
+// Make the cursor scale up when hovering over buttons or links
+document.querySelectorAll('a, button, input, .tab-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => { if(c) c.style.transform = 'scale(2)'; });
+  el.addEventListener('mouseleave', () => { if(c) c.style.transform = 'scale(1)'; });
+});
 </script>
-<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
-<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 </body>
 </html>
