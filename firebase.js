@@ -4,7 +4,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-aut
 
 // Your web app's live Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCu6ivnUU8wHVVtt3__eqaKxZMaKLAdT8A",
+  apiKey: "AIzaSyBKikCZ6qlO7zvqjsCdy8K0-g7WMp3AKWA",
   authDomain: "it-study-hub.firebaseapp.com",
   projectId: "it-study-hub",
   storageBucket: "it-study-hub.firebasestorage.app",
