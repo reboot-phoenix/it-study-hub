@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Dashboard — IT Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#04040a;--surface:#0a0a14;--surface2:#111120;--surface3:#161625;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --lime:#c8f135;--lime-dim:rgba(200,241,53,0.1);--lime-glow:rgba(200,241,53,0.2);
+  --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;
+  --gold:#f7b731;--green:#43e97b;--red:#ff6584;--blue:#60a5fa;
+  --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none !important;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden;}
+
+/* noise */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
+
+/* grid bg */
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(200,241,53,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(200,241,53,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,10,0.9);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:0.12em;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--lime);}
+.nav-right{display:flex;align-items:center;gap:20px;}
+.nav-back{font-family:var(--ff-mono);font-size:12px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
+.nav-back:hover{color:var(--lime);}
+.nav-user{font-family:var(--ff-mono);font-size:11px;color:var(--lime);background:var(--lime-dim);border:1px solid rgba(200,241,53,0.2);padding:6px 14px;border-radius:4px;letter-spacing:1px;}
+
+/* ── NOT LOGGED IN GATE ── */
+#gateScreen{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 64px);padding:48px 24px;}
+.gate-card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:56px 48px;text-align:center;max-width:440px;position:relative;overflow:hidden;}
+.gate-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--lime),transparent);}
+.gate-icon{font-size:48px;margin-bottom:20px;}
+.gate-title{font-family:var(--ff-display);font-size:36px;font-weight:800;margin-bottom:10px;}
+.gate-sub{font-size:14px;color:var(--muted2);line-height:1.7;margin-bottom:28px;}
+.btn-lime{display:inline-block;background:var(--lime);color:#000;font-family:var(--ff-mono);font-size:12px;font-weight:700;padding:13px 28px;border-radius:6px;text-decoration:none;letter-spacing:1px;transition:all 0.2s;}
+.btn-lime:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--lime-glow);}
+
+/* ── MAIN LAYOUT ── */
+#dashScreen{display:none;position:relative;z-index:1;}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 64px);}
+
+/* ── SIDEBAR ── */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:28px 20px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
+.sb-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;padding:8px 4px 4px;margin-top:8px;}
+
+.profile-box{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:8px;text-align:center;}
+.profile-avatar{width:56px;height:56px;border-radius:14px;background:var(--lime-dim);border:2px solid var(--lime);display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);font-size:22px;color:var(--lime);margin:0 auto 12px;}
+.profile-name{font-family:var(--ff-display);font-size:18px;font-weight:700;margin-bottom:2px;}
+.profile-email{font-family:var(--ff-mono);font-size:10px;color:var(--muted2);letter-spacing:0.5px;}
+.admin-badge{display:inline-block;background:rgba(247,183,49,0.15);border:1px solid rgba(247,183,49,0.3);color:var(--gold);font-family:var(--ff-mono);font-size:9px;letter-spacing:1px;padding:3px 10px;border-radius:3px;margin-top:8px;}
+
+.stat-row{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
+.stat-row-label{font-family:var(--ff-mono);font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;}
+.stat-row-val{font-family:var(--ff-display);font-size:20px;color:var(--lime);}
+.stat-row-val.gold{color:var(--gold);}
+.stat-row-val.green{color:var(--green);}
+
+/* ── MAIN CONTENT ── */
+.main{padding:40px 48px;display:flex;flex-direction:column;gap:36px;}
+
+/* Welcome hero */
+.welcome-hero{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px 36px;position:relative;overflow:hidden;}
+.welcome-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,var(--lime-glow),transparent 70%);pointer-events:none;}
+.welcome-eyebrow{font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;color:var(--lime);text-transform:uppercase;margin-bottom:10px;}
+.welcome-title{font-family:var(--ff-display);font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.1;margin-bottom:10px;}
+.welcome-title em{font-style:normal;color:var(--lime);}
+.welcome-sub{font-size:14px;color:var(--muted2);line-height:1.7;max-width:500px;}
+.welcome-row{display:flex;gap:16px;margin-top:20px;flex-wrap:wrap;}
+.rank-chip{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-family:var(--ff-mono);font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px;}
+.rank-chip span{color:var(--lime);font-weight:700;}
+
+/* Section headers */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.sec-label{font-family:var(--ff-mono);font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;}
+.sec-label::before{content:'';width:14px;height:1px;background:var(--lime);}
+.sec-title{font-family:var(--ff-display);font-size:24px;font-weight:700;}
+
+/* Grid */
+.grid-2{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;}
+
+/* ── LEADERBOARD ── */
+.lb-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+.lb-top{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.lb-season{font-family:var(--ff-display);font-size:18px;font-weight:700;}
+.lb-ends{font-family:var(--ff-mono);font-size:10px;color:var(--muted);letter-spacing:1px;}
+
+.lb-loading{padding:40px;text-align:center;font-family:var(--ff-mono);font-size:12px;color:var(--muted);}
+
+.lb-row{display:grid;grid-template-columns:48px 1fr 80px 70px;align-items:center;padding:14px 24px;border-top:1px solid var(--border);transition:background 0.2s;gap:8px;}
+.lb-row:hover{background:var(--surface2);}
+.lb-row.is-me{background:var(--lime-dim);border-left:2px solid var(--lime);}
+.lb-row.top-3{background:rgba(247,183,49,0.05);}
+
+.rank-num{font-family:var(--ff-mono);font-size:12px;font-weight:700;color:var(--muted);text-align:center;}
+.rank-num.r1{color:#ffd700;}
+.rank-num.r2{color:#c0c0c0;}
+.rank-num.r3{color:#cd7f32;}
+.rank-num.rme{color:var(--lime);}
+
+.lb-name{font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.lb-name .you-tag{font-family:var(--ff-mono);font-size:9px;background:var(--lime);color:#000;padding:2px 6px;border-radius:2px;letter-spacing:1px;}
+.lb-xp{font-family:var(--ff-mono);font-size:12px;color:var(--lime);font-weight:600;text-align:right;}
+.lb-lvl{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);text-align:right;}
+
+/* ── QUIZ SCORES ── */
+.scores-grid{display:flex;flex-direction:column;gap:10px;}
+.score-row{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+.score-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.score-subject{font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.score-pct{font-family:var(--ff-mono);font-size:12px;font-weight:700;}
+.score-bar-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.score-bar-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(0.16,1,0.3,1);}
+.level-tag{font-family:var(--ff-mono);font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:2px;text-transform:uppercase;}
+.lt-beginner{background:rgba(67,233,123,0.1);color:var(--green);border:1px solid rgba(67,233,123,0.2);}
+.lt-intermediate{background:rgba(247,183,49,0.1);color:var(--gold);border:1px solid rgba(247,183,49,0.2);}
+.lt-advanced{background:rgba(255,101,132,0.1);color:var(--red);border:1px solid rgba(255,101,132,0.2);}
+.lt-none{background:var(--surface);color:var(--muted);border:1px solid var(--border);}
+
+/* ── BADGES ── */
+.badges-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;}
+.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.badge-item{aspect-ratio:1;background:var(--surface2);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;position:relative;transition:all 0.2s;cursor:help;gap:4px;}
+.badge-item:hover:not(.locked){border-color:var(--lime);transform:translateY(-3px);box-shadow:0 8px 24px var(--lime-glow);}
+.badge-item.locked{opacity:0.25;filter:grayscale(1);}
+.badge-item .badge-label{font-family:var(--ff-mono);font-size:8px;color:var(--muted2);letter-spacing:0.5px;text-align:center;padding:0 4px;}
+
+/* skill bars */
+.skill-section{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.skill-item{margin-bottom:14px;}
+.skill-item:last-child{margin-bottom:0;}
+.skill-header{display:flex;justify-content:space-between;margin-bottom:6px;}
+.skill-name{font-size:12px;color:var(--muted2);}
+.skill-pct{font-family:var(--ff-mono);font-size:11px;color:var(--lime);}
+.skill-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.skill-fill{height:100%;background:linear-gradient(90deg,var(--lime),#a8e63d);border-radius:2px;width:0;transition:width 1.4s cubic-bezier(0.16,1,0.3,1);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;animation:fadeUp 0.5s ease forwards;}
+
+/* spinner */
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--lime);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .grid-2{grid-template-columns:1fr;}
+  .main{padding:24px 20px;}
+  nav{padding:0 20px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
+  <div class="nav-right">
+    <span class="nav-user" id="navUserLabel" style="display:none;"></span>
+    <a href="index.html" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back Home
+    </a>
+  </div>
+</nav>
+
+<!-- NOT LOGGED IN -->
+<div id="gateScreen">
+  <div class="gate-card">
+    <div class="gate-icon">🔐</div>
+    <div class="gate-title">Members Only</div>
+    <div class="gate-sub">Create a free account or sign in to see your personal dashboard, leaderboard rank, quiz scores and badges.</div>
+    <a href="Login.html" class="btn-lime">Sign In / Create Account →</a>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashScreen">
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="profile-box">
+        <div class="profile-avatar" id="sbAvatar">?</div>
+        <div class="profile-name" id="sbName">Loading...</div>
+        <div class="profile-email" id="sbEmail"></div>
+        <div class="admin-badge" id="sbAdminBadge" style="display:none;">⭐ ADMIN</div>
+      </div>
+
+      <div class="sb-label">Your Stats</div>
+      <div class="stat-row">
+        <div class="stat-row-label">Global Rank</div>
+        <div class="stat-row-val" id="sbRank">#—</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-row-label">Total XP</div>
+        <div class="stat-row-val" id="sbXP">0</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-row-label">Quizzes Done</div>
+        <div class="stat-row-val green" id="sbQuizzes">0</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-row-label">Best Score</div>
+        <div class="stat-row-val gold" id="sbBest">—</div>
+      </div>
+
+      <div style="margin-top:auto;padding-top:20px;">
+        <button onclick="handleLogout()" style="width:100%;padding:10px;background:transparent;color:var(--red);font-family:var(--ff-mono);font-size:11px;border:1px solid rgba(255,101,132,0.2);border-radius:8px;cursor:pointer;transition:all 0.2s;letter-spacing:1px;" onmouseover="this.style.background='rgba(255,101,132,0.08)'" onmouseout="this.style.background='transparent'">SIGN OUT</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- WELCOME -->
+      <div class="welcome-hero fade-up">
+        <div class="welcome-eyebrow">Student Dashboard</div>
+        <h1 class="welcome-title">Hey, <em id="welcomeName">there</em>! 👋</h1>
+        <p class="welcome-sub" id="welcomeSub">Loading your personalized dashboard...</p>
+        <div class="welcome-row">
+          <div class="rank-chip">🏆 Global Rank <span id="wRank">#—</span></div>
+          <div class="rank-chip">⚡ Total XP <span id="wXP">0</span></div>
+          <div class="rank-chip" id="adminChip" style="display:none;">⭐ <span>Admin Access</span></div>
+        </div>
+      </div>
+
+      <!-- LEADERBOARD + QUIZ SCORES -->
+      <div class="grid-2">
+
+        <!-- LEADERBOARD -->
+        <section class="fade-up" style="animation-delay:0.1s;">
+          <div class="sec-head">
+            <div>
+              <div class="sec-label">Live Rankings</div>
+              <div class="sec-title">Leaderboard</div>
+            </div>
+          </div>
+          <div class="lb-card">
+            <div class="lb-top">
+              <div class="lb-season">Season 01 — 2025</div>
+              <div class="lb-ends" id="lbStatus"><span class="spinner"></span></div>
+            </div>
+            <div id="lbBody">
+              <div class="lb-loading"><span class="spinner"></span> Loading rankings...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- QUIZ SCORES -->
+        <section class="fade-up" style="animation-delay:0.15s;">
+          <div class="sec-head">
+            <div>
+              <div class="sec-label">Performance</div>
+              <div class="sec-title">Quiz Scores</div>
+            </div>
+          </div>
+          <div class="scores-grid" id="scoresGrid">
+            <div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);padding:20px;text-align:center;"><span class="spinner"></span> Loading scores...</div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- BADGES + SKILLS -->
+      <div class="grid-2">
+
+        <!-- BADGES -->
+        <section class="fade-up" style="animation-delay:0.2s;">
+          <div class="sec-head">
+            <div>
+              <div class="sec-label">Achievements</div>
+              <div class="sec-title">Badges</div>
+            </div>
+          </div>
+          <div class="badges-card">
+            <div class="badge-grid" id="badgeGrid">
+            </div>
+          </div>
+        </section>
+
+        <!-- SKILL BREAKDOWN -->
+        <section class="fade-up" style="animation-delay:0.25s;">
+          <div class="sec-head">
+            <div>
+              <div class="sec-label">Progress</div>
+              <div class="sec-title">Skill Breakdown</div>
+            </div>
+          </div>
+          <div class="skill-section" id="skillSection">
+            <div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);text-align:center;padding:20px;"><span class="spinner"></span></div>
+          </div>
+        </section>
+
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- CURSOR -->
+<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
+<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, orderBy, query, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
+  authDomain: "it-study-hub.firebaseapp.com",
+  projectId: "it-study-hub",
+  storageBucket: "it-study-hub.firebasestorage.app",
+  messagingSenderId: "566661039167",
+  appId: "1:566661039167:web:122691d263631e404ea48a"
+};
+
+const ADMIN_EMAIL = "bscit.tiu2012@gmail.com";
+const SUBJECTS = [
+  { key:'c',      label:'C Programming',   icon:'⚙️', color:'#60a5fa' },
+  { key:'java',   label:'OOPs Java',        icon:'☕', color:'#f7b731' },
+  { key:'python', label:'Python',           icon:'🐍', color:'#43e97b' },
+  { key:'cpp',    label:'C++',              icon:'➕', color:'#a78bfa' },
+  { key:'csharp', label:'C#',              icon:'🔷', color:'#38bdf8' },
+  { key:'web',    label:'HTML+CSS+JS',      icon:'🌐', color:'#c8f135' },
+];
+
+const ALL_BADGES = [
+  { id:'hello_world', icon:'🌟', label:'Hello World', desc:'Signed up & joined' },
+  { id:'first_quiz',  icon:'🎯', label:'First Quiz',  desc:'Completed first quiz' },
+  { id:'c_master',    icon:'⚙️', label:'C Master',    desc:'Scored 100% in C' },
+  { id:'java_hero',   icon:'☕', label:'Java Hero',   desc:'Scored 100% in Java' },
+  { id:'python_pro',  icon:'🐍', label:'Python Pro',  desc:'Scored 100% in Python' },
+  { id:'bug_hunter',  icon:'🐞', label:'Bug Hunter',  desc:'Got all advanced Qs right' },
+  { id:'night_owl',   icon:'🦉', label:'Night Owl',   desc:'Signed in after midnight' },
+  { id:'admin_star',  icon:'⭐', label:'Admin',       desc:'Platform admin' },
+];
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ── AUTH STATE ──
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    document.getElementById('gateScreen').style.display = 'flex';
+    document.getElementById('dashScreen').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('gateScreen').style.display = 'none';
+  document.getElementById('dashScreen').style.display = 'block';
+
+  const isAdmin = user.email === ADMIN_EMAIL;
+  const name = user.displayName || user.email.split('@')[0];
+  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+  // Update nav
+  const navLabel = document.getElementById('navUserLabel');
+  navLabel.textContent = name.split(' ')[0].toUpperCase();
+  navLabel.style.display = 'block';
+
+  // Sidebar profile
+  document.getElementById('sbAvatar').textContent = initials;
+  document.getElementById('sbName').textContent = name;
+  document.getElementById('sbEmail').textContent = user.email;
+  if (isAdmin) document.getElementById('sbAdminBadge').style.display = 'inline-block';
+  if (isAdmin) document.getElementById('adminChip').style.display = 'flex';
+
+  // Welcome
+  document.getElementById('welcomeName').textContent = name.split(' ')[0];
+
+  // Get or create user doc in Firestore
+  const userRef = doc(db, 'users', user.uid);
+  let userData = {};
+  try {
+    const snap = await getDoc(userRef);
+    if (snap.exists()) {
+      userData = snap.data();
+    } else {
+      // First time — create user doc
+      const now = new Date();
+      const earnedBadges = ['hello_world'];
+      if (isAdmin) earnedBadges.push('admin_star');
+      if (now.getHours() >= 0 && now.getHours() < 5) earnedBadges.push('night_owl');
+      userData = {
+        name, email: user.email, isAdmin,
+        xp: isAdmin ? 9999 : 100,
+        quizzesDone: 0,
+        scores: {},
+        badges: earnedBadges,
+        joinedAt: serverTimestamp()
+      };
+      await setDoc(userRef, userData);
+    }
+  } catch(e) {
+    console.log('Firestore error:', e);
+    userData = { name, email: user.email, isAdmin, xp: isAdmin?9999:100, quizzesDone:0, scores:{}, badges:['hello_world'] };
+  }
+
+  // ── RENDER DASHBOARD ──
+  renderStats(userData, isAdmin);
+  renderScores(userData.scores || {});
+  renderBadges(userData.badges || []);
+  renderSkills(userData.scores || {});
+  await renderLeaderboard(user.uid, userData.xp || 0);
+
+  // Welcome message
+  const quizCount = Object.keys(userData.scores || {}).length;
+  let sub = isAdmin
+    ? "You have full admin access. All premium content is unlocked across the platform."
+    : quizCount === 0
+    ? "You haven't taken any quizzes yet. Take a placement quiz to earn XP and unlock your rank!"
+    : `You've completed ${quizCount} quiz${quizCount>1?'zes':''}. Keep going to climb the leaderboard!`;
+  document.getElementById('welcomeSub').textContent = sub;
+});
+
+// ── STATS ──
+function renderStats(data, isAdmin) {
+  const xp = data.xp || 0;
+  const quizzes = data.quizzesDone || 0;
+  const scores = data.scores || {};
+  const best = Object.values(scores).length > 0
+    ? Math.max(...Object.values(scores).map(s => s.pct || 0)) + '%'
+    : '—';
+  document.getElementById('sbXP').textContent = xp.toLocaleString();
+  document.getElementById('sbQuizzes').textContent = quizzes;
+  document.getElementById('sbBest').textContent = best;
+  document.getElementById('wXP').textContent = xp.toLocaleString();
+}
+
+// ── LEADERBOARD ──
+async function renderLeaderboard(myUid, myXP) {
+  try {
+    const q = query(collection(db, 'users'), orderBy('xp','desc'), limit(10));
+    const snap = await getDocs(q);
+    const users = [];
+    snap.forEach(d => users.push({ uid: d.id, ...d.data() }));
+
+    // Find my rank
+    const allQ = query(collection(db, 'users'), orderBy('xp','desc'));
+    const allSnap = await getDocs(allQ);
+    let myRank = 1;
+    allSnap.forEach((d, i) => { if (d.id === myUid) myRank = i+1; });
+    // Since forEach doesn't give index easily, count manually
+    myRank = 1;
+    allSnap.forEach(d => { if (d.data().xp > myXP) myRank++; });
+
+    document.getElementById('sbRank').textContent = '#' + myRank;
+    document.getElementById('wRank').textContent = '#' + myRank;
+    document.getElementById('lbStatus').textContent = users.length + ' students ranked';
+
+    // Check if I'm in top 10
+    const myInTop = users.find(u => u.uid === myUid);
+
+    let html = '';
+    users.forEach((u, i) => {
+      const rank = i + 1;
+      const isMe = u.uid === myUid;
+      const rankClass = rank===1?'r1':rank===2?'r2':rank===3?'r3':isMe?'rme':'';
+      const rowClass = isMe?'lb-row is-me':rank<=3?'lb-row top-3':'lb-row';
+      const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+      const displayName = u.name || u.email?.split('@')[0] || 'Student';
+      html += `
+        <div class="${rowClass}">
+          <div class="rank-num ${rankClass}">${medal||rank}</div>
+          <div class="lb-name">${displayName}${isMe?'<span class="you-tag">YOU</span>':''}</div>
+          <div class="lb-xp">${(u.xp||0).toLocaleString()} XP</div>
+          <div class="lb-lvl">Lv ${Math.floor((u.xp||0)/500)+1}</div>
+        </div>`;
+    });
+
+    // Add my row if not in top 10
+    if (!myInTop) {
+      const session = JSON.parse(localStorage.getItem('ish_session')||'{}');
+      const myName = session.name || 'You';
+      html += `<div style="padding:8px 24px;font-family:var(--ff-mono);font-size:10px;color:var(--muted);text-align:center;border-top:1px solid var(--border);">· · ·</div>
+        <div class="lb-row is-me">
+          <div class="rank-num rme">${myRank}</div>
+          <div class="lb-name">${myName}<span class="you-tag">YOU</span></div>
+          <div class="lb-xp">${myXP.toLocaleString()} XP</div>
+          <div class="lb-lvl">Lv ${Math.floor(myXP/500)+1}</div>
+        </div>`;
+    }
+
+    document.getElementById('lbBody').innerHTML = html;
+  } catch(e) {
+    document.getElementById('lbBody').innerHTML = '<div class="lb-loading" style="color:var(--muted2)">Could not load leaderboard</div>';
+  }
+}
+
+// ── QUIZ SCORES ──
+function renderScores(scores) {
+  const grid = document.getElementById('scoresGrid');
+  if (Object.keys(scores).length === 0) {
+    grid.innerHTML = `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;font-family:var(--ff-mono);font-size:12px;color:var(--muted);">No quizzes taken yet.<br><a href="ESD.html" style="color:var(--lime);text-decoration:none;margin-top:8px;display:inline-block;">Take your first quiz →</a></div>`;
+    return;
+  }
+  let html = '';
+  SUBJECTS.forEach(sub => {
+    const s = scores[sub.key];
+    if (!s) return;
+    const pct = s.pct || 0;
+    const level = s.level || 'beginner';
+    const ltClass = 'lt-' + level;
+    html += `
+      <div class="score-row">
+        <div class="score-top">
+          <div class="score-subject">${sub.icon} ${sub.label}</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="level-tag ${ltClass}">${level}</span>
+            <span class="score-pct" style="color:${sub.color}">${pct}%</span>
+          </div>
+        </div>
+        <div class="score-bar-track">
+          <div class="score-bar-fill" style="width:${pct}%;background:${sub.color};"></div>
+        </div>
+      </div>`;
+  });
+  grid.innerHTML = html || `<div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);text-align:center;padding:20px;">No scores yet</div>`;
+}
+
+// ── BADGES ──
+function renderBadges(earned) {
+  const grid = document.getElementById('badgeGrid');
+  grid.innerHTML = ALL_BADGES.map(b => {
+    const has = earned.includes(b.id);
+    return `<div class="badge-item ${has?'':'locked'}" title="${b.desc}">
+      ${b.icon}
+      <span class="badge-label">${b.label}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── SKILL BREAKDOWN ──
+function renderSkills(scores) {
+  const section = document.getElementById('skillSection');
+  const groups = [
+    { label:'Low Level (C / C++)',    keys:['c','cpp'],          pct: avgPct(scores,['c','cpp']) },
+    { label:'Object Oriented (Java/C#)', keys:['java','csharp'], pct: avgPct(scores,['java','csharp']) },
+    { label:'Scripting (Python)',     keys:['python'],            pct: avgPct(scores,['python']) },
+    { label:'Web (HTML+CSS+JS)',      keys:['web'],               pct: avgPct(scores,['web']) },
+  ];
+  section.innerHTML = groups.map(g => `
+    <div class="skill-item">
+      <div class="skill-header">
+        <span class="skill-name">${g.label}</span>
+        <span class="skill-pct">${g.pct}%</span>
+      </div>
+      <div class="skill-track">
+        <div class="skill-fill" style="width:${g.pct}%"></div>
+      </div>
+    </div>`).join('');
+}
+
+function avgPct(scores, keys) {
+  const vals = keys.map(k => scores[k]?.pct || 0);
+  return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+}
+
+// ── LOGOUT ──
+window.handleLogout = async function() {
+  await signOut(auth);
+  localStorage.removeItem('ish_session');
+  window.location.href = 'index.html';
+};
+</script>
+
+<script>
+const c=document.getElementById('cur'),r=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function anim(){c.style.left=(mx-5)+'px';c.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=(rx-18)+'px';r.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');});
+</script>
+</body>
+</html>
