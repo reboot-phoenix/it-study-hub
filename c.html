@@ -241,7 +241,7 @@
     <div class="sidebar-premium-note" id="premiumNote" style="display:none;">
       <div class="spn-title">⭐ Go Premium</div>
       <div class="spn-text">Unlock all 6 lessons, advanced PDFs, and coding problems.</div>
-      <button class="spn-btn" onclick="showPremiumToast()">Upgrade Now</button>
+      <button class="spn-btn" onclick="window.location.href='premium.html'">Upgrade Now</button>
     </div>
   </aside>
 
@@ -331,12 +331,12 @@
         </div>
         <span class="mat-action">→ Start Quiz</span>
         </a>
-        <div class="material-item premium-item" onclick="showPremiumToast()">
+        <div class="material-item premium-item" onclick="window.location.href='premium.html'">
           <div class="mat-icon premium-icon">⭐</div>
           <div class="mat-info"><span class="mat-title">Advanced Notes — Pointers & Memory</span><span class="mat-desc">Deep dive into memory management · Premium</span></div>
           <span class="mat-action premium-action">🔒 Unlock</span>
         </div>
-        <div class="material-item premium-item" onclick="showPremiumToast()">
+        <div class="material-item premium-item" onclick="window.location.href='premium.html'">
           <div class="mat-icon premium-icon">⭐</div>
           <div class="mat-info"><span class="mat-title">Placement Question Bank</span><span class="mat-desc">100+ interview-level questions · Premium</span></div>
           <span class="mat-action premium-action">🔒 Unlock</span>
@@ -383,7 +383,7 @@ function openLesson(id) {
     document.getElementById('lv-crumb').textContent = lesson.title;
     document.getElementById('lessonViewer').classList.add('active-lesson');
     document.getElementById('lv-body').innerHTML = `
-      <div class="lv-premium-lock">
+      <div class="material-item premium-item" onclick="window.location.href='premium.html'">
         <div class="lock-icon">⭐</div>
         <div class="lock-title">Premium Content</div>
         <div class="lock-text">This lesson is part of the Premium track. Upgrade to access all advanced modules, PDFs, and placement question banks.</div>
@@ -451,7 +451,7 @@ function showToast(title, msg, gold=false) {
 }
 
 function showPremiumToast() {
-  showToast('⭐ Premium Feature', 'Payment integration coming soon! Contact your professor.', true);
+  window.location.href = 'premium.html';
 }
 
 window.addEventListener('load', updateProgress);
