@@ -686,11 +686,11 @@
      FIREBASE SETUP — replace placeholders below
      ════════════════════════════════════════════ -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
+  apiKey: "AIzaSyCu6ivnUU8wHVVtt3__eqaKxZMaKLAdT8A",
   authDomain: "it-study-hub.firebaseapp.com",
   projectId: "it-study-hub",
   storageBucket: "it-study-hub.firebasestorage.app",
@@ -703,15 +703,37 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
-// If already logged in → redirect to courses
+// Only auto-redirect if user lands on Login.html WITHOUT clicking logout
+// i.e. if they navigated here from somewhere else while already logged in.
+// We check a flag: if user explicitly came to login page, don't redirect.
+const cameToLogin = sessionStorage.getItem('intentional_login_visit');
 onAuthStateChanged(auth, (user) => {
-  if (user) {
+  if (user && !cameToLogin) {
     localStorage.setItem('ish_session', JSON.stringify({
       name: user.displayName || user.email.split('@')[0],
       email: user.email,
+      uid: user.uid,
       isAdmin: user.email === ADMIN_EMAIL
     }));
     window.location.href = 'courses.html';
+  } else if (user && cameToLogin) {
+    // Already logged in but intentionally came here — just save session, don't redirect
+    localStorage.setItem('ish_session', JSON.stringify({
+      name: user.displayName || user.email.split('@')[0],
+      email: user.email,
+      uid: user.uid,
+      isAdmin: user.email === ADMIN_EMAIL
+    }));
+  }
+});
+
+// Mark that we're intentionally on the login page (set this when user clicks "Login" link)
+// Clear it once firebase resolves so future auto-opens redirect correctly
+window.addEventListener('load', () => {
+  // If we were sent here by a Login button, that page sets 'intentional_login_visit'
+  // Clear after 30s so it doesn't persist forever
+  if (cameToLogin) {
+    setTimeout(() => sessionStorage.removeItem('intentional_login_visit'), 30000);
   }
 });
 
@@ -766,8 +788,16 @@ window.handleLogin = async function() {
   if (!email || !password) { showError('Please fill in all fields.'); return; }
   setLoading('loginBtn','loginSpinner','loginBtnText',true,'Sign In');
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    sessionStorage.removeItem('intentional_login_visit');
+    localStorage.setItem('ish_session', JSON.stringify({
+      name: cred.user.displayName || cred.user.email.split('@')[0],
+      email: cred.user.email,
+      uid: cred.user.uid,
+      isAdmin: cred.user.email === ADMIN_EMAIL
+    }));
     showSuccess('Signed in! Redirecting...');
+    setTimeout(() => window.location.href = 'courses.html', 800);
   } catch(e) {
     setLoading('loginBtn','loginSpinner','loginBtnText',false,'Sign In');
     showError(friendlyError(e.code));
@@ -789,7 +819,15 @@ window.handleSignup = async function() {
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(cred.user, { displayName: name });
+    sessionStorage.removeItem('intentional_login_visit');
+    localStorage.setItem('ish_session', JSON.stringify({
+      name: name,
+      email: cred.user.email,
+      uid: cred.user.uid,
+      isAdmin: cred.user.email === ADMIN_EMAIL
+    }));
     showSuccess('Account created! Redirecting...');
+    setTimeout(() => window.location.href = 'courses.html', 800);
   } catch(e) {
     setLoading('signupBtn','signupSpinner','signupBtnText',false,'Create Account');
     showError(friendlyError(e.code));
@@ -800,9 +838,22 @@ window.handleSignup = async function() {
 window.handleGoogleSignIn = async function() {
   clearBanners();
   try {
-    await signInWithPopup(auth, googleProvider);
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    sessionStorage.removeItem('intentional_login_visit');
+    localStorage.setItem('ish_session', JSON.stringify({
+      name: user.displayName || user.email.split('@')[0],
+      email: user.email,
+      uid: user.uid,
+      photoURL: user.photoURL || '',
+      isAdmin: user.email === ADMIN_EMAIL
+    }));
+    showSuccess('Signed in with Google! Redirecting...');
+    setTimeout(() => window.location.href = 'courses.html', 800);
   } catch(e) {
-    showError(friendlyError(e.code));
+    if (e.code !== 'auth/popup-closed-by-user') {
+      showError(friendlyError(e.code));
+    }
   }
 };
 
