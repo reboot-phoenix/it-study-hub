@@ -687,7 +687,7 @@
      ════════════════════════════════════════════ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
@@ -715,7 +715,7 @@ onAuthStateChanged(auth, (user) => {
       uid: user.uid,
       isAdmin: user.email === ADMIN_EMAIL
     }));
-    window.location.href = 'global.html';
+    window.location.href = 'index.html';
   } else if (user && cameToLogin) {
     // Already logged in but intentionally came here — just save session, don't redirect
     localStorage.setItem('ish_session', JSON.stringify({
@@ -797,7 +797,7 @@ window.handleLogin = async function() {
       isAdmin: cred.user.email === ADMIN_EMAIL
     }));
     showSuccess('Signed in! Redirecting...');
-    setTimeout(() => window.location.href = 'global.html', 800);
+    setTimeout(() => window.location.href = 'index.html', 800);
   } catch(e) {
     setLoading('loginBtn','loginSpinner','loginBtnText',false,'Sign In');
     showError(friendlyError(e.code));
@@ -827,7 +827,7 @@ window.handleSignup = async function() {
       isAdmin: cred.user.email === ADMIN_EMAIL
     }));
     showSuccess('Account created! Redirecting...');
-    setTimeout(() => window.location.href = 'global.html', 800);
+    setTimeout(() => window.location.href = 'index.html', 800);
   } catch(e) {
     setLoading('signupBtn','signupSpinner','signupBtnText',false,'Create Account');
     showError(friendlyError(e.code));
@@ -835,11 +835,23 @@ window.handleSignup = async function() {
 };
 
 // ── GOOGLE SIGN IN ──
+// Using signInWithRedirect — works reliably on GitHub Pages subfolders.
+// Popup gets blocked/rejected when site is served from a subfolder path.
 window.handleGoogleSignIn = async function() {
   clearBanners();
   googleProvider.setCustomParameters({ prompt: 'select_account' });
   try {
-    const result = await signInWithPopup(auth, googleProvider);
+    showSuccess('Redirecting to Google...');
+    await signInWithRedirect(auth, googleProvider);
+  } catch(e) {
+    showError(friendlyError(e.code));
+  }
+};
+
+// ── HANDLE GOOGLE REDIRECT RESULT ──
+// Runs every time Login.html loads — catches the return from Google
+getRedirectResult(auth).then((result) => {
+  if (result && result.user) {
     const user = result.user;
     sessionStorage.removeItem('intentional_login_visit');
     const name = user.displayName || user.email.split('@')[0];
@@ -851,16 +863,13 @@ window.handleGoogleSignIn = async function() {
       isAdmin: user.email === ADMIN_EMAIL
     }));
     showSuccess('Signed in with Google! Redirecting...');
-    setTimeout(() => window.location.href = 'global.html', 800);
-  } catch(e) {
-    if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') return;
-    if (e.code === 'auth/popup-blocked') {
-      showError('Popup blocked! Please allow popups for this site and try again.');
-      return;
-    }
+    setTimeout(() => window.location.href = 'index.html', 800);
+  }
+}).catch((e) => {
+  if (e.code && e.code !== 'auth/no-auth-event') {
     showError(friendlyError(e.code));
   }
-};
+});
 
 // ── FORGOT PASSWORD ──
 window.forgotPassword = async function() {
@@ -885,6 +894,8 @@ function friendlyError(code) {
     'auth/invalid-email':'Please enter a valid email address.',
     'auth/too-many-requests':'Too many attempts. Try again later.',
     'auth/popup-closed-by-user':'Google sign-in was cancelled.',
+    'auth/unauthorized-domain':'This domain is not authorized. Add it in Firebase Console → Authentication → Authorized Domains.',
+    'auth/operation-not-allowed':'Google Sign-In is not enabled in Firebase Console.',
   };
   return map[code] || 'Something went wrong. Please try again.';
 }
