@@ -58,7 +58,6 @@
     overflow: hidden;
   }
 
-  /* Decorative grid lines */
   .left-panel::before {
     content: '';
     position: absolute;
@@ -186,7 +185,6 @@
     background: var(--bg);
   }
 
-  /* Ambient glow */
   .right-panel::before {
     content: '';
     position: absolute;
@@ -671,7 +669,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, GithubAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, sendPasswordResetEmail, GithubAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
@@ -687,30 +685,26 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const githubProvider = new GithubAuthProvider();
 
-// Auto-redirect handling
-const cameToLogin = sessionStorage.getItem('intentional_login_visit');
-onAuthStateChanged(auth, (user) => {
-  if (user && !cameToLogin) {
-    localStorage.setItem('ish_session', JSON.stringify({
-      name: user.displayName || user.email.split('@')[0],
-      email: user.email,
-      uid: user.uid,
-      isAdmin: user.email === ADMIN_EMAIL
-    }));
-    window.location.href = 'index.html';
-  } else if (user && cameToLogin) {
-    localStorage.setItem('ish_session', JSON.stringify({
-      name: user.displayName || user.email.split('@')[0],
-      email: user.email,
-      uid: user.uid,
-      isAdmin: user.email === ADMIN_EMAIL
-    }));
-  }
-});
+// FIX: Check if we explicitly came from an intentional logout action
+const userJustLoggedOut = localStorage.getItem('just_logged_out');
 
-window.addEventListener('load', () => {
-  if (cameToLogin) {
-    setTimeout(() => sessionStorage.removeItem('intentional_login_visit'), 30000);
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Save current session data regardless
+    localStorage.setItem('ish_session', JSON.stringify({
+      name: user.displayName || user.email.split('@')[0],
+      email: user.email,
+      uid: user.uid,
+      isAdmin: user.email === ADMIN_EMAIL
+    }));
+
+    // FIX: If the user just clicked logout on index.html, STOP the redirect loop completely.
+    if (userJustLoggedOut === 'true') {
+      return; 
+    }
+
+    // Otherwise, execute regular routing flow
+    window.location.href = 'index.html';
   }
 });
 
@@ -765,8 +759,8 @@ window.handleLogin = async function() {
   if (!email || !password) { showError('Please fill in all fields.'); return; }
   setLoading('loginBtn','loginSpinner','loginBtnText',true,'Sign In');
   try {
+    localStorage.removeItem('just_logged_out'); // Clear signout flag on deliberate manual log in
     const cred = await signInWithEmailAndPassword(auth, email, password);
-    sessionStorage.removeItem('intentional_login_visit');
     localStorage.setItem('ish_session', JSON.stringify({
       name: cred.user.displayName || cred.user.email.split('@')[0],
       email: cred.user.email,
@@ -794,9 +788,9 @@ window.handleSignup = async function() {
   document.getElementById('signupPassword').classList.remove('input-error');
   setLoading('signupBtn','signupSpinner','signupBtnText',true,'Create Account');
   try {
+    localStorage.removeItem('just_logged_out'); // Clear flag
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(cred.user, { displayName: name });
-    sessionStorage.removeItem('intentional_login_visit');
     localStorage.setItem('ish_session', JSON.stringify({
       name: name,
       email: cred.user.email,
@@ -815,6 +809,7 @@ window.handleSignup = async function() {
 window.handleGithubSignIn = async function() {
   clearBanners();
   try {
+    localStorage.removeItem('just_logged_out'); // Clear flag on incoming clean handshake
     showSuccess('Redirecting to GitHub...');
     await signInWithRedirect(auth, githubProvider);
   } catch(e) {
@@ -826,7 +821,7 @@ window.handleGithubSignIn = async function() {
 getRedirectResult(auth).then((result) => {
   if (result && result.user) {
     const user = result.user;
-    sessionStorage.removeItem('intentional_login_visit');
+    localStorage.removeItem('just_logged_out'); // Clear flag
     const name = user.displayName || user.email.split('@')[0];
     localStorage.setItem('ish_session', JSON.stringify({
       name,
