@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Article — IT Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#04040a;--surface:#0a0a14;--surface2:#111120;
+  --border:rgba(255,255,255,0.07);--border-active:rgba(200,241,53,0.4);
+  --lime:#c8f135;--lime-dim:rgba(200,241,53,0.12);--lime-glow:rgba(200,241,53,0.25);
+  --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;
+  --gold:#f7b731;--gold-dim:rgba(247,183,49,0.12);
+  --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none!important;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
+
+/* PROGRESS BAR */
+.read-progress{position:fixed;top:0;left:0;height:2px;background:var(--lime);z-index:9999;transition:width 0.1s linear;width:0%;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,10,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:0.12em;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--lime);}
+.nav-right{display:flex;align-items:center;gap:20px;}
+.nav-back{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;text-transform:uppercase;letter-spacing:0.05em;}
+.nav-back:hover{color:var(--lime);}
+.nav-share-btn{font-family:var(--ff-mono);font-size:11px;color:var(--lime);background:var(--lime-dim);border:1px solid var(--border-active);padding:7px 16px;border-radius:8px;cursor:pointer;transition:all 0.2s;letter-spacing:0.05em;}
+.nav-share-btn:hover{background:var(--lime);color:#000;}
+
+/* LAYOUT */
+.layout{position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:0;max-width:1200px;margin:0 auto;padding:60px 48px;align-items:start;}
+
+/* ARTICLE */
+.article-wrap{max-width:720px;}
+
+/* HERO */
+.article-hero{margin-bottom:56px;}
+.art-category{display:inline-flex;align-items:center;gap:6px;font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);background:var(--lime-dim);border:1px solid var(--border-active);padding:5px 14px;border-radius:99px;margin-bottom:20px;}
+.art-title{font-family:var(--ff-display);font-size:clamp(32px,5vw,56px);font-weight:800;line-height:1.05;letter-spacing:-0.01em;margin-bottom:20px;color:var(--text);}
+.art-excerpt{font-size:17px;color:var(--muted2);line-height:1.75;font-weight:300;margin-bottom:32px;border-left:2px solid var(--lime);padding-left:20px;}
+.art-meta{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.meta-author{display:flex;align-items:center;gap:10px;}
+.meta-avatar{width:36px;height:36px;border-radius:50%;background:var(--lime-dim);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.meta-name{font-weight:600;font-size:14px;}
+.meta-role{font-family:var(--ff-mono);font-size:10px;color:var(--lime);text-transform:uppercase;letter-spacing:1px;}
+.meta-divider{width:1px;height:32px;background:var(--border);}
+.meta-item{font-family:var(--ff-mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+
+/* FEATURED IMAGE */
+.art-visual{width:100%;height:280px;background:linear-gradient(135deg,#0a0a18,#0f0f22);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:100px;border:1px solid var(--border);margin:40px 0;position:relative;overflow:hidden;}
+.art-visual::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 50%,rgba(200,241,53,0.08),transparent 60%);}
+.art-visual-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,241,53,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(200,241,53,0.04) 1px,transparent 1px);background-size:40px 40px;}
+
+/* ARTICLE BODY */
+.art-body{font-size:16px;line-height:1.85;color:#d4d4e0;font-weight:300;}
+.art-body p{margin-bottom:24px;}
+.art-body h2{font-family:var(--ff-display);font-size:28px;font-weight:800;color:var(--text);margin:48px 0 16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.art-body h3{font-family:var(--ff-display);font-size:20px;font-weight:700;color:var(--text);margin:32px 0 12px;}
+.art-body strong{color:var(--text);font-weight:600;}
+.art-body em{color:var(--lime);font-style:normal;font-weight:500;}
+.art-body code{font-family:var(--ff-mono);font-size:13px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:2px 7px;color:var(--lime);}
+.art-body pre{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin:24px 0;overflow-x:auto;position:relative;}
+.art-body pre::before{content:'CODE';position:absolute;top:10px;right:14px;font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;color:var(--muted);}
+.art-body pre code{background:none;border:none;padding:0;color:#a8d8a8;font-size:13px;line-height:1.7;}
+.art-body ul,.art-body ol{padding-left:24px;margin-bottom:24px;}
+.art-body li{margin-bottom:8px;color:#d4d4e0;}
+.art-body blockquote{border-left:3px solid var(--lime);padding:16px 24px;background:var(--lime-dim);border-radius:0 10px 10px 0;margin:24px 0;font-style:italic;color:var(--text);}
+
+/* ARTICLE FOOTER */
+.art-footer{margin-top:64px;padding-top:40px;border-top:1px solid var(--border);}
+.art-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}
+.art-tag{font-family:var(--ff-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);cursor:pointer;transition:all 0.2s;}
+.art-tag:hover{border-color:var(--border-active);color:var(--lime);}
+
+/* RELATED POSTS */
+.related-title{font-family:var(--ff-display);font-size:24px;font-weight:800;margin-bottom:20px;}
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.related-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:all 0.25s;text-decoration:none;color:inherit;display:block;}
+.related-card:hover{border-color:var(--border-active);transform:translateY(-3px);background:var(--surface2);}
+.rc-emoji{font-size:24px;margin-bottom:10px;}
+.rc-cat{font-family:var(--ff-mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--lime);margin-bottom:6px;}
+.rc-title{font-family:var(--ff-display);font-size:15px;font-weight:700;line-height:1.3;color:var(--text);margin-bottom:6px;}
+.rc-meta{font-family:var(--ff-mono);font-size:10px;color:var(--muted);}
+
+/* SIDEBAR (sticky) */
+.sidebar{position:sticky;top:84px;padding-left:48px;display:flex;flex-direction:column;gap:20px;}
+.sidebar-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;}
+.sc-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:block;}
+
+/* TOC */
+.toc-item{display:flex;gap:10px;padding:8px 10px;border-radius:7px;cursor:pointer;transition:all 0.2s;font-size:13px;color:var(--muted2);text-decoration:none;align-items:flex-start;}
+.toc-item:hover{background:var(--surface2);color:var(--text);}
+.toc-item.active{color:var(--lime);background:var(--lime-dim);}
+.toc-num{font-family:var(--ff-mono);font-size:10px;color:var(--muted);margin-top:2px;min-width:16px;}
+
+/* READ PROGRESS WIDGET */
+.progress-widget{text-align:center;}
+.prog-circle{width:72px;height:72px;margin:0 auto 10px;}
+.prog-text{font-family:var(--ff-display);font-size:22px;color:var(--lime);}
+.prog-sub{font-family:var(--ff-mono);font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+
+/* SHARE */
+.share-btn{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted2);font-family:var(--ff-mono);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;margin-bottom:6px;}
+.share-btn:hover{border-color:var(--border-active);color:var(--lime);}
+.share-btn.copy-btn:hover{background:var(--lime);color:#000;border-color:var(--lime);}
+
+/* NOT FOUND */
+.not-found{text-align:center;padding:120px 40px;position:relative;z-index:1;}
+.nf-icon{font-size:64px;margin-bottom:20px;}
+.nf-title{font-family:var(--ff-display);font-size:40px;margin-bottom:12px;}
+.nf-sub{color:var(--muted2);margin-bottom:28px;font-size:15px;}
+.btn-lime{background:var(--lime);color:#000;border:none;padding:12px 28px;border-radius:8px;font-family:var(--ff-mono);font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;letter-spacing:1px;}
+
+@media(max-width:1000px){
+  .layout{grid-template-columns:1fr;padding:40px 24px;}
+  .sidebar{display:none;}
+}
+@media(max-width:600px){
+  nav{padding:0 20px;}
+  .related-grid{grid-template-columns:1fr;}
+  .art-title{font-size:28px;}
+}
+</style>
+</head>
+<body>
+
+<div class="read-progress" id="readProgress"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
+  <div class="nav-right">
+    <button class="nav-share-btn" onclick="copyLink()">⬡ Share Article</button>
+    <a href="blog.html" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      All Articles
+    </a>
+  </div>
+</nav>
+
+<div id="appRoot"></div>
+
+<!-- CURSOR -->
+<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
+<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px 20px;font-size:13px;z-index:9990;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none;display:flex;align-items:center;gap:10px;">
+  <span id="toastIcon">✅</span>
+  <span id="toastMsg">Copied!</span>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  SAME POSTS DATA — must match blog.html
+// ══════════════════════════════════════════
+const POSTS = [
+  {
+    id: 0,
+    title: 'The Rise of AI in Systems Programming',
+    excerpt: 'Will LLMs replace C++ developers, or just make them faster? We explore how AI tools like GitHub Copilot and Claude are changing the landscape of low-level code — and what it means for students learning C and C++ today.',
+    category: 'trend', catLabel: 'Tech Trends',
+    emoji: '🤖', author: 'Dithsa Dutta', authorEmoji: '👨‍💻',
+    authorRole: 'Founder & Lead Architect',
+    date: 'May 15, 2026', readTime: '12 min',
+    tags: ['AI', 'C++', 'Systems', 'Future of Code'],
+    content: `
+      <p>Artificial intelligence has stormed into nearly every layer of the software stack. But there's one domain where most assumed it couldn't reach: low-level systems programming. C, C++, Rust — the languages of operating systems, compilers, and embedded hardware. The land of memory addresses, pointer arithmetic, and undefined behavior.</p>
+      <p>That assumption is now being tested.</p>
+      <h2>What AI tools can already do</h2>
+      <p>Tools like GitHub Copilot, Claude, and GPT-4 can now generate surprisingly functional C and C++ code. Ask them to implement a linked list, write a memory allocator, or explain a segmentation fault — and they often do it well. For students learning systems programming, this is genuinely useful.</p>
+      <p>But here's what's more interesting: AI doesn't just write code. It <em>explains</em> code. For a student staring at a pointer error at 2AM, having an AI that can walk through the stack frame step by step is transformative.</p>
+      <h2>What AI still gets wrong</h2>
+      <p>AI models hallucinate. In systems programming, a hallucination isn't just wrong — it can be a subtle memory bug that compiles cleanly and crashes in production three weeks later. AI-generated C code often looks correct but has off-by-one errors, missing null checks, or incorrect use of volatile.</p>
+      <p>The deeper issue: AI doesn't understand <em>why</em> certain patterns exist. It doesn't know that you're writing code for a microcontroller with 2KB of RAM, or that your allocator needs to be lock-free. Context that an experienced systems programmer carries in their head is invisible to the model.</p>
+      <h2>What this means for you as a student</h2>
+      <p>Learn the fundamentals anyway. Not despite AI, but because of it. The developers who will thrive are those who can tell when AI is wrong — and fix it. That requires real understanding of pointers, memory layout, and hardware behavior.</p>
+      <p>Use AI as a tutor, not a replacement. Let it explain concepts, generate examples to experiment with, and help you debug. But write the code yourself first. Struggle with it. The struggle is where the learning happens.</p>
+      <p>The C programmers of 2030 won't be slower than today's — they'll be dramatically faster, with AI handling boilerplate while they focus on architecture. But the baseline knowledge required to use these tools well is exactly what courses like ours teach.</p>
+    `
+  },
+  {
+    id: 1,
+    title: 'Mastering Java Streams for Cleaner Code',
+    excerpt: 'Stop writing messy for-loops. Learn how to process data efficiently using the Java Stream API with practical examples that will change how you write Java forever.',
+    category: 'tutorial', catLabel: 'Tutorial',
+    emoji: '☕', author: 'Mithila Rani Saha', authorEmoji: '🌸',
+    authorRole: 'Designer & Content Lead',
+    date: 'May 10, 2026', readTime: '5 min',
+    tags: ['Java', 'Streams', 'OOP', 'Clean Code'],
+    content: `
+      <p>Java Streams were introduced in Java 8 and they completely changed how Java developers think about data processing. If you're still writing nested for-loops to filter and transform collections, this article will change your life.</p>
+      <h2>What is a Stream?</h2>
+      <p>A Stream is not a data structure. It's a pipeline of operations applied to a source of data — a collection, an array, or even an I/O channel. Streams are lazy: nothing executes until you call a terminal operation.</p>
+      <p>Think of it like a conveyor belt in a factory. Raw materials (your data) go in one end, and each station on the belt transforms them. At the very end, you collect the finished product.</p>
+      <h2>The three parts of every stream</h2>
+      <p><strong>1. Source</strong> — where the data comes from. Usually a List, Set, or array.<br>
+      <strong>2. Intermediate operations</strong> — transformations that return another stream. Examples: <code>filter()</code>, <code>map()</code>, <code>sorted()</code>.<br>
+      <strong>3. Terminal operation</strong> — triggers execution and produces a result. Examples: <code>collect()</code>, <code>forEach()</code>, <code>count()</code>.</p>
+      <h2>A real example: filtering students by grade</h2>
+      <p>The old verbose way that's hard to read:</p>
+      <pre><code>List&lt;Student&gt; topStudents = new ArrayList&lt;&gt;();
+for (Student s : students) {
+    if (s.getGrade() &gt;= 80) {
+        topStudents.add(s);
+    }
+}
+Collections.sort(topStudents,
+    Comparator.comparing(Student::getName));</code></pre>
+      <p>The Stream way — clean, readable, one expression:</p>
+      <pre><code>List&lt;Student&gt; topStudents = students.stream()
+    .filter(s -&gt; s.getGrade() &gt;= 80)
+    .sorted(Comparator.comparing(Student::getName))
+    .collect(Collectors.toList());</code></pre>
+      <h2>When NOT to use streams</h2>
+      <p>Streams aren't always better. For simple single-element operations, a regular if-statement is more readable. For performance-critical inner loops, streams add overhead. Use them when they make the intent clearer — not just because they're modern.</p>
+      <p>The goal of good code is communication. Streams communicate data transformation pipelines better than loops. Master them and your Java code will level up immediately.</p>
+    `
+  },
+  {
+    id: 2,
+    title: 'How to Ace Your First Tech Interview',
+    excerpt: 'From whiteboarding logic to behavioral questions — everything you need to know before walking into the room for the first time.',
+    category: 'career', catLabel: 'Career Growth',
+    emoji: '🎯', author: 'Snehanshu Sarkar', authorEmoji: '🐍',
+    authorRole: 'Contributor',
+    date: 'May 5, 2026', readTime: '8 min',
+    tags: ['Interview', 'Career', 'DSA', 'Placement'],
+    content: `
+      <p>Your first tech interview is terrifying. You're being evaluated on your thinking process, your communication, your problem-solving, and your code — simultaneously, under time pressure, by a stranger. No wonder most students feel underprepared.</p>
+      <p>Here's the truth: preparation is almost entirely the deciding factor. The students who get offers aren't always the most talented — they're the ones who prepared systematically.</p>
+      <h2>The three things interviewers actually evaluate</h2>
+      <p><strong>1. Can you solve problems?</strong> It's not just about getting the right answer — it's about your approach. Do you jump straight to coding, or do you think out loud, clarify the problem, and consider edge cases first? The process matters as much as the solution.</p>
+      <p><strong>2. Can you communicate?</strong> Coding in silence is a red flag. Interviewers want to follow your thinking. Talk through your logic: <em>"I'm thinking about using a HashMap here because lookup will be O(1)..."</em> Even if your solution is wrong, articulating your reasoning shows how you'd work on a team.</p>
+      <p><strong>3. Are you someone they want to work with?</strong> Behavioral questions aren't formalities. Have 3-4 specific stories from projects or college ready to go.</p>
+      <h2>The preparation plan that actually works</h2>
+      <p>Don't try to solve 500 LeetCode problems. That's not the game. Instead: solve 50-75 problems across key patterns — two pointers, sliding window, BFS/DFS, dynamic programming basics, and trees. For each problem, understand <em>why</em> the approach works, not just how to implement it.</p>
+      <p>Practice explaining your solutions out loud. Record yourself if needed. Most students can solve problems silently but fall apart when asked to explain. Bridge that gap before the interview.</p>
+      <h2>The day of the interview</h2>
+      <p>Before writing a single line: restate the problem in your own words. Ask about constraints. Think out loud about 2-3 approaches before picking one. Start with the brute force — never say "I know a better way" without first showing you understand the simple solution.</p>
+      <p>When you get stuck — and you will — say <em>"I'm not sure of the optimal approach, but I know how I'd start..."</em> Interviewers would rather see you reason under pressure than watch you freeze.</p>
+    `
+  },
+  {
+    id: 3,
+    title: 'Python Decorators: The Magic Behind the @ Symbol',
+    excerpt: 'They look intimidating but they are incredibly powerful. We break down Python decorators completely from scratch with real code examples.',
+    category: 'tutorial', catLabel: 'Tutorial',
+    emoji: '🐍', author: 'Argha Paul', authorEmoji: '🔷',
+    authorRole: 'Contributor',
+    date: 'Apr 28, 2026', readTime: '6 min',
+    tags: ['Python', 'Decorators', 'Advanced', 'Functions'],
+    content: `
+      <p>If you've written Flask routes, used Django's <code>@login_required</code>, or seen <code>@staticmethod</code> in a class, you've used decorators. But most students treat them like magic syntax — they know the @ goes above the function, but not why.</p>
+      <p>Decorators are one of Python's most powerful features. Once you truly understand them, you'll start seeing opportunities to use them everywhere.</p>
+      <h2>First: functions are objects</h2>
+      <p>Python functions are first-class objects. You can store them in variables, pass them as arguments, and return them from other functions. This is the foundation decorators are built on.</p>
+      <pre><code>def greet():
+    return "Hello!"
+
+say_hi = greet   # Storing the function itself
+print(say_hi())  # Hello!</code></pre>
+      <h2>A decorator is just a function that wraps another function</h2>
+      <pre><code>def my_decorator(func):
+    def wrapper():
+        print("Before the function runs")
+        func()
+        print("After the function runs")
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+# @ is sugar for: say_hello = my_decorator(say_hello)</code></pre>
+      <h2>A real use case: timing your functions</h2>
+      <pre><code>import time
+
+def timer(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__} took {end - start:.4f}s")
+        return result
+    return wrapper
+
+@timer
+def slow_function():
+    time.sleep(1)
+    return "done"
+
+slow_function()  # slow_function took 1.0012s</code></pre>
+      <p>Notice <code>*args</code> and <code>**kwargs</code> — this makes your decorator work with any function signature.</p>
+      <h2>The functools.wraps trick</h2>
+      <p>When you wrap a function, it loses its name and docstring. Fix this with <code>@functools.wraps(func)</code> inside your wrapper. Always include it in production decorators.</p>
+      <p>Decorators are used everywhere in professional Python: for authentication, caching, rate limiting, logging, retrying failed network calls. Master this pattern and a huge chunk of Python libraries will suddenly make sense.</p>
+    `
+  },
+  {
+    id: 4,
+    title: '5 Habits That Separate Top CS Students From the Rest',
+    excerpt: "It's not about studying more hours. The students who land the best opportunities have very specific habits that most people completely overlook.",
+    category: 'tips', catLabel: 'Study Tips',
+    emoji: '🧠', author: 'IT Study Hub', authorEmoji: '🌟',
+    authorRole: 'Editorial Team',
+    date: 'Apr 20, 2026', readTime: '7 min',
+    tags: ['Study Tips', 'Productivity', 'Habits', 'CS Students'],
+    content: `
+      <p>Every semester, some students seem to get more done in less time. They finish assignments faster, retain concepts longer, and somehow still have time for projects and internship applications. What's actually different about them?</p>
+      <p>After observing students over the years, we've identified five habits that consistently separate those who thrive from those who grind endlessly with mediocre results.</p>
+      <h2>1. They build things, not just read things</h2>
+      <p>Passive learning — reading textbooks, watching lectures, highlighting notes — feels productive but retains poorly. Active learning means building. After every concept you learn, build something that uses it. Learned linked lists? Implement a playlist manager. Learned file I/O? Build a simple note-taking app.</p>
+      <p>The act of building forces you to confront every gap in your understanding. A textbook can't tell you why your pointer is null. Debugging your own code can.</p>
+      <h2>2. They practice retrieval, not review</h2>
+      <p>Most students re-read their notes before exams. High performers quiz themselves instead. Close your notes and try to write down everything you remember. This process — called <em>retrieval practice</em> — is one of the most well-studied memory enhancement techniques. It's uncomfortable because you realize how much you forgot. That's exactly why it works.</p>
+      <h2>3. They write code every single day</h2>
+      <p>Not big coding sessions once a week. Small, consistent practice every day. Even 30 minutes of deliberate coding compounds dramatically over a semester. Programming is a motor skill as much as an intellectual one. Consistency builds fluency that cramming never can.</p>
+      <h2>4. They embrace confusion as progress</h2>
+      <p>Average students get frustrated when they don't understand something and often give up or skip ahead. High performers have learned to sit with confusion. They treat it as a signal that they're at the edge of their understanding — which is exactly where learning happens.</p>
+      <h2>5. They connect concepts across subjects</h2>
+      <p>The students who truly excel don't keep subjects in separate mental boxes. They notice that memory management in C is connected to garbage collection in Java, which is connected to how Python handles reference counting. These cross-subject connections are where deep understanding lives — and they're also what interviewers test.</p>
+      <p>Study with the question: <em>"Where have I seen this idea before?"</em> That habit alone will transform how you learn.</p>
+    `
+  }
+];
+
+// ── Get post ID from URL ──
+const params = new URLSearchParams(window.location.search);
+const postId = parseInt(params.get('id'));
+const post = POSTS.find(p => p.id === postId);
+
+// ── Render ──
+const root = document.getElementById('appRoot');
+
+if (!post) {
+  root.innerHTML = `
+    <div class="not-found">
+      <div class="nf-icon">📭</div>
+      <h1 class="nf-title">Article Not Found</h1>
+      <p class="nf-sub">This article doesn't exist or may have been moved.</p>
+      <a href="blog.html" class="btn-lime">← Back to Blog</a>
+    </div>`;
+} else {
+  // Set page title
+  document.title = `${post.title} — IT Study Hub`;
+
+  // Related posts — 2 random others
+  const related = POSTS.filter(p => p.id !== post.id).sort(() => Math.random()-0.5).slice(0,2);
+
+  // Extract headings for TOC
+  const headings = [...post.content.matchAll(/<h2>(.*?)<\/h2>/g)].map((m,i) => ({
+    text: m[1].replace(/<[^>]*>/g,''),
+    index: i
+  }));
+
+  const tocHTML = headings.length ? headings.map((h,i) => `
+    <a class="toc-item" id="toc-${i}" href="#heading-${i}">
+      <span class="toc-num">0${i+1}</span>
+      <span>${h.text}</span>
+    </a>`).join('') : '<p style="font-size:12px;color:var(--muted)">No sections</p>';
+
+  // Number the headings in content
+  let hIdx = 0;
+  const numberedContent = post.content.replace(/<h2>/g, () => `<h2 id="heading-${hIdx++}">`);
+
+  root.innerHTML = `
+  <div class="layout">
+    <article class="article-wrap">
+      <div class="article-hero">
+        <div class="art-category">${post.catLabel}</div>
+        <h1 class="art-title">${post.title}</h1>
+        <p class="art-excerpt">${post.excerpt}</p>
+        <div class="art-meta">
+          <div class="meta-author">
+            <div class="meta-avatar">${post.authorEmoji}</div>
+            <div>
+              <div class="meta-name">${post.author}</div>
+              <div class="meta-role">${post.authorRole}</div>
+            </div>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-item">📅 ${post.date}</div>
+          <div class="meta-item">🕒 ${post.readTime} read</div>
+        </div>
+      </div>
+
+      <div class="art-visual">
+        <div class="art-visual-grid"></div>
+        <span style="position:relative;z-index:1;filter:drop-shadow(0 0 40px rgba(200,241,53,0.2))">${post.emoji}</span>
+      </div>
+
+      <div class="art-body">${numberedContent}</div>
+
+      <div class="art-footer">
+        <div class="art-tags">
+          ${post.tags.map(t => `<span class="art-tag"># ${t}</span>`).join('')}
+        </div>
+        <div class="related-title">More Articles</div>
+        <div class="related-grid">
+          ${related.map(r => `
+            <a class="related-card" href="blog-post.html?id=${r.id}">
+              <div class="rc-emoji">${r.emoji}</div>
+              <div class="rc-cat">${r.catLabel}</div>
+              <div class="rc-title">${r.title}</div>
+              <div class="rc-meta">${r.readTime} read · ${r.author}</div>
+            </a>`).join('')}
+        </div>
+      </div>
+    </article>
+
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <span class="sc-label">Reading Progress</span>
+        <div class="progress-widget">
+          <svg class="prog-circle" viewBox="0 0 72 72">
+            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+            <circle id="progCircle" cx="36" cy="36" r="30" fill="none" stroke="#c8f135" stroke-width="4"
+              stroke-dasharray="188.5" stroke-dashoffset="188.5" stroke-linecap="round"
+              transform="rotate(-90 36 36)" style="transition:stroke-dashoffset 0.1s"/>
+          </svg>
+          <div class="prog-text" id="progPct">0%</div>
+          <div class="prog-sub">${post.readTime} read</div>
+        </div>
+      </div>
+
+      ${headings.length ? `
+      <div class="sidebar-card">
+        <span class="sc-label">In This Article</span>
+        ${tocHTML}
+      </div>` : ''}
+
+      <div class="sidebar-card">
+        <span class="sc-label">Share</span>
+        <button class="share-btn copy-btn" onclick="copyLink()">🔗 Copy Link</button>
+        <button class="share-btn" onclick="shareTwitter()">🐦 Share on Twitter</button>
+        <button class="share-btn" onclick="shareLinkedIn()">💼 Share on LinkedIn</button>
+      </div>
+
+      <div class="sidebar-card" style="background:var(--lime-dim);border-color:var(--border-active);">
+        <span class="sc-label" style="color:var(--lime)">Enjoyed this?</span>
+        <p style="font-size:13px;color:var(--muted2);line-height:1.6;margin-bottom:14px;">Unlock advanced lessons and all courses with Premium.</p>
+        <a href="premium.html" style="display:block;background:var(--lime);color:#000;text-align:center;padding:10px;border-radius:8px;font-family:var(--ff-mono);font-size:11px;font-weight:700;text-decoration:none;letter-spacing:1px;">⚡ GO PREMIUM</a>
+      </div>
+    </aside>
+  </div>`;
+
+  // ── Reading progress ──
+  function updateProgress() {
+    const winScroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const pct = Math.round((winScroll / height) * 100);
+    document.getElementById('readProgress').style.width = pct + '%';
+    const el = document.getElementById('progPct');
+    const circle = document.getElementById('progCircle');
+    if (el) el.textContent = pct + '%';
+    if (circle) circle.style.strokeDashoffset = 188.5 - (188.5 * pct / 100);
+
+    // Highlight TOC item
+    const headingEls = document.querySelectorAll('[id^="heading-"]');
+    let current = 0;
+    headingEls.forEach((el, i) => {
+      if (el.getBoundingClientRect().top < 120) current = i;
+    });
+    document.querySelectorAll('.toc-item').forEach((el,i) => {
+      el.classList.toggle('active', i === current);
+    });
+  }
+  window.addEventListener('scroll', updateProgress);
+}
+
+// ── Share functions ──
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    showToast('🔗', 'Link copied to clipboard!');
+  });
+}
+function shareTwitter() {
+  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(post?.title || 'Check this out')}&url=${encodeURIComponent(window.location.href)}`;
+  window.open(url, '_blank');
+}
+function shareLinkedIn() {
+  const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
+  window.open(url, '_blank');
+}
+function showToast(icon, msg) {
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastMsg').textContent = msg;
+  const t = document.getElementById('toast');
+  t.style.transform='translateY(0)'; t.style.opacity='1';
+  setTimeout(() => { t.style.transform='translateY(80px)'; t.style.opacity='0'; }, 3000);
+}
+
+// ── Cursor ──
+const cur = document.getElementById('cur');
+const curR = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+(function anim() {
+  cur.style.left=(mx-5)+'px'; cur.style.top=(my-5)+'px';
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  curR.style.left=(rx-18)+'px'; curR.style.top=(ry-18)+'px';
+  requestAnimationFrame(anim);
+})();
+document.addEventListener('mouseover', e => {
+  if (e.target.matches('a,button,.related-card,.toc-item,.art-tag')) cur.style.transform='scale(2)';
+  else cur.style.transform='scale(1)';
+});
+</script>
+</body>
+</html>
