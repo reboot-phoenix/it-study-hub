@@ -418,14 +418,14 @@
     color: var(--muted);
   }
 
-  /* ── GOOGLE BTN ── */
+  /* ── GITHUB BTN ── */
   .btn-github {
     width: 100%;
     padding: 13px;
-    background: var(--surface);
+    background: #24292e;
     border: 1px solid var(--border);
     border-radius: 10px;
-    color: var(--text);
+    color: #ffffff;
     font-family: var(--ff-body);
     font-size: 14px;
     font-weight: 500;
@@ -440,7 +440,7 @@
 
   .btn-github:hover {
     border-color: var(--border-active);
-    background: var(--surface2);
+    background: #2f363d;
     transform: translateY(-1px);
   }
 
@@ -516,44 +516,10 @@
     .left-panel { display: none; }
     .right-panel { padding: 32px 24px; align-items: flex-start; padding-top: 60px; }
   }
-  .btn-github {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 13px 20px;
-    background: #161b22;
-    border: 1.5px solid rgba(255,255,255,0.12);
-    border-radius: 10px;
-    font-family: var(--ff-mono);
-    font-size: 13px;
-    font-weight: 600;
-    color: #f0f0f8;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-top: 4px;
-    letter-spacing: 0.5px;
-  }
-  .btn-github:hover {
-    background: #1c2129;
-    border-color: rgba(200,241,53,0.4);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(200,241,53,0.1);
-    color: #c8f135;
-  }
-  .github-icon {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-    fill: currentColor;
-  }
-
 </style>
 </head>
 <body>
 
-<!-- LEFT PANEL -->
 <div class="left-panel">
   <div class="lp-logo">IT <span>STUDY</span> HUB</div>
 
@@ -581,17 +547,14 @@
   <div class="lp-bottom">© 2025 IT Study Hub · Built for students</div>
 </div>
 
-<!-- RIGHT PANEL -->
 <div class="right-panel">
   <div class="auth-box">
 
-    <!-- TAB TOGGLE -->
     <div class="tab-toggle">
       <button class="tab-btn active" onclick="switchTab('login')">Sign In</button>
       <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
     </div>
 
-    <!-- ERROR / SUCCESS BANNERS -->
     <div class="error-banner" id="errorBanner">
       <span>⚠️</span>
       <span id="errorText">Something went wrong.</span>
@@ -601,7 +564,6 @@
       <span id="successText">Done!</span>
     </div>
 
-    <!-- ── LOGIN FORM ── -->
     <div class="form-panel active" id="loginPanel">
       <div class="form-title">Welcome back</div>
       <div class="form-sub">Sign in to continue your learning journey.</div>
@@ -638,8 +600,10 @@
         <div class="divider-line"></div>
       </div>
 
-            <button class="btn-github" onclick="handleGithubSignIn()">
-        <svg class="github-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+      <button class="btn-github" onclick="handleGithubSignIn()">
+        <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+        </svg>
         Continue with GitHub
       </button>
 
@@ -648,7 +612,6 @@
       </div>
     </div>
 
-    <!-- ── SIGNUP FORM ── -->
     <div class="form-panel" id="signupPanel">
       <div class="form-title">Create account</div>
       <div class="form-sub">Join thousands of students leveling up their skills.</div>
@@ -690,8 +653,10 @@
         <div class="divider-line"></div>
       </div>
 
-            <button class="btn-github" onclick="handleGithubSignIn()">
-        <svg class="github-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+      <button class="btn-github" onclick="handleGithubSignIn()">
+        <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+        </svg>
         Continue with GitHub
       </button>
 
@@ -704,12 +669,9 @@
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     FIREBASE SETUP — replace placeholders below
-     ════════════════════════════════════════════ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, GithubAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, GithubAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
@@ -724,11 +686,8 @@ const ADMIN_EMAIL = "bscit.tiu2012@gmail.com";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const githubProvider = new GithubAuthProvider();
-githubProvider.addScope("user:email");
 
-// Only auto-redirect if user lands on Login.html WITHOUT clicking logout
-// i.e. if they navigated here from somewhere else while already logged in.
-// We check a flag: if user explicitly came to login page, don't redirect.
+// Auto-redirect handling
 const cameToLogin = sessionStorage.getItem('intentional_login_visit');
 onAuthStateChanged(auth, (user) => {
   if (user && !cameToLogin) {
@@ -740,7 +699,6 @@ onAuthStateChanged(auth, (user) => {
     }));
     window.location.href = 'index.html';
   } else if (user && cameToLogin) {
-    // Already logged in but intentionally came here — just save session, don't redirect
     localStorage.setItem('ish_session', JSON.stringify({
       name: user.displayName || user.email.split('@')[0],
       email: user.email,
@@ -750,11 +708,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// Mark that we're intentionally on the login page (set this when user clicks "Login" link)
-// Clear it once firebase resolves so future auto-opens redirect correctly
 window.addEventListener('load', () => {
-  // If we were sent here by a Login button, that page sets 'intentional_login_visit'
-  // Clear after 30s so it doesn't persist forever
   if (cameToLogin) {
     setTimeout(() => sessionStorage.removeItem('intentional_login_visit'), 30000);
   }
@@ -857,32 +811,38 @@ window.handleSignup = async function() {
   }
 };
 
-// ── GOOGLE SIGN IN ──
-// GitHub Sign In
+// ── GITHUB SIGN IN ──
 window.handleGithubSignIn = async function() {
   clearBanners();
   try {
-    const result = await signInWithPopup(auth, githubProvider);
-    const user = result.user;
-    const name = user.displayName || user.email?.split('@')[0] || user.login || 'GitHub User';
-    localStorage.setItem('ish_session', JSON.stringify({
-      name, email: user.email || '', uid: user.uid,
-      photoURL: user.photoURL || '',
-      isAdmin: user.email === ADMIN_EMAIL
-    }));
-    showSuccess('Signed in with GitHub! Redirecting...');
-    setTimeout(() => window.location.href = 'global.html', 800);
+    showSuccess('Redirecting to GitHub...');
+    await signInWithRedirect(auth, githubProvider);
   } catch(e) {
-    if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') return;
-    if (e.code === 'auth/popup-blocked') {
-      showError('Popup blocked! Please allow popups for this site and try again.');
-      return;
-    }
     showError(friendlyError(e.code));
   }
 };
 
-// GitHub Sign In handled by handleGithubSignIn() popup above
+// ── HANDLE REDIRECT RESULT ──
+getRedirectResult(auth).then((result) => {
+  if (result && result.user) {
+    const user = result.user;
+    sessionStorage.removeItem('intentional_login_visit');
+    const name = user.displayName || user.email.split('@')[0];
+    localStorage.setItem('ish_session', JSON.stringify({
+      name,
+      email: user.email,
+      uid: user.uid,
+      photoURL: user.photoURL || '',
+      isAdmin: user.email === ADMIN_EMAIL
+    }));
+    showSuccess('Signed in with GitHub! Redirecting...');
+    setTimeout(() => window.location.href = 'index.html', 800);
+  }
+}).catch((e) => {
+  if (e.code && e.code !== 'auth/no-auth-event') {
+    showError(friendlyError(e.code));
+  }
+});
 
 // ── FORGOT PASSWORD ──
 window.forgotPassword = async function() {
@@ -906,14 +866,14 @@ function friendlyError(code) {
     'auth/weak-password':'Password is too weak. Use at least 8 characters.',
     'auth/invalid-email':'Please enter a valid email address.',
     'auth/too-many-requests':'Too many attempts. Try again later.',
-    'auth/popup-closed-by-user':'Google sign-in was cancelled.',
+    'auth/popup-closed-by-user':'GitHub sign-in was cancelled.',
     'auth/unauthorized-domain':'This domain is not authorized. Add it in Firebase Console → Authentication → Authorized Domains.',
-    'auth/operation-not-allowed':'Google Sign-In is not enabled in Firebase Console.',
+    'auth/operation-not-allowed':'GitHub Sign-In is not enabled in Firebase Console.',
   };
   return map[code] || 'Something went wrong. Please try again.';
 }
 </script>
-<!-- Custom Cursor -->
+
 <div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 <script>
