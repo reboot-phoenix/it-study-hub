@@ -248,12 +248,12 @@ document.querySelectorAll('a,button').forEach(el=>{
 </script>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCu6ivnUU8wHVVtt3__eqaKxZMaKLAdT8A",
+  apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
   authDomain: "it-study-hub.firebaseapp.com",
   projectId: "it-study-hub",
   storageBucket: "it-study-hub.firebasestorage.app",
@@ -261,7 +261,7 @@ const firebaseConfig = {
   appId: "1:566661039167:web:122691d263631e404ea48a"
 };
 
-const ADMIN_EMAIL = "bscit.tiu2012@gmail.com";
+const ADMIN_EMAIL = "itstudyhub.tiu@gmail.com";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
@@ -302,9 +302,29 @@ async function computeRank(uid, userXP) {
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    // Not logged in — redirect to login, flag as intentional so it doesn't loop
-    sessionStorage.setItem('intentional_login_visit', '1');
-    window.location.href = 'Login.html';
+    // Not logged in — show guest view instead of redirecting
+    const nameEl = document.getElementById('sidebarName');
+    const emailEl = document.getElementById('sidebarEmail');
+    const initEl  = document.getElementById('sidebarAvatarInitial');
+    const xpEl    = document.getElementById('sidebarXP');
+    const coursesEl = document.getElementById('sidebarCourses');
+    const rankEl  = document.getElementById('sidebarRank');
+    if (nameEl)    nameEl.textContent  = 'Guest';
+    if (emailEl)   emailEl.textContent = 'Not signed in';
+    if (initEl)    initEl.textContent  = '?';
+    if (xpEl)      xpEl.textContent    = '0';
+    if (coursesEl) coursesEl.textContent = '0';
+    if (rankEl)    rankEl.textContent  = 'Sign in to see rank';
+    // Show sign in prompt in sidebar
+    const sidebar = document.querySelector('.sidebar-footer') || document.querySelector('.sidebar');
+    if (sidebar) {
+      const loginPrompt = document.createElement('a');
+      loginPrompt.href = 'Login.html';
+      loginPrompt.style.cssText = 'display:block;margin-top:16px;background:var(--lime);color:#000;font-family:var(--ff-mono);font-size:11px;font-weight:700;padding:10px;border-radius:8px;text-align:center;text-decoration:none;letter-spacing:1px;';
+      loginPrompt.textContent = 'Sign In →';
+      sidebar.appendChild(loginPrompt);
+    }
+    setPlanBadge('free', false);
     return;
   }
 
