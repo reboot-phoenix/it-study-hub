@@ -587,6 +587,10 @@
         <button class="btn-primary" onclick="retryQuiz()">🔁 Retry This Quiz</button>
         <button class="btn-secondary" onclick="backToSubjects()">← Choose Another Subject</button>
       </div>
+      <!-- Login note -->
+      <div id="loginSaveNote" style="display:none;margin-top:16px;background:rgba(200,241,53,0.08);border:1px solid rgba(200,241,53,0.2);border-radius:10px;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#c8f135;align-items:center;gap:8px;justify-content:center;text-align:center;">
+        💾 <a href="Login.html" style="color:#c8f135;font-weight:700;">Sign in</a> to save your score, earn XP and appear on the leaderboard!
+      </div>
     </div>
   </div>
 
@@ -944,6 +948,10 @@ function showResult() {
   document.getElementById('bdBeginner').textContent = `${scores.beginner}/${bMax}`;
   document.getElementById('bdIntermediate').textContent = `${scores.intermediate}/${iMax}`;
   document.getElementById('bdAdvanced').textContent = `${scores.advanced}/${aMax}`;
+
+  // ── SAVE TO FIREBASE ──
+  const pct = Math.round((totalScore / total) * 100);
+  saveScoreToFirebase(currentSubject, totalScore, total, pct, level);
 }
 
 function retryQuiz() {
@@ -955,6 +963,145 @@ function backToSubjects() {
   document.getElementById('quizScreen').style.display = 'none';
   document.getElementById('subjectScreen').style.display = 'block';
   document.getElementById('subjectScreen').classList.add('screen-transition');
+}
+</script>
+
+<!-- FIREBASE SCORE SAVING -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
+  authDomain: "it-study-hub.firebaseapp.com",
+  projectId: "it-study-hub",
+  storageBucket: "it-study-hub.firebasestorage.app",
+  messagingSenderId: "566661039167",
+  appId: "1:566661039167:web:122691d263631e404ea48a"
+};
+
+const ADMIN_EMAIL = "bscit.tiu2012@gmail.com";
+const XP_PER_QUIZ = 100;
+const XP_BONUS_PERFECT = 50;
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  // Show login prompt on result screen if not logged in
+  const loginNote = document.getElementById('loginSaveNote');
+  if (loginNote) loginNote.style.display = user ? 'none' : 'flex';
+});
+
+window.saveScoreToFirebase = async function(subject, score, total, pct, level) {
+  // Show login note if not logged in
+  const loginNote = document.getElementById('loginSaveNote');
+
+  if (!currentUser) {
+    if (loginNote) loginNote.style.display = 'flex';
+    return;
+  }
+
+  if (loginNote) loginNote.style.display = 'none';
+
+  try {
+    const userRef = doc(db, 'users', currentUser.uid);
+    const snap = await getDoc(userRef);
+    const existing = snap.exists() ? snap.data() : {};
+    const existingScores = existing.scores || {};
+    const prevPct = existingScores[subject]?.pct || 0;
+
+    // Only update if new score is better
+    const isBetter = pct > prevPct;
+    const isNew = !existingScores[subject];
+    const isPerfect = pct === 100;
+
+    // Calculate XP earned
+    let xpEarned = 0;
+    if (isNew) xpEarned += XP_PER_QUIZ;
+    if (isPerfect) xpEarned += XP_BONUS_PERFECT;
+    if (isBetter && !isNew) xpEarned += 25; // improvement bonus
+
+    // Build updated scores
+    const updatedScores = {
+      ...existingScores,
+      [subject]: { score, total, pct, level, updatedAt: new Date().toISOString() }
+    };
+
+    // Build badges
+    const badges = existing.badges || ['hello_world'];
+    if (!badges.includes('first_quiz')) badges.push('first_quiz');
+    if (isPerfect) {
+      const perfectBadges = { c:'c_master', java:'java_hero', python:'python_pro', cpp:'c_master', csharp:'c_master', web:'bug_hunter' };
+      const badge = perfectBadges[subject];
+      if (badge && !badges.includes(badge)) badges.push(badge);
+    }
+
+    // Save to Firestore
+    if (!snap.exists()) {
+      await setDoc(userRef, {
+        name: currentUser.displayName || currentUser.email.split('@')[0],
+        email: currentUser.email,
+        isAdmin: currentUser.email === ADMIN_EMAIL,
+        xp: xpEarned + 100,
+        quizzesDone: 1,
+        scores: updatedScores,
+        badges,
+        joinedAt: new Date().toISOString()
+      });
+    } else {
+      await updateDoc(userRef, {
+        scores: updatedScores,
+        badges,
+        xp: increment(xpEarned),
+        quizzesDone: increment(isNew ? 1 : 0)
+      });
+    }
+
+    // Update localStorage session
+    const session = JSON.parse(localStorage.getItem('ish_session') || '{}');
+    localStorage.setItem('ish_session', JSON.stringify({ ...session, xp: (session.xp || 0) + xpEarned }));
+
+    // Show XP toast on result screen
+    if (xpEarned > 0) {
+      showXPToast(xpEarned, isPerfect);
+    }
+
+  } catch(e) {
+    console.log('Score save error:', e);
+  }
+};
+
+function showXPToast(xp, isPerfect) {
+  // Create toast if not exists
+  let toast = document.getElementById('xpToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'xpToast';
+    toast.style.cssText = `
+      position:fixed;bottom:32px;right:32px;
+      background:#0a0a14;border:1px solid rgba(200,241,53,0.4);
+      border-radius:14px;padding:16px 22px;
+      font-family:'JetBrains Mono',monospace;font-size:13px;
+      color:#c8f135;z-index:9997;
+      transform:translateY(100px);opacity:0;
+      transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+      display:flex;align-items:center;gap:10px;
+      box-shadow:0 8px 32px rgba(200,241,53,0.15);
+    `;
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `⚡ +${xp} XP earned!${isPerfect ? ' 🏆 Perfect score!' : ''}`;
+  toast.style.transform = 'translateY(0)';
+  toast.style.opacity = '1';
+  setTimeout(() => {
+    toast.style.transform = 'translateY(100px)';
+    toast.style.opacity = '0';
+  }, 4000);
 }
 </script>
 
