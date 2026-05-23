@@ -881,16 +881,7 @@ window.handleGithubSignIn = async function() {
     showError(friendlyError(e.code));
   }
 };
-  try {
-    showSuccess('Redirecting to Google...');
-    await signInWithRedirect(auth, googleProvider);
-  } catch(e) {
-    showError(friendlyError(e.code));
-  }
-};
 
-// ── HANDLE GOOGLE REDIRECT RESULT ──
-// Runs every time Login.html loads — catches the return from Google
 // GitHub Sign In handled by handleGithubSignIn() popup above
 
 // ── FORGOT PASSWORD ──
