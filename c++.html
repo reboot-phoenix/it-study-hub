@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C++ Programming — IT Study Hub</title>
+<title>OOPs in C++ — IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -54,10 +54,10 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 
 .mod-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px 22px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;}
 .mod-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--lime);transform:scaleX(0);transition:transform 0.3s ease;transform-origin:left;}
-.mod-card:hover{border-color:var(--border-active);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.5);}
-.mod-card:hover::after{transform:scaleX(1);}
+.mod-card:hover:not(.locked){border-color:var(--border-active);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.5);}
+.mod-card:hover:not(.locked)::after{transform:scaleX(1);}
+.mod-card.locked{opacity:0.4;cursor:not-allowed;}
 .mod-card.premium-card::after{background:var(--gold);}
-.mod-card.premium-card:hover{border-color:rgba(247,183,49,0.4);}
 .mod-card.done-card::after{background:var(--green);transform:scaleX(1);}
 .mod-card.done-card{border-color:rgba(67,233,123,0.15);}
 
@@ -73,14 +73,13 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 .mod-footer{display:flex;align-items:center;justify-content:space-between;margin-top:2px;}
 .mod-level{font-family:var(--ff-mono);font-size:10px;color:var(--muted);}
 .mod-arrow{font-size:14px;color:var(--muted);transition:all 0.2s;}
-.mod-card:hover .mod-arrow{color:var(--lime);transform:translateX(4px);}
-.mod-card.premium-card:hover .mod-arrow{color:var(--gold);}
+.mod-card:hover:not(.locked) .mod-arrow{color:var(--lime);transform:translateX(4px);}
 
 /* MATERIALS */
 .mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.mat-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text);transition:all 0.2s;cursor:pointer;}
-.mat-item:hover{border-color:var(--border-active);transform:translateX(4px);}
-.mat-item.premium-mat:hover{border-color:rgba(247,183,49,0.4);}
+.mat-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text);transition:all 0.2s;}
+.mat-item:hover:not(.premium-mat){border-color:var(--border-active);transform:translateX(4px);}
+.mat-item.premium-mat{opacity:0.5;cursor:not-allowed;}
 .mat-icon{font-size:22px;min-width:32px;text-align:center;}
 .mat-info{flex:1;}
 .mat-title{font-size:13px;font-weight:500;margin-bottom:2px;}
@@ -102,6 +101,7 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 .lesson-article{max-width:680px;}
 
 .les-cat{display:inline-flex;align-items:center;gap:6px;font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);background:var(--lime-dim);border:1px solid var(--border-active);padding:5px 14px;border-radius:99px;margin-bottom:20px;}
+.les-cat.prem{color:var(--gold);background:var(--gold-dim);border-color:rgba(247,183,49,0.35);}
 .les-title{font-family:var(--ff-display);font-size:clamp(30px,5vw,50px);font-weight:800;line-height:1.05;letter-spacing:-0.01em;margin-bottom:14px;}
 .les-excerpt{font-size:15px;color:var(--muted2);line-height:1.8;font-weight:300;margin-bottom:26px;border-left:2px solid var(--lime);padding-left:18px;}
 .les-meta{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:36px;}
@@ -129,6 +129,10 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 .concepts-list{display:flex;flex-wrap:wrap;gap:8px;}
 .concept-tag{background:var(--lime-dim);border:1px solid rgba(200,241,53,0.2);color:var(--lime);font-family:var(--ff-mono);font-size:11px;padding:4px 12px;border-radius:3px;}
 
+.premium-lock{background:var(--surface);border:1px solid rgba(247,183,49,0.25);border-radius:16px;padding:56px 36px;text-align:center;margin-top:40px;}
+.lock-btn{background:var(--gold);color:#000;border:none;border-radius:8px;padding:12px 28px;font-family:var(--ff-mono);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:all 0.2s;}
+.lock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(247,183,49,0.3);}
+
 .les-footer{margin-top:52px;padding-top:32px;border-top:1px solid var(--border);}
 .les-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
 .les-tag{font-family:var(--ff-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);}
@@ -139,9 +143,7 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 .nlc-title{font-size:13px;font-weight:600;}
 
 /* SIDEBAR */
-.lesson-sidebar{position:sticky;top:130px;padding-left:24px;max-height:calc(100vh - 160px);overflow-y:auto;}
-.lesson-sidebar::-webkit-scrollbar{width:4px;}
-.lesson-sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.lesson-sidebar{position:sticky;top:130px;padding-left:24px;}
 .sb-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px;}
 .sb-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;}
 .sb-btn{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;transition:all 0.15s;border:none;background:transparent;width:100%;text-align:left;color:var(--muted2);}
@@ -149,7 +151,7 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 .sb-btn.active{background:var(--lime-dim);color:var(--lime);}
 .sb-num{width:20px;height:20px;border-radius:4px;background:var(--surface2);font-family:var(--ff-mono);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .sb-btn.active .sb-num{background:var(--lime);color:#000;}
-.sb-btn-title{font-size:11px;font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-btn-title{font-size:11px;font-weight:500;flex:1;}
 
 /* TOAST */
 .toast{position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px 20px;font-family:var(--ff-mono);font-size:12px;color:var(--lime);z-index:9997;transform:translateY(80px);opacity:0;transition:all 0.35s;}
@@ -182,11 +184,11 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 
 <div id="indexPage">
   <div class="fade-up">
-    <div class="course-eyebrow">Object-Oriented Systems · Subject 04</div>
-    <h1 class="course-title">C++ <em>Programming</em></h1>
-    <p class="course-desc">Master the high-performance language behind game engines, high-frequency trading, and operating systems. From pointers to OOP and the STL.</p>
+    <div class="course-eyebrow">Subject 03 · IT Study Hub</div>
+    <h1 class="course-title">OOPs in <em>C++</em></h1>
+    <p class="course-desc">Master the foundation of high-performance software. From pointers and memory management to the STL and the 4 pillars of OOP — everything you need.</p>
     <div class="course-chips">
-      <span class="chip chip-lime">⚙️ C++20</span>
+      <span class="chip chip-lime">⚙️ C++</span>
       <span class="chip chip-lime">6 Free Modules</span>
       <span class="chip chip-gold">6 Premium Modules</span>
       <span class="chip chip-lime">Real PDF Notes</span>
@@ -214,25 +216,35 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
   <div class="fade-up" style="animation-delay:0.25s;">
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
-      <a href="#" target="_blank" class="mat-item">
-        <div class="mat-icon">📝</div>
-        <div class="mat-info"><div class="mat-title">C++ Basics & OOP Notes</div><div class="mat-desc">Variables, Pointers, Classes · Free</div></div>
-        <span class="mat-action">↓ Download</span>
+      <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20CPP-1-28.pdf" target="_blank" class="mat-item">
+        <div class="mat-icon">📄</div>
+        <div class="mat-info"><div class="mat-title">C++ Basics — Pages 1–28</div><div class="mat-desc">Introduction, I/O Streams · Free</div></div>
+        <span class="mat-action">↓ PDF</span>
+      </a>
+      <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20CPP-29-72.pdf" target="_blank" class="mat-item">
+        <div class="mat-icon">📄</div>
+        <div class="mat-info"><div class="mat-title">Classes & Objects — Pages 29–72</div><div class="mat-desc">Constructors, Access Control · Free</div></div>
+        <span class="mat-action">↓ PDF</span>
+      </a>
+      <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20CPP-56-96.pdf" target="_blank" class="mat-item">
+        <div class="mat-icon">📄</div>
+        <div class="mat-info"><div class="mat-title">Pointers & Inheritance — Pages 56–96</div><div class="mat-desc">Memory, OOP Principles · Free</div></div>
+        <span class="mat-action">↓ PDF</span>
       </a>
       <a href="https://www.sanfoundry.com/cpp-programming-questions-answers/" target="_blank" class="mat-item">
         <div class="mat-icon">🎯</div>
-        <div class="mat-info"><div class="mat-title">Placement Quiz — C++</div><div class="mat-desc">1000+ MCQs · Free</div></div>
+        <div class="mat-info"><div class="mat-title">Placement Quiz — C++ OOP</div><div class="mat-desc">1000+ MCQs · Free</div></div>
         <span class="mat-action">→ Start</span>
       </a>
-      <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
+      <div class="mat-item premium-mat" onclick="showToast('⭐ Sign in as admin to unlock premium materials')">
         <div class="mat-icon">⭐</div>
-        <div class="mat-info"><div class="mat-title">Advanced Notes — STL & Memory</div><div class="mat-desc">Deep dive into Vectors and RAII · Premium</div></div>
-        <span class="mat-action locked">🔒 Unlock</span>
+        <div class="mat-info"><div class="mat-title">STL & Templates — Pages 97–188</div><div class="mat-desc">Vectors, Maps, Generic Code · Premium</div></div>
+        <span class="mat-action locked">🔒</span>
       </div>
-      <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
+      <div class="mat-item premium-mat" onclick="showToast('⭐ Sign in as admin to unlock premium materials')">
         <div class="mat-icon">⭐</div>
-        <div class="mat-info"><div class="mat-title">C++ Interview Question Bank</div><div class="mat-desc">100+ technical interview questions · Premium</div></div>
-        <span class="mat-action locked">🔒 Unlock</span>
+        <div class="mat-info"><div class="mat-title">Modern C++ (Smart Pointers) — Pages 189–260</div><div class="mat-desc">C++11 Features, RAII · Premium</div></div>
+        <span class="mat-action locked">🔒</span>
       </div>
     </div>
   </div>
@@ -240,7 +252,7 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 
 <div id="lessonPage">
   <div class="lesson-topbar">
-    <div class="les-breadcrumb">C++ Programming <span>/</span> <span id="lesCrumb">—</span></div>
+    <div class="les-breadcrumb">OOPs in C++ <span>/</span> <span id="lesCrumb">—</span></div>
     <div class="les-nav-btns">
       <button class="lnav-btn" onclick="goBack()">← Back</button>
       <button class="lnav-btn" id="prevBtn" onclick="prevLesson()">← Prev</button>
@@ -269,232 +281,433 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <script>
+const ADMIN_EMAIL = 'itstudyhub.tiu@gmail.com';
+function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){return null;}}
+function isPremium(){const s=getSession();return s&&(s.isAdmin||s.email===ADMIN_EMAIL);}
 function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_cpp_done')||'[]');}catch(e){return[];}}
 function saveCompleted(a){localStorage.setItem('ish_cpp_done',JSON.stringify(a));}
 
 const MODS = [
-  {id:1,free:true,icon:'⚙️',level:'Beginner',title:'Intro to C++',
-   excerpt:'C++ builds upon C by adding Object-Oriented features. Learn about its history, the compilation process, and how to write your first program using iostream.',
-   tags:['Beginner','History','Setup'],visual:'⚙️',bg:'linear-gradient(135deg,#0a1a1a,#0f2020)',
-   concepts:['Bjarne Stroustrup','iostream','std namespace','cout & cin','Compilation Process'],
-   body:`<p><strong>C++</strong> was developed by Bjarne Stroustrup in 1979 at Bell Labs as an extension to the C language (initially called "C with Classes"). It is a high-performance, compiled language used extensively in game development, OS design, and high-frequency trading.</p>
-<h2>Your First Program</h2>
-<p>Unlike C which uses <code>stdio.h</code> and <code>printf</code>, C++ introduces the <code>iostream</code> library and the concept of streams.</p>
+  {id:1,free:true,icon:'⚙️',level:'Beginner',title:'Introduction to C++',
+   excerpt:'Discover how Bjarne Stroustrup added Object-Oriented features to C. Learn about compilation, the standard namespace, and fundamental I/O streams.',
+   tags:['Beginner','History','I/O Streams'],visual:'⚙️',bg:'linear-gradient(135deg,#0a1a0a,#0f2010)',
+   concepts:['C vs C++','Compilation Process','iostream','namespace std','cin & cout','Basic Data Types'],
+   body:`<p>C++ was developed by <strong>Bjarne Stroustrup</strong> at Bell Labs in 1979 as an extension of the C programming language, initially named <em>"C with Classes"</em>.</p>
+<h2>C vs C++</h2>
+<p>While C is a procedural language, C++ is a <strong>multi-paradigm</strong> language. It supports procedural, object-oriented, and generic programming. Crucially, almost all valid C code is valid C++ code.</p>
+<blockquote>C++ gives you the low-level memory control of C, while providing high-level abstractions like classes and templates.</blockquote>
+<h2>The Compilation Process</h2>
+<ul>
+  <li><strong>Preprocessing</strong> — handles <code>#include</code> and <code>#define</code> macros.</li>
+  <li><strong>Compilation</strong> — translates code into assembly.</li>
+  <li><strong>Assembly</strong> — converts to machine-level object files (<code>.o</code> or <code>.obj</code>).</li>
+  <li><strong>Linking</strong> — merges object files and libraries into an executable (<code>.exe</code>).</li>
+</ul>
+<h2>Standard I/O and Namespaces</h2>
+<p>C++ uses streams for input and output, defined in the <code>&lt;iostream&gt;</code> library.</p>
 <pre><code>#include &lt;iostream&gt;
 
 int main() {
-    // using std::cout to print to the console
-    std::cout << "Hello, IT Study Hub!" << std::endl;
-    return 0;
-}</code></pre>
-<h2>The <code>std</code> Namespace</h2>
-<p>In C++, elements of the standard library are housed inside the <code>std</code> namespace. Instead of writing <code>std::</code> every time, you can declare <code>using namespace std;</code> globally, though this is often discouraged in large professional projects to prevent naming collisions.</p>
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
-
-int main() {
+    // using namespace std; is common but often avoided in large projects
+    std::cout &lt;&lt; "Hello, IT Study Hub!" &lt;&lt; std::endl;
+    
     int age;
-    cout << "Enter your age: ";
-    cin >> age; // Reading input
-    cout << "You are " << age << " years old." << endl;
+    std::cout &lt;&lt; "Enter your age: ";
+    std::cin &gt;&gt; age;
+    
     return 0;
-}</code></pre>`},
-
-  {id:2,free:true,icon:'🔤',level:'Beginner',title:'Variables & Data Types',
-   excerpt:'C++ is statically typed. Learn about primitives, constants, the auto keyword, and the incredibly important concept of references (&).',
-   tags:['Beginner','Data Types','References'],visual:'🔤',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
-   concepts:['Primitives','auto Keyword','const','References (&)','Type Casting'],
-   body:`<p>C++ is a <strong>statically typed</strong> language, meaning you must declare a variable's type. However, modern C++ (C++11 and later) introduced the <code>auto</code> keyword to make life easier.</p>
-<h2>Primitive Types & <code>auto</code></h2>
-<pre><code>int x = 10;
-double pi = 3.14159;
-char grade = 'A';
-bool isPassed = true;
-
-// Modern C++: The compiler figures out the type
-auto name = "Dithsha"; // Evaluates to const char*
-auto score = 95.5;     // Evaluates to double</code></pre>
-<h2>The Power of References (<code>&</code>)</h2>
-<p>A reference in C++ is an alias for an existing variable. Unlike pointers, references cannot be null, and they cannot be reassigned to point to something else once initialized. This is a massive feature that C lacks.</p>
-<pre><code>int a = 50;
-int& ref = a; // 'ref' is now an exact alias for 'a'
-
-ref = 100; // Changing 'ref' changes 'a'
-cout << a; // Outputs: 100</code></pre>
-<blockquote>References are most commonly used in function parameters to avoid copying large objects and to allow functions to modify the original variable.</blockquote>`},
-
-  {id:3,free:true,icon:'🔀',level:'Beginner',title:'Operators & Control Flow',
-   excerpt:'Make decisions and loop through data. Master if/else statements, switch cases, and the modern range-based for loop.',
-   tags:['Beginner','Logic','Conditionals'],visual:'🔀',bg:'linear-gradient(135deg,#0f0a14,#201028)',
-   concepts:['if / else','switch / case','for / while Loops','Range-based for Loop','Ternary Operator'],
-   body:`<p>Control flow in C++ is almost identical to C, utilizing <code>if</code>, <code>else if</code>, and <code>else</code> for branching, and <code>switch</code> for distinct cases.</p>
-<h2>Standard Loops</h2>
-<pre><code>// Standard for loop
-for (int i = 0; i < 5; i++) {
-    cout << i << " ";
-}
-
-// while loop
-int count = 5;
-while (count > 0) {
-    cout << count-- << " ";
 }</code></pre>
-<h2>The Range-Based For Loop (C++11)</h2>
-<p>One of the best modern features of C++ is the range-based for loop. It allows you to iterate over arrays and STL containers cleanly, exactly like Python or Java.</p>
-<pre><code>int numbers[] = {10, 20, 30, 40};
+<p>Save as <code>main.cpp</code> → compile with <code>g++ main.cpp -o app</code> → run with <code>./app</code>.</p>`},
 
-// Traditional way:
-for (int i = 0; i < 4; i++) { cout << numbers[i] << " "; }
-
-// Modern C++ range-based loop:
-for (int n : numbers) {
-    cout << n << " ";
-}
-
-// Best practice: use reference to avoid copying
-for (const auto& n : numbers) {
-    cout << n << " ";
-}</code></pre>`},
-
-  {id:4,free:true,icon:'🛠️',level:'Beginner',title:'Functions & Overloading',
-   excerpt:'Learn how to structure modular code. Master pass-by-value vs pass-by-reference, default arguments, and function overloading.',
-   tags:['Beginner','Functions','Modularity'],visual:'🛠️',bg:'linear-gradient(135deg,#14140a,#282810)',
-   concepts:['Pass by Value/Reference','Default Arguments','Function Overloading','Inline Functions'],
-   body:`<p>Functions allow you to break your program into manageable, reusable pieces. C++ introduces powerful enhancements to functions over C.</p>
-<h2>Pass-by-Reference</h2>
-<p>Passing by reference allows a function to modify the caller's variables directly, without the confusing syntax of C pointers.</p>
-<pre><code>void swap(int& x, int& y) {
-    int temp = x;
-    x = y;
-    y = temp;
-}
-
-int main() {
-    int a = 5, b = 10;
-    swap(a, b); // No '&' needed when calling!
-    // a is now 10, b is now 5
+  {id:2,free:true,icon:'🔀',level:'Beginner',title:'Control Statements',
+   excerpt:'The if, switch, while, for and do-while statements are the decision-making backbone of every C++ program. Master these to control execution flow.',
+   tags:['Beginner','Loops','Conditions'],visual:'🔀',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
+   concepts:['if & if-else','Nested if','switch Statement','while Loop','do-while Loop','for Loop','break & continue','return'],
+   body:`<p>Control statements divide into three categories: <strong>Selection</strong> (choose a path), <strong>Iteration</strong> (repeat steps), and <strong>Jump</strong> (exit or skip). They are the building blocks of all program logic.</p>
+<h2>Selection: if and switch</h2>
+<pre><code>int marks = 75;
+if (marks >= 90) {
+    std::cout &lt;&lt; "Grade: A";
+} else if (marks >= 70) {
+    std::cout &lt;&lt; "Grade: B";  // This runs
+} else {
+    std::cout &lt;&lt; "Grade: C";
 }</code></pre>
-<h2>Function Overloading</h2>
-<p>C++ allows multiple functions to have the exact same name, as long as their parameter lists (signatures) are different. The compiler figures out which one to call.</p>
-<pre><code>int add(int a, int b) {
-    return a + b;
-}
+<p>Use <code>switch</code> when matching one variable against many specific values:</p>
+<pre><code>int day = 3;
+switch (day) {
+    case 1: std::cout &lt;&lt; "Monday"; break;
+    case 3: std::cout &lt;&lt; "Wednesday"; break; // Runs
+    default: std::cout &lt;&lt; "Other day";
+}</code></pre>
+<blockquote>Always use <code>break</code> in switch cases. Without it, execution "falls through" to the next case!</blockquote>
+<h2>Iteration: Loops</h2>
+<pre><code>// while — checks condition first
+int i = 0;
+while (i < 5) { std::cout &lt;&lt; i; i++; }
 
-double add(double a, double b) {
-    return a + b;
-}
+// do-while — runs at least ONCE
+do { std::cout &lt;&lt; "Runs once!"; } while (false);
 
-int add(int a, int b, int c) {
-    return a + b + c;
-}
-// Calling add(5.5, 2.2) will automatically route to the double version.</code></pre>`},
+// for — best when iteration count is known
+for (int j = 0; j < 5; j++) { std::cout &lt;&lt; j; }</code></pre>`},
 
-  {id:5,free:true,icon:'👉',level:'Beginner',title:'Pointers & Memory',
-   excerpt:'C++ gives you direct control over memory. Understand raw pointers, the stack vs the heap, and dynamic allocation using new and delete.',
-   tags:['Beginner','Memory','Pointers'],visual:'👉',bg:'linear-gradient(135deg,#0a1414,#102828)',
-   concepts:['Raw Pointers (* &)','Stack vs Heap','new & delete','Dynamic Arrays','Memory Leaks'],
-   body:`<p>Like C, C++ utilizes <strong>pointers</strong> — variables that store the memory addresses of other variables. <code>&</code> gets the address, <code>*</code> dereferences the pointer to get the value.</p>
-<h2>Dynamic Memory: <code>new</code> and <code>delete</code></h2>
-<p>Instead of C's clunky <code>malloc()</code> and <code>free()</code>, C++ uses the operators <code>new</code> and <code>delete</code> for allocating memory on the <strong>Heap</strong>.</p>
-<pre><code>// Allocate a single integer on the heap
-int* p = new int;
-*p = 42;
-
-cout << "Value: " << *p << endl;
-
-// MUST free the memory to prevent memory leaks!
-delete p;
-p = nullptr; // Always set to nullptr after deleting</code></pre>
-<h2>Dynamic Arrays</h2>
-<p>If you need an array whose size is determined at runtime, you use dynamic allocation.</p>
-<pre><code>int size = 5;
-int* arr = new int[size];
-
-arr[0] = 10;
-
-// Note the brackets when deleting an array!
-delete[] arr;</code></pre>
-<blockquote><strong>Note:</strong> In Modern C++, raw pointers are heavily discouraged for ownership. You should use Smart Pointers (`std::unique_ptr`) or STL containers (`std::vector`) instead.</blockquote>`},
-
-  {id:6,free:true,icon:'🏗️',level:'Beginner',title:'Intro to OOP (Classes)',
-   excerpt:'The core of C++ is Object-Oriented Programming. Learn how to create custom data types using Classes, objects, and constructors.',
-   tags:['Beginner','OOP','Classes'],visual:'🏗️',bg:'linear-gradient(135deg,#140a14,#281028)',
-   concepts:['Classes & Objects','public / private','Encapsulation','Constructors','Destructors','this pointer'],
-   body:`<p>Object-Oriented Programming (OOP) allows you to bundle data (attributes) and functions (methods) into a single logical unit called a <strong>Class</strong>.</p>
+  {id:3,free:true,icon:'🏗️',level:'Beginner',title:'Classes & Objects',
+   excerpt:'Transition from procedural C to object-oriented C++. Learn to define classes, instantiate objects, and use constructors and access specifiers properly.',
+   tags:['Beginner','OOP','Classes'],visual:'🏗️',bg:'linear-gradient(135deg,#0f0a0a,#201010)',
+   concepts:['Class Definition','Object Instantiation','public vs private','Constructors','Destructors','this Pointer','Scope Resolution ::'],
+   body:`<p>A <strong>class</strong> is a blueprint — it defines what data (attributes) and behaviors (methods) objects will have. An <strong>object</strong> is an instance of that blueprint.</p>
 <h2>Defining a Class</h2>
-<p>By default, everything in a C++ <code>class</code> is private. You must explicitly use the <code>public:</code> access specifier to allow outside access.</p>
+<p>Unlike structs in C, classes in C++ have members that are <code>private</code> by default. Always remember the semicolon at the end of a class definition!</p>
 <pre><code>#include &lt;iostream&gt;
-#include &lt;string&gt;
 using namespace std;
 
 class Student {
 private:
-    // Data is hidden (Encapsulation)
-    string name;
-    float gpa;
+    int age;
 
 public:
-    // Constructor (called automatically on creation)
-    Student(string n, float g) {
-        name = n;
-        gpa = g;
-    }
-
-    // Method
-    void display() {
-        cout << name << " has a GPA of " << gpa << endl;
+    string name;
+    
+    // Method declaration
+    void display();
+    
+    // Setter
+    void setAge(int a) {
+        if (a > 0) age = a;
     }
 };
 
+// Method definition outside class using Scope Resolution ::
+void Student::display() {
+    cout &lt;&lt; "Name: " &lt;&lt; name &lt;&lt; ", Age: " &lt;&lt; age &lt;&lt; endl;
+}</code></pre>
+<h2>Constructors and Destructors</h2>
+<p>A <strong>constructor</strong> runs when an object is created. A <strong>destructor</strong> (starts with <code>~</code>) runs when the object goes out of scope.</p>
+<pre><code>class Player {
+public:
+    Player() { cout &lt;&lt; "Player Spawned!" &lt;&lt; endl; }
+    ~Player() { cout &lt;&lt; "Player Destroyed!" &lt;&lt; endl; }
+};
+
 int main() {
-    // Creating an object of the class
-    Student s1("Dithsha", 3.8);
-    s1.display();
+    Player p1; // Prints "Spawned"
+    return 0;  // Prints "Destroyed" as p1 goes out of scope
+}</code></pre>`},
+
+  {id:4,free:true,icon:'🎯',level:'Intermediate',title:'Pointers & Memory Management',
+   excerpt:'C++ gives you direct access to memory. Master pointers, references, and dynamic memory allocation using new and delete to prevent memory leaks.',
+   tags:['Intermediate','Pointers','Memory'],visual:'🎯',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
+   concepts:['Address-of Operator &','Dereference Operator *','Pointers vs References','new Keyword','delete Keyword','Memory Leaks','Null Pointers'],
+   body:`<p>A <strong>pointer</strong> is a variable that stores the memory address of another variable. They are powerful but require careful management.</p>
+<h2>Basics of Pointers and References</h2>
+<pre><code>int score = 100;
+int* ptr = &score;  // ptr holds the memory address of score
+
+cout &lt;&lt; score;      // Prints 100
+cout &lt;&lt; ptr;        // Prints memory address (e.g., 0x7ffe...)
+cout &lt;&lt; *ptr;       // Prints 100 (Dereferencing)
+
+// Reference (Alias)
+int& ref = score;
+ref = 200;          // score is now 200</code></pre>
+<h2>Dynamic Memory Allocation</h2>
+<p>Unlike stack memory, which is managed automatically, <strong>heap memory</strong> must be managed manually using <code>new</code> and <code>delete</code>.</p>
+<pre><code>int* dPtr = new int; // Allocate memory on the heap
+*dPtr = 50;
+
+cout &lt;&lt; *dPtr &lt;&lt; endl;
+
+delete dPtr;         // Free the memory!
+dPtr = nullptr;      // Prevent dangling pointer</code></pre>
+<blockquote><strong>Rule of thumb:</strong> For every <code>new</code>, there must be a matching <code>delete</code>. Failing to do this causes a <em>memory leak</em>.</blockquote>
+<h2>Allocating Arrays</h2>
+<pre><code>int* arr = new int[10]; // Array of 10 integers
+arr[0] = 5;
+delete[] arr;           // Use delete[] for arrays!</code></pre>`},
+
+  {id:5,free:true,icon:'🧬',level:'Intermediate',title:'Inheritance & Polymorphism',
+   excerpt:'Inheritance builds relationships between classes. Virtual functions and polymorphism allow one interface to take many forms, enabling dynamic dispatch.',
+   tags:['Intermediate','Inheritance','Virtual Functions'],visual:'🧬',bg:'linear-gradient(135deg,#10080a,#200f12)',
+   concepts:['Base & Derived Classes','Access Modifiers in Inheritance','Multiple Inheritance','Method Overriding','virtual Keyword','Pure Virtual Functions','Abstract Classes'],
+   body:`<p><strong>Inheritance</strong> promotes code reusability. C++ allows single, multiple, and hierarchical inheritance.</p>
+<h2>Basic Inheritance</h2>
+<pre><code>class Animal {
+public:
+    void eat() { cout &lt;&lt; "Eating..." &lt;&lt; endl; }
+};
+
+class Dog : public Animal {
+public:
+    void bark() { cout &lt;&lt; "Woof!" &lt;&lt; endl; }
+};
+
+Dog d;
+d.eat();  // Inherited from Animal
+d.bark();</code></pre>
+<h2>Runtime Polymorphism & Virtual Functions</h2>
+<p>To achieve dynamic method resolution at runtime, use the <code>virtual</code> keyword in the base class and override it in the derived class.</p>
+<pre><code>class Animal {
+public:
+    virtual void sound() { cout &lt;&lt; "..." &lt;&lt; endl; }
+};
+
+class Cat : public Animal {
+public:
+    void sound() override { cout &lt;&lt; "Meow!" &lt;&lt; endl; }
+};
+
+Animal* ptr = new Cat();
+ptr-&gt;sound(); // Outputs "Meow!" because of the virtual keyword
+delete ptr;</code></pre>
+<h2>Abstract Classes</h2>
+<p>A class with at least one <strong>pure virtual function</strong> (<code>= 0</code>) is abstract and cannot be instantiated. It acts like an interface.</p>
+<pre><code>class Shape {
+public:
+    virtual double area() = 0; // Pure virtual function
+};</code></pre>`},
+
+  {id:6,free:true,icon:'⚠️',level:'Intermediate',title:'Exception Handling',
+   excerpt:'C++ provides mechanisms to handle runtime errors gracefully. Learn how to throw exceptions, catch them, and use the standard exception library.',
+   tags:['Intermediate','Exceptions','try-catch'],visual:'⚠️',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
+   concepts:['try block','catch block','throw Statement','Catching by Reference','<stdexcept>','Custom Exceptions'],
+   body:`<p>Exception handling in C++ separates error-handling code from normal program logic using <code>try</code>, <code>catch</code>, and <code>throw</code>.</p>
+<h2>The try-catch Block</h2>
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int denominator = 0;
+    
+    try {
+        if (denominator == 0) {
+            throw "Division by zero error!"; // Throws a string literal
+        }
+        int result = 10 / denominator;
+    } 
+    catch (const char* msg) {
+        cout &lt;&lt; "Error: " &lt;&lt; msg &lt;&lt; endl;
+    }
+    
     return 0;
 }</code></pre>
-<p>Constructors set up your object's initial state. C++ also features <strong>Destructors</strong> (e.g., <code>~Student()</code>) which run automatically when an object goes out of scope, perfect for cleaning up dynamically allocated memory.</p>`},
+<h2>Standard Exceptions</h2>
+<p>It's best practice to use classes from the <code>&lt;stdexcept&gt;</code> library instead of throwing primitive types.</p>
+<pre><code>#include &lt;stdexcept&gt;
 
-  // PREMIUM MODULES
-  {id:7,free:false,icon:'🧬',level:'Intermediate',title:'Advanced OOP',
-   excerpt:'Master the pillars of OOP: Inheritance, Polymorphism, and Abstraction. Learn how to use virtual functions and abstract classes.',
-   tags:['Intermediate','Inheritance','Polymorphism'],visual:'🧬',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
-   concepts:['Base & Derived Classes','public inheritance','virtual Functions','override keyword','Abstract Classes & Pure Virtual'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+void validateAge(int age) {
+    if (age &lt; 0) {
+        throw std::invalid_argument("Age cannot be negative");
+    }
+}
 
-  {id:8,free:false,icon:'🛡️',level:'Intermediate',title:'Smart Pointers & RAII',
-   excerpt:'Stop writing memory leaks. Learn the modern C++ way of managing memory using unique_ptr, shared_ptr, and the RAII principle.',
-   tags:['Intermediate','Memory Management','Modern C++'],visual:'🛡️',bg:'linear-gradient(135deg,#10080a,#200f12)',
-   concepts:['Resource Acquisition Is Initialization (RAII)','std::unique_ptr','std::shared_ptr','std::make_unique','Memory Safety'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+// In main:
+try {
+    validateAge(-5);
+} catch (const std::invalid_argument& e) {
+    cout &lt;&lt; e.what() &lt;&lt; endl; // Always catch by const reference!
+}</code></pre>`},
 
-  {id:9,free:false,icon:'🧩',level:'Advanced',title:'Templates',
-   excerpt:'Write generic code that works with any data type. Master function templates, class templates, and the basics of metaprogramming.',
-   tags:['Advanced','Templates','Generics'],visual:'🧩',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
-   concepts:['template <typename T>','Function Templates','Class Templates','Template Specialization','Generic Programming'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+  // PREMIUM
+  {id:7,free:false,icon:'🧩',level:'Advanced',title:'Templates & Generic Programming',
+   excerpt:'Write code once that works for any data type. Templates are the foundation of generic programming and the driving force behind the Standard Template Library.',
+   tags:['Advanced','Templates','Generics'],visual:'🧩',bg:'linear-gradient(135deg,#0a0f0a,#0f1a0f)',
+   concepts:['Function Templates','Class Templates','Template Instantiation','template <typename T>','Multiple Template Parameters'],
+   body:`<p><strong>Templates</strong> allow you to write functions and classes that operate on generic types. The compiler generates the specific type versions for you.</p>
+<h2>Function Templates</h2>
+<pre><code>template &lt;typename T&gt;
+T myMax(T x, T y) {
+    return (x &gt; y) ? x : y;
+}
 
-  {id:10,free:false,icon:'📚',level:'Advanced',title:'Standard Template Library (STL)',
-   excerpt:'The STL is the heart of C++ data structures. Learn to use vectors, maps, sets, algorithms, and iterators efficiently.',
-   tags:['Advanced','STL','Data Structures'],visual:'📚',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
-   concepts:['std::vector','std::map & std::unordered_map','std::set','Iterators','<algorithm> (sort, find)'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+int main() {
+    cout &lt;&lt; myMax&lt;int&gt;(3, 7);       // Outputs 7
+    cout &lt;&lt; myMax&lt;double&gt;(3.1, 2.5); // Outputs 3.1
+    return 0;
+}</code></pre>
+<h2>Class Templates</h2>
+<p>Class templates are heavily used for data structures.</p>
+<pre><code>template &lt;typename T&gt;
+class Box {
+private:
+    T content;
+public:
+    void setContent(T val) { content = val; }
+    T getContent() { return content; }
+};
 
-  {id:11,free:false,icon:'⚠️',level:'Advanced',title:'Exception Handling',
-   excerpt:'Prevent your programs from crashing. Use try, catch, and throw to handle runtime errors cleanly and build custom exceptions.',
-   tags:['Advanced','Exceptions','Robustness'],visual:'⚠️',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
-   concepts:['try / catch / throw','std::exception','Multiple catch blocks','Custom Exception Classes','noexcept'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+Box&lt;string&gt; stringBox;
+stringBox.setContent("Secret Password");
+Box&lt;int&gt; intBox;
+intBox.setContent(42);</code></pre>`},
 
-  {id:12,free:false,icon:'🚀',level:'Advanced',title:'Modern C++ Features',
-   excerpt:'Bring your C++ up to date. Understand Lambda expressions, move semantics, and constexpr from C++11 through C++20.',
-   tags:['Advanced','Modern C++','Lambdas'],visual:'🚀',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
-   concepts:['Lambda Expressions','Move Semantics (std::move)','Rvalue References (&&)','constexpr','Multithreading (<thread>)'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`}
+  {id:8,free:false,icon:'📚',level:'Advanced',title:'Standard Template Library (STL)',
+   excerpt:'Do not reinvent the wheel. The STL provides highly optimized containers, algorithms, and iterators. Vectors and Maps will become your best friends.',
+   tags:['Advanced','STL','Containers'],visual:'📚',bg:'linear-gradient(135deg,#080a14,#0f1228)',
+   concepts:['Containers','std::vector','std::map','std::unordered_map','Iterators','Algorithms','std::sort'],
+   body:`<p>The <strong>STL</strong> provides three core components: <em>Containers</em> (data structures), <em>Iterators</em> (pointers to navigate them), and <em>Algorithms</em> (sorting, searching).</p>
+<h2>Vectors (Dynamic Arrays)</h2>
+<p>Vectors grow automatically. They are the default container for most use cases.</p>
+<pre><code>#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+std::vector&lt;int&gt; nums;
+nums.push_back(10);
+nums.push_back(20);
+nums.pop_back(); // Removes 20
+
+// Range-based for loop (C++11)
+for (int n : nums) {
+    std::cout &lt;&lt; n &lt;&lt; std::endl;
+}</code></pre>
+<h2>Maps (Key-Value Pairs)</h2>
+<pre><code>#include &lt;map&gt;
+
+std::map&lt;std::string, int&gt; grades;
+grades["Alice"] = 95;
+grades["Bob"] = 82;
+
+std::cout &lt;&lt; "Alice's grade: " &lt;&lt; grades["Alice"];</code></pre>
+<h2>Algorithms</h2>
+<pre><code>#include &lt;algorithm&gt;
+std::vector&lt;int&gt; v = {5, 2, 9, 1};
+std::sort(v.begin(), v.end()); // v is now {1, 2, 5, 9}</code></pre>`},
+
+  {id:9,free:false,icon:'🧠',level:'Advanced',title:'Modern C++ & Smart Pointers',
+   excerpt:'Forget manual memory management. C++11 introduced Smart Pointers that automatically clean up memory, drastically reducing memory leaks and segfaults.',
+   tags:['Advanced','C++11','Smart Pointers'],visual:'🧠',bg:'linear-gradient(135deg,#0a0a0f,#141420)',
+   concepts:['<memory> library','std::unique_ptr','std::shared_ptr','std::make_unique','Move Semantics','auto Keyword'],
+   body:`<p>Modern C++ (C++11 and later) encourages the use of <strong>Smart Pointers</strong> to automate memory management via RAII (Resource Acquisition Is Initialization).</p>
+<h2>unique_ptr</h2>
+<p>A <code>unique_ptr</code> owns the object exclusively. When it goes out of scope, the memory is automatically deleted.</p>
+<pre><code>#include &lt;memory&gt;
+
+class Entity {
+public:
+    Entity() { cout &lt;&lt; "Created\n"; }
+    ~Entity() { cout &lt;&lt; "Destroyed\n"; }
+    void print() { cout &lt;&lt; "Printing\n"; }
+};
+
+int main() {
+    {
+        // Preferred way to create a unique_ptr (C++14)
+        std::unique_ptr&lt;Entity&gt; entity = std::make_unique&lt;Entity&gt;();
+        entity-&gt;print();
+    } // "Destroyed" is automatically printed here! No delete needed!
+    return 0;
+}</code></pre>
+<h2>shared_ptr</h2>
+<p>Use <code>shared_ptr</code> when multiple owners need to point to the same memory. It keeps a reference count and deletes the memory when the count reaches zero.</p>
+<pre><code>std::shared_ptr&lt;Entity&gt; e1 = std::make_shared&lt;Entity&gt;();
+std::shared_ptr&lt;Entity&gt; e2 = e1; // Reference count is now 2</code></pre>`},
+
+  {id:10,free:false,icon:'📂',level:'Advanced',title:'File Handling & Streams',
+   excerpt:'Persist your data. Learn how to read from and write to text and binary files using fstream, ifstream, and ofstream.',
+   tags:['Advanced','File I/O','fstream'],visual:'📂',bg:'linear-gradient(135deg,#0a0f14,#101828)',
+   concepts:['<fstream>','ofstream (Writing)','ifstream (Reading)','File Open Modes','Checking if open()','getline'],
+   body:`<p>File handling in C++ is managed through the <code>&lt;fstream&gt;</code> library, which provides <code>ifstream</code> (input/read) and <code>ofstream</code> (output/write).</p>
+<h2>Writing to a File</h2>
+<pre><code>#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    std::ofstream outFile("data.txt");
+    
+    if (outFile.is_open()) {
+        outFile &lt;&lt; "Writing this to a file.\n";
+        outFile &lt;&lt; "C++ makes it easy!";
+        outFile.close(); // Always close files
+    } else {
+        std::cout &lt;&lt; "Unable to open file";
+    }
+    return 0;
+}</code></pre>
+<h2>Reading from a File</h2>
+<pre><code>#include &lt;fstream&gt;
+#include &lt;string&gt;
+
+std::ifstream inFile("data.txt");
+std::string line;
+
+if (inFile.is_open()) {
+    while (std::getline(inFile, line)) {
+        std::cout &lt;&lt; line &lt;&lt; '\n';
+    }
+    inFile.close();
+}</code></pre>`},
+
+  {id:11,free:false,icon:'⚡',level:'Advanced',title:'Multithreading (C++11)',
+   excerpt:'Harness the full power of modern multi-core processors. Learn to spawn threads, synchronize them with mutexes, and avoid race conditions.',
+   tags:['Advanced','Concurrency','Threads'],visual:'⚡',bg:'linear-gradient(135deg,#100a0a,#1e0f0f)',
+   concepts:['<thread> library','std::thread','join() vs detach()','Race Conditions','<mutex>','std::lock_guard'],
+   body:`<p>Since C++11, multithreading is part of the standard library, allowing you to run multiple functions concurrently.</p>
+<h2>Creating Threads</h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;thread&gt;
+
+void workerFunction(int x) {
+    std::cout &lt;&lt; "Worker thread executing with value: " &lt;&lt; x &lt;&lt; "\n";
+}
+
+int main() {
+    // Spawn a new thread
+    std::thread t1(workerFunction, 10);
+    
+    std::cout &lt;&lt; "Main thread executing\n";
+    
+    // Wait for t1 to finish before main exits
+    t1.join(); 
+    return 0;
+}</code></pre>
+<h2>Synchronization with Mutex</h2>
+<p>When multiple threads access the same variable, you need a <code>mutex</code> to prevent data corruption.</p>
+<pre><code>#include &lt;mutex&gt;
+std::mutex mtx;
+int sharedData = 0;
+
+void increment() {
+    std::lock_guard&lt;std::mutex&gt; lock(mtx); // Automatically unlocks when out of scope
+    sharedData++;
+}</code></pre>`},
+
+  {id:12,free:false,icon:'🛡️',level:'Advanced',title:'RAII & Rule of Three',
+   excerpt:'Write professional, leak-proof C++. Understand RAII principles and know exactly when you need to define custom copy constructors and assignment operators.',
+   tags:['Advanced','Best Practices','Memory'],visual:'🛡️',bg:'linear-gradient(135deg,#0a0a10,#12121e)',
+   concepts:['RAII','Rule of Three','Copy Constructor','Copy Assignment Operator','Deep vs Shallow Copy','Rule of Five (C++11)'],
+   body:`<p><strong>RAII</strong> (Resource Acquisition Is Initialization) is the core idiom of C++. It dictates that resource management (memory, file handles, network sockets) should be tied to object lifespan.</p>
+<h2>The Rule of Three</h2>
+<p>If your class manually manages memory (e.g., holds a raw pointer and uses <code>delete</code> in the destructor), you MUST implement three things to avoid shallow copy bugs:</p>
+<ol>
+  <li><strong>Destructor:</strong> To free the memory.</li>
+  <li><strong>Copy Constructor:</strong> To create a deep copy of the memory.</li>
+  <li><strong>Copy Assignment Operator:</strong> To handle assignment of existing objects safely.</li>
+</ol>
+<pre><code>class StringClass {
+private:
+    char* buffer;
+public:
+    // 1. Destructor
+    ~StringClass() { delete[] buffer; }
+    
+    // 2. Copy Constructor
+    StringClass(const StringClass& other) {
+        // Allocate new memory and copy data
+    }
+    
+    // 3. Copy Assignment Operator
+    StringClass& operator=(const StringClass& other) {
+        if (this != &other) {
+            // Clean up old memory, allocate new, and copy
+        }
+        return *this;
+    }
+};</code></pre>
+<blockquote>With modern C++ and Smart Pointers, we often aim for the <strong>Rule of Zero</strong>: design classes so they don't require any manual resource management at all!</blockquote>`}
 ];
 
 let currentId = null;
 let completed = getCompleted();
-const TOTAL_FREE = 6;
 
 // RENDER INDEX
 renderIndex();
@@ -509,40 +722,31 @@ function renderIndex() {
 
 function renderCard(m) {
   const done = completed.includes(m.id);
-  const locked = !m.free;
-  const cls = `mod-card${locked?' premium-card':''}${done?' done-card':''}`;
+  const locked = !m.free && !isPremium();
+  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}`;
   const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
-  
-  // PREMIUM REDIRECT LOGIC
-  const click = locked ? `onclick="window.location.href='premium.html'"` : `onclick="openLesson(${m.id})"`;
-  
+  const click = locked ? `onclick="showToast('⭐ Sign in as admin to unlock premium modules')"` : `onclick="openLesson(${m.id})"`;
   return `<div class="${cls}" ${click}>
     <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
     <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
     <div class="mod-title">${m.title}</div>
     <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
-    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">${locked?'🔒 Unlock':'→'}</span></div>
+    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">→</span></div>
   </div>`;
 }
 
 function updateProgress() {
   const freeDone = completed.filter(id => MODS.find(m=>m.id===id&&m.free)).length;
-  const pct = Math.round((freeDone/TOTAL_FREE)*100);
+  const pct = Math.round((freeDone/6)*100);
   document.getElementById('progFill').style.width = pct+'%';
   document.getElementById('progPct').textContent = pct+'%';
-  document.getElementById('progLabel').textContent = `${freeDone} of ${TOTAL_FREE} free modules completed`;
+  document.getElementById('progLabel').textContent = `${freeDone} of 6 free modules completed`;
 }
 
 function openLesson(id) {
   const m = MODS.find(x=>x.id===id);
   if (!m) return;
-  
-  // PREMIUM REDIRECT LOGIC
-  if (!m.free) { 
-    window.location.href = 'premium.html'; 
-    return; 
-  }
-  
+  if (!m.free && !isPremium()) { showToast('⭐ Sign in as admin to unlock premium modules'); return; }
   currentId = id;
   document.getElementById('indexPage').style.display = 'none';
   document.getElementById('lessonPage').style.display = 'block';
@@ -553,18 +757,20 @@ function openLesson(id) {
   const mb = document.getElementById('markBtn');
   mb.textContent = done ? '✓ Completed' : '✓ Mark Done';
   mb.classList.toggle('done-btn', done);
-  
-  // Hide prev/next if bounds reached
   document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
 
-  const html = `
-       <div class="les-cat">Module ${String(id).padStart(2,'0')} · ${m.level} · Free</div>
+  const html = !m.free && !isPremium()
+    ? `<div class="premium-lock"><div style="font-size:48px;margin-bottom:16px;">⭐</div>
+       <div style="font-family:var(--ff-display);font-size:28px;margin-bottom:10px;">Premium Module</div>
+       <div style="font-size:14px;color:var(--muted2);margin-bottom:24px;">Sign in as admin to unlock all advanced content.</div>
+       <button class="lock-btn" onclick="showToast('Contact admin for premium access')">Unlock Premium</button></div>`
+    : `<div class="les-cat ${!m.free?'prem':''}">Module ${String(id).padStart(2,'0')} · ${m.level} · ${m.free?'Free':'Premium'}</div>
        <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
-         <span class="meta-item">🖥️ C++20</span>
-         <span class="meta-item">⏱ ~12 min read</span>
+         <span class="meta-item">📖 C++ OOP</span>
+         <span class="meta-item">⏱ ~10 min read</span>
          <span class="meta-item">⚙️ ${m.level}</span>
        </div>
        <div class="les-visual" style="background:${m.bg};">
@@ -579,8 +785,8 @@ function openLesson(id) {
        <div class="les-footer">
          <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
          <div class="nav-lessons">
-           ${id>1?`<div class="nlc" onclick="${MODS.find(x=>x.id===id-1).free ? `openLesson(${id-1})` : `window.location.href='premium.html'`}"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
-           ${id<MODS.length?`<div class="nlc" onclick="${MODS.find(x=>x.id===id+1).free ? `openLesson(${id+1})` : `window.location.href='premium.html'`}" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
+           ${id>1?`<div class="nlc" onclick="openLesson(${id-1})"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
+           ${id<MODS.length?`<div class="nlc" onclick="openLesson(${id+1})" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
          </div>
        </div>`;
 
@@ -597,73 +803,38 @@ function openLesson(id) {
 
 function renderSidebar() {
   const freeDone = completed.filter(id=>MODS.find(m=>m.id===id&&m.free)).length;
-  const pct = Math.round((freeDone/TOTAL_FREE)*100);
+  const pct = Math.round((freeDone/6)*100);
   document.getElementById('sbProgFill').style.width = pct+'%';
-  document.getElementById('sbProgLabel').textContent = `${freeDone} / ${TOTAL_FREE} free`;
+  document.getElementById('sbProgLabel').textContent = `${freeDone} / 6 free`;
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
-    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free;
-    
-    // PREMIUM REDIRECT LOGIC in sidebar
-    const click = locked ? `window.location.href='premium.html'` : `openLesson(${m.id})`;
-    
-    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${click}">
+    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
+    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`showToast('⭐ Premium')`:`openLesson(${m.id})`}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
-      ${locked?'<span style="font-size:10px;opacity:0.5;color:var(--gold);">🔒</span>':''}
+      ${locked?'<span style="font-size:10px;opacity:0.5;">🔒</span>':''}
     </button>`;
   }).join('');
 }
 
-function goBack(){
-  document.getElementById('lessonPage').style.display='none';
-  document.getElementById('indexPage').style.display='block';
-  renderIndex();
-  window.scrollTo(0,0);
-}
-
-function prevLesson() {
-  if(currentId>1) {
-    const m = MODS.find(x=>x.id===currentId-1);
-    if(m.free) openLesson(currentId-1);
-    else window.location.href='premium.html';
-  }
-}
-
-function nextLesson() {
-  if(currentId<MODS.length) {
-    const m = MODS.find(x=>x.id===currentId+1);
-    if(m.free) openLesson(currentId+1);
-    else window.location.href='premium.html';
-  }
-}
-
-function markDone() {
-  if(!currentId) return;
-  const m = MODS.find(x=>x.id===currentId);
-  if(!m.free) return; // Prevent marking premium as done if somehow accessed
-  
-  if(!completed.includes(currentId)){
-    completed.push(currentId);
-    saveCompleted(completed);
-    showToast('✓ Module marked complete! ⚙️');
-  }
+function goBack(){document.getElementById('lessonPage').style.display='none';document.getElementById('indexPage').style.display='block';renderIndex();window.scrollTo(0,0);}
+function prevLesson(){if(currentId>1)openLesson(currentId-1);}
+function nextLesson(){if(currentId<MODS.length)openLesson(currentId+1);}
+function markDone(){
+  if(!currentId)return;
+  const m=MODS.find(x=>x.id===currentId);
+  if(!m.free&&!isPremium())return;
+  if(!completed.includes(currentId)){completed.push(currentId);saveCompleted(completed);showToast('✓ Module marked complete! ⚙️');}
   openLesson(currentId);
 }
-
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
-}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 
 // Cursor
 const cur=document.getElementById('cur'),curR=document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 (function anim(){cur.style.left=(mx-5)+'px';cur.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=(rx-18)+'px';curR.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
-document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
-document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
+document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
+document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
 </script>
 </body>
 </html>
