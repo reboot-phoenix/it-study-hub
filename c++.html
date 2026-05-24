@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Python Programming — IT Study Hub</title>
+<title>C++ Programming — IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -182,11 +182,11 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 
 <div id="indexPage">
   <div class="fade-up">
-    <div class="course-eyebrow">Data Science & Automation · Subject 03</div>
-    <h1 class="course-title">Python <em>Programming</em></h1>
-    <p class="course-desc">Master the most versatile programming language in the world. From basic scripting and automation to object-oriented design and file handling.</p>
+    <div class="course-eyebrow">Object-Oriented Systems · Subject 04</div>
+    <h1 class="course-title">C++ <em>Programming</em></h1>
+    <p class="course-desc">Master the high-performance language behind game engines, high-frequency trading, and operating systems. From pointers to OOP and the STL.</p>
     <div class="course-chips">
-      <span class="chip chip-lime">🐍 Python 3.10+</span>
+      <span class="chip chip-lime">⚙️ C++20</span>
       <span class="chip chip-lime">6 Free Modules</span>
       <span class="chip chip-gold">6 Premium Modules</span>
       <span class="chip chip-lime">Real PDF Notes</span>
@@ -216,22 +216,22 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
     <div class="mat-grid">
       <a href="#" target="_blank" class="mat-item">
         <div class="mat-icon">📝</div>
-        <div class="mat-info"><div class="mat-title">Python Basics Cheat Sheet</div><div class="mat-desc">Variables, Loops, Functions · Free</div></div>
+        <div class="mat-info"><div class="mat-title">C++ Basics & OOP Notes</div><div class="mat-desc">Variables, Pointers, Classes · Free</div></div>
         <span class="mat-action">↓ Download</span>
       </a>
-      <a href="https://www.sanfoundry.com/python-questions-answers/" target="_blank" class="mat-item">
+      <a href="https://www.sanfoundry.com/cpp-programming-questions-answers/" target="_blank" class="mat-item">
         <div class="mat-icon">🎯</div>
-        <div class="mat-info"><div class="mat-title">Placement Quiz — Python</div><div class="mat-desc">1000+ MCQs · Free</div></div>
+        <div class="mat-info"><div class="mat-title">Placement Quiz — C++</div><div class="mat-desc">1000+ MCQs · Free</div></div>
         <span class="mat-action">→ Start</span>
       </a>
       <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
         <div class="mat-icon">⭐</div>
-        <div class="mat-info"><div class="mat-title">Advanced Notes — OOP & APIs</div><div class="mat-desc">Deep dive into advanced concepts · Premium</div></div>
+        <div class="mat-info"><div class="mat-title">Advanced Notes — STL & Memory</div><div class="mat-desc">Deep dive into Vectors and RAII · Premium</div></div>
         <span class="mat-action locked">🔒 Unlock</span>
       </div>
       <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
         <div class="mat-icon">⭐</div>
-        <div class="mat-info"><div class="mat-title">Python Interview Question Bank</div><div class="mat-desc">100+ interview-level questions · Premium</div></div>
+        <div class="mat-info"><div class="mat-title">C++ Interview Question Bank</div><div class="mat-desc">100+ technical interview questions · Premium</div></div>
         <span class="mat-action locked">🔒 Unlock</span>
       </div>
     </div>
@@ -240,7 +240,7 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 
 <div id="lessonPage">
   <div class="lesson-topbar">
-    <div class="les-breadcrumb">Python Programming <span>/</span> <span id="lesCrumb">—</span></div>
+    <div class="les-breadcrumb">C++ Programming <span>/</span> <span id="lesCrumb">—</span></div>
     <div class="les-nav-btns">
       <button class="lnav-btn" onclick="goBack()">← Back</button>
       <button class="lnav-btn" id="prevBtn" onclick="prevLesson()">← Prev</button>
@@ -269,225 +269,226 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <script>
-function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_python_done')||'[]');}catch(e){return[];}}
-function saveCompleted(a){localStorage.setItem('ish_python_done',JSON.stringify(a));}
+function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_cpp_done')||'[]');}catch(e){return[];}}
+function saveCompleted(a){localStorage.setItem('ish_cpp_done',JSON.stringify(a));}
 
 const MODS = [
-  {id:1,free:true,icon:'🐍',level:'Beginner',title:'Intro to Python',
-   excerpt:'Python is a high-level, interpreted programming language known for its readability. Learn about its philosophy, the REPL, and write your first script.',
-   tags:['Beginner','History','Setup'],visual:'🐍',bg:'linear-gradient(135deg,#0a1a1a,#0f2020)',
-   concepts:['Interpreted Language','PEP 8','The Zen of Python','Indentation','print()','Comments'],
-   body:`<p>Created by Guido van Rossum and released in 1991, <strong>Python</strong> was designed with a philosophy that emphasizes code readability. It is an <em>interpreted</em> language, meaning you don't need to compile it before running—the Python interpreter reads and executes code line by line.</p>
-<h2>The Importance of Indentation</h2>
-<p>Unlike languages such as C or Java that use curly braces <code>{}</code> to define blocks of code, Python relies entirely on <strong>whitespace indentation</strong>. This isn't just a stylistic choice; it's a strict syntax rule.</p>
-<blockquote>A standard indentation in Python is exactly 4 spaces. Mixing tabs and spaces will lead to an <code>IndentationError</code>.</blockquote>
+  {id:1,free:true,icon:'⚙️',level:'Beginner',title:'Intro to C++',
+   excerpt:'C++ builds upon C by adding Object-Oriented features. Learn about its history, the compilation process, and how to write your first program using iostream.',
+   tags:['Beginner','History','Setup'],visual:'⚙️',bg:'linear-gradient(135deg,#0a1a1a,#0f2020)',
+   concepts:['Bjarne Stroustrup','iostream','std namespace','cout & cin','Compilation Process'],
+   body:`<p><strong>C++</strong> was developed by Bjarne Stroustrup in 1979 at Bell Labs as an extension to the C language (initially called "C with Classes"). It is a high-performance, compiled language used extensively in game development, OS design, and high-frequency trading.</p>
 <h2>Your First Program</h2>
-<pre><code># This is a single-line comment in Python
-print("Hello, IT Study Hub!")
+<p>Unlike C which uses <code>stdio.h</code> and <code>printf</code>, C++ introduces the <code>iostream</code> library and the concept of streams.</p>
+<pre><code>#include &lt;iostream&gt;
 
-"""
-This is a multi-line string.
-It is often used as a multi-line comment or a docstring.
-"""</code></pre>
-<h2>The Zen of Python</h2>
-<p>Python developers follow a set of guiding principles known as PEP 20. If you type <code>import this</code> in your Python terminal (REPL), you'll see rules like:</p>
-<ul>
-  <li>Beautiful is better than ugly.</li>
-  <li>Explicit is better than implicit.</li>
-  <li>Simple is better than complex.</li>
-  <li>Readability counts.</li>
-</ul>`},
+int main() {
+    // using std::cout to print to the console
+    std::cout << "Hello, IT Study Hub!" << std::endl;
+    return 0;
+}</code></pre>
+<h2>The <code>std</code> Namespace</h2>
+<p>In C++, elements of the standard library are housed inside the <code>std</code> namespace. Instead of writing <code>std::</code> every time, you can declare <code>using namespace std;</code> globally, though this is often discouraged in large professional projects to prevent naming collisions.</p>
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int age;
+    cout << "Enter your age: ";
+    cin >> age; // Reading input
+    cout << "You are " << age << " years old." << endl;
+    return 0;
+}</code></pre>`},
 
   {id:2,free:true,icon:'🔤',level:'Beginner',title:'Variables & Data Types',
-   excerpt:'Python uses dynamic typing. Learn how variables work, the core primitive types, and how to cast between them without explicit declarations.',
-   tags:['Beginner','Dynamic Typing','Data Types'],visual:'🔤',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
-   concepts:['Dynamic Typing','int, float, str, bool','type()','Type Casting','NoneType','Garbage Collection'],
-   body:`<p>In Python, you do not need to declare a variable's type before assigning a value to it. This is known as <strong>dynamic typing</strong>. The interpreter infers the type based on the value.</p>
-<h2>Core Primitive Types</h2>
-<p>Python has a few built-in primitive types that you will use in almost every program:</p>
-<ul>
-  <li><code>int</code> - Whole numbers (e.g., <code>42</code>)</li>
-  <li><code>float</code> - Decimal numbers (e.g., <code>3.14159</code>)</li>
-  <li><code>str</code> - Text strings (e.g., <code>"Cybersecurity"</code>)</li>
-  <li><code>bool</code> - Boolean values (<code>True</code> or <code>False</code> - note the capital letters!)</li>
-</ul>
-<pre><code>name = "Alice"   # str
-age = 20         # int
-gpa = 3.8        # float
-is_student = True # bool
+   excerpt:'C++ is statically typed. Learn about primitives, constants, the auto keyword, and the incredibly important concept of references (&).',
+   tags:['Beginner','Data Types','References'],visual:'🔤',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
+   concepts:['Primitives','auto Keyword','const','References (&)','Type Casting'],
+   body:`<p>C++ is a <strong>statically typed</strong> language, meaning you must declare a variable's type. However, modern C++ (C++11 and later) introduced the <code>auto</code> keyword to make life easier.</p>
+<h2>Primitive Types & <code>auto</code></h2>
+<pre><code>int x = 10;
+double pi = 3.14159;
+char grade = 'A';
+bool isPassed = true;
 
-# You can check a variable's type using the type() function:
-print(type(gpa))  # Output: &lt;class 'float'&gt;</code></pre>
-<h2>Type Casting</h2>
-<p>Because Python is strictly typed at runtime, you cannot concatenate a string and an integer directly. You must cast them.</p>
-<pre><code>age = 20
-# This will cause a TypeError:
-# print("I am " + age + " years old.")
+// Modern C++: The compiler figures out the type
+auto name = "Dithsha"; // Evaluates to const char*
+auto score = 95.5;     // Evaluates to double</code></pre>
+<h2>The Power of References (<code>&</code>)</h2>
+<p>A reference in C++ is an alias for an existing variable. Unlike pointers, references cannot be null, and they cannot be reassigned to point to something else once initialized. This is a massive feature that C lacks.</p>
+<pre><code>int a = 50;
+int& ref = a; // 'ref' is now an exact alias for 'a'
 
-# Correct way using casting:
-print("I am " + str(age) + " years old.")
-
-# Or casting a string to a float:
-price = float("19.99")</code></pre>`},
+ref = 100; // Changing 'ref' changes 'a'
+cout << a; // Outputs: 100</code></pre>
+<blockquote>References are most commonly used in function parameters to avoid copying large objects and to allow functions to modify the original variable.</blockquote>`},
 
   {id:3,free:true,icon:'🔀',level:'Beginner',title:'Operators & Control Flow',
-   excerpt:'Control the flow of your program using if, elif, and else statements. Master logical operators, truthiness, and chained comparisons.',
+   excerpt:'Make decisions and loop through data. Master if/else statements, switch cases, and the modern range-based for loop.',
    tags:['Beginner','Logic','Conditionals'],visual:'🔀',bg:'linear-gradient(135deg,#0f0a14,#201028)',
-   concepts:['if / elif / else','Logical Operators (and, or, not)','Truthiness','Chained Comparisons','Ternary Operator'],
-   body:`<p>Control flow allows your Python script to make decisions. Python uses <code>if</code>, <code>elif</code> (else if), and <code>else</code> blocks, structured by indentation.</p>
-<h2>Conditionals</h2>
-<pre><code>marks = 85
+   concepts:['if / else','switch / case','for / while Loops','Range-based for Loop','Ternary Operator'],
+   body:`<p>Control flow in C++ is almost identical to C, utilizing <code>if</code>, <code>else if</code>, and <code>else</code> for branching, and <code>switch</code> for distinct cases.</p>
+<h2>Standard Loops</h2>
+<pre><code>// Standard for loop
+for (int i = 0; i < 5; i++) {
+    cout << i << " ";
+}
 
-if marks >= 90:
-    print("Grade: A")
-elif marks >= 80:
-    print("Grade: B")  # This block will execute
-else:
-    print("Grade: C")</code></pre>
-<h2>Logical Operators</h2>
-<p>Unlike C which uses <code>&&</code> and <code>||</code>, Python uses plain English words: <code>and</code>, <code>or</code>, and <code>not</code>.</p>
-<pre><code>is_weekend = True
-has_homework = False
+// while loop
+int count = 5;
+while (count > 0) {
+    cout << count-- << " ";
+}</code></pre>
+<h2>The Range-Based For Loop (C++11)</h2>
+<p>One of the best modern features of C++ is the range-based for loop. It allows you to iterate over arrays and STL containers cleanly, exactly like Python or Java.</p>
+<pre><code>int numbers[] = {10, 20, 30, 40};
 
-if is_weekend and not has_homework:
-    print("Time to play video games!")
-elif is_weekend and has_homework:
-    print("Study first, then relax.")</code></pre>
-<h2>Chained Comparisons</h2>
-<p>Python allows you to chain mathematical comparisons elegantly, just like you would write them in algebra:</p>
-<pre><code>age = 20
-# Instead of: if age >= 18 and age <= 65:
-if 18 <= age <= 65:
-    print("Eligible to work.")</code></pre>
-<blockquote><strong>Truthiness:</strong> In Python, empty sequences (like <code>""</code>, <code>[]</code>, <code>{}</code>), the number <code>0</code>, and <code>None</code> evaluate to <code>False</code> in an if-statement. Everything else is generally <code>True</code>.</blockquote>`},
+// Traditional way:
+for (int i = 0; i < 4; i++) { cout << numbers[i] << " "; }
 
-  {id:4,free:true,icon:'🔁',level:'Beginner',title:'Loops & Iteration',
-   excerpt:'Execute code repeatedly using while and for loops. Discover the power of the range() function, break, and continue statements.',
-   tags:['Beginner','Loops','Iteration'],visual:'🔁',bg:'linear-gradient(135deg,#14140a,#282810)',
-   concepts:['for...in loop','while loop','range() function','break & continue','Infinite Loops'],
-   body:`<p>Loops in Python are incredibly powerful, especially the <code>for</code> loop, which is designed to iterate directly over sequences (like lists or strings) rather than relying on index counters.</p>
-<h2>The <code>for</code> Loop & <code>range()</code></h2>
-<p>The <code>range(start, stop, step)</code> function generates a sequence of numbers. Remember that the <code>stop</code> value is <em>exclusive</em>.</p>
-<pre><code># Prints numbers from 0 to 4
-for i in range(5):
-    print(i)
+// Modern C++ range-based loop:
+for (int n : numbers) {
+    cout << n << " ";
+}
 
-# Prints even numbers from 2 to 8
-for x in range(2, 10, 2):
-    print(x)</code></pre>
-<h2>The <code>while</code> Loop</h2>
-<p>A <code>while</code> loop runs as long as a condition remains <code>True</code>.</p>
-<pre><code>count = 3
-while count > 0:
-    print("Countdown:", count)
-    count -= 1  # count = count - 1
-print("Liftoff!")</code></pre>
-<h2>Loop Control: <code>break</code> and <code>continue</code></h2>
-<ul>
-  <li><code>break</code> terminates the loop entirely.</li>
-  <li><code>continue</code> skips the rest of the current iteration and jumps to the next one.</li>
-</ul>
-<pre><code>for num in range(1, 10):
-    if num == 5:
-        break     # Loop completely stops when num is 5
-    if num % 2 == 0:
-        continue  # Skips printing even numbers
-    print(num)    # Output: 1, 3</code></pre>`},
+// Best practice: use reference to avoid copying
+for (const auto& n : numbers) {
+    cout << n << " ";
+}</code></pre>`},
 
-  {id:5,free:true,icon:'🛠️',level:'Beginner',title:'Functions & Scope',
-   excerpt:'Write reusable blocks of code using the def keyword. Learn about parameters, return values, default arguments, and variable scope.',
-   tags:['Beginner','Functions','Modularity'],visual:'🛠️',bg:'linear-gradient(135deg,#0a1414,#102828)',
-   concepts:['def keyword','Return values','Default arguments','*args and **kwargs','Local vs Global Scope'],
-   body:`<p>Functions allow you to encapsulate logic into reusable blocks. In Python, functions are defined using the <code>def</code> keyword.</p>
-<h2>Defining and Calling Functions</h2>
-<pre><code>def greet(name):
-    """This docstring explains what the function does."""
-    return "Hello, " + name + "!"
+  {id:4,free:true,icon:'🛠️',level:'Beginner',title:'Functions & Overloading',
+   excerpt:'Learn how to structure modular code. Master pass-by-value vs pass-by-reference, default arguments, and function overloading.',
+   tags:['Beginner','Functions','Modularity'],visual:'🛠️',bg:'linear-gradient(135deg,#14140a,#282810)',
+   concepts:['Pass by Value/Reference','Default Arguments','Function Overloading','Inline Functions'],
+   body:`<p>Functions allow you to break your program into manageable, reusable pieces. C++ introduces powerful enhancements to functions over C.</p>
+<h2>Pass-by-Reference</h2>
+<p>Passing by reference allows a function to modify the caller's variables directly, without the confusing syntax of C pointers.</p>
+<pre><code>void swap(int& x, int& y) {
+    int temp = x;
+    x = y;
+    y = temp;
+}
 
-message = greet("Dithsha")
-print(message)</code></pre>
-<h2>Default Arguments</h2>
-<p>You can assign default values to parameters. If the caller doesn't provide an argument, the default is used.</p>
-<pre><code>def power(base, exponent=2):
-    return base ** exponent
+int main() {
+    int a = 5, b = 10;
+    swap(a, b); // No '&' needed when calling!
+    // a is now 10, b is now 5
+}</code></pre>
+<h2>Function Overloading</h2>
+<p>C++ allows multiple functions to have the exact same name, as long as their parameter lists (signatures) are different. The compiler figures out which one to call.</p>
+<pre><code>int add(int a, int b) {
+    return a + b;
+}
 
-print(power(3))    # Output: 9 (3 squared)
-print(power(3, 3)) # Output: 27 (3 cubed)</code></pre>
-<h2>Variable Scope</h2>
-<p>Variables created inside a function are <strong>local</strong> to that function. They cannot be accessed outside of it. Variables created outside are <strong>global</strong>.</p>
-<pre><code>x = "global"
+double add(double a, double b) {
+    return a + b;
+}
 
-def test_scope():
-    x = "local"
-    print("Inside:", x)
+int add(int a, int b, int c) {
+    return a + b + c;
+}
+// Calling add(5.5, 2.2) will automatically route to the double version.</code></pre>`},
 
-test_scope()     # Output: Inside: local
-print("Outside:", x) # Output: Outside: global</code></pre>
-<blockquote><strong>Advanced Tip:</strong> Functions in Python are "first-class citizens", meaning they can be passed as arguments to other functions, returned from functions, and assigned to variables!</blockquote>`},
+  {id:5,free:true,icon:'👉',level:'Beginner',title:'Pointers & Memory',
+   excerpt:'C++ gives you direct control over memory. Understand raw pointers, the stack vs the heap, and dynamic allocation using new and delete.',
+   tags:['Beginner','Memory','Pointers'],visual:'👉',bg:'linear-gradient(135deg,#0a1414,#102828)',
+   concepts:['Raw Pointers (* &)','Stack vs Heap','new & delete','Dynamic Arrays','Memory Leaks'],
+   body:`<p>Like C, C++ utilizes <strong>pointers</strong> — variables that store the memory addresses of other variables. <code>&</code> gets the address, <code>*</code> dereferences the pointer to get the value.</p>
+<h2>Dynamic Memory: <code>new</code> and <code>delete</code></h2>
+<p>Instead of C's clunky <code>malloc()</code> and <code>free()</code>, C++ uses the operators <code>new</code> and <code>delete</code> for allocating memory on the <strong>Heap</strong>.</p>
+<pre><code>// Allocate a single integer on the heap
+int* p = new int;
+*p = 42;
 
-  {id:6,free:true,icon:'📚',level:'Beginner',title:'Lists & Tuples',
-   excerpt:'Store collections of data. Understand the critical differences between mutable Lists and immutable Tuples, and master list slicing.',
-   tags:['Beginner','Data Structures','Arrays'],visual:'📚',bg:'linear-gradient(135deg,#140a14,#281028)',
-   concepts:['Lists (Mutable)','Tuples (Immutable)','List Methods','Indexing & Slicing','Tuple Unpacking'],
-   body:`<p>Python doesn't have built-in "arrays" like C or Java; instead, it uses highly versatile <strong>Lists</strong> and <strong>Tuples</strong> to store ordered collections of items.</p>
-<h2>Lists (Mutable)</h2>
-<p>Lists are created using square brackets <code>[]</code>. They are <em>mutable</em>, meaning you can change, add, or remove items after the list is created.</p>
-<pre><code>tech_stack = ["Python", "Java", "C"]
-tech_stack.append("JavaScript")  # Adds to the end
-tech_stack[1] = "C++"            # Modifies the second item
-tech_stack.remove("C")           # Removes a specific item
+cout << "Value: " << *p << endl;
 
-print(tech_stack) # ['Python', 'C++', 'JavaScript']</code></pre>
-<h2>List Slicing</h2>
-<p>Slicing allows you to extract sub-lists using the syntax <code>[start:stop:step]</code>.</p>
-<pre><code>nums = [0, 1, 2, 3, 4, 5]
-print(nums[1:4])   # [1, 2, 3] (stop is exclusive)
-print(nums[:3])    # [0, 1, 2] (from beginning to index 3)
-print(nums[::-1])  # [5, 4, 3, 2, 1, 0] (Quick trick to reverse a list!)</code></pre>
-<h2>Tuples (Immutable)</h2>
-<p>Tuples are created using parentheses <code>()</code>. Once created, they <strong>cannot be changed</strong>. They are faster than lists and used to protect data from accidental modification.</p>
-<pre><code>coordinates = (10.0, 20.5)
-# coordinates[0] = 15.0  <-- This will throw a TypeError!
+// MUST free the memory to prevent memory leaks!
+delete p;
+p = nullptr; // Always set to nullptr after deleting</code></pre>
+<h2>Dynamic Arrays</h2>
+<p>If you need an array whose size is determined at runtime, you use dynamic allocation.</p>
+<pre><code>int size = 5;
+int* arr = new int[size];
 
-# Tuple Unpacking
-x, y = coordinates
-print(f"X: {x}, Y: {y}")</code></pre>`},
+arr[0] = 10;
+
+// Note the brackets when deleting an array!
+delete[] arr;</code></pre>
+<blockquote><strong>Note:</strong> In Modern C++, raw pointers are heavily discouraged for ownership. You should use Smart Pointers (`std::unique_ptr`) or STL containers (`std::vector`) instead.</blockquote>`},
+
+  {id:6,free:true,icon:'🏗️',level:'Beginner',title:'Intro to OOP (Classes)',
+   excerpt:'The core of C++ is Object-Oriented Programming. Learn how to create custom data types using Classes, objects, and constructors.',
+   tags:['Beginner','OOP','Classes'],visual:'🏗️',bg:'linear-gradient(135deg,#140a14,#281028)',
+   concepts:['Classes & Objects','public / private','Encapsulation','Constructors','Destructors','this pointer'],
+   body:`<p>Object-Oriented Programming (OOP) allows you to bundle data (attributes) and functions (methods) into a single logical unit called a <strong>Class</strong>.</p>
+<h2>Defining a Class</h2>
+<p>By default, everything in a C++ <code>class</code> is private. You must explicitly use the <code>public:</code> access specifier to allow outside access.</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+class Student {
+private:
+    // Data is hidden (Encapsulation)
+    string name;
+    float gpa;
+
+public:
+    // Constructor (called automatically on creation)
+    Student(string n, float g) {
+        name = n;
+        gpa = g;
+    }
+
+    // Method
+    void display() {
+        cout << name << " has a GPA of " << gpa << endl;
+    }
+};
+
+int main() {
+    // Creating an object of the class
+    Student s1("Dithsha", 3.8);
+    s1.display();
+    return 0;
+}</code></pre>
+<p>Constructors set up your object's initial state. C++ also features <strong>Destructors</strong> (e.g., <code>~Student()</code>) which run automatically when an object goes out of scope, perfect for cleaning up dynamically allocated memory.</p>`},
 
   // PREMIUM MODULES
-  {id:7,free:false,icon:'🗂️',level:'Intermediate',title:'Dictionaries & Sets',
-   excerpt:'Master Python\'s hash maps. Learn how to store key-value pairs in Dictionaries and manage unique items with Sets.',
-   tags:['Intermediate','Hash Maps','Data Structures'],visual:'🗂️',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
-   concepts:['Key-Value Pairs','Dict Methods (.keys, .values)','Set Operations (Union, Intersection)','Dictionary Comprehensions'],
+  {id:7,free:false,icon:'🧬',level:'Intermediate',title:'Advanced OOP',
+   excerpt:'Master the pillars of OOP: Inheritance, Polymorphism, and Abstraction. Learn how to use virtual functions and abstract classes.',
+   tags:['Intermediate','Inheritance','Polymorphism'],visual:'🧬',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
+   concepts:['Base & Derived Classes','public inheritance','virtual Functions','override keyword','Abstract Classes & Pure Virtual'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:8,free:false,icon:'✂️',level:'Intermediate',title:'Strings & RegEx',
-   excerpt:'Strings are objects in Python. Learn advanced formatting (f-strings), built-in methods, and pattern matching using the re module.',
-   tags:['Intermediate','Strings','Regex'],visual:'✂️',bg:'linear-gradient(135deg,#10080a,#200f12)',
-   concepts:['f-strings','String Methods (.split, .join, .replace)','Regular Expressions (re module)','Raw Strings'],
+  {id:8,free:false,icon:'🛡️',level:'Intermediate',title:'Smart Pointers & RAII',
+   excerpt:'Stop writing memory leaks. Learn the modern C++ way of managing memory using unique_ptr, shared_ptr, and the RAII principle.',
+   tags:['Intermediate','Memory Management','Modern C++'],visual:'🛡️',bg:'linear-gradient(135deg,#10080a,#200f12)',
+   concepts:['Resource Acquisition Is Initialization (RAII)','std::unique_ptr','std::shared_ptr','std::make_unique','Memory Safety'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:9,free:false,icon:'🏗️',level:'Advanced',title:'Object-Oriented Programming',
-   excerpt:'Move beyond scripts to application design. Learn classes, objects, inheritance, and Python\'s special dunder methods.',
-   tags:['Advanced','OOP','Classes'],visual:'🏗️',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
-   concepts:['Classes & Objects','__init__ method','self keyword','Inheritance','Polymorphism','Dunder (Magic) Methods'],
+  {id:9,free:false,icon:'🧩',level:'Advanced',title:'Templates',
+   excerpt:'Write generic code that works with any data type. Master function templates, class templates, and the basics of metaprogramming.',
+   tags:['Advanced','Templates','Generics'],visual:'🧩',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
+   concepts:['template <typename T>','Function Templates','Class Templates','Template Specialization','Generic Programming'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:10,free:false,icon:'📂',level:'Advanced',title:'File Handling & I/O',
-   excerpt:'Learn how to safely read, write, and append to external text and CSV files using context managers (the "with" statement).',
-   tags:['Advanced','I/O','Files'],visual:'📂',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
-   concepts:['open(), read(), write()','Context Managers (with statement)','File Modes (r, w, a)','Working with CSVs'],
+  {id:10,free:false,icon:'📚',level:'Advanced',title:'Standard Template Library (STL)',
+   excerpt:'The STL is the heart of C++ data structures. Learn to use vectors, maps, sets, algorithms, and iterators efficiently.',
+   tags:['Advanced','STL','Data Structures'],visual:'📚',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
+   concepts:['std::vector','std::map & std::unordered_map','std::set','Iterators','<algorithm> (sort, find)'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:11,free:false,icon:'⚠️',level:'Advanced',title:'Error Handling',
-   excerpt:'Prevent your programs from crashing. Use try, except, else, and finally blocks to catch and manage runtime exceptions gracefully.',
-   tags:['Advanced','Exceptions','Debugging'],visual:'⚠️',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
-   concepts:['try / except','catching specific exceptions','finally block','raising Exceptions','Custom Exceptions'],
+  {id:11,free:false,icon:'⚠️',level:'Advanced',title:'Exception Handling',
+   excerpt:'Prevent your programs from crashing. Use try, catch, and throw to handle runtime errors cleanly and build custom exceptions.',
+   tags:['Advanced','Exceptions','Robustness'],visual:'⚠️',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
+   concepts:['try / catch / throw','std::exception','Multiple catch blocks','Custom Exception Classes','noexcept'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:12,free:false,icon:'📦',level:'Advanced',title:'Modules & Environments',
-   excerpt:'The true power of Python lies in its ecosystem. Learn how to import modules, install external packages using pip, and manage virtual environments.',
-   tags:['Advanced','pip','venv'],visual:'📦',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
-   concepts:['import statements','Standard Library','pip package manager','Virtual Environments (venv)','requirements.txt'],
+  {id:12,free:false,icon:'🚀',level:'Advanced',title:'Modern C++ Features',
+   excerpt:'Bring your C++ up to date. Understand Lambda expressions, move semantics, and constexpr from C++11 through C++20.',
+   tags:['Advanced','Modern C++','Lambdas'],visual:'🚀',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
+   concepts:['Lambda Expressions','Move Semantics (std::move)','Rvalue References (&&)','constexpr','Multithreading (<thread>)'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`}
 ];
 
@@ -562,9 +563,9 @@ function openLesson(id) {
        <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
-         <span class="meta-item">🖥️ Python 3</span>
+         <span class="meta-item">🖥️ C++20</span>
          <span class="meta-item">⏱ ~12 min read</span>
-         <span class="meta-item">🐍 ${m.level}</span>
+         <span class="meta-item">⚙️ ${m.level}</span>
        </div>
        <div class="les-visual" style="background:${m.bg};">
          <div class="les-visual-grid"></div>
@@ -644,7 +645,7 @@ function markDone() {
   if(!completed.includes(currentId)){
     completed.push(currentId);
     saveCompleted(completed);
-    showToast('✓ Module marked complete! 🐍');
+    showToast('✓ Module marked complete! ⚙️');
   }
   openLesson(currentId);
 }
