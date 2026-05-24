@@ -3,1236 +3,671 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Web Development — IT Study Hub</title>
+<title>Web Technology — IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #04040a;
-    --surface: #0a0a14;
-    --surface2: #111120;
-    --border: rgba(255,255,255,0.07);
-    --border-active: rgba(200,241,53,0.4);
-    --lime: #c8f135;
-    --lime-dim: rgba(200,241,53,0.12);
-    --lime-glow: rgba(200,241,53,0.25);
-    --text: #eeeef5;
-    --muted: #6b6b80;
-    --muted2: #9494a8;
-    --red: #ff5f56;
-    --ff-display: 'Syne', sans-serif;
-    --ff-body: 'DM Sans', sans-serif;
-    --ff-mono: 'JetBrains Mono', monospace;
-  }
-
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--ff-body);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── NOISE OVERLAY ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.5;
-  }
-
-  /* ── AMBIENT GLOW ── */
-  .ambient {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(120px);
-    pointer-events: none;
-    z-index: 0;
-  }
-  .ambient-1 {
-    width: 500px; height: 500px;
-    background: rgba(200,241,53,0.06);
-    top: -100px; left: -100px;
-  }
-  .ambient-2 {
-    width: 400px; height: 400px;
-    background: rgba(100,80,200,0.05);
-    bottom: 200px; right: -100px;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    padding: 0 48px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(4,4,10,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .nav-logo {
-    font-family: var(--ff-display);
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    color: var(--text);
-  }
-
-  .nav-logo span { color: var(--lime); }
-
-  .nav-back {
-    font-family: var(--ff-mono);
-    font-size: 12px;
-    color: var(--muted2);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: color 0.2s;
-  }
-
-  .nav-back:hover { color: var(--lime); }
-
-  .nav-back svg { transition: transform 0.2s; }
-  .nav-back:hover svg { transform: translateX(-3px); }
-
-  /* ── MAIN LAYOUT ── */
-  .layout {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    min-height: calc(100vh - 64px);
-  }
-
-  /* ── SIDEBAR ── */
-  .sidebar {
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    padding: 32px 24px;
-    position: sticky;
-    top: 64px;
-    height: calc(100vh - 64px);
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .sidebar::-webkit-scrollbar { width: 4px; }
-  .sidebar::-webkit-scrollbar-track { background: transparent; }
-  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  .sidebar-label {
-    font-family: var(--ff-mono);
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-    text-transform: uppercase;
-    padding: 0 12px;
-    margin-bottom: 8px;
-  }
-
-  .sidebar-progress {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 20px;
-  }
-
-  .sp-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 10px;
-  }
-
-  .sp-label {
-    font-size: 12px;
-    color: var(--muted2);
-    font-family: var(--ff-mono);
-  }
-
-  .sp-value {
-    font-family: var(--ff-display);
-    font-size: 26px;
-    color: var(--lime);
-    line-height: 1;
-  }
-
-  .pbar {
-    width: 100%;
-    height: 5px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 99px;
-    overflow: hidden;
-  }
-
-  .pbar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--lime), #a8e020);
-    border-radius: 99px;
-    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 0%;
-  }
-
-  .lesson-btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: left;
-    width: 100%;
-    color: var(--muted2);
-  }
-
-  .lesson-btn:hover:not(.locked) {
-    background: var(--lime-dim);
-    border-color: var(--border-active);
-    color: var(--text);
-    transform: translateX(3px);
-  }
-
-  .lesson-btn.active {
-    background: var(--lime-dim);
-    border-color: var(--border-active);
-    color: var(--lime);
-  }
-
-  .lesson-btn.done {
-    color: var(--muted2);
-  }
-
-  .lesson-btn.done .lb-num {
-    background: var(--lime);
-    color: #000;
-  }
-
-  .lesson-btn.locked {
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-
-  .lb-num {
-    width: 26px;
-    height: 26px;
-    border-radius: 7px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    font-weight: 600;
-    flex-shrink: 0;
-    transition: all 0.2s;
-  }
-
-  .lb-info { flex: 1; }
-
-  .lb-title {
-    font-size: 13px;
-    font-weight: 500;
-    font-family: var(--ff-body);
-    line-height: 1.3;
-    display: block;
-  }
-
-  .lb-sub {
-    font-size: 11px;
-    color: var(--muted);
-    display: block;
-    margin-top: 2px;
-    font-family: var(--ff-mono);
-  }
-
-  .lb-badge {
-    font-size: 10px;
-    font-family: var(--ff-mono);
-    padding: 2px 7px;
-    border-radius: 4px;
-    background: var(--red);
-    color: #fff;
-  }
-
-  .lb-badge.done-badge {
-    background: var(--lime);
-    color: #000;
-  }
-
-  /* ── MAIN CONTENT ── */
-  .main {
-    padding: 48px;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
-
-  /* ── HERO ── */
-  .hero {
-    position: relative;
-  }
-
-  .hero-eyebrow {
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    color: var(--lime);
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 28px;
-    height: 1px;
-    background: var(--lime);
-  }
-
-  .hero-title {
-    font-family: var(--ff-display);
-    font-size: clamp(48px, 6vw, 80px);
-    font-weight: 800;
-    line-height: 0.95;
-    letter-spacing: -0.02em;
-    color: var(--text);
-    margin-bottom: 20px;
-  }
-
-  .hero-title em {
-    font-style: normal;
-    color: var(--lime);
-  }
-
-  .hero-desc {
-    color: var(--muted2);
-    font-size: 15px;
-    line-height: 1.75;
-    max-width: 520px;
-  }
-
-  .hero-stats {
-    display: flex;
-    gap: 32px;
-    margin-top: 28px;
-  }
-
-  .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .stat-num {
-    font-family: var(--ff-display);
-    font-size: 28px;
-    color: var(--lime);
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 12px;
-    color: var(--muted);
-    font-family: var(--ff-mono);
-  }
-
-  /* ── LESSON VIEWER ── */
-  .lesson-viewer {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    overflow: hidden;
-    min-height: 320px;
-    display: flex;
-    flex-direction: column;
-    transition: border-color 0.3s;
-  }
-
-  .lesson-viewer.active-lesson {
-    border-color: var(--border-active);
-  }
-
-  .lv-header {
-    padding: 24px 28px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-
-  .lv-breadcrumb {
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .lv-breadcrumb span { color: var(--lime); }
-
-  .lv-body {
-    padding: 36px 28px;
-    flex: 1;
-  }
-
-  .lv-placeholder {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    text-align: center;
-    min-height: 220px;
-  }
-
-  .lv-placeholder-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-  }
-
-  .lv-placeholder h3 {
-    font-family: var(--ff-display);
-    font-size: 22px;
-    color: var(--muted2);
-    font-weight: 700;
-  }
-
-  .lv-placeholder p {
-    font-size: 14px;
-    color: var(--muted);
-    max-width: 300px;
-    line-height: 1.6;
-  }
-
-  .lv-lesson-title {
-    font-family: var(--ff-display);
-    font-size: 34px;
-    font-weight: 800;
-    margin-bottom: 6px;
-    color: var(--text);
-  }
-
-  .lv-lesson-tag {
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    color: var(--lime);
-    background: var(--lime-dim);
-    padding: 4px 10px;
-    border-radius: 99px;
-    display: inline-block;
-    margin-bottom: 20px;
-    border: 1px solid var(--border-active);
-  }
-
-  .lv-lesson-body {
-    font-size: 15px;
-    line-height: 1.85;
-    color: var(--muted2);
-    max-width: 620px;
-  }
-
-  .lv-lesson-body strong { color: var(--text); font-weight: 500; }
-
-  .lv-topics {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 20px;
-  }
-
-  .lv-topic {
-    font-family: var(--ff-mono);
-    font-size: 12px;
-    padding: 6px 12px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--muted2);
-  }
-
-  .lv-footer {
-    padding: 20px 28px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .btn-primary {
-    padding: 11px 24px;
-    background: var(--lime);
-    color: #000;
-    font-family: var(--ff-mono);
-    font-size: 13px;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px var(--lime-glow);
-  }
-
-  .btn-primary:active { transform: translateY(0); }
-
-  .btn-ghost {
-    padding: 11px 20px;
-    background: transparent;
-    color: var(--muted2);
-    font-family: var(--ff-mono);
-    font-size: 13px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-ghost:hover {
-    border-color: var(--border-active);
-    color: var(--lime);
-  }
-
-  .done-msg {
-    font-family: var(--ff-mono);
-    font-size: 12px;
-    color: var(--lime);
-    display: none;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .done-msg.show { display: flex; }
-
-  /* ── MODULES GRID ── */
-  .section-label {
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .modules-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-
-  .module-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 22px;
-    cursor: pointer;
-    transition: all 0.25s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .module-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--lime), transparent);
-    opacity: 0;
-    transition: opacity 0.25s;
-  }
-
-  .module-card:hover:not(.mc-locked) {
-    border-color: var(--border-active);
-    background: var(--surface2);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-  }
-
-  .module-card:hover:not(.mc-locked)::before { opacity: 1; }
-
-  .module-card.mc-locked {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-
-  .module-card.mc-active {
-    border-color: var(--border-active);
-    background: var(--surface2);
-  }
-
-  .mc-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
-
-  .mc-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-  .mc-badge {
-    font-family: var(--ff-mono);
-    font-size: 10px;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-weight: 600;
-  }
-
-  .mc-badge.start { background: var(--lime-dim); color: var(--lime); border: 1px solid var(--border-active); }
-  .mc-badge.locked-b { background: rgba(255,95,86,0.12); color: var(--red); border: 1px solid rgba(255,95,86,0.2); }
-  .mc-badge.done-b { background: rgba(200,241,53,0.2); color: var(--lime); border: 1px solid var(--border-active); }
-
-  .mc-title {
-    font-family: var(--ff-display);
-    font-size: 18px;
-    font-weight: 800;
-    margin-bottom: 4px;
-    color: var(--text);
-  }
-
-  .mc-desc {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  .mc-lessons {
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 12px;
-  }
-
-  /* ── MATERIALS ── */
-  .materials-list { display: flex; flex-direction: column; gap: 10px; }
-
-  .material-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 18px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: all 0.2s;
-    text-decoration: none;
-  }
-
-  .material-item:hover {
-    border-color: var(--border-active);
-    background: var(--surface2);
-    transform: translateX(4px);
-  }
-
-  .mat-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 9px;
-    background: var(--lime-dim);
-    border: 1px solid var(--border-active);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-
-  .mat-info { flex: 1; }
-
-  .mat-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    display: block;
-    margin-bottom: 2px;
-  }
-
-  .mat-desc {
-    font-size: 12px;
-    color: var(--muted);
-    font-family: var(--ff-mono);
-  }
-
-  .mat-action {
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    color: var(--lime);
-    background: var(--lime-dim);
-    border: 1px solid var(--border-active);
-    padding: 6px 14px;
-    border-radius: 7px;
-    white-space: nowrap;
-    transition: all 0.2s;
-  }
-
-  .material-item:hover .mat-action {
-    background: var(--lime);
-    color: #000;
-  }
-
-  /* ── OUTCOMES ── */
-  .outcomes-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-
-  .outcome-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-    transition: border-color 0.2s;
-  }
-
-  .outcome-card:hover { border-color: var(--border-active); }
-
-  .oc-icon {
-    font-size: 22px;
-    margin-bottom: 12px;
-  }
-
-  .oc-title {
-    font-family: var(--ff-display);
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 6px;
-    color: var(--text);
-  }
-
-  .oc-desc {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  /* ── TOAST ── */
-  .toast {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-    background: var(--surface);
-    border: 1px solid var(--border-active);
-    border-radius: 12px;
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 14px;
-    color: var(--text);
-    z-index: 999;
-    transform: translateY(80px);
-    opacity: 0;
-    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
-    pointer-events: none;
-    max-width: 320px;
-  }
-
-  .toast.show {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  .toast-icon { font-size: 18px; flex-shrink: 0; }
-  .toast-msg { font-family: var(--ff-mono); font-size: 12px; color: var(--lime); }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    .layout { grid-template-columns: 1fr; }
-    .sidebar {
-      position: relative;
-      top: 0;
-      height: auto;
-      border-right: none;
-      border-bottom: 1px solid var(--border);
-      flex-direction: row;
-      flex-wrap: wrap;
-      padding: 16px;
-    }
-    .sidebar-progress { width: 100%; }
-    .modules-grid { grid-template-columns: 1fr; }
-    .outcomes-grid { grid-template-columns: 1fr; }
-    .main { padding: 24px; }
-    nav { padding: 0 24px; }
-    .hero-stats { flex-wrap: wrap; gap: 20px; }
-  }
-
-  /* ── ANIMATION ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .fade-up {
-    animation: fadeUp 0.5s ease forwards;
-    opacity: 0;
-  }
-
-  .delay-1 { animation-delay: 0.1s; }
-  .delay-2 { animation-delay: 0.2s; }
-  .delay-3 { animation-delay: 0.3s; }
-  .delay-4 { animation-delay: 0.4s; }
-  .delay-5 { animation-delay: 0.5s; }
+:root{
+  --bg:#04040a;--surface:#0a0a14;--surface2:#111120;
+  --border:rgba(255,255,255,0.07);--border-active:rgba(200,241,53,0.4);
+  --lime:#c8f135;--lime-dim:rgba(200,241,53,0.12);--lime-glow:rgba(200,241,53,0.25);
+  --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;
+  --gold:#f7b731;--gold-dim:rgba(247,183,49,0.12);
+  --green:#43e97b;--red:#ff6584;
+  --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none!important;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
+.read-progress{position:fixed;top:0;left:0;height:2px;background:var(--lime);z-index:9999;transition:width 0.1s linear;width:0%;}
+nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,10,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:0.12em;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--lime);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-back{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.2s;text-transform:uppercase;letter-spacing:0.05em;}
+.nav-back:hover{color:var(--lime);}
+
+/* INDEX PAGE */
+#indexPage{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:60px 48px 80px;}
+.course-eyebrow{font-family:var(--ff-mono);font-size:10px;letter-spacing:3px;color:var(--lime);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.course-eyebrow::before{content:'';width:16px;height:1px;background:var(--lime);}
+.course-title{font-family:var(--ff-display);font-size:clamp(40px,6vw,72px);font-weight:800;line-height:1;letter-spacing:-1px;margin-bottom:16px;}
+.course-title em{font-style:normal;color:var(--lime);}
+.course-desc{font-size:16px;color:var(--muted2);line-height:1.7;max-width:580px;margin-bottom:28px;font-weight:300;}
+.course-chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:48px;}
+.chip{font-family:var(--ff-mono);font-size:10px;padding:5px 12px;border-radius:3px;letter-spacing:1px;}
+.chip-lime{background:var(--lime-dim);color:var(--lime);border:1px solid rgba(200,241,53,0.2);}
+.chip-gold{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(247,183,49,0.2);}
+
+/* PROGRESS CARD */
+.progress-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:36px;display:flex;align-items:center;gap:24px;}
+.prog-bar-wrap{flex:1;}
+.prog-bar-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:8px;}
+.prog-bar-fill{height:100%;background:linear-gradient(90deg,var(--lime),#a8e63d);border-radius:2px;transition:width 0.6s ease;}
+.prog-label{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);}
+.prog-pct{font-family:var(--ff-display);font-size:32px;color:var(--lime);}
+
+/* MODULE GRID */
+.sec-label{font-family:var(--ff-mono);font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px;}
+
+.mod-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px 22px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;}
+.mod-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--lime);transform:scaleX(0);transition:transform 0.3s ease;transform-origin:left;}
+.mod-card:hover{border-color:var(--border-active);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.5);}
+.mod-card:hover::after{transform:scaleX(1);}
+.mod-card.premium-card::after{background:var(--gold);}
+.mod-card.premium-card:hover{border-color:rgba(247,183,49,0.4);}
+.mod-card.done-card::after{background:var(--green);transform:scaleX(1);}
+.mod-card.done-card{border-color:rgba(67,233,123,0.15);}
+
+.mod-top{display:flex;align-items:center;justify-content:space-between;}
+.mod-icon{font-size:22px;}
+.mod-badge{font-family:var(--ff-mono);font-size:9px;letter-spacing:1px;padding:3px 8px;border-radius:2px;text-transform:uppercase;}
+.badge-free{background:var(--lime-dim);color:var(--lime);border:1px solid rgba(200,241,53,0.2);}
+.badge-premium{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(247,183,49,0.2);}
+.badge-done{background:rgba(67,233,123,0.1);color:var(--green);border:1px solid rgba(67,233,123,0.2);}
+.mod-num{font-family:var(--ff-mono);font-size:10px;color:var(--muted);}
+.mod-title{font-family:var(--ff-display);font-size:17px;font-weight:700;line-height:1.2;}
+.mod-desc{font-size:12px;color:var(--muted2);line-height:1.6;font-weight:300;}
+.mod-footer{display:flex;align-items:center;justify-content:space-between;margin-top:2px;}
+.mod-level{font-family:var(--ff-mono);font-size:10px;color:var(--muted);}
+.mod-arrow{font-size:14px;color:var(--muted);transition:all 0.2s;}
+.mod-card:hover .mod-arrow{color:var(--lime);transform:translateX(4px);}
+.mod-card.premium-card:hover .mod-arrow{color:var(--gold);}
+
+/* MATERIALS */
+.mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.mat-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text);transition:all 0.2s;cursor:pointer;}
+.mat-item:hover{border-color:var(--border-active);transform:translateX(4px);}
+.mat-item.premium-mat:hover{border-color:rgba(247,183,49,0.4);}
+.mat-icon{font-size:22px;min-width:32px;text-align:center;}
+.mat-info{flex:1;}
+.mat-title{font-size:13px;font-weight:500;margin-bottom:2px;}
+.mat-desc{font-family:var(--ff-mono);font-size:10px;color:var(--muted2);}
+.mat-action{font-family:var(--ff-mono);font-size:11px;color:var(--lime);}
+.mat-action.locked{color:var(--gold);}
+
+/* LESSON PAGE */
+#lessonPage{display:none;position:relative;z-index:1;}
+.lesson-topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:64px;z-index:99;gap:16px;}
+.les-breadcrumb{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.les-breadcrumb span{color:var(--lime);}
+.les-nav-btns{display:flex;gap:6px;flex-shrink:0;}
+.lnav-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-family:var(--ff-mono);font-size:10px;color:var(--muted2);cursor:pointer;transition:all 0.2s;letter-spacing:1px;white-space:nowrap;}
+.lnav-btn:hover{border-color:var(--lime);color:var(--lime);}
+.lnav-btn.done-btn{background:rgba(67,233,123,0.1);border-color:rgba(67,233,123,0.3);color:var(--green);}
+
+.lesson-layout{display:grid;grid-template-columns:1fr 250px;gap:0;max-width:1100px;margin:0 auto;padding:56px 48px 80px;align-items:start;}
+.lesson-article{max-width:680px;}
+
+.les-cat{display:inline-flex;align-items:center;gap:6px;font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);background:var(--lime-dim);border:1px solid var(--border-active);padding:5px 14px;border-radius:99px;margin-bottom:20px;}
+.les-title{font-family:var(--ff-display);font-size:clamp(30px,5vw,50px);font-weight:800;line-height:1.05;letter-spacing:-0.01em;margin-bottom:14px;}
+.les-excerpt{font-size:15px;color:var(--muted2);line-height:1.8;font-weight:300;margin-bottom:26px;border-left:2px solid var(--lime);padding-left:18px;}
+.les-meta{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:36px;}
+.meta-item{font-family:var(--ff-mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+
+.les-visual{width:100%;height:200px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:72px;border:1px solid var(--border);margin-bottom:36px;position:relative;overflow:hidden;}
+.les-visual-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,241,53,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(200,241,53,0.04) 1px,transparent 1px);background-size:40px 40px;}
+
+.art-body{font-size:15px;line-height:1.9;color:#d4d4e0;font-weight:300;}
+.art-body p{margin-bottom:20px;}
+.art-body h2{font-family:var(--ff-display);font-size:24px;font-weight:800;color:var(--text);margin:40px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.art-body h3{font-family:var(--ff-display);font-size:18px;font-weight:700;color:var(--text);margin:26px 0 10px;}
+.art-body strong{color:var(--text);font-weight:600;}
+.art-body em{color:var(--lime);font-style:normal;font-weight:500;}
+.art-body code{font-family:var(--ff-mono);font-size:12px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:2px 6px;color:var(--lime);}
+.art-body pre{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--lime);border-radius:0 12px 12px 0;padding:22px;margin:22px 0;overflow-x:auto;position:relative;}
+.art-body pre::before{content:'CODE';position:absolute;top:10px;right:14px;font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;color:var(--muted);}
+.art-body pre code{background:none;border:none;padding:0;color:#a8d8a8;font-size:12px;line-height:1.7;}
+.art-body ul,.art-body ol{padding-left:22px;margin-bottom:20px;}
+.art-body li{margin-bottom:7px;}
+.art-body blockquote{border-left:3px solid var(--lime);padding:14px 20px;background:var(--lime-dim);border-radius:0 10px 10px 0;margin:20px 0;color:var(--text);}
+
+.concepts-box{background:var(--surface);border:1px solid var(--border-active);border-radius:14px;padding:22px;margin:28px 0;}
+.concepts-title{font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;color:var(--lime);text-transform:uppercase;margin-bottom:12px;}
+.concepts-list{display:flex;flex-wrap:wrap;gap:8px;}
+.concept-tag{background:var(--lime-dim);border:1px solid rgba(200,241,53,0.2);color:var(--lime);font-family:var(--ff-mono);font-size:11px;padding:4px 12px;border-radius:3px;}
+
+.les-footer{margin-top:52px;padding-top:32px;border-top:1px solid var(--border);}
+.les-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.les-tag{font-family:var(--ff-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);}
+.nav-lessons{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.nlc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;}
+.nlc:hover{border-color:var(--border-active);}
+.nlc-dir{font-family:var(--ff-mono);font-size:10px;color:var(--muted);margin-bottom:5px;}
+.nlc-title{font-size:13px;font-weight:600;}
+
+/* SIDEBAR */
+.lesson-sidebar{position:sticky;top:130px;padding-left:24px;max-height:calc(100vh - 160px);overflow-y:auto;}
+.lesson-sidebar::-webkit-scrollbar{width:4px;}
+.lesson-sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.sb-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px;}
+.sb-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;}
+.sb-btn{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;transition:all 0.15s;border:none;background:transparent;width:100%;text-align:left;color:var(--muted2);}
+.sb-btn:hover{background:var(--surface2);color:var(--text);}
+.sb-btn.active{background:var(--lime-dim);color:var(--lime);}
+.sb-num{width:20px;height:20px;border-radius:4px;background:var(--surface2);font-family:var(--ff-mono);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sb-btn.active .sb-num{background:var(--lime);color:#000;}
+.sb-btn-title{font-size:11px;font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px 20px;font-family:var(--ff-mono);font-size:12px;color:var(--lime);z-index:9997;transform:translateY(80px);opacity:0;transition:all 0.35s;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;animation:fadeUp 0.5s ease forwards;}
+
+@media(max-width:900px){
+  nav,.lesson-topbar{padding:0 20px;}
+  #indexPage{padding:40px 20px 60px;}
+  .modules-grid{grid-template-columns:1fr 1fr;}
+  .lesson-layout{grid-template-columns:1fr;padding:28px 20px 60px;}
+  .lesson-sidebar{display:none;}
+  .mat-grid{grid-template-columns:1fr;}
+}
+@media(max-width:540px){.modules-grid{grid-template-columns:1fr;}.nav-lessons{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
+<div class="read-progress" id="readProgress"></div>
 
-<div class="ambient ambient-1"></div>
-<div class="ambient ambient-2"></div>
-
-<!-- NAV -->
 <nav>
-  <div class="nav-logo">IT <span>STUDY</span> HUB</div>
-  <a href="index.html" class="nav-back">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Back to Home
-  </a>
+  <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
+  <div class="nav-right">
+    <a href="courses.html" class="nav-back">← Courses</a>
+    <a href="index.html" class="nav-back">← Home</a>
+  </div>
 </nav>
 
-<!-- LAYOUT -->
-<div class="layout">
+<div id="indexPage">
+  <div class="fade-up">
+    <div class="course-eyebrow">Frontend & Web Dev · Subject 06</div>
+    <h1 class="course-title">Web <em>Technology</em></h1>
+    <p class="course-desc">Master the core languages of the internet. From building semantic structural layouts with HTML and CSS, to creating highly interactive web applications with modern JavaScript.</p>
+    <div class="course-chips">
+      <span class="chip chip-lime">🌐 HTML/CSS/JS</span>
+      <span class="chip chip-lime">6 Free Modules</span>
+      <span class="chip chip-gold">6 Premium Modules</span>
+      <span class="chip chip-lime">Real PDF Notes</span>
+    </div>
+  </div>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <p class="sidebar-label">Course Progress</p>
+  <div class="progress-card fade-up" style="animation-delay:0.1s;">
+    <div class="prog-pct" id="progPct">0%</div>
+    <div class="prog-bar-wrap">
+      <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
+      <div class="prog-label" id="progLabel">0 of 6 free modules completed</div>
+    </div>
+  </div>
 
-    <div class="sidebar-progress">
-      <div class="sp-row">
-        <span class="sp-label">Completed</span>
-        <span class="sp-value" id="sidebarPercent">0%</span>
+  <div class="fade-up" style="animation-delay:0.15s;">
+    <div class="sec-label">Free Modules</div>
+    <div class="modules-grid" id="freeGrid"></div>
+  </div>
+
+  <div class="fade-up" style="animation-delay:0.2s;">
+    <div class="sec-label">Premium Modules</div>
+    <div class="modules-grid" id="premiumGrid"></div>
+  </div>
+
+  <div class="fade-up" style="animation-delay:0.25s;">
+    <div class="sec-label">Study Materials</div>
+    <div class="mat-grid">
+      <a href="#" target="_blank" class="mat-item">
+        <div class="mat-icon">📝</div>
+        <div class="mat-info"><div class="mat-title">Web Dev Cheat Sheet</div><div class="mat-desc">HTML Tags, CSS Selectors, JS Basics · Free</div></div>
+        <span class="mat-action">↓ Download</span>
+      </a>
+      <a href="https://www.w3schools.com/quiztest/quiztest.asp?qtest=HTML" target="_blank" class="mat-item">
+        <div class="mat-icon">🎯</div>
+        <div class="mat-info"><div class="mat-title">Placement Quiz — Web Tech</div><div class="mat-desc">100+ Frontend MCQs · Free</div></div>
+        <span class="mat-action">→ Start</span>
+      </a>
+      <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
+        <div class="mat-icon">⭐</div>
+        <div class="mat-info"><div class="mat-title">Advanced Notes — React & Node</div><div class="mat-desc">Deep dive into Full-Stack dev · Premium</div></div>
+        <span class="mat-action locked">🔒 Unlock</span>
       </div>
-      <div class="pbar">
-        <div class="pbar-fill" id="sidebarFill"></div>
+      <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
+        <div class="mat-icon">⭐</div>
+        <div class="mat-info"><div class="mat-title">Frontend Interview Question Bank</div><div class="mat-desc">Dom Manipulation, Closures, Event Loop · Premium</div></div>
+        <span class="mat-action locked">🔒 Unlock</span>
       </div>
     </div>
-
-    <p class="sidebar-label">Lessons</p>
-
-    <button class="lesson-btn" id="sbtn-1" onclick="openLesson(1)">
-      <div class="lb-num" id="lnum-1">1</div>
-      <div class="lb-info">
-        <span class="lb-title">HTML Basics</span>
-        <span class="lb-sub">Structure & Tags</span>
-      </div>
-    </button>
-
-    <button class="lesson-btn" id="sbtn-2" onclick="openLesson(2)">
-      <div class="lb-num" id="lnum-2">2</div>
-      <div class="lb-info">
-        <span class="lb-title">CSS Fundamentals</span>
-        <span class="lb-sub">Style & Design</span>
-      </div>
-    </button>
-
-    <button class="lesson-btn" id="sbtn-3" onclick="openLesson(3)">
-      <div class="lb-num" id="lnum-3">3</div>
-      <div class="lb-info">
-        <span class="lb-title">Flexbox & Grid</span>
-        <span class="lb-sub">Responsive Layouts</span>
-      </div>
-    </button>
-
-    <button class="lesson-btn locked" id="sbtn-4">
-      <div class="lb-num" id="lnum-4">4</div>
-      <div class="lb-info">
-        <span class="lb-title">JavaScript DOM</span>
-        <span class="lb-sub">Interactivity</span>
-      </div>
-      <span class="lb-badge">🔒</span>
-    </button>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main">
-
-    <!-- HERO -->
-    <section class="hero fade-up">
-      <div class="hero-eyebrow">Frontend Track</div>
-      <h1 class="hero-title">Web<br><em>Development</em></h1>
-      <p class="hero-desc">Build real-world websites from scratch. Master HTML structure, CSS aesthetics, and JavaScript interactivity — skills that form the foundation of every modern web product.</p>
-      <div class="hero-stats">
-        <div class="stat">
-          <div class="stat-num">4</div>
-          <div class="stat-label">Modules</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">12+</div>
-          <div class="stat-label">Lessons</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">∞</div>
-          <div class="stat-label">Practice Sets</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- LESSON VIEWER -->
-    <section class="fade-up delay-1">
-      <div class="section-label">Current Lesson</div>
-      <div class="lesson-viewer" id="lessonViewer">
-        <div class="lv-header">
-          <div class="lv-breadcrumb">Web Development <span>/</span> <span id="lv-crumb">—</span></div>
-        </div>
-        <div class="lv-body" id="lv-body">
-          <div class="lv-placeholder">
-            <div class="lv-placeholder-icon">📖</div>
-            <h3>Select a Lesson</h3>
-            <p>Choose a module from the sidebar or the cards below to begin learning.</p>
-          </div>
-        </div>
-        <div class="lv-footer" id="lv-footer" style="display:none;">
-          <button class="btn-primary" onclick="markComplete()" id="completeBtn">
-            Mark as Complete
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button class="btn-ghost" onclick="nextLesson()">Next Lesson →</button>
-          <div class="done-msg" id="doneMsg">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            Completed!
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- MODULES -->
-    <section class="fade-up delay-2">
-      <div class="section-label">All Modules</div>
-      <div class="modules-grid">
-
-        <div class="module-card" id="mc-1" onclick="openLesson(1)">
-          <div class="mc-top">
-            <div class="mc-icon">🧱</div>
-            <span class="mc-badge start" id="mc-badge-1">START</span>
-          </div>
-          <div class="mc-title">Module 1</div>
-          <div class="mc-desc">HTML Basics — structure, semantics, forms, and page anatomy.</div>
-          <div class="mc-lessons">3 lessons · Beginner</div>
-        </div>
-
-        <div class="module-card" id="mc-2" onclick="openLesson(2)">
-          <div class="mc-top">
-            <div class="mc-icon">🎨</div>
-            <span class="mc-badge start" id="mc-badge-2">START</span>
-          </div>
-          <div class="mc-title">Module 2</div>
-          <div class="mc-desc">CSS Fundamentals — colors, spacing, typography, and visual design.</div>
-          <div class="mc-lessons">3 lessons · Beginner</div>
-        </div>
-
-        <div class="module-card" id="mc-3" onclick="openLesson(3)">
-          <div class="mc-top">
-            <div class="mc-icon">📐</div>
-            <span class="mc-badge start" id="mc-badge-3">START</span>
-          </div>
-          <div class="mc-title">Module 3</div>
-          <div class="mc-desc">Flexbox & Grid — modern layout systems for responsive design.</div>
-          <div class="mc-lessons">3 lessons · Intermediate</div>
-        </div>
-
-        <div class="module-card mc-locked" id="mc-4">
-          <div class="mc-top">
-            <div class="mc-icon">⚡</div>
-            <span class="mc-badge locked-b" id="mc-badge-4">LOCKED</span>
-          </div>
-          <div class="mc-title">Module 4</div>
-          <div class="mc-desc">JavaScript DOM — dynamic interactivity and event-driven logic.</div>
-          <div class="mc-lessons">3 lessons · Advanced · Complete 1–3 to unlock</div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- STUDY MATERIALS -->
-    <section class="fade-up delay-3">
-      <div class="section-label">Study Materials</div>
-      <div class="materials-list">
-        <a href="#" class="material-item">
-          <div class="mat-icon">📝</div>
-          <div class="mat-info">
-            <span class="mat-title">Lecture Notes</span>
-            <span class="mat-desc">Complete handwritten + digital notes · PDF · 48 pages</span>
-          </div>
-          <span class="mat-action">↓ Download</span>
-        </a>
-        <a href="#" class="material-item">
-          <div class="mat-icon">📄</div>
-          <div class="mat-info">
-            <span class="mat-title">Important PDFs</span>
-            <span class="mat-desc">Exam + placement focused questions · Curated collection</span>
-          </div>
-          <span class="mat-action">→ Open</span>
-        </a>
-        <a href="https://www.sanfoundry.com/1000-html-questions-answers/" 
-       target="_blank" class="material-item">
-      <div class="mat-icon">🎯</div>
-      <div class="mat-info">
-      <span class="mat-title">Placement Quiz — Web Technology</span>
-      <span class="mat-desc">1000+ MCQs from Sanfoundry · Free</span>
-    </div>
-    <span class="mat-action">→ Start Quiz</span>
-    </a>
-      </div>
-    </section>
-
-    <!-- OUTCOMES -->
-    <section class="fade-up delay-4">
-      <div class="section-label">What You'll Build</div>
-      <div class="outcomes-grid">
-        <div class="outcome-card">
-          <div class="oc-icon">🌐</div>
-          <div class="oc-title">Full Websites</div>
-          <div class="oc-desc">Build complete, responsive multi-page sites from scratch.</div>
-        </div>
-        <div class="outcome-card">
-          <div class="oc-icon">🧩</div>
-          <div class="oc-title">Web Apps</div>
-          <div class="oc-desc">Create interactive applications with JavaScript logic and DOM.</div>
-        </div>
-        <div class="outcome-card">
-          <div class="oc-icon">🚀</div>
-          <div class="oc-title">Placement Ready</div>
-          <div class="oc-desc">Strong frontend fundamentals for technical interviews and real jobs.</div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <span class="toast-icon">✅</span>
-  <div>
-    <div style="font-size:13px;font-weight:500;" id="toastTitle">Lesson Complete!</div>
-    <div class="toast-msg" id="toastMsg">Keep it up.</div>
   </div>
 </div>
 
-<script>
-const TOTAL = 3; // lessons 1-3 are completable; 4 unlocks after
-let completed = JSON.parse(localStorage.getItem("ish_web_progress") || "[]");
-let currentLesson = null;
+<div id="lessonPage">
+  <div class="lesson-topbar">
+    <div class="les-breadcrumb">Web Technology <span>/</span> <span id="lesCrumb">—</span></div>
+    <div class="les-nav-btns">
+      <button class="lnav-btn" onclick="goBack()">← Back</button>
+      <button class="lnav-btn" id="prevBtn" onclick="prevLesson()">← Prev</button>
+      <button class="lnav-btn" id="markBtn" onclick="markDone()">✓ Mark Done</button>
+      <button class="lnav-btn" id="nextBtn" onclick="nextLesson()">Next →</button>
+    </div>
+  </div>
+  <div class="lesson-layout">
+    <div class="lesson-article" id="lessonContent"></div>
+    <aside class="lesson-sidebar">
+      <div class="sb-card">
+        <div class="sb-label">Progress</div>
+        <div class="prog-bar-track" style="margin-bottom:8px;"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
+        <div class="prog-label" id="sbProgLabel">0 / 6 free</div>
+      </div>
+      <div class="sb-card">
+        <div class="sb-label">All Modules</div>
+        <div id="sbModList"></div>
+      </div>
+    </aside>
+  </div>
+</div>
 
-const lessons = {
-  1: {
-    title: "HTML Basics",
-    tag: "Module 1 · Beginner",
-    body: `<strong>HTML</strong> is the skeleton of every webpage. It defines the structure and content using a system of nested <strong>elements</strong> and <strong>tags</strong>. Every browser reads HTML and renders it visually.<br><br>
-In this lesson you'll learn how to structure documents with headings, paragraphs, links, images, lists, and semantic HTML5 elements like <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">&lt;section&gt;</code>, <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">&lt;article&gt;</code>, and <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">&lt;main&gt;</code>.`,
-    topics: ["Tags & Elements", "Document Structure", "Forms & Inputs", "Semantic HTML5", "Links & Images", "Tables"]
-  },
-  2: {
-    title: "CSS Fundamentals",
-    tag: "Module 2 · Beginner",
-    body: `<strong>CSS</strong> (Cascading Style Sheets) transforms raw HTML structure into visually polished interfaces. You control everything — color, typography, spacing, borders, backgrounds, and animation.<br><br>
-This lesson covers the <strong>box model</strong>, selectors, specificity, custom properties (CSS variables), and core visual design principles you'll use in every project.`,
-    topics: ["Box Model", "Selectors & Specificity", "Colors & Typography", "CSS Variables", "Transitions", "Pseudo-classes"]
-  },
-  3: {
-    title: "Flexbox & Grid",
-    tag: "Module 3 · Intermediate",
-    body: `Modern CSS layout is built on two powerful systems: <strong>Flexbox</strong> for one-dimensional flow and <strong>Grid</strong> for two-dimensional composition. Together they replace the old float-based hacks with a clean, powerful model.<br><br>
-By the end of this lesson, you'll confidently build <strong>responsive layouts</strong> that adapt across any screen size — without media query chaos.`,
-    topics: ["Flex Container", "Flex Items", "Grid Template", "Grid Areas", "Responsive Design", "Auto-fit & Minmax"]
-  }
-};
-
-function openLesson(id) {
-  if (id === 4) return;
-  currentLesson = id;
-
-  const lesson = lessons[id];
-  const viewer = document.getElementById("lessonViewer");
-  const body = document.getElementById("lv-body");
-  const footer = document.getElementById("lv-footer");
-  const crumb = document.getElementById("lv-crumb");
-
-  crumb.textContent = lesson.title;
-  viewer.classList.add("active-lesson");
-
-  const isComplete = completed.includes(id);
-
-  body.innerHTML = `
-    <div class="lv-lesson-title">${lesson.title}</div>
-    <div class="lv-lesson-tag">${lesson.tag}</div>
-    <div class="lv-lesson-body">${lesson.body}</div>
-    <div class="lv-topics">${lesson.topics.map(t => `<span class="lv-topic">${t}</span>`).join('')}</div>
-  `;
-
-  footer.style.display = "flex";
-
-  const doneMsg = document.getElementById("doneMsg");
-  const completeBtn = document.getElementById("completeBtn");
-
-  if (isComplete) {
-    doneMsg.classList.add("show");
-    completeBtn.style.opacity = "0.4";
-    completeBtn.style.pointerEvents = "none";
-  } else {
-    doneMsg.classList.remove("show");
-    completeBtn.style.opacity = "1";
-    completeBtn.style.pointerEvents = "auto";
-  }
-
-  // Sidebar active state
-  [1,2,3,4].forEach(i => {
-    const btn = document.getElementById(`sbtn-${i}`);
-    if (btn) btn.classList.remove("active");
-  });
-  const activeBtn = document.getElementById(`sbtn-${id}`);
-  if (activeBtn) activeBtn.classList.add("active");
-}
-
-function markComplete() {
-  if (currentLesson === null) return;
-  if (!completed.includes(currentLesson)) {
-    completed.push(currentLesson);
-  }
-  localStorage.setItem("ish_web_progress", JSON.stringify(completed));
-  updateProgress();
-  openLesson(currentLesson); // refresh state
-
-  showToast(`Module ${currentLesson} complete!`, "Keep pushing — you're building real skills.");
-}
-
-function nextLesson() {
-  if (currentLesson && currentLesson < 3) {
-    openLesson(currentLesson + 1);
-  }
-}
-
-function updateProgress() {
-  const count = completed.filter(c => c <= TOTAL).length;
-  const pct = Math.round((count / TOTAL) * 100);
-
-  document.getElementById("sidebarFill").style.width = pct + "%";
-  document.getElementById("sidebarPercent").textContent = pct + "%";
-
-  // Update sidebar buttons
-  [1,2,3].forEach(i => {
-    const btn = document.getElementById(`sbtn-${i}`);
-    const num = document.getElementById(`lnum-${i}`);
-    const badge = document.getElementById(`mc-badge-${i}`);
-    if (completed.includes(i)) {
-      if (btn) btn.classList.add("done");
-      if (num) { num.textContent = "✓"; }
-      if (badge) { badge.className = "mc-badge done-b"; badge.textContent = "DONE"; }
-    }
-  });
-
-  // Unlock module 4
-  if (count >= TOTAL) {
-    const sbtn4 = document.getElementById("sbtn-4");
-    const mc4 = document.getElementById("mc-4");
-    const badge4 = document.getElementById("mc-badge-4");
-
-    if (sbtn4) {
-      sbtn4.classList.remove("locked");
-      sbtn4.onclick = () => alert("JavaScript DOM module coming soon! 🚀");
-    }
-    if (mc4) {
-      mc4.classList.remove("mc-locked");
-      mc4.onclick = () => alert("JavaScript DOM module coming soon! 🚀");
-    }
-    if (badge4) { badge4.className = "mc-badge start"; badge4.textContent = "UNLOCK"; }
-  }
-}
-
-function showToast(title, msg) {
-  const toast = document.getElementById("toast");
-  document.getElementById("toastTitle").textContent = title;
-  document.getElementById("toastMsg").textContent = msg;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 3500);
-}
-
-// Init
-window.addEventListener("load", updateProgress);
-</script>
-<!-- Custom Cursor -->
+<div class="toast" id="toast"></div>
 <div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <script>
-const c = document.getElementById('cur');
-const r = document.getElementById('curR');
+function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_webtech_done')||'[]');}catch(e){return[];}}
+function saveCompleted(a){localStorage.setItem('ish_webtech_done',JSON.stringify(a));}
+
+const MODS = [
+  {id:1,free:true,icon:'🏗️',level:'Beginner',title:'Intro to Web & HTML5',
+   excerpt:'Discover how the web works (Client/Server model) and learn the foundational language of the internet: HyperText Markup Language (HTML).',
+   tags:['Beginner','HTML5','Structure'],visual:'🏗️',bg:'linear-gradient(135deg,#1a0a0a,#200f0f)',
+   concepts:['Client-Server Model','The DOM','Semantic HTML','Forms & Inputs','Attributes'],
+   body:`<p>The World Wide Web was invented by Tim Berners-Lee. At its core, the web operates on a Client-Server model. You (the client) request a webpage via a URL, and a remote computer (the server) responds with the necessary files.</p>
+<h2>The Anatomy of an HTML Document</h2>
+<p><strong>HTML</strong> (HyperText Markup Language) is not a programming language; it is a markup language used to structure content. It creates the Document Object Model (DOM) tree.</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Welcome to Web Tech&lt;/h1&gt;
+    &lt;/header&gt;
+    &lt;main&gt;
+        &lt;p&gt;This is a paragraph of &lt;strong&gt;text&lt;/strong&gt;.&lt;/p&gt;
+        &lt;a href="https://google.com"&gt;Click Here&lt;/a&gt;
+    &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h2>Semantic HTML5</h2>
+<p>Modern HTML emphasizes <em>semantics</em>—using tags that describe their meaning to both browsers and developers. Instead of wrapping everything in a generic <code>&lt;div&gt;</code>, use tags like <code>&lt;nav&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, and <code>&lt;footer&gt;</code>. This drastically improves SEO and screen-reader accessibility.</p>`},
+
+  {id:2,free:true,icon:'🎨',level:'Beginner',title:'Styling with CSS3',
+   excerpt:'HTML is just the skeleton. Learn how to make websites beautiful using Cascading Style Sheets, mastering selectors and the Box Model.',
+   tags:['Beginner','CSS3','Design'],visual:'🎨',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
+   concepts:['Selectors (Class/ID)','The Box Model','Margin vs Padding','Colors & Fonts','Flexbox Basics'],
+   body:`<p><strong>CSS</strong> (Cascading Style Sheets) dictates the visual presentation of an HTML document. The "Cascading" part means that rules read later in the file (or with higher specificity) override earlier rules.</p>
+<h2>CSS Syntax & Selectors</h2>
+<pre><code>/* Tag Selector */
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+/* Class Selector (Prefix with a dot) */
+.highlight-btn {
+    color: white;
+    background-color: blue;
+}
+
+/* ID Selector (Prefix with a hash) */
+#main-header {
+    font-size: 2rem;
+}</code></pre>
+<h2>The Box Model</h2>
+<p>This is the most important concept in CSS. Every single element on a web page is considered a rectangular box composed of four parts:</p>
+<ul>
+  <li><strong>Content:</strong> The actual text or image.</li>
+  <li><strong>Padding:</strong> The transparent space <em>inside</em> the border, pushing the border away from the content.</li>
+  <li><strong>Border:</strong> The line surrounding the padding and content.</li>
+  <li><strong>Margin:</strong> The transparent space <em>outside</em> the border, pushing the element away from other elements.</li>
+</ul>`},
+
+  {id:3,free:true,icon:'⚡',level:'Beginner',title:'JavaScript Basics',
+   excerpt:'Bring your static pages to life. JavaScript is the programming language of the browser, responsible for interactivity and logic.',
+   tags:['Beginner','JavaScript','Logic'],visual:'⚡',bg:'linear-gradient(135deg,#14140a,#282810)',
+   concepts:['Variables (let/const)','Functions','DOM Manipulation','Event Listeners','Data Types'],
+   body:`<p>If HTML is the noun and CSS is the adjective, <strong>JavaScript</strong> is the verb. It allows you to dynamically change HTML and CSS in response to user actions.</p>
+<h2>Variables & Functions</h2>
+<p>Modern JS uses <code>let</code> for variables that will change, and <code>const</code> for variables that remain constant. Avoid the old <code>var</code> keyword.</p>
+<pre><code>const siteName = "IT Study Hub";
+let userScore = 0;
+
+function increaseScore() {
+    userScore += 10;
+    console.log("Score is now: " + userScore);
+}</code></pre>
+<h2>DOM Manipulation & Events</h2>
+<p>JavaScript interacts with the HTML page by targeting elements in the Document Object Model (DOM).</p>
+<pre><code>// 1. Select the element
+const myButton = document.querySelector('.highlight-btn');
+const myTitle = document.getElementById('main-header');
+
+// 2. Add an Event Listener
+myButton.addEventListener('click', function() {
+    // 3. Change the DOM
+    myTitle.textContent = "Button was clicked!";
+    myTitle.style.color = "red";
+});</code></pre>`},
+
+  {id:4,free:true,icon:'📱',level:'Beginner',title:'Responsive Design & CSS',
+   excerpt:'In a mobile-first world, your website must look good on all screens. Master media queries, relative units, and CSS transitions.',
+   tags:['Beginner','Responsive','CSS Adv'],visual:'📱',bg:'linear-gradient(135deg,#0a1414,#102828)',
+   concepts:['Media Queries','Relative Units (rem, vh)','CSS Grid vs Flexbox','Hover States','CSS Transitions'],
+   body:`<p>A website that looks beautiful on a 4K monitor but breaks on an iPhone is a broken website. Responsive design ensures your UI adapts fluidly to any screen size.</p>
+<h2>Relative Units</h2>
+<p>Stop using exact pixels (<code>px</code>) for everything. Use relative units to allow your design to scale natively.</p>
+<ul>
+  <li><code>rem</code>: Relative to the root font size (usually 16px). <code>2rem</code> = 32px.</li>
+  <li><code>vw</code> / <code>vh</code>: 1% of the viewport width or height. <code>100vh</code> takes up the full screen height.</li>
+  <li><code>%</code>: Percentage relative to the parent container.</li>
+</ul>
+<h2>Media Queries</h2>
+<p>Media queries allow you to apply specific CSS rules only when the browser matches certain criteria (like screen width).</p>
+<pre><code>/* Default styles (Mobile First) */
+.container {
+    width: 100%;
+    flex-direction: column;
+}
+
+/* Tablet & Desktop styles */
+@media (min-width: 768px) {
+    .container {
+        width: 80%;
+        flex-direction: row; /* Side-by-side on larger screens */
+    }
+}</code></pre>
+<h2>Smooth Transitions</h2>
+<p>Never let color or size snap instantly on hover. Always use transitions.</p>
+<pre><code>.btn {
+    background: blue;
+    transition: background 0.3s ease;
+}
+.btn:hover { background: darkblue; }</code></pre>`},
+
+  {id:5,free:true,icon:'🗂️',level:'Beginner',title:'JS Control Flow & Data',
+   excerpt:'Dive deeper into JavaScript logic. Learn how to manage complex data structures using Arrays and Objects, and iterate through them.',
+   tags:['Beginner','Arrays','Objects'],visual:'🗂️',bg:'linear-gradient(135deg,#140a14,#281028)',
+   concepts:['if/else statements','Loops (for/while)','Arrays []','Objects {}','Higher Order Array Methods'],
+   body:`<p>To build real applications, you need to know how to store, structure, and manipulate data using JavaScript.</p>
+<h2>Objects and Arrays</h2>
+<p><strong>Arrays</strong> are ordered lists. <strong>Objects</strong> are collections of key-value pairs.</p>
+<pre><code>// Array of strings
+const frameworks = ["React", "Vue", "Angular"];
+
+// A JavaScript Object
+const student = {
+    name: "Dithsha",
+    major: "CSE",
+    gpa: 3.8,
+    isGraduated: false
+};
+
+// Accessing object data
+console.log(student.name); // Dot notation
+console.log(student["major"]); // Bracket notation</code></pre>
+<h2>Higher-Order Array Methods</h2>
+<p>Modern JS heavily relies on built-in methods like <code>map</code>, <code>filter</code>, and <code>forEach</code> instead of traditional <code>for</code> loops.</p>
+<pre><code>const grades = [85, 92, 78, 99];
+
+// Filter out grades below 90
+const aGrades = grades.filter(function(grade) {
+    return grade >= 90;
+});
+// aGrades is now [92, 99]</code></pre>`},
+
+  {id:6,free:true,icon:'🚀',level:'Beginner',title:'Modern ES6+ JavaScript',
+   excerpt:'JavaScript has evolved drastically. Learn the modern ES6 syntax that is mandatory for frameworks like React: Arrow functions, destructuring, and template literals.',
+   tags:['Beginner','ES6','Modern JS'],visual:'🚀',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
+   concepts:['Arrow Functions (=>)','Template Literals (` `)','Object Destructuring','Spread Operator (...)','Promises Basics'],
+   body:`<p>In 2015, JavaScript received a massive update known as ES6 (ECMAScript 2015). If you want to learn React, Vue, or Node.js, you <em>must</em> master these features.</p>
+<h2>Arrow Functions</h2>
+<p>A cleaner, more concise way to write functions. They also handle the <code>this</code> keyword differently, which is crucial in object-oriented JS.</p>
+<pre><code>// Traditional Function
+function add(a, b) {
+    return a + b;
+}
+
+// ES6 Arrow Function
+const add = (a, b) => {
+    return a + b;
+};
+
+// Implicit Return (even shorter!)
+const multiply = (a, b) => a * b;</code></pre>
+<h2>Template Literals</h2>
+<p>Say goodbye to messy string concatenation with <code>+</code>. Use backticks <code>\` \`</code> to inject variables directly into strings using <code>\${}</code>.</p>
+<pre><code>const name = "IT Study Hub";
+const modules = 12;
+
+// Old way: console.log("Welcome to " + name + "!");
+// ES6 way:
+console.log(`Welcome to ${name}! There are ${modules} modules.`);</code></pre>
+<h2>Destructuring</h2>
+<p>Extract properties from objects into distinct variables easily.</p>
+<pre><code>const user = { username: "admin", role: "superuser" };
+
+// Extract 'username' and 'role' into their own variables
+const { username, role } = user;
+console.log(username); // "admin"</code></pre>`},
+
+  // PREMIUM MODULES
+  {id:7,free:false,icon:'⚛️',level:'Intermediate',title:'Frontend Frameworks (React)',
+   excerpt:'Move beyond vanilla JavaScript. Learn component-based architecture, state management, and the Virtual DOM using React.js.',
+   tags:['Intermediate','React','Components'],visual:'⚛️',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
+   concepts:['JSX Syntax','Components & Props','useState & useEffect hooks','Virtual DOM','Client-side Routing'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+
+  {id:8,free:false,icon:'⚙️',level:'Intermediate',title:'Backend Basics (Node & Express)',
+   excerpt:'Take JavaScript to the server. Build robust backend APIs, handle HTTP requests, and manage server logic using Node.js and Express.',
+   tags:['Intermediate','Node.js','Backend'],visual:'⚙️',bg:'linear-gradient(135deg,#10080a,#200f12)',
+   concepts:['The Node Runtime','NPM (Node Package Manager)','Express.js Routing','Middleware','RESTful API Architecture'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+
+  {id:9,free:false,icon:'🌐',level:'Advanced',title:'APIs & Async JavaScript',
+   excerpt:'Web apps need data. Master asynchronous programming to fetch data from remote servers without freezing the browser.',
+   tags:['Advanced','Fetch','Async/Await'],visual:'🌐',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
+   concepts:['The Event Loop','Promises & .then()','async / await','The Fetch API','CORS & JSON parsing'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+
+  {id:10,free:false,icon:'🗄️',level:'Advanced',title:'Databases (SQL & NoSQL)',
+   excerpt:'Learn where the data actually lives. Understand the difference between relational databases (PostgreSQL) and document stores (MongoDB).',
+   tags:['Advanced','MongoDB','SQL'],visual:'🗄️',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
+   concepts:['Relational vs Non-Relational','CRUD Operations','Mongoose ORM','SQL Joins','Database Schema Design'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+
+  {id:11,free:false,icon:'🔒',level:'Advanced',title:'Security & Authentication',
+   excerpt:'Keep your users safe. Implement secure login systems, password hashing, and stateless authentication using JSON Web Tokens (JWT).',
+   tags:['Advanced','Security','JWT'],visual:'🔒',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
+   concepts:['Password Hashing (Bcrypt)','JSON Web Tokens (JWT)','Cookies vs LocalStorage','XSS and CSRF Protection','Route Guards'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+
+  {id:12,free:false,icon:'🚀',level:'Advanced',title:'Full-Stack Deployment',
+   excerpt:'Take your application from localhost to the world. Learn CI/CD basics, hosting frontend on Vercel, and backend on cloud providers.',
+   tags:['Advanced','Deployment','DevOps'],visual:'🚀',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
+   concepts:['Git & GitHub Integration','Environment Variables (.env)','Vercel / Netlify','Heroku / Render','Custom Domains'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`}
+];
+
+let currentId = null;
+let completed = getCompleted();
+const TOTAL_FREE = 6;
+
+// RENDER INDEX
+renderIndex();
+
+function renderIndex() {
+  const free = MODS.filter(m => m.free);
+  const prem = MODS.filter(m => !m.free);
+  document.getElementById('freeGrid').innerHTML = free.map(renderCard).join('');
+  document.getElementById('premiumGrid').innerHTML = prem.map(renderCard).join('');
+  updateProgress();
+}
+
+function renderCard(m) {
+  const done = completed.includes(m.id);
+  const locked = !m.free;
+  const cls = `mod-card${locked?' premium-card':''}${done?' done-card':''}`;
+  const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
+  
+  // PREMIUM REDIRECT LOGIC
+  const click = locked ? `onclick="window.location.href='premium.html'"` : `onclick="openLesson(${m.id})"`;
+  
+  return `<div class="${cls}" ${click}>
+    <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
+    <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
+    <div class="mod-title">${m.title}</div>
+    <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
+    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">${locked?'🔒 Unlock':'→'}</span></div>
+  </div>`;
+}
+
+function updateProgress() {
+  const freeDone = completed.filter(id => MODS.find(m=>m.id===id&&m.free)).length;
+  const pct = Math.round((freeDone/TOTAL_FREE)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  document.getElementById('progLabel').textContent = `${freeDone} of ${TOTAL_FREE} free modules completed`;
+}
+
+function openLesson(id) {
+  const m = MODS.find(x=>x.id===id);
+  if (!m) return;
+  
+  // PREMIUM REDIRECT LOGIC
+  if (!m.free) { 
+    window.location.href = 'premium.html'; 
+    return; 
+  }
+  
+  currentId = id;
+  document.getElementById('indexPage').style.display = 'none';
+  document.getElementById('lessonPage').style.display = 'block';
+  window.scrollTo(0,0);
+  document.getElementById('lesCrumb').textContent = m.title;
+
+  const done = completed.includes(id);
+  const mb = document.getElementById('markBtn');
+  mb.textContent = done ? '✓ Completed' : '✓ Mark Done';
+  mb.classList.toggle('done-btn', done);
+  
+  // Hide prev/next if bounds reached
+  document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
+  document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
+
+  const html = `
+       <div class="les-cat">Module ${String(id).padStart(2,'0')} · ${m.level} · Free</div>
+       <h1 class="les-title">${m.title}</h1>
+       <p class="les-excerpt">${m.excerpt}</p>
+       <div class="les-meta">
+         <span class="meta-item">🖥️ HTML/CSS/JS</span>
+         <span class="meta-item">⏱ ~15 min read</span>
+         <span class="meta-item">🌐 ${m.level}</span>
+       </div>
+       <div class="les-visual" style="background:${m.bg};">
+         <div class="les-visual-grid"></div>
+         <span style="position:relative;z-index:1;font-size:72px;">${m.visual}</span>
+       </div>
+       <div class="art-body">${m.body}</div>
+       <div class="concepts-box">
+         <div class="concepts-title">Key Concepts Covered</div>
+         <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
+       </div>
+       <div class="les-footer">
+         <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
+         <div class="nav-lessons">
+           ${id>1?`<div class="nlc" onclick="${MODS.find(x=>x.id===id-1).free ? `openLesson(${id-1})` : `window.location.href='premium.html'`}"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
+           ${id<MODS.length?`<div class="nlc" onclick="${MODS.find(x=>x.id===id+1).free ? `openLesson(${id+1})` : `window.location.href='premium.html'`}" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
+         </div>
+       </div>`;
+
+  document.getElementById('lessonContent').innerHTML = html;
+  renderSidebar();
+
+  // Scroll progress
+  window.onscroll = () => {
+    const pct = document.body.scrollHeight - window.innerHeight > 0
+      ? (window.scrollY/(document.body.scrollHeight-window.innerHeight))*100 : 0;
+    document.getElementById('readProgress').style.width = pct+'%';
+  };
+}
+
+function renderSidebar() {
+  const freeDone = completed.filter(id=>MODS.find(m=>m.id===id&&m.free)).length;
+  const pct = Math.round((freeDone/TOTAL_FREE)*100);
+  document.getElementById('sbProgFill').style.width = pct+'%';
+  document.getElementById('sbProgLabel').textContent = `${freeDone} / ${TOTAL_FREE} free`;
+  document.getElementById('sbModList').innerHTML = MODS.map(m=>{
+    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free;
+    
+    // PREMIUM REDIRECT LOGIC in sidebar
+    const click = locked ? `window.location.href='premium.html'` : `openLesson(${m.id})`;
+    
+    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${click}">
+      <span class="sb-num">${done?'✓':m.id}</span>
+      <span class="sb-btn-title">${m.title}</span>
+      ${locked?'<span style="font-size:10px;opacity:0.5;color:var(--gold);">🔒</span>':''}
+    </button>`;
+  }).join('');
+}
+
+function goBack(){
+  document.getElementById('lessonPage').style.display='none';
+  document.getElementById('indexPage').style.display='block';
+  renderIndex();
+  window.scrollTo(0,0);
+}
+
+function prevLesson() {
+  if(currentId>1) {
+    const m = MODS.find(x=>x.id===currentId-1);
+    if(m.free) openLesson(currentId-1);
+    else window.location.href='premium.html';
+  }
+}
+
+function nextLesson() {
+  if(currentId<MODS.length) {
+    const m = MODS.find(x=>x.id===currentId+1);
+    if(m.free) openLesson(currentId+1);
+    else window.location.href='premium.html';
+  }
+}
+
+function markDone() {
+  if(!currentId) return;
+  const m = MODS.find(x=>x.id===currentId);
+  if(!m.free) return; // Prevent marking premium as done if somehow accessed
+  
+  if(!completed.includes(currentId)){
+    completed.push(currentId);
+    saveCompleted(completed);
+    showToast('✓ Module marked complete! 🌐');
+  }
+  openLesson(currentId);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// Cursor
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function anim(){
-  c.style.left=(mx-5)+'px'; c.style.top=(my-5)+'px';
-  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-  r.style.left=(rx-18)+'px'; r.style.top=(ry-18)+'px';
-  requestAnimationFrame(anim);
-})();
-document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');
-  el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');
-});
+(function anim(){cur.style.left=(mx-5)+'px';cur.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=(rx-18)+'px';curR.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
+document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
+document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
 </script>
 </body>
 </html>
