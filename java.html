@@ -6,475 +6,826 @@
 <title>OOPs in Java — IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#04040a;--surface:#0a0a14;--surface2:#111120;
-    --border:rgba(255,255,255,0.07);--border-active:rgba(200,241,53,0.4);
-    --lime:#c8f135;--lime-dim:rgba(200,241,53,0.12);--lime-glow:rgba(200,241,53,0.25);
-    --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;--red:#ff5f56;
-    --gold:#f7b731;--gold-dim:rgba(247,183,49,0.12);
-    --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
-  }
-  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box; cursor: none !important;}
-  html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden;}
-  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
-  .ambient{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
-  .ambient-1{width:500px;height:500px;background:rgba(200,241,53,0.06);top:-100px;left:-100px;}
-  .ambient-2{width:400px;height:400px;background:rgba(100,80,200,0.05);bottom:200px;right:-100px;}
+:root{
+  --bg:#04040a;--surface:#0a0a14;--surface2:#111120;
+  --border:rgba(255,255,255,0.07);--border-active:rgba(200,241,53,0.4);
+  --lime:#c8f135;--lime-dim:rgba(200,241,53,0.12);--lime-glow:rgba(200,241,53,0.25);
+  --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;
+  --gold:#f7b731;--gold-dim:rgba(247,183,49,0.12);
+  --green:#43e97b;--red:#ff6584;
+  --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none!important;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
+.read-progress{position:fixed;top:0;left:0;height:2px;background:var(--lime);z-index:9999;transition:width 0.1s linear;width:0%;}
+nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,10,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:0.12em;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--lime);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-back{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.2s;text-transform:uppercase;letter-spacing:0.05em;}
+.nav-back:hover{color:var(--lime);}
 
-  /* NAV */
-  nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,10,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-  .nav-logo{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:0.12em;color:var(--text);text-decoration:none;}
-  .nav-logo span{color:var(--lime);}
-  .nav-back{font-family:var(--ff-mono);font-size:12px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
-  .nav-back:hover{color:var(--lime);}
+/* INDEX PAGE */
+#indexPage{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:60px 48px 80px;}
+.course-eyebrow{font-family:var(--ff-mono);font-size:10px;letter-spacing:3px;color:var(--lime);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.course-eyebrow::before{content:'';width:16px;height:1px;background:var(--lime);}
+.course-title{font-family:var(--ff-display);font-size:clamp(40px,6vw,72px);font-weight:800;line-height:1;letter-spacing:-1px;margin-bottom:16px;}
+.course-title em{font-style:normal;color:var(--lime);}
+.course-desc{font-size:16px;color:var(--muted2);line-height:1.7;max-width:580px;margin-bottom:28px;font-weight:300;}
+.course-chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:48px;}
+.chip{font-family:var(--ff-mono);font-size:10px;padding:5px 12px;border-radius:3px;letter-spacing:1px;}
+.chip-lime{background:var(--lime-dim);color:var(--lime);border:1px solid rgba(200,241,53,0.2);}
+.chip-gold{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(247,183,49,0.2);}
 
-  /* LAYOUT */
-  .layout{position:relative;z-index:1;display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 64px);}
+/* PROGRESS CARD */
+.progress-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:36px;display:flex;align-items:center;gap:24px;}
+.prog-bar-wrap{flex:1;}
+.prog-bar-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:8px;}
+.prog-bar-fill{height:100%;background:linear-gradient(90deg,var(--lime),#a8e63d);border-radius:2px;transition:width 0.6s ease;}
+.prog-label{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);}
+.prog-pct{font-family:var(--ff-display);font-size:32px;color:var(--lime);}
 
-  /* SIDEBAR */
-  .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:32px 24px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
-  .sidebar::-webkit-scrollbar{width:4px;}
-  .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
-  .sidebar-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;padding:0 12px;margin-bottom:8px;}
-  .sidebar-progress{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;}
-  .sp-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
-  .sp-label{font-size:12px;color:var(--muted2);font-family:var(--ff-mono);}
-  .sp-value{font-family:var(--ff-display);font-size:26px;color:var(--lime);line-height:1;}
-  .pbar{width:100%;height:5px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden;}
-  .pbar-fill{height:100%;background:linear-gradient(90deg,var(--lime),#a8e020);border-radius:99px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1);width:0%;}
+/* MODULE GRID */
+.sec-label{font-family:var(--ff-mono);font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px;}
 
-  .lesson-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;background:transparent;border:1px solid transparent;border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:left;width:100%;color:var(--muted2);}
-  .lesson-btn:hover:not(.locked){background:var(--lime-dim);border-color:var(--border-active);color:var(--text);transform:translateX(3px);}
-  .lesson-btn.active{background:var(--lime-dim);border-color:var(--border-active);color:var(--lime);}
-  .lesson-btn.done .lb-num{background:var(--lime);color:#000;}
-  .lesson-btn.locked{opacity:0.35;cursor:not-allowed;}
-  .lb-num{width:26px;height:26px;border-radius:7px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--ff-mono);font-size:11px;font-weight:600;flex-shrink:0;transition:all 0.2s;}
-  .lb-info{flex:1;}
-  .lb-title{font-size:13px;font-weight:500;font-family:var(--ff-body);line-height:1.3;display:block;}
-  .lb-sub{font-size:11px;color:var(--muted);display:block;margin-top:2px;font-family:var(--ff-mono);}
-  .lb-badge{font-size:10px;font-family:var(--ff-mono);padding:2px 7px;border-radius:4px;background:var(--red);color:#fff;}
-  .lb-badge.premium-badge{background:var(--gold);color:#000;}
+.mod-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px 22px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;}
+.mod-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--lime);transform:scaleX(0);transition:transform 0.3s ease;transform-origin:left;}
+.mod-card:hover:not(.locked){border-color:var(--border-active);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.5);}
+.mod-card:hover:not(.locked)::after{transform:scaleX(1);}
+.mod-card.locked{opacity:0.4;cursor:not-allowed;}
+.mod-card.premium-card::after{background:var(--gold);}
+.mod-card.done-card::after{background:var(--green);transform:scaleX(1);}
+.mod-card.done-card{border-color:rgba(67,233,123,0.15);}
 
-  /* PREMIUM LOCKED SIDEBAR */
-  .sidebar-premium-note{background:var(--gold-dim);border:1px solid rgba(247,183,49,0.25);border-radius:10px;padding:14px;margin-top:8px;}
-  .spn-title{font-family:var(--ff-mono);font-size:11px;color:var(--gold);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
-  .spn-text{font-size:12px;color:var(--muted2);line-height:1.5;}
-  .spn-btn{display:block;margin-top:10px;padding:8px 12px;background:var(--gold);color:#000;font-family:var(--ff-mono);font-size:11px;font-weight:700;border-radius:6px;text-align:center;text-decoration:none;transition:opacity 0.2s;cursor:pointer;border:none;width:100%;}
-  .spn-btn:hover{opacity:0.85;}
+.mod-top{display:flex;align-items:center;justify-content:space-between;}
+.mod-icon{font-size:22px;}
+.mod-badge{font-family:var(--ff-mono);font-size:9px;letter-spacing:1px;padding:3px 8px;border-radius:2px;text-transform:uppercase;}
+.badge-free{background:var(--lime-dim);color:var(--lime);border:1px solid rgba(200,241,53,0.2);}
+.badge-premium{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(247,183,49,0.2);}
+.badge-done{background:rgba(67,233,123,0.1);color:var(--green);border:1px solid rgba(67,233,123,0.2);}
+.mod-num{font-family:var(--ff-mono);font-size:10px;color:var(--muted);}
+.mod-title{font-family:var(--ff-display);font-size:17px;font-weight:700;line-height:1.2;}
+.mod-desc{font-size:12px;color:var(--muted2);line-height:1.6;font-weight:300;}
+.mod-footer{display:flex;align-items:center;justify-content:space-between;margin-top:2px;}
+.mod-level{font-family:var(--ff-mono);font-size:10px;color:var(--muted);}
+.mod-arrow{font-size:14px;color:var(--muted);transition:all 0.2s;}
+.mod-card:hover:not(.locked) .mod-arrow{color:var(--lime);transform:translateX(4px);}
 
-  /* MAIN */
-  .main{padding:48px;display:flex;flex-direction:column;gap:40px;}
+/* MATERIALS */
+.mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.mat-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text);transition:all 0.2s;}
+.mat-item:hover:not(.premium-mat){border-color:var(--border-active);transform:translateX(4px);}
+.mat-item.premium-mat{opacity:0.5;cursor:not-allowed;}
+.mat-icon{font-size:22px;min-width:32px;text-align:center;}
+.mat-info{flex:1;}
+.mat-title{font-size:13px;font-weight:500;margin-bottom:2px;}
+.mat-desc{font-family:var(--ff-mono);font-size:10px;color:var(--muted2);}
+.mat-action{font-family:var(--ff-mono);font-size:11px;color:var(--lime);}
+.mat-action.locked{color:var(--gold);}
 
-  /* HERO */
-  .hero-eyebrow{font-family:var(--ff-mono);font-size:11px;letter-spacing:0.18em;color:var(--lime);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
-  .hero-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--lime);}
-  .hero-title{font-family:var(--ff-display);font-size:clamp(48px,6vw,80px);font-weight:800;line-height:0.95;letter-spacing:-0.02em;color:var(--text);margin-bottom:20px;}
-  .hero-title em{font-style:normal;color:var(--lime);}
-  .hero-desc{color:var(--muted2);font-size:15px;line-height:1.75;max-width:520px;}
-  .hero-stats{display:flex;gap:32px;margin-top:28px;}
-  .stat{display:flex;flex-direction:column;gap:4px;}
-  .stat-num{font-family:var(--ff-display);font-size:28px;color:var(--lime);line-height:1;}
-  .stat-label{font-size:12px;color:var(--muted);font-family:var(--ff-mono);}
+/* LESSON PAGE */
+#lessonPage{display:none;position:relative;z-index:1;}
+.lesson-topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:64px;z-index:99;gap:16px;}
+.les-breadcrumb{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.les-breadcrumb span{color:var(--lime);}
+.les-nav-btns{display:flex;gap:6px;flex-shrink:0;}
+.lnav-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-family:var(--ff-mono);font-size:10px;color:var(--muted2);cursor:pointer;transition:all 0.2s;letter-spacing:1px;white-space:nowrap;}
+.lnav-btn:hover{border-color:var(--lime);color:var(--lime);}
+.lnav-btn.done-btn{background:rgba(67,233,123,0.1);border-color:rgba(67,233,123,0.3);color:var(--green);}
 
-  /* LESSON VIEWER */
-  .lesson-viewer{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;min-height:320px;display:flex;flex-direction:column;transition:border-color 0.3s;}
-  .lesson-viewer.active-lesson{border-color:var(--border-active);}
-  .lv-header{padding:24px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;}
-  .lv-breadcrumb{font-family:var(--ff-mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;}
-  .lv-breadcrumb span{color:var(--lime);}
-  .lv-body{padding:36px 28px;flex:1;}
-  .lv-placeholder{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;min-height:220px;}
-  .lv-placeholder-icon{width:56px;height:56px;border-radius:16px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:24px;}
-  .lv-placeholder h3{font-family:var(--ff-display);font-size:22px;color:var(--muted2);font-weight:700;}
-  .lv-placeholder p{font-size:14px;color:var(--muted);max-width:300px;line-height:1.6;}
-  .lv-lesson-title{font-family:var(--ff-display);font-size:34px;font-weight:800;margin-bottom:6px;color:var(--text);}
-  .lv-lesson-tag{font-family:var(--ff-mono);font-size:11px;color:var(--lime);background:var(--lime-dim);padding:4px 10px;border-radius:99px;display:inline-block;margin-bottom:20px;border:1px solid var(--border-active);}
-  .lv-lesson-tag.premium-tag{color:var(--gold);background:var(--gold-dim);border-color:rgba(247,183,49,0.3);}
-  .lv-lesson-body{font-size:15px;line-height:1.85;color:var(--muted2);max-width:620px;}
-  .lv-lesson-body strong{color:var(--text);font-weight:500;}
-  .lv-topics{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
-  .lv-topic{font-family:var(--ff-mono);font-size:12px;padding:6px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted2);}
-  .lv-footer{padding:20px 28px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.lesson-layout{display:grid;grid-template-columns:1fr 250px;gap:0;max-width:1100px;margin:0 auto;padding:56px 48px 80px;align-items:start;}
+.lesson-article{max-width:680px;}
 
-  /* PREMIUM LOCKED VIEW */
-  .lv-premium-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;min-height:220px;padding:40px;}
-  .lock-icon{width:64px;height:64px;border-radius:18px;background:var(--gold-dim);border:1px solid rgba(247,183,49,0.3);display:flex;align-items:center;justify-content:center;font-size:28px;}
-  .lock-title{font-family:var(--ff-display);font-size:26px;color:var(--gold);}
-  .lock-text{font-size:14px;color:var(--muted2);max-width:360px;line-height:1.7;}
-  .lock-btn{padding:12px 28px;background:var(--gold);color:#000;font-family:var(--ff-mono);font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;}
-  .lock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(247,183,49,0.3);}
+.les-cat{display:inline-flex;align-items:center;gap:6px;font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);background:var(--lime-dim);border:1px solid var(--border-active);padding:5px 14px;border-radius:99px;margin-bottom:20px;}
+.les-cat.prem{color:var(--gold);background:var(--gold-dim);border-color:rgba(247,183,49,0.35);}
+.les-title{font-family:var(--ff-display);font-size:clamp(30px,5vw,50px);font-weight:800;line-height:1.05;letter-spacing:-0.01em;margin-bottom:14px;}
+.les-excerpt{font-size:15px;color:var(--muted2);line-height:1.8;font-weight:300;margin-bottom:26px;border-left:2px solid var(--lime);padding-left:18px;}
+.les-meta{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:36px;}
+.meta-item{font-family:var(--ff-mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;}
 
-  .btn-primary{padding:11px 24px;background:var(--lime);color:#000;font-family:var(--ff-mono);font-size:13px;font-weight:600;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;text-decoration:none;}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--lime-glow);}
-  .btn-ghost{padding:11px 20px;background:transparent;color:var(--muted2);font-family:var(--ff-mono);font-size:13px;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.2s;}
-  .btn-ghost:hover{border-color:var(--border-active);color:var(--lime);}
-  .done-msg{font-family:var(--ff-mono);font-size:12px;color:var(--lime);display:none;align-items:center;gap:6px;}
-  .done-msg.show{display:flex;}
+.les-visual{width:100%;height:200px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:72px;border:1px solid var(--border);margin-bottom:36px;position:relative;overflow:hidden;}
+.les-visual-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,241,53,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(200,241,53,0.04) 1px,transparent 1px);background-size:40px 40px;}
 
-  /* SECTION */
-  .section-label{font-family:var(--ff-mono);font-size:11px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
-  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.art-body{font-size:15px;line-height:1.9;color:#d4d4e0;font-weight:300;}
+.art-body p{margin-bottom:20px;}
+.art-body h2{font-family:var(--ff-display);font-size:24px;font-weight:800;color:var(--text);margin:40px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.art-body h3{font-family:var(--ff-display);font-size:18px;font-weight:700;color:var(--text);margin:26px 0 10px;}
+.art-body strong{color:var(--text);font-weight:600;}
+.art-body em{color:var(--lime);font-style:normal;font-weight:500;}
+.art-body code{font-family:var(--ff-mono);font-size:12px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:2px 6px;color:var(--lime);}
+.art-body pre{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--lime);border-radius:0 12px 12px 0;padding:22px;margin:22px 0;overflow-x:auto;position:relative;}
+.art-body pre::before{content:'CODE';position:absolute;top:10px;right:14px;font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;color:var(--muted);}
+.art-body pre code{background:none;border:none;padding:0;color:#a8d8a8;font-size:12px;line-height:1.7;}
+.art-body ul,.art-body ol{padding-left:22px;margin-bottom:20px;}
+.art-body li{margin-bottom:7px;}
+.art-body blockquote{border-left:3px solid var(--lime);padding:14px 20px;background:var(--lime-dim);border-radius:0 10px 10px 0;margin:20px 0;color:var(--text);}
 
-  /* MODULES GRID */
-  .modules-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .module-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;}
-  .module-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--lime),transparent);opacity:0;transition:opacity 0.25s;}
-  .module-card:hover:not(.mc-locked){border-color:var(--border-active);background:var(--surface2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.4);}
-  .module-card:hover:not(.mc-locked)::before{opacity:1;}
-  .module-card.mc-locked{opacity:0.5;cursor:not-allowed;}
-  .module-card.mc-premium{border-color:rgba(247,183,49,0.2);}
-  .module-card.mc-premium::before{background:linear-gradient(90deg,var(--gold),transparent);}
-  .module-card.mc-premium:hover:not(.mc-locked){border-color:rgba(247,183,49,0.5);}
-  .mc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;}
-  .mc-icon{width:40px;height:40px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-  .mc-badge{font-family:var(--ff-mono);font-size:10px;padding:4px 8px;border-radius:6px;font-weight:600;}
-  .mc-badge.start{background:var(--lime-dim);color:var(--lime);border:1px solid var(--border-active);}
-  .mc-badge.locked-b{background:rgba(255,95,86,0.12);color:var(--red);border:1px solid rgba(255,95,86,0.2);}
-  .mc-badge.done-b{background:rgba(200,241,53,0.2);color:var(--lime);border:1px solid var(--border-active);}
-  .mc-badge.premium-b{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(247,183,49,0.3);}
-  .mc-title{font-family:var(--ff-display);font-size:18px;font-weight:800;margin-bottom:4px;color:var(--text);}
-  .mc-desc{font-size:13px;color:var(--muted);line-height:1.5;}
-  .mc-lessons{font-family:var(--ff-mono);font-size:11px;color:var(--muted);margin-top:12px;}
+.concepts-box{background:var(--surface);border:1px solid var(--border-active);border-radius:14px;padding:22px;margin:28px 0;}
+.concepts-title{font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;color:var(--lime);text-transform:uppercase;margin-bottom:12px;}
+.concepts-list{display:flex;flex-wrap:wrap;gap:8px;}
+.concept-tag{background:var(--lime-dim);border:1px solid rgba(200,241,53,0.2);color:var(--lime);font-family:var(--ff-mono);font-size:11px;padding:4px 12px;border-radius:3px;}
 
-  /* MATERIALS */
-  .materials-list{display:flex;flex-direction:column;gap:10px;}
-  .material-item{display:flex;align-items:center;gap:16px;padding:16px 18px;background:var(--surface);border:1px solid var(--border);border-radius:12px;transition:all 0.2s;text-decoration:none;}
-  .material-item:hover{border-color:var(--border-active);background:var(--surface2);transform:translateX(4px);}
-  .material-item.premium-item{border-color:rgba(247,183,49,0.2);}
-  .material-item.premium-item:hover{border-color:rgba(247,183,49,0.5);}
-  .mat-icon{width:38px;height:38px;border-radius:9px;background:var(--lime-dim);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-  .mat-icon.premium-icon{background:var(--gold-dim);border-color:rgba(247,183,49,0.3);}
-  .mat-info{flex:1;}
-  .mat-title{font-size:14px;font-weight:500;color:var(--text);display:block;margin-bottom:2px;}
-  .mat-desc{font-size:12px;color:var(--muted);font-family:var(--ff-mono);}
-  .mat-action{font-family:var(--ff-mono);font-size:11px;color:var(--lime);background:var(--lime-dim);border:1px solid var(--border-active);padding:6px 14px;border-radius:7px;white-space:nowrap;transition:all 0.2s;text-decoration:none;}
-  .material-item:hover .mat-action{background:var(--lime);color:#000;}
-  .mat-action.premium-action{color:var(--gold);background:var(--gold-dim);border-color:rgba(247,183,49,0.3);}
-  .material-item.premium-item:hover .mat-action.premium-action{background:var(--gold);color:#000;}
-  .mat-lock{font-size:14px;}
+.premium-lock{background:var(--surface);border:1px solid rgba(247,183,49,0.25);border-radius:16px;padding:56px 36px;text-align:center;margin-top:40px;}
+.lock-btn{background:var(--gold);color:#000;border:none;border-radius:8px;padding:12px 28px;font-family:var(--ff-mono);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:all 0.2s;}
+.lock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(247,183,49,0.3);}
 
-  /* OUTCOMES */
-  .outcomes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-  .outcome-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color 0.2s;}
-  .outcome-card:hover{border-color:var(--border-active);}
-  .oc-icon{font-size:22px;margin-bottom:12px;}
-  .oc-title{font-family:var(--ff-display);font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text);}
-  .oc-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.les-footer{margin-top:52px;padding-top:32px;border-top:1px solid var(--border);}
+.les-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.les-tag{font-family:var(--ff-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);}
+.nav-lessons{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.nlc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;}
+.nlc:hover{border-color:var(--border-active);}
+.nlc-dir{font-family:var(--ff-mono);font-size:10px;color:var(--muted);margin-bottom:5px;}
+.nlc-title{font-size:13px;font-weight:600;}
 
-  /* TOAST */
-  .toast{position:fixed;bottom:32px;right:32px;background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text);z-index:999;transform:translateY(80px);opacity:0;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);pointer-events:none;max-width:320px;}
-  .toast.show{transform:translateY(0);opacity:1;}
-  .toast-msg{font-family:var(--ff-mono);font-size:12px;color:var(--lime);}
-  .toast.gold-toast{border-color:rgba(247,183,49,0.4);}
-  .toast.gold-toast .toast-msg{color:var(--gold);}
+/* SIDEBAR */
+.lesson-sidebar{position:sticky;top:130px;padding-left:24px;}
+.sb-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px;}
+.sb-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;}
+.sb-btn{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;transition:all 0.15s;border:none;background:transparent;width:100%;text-align:left;color:var(--muted2);}
+.sb-btn:hover{background:var(--surface2);color:var(--text);}
+.sb-btn.active{background:var(--lime-dim);color:var(--lime);}
+.sb-num{width:20px;height:20px;border-radius:4px;background:var(--surface2);font-family:var(--ff-mono);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sb-btn.active .sb-num{background:var(--lime);color:#000;}
+.sb-btn-title{font-size:11px;font-weight:500;flex:1;}
 
-  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-  .fade-up{animation:fadeUp 0.5s ease forwards;opacity:0;}
-  .delay-1{animation-delay:0.1s;}.delay-2{animation-delay:0.2s;}.delay-3{animation-delay:0.3s;}.delay-4{animation-delay:0.4s;}
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px 20px;font-family:var(--ff-mono);font-size:12px;color:var(--lime);z-index:9997;transform:translateY(80px);opacity:0;transition:all 0.35s;}
+.toast.show{transform:translateY(0);opacity:1;}
 
-  @media(max-width:900px){
-    .layout{grid-template-columns:1fr;}
-    .sidebar{position:relative;top:0;height:auto;border-right:none;border-bottom:1px solid var(--border);flex-direction:row;flex-wrap:wrap;padding:16px;}
-    .sidebar-progress{width:100%;}
-    .modules-grid{grid-template-columns:1fr;}
-    .outcomes-grid{grid-template-columns:1fr;}
-    .main{padding:24px;}
-    nav{padding:0 24px;}
-  }
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;animation:fadeUp 0.5s ease forwards;}
+
+@media(max-width:900px){
+  nav,.lesson-topbar{padding:0 20px;}
+  #indexPage{padding:40px 20px 60px;}
+  .modules-grid{grid-template-columns:1fr 1fr;}
+  .lesson-layout{grid-template-columns:1fr;padding:28px 20px 60px;}
+  .lesson-sidebar{display:none;}
+  .mat-grid{grid-template-columns:1fr;}
+}
+@media(max-width:540px){.modules-grid{grid-template-columns:1fr;}.nav-lessons{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-<div class="ambient ambient-1"></div>
-<div class="ambient ambient-2"></div>
+<div class="read-progress" id="readProgress"></div>
 
 <nav>
   <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
-  <a href="index.html" class="nav-back">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Back Home
-  </a>
+  <div class="nav-right">
+    <a href="courses.html" class="nav-back">← Courses</a>
+    <a href="index.html" class="nav-back">← Home</a>
+  </div>
 </nav>
 
-<div class="layout">
-  <aside class="sidebar">
-    <p class="sidebar-label">Progress</p>
-    <div class="sidebar-progress">
-      <div class="sp-row">
-        <span class="sp-label">Completed</span>
-        <span class="sp-value" id="sidebarPercent">0%</span>
-      </div>
-      <div class="pbar"><div class="pbar-fill" id="sidebarFill"></div></div>
+<!-- INDEX PAGE -->
+<div id="indexPage">
+  <div class="fade-up">
+    <div class="course-eyebrow">Subject 02 · IT Study Hub</div>
+    <h1 class="course-title">OOPs in <em>Java</em></h1>
+    <p class="course-desc">Master the world's most popular enterprise language. From JVM internals to multithreading, GUI programming and the 4 pillars of OOP — everything you need.</p>
+    <div class="course-chips">
+      <span class="chip chip-lime">☕ Java</span>
+      <span class="chip chip-lime">6 Free Modules</span>
+      <span class="chip chip-gold">6 Premium Modules</span>
+      <span class="chip chip-lime">Real PDF Notes</span>
     </div>
+  </div>
 
-    <p class="sidebar-label">Free Lessons</p>
-    <button class="lesson-btn" id="sbtn-1" onclick="openLesson(1)">
-      <div class="lb-num" id="lnum-1">1</div>
-      <div class="lb-info"><span class="lb-title">Intro to Java</span><span class="lb-sub">JVM & Architecture</span></div>
-    </button>
-    <button class="lesson-btn" id="sbtn-2" onclick="openLesson(2)">
-      <div class="lb-num" id="lnum-2">2</div>
-      <div class="lb-info"><span class="lb-title">Classes & Objects</span><span class="lb-sub">Blueprints of Code</span></div>
-    </button>
-    <button class="lesson-btn" id="sbtn-3" onclick="openLesson(3)">
-      <div class="lb-num" id="lnum-3">3</div>
-      <div class="lb-info"><span class="lb-title">Encapsulation</span><span class="lb-sub">Data Hiding</span></div>
-    </button>
-
-    <p class="sidebar-label" style="margin-top:8px;">Premium Lessons</p>
-    <button class="lesson-btn" id="sbtn-4" onclick="openLesson(4)">
-      <div class="lb-num" id="lnum-4">4</div>
-      <div class="lb-info"><span class="lb-title">Inheritance</span><span class="lb-sub">Code Reusability</span></div>
-      <span class="lb-badge premium-badge">★</span>
-    </button>
-    <button class="lesson-btn" id="sbtn-5" onclick="openLesson(5)">
-      <div class="lb-num" id="lnum-5">5</div>
-      <div class="lb-info"><span class="lb-title">Polymorphism</span><span class="lb-sub">Overloading & Overriding</span></div>
-      <span class="lb-badge premium-badge">★</span>
-    </button>
-    <button class="lesson-btn" id="sbtn-6" onclick="openLesson(6)">
-      <div class="lb-num" id="lnum-6">6</div>
-      <div class="lb-info"><span class="lb-title">Abstraction</span><span class="lb-sub">Interfaces & Abstract</span></div>
-      <span class="lb-badge premium-badge">★</span>
-    </button>
-
-    <div class="sidebar-premium-note" id="premiumNote" style="display:none;">
-      <div class="spn-title">⭐ Go Premium</div>
-      <div class="spn-text">Unlock all Java OOP modules, advanced PDF notes, and project code.</div>
-      <button class="spn-btn" onclick="showPremiumToast()">Upgrade Now</button>
+  <div class="progress-card fade-up" style="animation-delay:0.1s;">
+    <div class="prog-pct" id="progPct">0%</div>
+    <div class="prog-bar-wrap">
+      <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
+      <div class="prog-label" id="progLabel">0 of 6 free modules completed</div>
     </div>
-  </aside>
+  </div>
 
-  <main class="main">
-    <section class="hero fade-up">
-      <div class="hero-eyebrow">Object Oriented Programming · Subject 02</div>
-      <h1 class="hero-title">Java<br><em>Mastery</em></h1>
-      <p class="hero-desc">Master the world's most popular enterprise language. Learn the 4 pillars of OOPs, JVM internals, and how to build scalable, robust software architecture.</p>
-      <div class="hero-stats">
-        <div class="stat"><div class="stat-num">6</div><div class="stat-label">Modules</div></div>
-        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Free</div></div>
-        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Premium</div></div>
-      </div>
-    </section>
+  <div class="fade-up" style="animation-delay:0.15s;">
+    <div class="sec-label">Free Modules</div>
+    <div class="modules-grid" id="freeGrid"></div>
+  </div>
 
-    <section class="fade-up delay-1">
-      <div class="section-label">Current Lesson</div>
-      <div class="lesson-viewer" id="lessonViewer">
-        <div class="lv-header">
-          <div class="lv-breadcrumb">OOPs in Java <span>/</span> <span id="lv-crumb">—</span></div>
-        </div>
-        <div class="lv-body" id="lv-body">
-          <div class="lv-placeholder">
-            <div class="lv-placeholder-icon">☕</div>
-            <h3>Select a Lesson</h3>
-            <p>Choose a module from the sidebar or the cards below to begin your Java journey.</p>
-          </div>
-        </div>
-        <div class="lv-footer" id="lv-footer" style="display:none;">
-          <button class="btn-primary" onclick="markComplete()" id="completeBtn">Mark as Complete ✓</button>
-          <button class="btn-ghost" onclick="nextLesson()">Next →</button>
-          <div class="done-msg" id="doneMsg">✓ Completed!</div>
-        </div>
-      </div>
-    </section>
+  <div class="fade-up" style="animation-delay:0.2s;">
+    <div class="sec-label">Premium Modules</div>
+    <div class="modules-grid" id="premiumGrid"></div>
+  </div>
 
-    <section class="fade-up delay-2">
-      <div class="section-label">All Modules</div>
-      <div class="modules-grid">
-        <div class="module-card" id="mc-1" onclick="openLesson(1)">
-          <div class="mc-top"><div class="mc-icon">☕</div><span class="mc-badge start" id="mc-badge-1">FREE</span></div>
-          <div class="mc-title">Intro to Java</div><div class="mc-desc">History, JVM, JRE vs JDK, and your first class.</div>
-          <div class="mc-lessons">Beginner · Free</div>
-        </div>
-        <div class="module-card" id="mc-2" onclick="openLesson(2)">
-          <div class="mc-top"><div class="mc-icon">🏗️</div><span class="mc-badge start" id="mc-badge-2">FREE</span></div>
-          <div class="mc-title">Classes & Objects</div><div class="mc-desc">Constructors, methods, and the 'this' keyword.</div>
-          <div class="mc-lessons">Beginner · Free</div>
-        </div>
-        <div class="module-card" id="mc-3" onclick="openLesson(3)">
-          <div class="mc-top"><div class="mc-icon">🔒</div><span class="mc-badge start" id="mc-badge-3">FREE</span></div>
-          <div class="mc-title">Encapsulation</div><div class="mc-desc">Access modifiers: private, public, and protected.</div>
-          <div class="mc-lessons">Beginner · Free</div>
-        </div>
-        <div class="module-card mc-premium" id="mc-4" onclick="openLesson(4)">
-          <div class="mc-top"><div class="mc-icon">🧬</div><span class="mc-badge premium-b" id="mc-badge-4">★ PREMIUM</span></div>
-          <div class="mc-title">Inheritance</div><div class="mc-desc">Single, Multilevel inheritance and 'super' keyword.</div>
-          <div class="mc-lessons">Intermediate · Premium</div>
-        </div>
-        <div class="module-card mc-premium" id="mc-5" onclick="openLesson(5)">
-          <div class="mc-top"><div class="mc-icon">🎭</div><span class="mc-badge premium-b" id="mc-badge-5">★ PREMIUM</span></div>
-          <div class="mc-title">Polymorphism</div><div class="mc-desc">Method overloading vs overriding & dynamic dispatch.</div>
-          <div class="mc-lessons">Advanced · Premium</div>
-        </div>
-        <div class="module-card mc-premium" id="mc-6" onclick="openLesson(6)">
-          <div class="mc-top"><div class="mc-icon">☁️</div><span class="mc-badge premium-b" id="mc-badge-6">★ PREMIUM</span></div>
-          <div class="mc-title">Abstraction</div><div class="mc-desc">Abstract classes and Interfaces in depth.</div>
-          <div class="mc-lessons">Advanced · Premium</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="fade-up delay-3">
-      <div class="section-label">Study Materials</div>
-      <div class="materials-list">
-        <a href="pdfs/java-basics.pdf" target="_blank" class="material-item">
-          <div class="mat-icon">📝</div>
-          <div class="mat-info"><span class="mat-title">Java Foundations PDF</span><span class="mat-desc">JVM Setup, Variables, OOP Overview · Free</span></div>
-          <span class="mat-action">↓ Download</span>
-        </a>
-        <a href="https://www.sanfoundry.com/java-interview-questions-answers/" 
-        target="_blank" class="material-item">
+  <div class="fade-up" style="animation-delay:0.25s;">
+    <div class="sec-label">Study Materials</div>
+    <div class="mat-grid">
+      <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20JAVA-1-28.pdf" target="_blank" class="mat-item">
+        <div class="mat-icon">📄</div>
+        <div class="mat-info"><div class="mat-title">Java Basics — Pages 1–28</div><div class="mat-desc">Introduction, Control Flow · Free</div></div>
+        <span class="mat-action">↓ PDF</span>
+      </a>
+      <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20JAVA-29-72.pdf" target="_blank" class="mat-item">
+        <div class="mat-icon">📄</div>
+        <div class="mat-info"><div class="mat-title">Classes & OOP — Pages 29–72</div><div class="mat-desc">Classes, Objects, Methods · Free</div></div>
+        <span class="mat-action">↓ PDF</span>
+      </a>
+      <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20JAVA-56-96.pdf" target="_blank" class="mat-item">
+        <div class="mat-icon">📄</div>
+        <div class="mat-info"><div class="mat-title">Inheritance & Access — Pages 56–96</div><div class="mat-desc">OOP Principles · Free</div></div>
+        <span class="mat-action">↓ PDF</span>
+      </a>
+      <a href="https://www.sanfoundry.com/java-interview-questions-answers/" target="_blank" class="mat-item">
         <div class="mat-icon">🎯</div>
-        <div class="mat-info">
-        <span class="mat-title">Placement Quiz — OPPs in Java</span>
-        <span class="mat-desc">1000+ MCQs from Sanfoundry · Free</span>
-        </div>
-        <span class="mat-action">→ Start Quiz</span>
-        </a>
-        <div class="material-item premium-item" onclick="showPremiumToast()">
-          <div class="mat-icon premium-icon">⭐</div>
-          <div class="mat-info"><span class="mat-title">Advanced Java Collections</span><span class="mat-desc">List, Set, Map & Internal Working · Premium</span></div>
-          <span class="mat-action premium-action">🔒 Unlock</span>
-        </div>
-        <div class="material-item premium-item" onclick="showPremiumToast()">
-          <div class="mat-icon premium-icon">⭐</div>
-          <div class="mat-info"><span class="mat-title">Java Interview Kit</span><span class="mat-desc">50+ Java OOP Interview Questions · Premium</span></div>
-          <span class="mat-action premium-action">🔒 Unlock</span>
-        </div>
+        <div class="mat-info"><div class="mat-title">Placement Quiz — Java OOP</div><div class="mat-desc">1000+ MCQs · Free</div></div>
+        <span class="mat-action">→ Start</span>
+      </a>
+      <div class="mat-item premium-mat" onclick="showToast('⭐ Sign in as admin to unlock premium materials')">
+        <div class="mat-icon">⭐</div>
+        <div class="mat-info"><div class="mat-title">Threads & Strings — Pages 97–188</div><div class="mat-desc">Multithreading, String Handling · Premium</div></div>
+        <span class="mat-action locked">🔒</span>
       </div>
-    </section>
-
-    <section class="fade-up delay-4">
-      <div class="section-label">What You'll Build</div>
-      <div class="outcomes-grid">
-        <div class="outcome-card"><div class="oc-icon">🏢</div><div class="oc-title">Enterprise Apps</div><div class="oc-desc">Design systems using industry-standard Java design patterns.</div></div>
-        <div class="outcome-card"><div class="oc-icon">🛠️</div><div class="oc-title">Robust Code</div><div class="oc-desc">Write bug-resistant code using Abstraction and Interfaces.</div></div>
-        <div class="outcome-card"><div class="oc-icon">💼</div><div class="oc-title">Job Ready</div><div class="oc-desc">Preparation for Java Developer roles at top tech firms.</div></div>
+      <div class="mat-item premium-mat" onclick="showToast('⭐ Sign in as admin to unlock premium materials')">
+        <div class="mat-icon">⭐</div>
+        <div class="mat-info"><div class="mat-title">AWT & GUI — Pages 189–260</div><div class="mat-desc">Abstract Window Toolkit · Premium</div></div>
+        <span class="mat-action locked">🔒</span>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
 </div>
 
-<div class="toast" id="toast">
-  <span id="toastIcon">✅</span>
-  <div><div style="font-size:13px;font-weight:500;" id="toastTitle">Done!</div><div class="toast-msg" id="toastMsg"></div></div>
+<!-- LESSON PAGE -->
+<div id="lessonPage">
+  <div class="lesson-topbar">
+    <div class="les-breadcrumb">OOPs in Java <span>/</span> <span id="lesCrumb">—</span></div>
+    <div class="les-nav-btns">
+      <button class="lnav-btn" onclick="goBack()">← Back</button>
+      <button class="lnav-btn" id="prevBtn" onclick="prevLesson()">← Prev</button>
+      <button class="lnav-btn" id="markBtn" onclick="markDone()">✓ Mark Done</button>
+      <button class="lnav-btn" id="nextBtn" onclick="nextLesson()">Next →</button>
+    </div>
+  </div>
+  <div class="lesson-layout">
+    <div class="lesson-article" id="lessonContent"></div>
+    <aside class="lesson-sidebar">
+      <div class="sb-card">
+        <div class="sb-label">Progress</div>
+        <div class="prog-bar-track" style="margin-bottom:8px;"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
+        <div class="prog-label" id="sbProgLabel">0 / 6 free</div>
+      </div>
+      <div class="sb-card">
+        <div class="sb-label">All Modules</div>
+        <div id="sbModList"></div>
+      </div>
+    </aside>
+  </div>
 </div>
 
-<script>
-const TOTAL_FREE = 3;
-const TOTAL = 6;
-let completed = JSON.parse(localStorage.getItem("ish_java_progress") || "[]");
-let currentLesson = null;
-const isPremium = JSON.parse(localStorage.getItem("ish_premium") || "false");
-
-const lessons = {
-  1:{title:"Intro to Java",tag:"Module 1 · Beginner · Free",premium:false,body:`<strong>Java</strong> is a high-level, class-based, object-oriented programming language designed to have as few implementation dependencies as possible. It follows the <strong>"Write Once, Run Anywhere"</strong> (WORA) principle.<br><br>In this lesson, you will understand the role of the <strong>JVM (Java Virtual Machine)</strong>, how bytecode works, and the difference between JDK, JRE, and JVM.`,topics:["JVM Architecture","JDK vs JRE","Bytecode Concept","Public Static Void Main","Java Data Types","Variables"]},
-  2:{title:"Classes & Objects",tag:"Module 2 · Beginner · Free",premium:false,body:`In Java, everything revolves around <strong>Classes and Objects</strong>. A class is a blueprint, and an object is an instance of that blueprint.<br><br>You'll learn how to define fields (attributes) and methods (behaviors), how to use <strong>constructors</strong> to initialize objects, and the purpose of the <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">new</code> keyword.`,topics:["Class Declaration","Object Instantiation","Constructors","Method Overloading","The 'this' Keyword","Static Members"]},
-  3:{title:"Encapsulation",tag:"Module 3 · Beginner · Free",premium:false,body:`<strong>Encapsulation</strong> is the mechanism of wrapping data and code acting on the data together as a single unit. It is used for <strong>data hiding</strong> and security.<br><br>Learn how to use <strong>Access Modifiers</strong> (<code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">private</code>, <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">public</code>, <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">protected</code>) and why Getters and Setters are standard practice in Java.`,topics:["Private vs Public","Protected Access","Getters & Setters","Packages in Java","Data Security","POJO Classes"]},
-  4:{title:"Inheritance",tag:"Module 4 · Intermediate · Premium",premium:true,body:`<strong>Inheritance</strong> allows a new class to acquire the properties and behaviors of an existing class. It promotes <strong>code reusability</strong>.<br><br>This premium lesson covers the <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">extends</code> keyword, different types of inheritance (Single, Multilevel, Hierarchical), and the vital role of the <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">super</code> keyword.`,topics:["Extends Keyword","Super Keyword","Constructor Chaining","Single Inheritance","Multilevel Inheritance","Method Overriding Intro"]},
-  5:{title:"Polymorphism",tag:"Module 5 · Advanced · Premium",premium:true,body:`<strong>Polymorphism</strong> means "many forms." In Java, it allows us to perform a single action in different ways. It is divided into Compile-time and Runtime polymorphism.<br><br>Master <strong>Method Overriding</strong> and <strong>Dynamic Method Dispatch</strong>. This is how Java handles different object types at runtime, allowing for flexible and extensible codebases.`,topics:["Method Overriding","Upcasting & Downcasting","Dynamic Method Dispatch","Compile-time vs Runtime","@Override Annotation","Final Keyword"]},
-  6:{title:"Abstraction",tag:"Module 6 · Advanced · Premium",premium:true,body:`<strong>Abstraction</strong> is the process of hiding implementation details and showing only functionality. In Java, this is achieved using <strong>Abstract Classes</strong> and <strong>Interfaces</strong>.<br><br>Learn when to use an abstract class versus an interface, how to handle multiple inheritance through interfaces, and the new features in Java 8+ interfaces.`,topics:["Abstract Classes","Abstract Methods","Interfaces","Implements Keyword","Multiple Inheritance","Interface Default Methods"]}
-};
-
-function openLesson(id) {
-  const lesson = lessons[id];
-  if (lesson.premium && !isPremium) {
-    currentLesson = id;
-    document.getElementById('lv-crumb').textContent = lesson.title;
-    document.getElementById('lessonViewer').classList.add('active-lesson');
-    document.getElementById('lv-body').innerHTML = `
-      <div class="lv-premium-lock">
-        <div class="lock-icon">⭐</div>
-        <div class="lock-title">Premium Java Track</div>
-        <div class="lock-text">This advanced module is locked. Upgrade to unlock all OOPs concepts, source code, and professional PDF notes.</div>
-        <button class="lock-btn" onclick="showPremiumToast()">Upgrade to Premium</button>
-      </div>`;
-    document.getElementById('lv-footer').style.display = 'none';
-    document.getElementById('premiumNote').style.display = 'block';
-    [1,2,3,4,5,6].forEach(i => document.getElementById(`sbtn-${i}`)?.classList.remove('active'));
-    document.getElementById(`sbtn-${id}`)?.classList.add('active');
-    return;
-  }
-  currentLesson = id;
-  document.getElementById('lv-crumb').textContent = lesson.title;
-  document.getElementById('lessonViewer').classList.add('active-lesson');
-  document.getElementById('lv-body').innerHTML = `
-    <div class="lv-lesson-title">${lesson.title}</div>
-    <div class="lv-lesson-tag ${lesson.premium ? 'premium-tag' : ''}">${lesson.tag}</div>
-    <div class="lv-lesson-body">${lesson.body}</div>
-    <div class="lv-topics">${lesson.topics.map(t=>`<span class="lv-topic">${t}</span>`).join('')}</div>`;
-  document.getElementById('lv-footer').style.display = 'flex';
-  const done = completed.includes(id);
-  document.getElementById('doneMsg').classList.toggle('show', done);
-  document.getElementById('completeBtn').style.opacity = done ? '0.4' : '1';
-  document.getElementById('completeBtn').style.pointerEvents = done ? 'none' : 'auto';
-  [1,2,3,4,5,6].forEach(i => document.getElementById(`sbtn-${i}`)?.classList.remove('active'));
-  document.getElementById(`sbtn-${id}`)?.classList.add('active');
-}
-
-function markComplete() {
-  if (!currentLesson || lessons[currentLesson].premium && !isPremium) return;
-  if (!completed.includes(currentLesson)) completed.push(currentLesson);
-  localStorage.setItem("ish_java_progress", JSON.stringify(completed));
-  updateProgress();
-  openLesson(currentLesson);
-  showToast('Module Complete! ☕', 'Java progress saved.');
-}
-
-function nextLesson() {
-  if (currentLesson && currentLesson < TOTAL) openLesson(currentLesson + 1);
-}
-
-function updateProgress() {
-  const count = completed.filter(c => c <= TOTAL_FREE).length;
-  const pct = Math.round((count / TOTAL_FREE) * 100);
-  document.getElementById('sidebarFill').style.width = pct + '%';
-  document.getElementById('sidebarPercent').textContent = pct + '%';
-  [1,2,3].forEach(i => {
-    if (completed.includes(i)) {
-      document.getElementById(`sbtn-${i}`)?.classList.add('done');
-      const num = document.getElementById(`lnum-${i}`);
-      if (num) num.textContent = '✓';
-      const badge = document.getElementById(`mc-badge-${i}`);
-      if (badge) { badge.className = 'mc-badge done-b'; badge.textContent = 'DONE'; }
-    }
-  });
-}
-
-function showToast(title, msg, gold=false) {
-  const t = document.getElementById('toast');
-  document.getElementById('toastTitle').textContent = title;
-  document.getElementById('toastMsg').textContent = msg;
-  t.className = 'toast' + (gold ? ' gold-toast' : '');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
-}
-
-function showPremiumToast() {
-  showToast('⭐ Premium Java', 'Payment integration coming soon! Ask your IT Study Hub admin.', true);
-}
-
-window.addEventListener('load', updateProgress);
-</script>
-<!-- Custom Cursor -->
+<div class="toast" id="toast"></div>
 <div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <script>
-const c = document.getElementById('cur');
-const r = document.getElementById('curR');
+const ADMIN_EMAIL = 'itstudyhub.tiu@gmail.com';
+function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){return null;}}
+function isPremium(){const s=getSession();return s&&(s.isAdmin||s.email===ADMIN_EMAIL);}
+function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_java_done')||'[]');}catch(e){return[];}}
+function saveCompleted(a){localStorage.setItem('ish_java_done',JSON.stringify(a));}
+
+const MODS = [
+  {id:1,free:true,icon:'☕',level:'Beginner',title:'Introduction to Java',
+   excerpt:'Understand why Java was built, how the JVM works, and what makes Java the "Write Once, Run Anywhere" language trusted by millions of developers worldwide.',
+   tags:['Beginner','JVM','History'],visual:'☕',bg:'linear-gradient(135deg,#0a1a0a,#0f2010)',
+   concepts:['JVM Architecture','JDK vs JRE','WORA Principle','Java Buzzwords','Bytecode','Applications vs Applets'],
+   body:`<p>Java was conceived by <strong>James Gosling</strong> at Sun Microsystems in 1991, initially called <em>Oak</em>, renamed <em>Java</em> in 1995. The driving goal: a platform-independent language for networked devices.</p>
+<h2>The WORA Principle</h2>
+<p>Java's most famous promise is <strong>"Write Once, Run Anywhere" (WORA)</strong>. Instead of compiling to machine code, Java compiles to <strong>bytecode</strong> — a platform-neutral format that any JVM can run.</p>
+<blockquote>Think of bytecode as a universal language every JVM in the world understands, regardless of the underlying hardware.</blockquote>
+<h2>JDK vs JRE vs JVM</h2>
+<ul>
+  <li><strong>JVM</strong> — the engine that executes bytecode. Makes WORA possible.</li>
+  <li><strong>JRE</strong> — JVM + libraries needed to <em>run</em> Java programs.</li>
+  <li><strong>JDK</strong> — JRE + compiler + tools needed to <em>write</em> Java programs. Install this to develop.</li>
+</ul>
+<h2>Java Buzzwords</h2>
+<ul>
+  <li><strong>Simple</strong> — removes complex C++ features like pointers and multiple class inheritance</li>
+  <li><strong>Object-Oriented</strong> — everything is an object (except primitives)</li>
+  <li><strong>Platform Independent</strong> — compile once, run anywhere via bytecode</li>
+  <li><strong>Secure</strong> — no direct memory access, bytecode verification</li>
+  <li><strong>Robust</strong> — strong type checking, exception handling, garbage collection</li>
+  <li><strong>Multithreaded</strong> — built-in support for concurrent programming</li>
+</ul>
+<h2>Your First Java Program</h2>
+<pre><code>public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, IT Study Hub!");
+    }
+}</code></pre>
+<p>Save as <code>HelloWorld.java</code> → compile with <code>javac HelloWorld.java</code> → run with <code>java HelloWorld</code>. The compiler creates <code>HelloWorld.class</code> — your bytecode file.</p>`},
+
+  {id:2,free:true,icon:'🔀',level:'Beginner',title:'Control Statements',
+   excerpt:'The if, switch, while, for and do-while statements are the decision-making backbone of every Java program. Master these and you control the flow of all logic.',
+   tags:['Beginner','Loops','Conditions'],visual:'🔀',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
+   concepts:['if & if-else','Nested if','switch Statement','while Loop','do-while Loop','for Loop','break & continue','return'],
+   body:`<p>Control statements divide into three categories: <strong>Selection</strong> (choose a path), <strong>Iteration</strong> (repeat steps), and <strong>Jump</strong> (exit or skip). They are the building blocks of all program logic.</p>
+<h2>Selection: if and switch</h2>
+<pre><code>int marks = 75;
+if (marks >= 90) {
+    System.out.println("Grade: A");
+} else if (marks >= 70) {
+    System.out.println("Grade: B");  // This runs
+} else {
+    System.out.println("Grade: C");
+}</code></pre>
+<p>Use <code>switch</code> when matching one variable against many specific values:</p>
+<pre><code>int day = 3;
+switch (day) {
+    case 1: System.out.println("Monday"); break;
+    case 3: System.out.println("Wednesday"); break; // Runs
+    default: System.out.println("Other day");
+}</code></pre>
+<blockquote>Always use <code>break</code> in switch cases. Without it, execution "falls through" to the next case — a very common bug!</blockquote>
+<h2>Iteration: Loops</h2>
+<pre><code>// while — checks condition first
+int i = 0;
+while (i < 5) { System.out.println(i); i++; }
+
+// do-while — runs at least ONCE
+do { System.out.println("Runs once!"); } while (false);
+
+// for — best when iteration count is known
+for (int j = 0; j < 5; j++) { System.out.println(j); }</code></pre>
+<h2>Jump: break, continue, return</h2>
+<pre><code>for (int i = 0; i < 10; i++) {
+    if (i == 3) continue;  // Skip 3
+    if (i == 7) break;     // Stop at 7
+    System.out.println(i); // Prints: 0 1 2 4 5 6
+}</code></pre>`},
+
+  {id:3,free:true,icon:'🏗️',level:'Beginner',title:'Classes, Objects & Methods',
+   excerpt:'Everything in Java is built from classes and objects. Learn to define your own data types, create instances, control access, and understand static and final keywords.',
+   tags:['Beginner','OOP','Classes'],visual:'🏗️',bg:'linear-gradient(135deg,#0f0a0a,#201010)',
+   concepts:['Class Declaration','Object Creation','Constructors','Access Specifiers','static','final','Inner Classes','Arrays'],
+   body:`<p>A <strong>class</strong> is a blueprint — it defines what data (fields) and behaviors (methods) objects will have. An <strong>object</strong> is a living instance of that blueprint in memory.</p>
+<h2>Defining a Class & Creating Objects</h2>
+<pre><code>class Student {
+    String name;
+    int age;
+    float marks;
+
+    void display() {
+        System.out.println("Name: " + name + ", Age: " + age);
+    }
+}
+
+// In main():
+Student s1 = new Student();
+s1.name = "Dithsha";
+s1.age = 20;
+s1.display();</code></pre>
+<h2>Constructors</h2>
+<p>A constructor is called automatically when an object is created — same name as class, no return type:</p>
+<pre><code>class Student {
+    String name; int age;
+    Student(String n, int a) { name = n; age = a; }
+}
+Student s = new Student("Mithila", 21);</code></pre>
+<h2>Access Specifiers</h2>
+<ul>
+  <li><code>public</code> — accessible from anywhere</li>
+  <li><code>private</code> — only within this class (best for sensitive data)</li>
+  <li><code>protected</code> — within this class and subclasses</li>
+  <li><em>default</em> — within the same package only</li>
+</ul>
+<h2>static and final</h2>
+<pre><code>class MathHelper {
+    static final double PI = 3.14159; // Constant
+
+    static double circleArea(double r) { // No 'new' needed
+        return PI * r * r;
+    }
+}
+double area = MathHelper.circleArea(5.0);</code></pre>`},
+
+  {id:4,free:true,icon:'🧬',level:'Intermediate',title:'Inheritance & Interfaces',
+   excerpt:'Inheritance lets one class acquire the properties of another, promoting reuse. Interfaces define contracts — the key to flexible, maintainable Java design.',
+   tags:['Intermediate','Inheritance','Interfaces'],visual:'🧬',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
+   concepts:['extends Keyword','super Keyword','Method Overriding','Abstract Classes','Interfaces','implements','Multiple Interfaces'],
+   body:`<p><strong>Inheritance</strong> allows a child class to inherit all fields and methods of a parent class using the <code>extends</code> keyword. It promotes <strong>code reusability</strong>.</p>
+<h2>Basic Inheritance</h2>
+<pre><code>class Animal {
+    String name;
+    void eat() { System.out.println(name + " is eating"); }
+}
+
+class Dog extends Animal {
+    void bark() { System.out.println(name + " says: Woof!"); }
+}
+
+Dog d = new Dog();
+d.name = "Bruno";
+d.eat();  // Inherited!
+d.bark(); // Dog's own</code></pre>
+<h2>super Keyword</h2>
+<pre><code>class Animal {
+    Animal(String name) { System.out.println("Animal: " + name); }
+}
+class Dog extends Animal {
+    Dog(String name) {
+        super(name); // Must be FIRST line
+        System.out.println("Dog: " + name);
+    }
+}</code></pre>
+<h2>Abstract Classes & Interfaces</h2>
+<pre><code>abstract class Shape {
+    abstract double area(); // Must be implemented by subclass
+    void describe() { System.out.println("Area: " + area()); }
+}
+
+interface Flyable { void fly(); }
+interface Swimmable { void swim(); }
+
+// Multiple interfaces — Java's solution to multiple inheritance
+class Duck implements Flyable, Swimmable {
+    public void fly()  { System.out.println("Duck flies!"); }
+    public void swim() { System.out.println("Duck swims!"); }
+}</code></pre>`},
+
+  {id:5,free:true,icon:'🎭',level:'Intermediate',title:'Encapsulation & Polymorphism',
+   excerpt:'Encapsulation protects your data. Polymorphism lets one interface take many forms. Together they separate Java beginners from Java developers.',
+   tags:['Intermediate','OOP','Polymorphism'],visual:'🎭',bg:'linear-gradient(135deg,#10080a,#200f12)',
+   concepts:['Getters & Setters','POJO Classes','Method Overloading','Method Overriding','@Override','Dynamic Dispatch','Upcasting','instanceof'],
+   body:`<p><strong>Encapsulation</strong> and <strong>Polymorphism</strong> are two of the four pillars of OOP. They separate good Java code from great Java code.</p>
+<h2>Encapsulation — Protecting Data</h2>
+<pre><code>class BankAccount {
+    private double balance; // Hidden!
+
+    public double getBalance() { return balance; }
+
+    public void deposit(double amount) {
+        if (amount > 0) balance += amount;
+        // Can't just set balance = -99999 from outside
+    }
+}</code></pre>
+<blockquote>This POJO pattern is used in every Java framework — Spring, Hibernate, Android. Master it early.</blockquote>
+<h2>Method Overloading — Compile-Time Polymorphism</h2>
+<pre><code>class Calculator {
+    int add(int a, int b)           { return a + b; }
+    double add(double a, double b)  { return a + b; }
+    int add(int a, int b, int c)    { return a + b + c; }
+}
+// Compiler picks the right method based on argument types</code></pre>
+<h2>Method Overriding — Runtime Polymorphism</h2>
+<pre><code>class Animal { void sound() { System.out.println("..."); } }
+class Dog extends Animal {
+    @Override void sound() { System.out.println("Woof!"); }
+}
+class Cat extends Animal {
+    @Override void sound() { System.out.println("Meow!"); }
+}
+
+Animal a = new Dog(); a.sound(); // "Woof!" — JVM decides at runtime!
+a = new Cat();        a.sound(); // "Meow!" — same reference, different object</code></pre>`},
+
+  {id:6,free:true,icon:'⚠️',level:'Intermediate',title:'Exception Handling',
+   excerpt:'Every real program encounters errors. Java gives you powerful tools to catch, handle and recover from them — keeping your programs robust and crash-free.',
+   tags:['Intermediate','Exceptions','try-catch'],visual:'⚠️',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
+   concepts:['try-catch-finally','Checked vs Unchecked','Common Exceptions','throw & throws','Custom Exceptions','Multi-catch'],
+   body:`<p>An <strong>exception</strong> is an event that disrupts normal program flow. Java's <code>try-catch-finally</code> lets you handle errors gracefully instead of crashing.</p>
+<h2>try-catch-finally</h2>
+<pre><code>try {
+    int result = 10 / 0; // Throws ArithmeticException
+} catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero: " + e.getMessage());
+} finally {
+    System.out.println("This ALWAYS runs — use for cleanup!");
+}</code></pre>
+<h2>Checked vs Unchecked</h2>
+<p><strong>Checked</strong> — compiler forces you to handle (like <code>IOException</code>).</p>
+<p><strong>Unchecked</strong> — happen at runtime, no warning: <code>NullPointerException</code>, <code>ArrayIndexOutOfBoundsException</code>, <code>ArithmeticException</code>.</p>
+<h2>throw, throws & Custom Exceptions</h2>
+<pre><code>// throws — declares method might throw
+void readFile(String name) throws IOException { ... }
+
+// throw — manually raises exception
+void setAge(int age) {
+    if (age < 0) throw new IllegalArgumentException("Age cannot be negative!");
+    this.age = age;
+}
+
+// Custom exception
+class InsufficientFundsException extends Exception {
+    InsufficientFundsException(double amt) {
+        super("Need ₹" + amt + " more");
+    }
+}</code></pre>`},
+
+  // PREMIUM
+  {id:7,free:false,icon:'⚡',level:'Advanced',title:'Multithreaded Programming',
+   excerpt:'Java has built-in multithreading support. Learn to create concurrent programs, manage thread lifecycle, and use synchronization to prevent race conditions.',
+   tags:['Advanced','Threads','Concurrency'],visual:'⚡',bg:'linear-gradient(135deg,#0a0f0a,#0f1a0f)',
+   concepts:['Thread Class','Runnable Interface','Thread Lifecycle','sleep() & join()','Thread Priority','synchronization','wait() notify()'],
+   body:`<p>Java has <strong>built-in support for multithreading</strong> — running two or more parts of a program concurrently. Each part is a <strong>thread</strong>.</p>
+<h2>Creating Threads</h2>
+<pre><code>// Method 1: Extend Thread
+class MyThread extends Thread {
+    public void run() { System.out.println("Running: " + getName()); }
+}
+
+// Method 2: Implement Runnable (preferred)
+class MyTask implements Runnable {
+    public void run() { System.out.println("Task running"); }
+}
+
+new MyThread().start();
+new Thread(new MyTask()).start(); // Never call run() directly!</code></pre>
+<h2>Key Thread Methods</h2>
+<pre><code>Thread.sleep(1000);  // Pause 1 second
+t.join();            // Wait for thread to finish
+t.isAlive();         // Is thread still running?
+t.setPriority(8);    // Priority 1-10 (default 5)</code></pre>
+<h2>Synchronization</h2>
+<pre><code>class Counter {
+    private int count = 0;
+    synchronized void increment() { count++; } // One thread at a time!
+    synchronized int get() { return count; }
+}</code></pre>`},
+
+  {id:8,free:false,icon:'📝',level:'Advanced',title:'String Handling',
+   excerpt:'Strings are everywhere in Java. Learn the difference between String and StringBuffer, master all key methods, and understand why immutability matters for performance.',
+   tags:['Advanced','Strings','StringBuffer'],visual:'📝',bg:'linear-gradient(135deg,#080a14,#0f1228)',
+   concepts:['String Immutability','StringBuffer','charAt indexOf','substring split','String Comparison','append insert reverse','Command Line Args'],
+   body:`<p><strong>String</strong> objects in Java are <em>immutable</em> — once created they cannot be changed. Use <strong>StringBuffer</strong> (mutable, thread-safe) for heavy manipulation.</p>
+<h2>Essential String Methods</h2>
+<pre><code>String s = "IT Study Hub";
+s.length()            // 12
+s.charAt(3)           // 't'
+s.indexOf("Study")    // 3
+s.substring(3, 8)     // "Study"
+s.toUpperCase()       // "IT STUDY HUB"
+s.trim()              // removes whitespace
+s.equals("IT Study Hub")       // true — content check
+s.replace("Hub", "Platform")   // "IT Study Platform"
+s.split(" ")          // ["IT", "Study", "Hub"]</code></pre>
+<h2>StringBuffer</h2>
+<pre><code>StringBuffer sb = new StringBuffer("Hello");
+sb.append(" World");    // "Hello World"
+sb.insert(5, ",");      // "Hello, World"
+sb.delete(5, 6);        // "Hello World"
+sb.reverse();           // "dlroW olleH"
+String result = sb.toString();</code></pre>
+<blockquote>Never concatenate strings in a loop using +. Each + creates a new String object. Use StringBuffer or StringBuilder instead.</blockquote>`},
+
+  {id:9,free:false,icon:'📦',level:'Advanced',title:'Packages & Collections',
+   excerpt:'Packages organize your code and prevent naming conflicts. The Collections Framework gives you dynamic data structures every Java developer uses daily.',
+   tags:['Advanced','Packages','Collections'],visual:'📦',bg:'linear-gradient(135deg,#0a0a0f,#141420)',
+   concepts:['package Declaration','import Statement','java.util','ArrayList','LinkedList','HashMap','HashSet','Recursion'],
+   body:`<p><strong>Packages</strong> group related classes and prevent naming conflicts. Declare at top of file, import what you need.</p>
+<pre><code>package com.itstudyhub.java;  // Declare
+import java.util.ArrayList;   // Import one class
+import java.util.*;           // Import everything</code></pre>
+<h2>ArrayList — Dynamic Array</h2>
+<pre><code>ArrayList&lt;String&gt; subjects = new ArrayList&lt;&gt;();
+subjects.add("Java");
+subjects.add("Python");
+subjects.get(0);              // "Java"
+subjects.size();              // 2
+subjects.remove("Python");
+subjects.contains("Java");    // true
+for (String s : subjects) System.out.println(s);</code></pre>
+<h2>HashMap — Key-Value Store</h2>
+<pre><code>HashMap&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+scores.put("Dithsha", 95);
+scores.put("Mithila", 88);
+scores.get("Dithsha");        // 95
+scores.containsKey("Argha");  // false</code></pre>`},
+
+  {id:10,free:false,icon:'🖼️',level:'Advanced',title:'Abstract Window Toolkit',
+   excerpt:'AWT is Java\'s original GUI toolkit. Build real graphical windows, draw shapes, manage fonts and colors — the foundation of all Java desktop applications.',
+   tags:['Advanced','AWT','GUI'],visual:'🖼️',bg:'linear-gradient(135deg,#0a0f14,#101828)',
+   concepts:['AWT Hierarchy','Frame Class','Graphics','drawLine drawRect','Font','Color','WindowListener','Canvas'],
+   body:`<p>AWT provides classes to build GUI applications. The hierarchy: <code>Component → Container → Frame</code>.</p>
+<pre><code>import java.awt.*;
+import java.awt.event.*;
+
+class MyWindow extends Frame {
+    MyWindow() {
+        super("My Java Window");
+        setSize(400, 300);
+        setVisible(true);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) { dispose(); }
+        });
+    }
+
+    public void paint(Graphics g) {
+        // Set color and draw shapes
+        g.setColor(Color.BLUE);
+        g.drawRect(50, 100, 200, 100);
+        g.setColor(Color.RED);
+        g.fillOval(150, 120, 80, 60);
+
+        // Draw text with custom font
+        g.setFont(new Font("Arial", Font.BOLD, 16));
+        g.setColor(Color.GREEN);
+        g.drawString("Hello AWT!", 120, 200);
+    }
+}
+public class Main {
+    public static void main(String[] args) { new MyWindow(); }
+}</code></pre>`},
+
+  {id:11,free:false,icon:'🖱️',level:'Advanced',title:'AWT Controls & Applets',
+   excerpt:'Add interactive controls — buttons, text fields, checkboxes — to your GUI. Handle events and learn the Applet lifecycle for browser-based Java programs.',
+   tags:['Advanced','Controls','Events','Applets'],visual:'🖱️',bg:'linear-gradient(135deg,#100a0a,#1e0f0f)',
+   concepts:['Button Label','TextField','Checkbox Choice','ActionListener','MouseListener','Event Delegation','Applet Lifecycle','init start stop destroy'],
+   body:`<p>AWT controls are interactive components. The <strong>event delegation model</strong>: a source generates an event → a listener handles it.</p>
+<pre><code>import java.awt.*;
+import java.awt.event.*;
+
+class MyApp extends Frame implements ActionListener {
+    Button btn = new Button("Click Me!");
+    Label lbl  = new Label("Hello!");
+
+    MyApp() {
+        btn.addActionListener(this); // Register listener
+        setLayout(new FlowLayout());
+        add(btn); add(lbl);
+        setSize(300, 200);
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        lbl.setText("You clicked the button!");
+    }
+}</code></pre>
+<h2>Applet Lifecycle</h2>
+<pre><code>public class MyApplet extends Applet {
+    public void init()             { /* Called once at start    */ }
+    public void start()            { /* Called when made visible */ }
+    public void paint(Graphics g)  { g.drawString("Hi!", 50, 50); }
+    public void stop()             { /* Called when hidden      */ }
+    public void destroy()          { /* Cleanup at end          */ }
+}</code></pre>`},
+
+  {id:12,free:false,icon:'🎨',level:'Advanced',title:'Layout Managers & Advanced GUI',
+   excerpt:'Layout managers control how components are arranged in containers. Master FlowLayout, BorderLayout, GridLayout and add professional menus and dialogs.',
+   tags:['Advanced','Layouts','Menus','Dialogs'],visual:'🎨',bg:'linear-gradient(135deg,#0a0a10,#12121e)',
+   concepts:['FlowLayout','BorderLayout','GridLayout','CardLayout','MenuBar & Menu','MenuItem','Dialog','FileDialog'],
+   body:`<p>Layout managers automatically arrange components. Different layouts suit different needs.</p>
+<pre><code>// FlowLayout — left to right (default for Panel)
+setLayout(new FlowLayout());
+
+// BorderLayout — 5 regions (default for Frame)
+setLayout(new BorderLayout());
+add(new Button("Top"),    BorderLayout.NORTH);
+add(new Button("Bottom"), BorderLayout.SOUTH);
+add(new TextArea(),       BorderLayout.CENTER);
+
+// GridLayout — equal rows and columns (great for calculators!)
+setLayout(new GridLayout(3, 3));</code></pre>
+<h2>Menus</h2>
+<pre><code>MenuBar mb   = new MenuBar();
+Menu file    = new Menu("File");
+MenuItem open = new MenuItem("Open");
+MenuItem save = new MenuItem("Save");
+file.add(open); file.add(save);
+mb.add(file);
+setMenuBar(mb);
+open.addActionListener(e -> System.out.println("Open!"));</code></pre>
+<h2>File Dialog</h2>
+<pre><code>FileDialog fd = new FileDialog(this, "Open", FileDialog.LOAD);
+fd.setVisible(true);
+System.out.println("File: " + fd.getDirectory() + fd.getFile());</code></pre>`}
+];
+
+let currentId = null;
+let completed = getCompleted();
+
+// RENDER INDEX
+renderIndex();
+
+function renderIndex() {
+  const free = MODS.filter(m => m.free);
+  const prem = MODS.filter(m => !m.free);
+  document.getElementById('freeGrid').innerHTML = free.map(renderCard).join('');
+  document.getElementById('premiumGrid').innerHTML = prem.map(renderCard).join('');
+  updateProgress();
+}
+
+function renderCard(m) {
+  const done = completed.includes(m.id);
+  const locked = !m.free && !isPremium();
+  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}`;
+  const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
+  const click = locked ? `onclick="showToast('⭐ Sign in as admin to unlock premium modules')"` : `onclick="openLesson(${m.id})"`;
+  return `<div class="${cls}" ${click}>
+    <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
+    <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
+    <div class="mod-title">${m.title}</div>
+    <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
+    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">→</span></div>
+  </div>`;
+}
+
+function updateProgress() {
+  const freeDone = completed.filter(id => MODS.find(m=>m.id===id&&m.free)).length;
+  const pct = Math.round((freeDone/6)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  document.getElementById('progLabel').textContent = `${freeDone} of 6 free modules completed`;
+}
+
+function openLesson(id) {
+  const m = MODS.find(x=>x.id===id);
+  if (!m) return;
+  if (!m.free && !isPremium()) { showToast('⭐ Sign in as admin to unlock premium modules'); return; }
+  currentId = id;
+  document.getElementById('indexPage').style.display = 'none';
+  document.getElementById('lessonPage').style.display = 'block';
+  window.scrollTo(0,0);
+  document.getElementById('lesCrumb').textContent = m.title;
+
+  const done = completed.includes(id);
+  const mb = document.getElementById('markBtn');
+  mb.textContent = done ? '✓ Completed' : '✓ Mark Done';
+  mb.classList.toggle('done-btn', done);
+  document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
+  document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
+
+  const html = !m.free && !isPremium()
+    ? `<div class="premium-lock"><div style="font-size:48px;margin-bottom:16px;">⭐</div>
+       <div style="font-family:var(--ff-display);font-size:28px;margin-bottom:10px;">Premium Module</div>
+       <div style="font-size:14px;color:var(--muted2);margin-bottom:24px;">Sign in as admin to unlock all advanced content.</div>
+       <button class="lock-btn" onclick="showToast('Contact admin for premium access')">Unlock Premium</button></div>`
+    : `<div class="les-cat ${!m.free?'prem':''}">Module ${String(id).padStart(2,'0')} · ${m.level} · ${m.free?'Free':'Premium'}</div>
+       <h1 class="les-title">${m.title}</h1>
+       <p class="les-excerpt">${m.excerpt}</p>
+       <div class="les-meta">
+         <span class="meta-item">📖 Java OOP</span>
+         <span class="meta-item">⏱ ~10 min read</span>
+         <span class="meta-item">☕ ${m.level}</span>
+       </div>
+       <div class="les-visual" style="background:${m.bg};">
+         <div class="les-visual-grid"></div>
+         <span style="position:relative;z-index:1;font-size:72px;">${m.visual}</span>
+       </div>
+       <div class="art-body">${m.body}</div>
+       <div class="concepts-box">
+         <div class="concepts-title">Key Concepts Covered</div>
+         <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
+       </div>
+       <div class="les-footer">
+         <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
+         <div class="nav-lessons">
+           ${id>1?`<div class="nlc" onclick="openLesson(${id-1})"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
+           ${id<MODS.length?`<div class="nlc" onclick="openLesson(${id+1})" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
+         </div>
+       </div>`;
+
+  document.getElementById('lessonContent').innerHTML = html;
+  renderSidebar();
+
+  // Scroll progress
+  window.onscroll = () => {
+    const pct = document.body.scrollHeight - window.innerHeight > 0
+      ? (window.scrollY/(document.body.scrollHeight-window.innerHeight))*100 : 0;
+    document.getElementById('readProgress').style.width = pct+'%';
+  };
+}
+
+function renderSidebar() {
+  const freeDone = completed.filter(id=>MODS.find(m=>m.id===id&&m.free)).length;
+  const pct = Math.round((freeDone/6)*100);
+  document.getElementById('sbProgFill').style.width = pct+'%';
+  document.getElementById('sbProgLabel').textContent = `${freeDone} / 6 free`;
+  document.getElementById('sbModList').innerHTML = MODS.map(m=>{
+    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
+    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`showToast('⭐ Premium')`:`openLesson(${m.id})`}">
+      <span class="sb-num">${done?'✓':m.id}</span>
+      <span class="sb-btn-title">${m.title}</span>
+      ${locked?'<span style="font-size:10px;opacity:0.5;">🔒</span>':''}
+    </button>`;
+  }).join('');
+}
+
+function goBack(){document.getElementById('lessonPage').style.display='none';document.getElementById('indexPage').style.display='block';renderIndex();window.scrollTo(0,0);}
+function prevLesson(){if(currentId>1)openLesson(currentId-1);}
+function nextLesson(){if(currentId<MODS.length)openLesson(currentId+1);}
+function markDone(){
+  if(!currentId)return;
+  const m=MODS.find(x=>x.id===currentId);
+  if(!m.free&&!isPremium())return;
+  if(!completed.includes(currentId)){completed.push(currentId);saveCompleted(completed);showToast('✓ Module marked complete! ☕');}
+  openLesson(currentId);
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+// Cursor
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function anim(){
-  c.style.left=(mx-5)+'px'; c.style.top=(my-5)+'px';
-  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-  r.style.left=(rx-18)+'px'; r.style.top=(ry-18)+'px';
-  requestAnimationFrame(anim);
-})();
-document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');
-  el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');
-});
+(function anim(){cur.style.left=(mx-5)+'px';cur.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=(rx-18)+'px';curR.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
+document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
+document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
 </script>
 </body>
 </html>
