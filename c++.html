@@ -56,7 +56,7 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 .mod-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--lime);transform:scaleX(0);transition:transform 0.3s ease;transform-origin:left;}
 .mod-card:hover:not(.locked){border-color:var(--border-active);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.5);}
 .mod-card:hover:not(.locked)::after{transform:scaleX(1);}
-.mod-card.locked{opacity:0.4;cursor:not-allowed;}
+.mod-card.locked{opacity:0.4;cursor:pointer;}
 .mod-card.premium-card::after{background:var(--gold);}
 .mod-card.done-card::after{background:var(--green);transform:scaleX(1);}
 .mod-card.done-card{border-color:rgba(67,233,123,0.15);}
@@ -77,9 +77,9 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 
 /* MATERIALS */
 .mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.mat-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text);transition:all 0.2s;}
+.mat-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text);transition:all 0.2s;cursor:pointer;}
 .mat-item:hover:not(.premium-mat){border-color:var(--border-active);transform:translateX(4px);}
-.mat-item.premium-mat{opacity:0.5;cursor:not-allowed;}
+.mat-item.premium-mat{opacity:0.5;}
 .mat-icon{font-size:22px;min-width:32px;text-align:center;}
 .mat-info{flex:1;}
 .mat-title{font-size:13px;font-weight:500;margin-bottom:2px;}
@@ -236,16 +236,16 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
         <div class="mat-info"><div class="mat-title">Placement Quiz — C++ OOP</div><div class="mat-desc">1000+ MCQs · Free</div></div>
         <span class="mat-action">→ Start</span>
       </a>
-      <div class="mat-item premium-mat" onclick="showToast('⭐ Sign in as admin to unlock premium materials')">
+      <a href="premium.html" class="mat-item premium-mat">
         <div class="mat-icon">⭐</div>
         <div class="mat-info"><div class="mat-title">STL & Templates — Pages 97–188</div><div class="mat-desc">Vectors, Maps, Generic Code · Premium</div></div>
         <span class="mat-action locked">🔒</span>
-      </div>
-      <div class="mat-item premium-mat" onclick="showToast('⭐ Sign in as admin to unlock premium materials')">
+      </a>
+      <a href="premium.html" class="mat-item premium-mat">
         <div class="mat-icon">⭐</div>
         <div class="mat-info"><div class="mat-title">Modern C++ (Smart Pointers) — Pages 189–260</div><div class="mat-desc">C++11 Features, RAII · Premium</div></div>
         <span class="mat-action locked">🔒</span>
-      </div>
+      </a>
     </div>
   </div>
 </div>
@@ -725,7 +725,7 @@ function renderCard(m) {
   const locked = !m.free && !isPremium();
   const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}`;
   const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
-  const click = locked ? `onclick="showToast('⭐ Sign in as admin to unlock premium modules')"` : `onclick="openLesson(${m.id})"`;
+  const click = locked ? `onclick="window.location.href='premium.html'"` : `onclick="openLesson(${m.id})"`;
   return `<div class="${cls}" ${click}>
     <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
     <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
@@ -746,7 +746,7 @@ function updateProgress() {
 function openLesson(id) {
   const m = MODS.find(x=>x.id===id);
   if (!m) return;
-  if (!m.free && !isPremium()) { showToast('⭐ Sign in as admin to unlock premium modules'); return; }
+  if (!m.free && !isPremium()) { window.location.href='premium.html'; return; }
   currentId = id;
   document.getElementById('indexPage').style.display = 'none';
   document.getElementById('lessonPage').style.display = 'block';
@@ -764,7 +764,7 @@ function openLesson(id) {
     ? `<div class="premium-lock"><div style="font-size:48px;margin-bottom:16px;">⭐</div>
        <div style="font-family:var(--ff-display);font-size:28px;margin-bottom:10px;">Premium Module</div>
        <div style="font-size:14px;color:var(--muted2);margin-bottom:24px;">Sign in as admin to unlock all advanced content.</div>
-       <button class="lock-btn" onclick="showToast('Contact admin for premium access')">Unlock Premium</button></div>`
+       <button class="lock-btn" onclick="window.location.href='premium.html'">Unlock Premium</button></div>`
     : `<div class="les-cat ${!m.free?'prem':''}">Module ${String(id).padStart(2,'0')} · ${m.level} · ${m.free?'Free':'Premium'}</div>
        <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
@@ -808,7 +808,7 @@ function renderSidebar() {
   document.getElementById('sbProgLabel').textContent = `${freeDone} / 6 free`;
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
     const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
-    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`showToast('⭐ Premium')`:`openLesson(${m.id})`}">
+    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`window.location.href='premium.html'`:`openLesson(${m.id})`}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
       ${locked?'<span style="font-size:10px;opacity:0.5;">🔒</span>':''}
