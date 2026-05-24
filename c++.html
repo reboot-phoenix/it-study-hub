@@ -3,505 +3,666 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C++ Programming — IT Study Hub</title>
+<title>Python Programming — IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#04040a;--surface:#0a0a14;--surface2:#111120;
-    --border:rgba(255,255,255,0.07);--border-active:rgba(200,241,53,0.4);
-    --lime:#c8f135;--lime-dim:rgba(200,241,53,0.12);--lime-glow:rgba(200,241,53,0.25);
-    --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;--red:#ff5f56;
-    --gold:#f7b731;--gold-dim:rgba(247,183,49,0.12);
-    --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
-  }
-  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box; cursor: none !important;}
-  html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden;}
-  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
-  .ambient{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
-  .ambient-1{width:500px;height:500px;background:rgba(200,241,53,0.06);top:-100px;left:-100px;}
-  .ambient-2{width:400px;height:400px;background:rgba(100,80,200,0.05);bottom:200px;right:-100px;}
+:root{
+  --bg:#04040a;--surface:#0a0a14;--surface2:#111120;
+  --border:rgba(255,255,255,0.07);--border-active:rgba(200,241,53,0.4);
+  --lime:#c8f135;--lime-dim:rgba(200,241,53,0.12);--lime-glow:rgba(200,241,53,0.25);
+  --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;
+  --gold:#f7b731;--gold-dim:rgba(247,183,49,0.12);
+  --green:#43e97b;--red:#ff6584;
+  --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none!important;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5;}
+.read-progress{position:fixed;top:0;left:0;height:2px;background:var(--lime);z-index:9999;transition:width 0.1s linear;width:0%;}
+nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,10,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:0.12em;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--lime);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-back{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.2s;text-transform:uppercase;letter-spacing:0.05em;}
+.nav-back:hover{color:var(--lime);}
 
-  /* NAV */
-  nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,10,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-  .nav-logo{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:0.12em;color:var(--text);text-decoration:none;}
-  .nav-logo span{color:var(--lime);}
-  .nav-back{font-family:var(--ff-mono);font-size:12px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
-  .nav-back:hover{color:var(--lime);}
+/* INDEX PAGE */
+#indexPage{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:60px 48px 80px;}
+.course-eyebrow{font-family:var(--ff-mono);font-size:10px;letter-spacing:3px;color:var(--lime);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.course-eyebrow::before{content:'';width:16px;height:1px;background:var(--lime);}
+.course-title{font-family:var(--ff-display);font-size:clamp(40px,6vw,72px);font-weight:800;line-height:1;letter-spacing:-1px;margin-bottom:16px;}
+.course-title em{font-style:normal;color:var(--lime);}
+.course-desc{font-size:16px;color:var(--muted2);line-height:1.7;max-width:580px;margin-bottom:28px;font-weight:300;}
+.course-chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:48px;}
+.chip{font-family:var(--ff-mono);font-size:10px;padding:5px 12px;border-radius:3px;letter-spacing:1px;}
+.chip-lime{background:var(--lime-dim);color:var(--lime);border:1px solid rgba(200,241,53,0.2);}
+.chip-gold{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(247,183,49,0.2);}
 
-  /* LAYOUT */
-  .layout{position:relative;z-index:1;display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 64px);}
+/* PROGRESS CARD */
+.progress-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:36px;display:flex;align-items:center;gap:24px;}
+.prog-bar-wrap{flex:1;}
+.prog-bar-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:8px;}
+.prog-bar-fill{height:100%;background:linear-gradient(90deg,var(--lime),#a8e63d);border-radius:2px;transition:width 0.6s ease;}
+.prog-label{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);}
+.prog-pct{font-family:var(--ff-display);font-size:32px;color:var(--lime);}
 
-  /* SIDEBAR */
-  .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:32px 24px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
-  .sidebar::-webkit-scrollbar{width:4px;}
-  .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
-  .sidebar-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;padding:0 12px;margin-bottom:8px;}
-  .sidebar-progress{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;}
-  .sp-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
-  .sp-label{font-size:12px;color:var(--muted2);font-family:var(--ff-mono);}
-  .sp-value{font-family:var(--ff-display);font-size:26px;color:var(--lime);line-height:1;}
-  .pbar{width:100%;height:5px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden;}
-  .pbar-fill{height:100%;background:linear-gradient(90deg,var(--lime),#a8e020);border-radius:99px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1);width:0%;}
+/* MODULE GRID */
+.sec-label{font-family:var(--ff-mono);font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px;}
 
-  .lesson-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;background:transparent;border:1px solid transparent;border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:left;width:100%;color:var(--muted2);}
-  .lesson-btn:hover:not(.locked){background:var(--lime-dim);border-color:var(--border-active);color:var(--text);transform:translateX(3px);}
-  .lesson-btn.active{background:var(--lime-dim);border-color:var(--border-active);color:var(--lime);}
-  .lesson-btn.done .lb-num{background:var(--lime);color:#000;}
-  .lesson-btn.locked{opacity:0.35;cursor:not-allowed;}
-  .lb-num{width:26px;height:26px;border-radius:7px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--ff-mono);font-size:11px;font-weight:600;flex-shrink:0;transition:all 0.2s;}
-  .lb-info{flex:1;}
-  .lb-title{font-size:13px;font-weight:500;font-family:var(--ff-body);line-height:1.3;display:block;}
-  .lb-sub{font-size:11px;color:var(--muted);display:block;margin-top:2px;font-family:var(--ff-mono);}
-  .lb-badge{font-size:10px;font-family:var(--ff-mono);padding:2px 7px;border-radius:4px;background:var(--red);color:#fff;}
-  .lb-badge.premium-badge{background:var(--gold);color:#000;}
+.mod-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px 22px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;}
+.mod-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--lime);transform:scaleX(0);transition:transform 0.3s ease;transform-origin:left;}
+.mod-card:hover{border-color:var(--border-active);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.5);}
+.mod-card:hover::after{transform:scaleX(1);}
+.mod-card.premium-card::after{background:var(--gold);}
+.mod-card.premium-card:hover{border-color:rgba(247,183,49,0.4);}
+.mod-card.done-card::after{background:var(--green);transform:scaleX(1);}
+.mod-card.done-card{border-color:rgba(67,233,123,0.15);}
 
-  /* PREMIUM LOCKED SIDEBAR */
-  .sidebar-premium-note{background:var(--gold-dim);border:1px solid rgba(247,183,49,0.25);border-radius:10px;padding:14px;margin-top:8px;}
-  .spn-title{font-family:var(--ff-mono);font-size:11px;color:var(--gold);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
-  .spn-text{font-size:12px;color:var(--muted2);line-height:1.5;}
-  .spn-btn{display:block;margin-top:10px;padding:8px 12px;background:var(--gold);color:#000;font-family:var(--ff-mono);font-size:11px;font-weight:700;border-radius:6px;text-align:center;text-decoration:none;transition:opacity 0.2s;cursor:pointer;border:none;width:100%;}
-  .spn-btn:hover{opacity:0.85;}
+.mod-top{display:flex;align-items:center;justify-content:space-between;}
+.mod-icon{font-size:22px;}
+.mod-badge{font-family:var(--ff-mono);font-size:9px;letter-spacing:1px;padding:3px 8px;border-radius:2px;text-transform:uppercase;}
+.badge-free{background:var(--lime-dim);color:var(--lime);border:1px solid rgba(200,241,53,0.2);}
+.badge-premium{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(247,183,49,0.2);}
+.badge-done{background:rgba(67,233,123,0.1);color:var(--green);border:1px solid rgba(67,233,123,0.2);}
+.mod-num{font-family:var(--ff-mono);font-size:10px;color:var(--muted);}
+.mod-title{font-family:var(--ff-display);font-size:17px;font-weight:700;line-height:1.2;}
+.mod-desc{font-size:12px;color:var(--muted2);line-height:1.6;font-weight:300;}
+.mod-footer{display:flex;align-items:center;justify-content:space-between;margin-top:2px;}
+.mod-level{font-family:var(--ff-mono);font-size:10px;color:var(--muted);}
+.mod-arrow{font-size:14px;color:var(--muted);transition:all 0.2s;}
+.mod-card:hover .mod-arrow{color:var(--lime);transform:translateX(4px);}
+.mod-card.premium-card:hover .mod-arrow{color:var(--gold);}
 
-  /* MAIN */
-  .main{padding:48px;display:flex;flex-direction:column;gap:40px;}
+/* MATERIALS */
+.mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.mat-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text);transition:all 0.2s;cursor:pointer;}
+.mat-item:hover{border-color:var(--border-active);transform:translateX(4px);}
+.mat-item.premium-mat:hover{border-color:rgba(247,183,49,0.4);}
+.mat-icon{font-size:22px;min-width:32px;text-align:center;}
+.mat-info{flex:1;}
+.mat-title{font-size:13px;font-weight:500;margin-bottom:2px;}
+.mat-desc{font-family:var(--ff-mono);font-size:10px;color:var(--muted2);}
+.mat-action{font-family:var(--ff-mono);font-size:11px;color:var(--lime);}
+.mat-action.locked{color:var(--gold);}
 
-  /* HERO */
-  .hero-eyebrow{font-family:var(--ff-mono);font-size:11px;letter-spacing:0.18em;color:var(--lime);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
-  .hero-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--lime);}
-  .hero-title{font-family:var(--ff-display);font-size:clamp(48px,6vw,80px);font-weight:800;line-height:0.95;letter-spacing:-0.02em;color:var(--text);margin-bottom:20px;}
-  .hero-title em{font-style:normal;color:var(--lime);}
-  .hero-desc{color:var(--muted2);font-size:15px;line-height:1.75;max-width:520px;}
-  .hero-stats{display:flex;gap:32px;margin-top:28px;}
-  .stat{display:flex;flex-direction:column;gap:4px;}
-  .stat-num{font-family:var(--ff-display);font-size:28px;color:var(--lime);line-height:1;}
-  .stat-label{font-size:12px;color:var(--muted);font-family:var(--ff-mono);}
+/* LESSON PAGE */
+#lessonPage{display:none;position:relative;z-index:1;}
+.lesson-topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:64px;z-index:99;gap:16px;}
+.les-breadcrumb{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.les-breadcrumb span{color:var(--lime);}
+.les-nav-btns{display:flex;gap:6px;flex-shrink:0;}
+.lnav-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-family:var(--ff-mono);font-size:10px;color:var(--muted2);cursor:pointer;transition:all 0.2s;letter-spacing:1px;white-space:nowrap;}
+.lnav-btn:hover{border-color:var(--lime);color:var(--lime);}
+.lnav-btn.done-btn{background:rgba(67,233,123,0.1);border-color:rgba(67,233,123,0.3);color:var(--green);}
 
-  /* LESSON VIEWER */
-  .lesson-viewer{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;min-height:320px;display:flex;flex-direction:column;transition:border-color 0.3s;}
-  .lesson-viewer.active-lesson{border-color:var(--border-active);}
-  .lv-header{padding:24px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;}
-  .lv-breadcrumb{font-family:var(--ff-mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;}
-  .lv-breadcrumb span{color:var(--lime);}
-  .lv-body{padding:36px 28px;flex:1;}
-  .lv-placeholder{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;min-height:220px;}
-  .lv-placeholder-icon{width:56px;height:56px;border-radius:16px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:24px;}
-  .lv-placeholder h3{font-family:var(--ff-display);font-size:22px;color:var(--muted2);font-weight:700;}
-  .lv-placeholder p{font-size:14px;color:var(--muted);max-width:300px;line-height:1.6;}
-  .lv-lesson-title{font-family:var(--ff-display);font-size:34px;font-weight:800;margin-bottom:6px;color:var(--text);}
-  .lv-lesson-tag{font-family:var(--ff-mono);font-size:11px;color:var(--lime);background:var(--lime-dim);padding:4px 10px;border-radius:99px;display:inline-block;margin-bottom:20px;border:1px solid var(--border-active);}
-  .lv-lesson-tag.premium-tag{color:var(--gold);background:var(--gold-dim);border-color:rgba(247,183,49,0.3);}
-  .lv-lesson-body{font-size:15px;line-height:1.85;color:var(--muted2);max-width:620px;}
-  .lv-lesson-body strong{color:var(--text);font-weight:500;}
-  .lv-topics{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
-  .lv-topic{font-family:var(--ff-mono);font-size:12px;padding:6px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted2);}
-  .lv-footer{padding:20px 28px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.lesson-layout{display:grid;grid-template-columns:1fr 250px;gap:0;max-width:1100px;margin:0 auto;padding:56px 48px 80px;align-items:start;}
+.lesson-article{max-width:680px;}
 
-  /* PREMIUM LOCKED VIEW */
-  .lv-premium-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;min-height:220px;padding:40px;}
-  .lock-icon{width:64px;height:64px;border-radius:18px;background:var(--gold-dim);border:1px solid rgba(247,183,49,0.3);display:flex;align-items:center;justify-content:center;font-size:28px;}
-  .lock-title{font-family:var(--ff-display);font-size:26px;color:var(--gold);}
-  .lock-text{font-size:14px;color:var(--muted2);max-width:360px;line-height:1.7;}
-  .lock-btn{padding:12px 28px;background:var(--gold);color:#000;font-family:var(--ff-mono);font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;}
-  .lock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(247,183,49,0.3);}
+.les-cat{display:inline-flex;align-items:center;gap:6px;font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);background:var(--lime-dim);border:1px solid var(--border-active);padding:5px 14px;border-radius:99px;margin-bottom:20px;}
+.les-title{font-family:var(--ff-display);font-size:clamp(30px,5vw,50px);font-weight:800;line-height:1.05;letter-spacing:-0.01em;margin-bottom:14px;}
+.les-excerpt{font-size:15px;color:var(--muted2);line-height:1.8;font-weight:300;margin-bottom:26px;border-left:2px solid var(--lime);padding-left:18px;}
+.les-meta{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:36px;}
+.meta-item{font-family:var(--ff-mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;}
 
-  .btn-primary{padding:11px 24px;background:var(--lime);color:#000;font-family:var(--ff-mono);font-size:13px;font-weight:600;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;text-decoration:none;}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--lime-glow);}
-  .btn-ghost{padding:11px 20px;background:transparent;color:var(--muted2);font-family:var(--ff-mono);font-size:13px;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.2s;}
-  .btn-ghost:hover{border-color:var(--border-active);color:var(--lime);}
-  .done-msg{font-family:var(--ff-mono);font-size:12px;color:var(--lime);display:none;align-items:center;gap:6px;}
-  .done-msg.show{display:flex;}
+.les-visual{width:100%;height:200px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:72px;border:1px solid var(--border);margin-bottom:36px;position:relative;overflow:hidden;}
+.les-visual-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,241,53,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(200,241,53,0.04) 1px,transparent 1px);background-size:40px 40px;}
 
-  /* SECTION */
-  .section-label{font-family:var(--ff-mono);font-size:11px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
-  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.art-body{font-size:15px;line-height:1.9;color:#d4d4e0;font-weight:300;}
+.art-body p{margin-bottom:20px;}
+.art-body h2{font-family:var(--ff-display);font-size:24px;font-weight:800;color:var(--text);margin:40px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.art-body h3{font-family:var(--ff-display);font-size:18px;font-weight:700;color:var(--text);margin:26px 0 10px;}
+.art-body strong{color:var(--text);font-weight:600;}
+.art-body em{color:var(--lime);font-style:normal;font-weight:500;}
+.art-body code{font-family:var(--ff-mono);font-size:12px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:2px 6px;color:var(--lime);}
+.art-body pre{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--lime);border-radius:0 12px 12px 0;padding:22px;margin:22px 0;overflow-x:auto;position:relative;}
+.art-body pre::before{content:'CODE';position:absolute;top:10px;right:14px;font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;color:var(--muted);}
+.art-body pre code{background:none;border:none;padding:0;color:#a8d8a8;font-size:12px;line-height:1.7;}
+.art-body ul,.art-body ol{padding-left:22px;margin-bottom:20px;}
+.art-body li{margin-bottom:7px;}
+.art-body blockquote{border-left:3px solid var(--lime);padding:14px 20px;background:var(--lime-dim);border-radius:0 10px 10px 0;margin:20px 0;color:var(--text);}
 
-  /* MODULES GRID */
-  .modules-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .module-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;}
-  .module-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--lime),transparent);opacity:0;transition:opacity 0.25s;}
-  .module-card:hover:not(.mc-locked){border-color:var(--border-active);background:var(--surface2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.4);}
-  .module-card:hover:not(.mc-locked)::before{opacity:1;}
-  .module-card.mc-locked{opacity:0.5;cursor:not-allowed;}
-  .module-card.mc-premium{border-color:rgba(247,183,49,0.2);}
-  .module-card.mc-premium::before{background:linear-gradient(90deg,var(--gold),transparent);}
-  .module-card.mc-premium:hover:not(.mc-locked){border-color:rgba(247,183,49,0.5);}
-  .mc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;}
-  .mc-icon{width:40px;height:40px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-  .mc-badge{font-family:var(--ff-mono);font-size:10px;padding:4px 8px;border-radius:6px;font-weight:600;}
-  .mc-badge.start{background:var(--lime-dim);color:var(--lime);border:1px solid var(--border-active);}
-  .mc-badge.locked-b{background:rgba(255,95,86,0.12);color:var(--red);border:1px solid rgba(255,95,86,0.2);}
-  .mc-badge.done-b{background:rgba(200,241,53,0.2);color:var(--lime);border:1px solid var(--border-active);}
-  .mc-badge.premium-b{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(247,183,49,0.3);}
-  .mc-title{font-family:var(--ff-display);font-size:18px;font-weight:800;margin-bottom:4px;color:var(--text);}
-  .mc-desc{font-size:13px;color:var(--muted);line-height:1.5;}
-  .mc-lessons{font-family:var(--ff-mono);font-size:11px;color:var(--muted);margin-top:12px;}
+.concepts-box{background:var(--surface);border:1px solid var(--border-active);border-radius:14px;padding:22px;margin:28px 0;}
+.concepts-title{font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;color:var(--lime);text-transform:uppercase;margin-bottom:12px;}
+.concepts-list{display:flex;flex-wrap:wrap;gap:8px;}
+.concept-tag{background:var(--lime-dim);border:1px solid rgba(200,241,53,0.2);color:var(--lime);font-family:var(--ff-mono);font-size:11px;padding:4px 12px;border-radius:3px;}
 
-  /* MATERIALS */
-  .materials-list{display:flex;flex-direction:column;gap:10px;}
-  .material-item{display:flex;align-items:center;gap:16px;padding:16px 18px;background:var(--surface);border:1px solid var(--border);border-radius:12px;transition:all 0.2s;text-decoration:none;}
-  .material-item:hover{border-color:var(--border-active);background:var(--surface2);transform:translateX(4px);}
-  .material-item.premium-item{border-color:rgba(247,183,49,0.2);}
-  .material-item.premium-item:hover{border-color:rgba(247,183,49,0.5);}
-  .mat-icon{width:38px;height:38px;border-radius:9px;background:var(--lime-dim);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-  .mat-icon.premium-icon{background:var(--gold-dim);border-color:rgba(247,183,49,0.3);}
-  .mat-info{flex:1;}
-  .mat-title{font-size:14px;font-weight:500;color:var(--text);display:block;margin-bottom:2px;}
-  .mat-desc{font-size:12px;color:var(--muted);font-family:var(--ff-mono);}
-  .mat-action{font-family:var(--ff-mono);font-size:11px;color:var(--lime);background:var(--lime-dim);border:1px solid var(--border-active);padding:6px 14px;border-radius:7px;white-space:nowrap;transition:all 0.2s;text-decoration:none;}
-  .material-item:hover .mat-action{background:var(--lime);color:#000;}
-  .mat-action.premium-action{color:var(--gold);background:var(--gold-dim);border-color:rgba(247,183,49,0.3);}
-  .material-item.premium-item:hover .mat-action.premium-action{background:var(--gold);color:#000;}
-  .mat-lock{font-size:14px;}
+.les-footer{margin-top:52px;padding-top:32px;border-top:1px solid var(--border);}
+.les-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.les-tag{font-family:var(--ff-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:99px;border:1px solid var(--border);color:var(--muted2);}
+.nav-lessons{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.nlc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;}
+.nlc:hover{border-color:var(--border-active);}
+.nlc-dir{font-family:var(--ff-mono);font-size:10px;color:var(--muted);margin-bottom:5px;}
+.nlc-title{font-size:13px;font-weight:600;}
 
-  /* OUTCOMES */
-  .outcomes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-  .outcome-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color 0.2s;}
-  .outcome-card:hover{border-color:var(--border-active);}
-  .oc-icon{font-size:22px;margin-bottom:12px;}
-  .oc-title{font-family:var(--ff-display);font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text);}
-  .oc-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+/* SIDEBAR */
+.lesson-sidebar{position:sticky;top:130px;padding-left:24px;max-height:calc(100vh - 160px);overflow-y:auto;}
+.lesson-sidebar::-webkit-scrollbar{width:4px;}
+.lesson-sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.sb-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px;}
+.sb-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;}
+.sb-btn{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;transition:all 0.15s;border:none;background:transparent;width:100%;text-align:left;color:var(--muted2);}
+.sb-btn:hover{background:var(--surface2);color:var(--text);}
+.sb-btn.active{background:var(--lime-dim);color:var(--lime);}
+.sb-num{width:20px;height:20px;border-radius:4px;background:var(--surface2);font-family:var(--ff-mono);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sb-btn.active .sb-num{background:var(--lime);color:#000;}
+.sb-btn-title{font-size:11px;font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
-  /* TOAST */
-  .toast{position:fixed;bottom:32px;right:32px;background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text);z-index:999;transform:translateY(80px);opacity:0;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);pointer-events:none;max-width:320px;}
-  .toast.show{transform:translateY(0);opacity:1;}
-  .toast-msg{font-family:var(--ff-mono);font-size:12px;color:var(--lime);}
-  .toast.gold-toast{border-color:rgba(247,183,49,0.4);}
-  .toast.gold-toast .toast-msg{color:var(--gold);}
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px 20px;font-family:var(--ff-mono);font-size:12px;color:var(--lime);z-index:9997;transform:translateY(80px);opacity:0;transition:all 0.35s;}
+.toast.show{transform:translateY(0);opacity:1;}
 
-  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-  .fade-up{animation:fadeUp 0.5s ease forwards;opacity:0;}
-  .delay-1{animation-delay:0.1s;}.delay-2{animation-delay:0.2s;}.delay-3{animation-delay:0.3s;}.delay-4{animation-delay:0.4s;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;animation:fadeUp 0.5s ease forwards;}
 
-  @media(max-width:900px){
-    .layout{grid-template-columns:1fr;}
-    .sidebar{position:relative;top:0;height:auto;border-right:none;border-bottom:1px solid var(--border);flex-direction:row;flex-wrap:wrap;padding:16px;}
-    .sidebar-progress{width:100%;}
-    .modules-grid{grid-template-columns:1fr;}
-    .outcomes-grid{grid-template-columns:1fr;}
-    .main{padding:24px;}
-    nav{padding:0 24px;}
-  }
+@media(max-width:900px){
+  nav,.lesson-topbar{padding:0 20px;}
+  #indexPage{padding:40px 20px 60px;}
+  .modules-grid{grid-template-columns:1fr 1fr;}
+  .lesson-layout{grid-template-columns:1fr;padding:28px 20px 60px;}
+  .lesson-sidebar{display:none;}
+  .mat-grid{grid-template-columns:1fr;}
+}
+@media(max-width:540px){.modules-grid{grid-template-columns:1fr;}.nav-lessons{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-<div class="ambient ambient-1"></div>
-<div class="ambient ambient-2"></div>
+<div class="read-progress" id="readProgress"></div>
 
 <nav>
   <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
-  <a href="index.html" class="nav-back">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Back Home
-  </a>
+  <div class="nav-right">
+    <a href="courses.html" class="nav-back">← Courses</a>
+    <a href="index.html" class="nav-back">← Home</a>
+  </div>
 </nav>
 
-<div class="layout">
-  <aside class="sidebar">
-    <p class="sidebar-label">Progress</p>
-    <div class="sidebar-progress">
-      <div class="sp-row">
-        <span class="sp-label">Completed</span>
-        <span class="sp-value" id="sidebarPercent">0%</span>
-      </div>
-      <div class="pbar"><div class="pbar-fill" id="sidebarFill"></div></div>
+<div id="indexPage">
+  <div class="fade-up">
+    <div class="course-eyebrow">Data Science & Automation · Subject 03</div>
+    <h1 class="course-title">Python <em>Programming</em></h1>
+    <p class="course-desc">Master the most versatile programming language in the world. From basic scripting and automation to object-oriented design and file handling.</p>
+    <div class="course-chips">
+      <span class="chip chip-lime">🐍 Python 3.10+</span>
+      <span class="chip chip-lime">6 Free Modules</span>
+      <span class="chip chip-gold">6 Premium Modules</span>
+      <span class="chip chip-lime">Real PDF Notes</span>
     </div>
+  </div>
 
-    <p class="sidebar-label">Free Lessons</p>
-    <button class="lesson-btn" id="sbtn-1" onclick="openLesson(1)">
-      <div class="lb-num" id="lnum-1">1</div>
-      <div class="lb-info"><span class="lb-title">Intro to C++</span><span class="lb-sub">C vs C++ & Setup</span></div>
-    </button>
-    <button class="lesson-btn" id="sbtn-2" onclick="openLesson(2)">
-      <div class="lb-num" id="lnum-2">2</div>
-      <div class="lb-info"><span class="lb-title">Classes & Objects</span><span class="lb-sub">The OOP Blueprint</span></div>
-    </button>
-    <button class="lesson-btn" id="sbtn-3" onclick="openLesson(3)">
-      <div class="lb-num" id="lnum-3">3</div>
-      <div class="lb-info"><span class="lb-title">Encapsulation</span><span class="lb-sub">Access Control</span></div>
-    </button>
-
-    <p class="sidebar-label" style="margin-top:8px;">Premium Lessons</p>
-    <button class="lesson-btn" id="sbtn-4" onclick="openLesson(4)">
-      <div class="lb-num" id="lnum-4">4</div>
-      <div class="lb-info"><span class="lb-title">Inheritance</span><span class="lb-sub">Code Reusability</span></div>
-      <span class="lb-badge premium-badge">★</span>
-    </button>
-    <button class="lesson-btn" id="sbtn-5" onclick="openLesson(5)">
-      <div class="lb-num" id="lnum-5">5</div>
-      <div class="lb-info"><span class="lb-title">STL Mastery</span><span class="lb-sub">Vectors, Maps, Sets</span></div>
-      <span class="lb-badge premium-badge">★</span>
-    </button>
-    <button class="lesson-btn" id="sbtn-6" onclick="openLesson(6)">
-      <div class="lb-num" id="lnum-6">6</div>
-      <div class="lb-info"><span class="lb-title">Pointers & Memory</span><span class="lb-sub">Smart Pointers & DMA</span></div>
-      <span class="lb-badge premium-badge">★</span>
-    </button>
-
-    <div class="sidebar-premium-note" id="premiumNote" style="display:none;">
-      <div class="spn-title">⭐ Go Premium</div>
-      <div class="spn-text">Unlock all C++ modules, STL cheat sheets, and advanced DMA PDFs.</div>
-      <button class="spn-btn" onclick="showPremiumToast()">Upgrade Now</button>
+  <div class="progress-card fade-up" style="animation-delay:0.1s;">
+    <div class="prog-pct" id="progPct">0%</div>
+    <div class="prog-bar-wrap">
+      <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
+      <div class="prog-label" id="progLabel">0 of 6 free modules completed</div>
     </div>
-  </aside>
+  </div>
 
-  <main class="main">
-    <section class="hero fade-up">
-      <div class="hero-eyebrow">Performance Systems · Subject 05</div>
-      <h1 class="hero-title">C++<br><em>Programming</em></h1>
-      <p class="hero-desc">Master the language used for game engines, operating systems, and high-frequency trading. Deep dive into manual memory, the STL, and zero-cost abstractions.</p>
-      <div class="hero-stats">
-        <div class="stat"><div class="stat-num">6</div><div class="stat-label">Modules</div></div>
-        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Free</div></div>
-        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Premium</div></div>
-      </div>
-    </section>
+  <div class="fade-up" style="animation-delay:0.15s;">
+    <div class="sec-label">Free Modules</div>
+    <div class="modules-grid" id="freeGrid"></div>
+  </div>
 
-    <section class="fade-up delay-1">
-      <div class="section-label">Current Lesson</div>
-      <div class="lesson-viewer" id="lessonViewer">
-        <div class="lv-header">
-          <div class="lv-breadcrumb">C++ Programming <span>/</span> <span id="lv-crumb">—</span></div>
-        </div>
-        <div class="lv-body" id="lv-body">
-          <div class="lv-placeholder">
-            <div class="lv-placeholder-icon">🚀</div>
-            <h3>Select a Lesson</h3>
-            <p>Choose a module from the sidebar or the cards below to start your C++ journey.</p>
-          </div>
-        </div>
-        <div class="lv-footer" id="lv-footer" style="display:none;">
-          <button class="btn-primary" onclick="markComplete()" id="completeBtn">Mark as Complete ✓</button>
-          <button class="btn-ghost" onclick="nextLesson()">Next →</button>
-          <div class="done-msg" id="doneMsg">✓ Completed!</div>
-        </div>
-      </div>
-    </section>
+  <div class="fade-up" style="animation-delay:0.2s;">
+    <div class="sec-label">Premium Modules</div>
+    <div class="modules-grid" id="premiumGrid"></div>
+  </div>
 
-    <section class="fade-up delay-2">
-      <div class="section-label">All Modules</div>
-      <div class="modules-grid">
-        <div class="module-card" id="mc-1" onclick="openLesson(1)">
-          <div class="mc-top"><div class="mc-icon">🏗️</div><span class="mc-badge start" id="mc-badge-1">FREE</span></div>
-          <div class="mc-title">Intro to C++</div><div class="mc-desc">Modern C++ standards, iostream, and namespaces.</div>
-          <div class="mc-lessons">Beginner · Free</div>
-        </div>
-        <div class="module-card" id="mc-2" onclick="openLesson(2)">
-          <div class="mc-top"><div class="mc-icon">📦</div><span class="mc-badge start" id="mc-badge-2">FREE</span></div>
-          <div class="mc-title">Classes & Objects</div><div class="mc-desc">Constructors, Destructors, and member methods.</div>
-          <div class="mc-lessons">Beginner · Free</div>
-        </div>
-        <div class="module-card" id="mc-3" onclick="openLesson(3)">
-          <div class="mc-top"><div class="mc-icon">🔒</div><span class="mc-badge start" id="mc-badge-3">FREE</span></div>
-          <div class="mc-title">Encapsulation</div><div class="mc-desc">Public, Private, and Friend functions.</div>
-          <div class="mc-lessons">Beginner · Free</div>
-        </div>
-        <div class="module-card mc-premium" id="mc-4" onclick="openLesson(4)">
-          <div class="mc-top"><div class="mc-icon">🧩</div><span class="mc-badge premium-b" id="mc-badge-4">★ PREMIUM</span></div>
-          <div class="mc-title">Inheritance</div><div class="mc-desc">Multiple inheritance and virtual functions.</div>
-          <div class="mc-lessons">Intermediate · Premium</div>
-        </div>
-        <div class="module-card mc-premium" id="mc-5" onclick="openLesson(5)">
-          <div class="mc-top"><div class="mc-icon">⚡</div><span class="mc-badge premium-b" id="mc-badge-5">★ PREMIUM</span></div>
-          <div class="mc-title">STL Mastery</div><div class="mc-desc">Vectors, Maps, Iterators, and Algorithms.</div>
-          <div class="mc-lessons">Advanced · Premium</div>
-        </div>
-        <div class="module-card mc-premium" id="mc-6" onclick="openLesson(6)">
-          <div class="mc-top"><div class="mc-icon">🧠</div><span class="mc-badge premium-b" id="mc-badge-6">★ PREMIUM</span></div>
-          <div class="mc-title">Pointers & Memory</div><div class="mc-desc">New/Delete, Smart Pointers, and RAII.</div>
-          <div class="mc-lessons">Advanced · Premium</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="fade-up delay-3">
-      <div class="section-label">Study Materials</div>
-      <div class="materials-list">
-        <a href="pdfs/cpp-basics.pdf" target="_blank" class="material-item">
-          <div class="mat-icon">📝</div>
-          <div class="mat-info"><span class="mat-title">C++ Core Fundamentals</span><span class="mat-desc">Reference Variables, I/O, Overloading · Free</span></div>
-          <span class="mat-action">↓ Download</span>
-        </a>
-        <a href="https://www.sanfoundry.com/cplusplus-interview-questions-answers/" 
-        target="_blank" class="material-item">
+  <div class="fade-up" style="animation-delay:0.25s;">
+    <div class="sec-label">Study Materials</div>
+    <div class="mat-grid">
+      <a href="#" target="_blank" class="mat-item">
+        <div class="mat-icon">📝</div>
+        <div class="mat-info"><div class="mat-title">Python Basics Cheat Sheet</div><div class="mat-desc">Variables, Loops, Functions · Free</div></div>
+        <span class="mat-action">↓ Download</span>
+      </a>
+      <a href="https://www.sanfoundry.com/python-questions-answers/" target="_blank" class="mat-item">
         <div class="mat-icon">🎯</div>
-        <div class="mat-info">
-        <span class="mat-title">Placement Quiz — C++ Programming</span>
-        <span class="mat-desc">1000+ MCQs from Sanfoundry · Free</span>
-        </div>
-        <span class="mat-action">→ Start Quiz</span>
-        </a>
-        <a href="premium.html" target="_blank" class="premium-link">
-    <div class="material-item premium-item">
-
-        <div class="mat-icon premium-icon">⭐</div>
-
-        <div class="mat-info">
-            <span class="mat-title">
-                STL Algorithms Workbook
-            </span>
-
-            <span class="mat-desc">
-                Complexity analysis and STL patterns · Premium
-            </span>
-        </div>
-
-        <span class="mat-action premium-action">
-            🔒 Unlock
-        </span>
-
-    </div>
-</a>
-<a href="premium.html" target="_blank" class="premium-link">
-    <div class="material-item premium-item">
-        <div class="mat-icon premium-icon">⭐</div>
-        <div class="mat-info">
-            <span class="mat-title">
-                Competitive Coding Prep
-            </span>
-            <span class="mat-desc">
-                DSA in C++: Interview Problems · Premium
-            </span>
-        </div>
-        <span class="mat-action premium-action">
-            🔒 Unlock
-        </span>
-    </div>
-</a>
+        <div class="mat-info"><div class="mat-title">Placement Quiz — Python</div><div class="mat-desc">1000+ MCQs · Free</div></div>
+        <span class="mat-action">→ Start</span>
+      </a>
+      <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
+        <div class="mat-icon">⭐</div>
+        <div class="mat-info"><div class="mat-title">Advanced Notes — OOP & APIs</div><div class="mat-desc">Deep dive into advanced concepts · Premium</div></div>
+        <span class="mat-action locked">🔒 Unlock</span>
       </div>
-    </section>
-
-    <section class="fade-up delay-4">
-      <div class="section-label">What You'll Build</div>
-      <div class="outcomes-grid">
-        <div class="outcome-card"><div class="oc-icon">🎮</div><div class="oc-title">Game Engines</div><div class="oc-desc">Learn the backbone of high-performance gaming software.</div></div>
-        <div class="outcome-card"><div class="oc-icon">🏎️</div><div class="oc-title">Optimized Apps</div><div class="oc-desc">Write zero-overhead code that runs as fast as hardware allows.</div></div>
-        <div class="outcome-card"><div class="oc-icon">🏆</div><div class="oc-title">CP Expert</div><div class="oc-desc">Master the Standard Template Library for coding competitions.</div></div>
+      <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
+        <div class="mat-icon">⭐</div>
+        <div class="mat-info"><div class="mat-title">Python Interview Question Bank</div><div class="mat-desc">100+ interview-level questions · Premium</div></div>
+        <span class="mat-action locked">🔒 Unlock</span>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
 </div>
 
-<div class="toast" id="toast">
-  <span id="toastIcon">✅</span>
-  <div><div style="font-size:13px;font-weight:500;" id="toastTitle">Done!</div><div class="toast-msg" id="toastMsg"></div></div>
+<div id="lessonPage">
+  <div class="lesson-topbar">
+    <div class="les-breadcrumb">Python Programming <span>/</span> <span id="lesCrumb">—</span></div>
+    <div class="les-nav-btns">
+      <button class="lnav-btn" onclick="goBack()">← Back</button>
+      <button class="lnav-btn" id="prevBtn" onclick="prevLesson()">← Prev</button>
+      <button class="lnav-btn" id="markBtn" onclick="markDone()">✓ Mark Done</button>
+      <button class="lnav-btn" id="nextBtn" onclick="nextLesson()">Next →</button>
+    </div>
+  </div>
+  <div class="lesson-layout">
+    <div class="lesson-article" id="lessonContent"></div>
+    <aside class="lesson-sidebar">
+      <div class="sb-card">
+        <div class="sb-label">Progress</div>
+        <div class="prog-bar-track" style="margin-bottom:8px;"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
+        <div class="prog-label" id="sbProgLabel">0 / 6 free</div>
+      </div>
+      <div class="sb-card">
+        <div class="sb-label">All Modules</div>
+        <div id="sbModList"></div>
+      </div>
+    </aside>
+  </div>
 </div>
 
-<script>
-const TOTAL_FREE = 3;
-const TOTAL = 6;
-let completed = JSON.parse(localStorage.getItem("ish_cpp_progress") || "[]");
-let currentLesson = null;
-const isPremium = JSON.parse(localStorage.getItem("ish_premium") || "false");
-
-const lessons = {
-  1:{title:"Intro to C++",tag:"Module 1 · Beginner · Free",premium:false,body:`<strong>C++</strong> was developed by Bjarne Stroustrup as an extension of the C language. It adds <strong>Object-Oriented</strong> features while maintaining low-level hardware control.<br><br>In this lesson, you will set up modern compilers (GCC/Clang), understand <strong>iostream</strong> for input/output, and learn how <strong>namespaces</strong> prevent naming conflicts in large projects.`,topics:["C vs C++","g++ Compiler Setup","iostream & cin/cout","Namespaces","Standard C++11/17/20","Basic Data Types"]},
-  2:{title:"Classes & Objects",tag:"Module 2 · Beginner · Free",premium:false,body:`C++ is a class-based language. A class defines the <strong>attributes (data)</strong> and <strong>behaviors (methods)</strong> that its objects will have.<br><br>You'll learn how to write <strong>Constructors</strong> to initialize objects, <strong>Destructors</strong> to free resources, and the difference between stack and heap allocation for class instances.`,topics:["Class Syntax","Constructors & Destructors","Accessing Members","This Pointer","Static Members","Const Methods"]},
-  3:{title:"Encapsulation",tag:"Module 3 · Beginner · Free",premium:false,body:`<strong>Encapsulation</strong> hides the internal state of an object and requires all interaction to be performed through an object's methods.<br><br>Explore access specifiers: <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">public</code>, <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">private</code>, and <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">protected</code>, and learn about <strong>Friend Classes</strong> for controlled external access.`,topics:["Private vs Public","Protected Access","Getters & Setters","Friend Functions","Data Hiding","Interface Design"]},
-  4:{title:"Inheritance",tag:"Module 4 · Intermediate · Premium",premium:true,body:`<strong>Inheritance</strong> allows a class to inherit members from another class. C++ is unique in supporting <strong>Multiple Inheritance</strong>, which allows a class to derive from more than one base class.<br><br>This premium lesson covers virtual base classes, the <strong>Diamond Problem</strong>, and how to override base class methods using the virtual keyword.`,topics:["Base & Derived Classes","Multiple Inheritance","Virtual Functions","Override Keyword","Abstract Classes","The Diamond Problem"]},
-  5:{title:"STL Mastery",tag:"Module 5 · Advanced · Premium",premium:true,body:`The <strong>Standard Template Library (STL)</strong> is a powerful set of C++ template classes to provide common programming data structures and functions.<br><br>Master <strong>Vectors, Lists, Maps, and Sets</strong>. Learn how to use Iterators to navigate collections and STL Algorithms like sort and search to write efficient, professional code.`,topics:["Vectors & Lists","Maps & Sets","Iterators","STL Algorithms","Templates (Generics)","Complexity Analysis"]},
-  6:{title:"Pointers & Memory",tag:"Module 6 · Advanced · Premium",premium:true,body:`C++ gives you direct control over <strong>Dynamic Memory Allocation</strong> using <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">new</code> and <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--ff-mono);font-size:13px;">delete</code>.<br><br>This module explores <strong>Smart Pointers</strong> (unique_ptr, shared_ptr) introduced in modern C++ to prevent memory leaks, and the concept of <strong>RAII</strong> (Resource Acquisition Is Initialization).`,topics:["New & Delete","Memory Leaks","Unique vs Shared Pointers","Weak Pointers","RAII Principle","L-values vs R-values"]}
-};
-
-function openLesson(id) {
-  const lesson = lessons[id];
-  if (lesson.premium && !isPremium) {
-    currentLesson = id;
-    document.getElementById('lv-crumb').textContent = lesson.title;
-    document.getElementById('lessonViewer').classList.add('active-lesson');
-    document.getElementById('lv-body').innerHTML = `
-      <div class="lv-premium-lock">
-        <div class="lock-icon">⭐</div>
-        <div class="lock-title">Premium C++ Track</div>
-        <div class="lock-text">This advanced C++ module is part of the Premium track. Upgrade to access STL labs, Smart Pointer workbooks, and placement notes.</div>
-        <button class="lock-btn" onclick="showPremiumToast()">Upgrade to Premium</button>
-      </div>`;
-    document.getElementById('lv-footer').style.display = 'none';
-    document.getElementById('premiumNote').style.display = 'block';
-    [1,2,3,4,5,6].forEach(i => document.getElementById(`sbtn-${i}`)?.classList.remove('active'));
-    document.getElementById(`sbtn-${id}`)?.classList.add('active');
-    return;
-  }
-  currentLesson = id;
-  document.getElementById('lv-crumb').textContent = lesson.title;
-  document.getElementById('lessonViewer').classList.add('active-lesson');
-  document.getElementById('lv-body').innerHTML = `
-    <div class="lv-lesson-title">${lesson.title}</div>
-    <div class="lv-lesson-tag ${lesson.premium ? 'premium-tag' : ''}">${lesson.tag}</div>
-    <div class="lv-lesson-body">${lesson.body}</div>
-    <div class="lv-topics">${lesson.topics.map(t=>`<span class="lv-topic">${t}</span>`).join('')}</div>`;
-  document.getElementById('lv-footer').style.display = 'flex';
-  const done = completed.includes(id);
-  document.getElementById('doneMsg').classList.toggle('show', done);
-  document.getElementById('completeBtn').style.opacity = done ? '0.4' : '1';
-  document.getElementById('completeBtn').style.pointerEvents = done ? 'none' : 'auto';
-  [1,2,3,4,5,6].forEach(i => document.getElementById(`sbtn-${i}`)?.classList.remove('active'));
-  document.getElementById(`sbtn-${id}`)?.classList.add('active');
-}
-
-function markComplete() {
-  if (!currentLesson || lessons[currentLesson].premium && !isPremium) return;
-  if (!completed.includes(currentLesson)) completed.push(currentLesson);
-  localStorage.setItem("ish_cpp_progress", JSON.stringify(completed));
-  updateProgress();
-  openLesson(currentLesson);
-  showToast('Module Complete! 🚀', 'C++ progress saved.');
-}
-
-function nextLesson() {
-  if (currentLesson && currentLesson < TOTAL) openLesson(currentLesson + 1);
-}
-
-function updateProgress() {
-  const count = completed.filter(c => c <= TOTAL_FREE).length;
-  const pct = Math.round((count / TOTAL_FREE) * 100);
-  document.getElementById('sidebarFill').style.width = pct + '%';
-  document.getElementById('sidebarPercent').textContent = pct + '%';
-  [1,2,3].forEach(i => {
-    if (completed.includes(i)) {
-      document.getElementById(`sbtn-${i}`)?.classList.add('done');
-      const num = document.getElementById(`lnum-${i}`);
-      if (num) num.textContent = '✓';
-      const badge = document.getElementById(`mc-badge-${i}`);
-      if (badge) { badge.className = 'mc-badge done-b'; badge.textContent = 'DONE'; }
-    }
-  });
-}
-
-function showToast(title, msg, gold=false) {
-  const t = document.getElementById('toast');
-  document.getElementById('toastTitle').textContent = title;
-  document.getElementById('toastMsg').textContent = msg;
-  t.className = 'toast' + (gold ? ' gold-toast' : '');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
-}
-
-function showPremiumToast() {
-  showToast('⭐ Premium C++', 'Payment integration coming soon! Ask your IT Study Hub instructor.', true);
-}
-
-window.addEventListener('load', updateProgress);
-</script>
-<!-- Custom Cursor -->
+<div class="toast" id="toast"></div>
 <div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <script>
-const c = document.getElementById('cur');
-const r = document.getElementById('curR');
+function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_python_done')||'[]');}catch(e){return[];}}
+function saveCompleted(a){localStorage.setItem('ish_python_done',JSON.stringify(a));}
+
+const MODS = [
+  {id:1,free:true,icon:'🐍',level:'Beginner',title:'Intro to Python',
+   excerpt:'Python is a high-level, interpreted programming language known for its readability. Learn about its philosophy, the REPL, and write your first script.',
+   tags:['Beginner','History','Setup'],visual:'🐍',bg:'linear-gradient(135deg,#0a1a1a,#0f2020)',
+   concepts:['Interpreted Language','PEP 8','The Zen of Python','Indentation','print()','Comments'],
+   body:`<p>Created by Guido van Rossum and released in 1991, <strong>Python</strong> was designed with a philosophy that emphasizes code readability. It is an <em>interpreted</em> language, meaning you don't need to compile it before running—the Python interpreter reads and executes code line by line.</p>
+<h2>The Importance of Indentation</h2>
+<p>Unlike languages such as C or Java that use curly braces <code>{}</code> to define blocks of code, Python relies entirely on <strong>whitespace indentation</strong>. This isn't just a stylistic choice; it's a strict syntax rule.</p>
+<blockquote>A standard indentation in Python is exactly 4 spaces. Mixing tabs and spaces will lead to an <code>IndentationError</code>.</blockquote>
+<h2>Your First Program</h2>
+<pre><code># This is a single-line comment in Python
+print("Hello, IT Study Hub!")
+
+"""
+This is a multi-line string.
+It is often used as a multi-line comment or a docstring.
+"""</code></pre>
+<h2>The Zen of Python</h2>
+<p>Python developers follow a set of guiding principles known as PEP 20. If you type <code>import this</code> in your Python terminal (REPL), you'll see rules like:</p>
+<ul>
+  <li>Beautiful is better than ugly.</li>
+  <li>Explicit is better than implicit.</li>
+  <li>Simple is better than complex.</li>
+  <li>Readability counts.</li>
+</ul>`},
+
+  {id:2,free:true,icon:'🔤',level:'Beginner',title:'Variables & Data Types',
+   excerpt:'Python uses dynamic typing. Learn how variables work, the core primitive types, and how to cast between them without explicit declarations.',
+   tags:['Beginner','Dynamic Typing','Data Types'],visual:'🔤',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
+   concepts:['Dynamic Typing','int, float, str, bool','type()','Type Casting','NoneType','Garbage Collection'],
+   body:`<p>In Python, you do not need to declare a variable's type before assigning a value to it. This is known as <strong>dynamic typing</strong>. The interpreter infers the type based on the value.</p>
+<h2>Core Primitive Types</h2>
+<p>Python has a few built-in primitive types that you will use in almost every program:</p>
+<ul>
+  <li><code>int</code> - Whole numbers (e.g., <code>42</code>)</li>
+  <li><code>float</code> - Decimal numbers (e.g., <code>3.14159</code>)</li>
+  <li><code>str</code> - Text strings (e.g., <code>"Cybersecurity"</code>)</li>
+  <li><code>bool</code> - Boolean values (<code>True</code> or <code>False</code> - note the capital letters!)</li>
+</ul>
+<pre><code>name = "Alice"   # str
+age = 20         # int
+gpa = 3.8        # float
+is_student = True # bool
+
+# You can check a variable's type using the type() function:
+print(type(gpa))  # Output: &lt;class 'float'&gt;</code></pre>
+<h2>Type Casting</h2>
+<p>Because Python is strictly typed at runtime, you cannot concatenate a string and an integer directly. You must cast them.</p>
+<pre><code>age = 20
+# This will cause a TypeError:
+# print("I am " + age + " years old.")
+
+# Correct way using casting:
+print("I am " + str(age) + " years old.")
+
+# Or casting a string to a float:
+price = float("19.99")</code></pre>`},
+
+  {id:3,free:true,icon:'🔀',level:'Beginner',title:'Operators & Control Flow',
+   excerpt:'Control the flow of your program using if, elif, and else statements. Master logical operators, truthiness, and chained comparisons.',
+   tags:['Beginner','Logic','Conditionals'],visual:'🔀',bg:'linear-gradient(135deg,#0f0a14,#201028)',
+   concepts:['if / elif / else','Logical Operators (and, or, not)','Truthiness','Chained Comparisons','Ternary Operator'],
+   body:`<p>Control flow allows your Python script to make decisions. Python uses <code>if</code>, <code>elif</code> (else if), and <code>else</code> blocks, structured by indentation.</p>
+<h2>Conditionals</h2>
+<pre><code>marks = 85
+
+if marks >= 90:
+    print("Grade: A")
+elif marks >= 80:
+    print("Grade: B")  # This block will execute
+else:
+    print("Grade: C")</code></pre>
+<h2>Logical Operators</h2>
+<p>Unlike C which uses <code>&&</code> and <code>||</code>, Python uses plain English words: <code>and</code>, <code>or</code>, and <code>not</code>.</p>
+<pre><code>is_weekend = True
+has_homework = False
+
+if is_weekend and not has_homework:
+    print("Time to play video games!")
+elif is_weekend and has_homework:
+    print("Study first, then relax.")</code></pre>
+<h2>Chained Comparisons</h2>
+<p>Python allows you to chain mathematical comparisons elegantly, just like you would write them in algebra:</p>
+<pre><code>age = 20
+# Instead of: if age >= 18 and age <= 65:
+if 18 <= age <= 65:
+    print("Eligible to work.")</code></pre>
+<blockquote><strong>Truthiness:</strong> In Python, empty sequences (like <code>""</code>, <code>[]</code>, <code>{}</code>), the number <code>0</code>, and <code>None</code> evaluate to <code>False</code> in an if-statement. Everything else is generally <code>True</code>.</blockquote>`},
+
+  {id:4,free:true,icon:'🔁',level:'Beginner',title:'Loops & Iteration',
+   excerpt:'Execute code repeatedly using while and for loops. Discover the power of the range() function, break, and continue statements.',
+   tags:['Beginner','Loops','Iteration'],visual:'🔁',bg:'linear-gradient(135deg,#14140a,#282810)',
+   concepts:['for...in loop','while loop','range() function','break & continue','Infinite Loops'],
+   body:`<p>Loops in Python are incredibly powerful, especially the <code>for</code> loop, which is designed to iterate directly over sequences (like lists or strings) rather than relying on index counters.</p>
+<h2>The <code>for</code> Loop & <code>range()</code></h2>
+<p>The <code>range(start, stop, step)</code> function generates a sequence of numbers. Remember that the <code>stop</code> value is <em>exclusive</em>.</p>
+<pre><code># Prints numbers from 0 to 4
+for i in range(5):
+    print(i)
+
+# Prints even numbers from 2 to 8
+for x in range(2, 10, 2):
+    print(x)</code></pre>
+<h2>The <code>while</code> Loop</h2>
+<p>A <code>while</code> loop runs as long as a condition remains <code>True</code>.</p>
+<pre><code>count = 3
+while count > 0:
+    print("Countdown:", count)
+    count -= 1  # count = count - 1
+print("Liftoff!")</code></pre>
+<h2>Loop Control: <code>break</code> and <code>continue</code></h2>
+<ul>
+  <li><code>break</code> terminates the loop entirely.</li>
+  <li><code>continue</code> skips the rest of the current iteration and jumps to the next one.</li>
+</ul>
+<pre><code>for num in range(1, 10):
+    if num == 5:
+        break     # Loop completely stops when num is 5
+    if num % 2 == 0:
+        continue  # Skips printing even numbers
+    print(num)    # Output: 1, 3</code></pre>`},
+
+  {id:5,free:true,icon:'🛠️',level:'Beginner',title:'Functions & Scope',
+   excerpt:'Write reusable blocks of code using the def keyword. Learn about parameters, return values, default arguments, and variable scope.',
+   tags:['Beginner','Functions','Modularity'],visual:'🛠️',bg:'linear-gradient(135deg,#0a1414,#102828)',
+   concepts:['def keyword','Return values','Default arguments','*args and **kwargs','Local vs Global Scope'],
+   body:`<p>Functions allow you to encapsulate logic into reusable blocks. In Python, functions are defined using the <code>def</code> keyword.</p>
+<h2>Defining and Calling Functions</h2>
+<pre><code>def greet(name):
+    """This docstring explains what the function does."""
+    return "Hello, " + name + "!"
+
+message = greet("Dithsha")
+print(message)</code></pre>
+<h2>Default Arguments</h2>
+<p>You can assign default values to parameters. If the caller doesn't provide an argument, the default is used.</p>
+<pre><code>def power(base, exponent=2):
+    return base ** exponent
+
+print(power(3))    # Output: 9 (3 squared)
+print(power(3, 3)) # Output: 27 (3 cubed)</code></pre>
+<h2>Variable Scope</h2>
+<p>Variables created inside a function are <strong>local</strong> to that function. They cannot be accessed outside of it. Variables created outside are <strong>global</strong>.</p>
+<pre><code>x = "global"
+
+def test_scope():
+    x = "local"
+    print("Inside:", x)
+
+test_scope()     # Output: Inside: local
+print("Outside:", x) # Output: Outside: global</code></pre>
+<blockquote><strong>Advanced Tip:</strong> Functions in Python are "first-class citizens", meaning they can be passed as arguments to other functions, returned from functions, and assigned to variables!</blockquote>`},
+
+  {id:6,free:true,icon:'📚',level:'Beginner',title:'Lists & Tuples',
+   excerpt:'Store collections of data. Understand the critical differences between mutable Lists and immutable Tuples, and master list slicing.',
+   tags:['Beginner','Data Structures','Arrays'],visual:'📚',bg:'linear-gradient(135deg,#140a14,#281028)',
+   concepts:['Lists (Mutable)','Tuples (Immutable)','List Methods','Indexing & Slicing','Tuple Unpacking'],
+   body:`<p>Python doesn't have built-in "arrays" like C or Java; instead, it uses highly versatile <strong>Lists</strong> and <strong>Tuples</strong> to store ordered collections of items.</p>
+<h2>Lists (Mutable)</h2>
+<p>Lists are created using square brackets <code>[]</code>. They are <em>mutable</em>, meaning you can change, add, or remove items after the list is created.</p>
+<pre><code>tech_stack = ["Python", "Java", "C"]
+tech_stack.append("JavaScript")  # Adds to the end
+tech_stack[1] = "C++"            # Modifies the second item
+tech_stack.remove("C")           # Removes a specific item
+
+print(tech_stack) # ['Python', 'C++', 'JavaScript']</code></pre>
+<h2>List Slicing</h2>
+<p>Slicing allows you to extract sub-lists using the syntax <code>[start:stop:step]</code>.</p>
+<pre><code>nums = [0, 1, 2, 3, 4, 5]
+print(nums[1:4])   # [1, 2, 3] (stop is exclusive)
+print(nums[:3])    # [0, 1, 2] (from beginning to index 3)
+print(nums[::-1])  # [5, 4, 3, 2, 1, 0] (Quick trick to reverse a list!)</code></pre>
+<h2>Tuples (Immutable)</h2>
+<p>Tuples are created using parentheses <code>()</code>. Once created, they <strong>cannot be changed</strong>. They are faster than lists and used to protect data from accidental modification.</p>
+<pre><code>coordinates = (10.0, 20.5)
+# coordinates[0] = 15.0  <-- This will throw a TypeError!
+
+# Tuple Unpacking
+x, y = coordinates
+print(f"X: {x}, Y: {y}")</code></pre>`},
+
+  // PREMIUM MODULES
+  {id:7,free:false,icon:'🗂️',level:'Intermediate',title:'Dictionaries & Sets',
+   excerpt:'Master Python\'s hash maps. Learn how to store key-value pairs in Dictionaries and manage unique items with Sets.',
+   tags:['Intermediate','Hash Maps','Data Structures'],visual:'🗂️',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
+   concepts:['Key-Value Pairs','Dict Methods (.keys, .values)','Set Operations (Union, Intersection)','Dictionary Comprehensions'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+
+  {id:8,free:false,icon:'✂️',level:'Intermediate',title:'Strings & RegEx',
+   excerpt:'Strings are objects in Python. Learn advanced formatting (f-strings), built-in methods, and pattern matching using the re module.',
+   tags:['Intermediate','Strings','Regex'],visual:'✂️',bg:'linear-gradient(135deg,#10080a,#200f12)',
+   concepts:['f-strings','String Methods (.split, .join, .replace)','Regular Expressions (re module)','Raw Strings'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+
+  {id:9,free:false,icon:'🏗️',level:'Advanced',title:'Object-Oriented Programming',
+   excerpt:'Move beyond scripts to application design. Learn classes, objects, inheritance, and Python\'s special dunder methods.',
+   tags:['Advanced','OOP','Classes'],visual:'🏗️',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
+   concepts:['Classes & Objects','__init__ method','self keyword','Inheritance','Polymorphism','Dunder (Magic) Methods'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+
+  {id:10,free:false,icon:'📂',level:'Advanced',title:'File Handling & I/O',
+   excerpt:'Learn how to safely read, write, and append to external text and CSV files using context managers (the "with" statement).',
+   tags:['Advanced','I/O','Files'],visual:'📂',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
+   concepts:['open(), read(), write()','Context Managers (with statement)','File Modes (r, w, a)','Working with CSVs'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+
+  {id:11,free:false,icon:'⚠️',level:'Advanced',title:'Error Handling',
+   excerpt:'Prevent your programs from crashing. Use try, except, else, and finally blocks to catch and manage runtime exceptions gracefully.',
+   tags:['Advanced','Exceptions','Debugging'],visual:'⚠️',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
+   concepts:['try / except','catching specific exceptions','finally block','raising Exceptions','Custom Exceptions'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+
+  {id:12,free:false,icon:'📦',level:'Advanced',title:'Modules & Environments',
+   excerpt:'The true power of Python lies in its ecosystem. Learn how to import modules, install external packages using pip, and manage virtual environments.',
+   tags:['Advanced','pip','venv'],visual:'📦',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
+   concepts:['import statements','Standard Library','pip package manager','Virtual Environments (venv)','requirements.txt'],
+   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`}
+];
+
+let currentId = null;
+let completed = getCompleted();
+const TOTAL_FREE = 6;
+
+// RENDER INDEX
+renderIndex();
+
+function renderIndex() {
+  const free = MODS.filter(m => m.free);
+  const prem = MODS.filter(m => !m.free);
+  document.getElementById('freeGrid').innerHTML = free.map(renderCard).join('');
+  document.getElementById('premiumGrid').innerHTML = prem.map(renderCard).join('');
+  updateProgress();
+}
+
+function renderCard(m) {
+  const done = completed.includes(m.id);
+  const locked = !m.free;
+  const cls = `mod-card${locked?' premium-card':''}${done?' done-card':''}`;
+  const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
+  
+  // PREMIUM REDIRECT LOGIC
+  const click = locked ? `onclick="window.location.href='premium.html'"` : `onclick="openLesson(${m.id})"`;
+  
+  return `<div class="${cls}" ${click}>
+    <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
+    <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
+    <div class="mod-title">${m.title}</div>
+    <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
+    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">${locked?'🔒 Unlock':'→'}</span></div>
+  </div>`;
+}
+
+function updateProgress() {
+  const freeDone = completed.filter(id => MODS.find(m=>m.id===id&&m.free)).length;
+  const pct = Math.round((freeDone/TOTAL_FREE)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  document.getElementById('progLabel').textContent = `${freeDone} of ${TOTAL_FREE} free modules completed`;
+}
+
+function openLesson(id) {
+  const m = MODS.find(x=>x.id===id);
+  if (!m) return;
+  
+  // PREMIUM REDIRECT LOGIC
+  if (!m.free) { 
+    window.location.href = 'premium.html'; 
+    return; 
+  }
+  
+  currentId = id;
+  document.getElementById('indexPage').style.display = 'none';
+  document.getElementById('lessonPage').style.display = 'block';
+  window.scrollTo(0,0);
+  document.getElementById('lesCrumb').textContent = m.title;
+
+  const done = completed.includes(id);
+  const mb = document.getElementById('markBtn');
+  mb.textContent = done ? '✓ Completed' : '✓ Mark Done';
+  mb.classList.toggle('done-btn', done);
+  
+  // Hide prev/next if bounds reached
+  document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
+  document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
+
+  const html = `
+       <div class="les-cat">Module ${String(id).padStart(2,'0')} · ${m.level} · Free</div>
+       <h1 class="les-title">${m.title}</h1>
+       <p class="les-excerpt">${m.excerpt}</p>
+       <div class="les-meta">
+         <span class="meta-item">🖥️ Python 3</span>
+         <span class="meta-item">⏱ ~12 min read</span>
+         <span class="meta-item">🐍 ${m.level}</span>
+       </div>
+       <div class="les-visual" style="background:${m.bg};">
+         <div class="les-visual-grid"></div>
+         <span style="position:relative;z-index:1;font-size:72px;">${m.visual}</span>
+       </div>
+       <div class="art-body">${m.body}</div>
+       <div class="concepts-box">
+         <div class="concepts-title">Key Concepts Covered</div>
+         <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
+       </div>
+       <div class="les-footer">
+         <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
+         <div class="nav-lessons">
+           ${id>1?`<div class="nlc" onclick="${MODS.find(x=>x.id===id-1).free ? `openLesson(${id-1})` : `window.location.href='premium.html'`}"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
+           ${id<MODS.length?`<div class="nlc" onclick="${MODS.find(x=>x.id===id+1).free ? `openLesson(${id+1})` : `window.location.href='premium.html'`}" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
+         </div>
+       </div>`;
+
+  document.getElementById('lessonContent').innerHTML = html;
+  renderSidebar();
+
+  // Scroll progress
+  window.onscroll = () => {
+    const pct = document.body.scrollHeight - window.innerHeight > 0
+      ? (window.scrollY/(document.body.scrollHeight-window.innerHeight))*100 : 0;
+    document.getElementById('readProgress').style.width = pct+'%';
+  };
+}
+
+function renderSidebar() {
+  const freeDone = completed.filter(id=>MODS.find(m=>m.id===id&&m.free)).length;
+  const pct = Math.round((freeDone/TOTAL_FREE)*100);
+  document.getElementById('sbProgFill').style.width = pct+'%';
+  document.getElementById('sbProgLabel').textContent = `${freeDone} / ${TOTAL_FREE} free`;
+  document.getElementById('sbModList').innerHTML = MODS.map(m=>{
+    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free;
+    
+    // PREMIUM REDIRECT LOGIC in sidebar
+    const click = locked ? `window.location.href='premium.html'` : `openLesson(${m.id})`;
+    
+    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${click}">
+      <span class="sb-num">${done?'✓':m.id}</span>
+      <span class="sb-btn-title">${m.title}</span>
+      ${locked?'<span style="font-size:10px;opacity:0.5;color:var(--gold);">🔒</span>':''}
+    </button>`;
+  }).join('');
+}
+
+function goBack(){
+  document.getElementById('lessonPage').style.display='none';
+  document.getElementById('indexPage').style.display='block';
+  renderIndex();
+  window.scrollTo(0,0);
+}
+
+function prevLesson() {
+  if(currentId>1) {
+    const m = MODS.find(x=>x.id===currentId-1);
+    if(m.free) openLesson(currentId-1);
+    else window.location.href='premium.html';
+  }
+}
+
+function nextLesson() {
+  if(currentId<MODS.length) {
+    const m = MODS.find(x=>x.id===currentId+1);
+    if(m.free) openLesson(currentId+1);
+    else window.location.href='premium.html';
+  }
+}
+
+function markDone() {
+  if(!currentId) return;
+  const m = MODS.find(x=>x.id===currentId);
+  if(!m.free) return; // Prevent marking premium as done if somehow accessed
+  
+  if(!completed.includes(currentId)){
+    completed.push(currentId);
+    saveCompleted(completed);
+    showToast('✓ Module marked complete! 🐍');
+  }
+  openLesson(currentId);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// Cursor
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function anim(){
-  c.style.left=(mx-5)+'px'; c.style.top=(my-5)+'px';
-  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-  r.style.left=(rx-18)+'px'; r.style.top=(ry-18)+'px';
-  requestAnimationFrame(anim);
-})();
-document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');
-  el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');
-});
+(function anim(){cur.style.left=(mx-5)+'px';cur.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=(rx-18)+'px';curR.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
+document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
+document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
 </script>
 </body>
 </html>
