@@ -326,6 +326,147 @@ slow_function()  # slow_function took 1.0012s</code></pre>
       <p>The students who truly excel don't keep subjects in separate mental boxes. They notice that memory management in C is connected to garbage collection in Java, which is connected to how Python handles reference counting. These cross-subject connections are where deep understanding lives — and they're also what interviewers test.</p>
       <p>Study with the question: <em>"Where have I seen this idea before?"</em> That habit alone will transform how you learn.</p>
     `
+  }  ,
+  {
+    id: 5,
+    title: 'C Pointers Demystified: The Concept Everyone Gets Wrong',
+    excerpt: 'Pointers are the single most feared topic in C programming. Here is a clear, visual explanation that will make them click once and for all.',
+    category: 'tutorial', catLabel: 'Tutorial',
+    emoji: '⚙️', author: 'Dithsa Dutta', authorEmoji: '👨‍💻',
+    authorRole: 'Founder & Lead Architect',
+    date: 'May 18, 2026', readTime: '9 min',
+    tags: ['C Programming', 'Pointers', 'Memory', 'Systems'],
+    content: `
+      <p>No concept in programming causes more panic than the C pointer. Students pass their data structures exam without truly understanding pointers, then spend the next two years writing code that occasionally works and occasionally segfaults with no idea why. This article fixes that.</p>
+      <h2>What a pointer actually is</h2>
+      <p>Your computer's RAM is like a massive array of numbered boxes. Each box holds one byte of data. The number on the box is its <em>address</em>. A pointer is simply a variable that stores one of those addresses — it points to a location in memory rather than storing a value directly.</p>
+      <p>When you write <code>int x = 42;</code>, the value 42 is stored at some address, say 1000. When you write <code>int *p = &amp;x;</code>, you're creating a variable <code>p</code> that stores the value 1000 — the address where 42 lives. That's it. A pointer is just an address.</p>
+      <h2>The two operators you must understand</h2>
+      <p>There are exactly two pointer operators and they do opposite things:</p>
+      <p><strong>&amp; (address-of)</strong> — takes a variable and gives you its address. <code>&amp;x</code> gives you the address where x is stored.</p>
+      <p><strong>* (dereference)</strong> — takes an address and gives you the value at that address. <code>*p</code> says "go to the address stored in p and give me what's there."</p>
+      <pre><code>int x = 42;
+int *p = &amp;x;   // p stores the address of x
+
+printf("%d", x);   // prints 42  (the value)
+printf("%p", p);   // prints address like 0x7fff... (the address)
+printf("%d", *p);  // prints 42  (value AT the address)</code></pre>
+      <h2>Why pointers exist at all</h2>
+      <p>Two reasons. First, <strong>efficiency</strong>. Passing a large struct to a function copies every byte of it. Passing a pointer copies only 8 bytes (the address) regardless of how big the struct is. Second, <strong>mutation</strong>. In C, function arguments are passed by value — the function gets a copy. If you want a function to modify a variable in the caller, you pass the address of that variable so the function can reach back and change the original.</p>
+      <h2>The most common pointer mistake</h2>
+      <p>Dereferencing an uninitialized or null pointer is the cause of most segfaults. If you declare <code>int *p;</code> without initializing it, p contains garbage — some random address. Dereferencing it (<code>*p</code>) attempts to read from a random memory location. The OS kills your program. Always initialize pointers, and always check for NULL before dereferencing.</p>
+      <pre><code>int *p = NULL;   // safe initialized state
+
+if (p != NULL) {
+    *p = 10;     // only dereference if not null
+}</code></pre>
+      <p>Once this mental model clicks — a pointer is just an address, * means "go there", &amp; means "give me the address" — every pointer concept becomes straightforward: pointer arithmetic, arrays, function pointers, linked lists. They all follow the same rules.</p>
+    `
+  },
+  {
+    id: 6,
+    title: 'Git & GitHub: The Workflow Every CS Student Must Know',
+    excerpt: 'Most students use Git only to push code. Here is the professional workflow — branching, pull requests, conflict resolution — that gets you hired.',
+    category: 'tutorial', catLabel: 'Tutorial',
+    emoji: '🌿', author: 'Snehanshu Sarkar', authorEmoji: '🐍',
+    authorRole: 'Contributor',
+    date: 'May 12, 2026', readTime: '7 min',
+    tags: ['Git', 'GitHub', 'Version Control', 'Workflow'],
+    content: `
+      <p>Most students treat Git as a backup tool — they commit everything to main and push when they're done. That works for solo projects but it's a red flag in every internship and job interview. Professional teams use Git very differently, and learning that workflow will immediately set you apart.</p>
+      <h2>The three concepts that actually matter</h2>
+      <p><strong>Commits are snapshots, not saves.</strong> Each commit should represent one logical change — a feature, a bug fix, a refactor. The commit message should explain what changed and why, not just "updated code." Bad: <code>git commit -m "stuff"</code>. Good: <code>git commit -m "fix: handle null pointer in user lookup"</code>.</p>
+      <p><strong>Branches are free.</strong> Creating a branch costs nothing and takes milliseconds. Every new feature or bug fix should live on its own branch. This keeps main always deployable and lets multiple people work simultaneously without stepping on each other.</p>
+      <p><strong>Pull Requests are for review, not just merging.</strong> A PR is how you ask your team to review your code before it goes into the main codebase. Even on a solo project, PRs help you review your own work with fresh eyes.</p>
+      <h2>The professional workflow</h2>
+      <pre><code># 1. Always start from an up-to-date main
+git checkout main
+git pull origin main
+
+# 2. Create a branch for your work
+git checkout -b feature/add-login-page
+
+# 3. Make commits as you work
+git add .
+git commit -m "feat: add email/password login form"
+git commit -m "feat: wire Firebase signInWithEmailAndPassword"
+
+# 4. Push your branch
+git push origin feature/add-login-page
+
+# 5. Open a Pull Request on GitHub
+# 6. Get review, make changes, merge</code></pre>
+      <h2>Resolving merge conflicts</h2>
+      <p>Conflicts happen when two branches modify the same lines of the same file. Git can't decide which version to keep, so it marks the conflict in the file and asks you to resolve it manually. The file will contain markers like <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> showing your changes and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> showing the incoming changes. Delete the markers, keep the correct code, then commit.</p>
+      <p>The best way to minimize conflicts: pull from main frequently, keep branches short-lived (merge within 1-2 days), and communicate with your team about who is touching which files.</p>
+      <h2>The .gitignore file</h2>
+      <p>Never commit node_modules, .env files, API keys, or build outputs. Create a <code>.gitignore</code> file in your project root listing everything Git should ignore. GitHub has templates for every language — when creating a new repo, select the template for your tech stack.</p>
+      <p>One thing that will immediately impress interviewers: commit history that tells a story. Clear branch names, atomic commits, good messages. It shows you understand software development as a collaborative, professional discipline — not just a solo coding exercise.</p>
+    `
+  },
+  {
+    id: 7,
+    title: 'Understanding Big-O: Why Your Code Slows Down at Scale',
+    excerpt: 'Big-O notation is how engineers measure how code behaves as input grows. Master this and algorithm questions in interviews become much less scary.',
+    category: 'tutorial', catLabel: 'Tutorial',
+    emoji: '📈', author: 'Dithsa Dutta', authorEmoji: '👨‍💻',
+    authorRole: 'Founder & Lead Architect',
+    date: 'May 8, 2026', readTime: '8 min',
+    tags: ['Algorithms', 'Big-O', 'DSA', 'Complexity'],
+    content: `
+      <p>Big-O notation appears in every data structures course and every technical interview, but most students memorize the answers without understanding what they mean. This article builds the intuition from scratch so you can derive complexity on your own instead of looking it up.</p>
+      <h2>What Big-O actually measures</h2>
+      <p>Big-O describes how the <em>number of operations</em> your code performs grows as the input size n grows. It answers: if I double the input, how much longer does this take? It ignores constants and lower-order terms because at large scale, only the dominant term matters.</p>
+      <h2>The common complexities, explained intuitively</h2>
+      <p><strong>O(1) — Constant time.</strong> The operation takes the same time regardless of input size. Accessing an array by index, looking up a HashMap key. You do one thing, done.</p>
+      <p><strong>O(log n) — Logarithmic.</strong> Every step halves the remaining work. Binary search on a sorted array: you look at the middle, eliminate half, repeat. To search 1 million elements: only 20 steps. This is why sorted data + binary search is so powerful.</p>
+      <p><strong>O(n) — Linear.</strong> You touch every element once. A single for-loop over an array. If n doubles, time doubles.</p>
+      <p><strong>O(n log n) — Linearithmic.</strong> Most efficient sorting algorithms (Merge Sort, Heap Sort). Slightly worse than linear but vastly better than quadratic.</p>
+      <p><strong>O(n²) — Quadratic.</strong> A nested loop where both loops run n times. Bubble sort. Selection sort. Comparing every pair of elements. If n doubles, time quadruples. Fine for n=100, catastrophic for n=100,000.</p>
+      <h2>How to analyze your own code</h2>
+      <pre><code>// O(n) - one loop
+for (int i = 0; i &lt; n; i++) { ... }
+
+// O(n²) - nested loops, both over n
+for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; n; j++) { ... }
+}
+
+// O(n) - two separate loops, not nested
+for (int i = 0; i &lt; n; i++) { ... }
+for (int j = 0; j &lt; n; j++) { ... }
+// O(n + n) = O(2n) = O(n) — constants drop out</code></pre>
+      <h2>Space complexity</h2>
+      <p>Big-O also describes memory usage. An algorithm that creates a new array of size n has O(n) space complexity. One that uses only a few variables regardless of n is O(1) space. Interviewers often ask for both time and space complexity — always mention both.</p>
+      <p>The practical takeaway: before submitting any solution, ask yourself "what is the Big-O?" If it's O(n²) and the input can be large, look for a HashMap or sorting-based approach to bring it to O(n) or O(n log n). That mental habit alone will dramatically improve your solutions.</p>
+    `
+  },
+  {
+    id: 8,
+    title: 'From Zero to Deployed: How We Built IT Study Hub',
+    excerpt: 'Behind the scenes of how four TIU students built a full-stack educational platform with Firebase, Razorpay, and a drag-to-login system — from scratch.',
+    category: 'trend', catLabel: 'Tech Trends',
+    emoji: '🚀', author: 'IT Study Hub', authorEmoji: '🌟',
+    authorRole: 'Editorial Team',
+    date: 'May 25, 2026', readTime: '10 min',
+    tags: ['Behind The Scenes', 'Firebase', 'Web Dev', 'Project'],
+    content: `
+      <p>When we started building IT Study Hub, we had one rule: no templates, no frameworks, no shortcuts. Every line of HTML, CSS, and JavaScript written by hand. Six months later, we have a fully deployed platform with Firebase authentication, a Razorpay payment system, a drag-to-authenticate login, and a global leaderboard. Here's how it actually happened.</p>
+      <h2>The design language first</h2>
+      <p>Before writing a single line of application code, we spent two weeks defining the visual system. The dark cyberpunk aesthetic — near-black backgrounds (#04040a), lime green (#c8f135) as the primary accent, JetBrains Mono for all labels and metadata — wasn't arbitrary. It communicates that this is a technical platform built by developers who care about craft, not a generic blue-and-white Udemy clone.</p>
+      <p>The custom cursor (an interpolated ring that trails behind the mouse using <code>rx += (mx - rx) * 0.12</code>) and the noise texture overlay (an SVG fractal filter rendered as a background) were added last, but they're what people remember first.</p>
+      <h2>Firebase: the backend we never had to build</h2>
+      <p>The decision to use Firebase meant we could ship a fully functional backend — authentication, database, file storage — without writing a single server. Firebase Auth handles the entire login flow. Firestore stores user profiles, XP, and premium plan status. Firebase Storage hosts the premium PDF materials with auth-gated download URLs.</p>
+      <p>The trickiest part was authentication on GitHub Pages. Because our site lives at a subfolder path (esd-project-tiu.github.io/it-study-hub/), we had to switch from <code>signInWithPopup</code> to <code>signInWithRedirect</code> for OAuth providers, and carefully configure authorized domains in both Firebase Console and Google Cloud Console.</p>
+      <h2>The drag-to-authenticate login</h2>
+      <p>This started as a late-night experiment. The idea: replace the boring submit button with a slider that users drag to authenticate. If credentials are correct — lime particles burst, the panel flashes "ACCESS GRANTED" and redirects. If wrong — the entire login panel glitches (a CSS animation that translates and skews the element rapidly), red particles burst, and it resets after two seconds.</p>
+      <p>The implementation is pure JavaScript event handling — <code>mousedown</code>, <code>mousemove</code>, <code>mouseup</code>, and their touch equivalents. The threshold is 88% — drag past that and Firebase auth fires automatically. No button click required.</p>
+      <h2>The premium system</h2>
+      <p>Razorpay was the obvious choice for India — it supports UPI, all cards, net banking, and wallets with a simple JavaScript SDK. The integration took one afternoon. When payment succeeds, the <code>handler</code> callback fires, we update <code>users/{uid}.plan</code> in Firestore, and the UI unlocks immediately. Three plan tiers: Starter (₹199, 1 course), Pro (₹499, all 6 courses), Elite (₹999, lifetime access + mentor Q&A).</p>
+      <h2>What we learned</h2>
+      <p>The biggest lesson: start with the design system. Having clear CSS variables (--lime, --surface, --border-active) from day one meant every new page was consistent without any extra thought. The second lesson: Firebase is genuinely excellent for student projects — the free Spark plan covers everything you need to launch and get real users.</p>
+      <p>The third lesson, and the most important: ship something real. Not a mockup, not a demo with fake data — a real deployed platform that real students can use. The gap between "looks like a website" and "is a website" is where most student projects never go. We crossed it. You can too.</p>
+    `
   }
 ];
 
