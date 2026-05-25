@@ -171,10 +171,10 @@ nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;al
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <span class="sidebar-label">Categories</span>
-    <button class="cat-btn active" onclick="filterByCategory('all', this)">📰 All Stories <span class="cat-count">5</span></button>
-    <button class="cat-btn" onclick="filterByCategory('trend', this)">⚡ Tech Trends <span class="cat-count">1</span></button>
+    <button class="cat-btn active" onclick="filterByCategory('all', this)">📰 All Stories <span class="cat-count">9</span></button>
+    <button class="cat-btn" onclick="filterByCategory('trend', this)">⚡ Tech Trends <span class="cat-count">2</span></button>
     <button class="cat-btn" onclick="filterByCategory('career', this)">🎯 Career Growth <span class="cat-count">1</span></button>
-    <button class="cat-btn" onclick="filterByCategory('tutorial', this)">🛠 Code Tutorials <span class="cat-count">2</span></button>
+    <button class="cat-btn" onclick="filterByCategory('tutorial', this)">🛠 Code Tutorials <span class="cat-count">5</span></button>
     <button class="cat-btn" onclick="filterByCategory('tips', this)">💡 Study Tips <span class="cat-count">1</span></button>
 
     <span class="sidebar-label" style="margin-top:28px;">Trending Now</span>
@@ -193,6 +193,16 @@ nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;al
       <div class="tc-title">Mastering Java Streams for Cleaner Code</div>
       <div class="tc-meta">5 min · Tutorial</div>
     </div>
+    <div class="trending-card" onclick="openPost(8)">
+      <div class="tc-num">04</div>
+      <div class="tc-title">How We Built IT Study Hub</div>
+      <div class="tc-meta">10 min · Tech Trends</div>
+    </div>
+    <div class="trending-card" onclick="openPost(7)">
+      <div class="tc-num">05</div>
+      <div class="tc-title">Understanding Big-O Notation</div>
+      <div class="tc-meta">8 min · Tutorial</div>
+    </div>
 
     <div class="subscribe-box" style="margin-top:16px;">
       <div class="sb-title">Stay Sharp 🧠</div>
@@ -208,7 +218,7 @@ nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;al
       <div class="hero-eyebrow">Insights & Articles</div>
       <h1 class="hero-title">The <em>Developer</em><br>Blog</h1>
       <div class="hero-stats">
-        <div class="h-stat"><span>5</span> Articles</div>
+        <div class="h-stat"><span>9</span> Articles</div>
         <div class="h-stat"><span>4</span> Categories</div>
         <div class="h-stat">Updated <span>May 2026</span></div>
       </div>
@@ -467,6 +477,66 @@ slow_function()  # slow_function took 1.0012s</code></pre>
       <p>The students who truly excel don't keep subjects in separate mental boxes. They notice that memory management in C is connected to garbage collection in Java, which is connected to how Python handles reference counting. These cross-subject connections are where deep understanding lives — and they're also what interviewers test when they ask "why" questions instead of "how" questions.</p>
       <p>Study with the question: "Where have I seen this idea before?" That habit alone will transform how you learn.</p>
     `
+  }  ,
+  {
+    id: 5,
+    slug: 'c-pointers-demystified',
+    title: 'C Pointers Demystified: The Concept Everyone Gets Wrong',
+    excerpt: 'Pointers are the single most feared topic in C programming. Here is a clear, visual explanation that will make them click once and for all.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '⚙️',
+    author: 'Dithsa Dutta',
+    authorEmoji: '👨‍💻',
+    date: 'May 18, 2026',
+    readTime: '9 min',
+    featured: false,
+    content: ``
+  },
+  {
+    id: 6,
+    slug: 'git-github-workflow',
+    title: 'Git & GitHub: The Workflow Every CS Student Must Know',
+    excerpt: 'Most students use Git only to push code. Here is the professional workflow — branching, pull requests, conflict resolution — that gets you hired.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '🌿',
+    author: 'Snehanshu Sarkar',
+    authorEmoji: '🐍',
+    date: 'May 12, 2026',
+    readTime: '7 min',
+    featured: false,
+    content: ``
+  },
+  {
+    id: 7,
+    slug: 'big-o-notation',
+    title: 'Understanding Big-O: Why Your Code Slows Down at Scale',
+    excerpt: 'Big-O notation is how engineers measure how code behaves as input grows. Master this and algorithm questions in interviews become much less scary.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '📈',
+    author: 'Dithsa Dutta',
+    authorEmoji: '👨‍💻',
+    date: 'May 8, 2026',
+    readTime: '8 min',
+    featured: false,
+    content: ``
+  },
+  {
+    id: 8,
+    slug: 'how-we-built-it-study-hub',
+    title: 'From Zero to Deployed: How We Built IT Study Hub',
+    excerpt: 'Behind the scenes of how four TIU students built a full-stack educational platform with Firebase, Razorpay, and a drag-to-login system — from scratch.',
+    category: 'trend',
+    catLabel: 'Tech Trends',
+    emoji: '🚀',
+    author: 'IT Study Hub',
+    authorEmoji: '🌟',
+    date: 'May 25, 2026',
+    readTime: '10 min',
+    featured: false,
+    content: ``
   }
 ];
 
