@@ -10,9 +10,9 @@
     --bg: #0a0a0f;
     --card: #111118;
     --border: #1e1e2e;
-    --accent: #6c63ff;
-    --accent2: #ff6584;
-    --accent3: #43e97b;
+    --accent: #c8f135;
+    --accent2: #a8e020;
+    --accent3: #c8f135;
     --text: #e8e8f0;
     --muted: #6b6b80;
     --beginner: #43e97b;
@@ -36,8 +36,8 @@
     position: fixed;
     inset: 0;
     background-image:
-      linear-gradient(rgba(108,99,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(108,99,255,0.04) 1px, transparent 1px);
+      linear-gradient(rgba(200,241,53,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,241,53,0.04) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 0;
@@ -124,7 +124,7 @@
   .subject-card:hover {
     border-color: var(--accent);
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(108,99,255,0.15);
+    box-shadow: 0 12px 40px rgba(200,241,53,0.15);
   }
 
   .subject-card:hover::before { transform: scaleX(1); }
@@ -183,7 +183,7 @@
 
   .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    background: linear-gradient(90deg, #c8f135, #a8e020);
     border-radius: 2px;
     transition: width 0.4s ease;
   }
@@ -274,7 +274,7 @@
 
   .option-btn:hover:not(:disabled) {
     border-color: var(--accent);
-    background: rgba(108,99,255,0.08);
+    background: rgba(200,241,53,0.08);
     transform: translateX(3px);
   }
 
@@ -326,7 +326,7 @@
     display: none;
   }
 
-  .next-btn:hover { background: #8078ff; transform: translateY(-1px); }
+  .next-btn:hover { background: #b8e020; transform: translateY(-1px); }
 
   /* ── RESULT SCREEN ── */
   #resultScreen {
@@ -349,7 +349,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(108,99,255,0.12), transparent 60%);
+    background: radial-gradient(circle at 50% 0%, rgba(200,241,53,0.08), transparent 60%);
     pointer-events: none;
   }
 
@@ -439,6 +439,7 @@
 
   .btn-primary {
     background: var(--accent);
+    color: #000;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -450,7 +451,7 @@
     transition: all 0.2s;
   }
 
-  .btn-primary:hover { background: #8078ff; transform: translateY(-1px); }
+  .btn-primary:hover { background: #b8e020; transform: translateY(-1px); }
 
   .btn-secondary {
     background: transparent;
@@ -491,9 +492,53 @@
   .screen-transition {
     animation: fadeUp 0.4s ease both;
   }
+
+  /* ── SITE NAV ── */
+  .site-nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; height: 60px;
+    background: rgba(10,10,15,0.92); backdrop-filter: blur(16px);
+    border-bottom: 1px solid #1e1e2e;
+  }
+  .site-nav-logo {
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800;
+    letter-spacing: 0.12em; color: #e8e8f0; text-decoration: none;
+  }
+  .site-nav-logo span { color: #c8f135; }
+  .site-nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-back-btn {
+    display: flex; align-items: center; gap: 7px;
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: #6b6b80; text-decoration: none;
+    border: 1px solid #1e1e2e; border-radius: 6px;
+    padding: 6px 14px; transition: all 0.2s;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .nav-back-btn:hover { color: #c8f135; border-color: rgba(200,241,53,0.4); background: rgba(200,241,53,0.06); }
+  .nav-courses-btn {
+    display: flex; align-items: center; gap: 7px;
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: #000; background: #c8f135;
+    text-decoration: none; border-radius: 6px;
+    padding: 6px 14px; transition: all 0.2s;
+    text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;
+  }
+  .nav-courses-btn:hover { background: #b8e020; transform: translateY(-1px); }
+
 </style>
 </head>
 <body>
+<nav class="site-nav">
+  <a href="index.html" class="site-nav-logo">IT <span>STUDY</span> HUB</a>
+  <div class="site-nav-right">
+    <a href="courses.html" class="nav-courses-btn">📚 Courses</a>
+    <a href="index.html" class="nav-back-btn">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6L8 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Home
+    </a>
+  </div>
+</nav>
 <div class="container">
 
   <!-- HEADER -->
