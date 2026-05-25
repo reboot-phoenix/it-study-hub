@@ -692,7 +692,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, sendPasswordResetEmail"https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
@@ -829,30 +829,7 @@ window.handleSignup = async function(fromSlider) {
   }
 };
 
-// ── GITHUB SIGN IN ──
 
-
-// ── HANDLE REDIRECT RESULT ──
-getRedirectResult(auth).then((result) => {
-  if (result && result.user) {
-    const user = result.user;
-    localStorage.removeItem('just_logged_out'); // Clear flag
-    const name = user.displayName || user.email.split('@')[0];
-    localStorage.setItem('ish_session', JSON.stringify({
-      name,
-      email: user.email,
-      uid: user.uid,
-      photoURL: user.photoURL || '',
-      isAdmin: user.email === ADMIN_EMAIL
-    }));
-    showSuccess('Signed in with GitHub! Redirecting...');
-    setTimeout(() => window.location.href = 'index.html', 800);
-  }
-}).catch((e) => {
-  if (e.code && e.code !== 'auth/no-auth-event') {
-    showError(friendlyError(e.code));
-  }
-});
 
 // ── FORGOT PASSWORD ──
 window.forgotPassword = async function() {
@@ -1012,12 +989,15 @@ function spawnParticles(el, success) {
 }
 
 /* ── Verdict flash ── */
-function showVerdict(ok, emoji, heading, body, resultEl) {
+function showVerdict(ok, name) {
+    const isLogin = document.getElementById('loginPanel').classList.contains('active');
+    const resultEl = document.getElementById(isLogin ? 'loginResult' : 'signupResult');
     if (!resultEl) return;
-    resultEl.textContent = (ok ? '✓ ' : '✗ ') + heading + ' — ' + body;
+    resultEl.textContent = ok
+      ? '✓ Welcome' + (name ? ', ' + name.split(' ')[0] + '!' : '!') + ' Redirecting...'
+      : '✗ Incorrect credentials. Please try again.';
     resultEl.className = 'drag-result show ' + (ok ? 'ok' : 'fail');
-    if (ok) setTimeout(() => resultEl.classList.remove('show'), 3000);
-    else setTimeout(() => { resultEl.classList.remove('show'); }, 2500);
+    if (!ok) setTimeout(() => resultEl.classList.remove('show'), 2500);
   }
 
 /* ── Wire login slider ── */
