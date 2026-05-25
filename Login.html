@@ -397,55 +397,11 @@
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ── DIVIDER ── */
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
 
-  .divider-line {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
 
-  .divider-text {
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    color: var(--muted);
-  }
 
-  /* ── GITHUB BTN ── */
-  .btn-github {
-    width: 100%;
-    padding: 13px;
-    background: #24292e;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: #ffffff;
-    font-family: var(--ff-body);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
 
-  .btn-github:hover {
-    border-color: var(--border-active);
-    background: #2f363d;
-    transform: translateY(-1px);
-  }
 
-  .github-icon {
-    width: 18px;
-    height: 18px;
-  }
 
   /* ── TERMS ── */
   .terms {
@@ -508,18 +464,10 @@
 
   /* ══ DRAG SLIDER ══ */
   .drag-wrap { margin-bottom: 16px; }
-  .drag-label-row {
-    font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.15em;
-    text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .drag-label-row::before, .drag-label-row::after {
-    content: ''; flex: 1; height: 1px; background: var(--border);
-  }
   .drag-track {
-    position: relative; width: 100%; height: 52px;
+    position: relative; width: 100%; height: 60px;
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; overflow: hidden; display: flex; align-items: center;
+    border-radius: 14px; overflow: hidden; display: flex; align-items: center;
     transition: border-color 0.2s;
   }
   .drag-track:hover { border-color: rgba(200,241,53,0.2); }
@@ -530,7 +478,7 @@
     position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
     background: linear-gradient(90deg, rgba(200,241,53,0.08), rgba(200,241,53,0.18));
     border-right: 2px solid var(--lime);
-    box-shadow: 0 0 16px var(--lime-glow);
+    box-shadow: 0 0 16px var(--lime-glow); animation: fillPulse 2s ease infinite;
     pointer-events: none; transition: width 0.04s;
   }
   .drag-fill.red { background: linear-gradient(90deg,rgba(255,95,86,0.08),rgba(255,95,86,0.18)); border-right-color:var(--red); box-shadow:0 0 16px rgba(255,95,86,0.3); }
@@ -538,13 +486,13 @@
 
   .drag-hint {
     position: absolute; inset: 0; display: flex; align-items: center;
-    justify-content: center; font-family: var(--ff-mono); font-size: 11px;
+    justify-content: center; font-family: var(--ff-mono); font-size: 10px;
     letter-spacing: 0.15em; color: var(--muted); pointer-events: none;
     text-transform: uppercase; transition: opacity 0.2s;
   }
 
   .drag-thumb {
-    position: absolute; left: 4px; width: 44px; height: 44px;
+    position: absolute; left: 4px; width: 52px; height: 52px;
     background: var(--lime); border-radius: 7px;
     display: flex; align-items: center; justify-content: center;
     font-size: 16px; color: #000; font-weight: 900;
@@ -554,34 +502,35 @@
   }
   .drag-thumb.snap { transition: left 0.35s cubic-bezier(0.34,1.56,0.64,1), background 0.3s; }
   .drag-thumb.loading { background: #444; animation: thumbSpin 0.7s linear infinite; }
+  @keyframes fillPulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
   @keyframes thumbSpin { to { transform: rotate(360deg); } }
   .drag-thumb.granted { background: var(--lime); box-shadow: 0 4px 24px var(--lime-glow); }
   .drag-thumb.denied { background: var(--red); box-shadow: 0 4px 16px rgba(255,95,86,0.4); }
 
-  /* Verdict flash */
-  .verdict-flash {
-    position: fixed; inset: 0; z-index: 998;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(4,4,10,0.92); backdrop-filter: blur(8px);
-    opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  /* Inline result msg below slider */
+  .drag-result {
+    height: 0; overflow: hidden;
+    font-family: var(--ff-mono); font-size: 11px;
+    border-radius: 8px; letter-spacing: 0.05em;
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 14px; margin-top: 0;
+    transition: height 0.3s ease, margin-top 0.3s ease, padding 0.3s ease, opacity 0.3s;
+    opacity: 0;
   }
-  .verdict-flash.show { opacity: 1; pointer-events: auto; }
-  .verdict-inner {
-    text-align: center; padding: 40px 32px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 16px; max-width: 340px; width: 90%;
-    position: relative; overflow: hidden;
+  .drag-result.show {
+    height: 38px; margin-top: 10px;
+    padding: 0 14px; opacity: 1;
   }
-  .verdict-inner::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--lime), transparent);
+  .drag-result.ok {
+    background: rgba(200,241,53,0.08);
+    border: 1px solid rgba(200,241,53,0.25);
+    color: var(--lime);
   }
-  .verdict-inner.denied::before { background: linear-gradient(90deg,transparent,var(--red),transparent); }
-  .verdict-emoji { font-size: 44px; margin-bottom: 14px; display: block; }
-  .verdict-heading { font-family: var(--ff-display); font-size: 26px; font-weight: 800; margin-bottom: 6px; }
-  .verdict-heading.ok { color: var(--lime); }
-  .verdict-heading.no { color: var(--red); }
-  .verdict-body { font-family: var(--ff-mono); font-size: 11px; color: var(--muted2); letter-spacing: 0.05em; line-height: 1.7; }
+  .drag-result.fail {
+    background: rgba(255,95,86,0.08);
+    border: 1px solid rgba(255,95,86,0.25);
+    color: var(--red);
+  }
 
   /* Particle */
   .particle { position: fixed; border-radius: 50%; pointer-events: none; z-index: 997; animation: rise 1s ease-out forwards; }
@@ -680,26 +629,13 @@
       </div>
 
       <div class="drag-wrap" id="loginDragWrap">
-        <div class="drag-label-row">Drag to sign in</div>
         <div class="drag-track" id="loginTrack">
           <div class="drag-fill" id="loginFill"></div>
-          <div class="drag-hint" id="loginHint">→ SLIDE TO SIGN IN →</div>
+          <div class="drag-hint" id="loginHint">slide to sign in →</div>
           <div class="drag-thumb" id="loginThumb">→</div>
         </div>
+        <div class="drag-result" id="loginResult"></div>
       </div>
-
-      <div class="divider">
-        <div class="divider-line"></div>
-        <div class="divider-text">or</div>
-        <div class="divider-line"></div>
-      </div>
-
-      <button class="btn-github" onclick="handleGithubSignIn()">
-        <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
-        </svg>
-        Continue with GitHub
-      </button>
 
       <div class="terms">
         Don't have an account? <a href="#" onclick="switchTab('signup')">Sign up free</a>
@@ -737,26 +673,13 @@
       </div>
 
       <div class="drag-wrap" id="signupDragWrap" style="margin-top:8px;">
-        <div class="drag-label-row">Drag to register</div>
         <div class="drag-track" id="signupTrack">
           <div class="drag-fill" id="signupFill"></div>
-          <div class="drag-hint" id="signupHint">→ SLIDE TO CREATE ACCOUNT →</div>
+          <div class="drag-hint" id="signupHint">slide to create account →</div>
           <div class="drag-thumb" id="signupThumb">→</div>
         </div>
+        <div class="drag-result" id="signupResult"></div>
       </div>
-
-      <div class="divider">
-        <div class="divider-line"></div>
-        <div class="divider-text">or</div>
-        <div class="divider-line"></div>
-      </div>
-
-      <button class="btn-github" onclick="handleGithubSignIn()">
-        <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
-        </svg>
-        Continue with GitHub
-      </button>
 
       <div class="terms">
         By signing up you agree to our <a href="#">Terms</a> &amp; <a href="privacypolicy.html">Privacy Policy</a>.<br>
@@ -769,7 +692,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, sendPasswordResetEmail, GithubAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, sendPasswordResetEmail"https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
@@ -783,7 +706,6 @@ const firebaseConfig = {
 const ADMIN_EMAIL = "bscit.tiu2012@gmail.com";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const githubProvider = new GithubAuthProvider();
 
 // ── NO AUTO-REDIRECT ON LOGIN PAGE ──
 // We deliberately do NOT redirect here even if Firebase still has a session.
@@ -908,22 +830,7 @@ window.handleSignup = async function(fromSlider) {
 };
 
 // ── GITHUB SIGN IN ──
-window.handleGithubSignIn = async function() {
-  clearBanners();
-  try {
-    // Sign out any existing Firebase session first.
-    // This is critical — without this, Firebase reuses the last GitHub account
-    // and never shows the GitHub account picker, making it impossible to switch accounts.
-    const { signOut } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
-    await signOut(auth);
-    localStorage.removeItem('ish_session');
 
-    showSuccess('Redirecting to GitHub...');
-    await signInWithRedirect(auth, githubProvider);
-  } catch(e) {
-    showError(friendlyError(e.code));
-  }
-};
 
 // ── HANDLE REDIRECT RESULT ──
 getRedirectResult(auth).then((result) => {
@@ -988,12 +895,7 @@ document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseent
 </script>
 
 <!-- Verdict Overlay -->
-<div class="verdict-flash" id="verdictFlash">
-  <div class="verdict-inner" id="verdictInner">
-    <span class="verdict-emoji" id="verdictEmoji">🔓</span>
-    <div class="verdict-heading ok" id="verdictHeading">ACCESS GRANTED</div>
-    <div class="verdict-body" id="verdictBody">Verified. Redirecting...</div>
-  </div>
+
 </div>
 
 <script>
@@ -1110,28 +1012,13 @@ function spawnParticles(el, success) {
 }
 
 /* ── Verdict flash ── */
-function showVerdict(granted, name) {
-  const flash   = document.getElementById('verdictFlash');
-  const inner   = document.getElementById('verdictInner');
-  const emoji   = document.getElementById('verdictEmoji');
-  const heading = document.getElementById('verdictHeading');
-  const body    = document.getElementById('verdictBody');
-  if (granted) {
-    inner.className = 'verdict-inner';
-    emoji.textContent = '🔓';
-    heading.className = 'verdict-heading ok';
-    heading.textContent = 'ACCESS GRANTED';
-    body.textContent = `Welcome, ${name}. Redirecting to dashboard...`;
-  } else {
-    inner.className = 'verdict-inner denied';
-    emoji.textContent = '🚫';
-    heading.className = 'verdict-heading no';
-    heading.textContent = 'ACCESS DENIED';
-    body.textContent = 'Invalid credentials. Resetting in 2s...';
+function showVerdict(ok, emoji, heading, body, resultEl) {
+    if (!resultEl) return;
+    resultEl.textContent = (ok ? '✓ ' : '✗ ') + heading + ' — ' + body;
+    resultEl.className = 'drag-result show ' + (ok ? 'ok' : 'fail');
+    if (ok) setTimeout(() => resultEl.classList.remove('show'), 3000);
+    else setTimeout(() => { resultEl.classList.remove('show'); }, 2500);
   }
-  flash.classList.add('show');
-  if (!granted) setTimeout(() => flash.classList.remove('show'), 2000);
-}
 
 /* ── Wire login slider ── */
 makeDragSlider('loginTrack','loginFill','loginHint','loginThumb',
