@@ -703,7 +703,7 @@ const firebaseConfig = {
   appId: "1:566661039167:web:122691d263631e404ea48a"
 };
 
-const ADMIN_EMAIL = "bscit.tiu2012@gmail.com";
+const ADMIN_EMAIL = "itstudyhub.tiu@gmail.com";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -770,10 +770,10 @@ window.handleLogin = async function(fromSlider) {
 
     if (fromSlider) {
       showVerdict(true, session.name);
-      setTimeout(() => window.location.href = 'index.html', 2000);
+      setTimeout(() => window.location.href = 'global.html', 2000);
     } else {
       showSuccess('Signed in! Redirecting...');
-      setTimeout(() => window.location.href = 'index.html', 800);
+      setTimeout(() => window.location.href = 'global.html', 800);
     }
   } catch(e) {
     const msg = friendlyError(e.code) || e.message;
@@ -816,10 +816,10 @@ window.handleSignup = async function(fromSlider) {
 
     if (fromSlider) {
       showVerdict(true, name);
-      setTimeout(() => window.location.href = 'index.html', 2000);
+      setTimeout(() => window.location.href = 'global.html', 2000);
     } else {
       showSuccess('Account created! Redirecting...');
-      setTimeout(() => window.location.href = 'index.html', 800);
+      setTimeout(() => window.location.href = 'global.html', 800);
     }
   } catch(e) {
     const msg = friendlyError(e.code) || e.message;
