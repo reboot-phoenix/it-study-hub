@@ -503,7 +503,7 @@ async function renderLeaderboard(myUid, myXP) {
 function renderScores(scores) {
   const grid = document.getElementById('scoresGrid');
   if (Object.keys(scores).length === 0) {
-    grid.innerHTML = `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;font-family:var(--ff-mono);font-size:12px;color:var(--muted);">No quizzes taken yet.<br><a href="ESD.html" style="color:var(--lime);text-decoration:none;margin-top:8px;display:inline-block;">Take your first quiz →</a></div>`;
+    grid.innerHTML = `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;font-family:var(--ff-mono);font-size:12px;color:var(--muted);">No quizzes taken yet.<br><a href="quiz.html" style="color:var(--lime);text-decoration:none;margin-top:8px;display:inline-block;">Take your first quiz →</a></div>`;
     return;
   }
   let html = '';
