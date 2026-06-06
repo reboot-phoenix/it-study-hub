@@ -707,13 +707,6 @@ const ADMIN_EMAIL = "itstudyhub.tiu@gmail.com";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// ── NO AUTO-REDIRECT ON LOGIN PAGE ──
-// We deliberately do NOT redirect here even if Firebase still has a session.
-// Firebase persists auth across browser sessions by default in IndexedDB.
-// The user explicitly came to Login.html — they want to log in or switch accounts.
-// Redirect ONLY happens after a deliberate login action (handleLogin / handleSignup / GitHub).
-// This fixes the "auto-login trap" where you can never switch accounts.
-
 // ── TAB SWITCHING ──
 window.switchTab = function(tab) {
   const tabs = document.querySelectorAll('.tab-btn');
@@ -747,14 +740,13 @@ window.togglePass = function(inputId, btn) {
   btn.textContent = input.type === 'password' ? '👁' : '🙈';
 };
 
-// ── LOGIN ── (used by both drag slider and Enter key)
+// ── LOGIN ──
 window.handleLogin = async function(fromSlider) {
   clearBanners();
   const email    = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
   if (!email || !password) { showError('Please fill in email and password first.'); throw new Error('EMPTY'); }
   try {
-    // Always sign out current session first — clean slate every login
     const { signOut } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
     try { await signOut(auth); } catch(_) {}
     localStorage.removeItem('ish_session');
@@ -778,11 +770,12 @@ window.handleLogin = async function(fromSlider) {
   } catch(e) {
     const msg = friendlyError(e.code) || e.message;
     showError(msg);
-    if (fromSlider) showVerdict(false);
+    if (fromSlider) showVerdict(false, null, msg);
     throw e;
   }
 };
-  // ── SIGNUP ── (used by both drag slider and Enter key)
+
+// ── SIGNUP ──
 window.handleSignup = async function(fromSlider) {
   clearBanners();
   const name     = document.getElementById('signupName').value.trim();
@@ -823,12 +816,10 @@ window.handleSignup = async function(fromSlider) {
   } catch(e) {
     const msg = friendlyError(e.code) || e.message;
     showError(msg);
-    if (fromSlider) showVerdict(false, null, msg); // Passes the actual error to the slider result
+    if (fromSlider) showVerdict(false, null, msg); 
     throw e;
   }
 };
-
-
 
 // ── FORGOT PASSWORD ──
 window.forgotPassword = async function() {
@@ -838,7 +829,9 @@ window.forgotPassword = async function() {
     await sendPasswordResetEmail(auth, email);
     showSuccess('Password reset email sent! Check your inbox.');
   } catch(e) {
-    showError(friendlyError(e.code));
+    console.error("Firebase Reset Error Code:", e.code); 
+    const msg = friendlyError(e.code) || `Error: ${e.code}`;
+    showError(msg);
   }
 };
 
@@ -858,137 +851,9 @@ function friendlyError(code) {
   };
   return map[code] || 'Something went wrong. Please try again.';
 }
-</script>
-
-<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
-<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
-<script>
-const c=document.getElementById('cur'),r=document.getElementById('curR');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function anim(){c.style.left=(mx-5)+'px';c.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=(rx-18)+'px';r.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
-document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');});
-</script>
-
-<!-- Verdict Overlay -->
-
-</div>
-
-<script>
-/* ══════════════════════════════
-   DRAG SLIDER ENGINE
-══════════════════════════════ */
-function makeDragSlider(trackId, fillId, hintId, thumbId, onComplete) {
-  const track = document.getElementById(trackId);
-  const fill  = document.getElementById(fillId);
-  const hint  = document.getElementById(hintId);
-  const thumb = document.getElementById(thumbId);
-
-  let dragging = false, startX = 0, maxX = 0, locked = false;
-  const THRESHOLD = 0.86;
-
-  function getMax() {
-    maxX = track.offsetWidth - thumb.offsetWidth - 8;
-  }
-
-  function setPos(px) {
-    const c = Math.max(0, Math.min(px, maxX));
-    thumb.style.left = (4 + c) + 'px';
-    fill.style.width = (c + thumb.offsetWidth) + 'px';
-    hint.style.opacity = Math.max(0, 1 - (c / maxX) * 2.5);
-    return c;
-  }
-
-  function reset() {
-    if (locked) return;
-    thumb.classList.add('snap');
-    thumb.style.left = '4px';
-    fill.style.width = '0';
-    hint.style.opacity = '1';
-    thumb.textContent = '→';
-    thumb.className = 'drag-thumb snap';
-    fill.className = 'drag-fill';
-    track.className = 'drag-track';
-    setTimeout(() => thumb.classList.remove('snap'), 400);
-  }
-
-  function trigger() {
-    locked = true;
-    thumb.className = 'drag-thumb loading';
-    thumb.textContent = '';
-    hint.style.opacity = '0';
-    onComplete(
-      () => { // success callback
-        thumb.className = 'drag-thumb granted snap';
-        thumb.textContent = '✓';
-        fill.className = 'drag-fill full';
-        track.className = 'drag-track success-state';
-        spawnParticles(thumb, true);
-      },
-      (msg) => { // fail callback
-        thumb.className = 'drag-thumb denied';
-        thumb.textContent = '✗';
-        fill.className = 'drag-fill red';
-        track.className = 'drag-track error-state';
-        spawnParticles(thumb, false);
-        document.querySelector('.right-panel').classList.add('glitching');
-        setTimeout(() => {
-          document.querySelector('.right-panel').classList.remove('glitching');
-          locked = false;
-          reset();
-        }, 1800);
-      }
-    );
-  }
-
-  // Mouse
-  thumb.addEventListener('mousedown', e => {
-    if (locked) return;
-    e.preventDefault(); dragging = true; getMax();
-    startX = e.clientX - (parseFloat(thumb.style.left || '4') - 4);
-    thumb.classList.remove('snap');
-  });
-  document.addEventListener('mousemove', e => {
-    if (!dragging || locked) return;
-    const pos = setPos(e.clientX - startX);
-    if (pos / maxX >= THRESHOLD) { dragging = false; setPos(maxX); trigger(); }
-  });
-  document.addEventListener('mouseup', () => { if (!dragging) return; dragging = false; if (!locked) reset(); });
-
-  // Touch
-  thumb.addEventListener('touchstart', e => {
-    if (locked) return;
-    e.preventDefault(); dragging = true; getMax();
-    startX = e.touches[0].clientX - (parseFloat(thumb.style.left || '4') - 4);
-  }, { passive: false });
-  document.addEventListener('touchmove', e => {
-    if (!dragging || locked) return;
-    e.preventDefault();
-    const pos = setPos(e.touches[0].clientX - startX);
-    if (pos / maxX >= THRESHOLD) { dragging = false; setPos(maxX); trigger(); }
-  }, { passive: false });
-  document.addEventListener('touchend', () => { if (!dragging) return; dragging = false; if (!locked) reset(); });
-
-  window.addEventListener('resize', getMax);
-  window.addEventListener('load', getMax);
-}
-
-/* ── Particles ── */
-function spawnParticles(el, success) {
-  const rect = el.getBoundingClientRect();
-  const color = success ? '#c8f135' : '#ff5f56';
-  for (let i = 0; i < 14; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    const size = Math.random() * 5 + 3;
-    p.style.cssText = `width:${size}px;height:${size}px;background:${color};left:${rect.left + rect.width/2 + (Math.random()-0.5)*60}px;top:${rect.top}px;animation-duration:${Math.random()*0.8+0.6}s;`;
-    document.body.appendChild(p);
-    setTimeout(() => p.remove(), 1500);
-  }
-}
 
 /* ── Verdict flash ── */
-function showVerdict(ok, name, customError) {
+window.showVerdict = function(ok, name, customError) {
     const isLogin = document.getElementById('loginPanel').classList.contains('active');
     const resultEl = document.getElementById(isLogin ? 'loginResult' : 'signupResult');
     if (!resultEl) return;
@@ -996,7 +861,6 @@ function showVerdict(ok, name, customError) {
     if (ok) {
       resultEl.textContent = '✓ Welcome' + (name ? ', ' + name.split(' ')[0] + '!' : '!') + ' Redirecting...';
     } else {
-      // If a specific error is provided (like from signup), show it; otherwise default to login error
       resultEl.textContent = customError ? '✗ ' + customError : '✗ Incorrect credentials. Please try again.';
     }
     
@@ -1014,7 +878,6 @@ makeDragSlider('loginTrack','loginFill','loginHint','loginThumb',
       await window.handleLogin(true); 
       onSuccess();
     } catch(e) { 
-      // Extracts the friendly error text to pass to the slider UI
       const errorMsg = friendlyError(e.code) || e.message;
       onFail(errorMsg); 
     }
@@ -1032,7 +895,6 @@ makeDragSlider('signupTrack','signupFill','signupHint','signupThumb',
       await window.handleSignup(true);
       onSuccess();
     } catch(e) { 
-      // Extracts the friendly error text to pass to the slider UI
       const errorMsg = friendlyError(e.code) || e.message;
       onFail(errorMsg); 
     }
@@ -1045,6 +907,7 @@ document.addEventListener('keydown', e => {
   const isLogin = document.getElementById('loginPanel').classList.contains('active');
   isLogin ? window.handleLogin(true).catch(()=>{}) : window.handleSignup(true).catch(()=>{});
 });
+</script>
   
 </script>
 
