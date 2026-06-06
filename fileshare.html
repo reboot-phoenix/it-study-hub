@@ -208,156 +208,47 @@ nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;al
 // ── REAL FILES DATA ──
 const FILES = [
   // C PROGRAMMING
-  {
-    id:1, type:'c', icon:'📄',
-    name:'C Programming — Complete Tutorial',
-    desc:'Full C tutorial from basics to advanced: syntax, pointers, memory management, file I/O, and more.',
-    size:'~2.5 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/cprogramming/cprogramming_tutorial.pdf'
-  },
-  {
-    id:2, type:'c', icon:'📄',
-    name:'C Quick Reference Guide',
-    desc:'Concise cheat sheet covering all C keywords, operators, format specifiers and standard library functions.',
-    size:'~1.2 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/cprogramming/pdf/c_quick_guide.pdf'
-  },
-  {
-    id:3, type:'c', icon:'📄',
-    name:'C Programming — TIU Lecture Notes (Pages 1–28)',
-    desc:'Official TIU BCA-421 notes: Introduction, control statements and program structure.',
-    size:'~1.8 MB', format:'PDF',
-    url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20JAVA-1-28.pdf'
-  },
+  { id:1, type:'c', icon:'📄', name:'C Programming — Pages 1–49', desc:'Introduction to C, variables, data types, operators and control flow.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/PROGRAMMING_IN_C-2-49.pdf' },
+  { id:2, type:'c', icon:'📄', name:'C Programming — Pages 50–87', desc:'Functions, arrays, strings and pointers fundamentals.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/PROGRAMMING_IN_C-50-87.pdf' },
+  { id:3, type:'c', icon:'📄', name:'C Programming — Pages 88–123', desc:'Structures, unions, file handling and dynamic memory.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/PROGRAMMING_IN_C-88-123.pdf' },
+  { id:4, type:'c', icon:'📄', name:'C Programming — Pages 127–155', desc:'Advanced pointers, linked lists and recursion.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/PROGRAMMING_IN_C-127-155.pdf' },
+  { id:5, type:'c', icon:'📄', name:'C Programming — Pages 156–186', desc:'File I/O, preprocessor directives and bitwise operations.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/PROGRAMMING_IN_C-156-186.pdf' },
+  { id:6, type:'c', icon:'📄', name:'C Programming — Pages 187–235', desc:'Advanced topics: sorting algorithms, complex data structures.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/PROGRAMMING_IN_C-187-235.pdf' },
 
   // JAVA
-  {
-    id:4, type:'java', icon:'📄',
-    name:'Java OOPs — TIU Notes (Pages 1–28)',
-    desc:'Official TIU BCA-421 Java notes covering Introduction, JVM architecture and Java basics.',
-    size:'~2.1 MB', format:'PDF',
-    url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20JAVA-1-28.pdf'
-  },
-  {
-    id:5, type:'java', icon:'📄',
-    name:'Java OOPs — TIU Notes (Pages 29–72)',
-    desc:'Classes, Objects, Methods, Constructors, Inheritance and Interfaces — core OOP concepts.',
-    size:'~2.4 MB', format:'PDF',
-    url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20JAVA-29-72.pdf'
-  },
-  {
-    id:6, type:'java', icon:'📄',
-    name:'Java OOPs — TIU Notes (Pages 56–96)',
-    desc:'Access specifiers, Polymorphism, Abstract classes and Interface implementation.',
-    size:'~2.2 MB', format:'PDF',
-    url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20JAVA-56-96.pdf'
-  },
-  {
-    id:7, type:'java', icon:'📄',
-    name:'Java OOPs — TIU Notes (Pages 97–131)',
-    desc:'Exception Handling, Multithreading, Thread lifecycle and Synchronization.',
-    size:'~2.0 MB', format:'PDF',
-    url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20JAVA-97-131.pdf'
-  },
-  {
-    id:8, type:'java', icon:'📄',
-    name:'Java OOPs — TIU Notes (Pages 133–188)',
-    desc:'String Handling, Packages, Collections Framework and Recursion.',
-    size:'~2.6 MB', format:'PDF',
-    url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20JAVA-133-188.pdf'
-  },
-  {
-    id:9, type:'java', icon:'📄',
-    name:'Java OOPs — TIU Notes (Pages 189–260)',
-    desc:'AWT, GUI Programming, Layout Managers, Applets and Event Handling.',
-    size:'~3.1 MB', format:'PDF',
-    url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdfs/BCA-421%20JAVA-189-260.pdf'
-  },
-  {
-    id:10, type:'java', icon:'📄',
-    name:'Java Complete Tutorial — TutorialsPoint',
-    desc:'Comprehensive Java guide from basics to advanced OOP, collections and multithreading.',
-    size:'~3.5 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/java/java_tutorial.pdf'
-  },
+  { id:7, type:'java', icon:'📄', name:'Java OOPs — Pages 1–28', desc:'Introduction to Java, JVM architecture, data types and control flow.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/BCA-421%20JAVA-1-28.pdf' },
+  { id:8, type:'java', icon:'📄', name:'Java OOPs — Pages 29–72', desc:'Classes, objects, constructors, methods and encapsulation.', size:'~2.5 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/BCA-421%20JAVA-29-72.pdf' },
+  { id:9, type:'java', icon:'📄', name:'Java OOPs — Pages 56–96', desc:'Inheritance, polymorphism, abstract classes and interfaces.', size:'~2.2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/BCA-421%20JAVA-56-96.pdf' },
+  { id:10, type:'java', icon:'📄', name:'Java OOPs — Pages 97–131', desc:'Exception handling, multithreading and thread lifecycle.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/BCA-421%20JAVA-97-131.pdf' },
+  { id:11, type:'java', icon:'📄', name:'Java OOPs — Pages 133–188', desc:'String handling, packages, collections framework and recursion.', size:'~2.5 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/BCA-421%20JAVA-133-188.pdf' },
+  { id:12, type:'java', icon:'📄', name:'Java OOPs — Pages 189–260', desc:'AWT, GUI programming, layout managers, applets and event handling.', size:'~3 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/BCA-421%20JAVA-189-260.pdf' },
 
   // PYTHON
-  {
-    id:11, type:'python', icon:'📄',
-    name:'Python Tutorial — Complete Guide',
-    desc:'Full Python tutorial: syntax, data types, lists, dictionaries, OOP, file handling and modules.',
-    size:'~2.8 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/python/python_tutorial.pdf'
-  },
-  {
-    id:12, type:'python', icon:'📄',
-    name:'Python Quick Reference',
-    desc:'Handy cheat sheet for Python syntax, built-in functions, string methods and common patterns.',
-    size:'~1.0 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/python/pdf/python_quick_guide.pdf'
-  },
+  { id:13, type:'python', icon:'📄', name:'Python Complete Notes', desc:'Full Python notes: syntax, data structures, OOP, file handling and modules.', size:'~3 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/python.pdf' },
 
   // C++
-  {
-    id:13, type:'cpp', icon:'📄',
-    name:'C++ Programming — Complete Tutorial',
-    desc:'Full C++ tutorial: OOP, templates, STL, operator overloading, inheritance and polymorphism.',
-    size:'~3.0 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/cplusplus/cplusplus_tutorial.pdf'
-  },
-  {
-    id:14, type:'cpp', icon:'📄',
-    name:'C++ Quick Reference Guide',
-    desc:'Concise C++ cheat sheet covering classes, STL containers, iterators and key syntax.',
-    size:'~1.3 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/cplusplus/pdf/cplusplus_quick_guide.pdf'
-  },
+  { id:14, type:'cpp', icon:'📄', name:'C++ Lecture Notes — Pages 1–18', desc:'Introduction to C++, basic I/O, namespaces and first programs.', size:'~1.5 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%2B%2B%20lecture%20notes%20Complete-1-18.pdf' },
+  { id:15, type:'cpp', icon:'📄', name:'C++ Lecture Notes — Pages 19–35', desc:'Classes, objects, constructors and destructors.', size:'~1.5 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%2B%2B%20lecture%20notes%20Complete-19-35.pdf' },
+  { id:16, type:'cpp', icon:'📄', name:'C++ Lecture Notes — Pages 36–64', desc:'Inheritance, polymorphism and virtual functions.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%2B%2B%20lecture%20notes%20Complete-36-64.pdf' },
+  { id:17, type:'cpp', icon:'📄', name:'C++ Lecture Notes — Pages 67–120', desc:'Operator overloading, templates and exception handling.', size:'~2.5 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%2B%2B%20lecture%20notes%20Complete-67-120.pdf' },
+  { id:18, type:'cpp', icon:'📄', name:'C++ Lecture Notes — Pages 108–132', desc:'STL containers, iterators and algorithms.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%2B%2B%20lecture%20notes%20Complete-108-132.pdf' },
+  { id:19, type:'cpp', icon:'📄', name:'C++ Lecture Notes — Pages 133–146', desc:'File I/O streams, advanced memory management and RAII.', size:'~1.5 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%2B%2B%20lecture%20notes%20Complete-133-146.pdf' },
 
   // C#
-  {
-    id:15, type:'csharp', icon:'📄',
-    name:'C# Programming — Complete Tutorial',
-    desc:'Full C# guide: .NET framework, LINQ, delegates, async/await, generics and WinForms basics.',
-    size:'~2.9 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/csharp/csharp_tutorial.pdf'
-  },
-  {
-    id:16, type:'csharp', icon:'📄',
-    name:'C# Quick Reference Guide',
-    desc:'Quick reference for C# syntax, data types, control flow, classes and LINQ queries.',
-    size:'~1.1 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/csharp/pdf/csharp_quick_guide.pdf'
-  },
+  { id:20, type:'csharp', icon:'📄', name:'C# Notes — Pages 1–82', desc:'Introduction to C#, .NET framework, data types and OOP basics.', size:'~2.5 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%23%20NOTES-1-82.pdf' },
+  { id:21, type:'csharp', icon:'📄', name:'C# Notes — Pages 83–126', desc:'Inheritance, interfaces, abstract classes and access modifiers.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%23%20NOTES-83-126.pdf' },
+  { id:22, type:'csharp', icon:'📄', name:'C# Notes — Pages 127–192', desc:'Collections, generics, delegates and events.', size:'~2.5 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%23%20NOTES-127-192.pdf' },
+  { id:23, type:'csharp', icon:'📄', name:'C# Notes — Pages 193–224', desc:'LINQ queries, lambda expressions and extension methods.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%23%20NOTES-193-224.pdf' },
+  { id:24, type:'csharp', icon:'📄', name:'C# Notes — Pages 225–314', desc:'Async/await, multithreading and exception handling.', size:'~3 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%23%20NOTES-225-314.pdf' },
+  { id:25, type:'csharp', icon:'📄', name:'C# Notes — Pages 315–469', desc:'File I/O, WinForms, advanced .NET topics and interview prep.', size:'~4 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%23%20NOTES-315-469.pdf' },
 
   // HTML + CSS + JS
-  {
-    id:17, type:'web', icon:'📄',
-    name:'HTML Tutorial — Complete Guide',
-    desc:'Complete HTML reference: tags, forms, tables, semantic elements, HTML5 APIs and accessibility.',
-    size:'~2.2 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/html/html_tutorial.pdf'
-  },
-  {
-    id:18, type:'web', icon:'📄',
-    name:'CSS Tutorial — Complete Guide',
-    desc:'Full CSS guide: selectors, box model, flexbox, grid, animations and responsive design.',
-    size:'~2.0 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/css/css_tutorial.pdf'
-  },
-  {
-    id:19, type:'web', icon:'📄',
-    name:'JavaScript Tutorial — Complete Guide',
-    desc:'Complete JS tutorial: DOM, events, ES6+, async/await, fetch API, closures and prototypes.',
-    size:'~3.2 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/javascript/javascript_tutorial.pdf'
-  },
-  {
-    id:20, type:'web', icon:'📄',
-    name:'Web Dev Quick Reference',
-    desc:'Combined HTML+CSS+JS cheat sheet — perfect for quick lookups during coding sessions.',
-    size:'~1.4 MB', format:'PDF',
-    url:'https://www.tutorialspoint.com/javascript/pdf/javascript_quick_guide.pdf'
-  },
+  { id:26, type:'web', icon:'📄', name:'HTML Notes — Pages 1–21', desc:'HTML5 basics: document structure, headings, links, images and lists.', size:'~1.5 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/HTML%20notes-1-21.pdf' },
+  { id:27, type:'web', icon:'📄', name:'HTML Notes — Pages 22–57', desc:'Forms, tables, semantic elements and HTML5 APIs.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/HTML%20notes-22-57.pdf' },
+  { id:28, type:'web', icon:'📄', name:'HTML Notes — Pages 58–77', desc:'Multimedia, iframes, accessibility and advanced HTML5 features.', size:'~1.5 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/HTML%20notes-58-77.pdf' },
+  { id:29, type:'web', icon:'📄', name:'CSS Complete Notes', desc:'Full CSS: selectors, box model, flexbox, grid, animations and responsive design.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/CSS%20notes.pdf' },
+  { id:30, type:'web', icon:'📄', name:'JavaScript Notes — Pages 1–28', desc:'JS fundamentals: variables, data types, functions, arrays and objects.', size:'~2 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/JS%20Notes-1-28.pdf' },
+  { id:31, type:'web', icon:'📄', name:'JavaScript Notes — Pages 29–45', desc:'DOM manipulation, events, ES6+ features and async programming.', size:'~1.5 MB', format:'PDF', url:'https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/JS%20Notes-29-45.pdf' },
 ];
 
 const BADGES = {c:'badge-c',java:'badge-java',python:'badge-python',cpp:'badge-cpp',csharp:'badge-csharp',web:'badge-web'};
