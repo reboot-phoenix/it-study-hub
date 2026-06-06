@@ -782,8 +782,7 @@ window.handleLogin = async function(fromSlider) {
     throw e;
   }
 };
-
-// ── SIGNUP ── (used by both drag slider and Enter key)
+  // ── SIGNUP ── (used by both drag slider and Enter key)
 window.handleSignup = async function(fromSlider) {
   clearBanners();
   const name     = document.getElementById('signupName').value.trim();
@@ -824,7 +823,7 @@ window.handleSignup = async function(fromSlider) {
   } catch(e) {
     const msg = friendlyError(e.code) || e.message;
     showError(msg);
-    if (fromSlider) showVerdict(false);
+    if (fromSlider) showVerdict(false, null, msg); // Passes the actual error to the slider result
     throw e;
   }
 };
@@ -989,16 +988,21 @@ function spawnParticles(el, success) {
 }
 
 /* ── Verdict flash ── */
-function showVerdict(ok, name) {
+function showVerdict(ok, name, customError) {
     const isLogin = document.getElementById('loginPanel').classList.contains('active');
     const resultEl = document.getElementById(isLogin ? 'loginResult' : 'signupResult');
     if (!resultEl) return;
-    resultEl.textContent = ok
-      ? '✓ Welcome' + (name ? ', ' + name.split(' ')[0] + '!' : '!') + ' Redirecting...'
-      : '✗ Incorrect credentials. Please try again.';
+    
+    if (ok) {
+      resultEl.textContent = '✓ Welcome' + (name ? ', ' + name.split(' ')[0] + '!' : '!') + ' Redirecting...';
+    } else {
+      // If a specific error is provided (like from signup), show it; otherwise default to login error
+      resultEl.textContent = customError ? '✗ ' + customError : '✗ Incorrect credentials. Please try again.';
+    }
+    
     resultEl.className = 'drag-result show ' + (ok ? 'ok' : 'fail');
-    if (!ok) setTimeout(() => resultEl.classList.remove('show'), 2500);
-  }
+    if (!ok) setTimeout(() => resultEl.classList.remove('show'), 3500);
+}
 
 /* ── Wire login slider ── */
 makeDragSlider('loginTrack','loginFill','loginHint','loginThumb',
@@ -1007,19 +1011,31 @@ makeDragSlider('loginTrack','loginFill','loginHint','loginThumb',
     const pass  = document.getElementById('loginPassword').value;
     if (!email || !pass) { showError('Please fill in email and password first.'); onFail(); return; }
     try {
-      await window.handleLogin(true); // pass flag = called from slider
+      await window.handleLogin(true); 
       onSuccess();
-    } catch(e) { onFail(e.message); }
+    } catch(e) { 
+      // Extracts the friendly error text to pass to the slider UI
+      const errorMsg = friendlyError(e.code) || e.message;
+      onFail(errorMsg); 
+    }
   }
 );
 
 /* ── Wire signup slider ── */
 makeDragSlider('signupTrack','signupFill','signupHint','signupThumb',
   async (onSuccess, onFail) => {
+    const name  = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const pass  = document.getElementById('signupPassword').value;
+    if (!name || !email || !pass) { showError('Please fill in all fields.'); onFail(); return; }
     try {
       await window.handleSignup(true);
       onSuccess();
-    } catch(e) { onFail(e.message); }
+    } catch(e) { 
+      // Extracts the friendly error text to pass to the slider UI
+      const errorMsg = friendlyError(e.code) || e.message;
+      onFail(errorMsg); 
+    }
   }
 );
 
@@ -1029,6 +1045,7 @@ document.addEventListener('keydown', e => {
   const isLogin = document.getElementById('loginPanel').classList.contains('active');
   isLogin ? window.handleLogin(true).catch(()=>{}) : window.handleSignup(true).catch(()=>{});
 });
+  
 </script>
 
 </body>
