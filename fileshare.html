@@ -318,7 +318,7 @@ function renderFiles() {
       <div class="file-desc">${f.desc}</div>
       <div class="file-footer">
         <span class="file-type-tag" style="color:${COLORS[f.type]};">${LABELS[f.type]}</span>
-        <a href="${f.url}" target="_blank" download class="btn-dl" onclick="trackDownload('${f.name}')">↓ Download</a>
+        <a href="${f.url}" download class="btn-dl" onclick="trackDownload('${f.name}')">↓ Download</a>
       </div>
     </div>`).join('');
 }
