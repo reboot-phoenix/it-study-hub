@@ -167,6 +167,17 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
   .mat-grid{grid-template-columns:1fr;}
 }
 @media(max-width:540px){.modules-grid{grid-template-columns:1fr;}.nav-lessons{grid-template-columns:1fr;}}
+
+  .mod-card:hover:not(.locked){border-color:var(--border-active);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.5);}
+  .mod-card:hover:not(.locked)::after{transform:scaleX(1);}
+  .mod-card.locked{opacity:0.4;cursor:pointer;}
+  .mod-card:hover:not(.locked) .mod-arrow{color:var(--lime);transform:translateX(4px);}
+  .mat-item:hover:not(.premium-mat){border-color:var(--border-active);transform:translateX(4px);}
+  .mat-item.premium-mat{opacity:0.5;}
+  .les-cat.prem{color:var(--gold);background:var(--gold-dim);border-color:rgba(247,183,49,0.35);}
+  .premium-lock{background:var(--surface);border:1px solid rgba(247,183,49,0.25);border-radius:16px;padding:56px 36px;text-align:center;margin-top:40px;}
+  .lock-btn{background:var(--gold);color:#000;border:none;border-radius:8px;padding:12px 28px;font-family:var(--ff-mono);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:all 0.2s;}
+  .lock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(247,183,49,0.3);}
 </style>
 </head>
 <body>
@@ -214,7 +225,7 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
   <div class="fade-up" style="animation-delay:0.25s;">
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
-      <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/python.pdf" class="mat-item">
+      <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/python.pdf" target="_blank" class="mat-item">
         <div class="mat-icon">📝</div>
         <div class="mat-info"><div class="mat-title">Python Basics Cheat Sheet</div><div class="mat-desc">Variables, Loops, Functions · Free</div></div>
         <span class="mat-action">↓ Download</span>
@@ -269,6 +280,9 @@ nav{position:sticky;top:2px;z-index:100;padding:0 48px;height:64px;display:flex;
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <script>
+const ADMIN_EMAIL = 'itstudyhub.tiu@gmail.com';
+function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){return null;}}
+function isPremium(){const s=getSession();return s&&(s.isAdmin||s.plan==='pro'||s.plan==='elite'||s.email===ADMIN_EMAIL);}
 function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_python_done')||'[]');}catch(e){return[];}}
 function saveCompleted(a){localStorage.setItem('ish_python_done',JSON.stringify(a));}
 
@@ -508,19 +522,16 @@ function renderIndex() {
 
 function renderCard(m) {
   const done = completed.includes(m.id);
-  const locked = !m.free;
-  const cls = `mod-card${locked?' premium-card':''}${done?' done-card':''}`;
+  const locked = !m.free && !isPremium();
+  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}`;
   const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
-  
-  // PREMIUM REDIRECT LOGIC
   const click = locked ? `onclick="window.location.href='premium.html'"` : `onclick="openLesson(${m.id})"`;
-  
   return `<div class="${cls}" ${click}>
     <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
     <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
     <div class="mod-title">${m.title}</div>
     <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
-    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">${locked?'🔒 Unlock':'→'}</span></div>
+    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">→</span></div>
   </div>`;
 }
 
@@ -535,13 +546,7 @@ function updateProgress() {
 function openLesson(id) {
   const m = MODS.find(x=>x.id===id);
   if (!m) return;
-  
-  // PREMIUM REDIRECT LOGIC
-  if (!m.free) { 
-    window.location.href = 'premium.html'; 
-    return; 
-  }
-  
+  if (!m.free && !isPremium()) { window.location.href='premium.html'; return; }
   currentId = id;
   document.getElementById('indexPage').style.display = 'none';
   document.getElementById('lessonPage').style.display = 'block';
@@ -552,19 +557,21 @@ function openLesson(id) {
   const mb = document.getElementById('markBtn');
   mb.textContent = done ? '✓ Completed' : '✓ Mark Done';
   mb.classList.toggle('done-btn', done);
-  
-  // Hide prev/next if bounds reached
   document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
 
-  const html = `
-       <div class="les-cat">Module ${String(id).padStart(2,'0')} · ${m.level} · Free</div>
+  const html = !m.free && !isPremium()
+    ? `<div class="premium-lock"><div style="font-size:48px;margin-bottom:16px;">⭐</div>
+       <div style="font-family:var(--ff-display);font-size:28px;margin-bottom:10px;">Premium Module</div>
+       <div style="font-size:14px;color:var(--muted2);margin-bottom:24px;">Upgrade your plan to unlock all advanced content.</div>
+       <button class="lock-btn" onclick="window.location.href='premium.html'">Unlock Premium</button></div>`
+    : `<div class="les-cat ${!m.free?'prem':''}">Module ${String(id).padStart(2,'0')} · ${m.level} · ${m.free?'Free':'Premium'}</div>
        <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
-         <span class="meta-item">🖥️ Python 3</span>
-         <span class="meta-item">⏱ ~12 min read</span>
-         <span class="meta-item">🐍 ${m.level}</span>
+         <span class="meta-item">🐍 Python</span>
+         <span class="meta-item">⏱ ~10 min read</span>
+         <span class="meta-item">⚙️ ${m.level}</span>
        </div>
        <div class="les-visual" style="background:${m.bg};">
          <div class="les-visual-grid"></div>
@@ -578,8 +585,8 @@ function openLesson(id) {
        <div class="les-footer">
          <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
          <div class="nav-lessons">
-           ${id>1?`<div class="nlc" onclick="${MODS.find(x=>x.id===id-1).free ? `openLesson(${id-1})` : `window.location.href='premium.html'`}"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
-           ${id<MODS.length?`<div class="nlc" onclick="${MODS.find(x=>x.id===id+1).free ? `openLesson(${id+1})` : `window.location.href='premium.html'`}" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
+           ${id>1?`<div class="nlc" onclick="openLesson(${id-1})"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
+           ${id<MODS.length?`<div class="nlc" onclick="openLesson(${id+1})" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
          </div>
        </div>`;
 
@@ -600,7 +607,7 @@ function renderSidebar() {
   document.getElementById('sbProgFill').style.width = pct+'%';
   document.getElementById('sbProgLabel').textContent = `${freeDone} / ${TOTAL_FREE} free`;
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
-    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free;
+    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
     
     // PREMIUM REDIRECT LOGIC in sidebar
     const click = locked ? `window.location.href='premium.html'` : `openLesson(${m.id})`;
@@ -639,7 +646,7 @@ function nextLesson() {
 function markDone() {
   if(!currentId) return;
   const m = MODS.find(x=>x.id===currentId);
-  if(!m.free) return; // Prevent marking premium as done if somehow accessed
+  if(!m.free&&!isPremium()) return;
   
   if(!completed.includes(currentId)){
     completed.push(currentId);
