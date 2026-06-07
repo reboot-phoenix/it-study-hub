@@ -43,7 +43,9 @@ nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;al
 .nav-user{font-family:var(--ff-mono);font-size:11px;color:var(--lime);background:var(--lime-dim);border:1px solid rgba(200,241,53,0.2);padding:6px 14px;border-radius:4px;letter-spacing:1px;}
 
 /* ── NOT LOGGED IN GATE ── */
-#gateScreen{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 64px);padding:48px 24px;}
+#gateScreen{position:relative;z-index:1;display:none;align-items:center;justify-content:center;min-height:calc(100vh - 64px);padding:48px 24px;}
+#authLoader{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 64px);}
+#authLoader .loader-ring{width:40px;height:40px;border:3px solid #1e1e2e;border-top-color:#c8f135;border-radius:50%;animation:spin 0.7s linear infinite;}
 .gate-card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:56px 48px;text-align:center;max-width:440px;position:relative;overflow:hidden;}
 .gate-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--lime),transparent);}
 .gate-icon{font-size:48px;margin-bottom:20px;}
@@ -180,6 +182,12 @@ nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;al
     </a>
   </div>
 </nav>
+
+
+<!-- AUTH LOADER — shown while Firebase resolves, hidden once auth state known -->
+<div id="authLoader">
+  <div class="loader-ring"></div>
+</div>
 
 <!-- NOT LOGGED IN -->
 <div id="gateScreen">
@@ -359,9 +367,33 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// ── INSTANT SESSION PRE-CHECK (eliminates flicker) ──
+// If localStorage has a session, pre-show dashboard immediately
+// Firebase will verify and correct if needed
+(function() {
+  try {
+    const s = JSON.parse(localStorage.getItem('ish_session') || 'null');
+    if (s && s.email) {
+      document.getElementById('authLoader').style.display = 'none';
+      document.getElementById('dashScreen').style.display = 'block';
+      // Pre-fill name so nav doesn't flash empty
+      const navLabel = document.getElementById('navUserLabel');
+      if (navLabel && s.name) {
+        navLabel.textContent = (s.name.split(' ')[0] || s.email.split('@')[0]).toUpperCase();
+        navLabel.style.display = 'block';
+      }
+    }
+  } catch(_) {}
+})();
+
 // ── AUTH STATE ──
 onAuthStateChanged(auth, async (user) => {
+  // Always hide loader first
+  document.getElementById('authLoader').style.display = 'none';
+
   if (!user) {
+    // Clear any stale session
+    localStorage.removeItem('ish_session');
     document.getElementById('gateScreen').style.display = 'flex';
     document.getElementById('dashScreen').style.display = 'none';
     return;
