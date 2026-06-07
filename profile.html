@@ -27,7 +27,10 @@ nav{position:sticky;top:0;z-index:100;padding:0 48px;height:64px;display:flex;al
 .nav-back:hover{color:var(--lime);}
 
 /* GATE */
-#gateScreen{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 64px);}
+#gateScreen{position:relative;z-index:1;display:none;align-items:center;justify-content:center;min-height:calc(100vh - 64px);}
+#authLoader{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 64px);}
+#authLoader .loader-ring{width:40px;height:40px;border:3px solid #1e1e2e;border-top-color:#c8f135;border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
 .gate-card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:56px 48px;text-align:center;max-width:420px;position:relative;overflow:hidden;}
 .gate-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--lime),transparent);}
 
@@ -134,6 +137,11 @@ input:disabled{opacity:0.5;}
     Back Home
   </a>
 </nav>
+
+<!-- AUTH LOADER -->
+<div id="authLoader">
+  <div class="loader-ring"></div>
+</div>
 
 <!-- GATE -->
 <div id="gateScreen">
@@ -300,9 +308,22 @@ const storage = getStorage(app);
 let currentUser = null;
 let userData = {};
 
+// ── INSTANT SESSION PRE-CHECK (eliminates flicker) ──
+(function() {
+  try {
+    const s = JSON.parse(localStorage.getItem('ish_session') || 'null');
+    if (s && s.email) {
+      document.getElementById('authLoader').style.display = 'none';
+      document.getElementById('profilePage').style.display = 'block';
+    }
+  } catch(_) {}
+})();
+
 // ── AUTH ──
 onAuthStateChanged(auth, async (user) => {
+  document.getElementById('authLoader').style.display = 'none';
   if (!user) {
+    localStorage.removeItem('ish_session');
     document.getElementById('gateScreen').style.display = 'flex';
     document.getElementById('profilePage').style.display = 'none';
     return;
