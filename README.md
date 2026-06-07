@@ -15,15 +15,15 @@
 
 ---
 
-[![Live Site](https://img.shields.io/badge/🌐_LIVE_SITE-esd--project--tiu.github.io-c8f135?style=for-the-badge&labelColor=05050a)](https://esd-project-tiu.github.io/it-study-hub/index.html)
+[![Live Site](https://img.shields.io/badge/🌐_LIVE_SITE-www.itstudyhub.dpdns.org-c8f135?style=for-the-badge&labelColor=05050a)](https://www.itstudyhub.dpdns.org)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222222?style=for-the-badge&logo=github&logoColor=white)](https://pages.github.com)
 
-[![Made with ❤️](https://img.shields.io/badge/Made_with-❤️_at_TIU-c8f135?style=flat-square&labelColor=05050a)](https://esd-project-tiu.github.io/it-study-hub/index.html)
-[![ESD Project](https://img.shields.io/badge/ESD-Group_Project_2025-c8f135?style=flat-square&labelColor=05050a)](https://esd-project-tiu.github.io/it-study-hub/index.html)
-[![Status](https://img.shields.io/badge/Status-Live_&_Active_🟢-c8f135?style=flat-square&labelColor=05050a)](https://esd-project-tiu.github.io/it-study-hub/index.html)
+[![Made with ❤️](https://img.shields.io/badge/Made_with-❤️_at_TIU-c8f135?style=flat-square&labelColor=05050a)](https://www.itstudyhub.dpdns.org)
+[![ESD Project](https://img.shields.io/badge/ESD-Group_Project_2026-c8f135?style=flat-square&labelColor=05050a)](https://www.itstudyhub.dpdns.org)
+[![Status](https://img.shields.io/badge/Status-Live_&_Active_🟢-c8f135?style=flat-square&labelColor=05050a)](https://www.itstudyhub.dpdns.org)
 
 </div>
 
@@ -37,7 +37,7 @@
 |:---:|:---:|:---:|
 | Dark cyberpunk landing page with animated hero | 6 subject cards with skill level indicators | 25-question placement system with instant results |
 
-> **🔗 Live at:** [`esd-project-tiu.github.io/it-study-hub`](https://esd-project-tiu.github.io/it-study-hub/index.html)
+> **🔗 Live at:** [`www.itstudyhub.dpdns.org`](https://www.itstudyhub.dpdns.org)
 
 </div>
 
@@ -91,7 +91,7 @@ Collaborative space for students to download and share class notes, past papers,
 Regular editorial content covering AI, Cybersecurity, Web Development, and IT career insights.
 
 ### 🔒 Authentication System
-Dynamic auth header powered by `localStorage` session state — structurally ready for Firebase backend integration.
+Firebase-powered authentication with email/password login, session persistence via `onAuthStateChanged`, and role-based access control (free / pro / elite) enforced at the Firestore level.
 
 ---
 
@@ -108,7 +108,7 @@ it-study-hub/
 ├── 📄 team.html              ← Team profiles
 ├── 📄 about.html             ← Project documentation
 ├── 📄 contactus.html         ← Contact forms
-├── 📄 Login.html             ← Sign-in & enrollment
+├── 📄 Login.html             ← Sign-in & enrollment (drag-to-authenticate)
 ├── 📄 privacypolicy.html     ← Privacy & compliance
 ├── 📄 global.html            ← Shared layout utilities
 │
@@ -138,9 +138,12 @@ it-study-hub/
 │  Structure   │  HTML5                               │
 │  Styling     │  CSS3 (Grid, Flexbox, Animations)    │
 │  Logic       │  Vanilla JavaScript (ES6+)           │
-│  Hosting     │  GitHub Pages                        │
+│  Auth        │  Firebase Authentication             │
+│  Database    │  Cloud Firestore                     │
+│  Storage     │  Firebase Storage                    │
+│  Hosting     │  GitHub Pages + Custom Domain        │
+│  Domain      │  www.itstudyhub.dpdns.org            │
 │  Version     │  Git + GitHub                        │
-│  Auth (UI)   │  localStorage Session Machine        │
 │  Fonts       │  Bebas Neue · DM Sans · JetBrains   │
 └──────────────┴──────────────────────────────────────┘
 
@@ -153,7 +156,7 @@ it-study-hub/
 
 ### View Live
 ```
-https://esd-project-tiu.github.io/it-study-hub/index.html
+https://www.itstudyhub.dpdns.org
 ```
 
 ### Run Locally
@@ -177,10 +180,10 @@ open index.html
 
 | | Name | Role |
 |:---:|:---|:---|
-| 👑 | **Dithsa Dutta** | Project Lead · Frontend Dev · Quiz System |
+| 👑 | **Dithsa Dutta** | Project Lead · Full Stack Dev · Quiz System · Firebase |
 | 🌸 | **Mithila Rani Saha** | UI/UX Design · Blog Content |
 | 💻 | **Snehanshu Sarkar** | Technical Implementation |
-| 🔧 | **Argha Paul** | Content |
+| 🔧 | **Argha Paul** | Content & Documentation |
 
 *Techno India University — B.Sc Information Technology — ESD Group Project 2026*
 
@@ -190,11 +193,14 @@ open index.html
 
 ## 🔮 Future Roadmap
 
-- [ ] 🔐 Firebase Authentication — real student accounts with saved progress
+- [x] 🔐 Firebase Authentication — real student accounts with session persistence
+- [x] 👑 Premium plan system — ₹199 / ₹499 / ₹999 tiers with Firestore enforcement
+- [x] 🏆 Global leaderboard — XP-based rankings pulled from Firestore
 - [ ] 📊 Full 25-question quiz for all subjects
 - [ ] 💬 Discussion forum for student Q&A
 - [ ] 📈 Personal dashboard with quiz history & progress tracking
 - [ ] 🌍 Open platform beyond TIU to all IT students in India
+- [ ] 📱 Mobile-first redesign
 
 ---
 
@@ -207,10 +213,9 @@ This project was built as part of the **Enterprise Systems Development (ESD)** c
 <div align="center">
 
 ```
-built with 💚 by team IT STUDY HUB · TIU · 2025
+built with 💚 by team IT STUDY HUB · TIU · 2026
 ```
 
-[![Visit Site](https://img.shields.io/badge/🚀_Visit_Live_Site-c8f135?style=for-the-badge&labelColor=05050a)](https://esd-project-tiu.github.io/it-study-hub/index.html)
+[![Visit Site](https://img.shields.io/badge/🚀_Visit_Live_Site-www.itstudyhub.dpdns.org-c8f135?style=for-the-badge&labelColor=05050a)](https://www.itstudyhub.dpdns.org)
 
 </div>
-
