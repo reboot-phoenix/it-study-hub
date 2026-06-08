@@ -408,6 +408,102 @@
     .page-footer { padding:24px; flex-direction:column; gap:12px; text-align:center; }
     .nav-links { gap:16px; }
   }
+
+  /* ── TEAM PHOTO BLOCK ── */
+  .team-photo-block {
+    max-width:860px;
+    margin:0 auto;
+  }
+
+  .team-photo-frame {
+    position:relative;
+    border-radius:24px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    box-shadow:0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,241,53,0.08);
+    transition:box-shadow 0.4s, border-color 0.4s;
+  }
+  .team-photo-frame:hover {
+    border-color:var(--border-active);
+    box-shadow:0 40px 100px rgba(0,0,0,0.7), 0 0 60px rgba(200,241,53,0.08);
+  }
+
+  .team-photo-img {
+    width:100%;
+    display:block;
+    object-fit:cover;
+    filter:grayscale(12%) brightness(0.92);
+    transition:filter 0.5s, transform 0.5s;
+  }
+  .team-photo-frame:hover .team-photo-img {
+    filter:grayscale(0%) brightness(1);
+    transform:scale(1.015);
+  }
+
+  .team-photo-overlay {
+    position:absolute;
+    bottom:0; left:0; right:0;
+    padding:48px 28px 24px;
+    background:linear-gradient(to top, rgba(4,4,10,0.92) 0%, rgba(4,4,10,0.5) 60%, transparent 100%);
+  }
+
+  .team-names-row {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  .tn-chip {
+    font-family:var(--ff-mono);
+    font-size:10px;
+    color:var(--muted);
+    background:rgba(10,10,20,0.75);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:7px 14px;
+    letter-spacing:0.06em;
+    backdrop-filter:blur(8px);
+    transition:border-color 0.2s, color 0.2s;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .tn-chip span { color:var(--text); font-weight:600; font-size:11px; }
+  .tn-chip em { font-style:normal; color:var(--muted2); font-size:9px; letter-spacing:0.08em; }
+  .tn-chip.founder {
+    border-color:rgba(200,241,53,0.45);
+    background:rgba(200,241,53,0.07);
+  }
+  .tn-chip.founder span { color:var(--lime); }
+  .tn-chip.founder em { color:rgba(200,241,53,0.7); }
+  .team-photo-frame:hover .tn-chip {
+    border-color:rgba(200,241,53,0.25);
+  }
+  .team-photo-frame:hover .tn-chip.founder {
+    border-color:var(--lime);
+    box-shadow:0 0 12px rgba(200,241,53,0.2);
+  }
+
+  .team-caption {
+    text-align:center;
+    margin-top:20px;
+    padding-bottom:4px;
+  }
+  .team-caption-title {
+    font-family:var(--ff-display);
+    font-size:22px;
+    font-weight:800;
+    color:var(--text);
+    margin-bottom:6px;
+  }
+  .team-caption-sub {
+    font-family:var(--ff-mono);
+    font-size:11px;
+    color:var(--lime);
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+  }
+
 </style>
 </head>
 <body>
@@ -437,85 +533,25 @@
 <!-- ── TEAM GRID ── -->
 <div class="team-wrapper">
   <div class="section-label">Founding Members</div>
-  <div class="team-grid">
 
-    <!-- Dithsa -->
-    <div class="member-card fade-up" style="animation-delay:0.05s;">
-      <div class="card-photo">
-        <img src="Dithsa.jpeg" alt="Dithsa Dutta" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="card-photo-placeholder" style="display:none;">👨‍💻</div>
-      </div>
-      <div class="card-body">
-        <div class="card-index">// MEMBER_01</div>
-        <div class="card-name">Dithsa Dutta</div>
-        <div class="card-role">Founder & Lead Developer</div>
-        <div class="card-divider"></div>
-        <div class="card-tags">
-          <span class="tag">Frontend</span>
-          <span class="tag">Firebase</span>
-          <span class="tag">Quiz System</span>
+  <div class="team-photo-block fade-up" style="animation-delay:0.05s;">
+    <div class="team-photo-frame">
+      <img src="team_image.jpeg" alt="The IT Study Hub Team at Techno India University" class="team-photo-img">
+      <div class="team-photo-overlay">
+        <div class="team-names-row">
+          <div class="tn-chip founder">// MEMBER_01 &nbsp;<span>Dithsa Dutta</span><em>Founder &amp; Full Stack Developer</em></div>
+          <div class="tn-chip">// MEMBER_02 &nbsp;<span>Mithila Rani Saha</span><em>Designer</em></div>
+          <div class="tn-chip">// MEMBER_03 &nbsp;<span>Snehanshu Sarkar</span><em>Technical Implementation</em></div>
+          <div class="tn-chip">// MEMBER_04 &nbsp;<span>Argha Paul</span><em>Tester &amp; Content</em></div>
         </div>
       </div>
     </div>
-
-    <!-- Mithila -->
-    <div class="member-card fade-up" style="animation-delay:0.12s;">
-      <div class="card-photo">
-        <img src="Mithila.jpeg" alt="Mithila Rani Saha" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="card-photo-placeholder" style="display:none;">🌸</div>
-      </div>
-      <div class="card-body">
-        <div class="card-index">// MEMBER_02</div>
-        <div class="card-name">Mithila Rani Saha</div>
-        <div class="card-role">UI/UX Designer</div>
-        <div class="card-divider"></div>
-        <div class="card-tags">
-          <span class="tag">Design</span>
-          <span class="tag">Blog Content</span>
-          <span class="tag">Visual Identity</span>
-        </div>
-      </div>
+    <div class="team-caption">
+      <div class="team-caption-title">The Full Squad</div>
+      <div class="team-caption-sub">Techno India University · ESD 2026 · B.Sc IT</div>
     </div>
-
-    <!-- Argha -->
-    <div class="member-card fade-up" style="animation-delay:0.19s;">
-      <div class="card-photo">
-        <img src="Argha.jpeg" alt="Argha Paul" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="card-photo-placeholder" style="display:none;">🔷</div>
-      </div>
-      <div class="card-body">
-        <div class="card-index">// MEMBER_03</div>
-        <div class="card-name">Argha Paul</div>
-        <div class="card-role">Research & Content</div>
-        <div class="card-divider"></div>
-        <div class="card-tags">
-          <span class="tag">Research</span>
-          <span class="tag">Course Content</span>
-          <span class="tag">Documentation</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Snehanshu -->
-    <div class="member-card fade-up" style="animation-delay:0.26s;">
-      <div class="card-photo">
-        <img src="Snehanshu.jpeg" alt="Snehanshu Sarkar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="card-photo-placeholder" style="display:none;">🐍</div>
-      </div>
-      <div class="card-body">
-        <div class="card-index">// MEMBER_04</div>
-        <div class="card-name">Snehanshu Sarkar</div>
-        <div class="card-role">Technical Implementation</div>
-        <div class="card-divider"></div>
-        <div class="card-tags">
-          <span class="tag">Testing</span>
-          <span class="tag">Backend Logic</span>
-          <span class="tag">QA</span>
-        </div>
-      </div>
-    </div>
-
   </div>
+
 </div>
 
 <!-- ── CONTACT SECTION ── -->
