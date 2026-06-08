@@ -121,10 +121,7 @@ it-study-hub/
 │   └── web.html              ← HTML + CSS + JS track
 │
 └── 🖼️ Team Assets
-    ├── Dithsa.jpeg
-    ├── Mithila.jpeg
-    ├── Snehanshu.jpeg
-    └── Argha.jpeg
+    ├── team_image.jpeg
 ```
 
 ---
