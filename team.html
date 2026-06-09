@@ -7,503 +7,290 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:#04040a;
-    --surface:#0a0a14;
-    --surface2:#111120;
-    --border:rgba(255,255,255,0.07);
-    --border-active:rgba(200,241,53,0.4);
-    --lime:#c8f135;
-    --lime-dim:rgba(200,241,53,0.10);
-    --lime-glow:rgba(200,241,53,0.22);
-    --text:#eeeef5;
-    --muted:#6b6b80;
-    --muted2:#9494a8;
-    --ff-display:'Syne',sans-serif;
-    --ff-body:'DM Sans',sans-serif;
-    --ff-mono:'JetBrains Mono',monospace;
+    --bg:#04040a;--surface:#0a0a14;--surface2:#111120;
+    --border:rgba(255,255,255,0.07);--border-active:rgba(200,241,53,0.4);
+    --lime:#c8f135;--lime-dim:rgba(200,241,53,0.10);--lime-glow:rgba(200,241,53,0.22);
+    --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;
+    --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
   }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none!important}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden}
 
-  *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; cursor:none !important; }
-
-  html { scroll-behavior:smooth; }
-
-  body {
-    background:var(--bg);
-    color:var(--text);
-    font-family:var(--ff-body);
-    min-height:100vh;
-    overflow-x:hidden;
-  }
-
-  /* NOISE OVERLAY */
-  body::before {
-    content:'';
-    position:fixed;
-    inset:0;
+  body::before{
+    content:'';position:fixed;inset:0;
     background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events:none;
-    z-index:0;
-    opacity:0.5;
+    pointer-events:none;z-index:0;opacity:0.5
   }
 
-  /* AMBIENT GLOWS */
-  .ambient { position:fixed; border-radius:50%; filter:blur(120px); pointer-events:none; z-index:0; }
-  .amb-1 { width:500px; height:500px; background:rgba(200,241,53,0.05); top:-150px; right:-150px; }
-  .amb-2 { width:400px; height:400px; background:rgba(200,241,53,0.04); bottom:-100px; left:-100px; }
+  .ambient{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+  .amb-1{width:500px;height:500px;background:rgba(200,241,53,0.05);top:-150px;right:-150px}
+  .amb-2{width:400px;height:400px;background:rgba(200,241,53,0.04);bottom:-100px;left:-100px}
 
-  /* ── NAV ── */
-  nav {
-    position:sticky;
-    top:0;
-    z-index:100;
-    padding:0 48px;
-    height:64px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background:rgba(4,4,10,0.88);
-    backdrop-filter:blur(20px);
-    border-bottom:1px solid var(--border);
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:100;
+    padding:0 48px;height:64px;
+    display:flex;align-items:center;justify-content:space-between;
+    background:rgba(4,4,10,0.88);backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border)
+  }
+  .nav-logo{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:0.12em;color:var(--text);text-decoration:none}
+  .nav-logo span{color:var(--lime)}
+  .nav-links{display:flex;gap:28px;align-items:center}
+  .nav-link{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);text-decoration:none;transition:color .2s;text-transform:uppercase;letter-spacing:0.05em}
+  .nav-link:hover{color:var(--lime)}
+  .nav-link.active{color:var(--lime)}
+
+  /* LAYOUT — same sidebar pattern as about/contact */
+  .layout{
+    position:relative;z-index:1;
+    display:grid;grid-template-columns:300px 1fr;
+    min-height:calc(100vh - 64px)
   }
 
-  .nav-logo {
-    font-family:var(--ff-display);
-    font-size:15px;
-    font-weight:800;
-    letter-spacing:0.12em;
-    color:var(--text);
-    text-decoration:none;
-    text-transform:uppercase;
+  /* SIDEBAR */
+  .sidebar{
+    background:var(--surface);border-right:1px solid var(--border);
+    padding:32px 24px;position:sticky;top:64px;
+    height:calc(100vh - 64px);overflow-y:auto;
+    display:flex;flex-direction:column;gap:8px
   }
-  .nav-logo span { color:var(--lime); }
-
-  .nav-links { display:flex; gap:28px; align-items:center; }
-
-  .nav-link {
-    font-family:var(--ff-mono);
-    font-size:11px;
-    color:var(--muted2);
-    text-decoration:none;
-    transition:color 0.2s;
-    text-transform:uppercase;
-    letter-spacing:0.05em;
+  .sidebar-label{
+    font-family:var(--ff-mono);font-size:10px;letter-spacing:0.15em;
+    color:var(--muted);text-transform:uppercase;
+    padding:0 4px;margin-bottom:4px;margin-top:16px;display:block
   }
-  .nav-link:hover { color:var(--lime); }
-  .nav-link.active { color:var(--lime); }
+  .sidebar-label:first-child{margin-top:0}
 
-  /* ── HERO ── */
-  .hero {
+  .info-pill{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:12px;padding:14px 16px;transition:border-color .2s
+  }
+  .info-pill:hover{border-color:var(--border-active)}
+  .pill-title{font-family:var(--ff-mono);font-size:10px;color:var(--lime);margin-bottom:4px;letter-spacing:0.08em}
+  .pill-val{font-size:13px;color:var(--text);line-height:1.45}
+
+  .member-list{display:flex;flex-direction:column;gap:8px}
+  .member-item{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 14px;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:10px;transition:all .2s;cursor:default!important
+  }
+  .member-item:hover{border-color:var(--border-active);transform:translateX(4px)}
+  .member-avatar{
+    width:32px;height:32px;border-radius:8px;
+    background:var(--lime-dim);border:1px solid var(--border-active);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--ff-mono);font-size:11px;font-weight:600;color:var(--lime);
+    flex-shrink:0
+  }
+  .member-info{}
+  .member-name-sm{font-size:13px;font-weight:500;color:var(--text);line-height:1.2}
+  .member-role-sm{font-family:var(--ff-mono);font-size:9px;color:var(--muted);letter-spacing:0.06em;margin-top:2px}
+
+  /* MAIN */
+  .main{padding:48px;display:flex;flex-direction:column;gap:48px;max-width:900px}
+
+  /* HERO */
+  .hero-eyebrow{
+    font-family:var(--ff-mono);font-size:11px;letter-spacing:0.18em;
+    color:var(--lime);text-transform:uppercase;margin-bottom:16px;
+    display:flex;align-items:center;gap:10px
+  }
+  .hero-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--lime)}
+  .hero-title{
+    font-family:var(--ff-display);font-size:clamp(42px,6vw,72px);
+    font-weight:800;line-height:0.95;margin-bottom:20px
+  }
+  .hero-title em{font-style:normal;color:var(--lime)}
+  .hero-desc{color:var(--muted2);font-size:16px;max-width:560px;line-height:1.75}
+
+  /* PHOTO SECTION */
+  .photo-section{}
+  .section-label{
+    font-family:var(--ff-mono);font-size:11px;letter-spacing:0.15em;
+    color:var(--muted);text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;margin-bottom:20px
+  }
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+  .photo-card{
     position:relative;
-    z-index:1;
-    padding:80px 64px 48px;
-    max-width:1200px;
-    margin:0 auto;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:20px;overflow:hidden;
+    transition:border-color .3s,box-shadow .3s
   }
-
-  .hero-eyebrow {
-    font-family:var(--ff-mono);
-    font-size:11px;
-    letter-spacing:0.2em;
-    color:var(--lime);
-    text-transform:uppercase;
-    margin-bottom:20px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-  }
-  .hero-eyebrow::before {
-    content:'';
-    display:block;
-    width:32px;
-    height:1px;
-    background:var(--lime);
-  }
-
-  .hero-title {
-    font-family:var(--ff-display);
-    font-size:clamp(52px,8vw,96px);
-    font-weight:800;
-    line-height:0.9;
-    letter-spacing:-0.02em;
-    margin-bottom:24px;
-  }
-  .hero-title em { font-style:normal; color:var(--lime); }
-
-  .hero-desc {
-    color:var(--muted2);
-    font-size:16px;
-    max-width:560px;
-    line-height:1.75;
-  }
-
-  /* ── TEAM GRID ── */
-  .team-wrapper {
-    position:relative;
-    z-index:1;
-    padding:0 64px 80px;
-    max-width:1200px;
-    margin:0 auto;
-  }
-
-  .section-label {
-    font-family:var(--ff-mono);
-    font-size:11px;
-    letter-spacing:0.15em;
-    color:var(--muted);
-    text-transform:uppercase;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-bottom:40px;
-  }
-  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
-
-  .team-grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-    gap:24px;
-  }
-
-  /* ── MEMBER CARD ── */
-  .member-card {
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:20px;
-    overflow:hidden;
-    transition:border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    position:relative;
-  }
-
-  .member-card:hover {
+  .photo-card:hover{
     border-color:var(--border-active);
-    transform:translateY(-6px);
-    box-shadow:0 20px 48px rgba(0,0,0,0.5), 0 0 0 1px var(--border-active);
+    box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 1px var(--border-active)
   }
-
-  .member-card::after {
-    content:'';
-    position:absolute;
-    inset:0;
-    background:linear-gradient(135deg, var(--lime-dim) 0%, transparent 60%);
-    opacity:0;
-    transition:opacity 0.3s;
-    pointer-events:none;
-    border-radius:20px;
-  }
-  .member-card:hover::after { opacity:1; }
-
-  /* photo area */
-  .card-photo {
-    width:100%;
-    aspect-ratio:1/1;
-    overflow:hidden;
-    background:var(--surface2);
-    position:relative;
-  }
-
-  .card-photo img {
-    width:100%;
-    height:100%;
-    object-fit:cover;
+  .photo-card img{
+    width:100%;max-height:520px;
+    object-fit:cover;object-position:center 8%;
     display:block;
-    filter:grayscale(20%);
-    transition:filter 0.4s, transform 0.4s;
+    filter:grayscale(10%) contrast(1.05);
+    transition:filter .5s,transform .5s
   }
-  .member-card:hover .card-photo img {
-    filter:grayscale(0%);
-    transform:scale(1.04);
+  .photo-card:hover img{filter:grayscale(0%) contrast(1.02);transform:scale(1.02)}
+
+  /* gradient over photo */
+  .photo-overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(to bottom,transparent 50%,rgba(4,4,10,0.9) 100%)
   }
 
-  /* photo placeholder (shown if img fails) */
-  .card-photo-placeholder {
-    width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:64px;
-    background:var(--surface2);
+  /* scan line */
+  .photo-card::after{
+    content:'';position:absolute;left:0;right:0;
+    height:2px;background:var(--lime);
+    top:-100%;transition:top .6s ease;opacity:0.6;pointer-events:none
+  }
+  .photo-card:hover::after{top:100%}
+
+  /* bottom bar on photo */
+  .photo-bar{
+    position:absolute;bottom:0;left:0;right:0;
+    padding:20px 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px
+  }
+  .photo-bar-left{}
+  .photo-bar-tag{
+    font-family:var(--ff-mono);font-size:10px;
+    color:var(--lime);letter-spacing:0.15em;
+    text-transform:uppercase;margin-bottom:6px
+  }
+  .photo-bar-names{
+    font-family:var(--ff-display);font-size:18px;font-weight:700;
+    color:var(--text);letter-spacing:0.04em
+  }
+  .photo-bar-names .dot{color:var(--muted);margin:0 6px;font-weight:400}
+  .photo-bar-right{flex-shrink:0}
+  .photo-bar-badge{
+    display:flex;align-items:center;gap:8px;
+    background:var(--lime-dim);border:1px solid var(--border-active);
+    border-radius:50px;padding:6px 14px;
+    font-family:var(--ff-mono);font-size:10px;color:var(--lime);
+    letter-spacing:0.1em;text-transform:uppercase
+  }
+  .badge-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--lime);box-shadow:0 0 8px var(--lime);
+    animation:blink 2s infinite
   }
 
-  /* lime scan line on hover */
-  .card-photo::after {
-    content:'';
-    position:absolute;
-    left:0; right:0;
-    height:2px;
-    background:var(--lime);
-    top:-100%;
-    transition:top 0.5s ease;
-    opacity:0.7;
+  /* TEAM CARDS */
+  .team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .team-card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:16px;padding:24px;
+    display:flex;gap:16px;align-items:flex-start;
+    transition:border-color .25s,transform .25s,box-shadow .25s;
+    position:relative;overflow:hidden
   }
-  .member-card:hover .card-photo::after { top:100%; }
-
-  /* card body */
-  .card-body {
-    padding:24px;
-    position:relative;
-    z-index:1;
+  .team-card::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,var(--lime-dim) 0%,transparent 60%);
+    opacity:0;transition:opacity .25s;border-radius:16px;pointer-events:none
   }
-
-  .card-index {
-    font-family:var(--ff-mono);
-    font-size:10px;
-    color:var(--muted);
-    letter-spacing:0.1em;
-    margin-bottom:8px;
+  .team-card:hover{
+    border-color:var(--border-active);
+    transform:translateY(-4px);
+    box-shadow:0 16px 40px rgba(0,0,0,0.4)
   }
+  .team-card:hover::before{opacity:1}
 
-  .card-name {
-    font-family:var(--ff-display);
-    font-size:22px;
-    font-weight:800;
-    color:var(--text);
-    margin-bottom:4px;
-    line-height:1.1;
-  }
-
-  .card-role {
-    font-family:var(--ff-mono);
-    font-size:11px;
-    color:var(--lime);
-    text-transform:uppercase;
-    letter-spacing:0.1em;
-  }
-
-  .card-divider {
-    height:1px;
-    background:var(--border);
-    margin:16px 0;
-  }
-
-  .card-tags {
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-  }
-
-  .tag {
-    font-family:var(--ff-mono);
-    font-size:10px;
-    padding:4px 10px;
-    border-radius:6px;
-    background:var(--surface2);
-    border:1px solid var(--border);
-    color:var(--muted2);
-  }
-
-  /* ── CONTACT SECTION ── */
-  .contact-wrapper {
-    position:relative;
-    z-index:1;
-    padding:0 64px 80px;
-    max-width:1200px;
-    margin:0 auto;
-  }
-
-  .contact-grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(240px,1fr));
-    gap:16px;
-  }
-
-  .contact-card {
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:24px;
-    display:flex;
-    gap:16px;
-    align-items:flex-start;
-    transition:border-color 0.25s, transform 0.25s;
-  }
-  .contact-card:hover { border-color:var(--border-active); transform:translateY(-3px); }
-
-  .cc-icon {
-    width:40px;
-    height:40px;
+  .card-index-badge{
+    width:40px;height:40px;flex-shrink:0;
+    background:var(--lime-dim);border:1px solid var(--border-active);
     border-radius:10px;
-    background:var(--lime-dim);
-    border:1px solid var(--border-active);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:18px;
-    flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--ff-mono);font-size:11px;font-weight:600;color:var(--lime)
+  }
+  .card-body{}
+  .card-index-label{
+    font-family:var(--ff-mono);font-size:9px;color:var(--muted);
+    letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px
+  }
+  .card-name{
+    font-family:var(--ff-display);font-size:19px;font-weight:800;
+    color:var(--text);margin-bottom:2px;line-height:1.15
+  }
+  .card-role{
+    font-family:var(--ff-mono);font-size:10px;color:var(--lime);
+    letter-spacing:0.08em;margin-bottom:10px
+  }
+  .card-tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:6px;padding:3px 10px;
+    font-family:var(--ff-mono);font-size:9px;
+    color:var(--muted2);letter-spacing:0.06em
   }
 
-  .cc-label {
-    font-family:var(--ff-mono);
-    font-size:10px;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:0.1em;
-    margin-bottom:4px;
+  /* CONTACT STRIP */
+  .contact-strip{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:16px;padding:0;overflow:hidden;
+    display:grid;grid-template-columns:repeat(4,1fr)
   }
-  .cc-value {
-    font-size:14px;
-    color:var(--text);
-    line-height:1.4;
+  .contact-item{
+    padding:24px 20px;border-right:1px solid var(--border);
+    transition:background .2s;position:relative;overflow:hidden
   }
+  .contact-item:last-child{border-right:none}
+  .contact-item::after{
+    content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+    background:var(--lime);transform:scaleX(0);transform-origin:left;
+    transition:transform .3s
+  }
+  .contact-item:hover{background:var(--lime-dim)}
+  .contact-item:hover::after{transform:scaleX(1)}
+  .ci-icon{font-size:18px;margin-bottom:10px;display:block}
+  .ci-label{font-family:var(--ff-mono);font-size:9px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:5px}
+  .ci-val{font-size:12.5px;color:var(--text);font-weight:500;line-height:1.4}
 
-  /* social icons */
-  .social-row { display:flex; gap:10px; margin-top:4px; }
-  .social-btn {
-    width:32px; height:32px;
-    background:var(--surface2);
-    border:1px solid var(--border);
-    border-radius:8px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:14px;
-    color:var(--muted2);
-    text-decoration:none;
-    transition:all 0.2s;
+  .social-row{display:flex;gap:6px;margin-top:6px}
+  .social-btn{
+    width:28px;height:28px;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:6px;display:flex;align-items:center;justify-content:center;
+    font-family:var(--ff-mono);font-size:11px;color:var(--muted2);
+    text-decoration:none;transition:all .2s
   }
-  .social-btn:hover { border-color:var(--lime); color:var(--lime); background:var(--lime-dim); }
+  .social-btn:hover{border-color:var(--lime);color:var(--lime);background:var(--lime-dim)}
 
-  /* ── FOOTER ── */
-  .page-footer {
-    position:relative;
-    z-index:1;
-    border-top:1px solid var(--border);
-    padding:32px 64px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    max-width:1200px;
-    margin:0 auto;
+  /* FOOTER */
+  .page-footer{
+    padding:32px 0;border-top:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between
   }
-  .footer-copy {
-    font-family:var(--ff-mono);
-    font-size:11px;
-    color:var(--muted);
+  .footer-copy{font-family:var(--ff-mono);font-size:11px;color:var(--muted)}
+  .footer-back{
+    font-family:var(--ff-mono);font-size:11px;color:var(--muted2);
+    text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s
   }
-  .footer-back {
-    font-family:var(--ff-mono);
-    font-size:11px;
-    color:var(--muted2);
-    text-decoration:none;
-    display:flex;
-    align-items:center;
-    gap:6px;
-    transition:color 0.2s;
-  }
-  .footer-back:hover { color:var(--lime); }
+  .footer-back:hover{color:var(--lime)}
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity:0; transform:translateY(24px); }
-    to   { opacity:1; transform:translateY(0); }
-  }
-  .fade-up { opacity:0; animation:fadeUp 0.6s ease forwards; }
+  /* ANIMATIONS */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  .fade-up{opacity:0;animation:fadeUp .6s ease forwards}
 
-  /* ── RESPONSIVE ── */
-  @media(max-width:768px) {
-    nav { padding:0 20px; }
-    .hero { padding:48px 24px 32px; }
-    .team-wrapper, .contact-wrapper { padding:0 24px 48px; }
-    .hero-title { font-size:52px; }
-    .page-footer { padding:24px; flex-direction:column; gap:12px; text-align:center; }
-    .nav-links { gap:16px; }
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr}
+    .sidebar{display:none}
+    .main{padding:24px}
+    .team-grid{grid-template-columns:1fr}
+    .contact-strip{grid-template-columns:1fr 1fr}
+    .contact-item{border-right:none;border-bottom:1px solid var(--border)}
   }
-
-  /* ── TEAM PHOTO BLOCK ── */
-  .team-photo-block {
-    max-width:860px;
-    margin:0 auto;
+  @media(max-width:560px){
+    .contact-strip{grid-template-columns:1fr}
+    .photo-bar-names{font-size:13px}
   }
-
-  .team-photo-frame {
-    position:relative;
-    border-radius:24px;
-    overflow:hidden;
-    border:1px solid var(--border);
-    box-shadow:0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,241,53,0.08);
-    transition:box-shadow 0.4s, border-color 0.4s;
-  }
-  .team-photo-frame:hover {
-    border-color:var(--border-active);
-    box-shadow:0 40px 100px rgba(0,0,0,0.7), 0 0 60px rgba(200,241,53,0.08);
-  }
-
-  .team-photo-img {
-    width:100%;
-    display:block;
-    object-fit:cover;
-    filter:grayscale(12%) brightness(0.92);
-    transition:filter 0.5s, transform 0.5s;
-  }
-  .team-photo-frame:hover .team-photo-img {
-    filter:grayscale(0%) brightness(1);
-    transform:scale(1.015);
-  }
-
-  .team-photo-overlay {
-    position:absolute;
-    bottom:0; left:0; right:0;
-    padding:48px 28px 24px;
-    background:linear-gradient(to top, rgba(4,4,10,0.92) 0%, rgba(4,4,10,0.5) 60%, transparent 100%);
-  }
-
-  .team-names-row {
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-  }
-
-  .tn-chip {
-    font-family:var(--ff-mono);
-    font-size:10px;
-    color:var(--muted);
-    background:rgba(10,10,20,0.75);
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:7px 14px;
-    letter-spacing:0.06em;
-    backdrop-filter:blur(8px);
-    transition:border-color 0.2s, color 0.2s;
-    display:flex;
-    flex-direction:column;
-    gap:2px;
-  }
-  .tn-chip span { color:var(--text); font-weight:600; font-size:11px; }
-  .tn-chip em { font-style:normal; color:var(--muted2); font-size:9px; letter-spacing:0.08em; }
-  .tn-chip.founder {
-    border-color:rgba(200,241,53,0.45);
-    background:rgba(200,241,53,0.07);
-  }
-  .tn-chip.founder span { color:var(--lime); }
-  .tn-chip.founder em { color:rgba(200,241,53,0.7); }
-  .team-photo-frame:hover .tn-chip {
-    border-color:rgba(200,241,53,0.25);
-  }
-  .team-photo-frame:hover .tn-chip.founder {
-    border-color:var(--lime);
-    box-shadow:0 0 12px rgba(200,241,53,0.2);
-  }
-
-  .team-caption {
-    text-align:center;
-    margin-top:20px;
-    padding-bottom:4px;
-  }
-  .team-caption-title {
-    font-family:var(--ff-display);
-    font-size:22px;
-    font-weight:800;
-    color:var(--text);
-    margin-bottom:6px;
-  }
-  .team-caption-sub {
-    font-family:var(--ff-mono);
-    font-size:11px;
-    color:var(--lime);
-    letter-spacing:0.15em;
-    text-transform:uppercase;
-  }
-
 </style>
 </head>
 <body>
@@ -511,7 +298,6 @@
 <div class="ambient amb-1"></div>
 <div class="ambient amb-2"></div>
 
-<!-- ── NAVIGATION ── -->
 <nav>
   <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
   <div class="nav-links">
@@ -523,124 +309,228 @@
   </div>
 </nav>
 
-<!-- ── HERO ── -->
-<section class="hero fade-up">
-  <div class="hero-eyebrow">Techno India University · ESD 2026</div>
-  <h1 class="hero-title">The Minds<br>Behind the <em>Hub</em></h1>
-  <p class="hero-desc">A team of B.Sc IT students united by one idea — that technical education should be clear, accessible, and worth your time.</p>
-</section>
+<div class="layout">
 
-<!-- ── TEAM GRID ── -->
-<div class="team-wrapper">
-  <div class="section-label">Founding Members</div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <span class="sidebar-label">Team Info</span>
+    <div class="info-pill">
+      <div class="pill-title">PROJECT</div>
+      <div class="pill-val">IT Study Hub — ESD 2026</div>
+    </div>
+    <div class="info-pill">
+      <div class="pill-title">INSTITUTION</div>
+      <div class="pill-val">Techno India University, Kolkata</div>
+    </div>
+    <div class="info-pill">
+      <div class="pill-title">STACK</div>
+      <div class="pill-val">HTML · CSS · JS · Firebase</div>
+    </div>
+    <div class="info-pill">
+      <div class="pill-title">TEAM SIZE</div>
+      <div class="pill-val">4 Members</div>
+    </div>
 
-  <div class="team-photo-block fade-up" style="animation-delay:0.05s;">
-    <div class="team-photo-frame">
-      <img src="team_image.jpeg" alt="The IT Study Hub Team at Techno India University" class="team-photo-img">
-      <div class="team-photo-overlay">
-        <div class="team-names-row">
-          <div class="tn-chip founder">// MEMBER_01 &nbsp;<span>Dithsa Dutta</span><em>Founder &amp; Full Stack Developer</em></div>
-          <div class="tn-chip">// MEMBER_02 &nbsp;<span>Mithila Rani Saha</span><em>Designer</em></div>
-          <div class="tn-chip">// MEMBER_03 &nbsp;<span>Snehanshu Sarkar</span><em>Technical Implementation</em></div>
-          <div class="tn-chip">// MEMBER_04 &nbsp;<span>Argha Paul</span><em>Tester &amp; Content</em></div>
+    <span class="sidebar-label" style="margin-top:8px">Members</span>
+    <div class="member-list">
+      <div class="member-item">
+        <div class="member-avatar">DD</div>
+        <div class="member-info">
+          <div class="member-name-sm">Dithsa Dutta</div>
+          <div class="member-role-sm">Lead Developer</div>
+        </div>
+      </div>
+      <div class="member-item">
+        <div class="member-avatar">SS</div>
+        <div class="member-info">
+          <div class="member-name-sm">Snehanshu Sarkar</div>
+          <div class="member-role-sm">Implementation</div>
+        </div>
+      </div>
+      <div class="member-item">
+        <div class="member-avatar">MS</div>
+        <div class="member-info">
+          <div class="member-name-sm">Mithila Rani Saha</div>
+          <div class="member-role-sm">UI / UX</div>
+        </div>
+      </div>
+      <div class="member-item">
+        <div class="member-avatar">AP</div>
+        <div class="member-info">
+          <div class="member-name-sm">Argha Paul</div>
+          <div class="member-role-sm">Research & Content</div>
         </div>
       </div>
     </div>
-    <div class="team-caption">
-      <div class="team-caption-title">The Full Squad</div>
-      <div class="team-caption-sub">Techno India University · ESD 2026 · B.Sc IT</div>
-    </div>
-  </div>
+  </aside>
 
-</div>
+  <!-- MAIN -->
+  <main class="main">
 
-<!-- ── CONTACT SECTION ── -->
-<div class="contact-wrapper">
-  <div class="section-label">Get In Touch</div>
-  <div class="contact-grid">
+    <!-- HERO -->
+    <header class="fade-up" style="animation-delay:.05s">
+      <div class="hero-eyebrow">Techno India University · ESD 2026</div>
+      <h1 class="hero-title">The Minds<br>Behind the <em>Hub</em></h1>
+      <p class="hero-desc">A team of B.Sc IT students united by one idea — that technical education should be clear, accessible, and worth your time.</p>
+    </header>
 
-    <div class="contact-card fade-up" style="animation-delay:0.3s;">
-      <div class="cc-icon">📍</div>
-      <div>
-        <div class="cc-label">Location</div>
-        <div class="cc-value">Kolkata, West Bengal, India</div>
-      </div>
-    </div>
-
-    <div class="contact-card fade-up" style="animation-delay:0.35s;">
-      <div class="cc-icon">✉️</div>
-      <div>
-        <div class="cc-label">Email</div>
-        <div class="cc-value">itstudyhub.tiu@gmail.com</div>
-      </div>
-    </div>
-
-    <div class="contact-card fade-up" style="animation-delay:0.4s;">
-      <div class="cc-icon">📞</div>
-      <div>
-        <div class="cc-label">Phone</div>
-        <div class="cc-value">+91 9062222240</div>
-      </div>
-    </div>
-
-    <div class="contact-card fade-up" style="animation-delay:0.45s;">
-      <div class="cc-icon">🔗</div>
-      <div>
-        <div class="cc-label">Connect</div>
-        <div class="social-row">
-          <a href="#" class="social-btn" title="Facebook">f</a>
-          <a href="#" class="social-btn" title="Twitter">𝕏</a>
-          <a href="#" class="social-btn" title="LinkedIn">in</a>
-          <a href="#" class="social-btn" title="Instagram">ig</a>
+    <!-- PHOTO -->
+    <section class="photo-section fade-up" style="animation-delay:.12s">
+      <div class="section-label">Team Photo</div>
+      <div class="photo-card">
+        <img src="team_image.jpeg" alt="IT Study Hub Team">
+        <div class="photo-overlay"></div>
+        <div class="photo-bar">
+          <div class="photo-bar-left">
+            <div class="photo-bar-tag">// Founding Members</div>
+            <div class="photo-bar-names">
+              Dithsa<span class="dot">&middot;</span>Snehanshu<span class="dot">&middot;</span>Mithila<span class="dot">&middot;</span>Argha
+            </div>
+          </div>
+          <div class="photo-bar-right">
+            <div class="photo-bar-badge">
+              <div class="badge-dot"></div>
+              B.Sc IT · 2026
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-  </div>
+    <!-- TEAM CARDS -->
+    <section class="fade-up" style="animation-delay:.2s">
+      <div class="section-label">Founding Members</div>
+      <div class="team-grid">
+
+        <div class="team-card">
+          <div class="card-index-badge">01</div>
+          <div class="card-body">
+            <div class="card-index-label">// MEMBER_01</div>
+            <div class="card-name">Dithsa Dutta</div>
+            <div class="card-role">Founder &amp; Lead Developer</div>
+            <div class="card-tags">
+              <span class="tag">Frontend</span>
+              <span class="tag">Firebase</span>
+              <span class="tag">Quiz System</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="team-card">
+          <div class="card-index-badge">02</div>
+          <div class="card-body">
+            <div class="card-index-label">// MEMBER_02</div>
+            <div class="card-name">Mithila Rani Saha</div>
+            <div class="card-role">UI / UX Designer</div>
+            <div class="card-tags">
+              <span class="tag">Design</span>
+              <span class="tag">Blog Content</span>
+              <span class="tag">Visual Identity</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="team-card">
+          <div class="card-index-badge">03</div>
+          <div class="card-body">
+            <div class="card-index-label">// MEMBER_03</div>
+            <div class="card-name">Snehanshu Sarkar</div>
+            <div class="card-role">Technical Implementation</div>
+            <div class="card-tags">
+              <span class="tag">Testing</span>
+              <span class="tag">Backend Logic</span>
+              <span class="tag">QA</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="team-card">
+          <div class="card-index-badge">04</div>
+          <div class="card-body">
+            <div class="card-index-label">// MEMBER_04</div>
+            <div class="card-name">Argha Paul</div>
+            <div class="card-role">Research &amp; Content</div>
+            <div class="card-tags">
+              <span class="tag">Research</span>
+              <span class="tag">Course Content</span>
+              <span class="tag">Documentation</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CONTACT STRIP -->
+    <section class="fade-up" style="animation-delay:.28s">
+      <div class="section-label">Get In Touch</div>
+      <div class="contact-strip">
+        <div class="contact-item">
+          <span class="ci-icon">&#128205;</span>
+          <div class="ci-label">Location</div>
+          <div class="ci-val">Kolkata, West Bengal, India</div>
+        </div>
+        <div class="contact-item">
+          <span class="ci-icon">&#9993;</span>
+          <div class="ci-label">Email</div>
+          <div class="ci-val">itstudyhub.tiu@gmail.com</div>
+        </div>
+        <div class="contact-item">
+          <span class="ci-icon">&#128222;</span>
+          <div class="ci-label">Phone</div>
+          <div class="ci-val">+91 9062222240</div>
+        </div>
+        <div class="contact-item">
+          <span class="ci-icon">&#128279;</span>
+          <div class="ci-label">Connect</div>
+          <div class="social-row">
+            <a href="#" class="social-btn" title="Facebook">f</a>
+            <a href="#" class="social-btn" title="Twitter">&#120143;</a>
+            <a href="#" class="social-btn" title="LinkedIn">in</a>
+            <a href="#" class="social-btn" title="Instagram">ig</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="page-footer fade-up" style="animation-delay:.36s">
+      <span class="footer-copy">&#169; 2026 IT Study Hub &nbsp;&middot;&nbsp; Built for the next 1%</span>
+      <a href="index.html" class="footer-back">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Home
+      </a>
+    </footer>
+
+  </main>
 </div>
 
-<!-- ── FOOTER ── -->
-<footer class="page-footer fade-up" style="animation-delay:0.5s;">
-  <span class="footer-copy">© 2026 IT Study Hub · Built for the next 1%</span>
-  <a href="index.html" class="footer-back">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Back to Home
-  </a>
-</footer>
-
-<!-- ── CUSTOM CURSOR ── -->
+<!-- CURSOR -->
 <div id="cur" style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;"></div>
 <div id="curR" style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;"></div>
 
 <script>
-  // Cursor
-  const c = document.getElementById('cur'), r = document.getElementById('curR');
+  const c=document.getElementById('cur'),r=document.getElementById('curR');
   let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-  (function anim(){
-    c.style.left=(mx-5)+'px'; c.style.top=(my-5)+'px';
-    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-    r.style.left=(rx-18)+'px'; r.style.top=(ry-18)+'px';
-    requestAnimationFrame(anim);
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  (function a(){
+    c.style.left=(mx-5)+'px';c.style.top=(my-5)+'px';
+    rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+    r.style.left=(rx-18)+'px';r.style.top=(ry-18)+'px';
+    requestAnimationFrame(a)
   })();
   document.querySelectorAll('a,button').forEach(el=>{
     el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');
     el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');
   });
 
-  // Scroll reveal for cards
-  const observer = new IntersectionObserver((entries)=>{
+  const observer=new IntersectionObserver(entries=>{
     entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.style.animationPlayState = 'running';
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
+      if(e.isIntersecting){e.target.style.animationPlayState='running';observer.unobserve(e.target)}
+    })
+  },{threshold:.1});
   document.querySelectorAll('.fade-up').forEach(el=>{
-    el.style.animationPlayState = 'paused';
-    observer.observe(el);
+    el.style.animationPlayState='paused';observer.observe(el)
   });
 </script>
 </body>
