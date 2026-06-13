@@ -121,7 +121,7 @@ it-study-hub/
 │   └── web.html              ← HTML + CSS + JS track
 │
 └── 🖼️ Team Assets
-    ├── team_image.jpeg
+    └── team_image.jpeg
 ```
 
 ---
