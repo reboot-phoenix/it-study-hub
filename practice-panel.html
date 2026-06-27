@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Practice — IT Study Hub</title>
+
+<!-- Monaco Editor -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/editor/editor.main.min.css"/>
+
+<style>
+  /* ── Tokens matching IT Study Hub ── */
+  :root {
+    --bg:       #0a0a0a;
+    --surface:  #111111;
+    --border:   #1e1e1e;
+    --border2:  #2a2a2a;
+    --accent:   #00ff88;
+    --accent2:  #0af;
+    --warn:     #ffaa00;
+    --danger:   #ff4444;
+    --text:     #e8e8e8;
+    --muted:    #666;
+    --mono:     'Fira Code', 'Cascadia Code', 'Courier New', monospace;
+    --sans:     'Inter', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border2);
+    padding: 0 1.5rem;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-logo {
+    font-family: var(--mono);
+    font-size: .75rem;
+    color: var(--accent);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .topbar-sep { color: var(--border2); }
+  .topbar-title {
+    font-size: .78rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: .75rem; }
+
+  /* ── Layout ── */
+  .workspace {
+    display: grid;
+    grid-template-columns: 260px 1fr 340px;
+    grid-template-rows: 1fr;
+    height: calc(100vh - 52px);
+    overflow: hidden;
+  }
+
+  /* ── Problem sidebar ── */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-header {
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .sidebar-header span {
+    font-family: var(--mono);
+    font-size: .7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+  }
+  .problem-list {
+    overflow-y: auto;
+    flex: 1;
+    padding: .5rem;
+  }
+  .problem-item {
+    padding: .6rem .75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    transition: background .15s;
+    border: 1px solid transparent;
+    margin-bottom: 2px;
+  }
+  .problem-item:hover { background: #1a1a1a; }
+  .problem-item.active {
+    background: #001a0d;
+    border-color: #00ff8822;
+  }
+  .problem-item.active .p-title { color: var(--accent); }
+  .problem-item.solved .p-dot { background: var(--accent); }
+  .p-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--border2);
+    flex-shrink: 0;
+  }
+  .p-info { flex: 1; min-width: 0; }
+  .p-title {
+    font-size: .78rem;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .p-meta {
+    font-size: .65rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-top: 1px;
+  }
+  .diff-badge {
+    font-size: .6rem;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-weight: 600;
+  }
+  .diff-easy  { background: #00ff8820; color: var(--accent); }
+  .diff-med   { background: #ffaa0020; color: var(--warn); }
+  .diff-hard  { background: #ff444420; color: var(--danger); }
+
+  /* ── Lang selector in sidebar ── */
+  .lang-strip {
+    padding: .6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: .4rem;
+    flex-wrap: wrap;
+  }
+  .lang-btn {
+    background: #1a1a1a;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: .65rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .lang-btn.active {
+    background: #00ff8815;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── Editor pane ── */
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-right: 1px solid var(--border2);
+  }
+  .editor-topbar {
+    background: #0d0d0d;
+    border-bottom: 1px solid var(--border);
+    padding: .45rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+  .file-tab {
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--muted);
+    padding: .2rem .6rem;
+    border-radius: 4px;
+    background: #1a1a1a;
+    border: 1px solid var(--border2);
+  }
+  .file-tab.active { color: var(--text); background: var(--surface); }
+  .editor-actions { margin-left: auto; display: flex; gap: .5rem; }
+
+  #monaco-container {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* terminal output */
+  .output-strip {
+    background: #050505;
+    border-top: 1px solid var(--border2);
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .output-header {
+    padding: .4rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    flex-shrink: 0;
+  }
+  .output-label {
+    font-family: var(--mono);
+    font-size: .65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: background .3s;
+  }
+  .status-dot.running { background: var(--warn); animation: pulse 1s infinite; }
+  .status-dot.ok      { background: var(--accent); }
+  .status-dot.err     { background: var(--danger); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  #output-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: .5rem 1rem;
+    font-family: var(--mono);
+    font-size: .75rem;
+    line-height: 1.6;
+    color: #b0ffcc;
+    white-space: pre-wrap;
+  }
+  #output-area.err-text { color: #ff8888; }
+  .output-placeholder { color: var(--muted); font-style: italic; }
+
+  /* stdin */
+  .stdin-row {
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: .3rem .75rem;
+    gap: .5rem;
+    flex-shrink: 0;
+  }
+  .stdin-label {
+    font-family: var(--mono);
+    font-size: .65rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  #stdin-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: .72rem;
+  }
+
+  /* ── Right pane: problem + AI ── */
+  .right-pane {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .right-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border2);
+    flex-shrink: 0;
+  }
+  .rtab {
+    flex: 1;
+    padding: .55rem;
+    font-size: .72rem;
+    font-family: var(--mono);
+    text-align: center;
+    cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    transition: all .15s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+  .rtab:hover { color: var(--text); }
+  .rtab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .right-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+  .right-panel { display: none; }
+  .right-panel.active { display: block; }
+
+  /* problem description */
+  .prob-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: .3rem;
+  }
+  .prob-tags { display: flex; gap: .4rem; margin-bottom: .85rem; flex-wrap: wrap; }
+  .tag {
+    font-family: var(--mono);
+    font-size: .62rem;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: #1a1a1a;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+  }
+  .prob-desc {
+    font-size: .82rem;
+    line-height: 1.7;
+    color: #ccc;
+    margin-bottom: 1rem;
+  }
+  .prob-section-label {
+    font-family: var(--mono);
+    font-size: .65rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    margin-bottom: .4rem;
+  }
+  .prob-example {
+    background: #0d0d0d;
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: .6rem .8rem;
+    font-family: var(--mono);
+    font-size: .74rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  .prob-example .label { color: var(--accent2); margin-bottom: 2px; }
+  .prob-example .val   { color: var(--text); }
+
+  /* AI chat */
+  .ai-intro {
+    background: #001a0d;
+    border: 1px solid #00ff8822;
+    border-radius: 8px;
+    padding: .75rem;
+    margin-bottom: 1rem;
+    font-size: .78rem;
+    color: #aaa;
+    line-height: 1.6;
+  }
+  .ai-intro strong { color: var(--accent); }
+  .ai-choice {
+    display: flex;
+    gap: .5rem;
+    margin-bottom: 1rem;
+  }
+  .ai-choice-btn {
+    flex: 1;
+    padding: .5rem .4rem;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: #1a1a1a;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: .68rem;
+    cursor: pointer;
+    transition: all .2s;
+    text-align: center;
+  }
+  .ai-choice-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .ai-choice-btn.selected {
+    background: #00ff8815;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .chat-log {
+    display: flex;
+    flex-direction: column;
+    gap: .65rem;
+    margin-bottom: 1rem;
+  }
+  .chat-msg {
+    border-radius: 7px;
+    padding: .6rem .8rem;
+    font-size: .78rem;
+    line-height: 1.6;
+    max-width: 95%;
+  }
+  .chat-msg.user {
+    background: #1a2a1a;
+    border: 1px solid #00ff8830;
+    align-self: flex-end;
+    color: #ccc;
+    font-family: var(--mono);
+    font-size: .72rem;
+  }
+  .chat-msg.ai {
+    background: #111;
+    border: 1px solid var(--border2);
+    align-self: flex-start;
+    color: #ddd;
+  }
+  .chat-msg.ai .ai-label {
+    font-family: var(--mono);
+    font-size: .62rem;
+    color: var(--accent);
+    margin-bottom: .3rem;
+    display: block;
+  }
+  .chat-msg.loading { color: var(--muted); font-style: italic; }
+
+  .ai-input-row {
+    display: flex;
+    gap: .5rem;
+    flex-shrink: 0;
+    padding: .75rem 1rem;
+    border-top: 1px solid var(--border2);
+  }
+  #ai-custom-input {
+    flex: 1;
+    background: #111;
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: .4rem .7rem;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: .72rem;
+    outline: none;
+    transition: border .2s;
+  }
+  #ai-custom-input:focus { border-color: var(--accent); }
+  #ai-custom-input::placeholder { color: var(--muted); }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .35rem .8rem;
+    border-radius: 5px;
+    font-family: var(--mono);
+    font-size: .72rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .btn-run {
+    background: var(--accent);
+    color: #000;
+  }
+  .btn-run:hover { background: #00e87a; }
+  .btn-run:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-ghost {
+    background: #1a1a1a;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-ai {
+    background: #1a1a1a;
+    border: 1px solid #00ff8840;
+    color: var(--accent);
+  }
+  .btn-ai:hover { background: #00ff8812; }
+  .btn-ai:disabled { opacity:.4; cursor:not-allowed; }
+  .btn-sm { padding: .25rem .5rem; font-size: .65rem; }
+
+  /* scrollbars */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <a class="topbar-logo" href="index.html">IT STUDY HUB</a>
+  <span class="topbar-sep">›</span>
+  <span class="topbar-title" id="course-label">C Programming</span>
+  <span class="topbar-sep">›</span>
+  <span class="topbar-title">Practice</span>
+  <div class="topbar-right">
+    <button class="btn btn-run" id="run-btn" onclick="runCode()">▶ Run</button>
+  </div>
+</div>
+
+<!-- Main workspace -->
+<div class="workspace">
+
+  <!-- LEFT: problem list -->
+  <div class="sidebar">
+    <!-- language selector -->
+    <div class="lang-strip" id="lang-strip">
+      <button class="lang-btn active" onclick="setLang('c','C')">C</button>
+      <button class="lang-btn" onclick="setLang('java','Java')">Java</button>
+      <button class="lang-btn" onclick="setLang('python','Python')">Python</button>
+      <button class="lang-btn" onclick="setLang('cpp','C++')">C++</button>
+      <button class="lang-btn" onclick="setLang('csharp','C#')">C#</button>
+      <button class="lang-btn" onclick="setLang('javascript','JS')">JS</button>
+    </div>
+    <div class="sidebar-header">
+      <span>Problems</span>
+    </div>
+    <div class="problem-list" id="problem-list"></div>
+  </div>
+
+  <!-- MIDDLE: editor + output -->
+  <div class="editor-pane">
+    <div class="editor-topbar">
+      <div class="file-tab active" id="file-tab-name">main.c</div>
+      <div class="editor-actions">
+        <button class="btn btn-ghost btn-sm" onclick="resetCode()">↺ Reset</button>
+      </div>
+    </div>
+
+    <div id="monaco-container"></div>
+
+    <div class="output-strip">
+      <div class="output-header">
+        <div class="status-dot" id="status-dot"></div>
+        <span class="output-label">Output</span>
+        <span style="margin-left:auto;font-family:var(--mono);font-size:.65rem;color:var(--muted)" id="exec-time"></span>
+        <button class="btn btn-ghost btn-sm" onclick="clearOutput()" style="margin-left:.5rem">Clear</button>
+      </div>
+      <div id="output-area"><span class="output-placeholder">// Run your code to see output here</span></div>
+      <div class="stdin-row">
+        <span class="stdin-label">stdin ›</span>
+        <input id="stdin-input" placeholder="provide input if needed…" spellcheck="false"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: problem description + AI -->
+  <div class="right-pane">
+    <div class="right-tabs">
+      <button class="rtab active" onclick="switchTab('desc',this)">📋 Problem</button>
+      <button class="rtab" onclick="switchTab('ai',this)">🤖 AI Help</button>
+      <button class="rtab" onclick="switchTab('tests',this)">✓ Tests</button>
+    </div>
+
+    <!-- Problem description panel -->
+    <div class="right-content right-panel active" id="panel-desc">
+      <div class="prob-title" id="pd-title">Loading…</div>
+      <div class="prob-tags" id="pd-tags"></div>
+      <div class="prob-desc" id="pd-desc"></div>
+      <div class="prob-section-label">Example</div>
+      <div class="prob-example" id="pd-example"></div>
+      <div class="prob-section-label">Constraints</div>
+      <div class="prob-example" id="pd-constraints"></div>
+    </div>
+
+    <!-- AI Help panel -->
+    <div class="right-content right-panel" id="panel-ai" style="display:flex;flex-direction:column;padding:0">
+      <div style="flex:1;overflow-y:auto;padding:1rem">
+        <div class="ai-intro">
+          <strong>AI Study Assistant</strong><br>
+          Choose how much help you want. I'll look at your current code and give you guidance — never judge you for asking.
+        </div>
+        <div class="ai-choice">
+          <button class="ai-choice-btn selected" id="mode-hint" onclick="setAIMode('hint',this)">💡 Hint<br><span style="color:var(--muted);font-size:.6rem">nudge only</span></button>
+          <button class="ai-choice-btn" id="mode-explain" onclick="setAIMode('explain',this)">🔍 Explain<br><span style="color:var(--muted);font-size:.6rem">full breakdown</span></button>
+          <button class="ai-choice-btn" id="mode-solution" onclick="setAIMode('solution',this)">✅ Solution<br><span style="color:var(--muted);font-size:.6rem">show answer</span></button>
+        </div>
+        <div class="chat-log" id="chat-log"></div>
+      </div>
+      <div class="ai-input-row">
+        <input id="ai-custom-input" placeholder="Ask something specific… (optional)" onkeydown="if(event.key==='Enter')askAI()"/>
+        <button class="btn btn-ai" id="ai-ask-btn" onclick="askAI()">Ask →</button>
+      </div>
+    </div>
+
+    <!-- Tests panel -->
+    <div class="right-content right-panel" id="panel-tests">
+      <div id="test-results" style="display:flex;flex-direction:column;gap:.5rem"></div>
+      <button class="btn btn-run" style="margin-top:1rem;width:100%" onclick="runTests()">▶ Run All Tests</button>
+    </div>
+  </div>
+</div>
+
+<!-- Monaco loader -->
+<script>
+var require = { paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/editor/editor.main.noscript.js"></script>
+
+<script>
+/* ══════════════════════════════════════
+   PROBLEM BANK  (extend per course)
+══════════════════════════════════════ */
+const PROBLEMS = {
+  c: [
+    {
+      id:'c1', title:'Hello, World!', difficulty:'easy',
+      tags:['I/O','Basics'],
+      desc:'Write a C program that prints <code>Hello, World!</code> followed by a newline to standard output.',
+      example:{ input:'(none)', output:'Hello, World!' },
+      constraints:'Use printf. No extra spaces.',
+      tests:[{input:'',expected:'Hello, World!\n'}],
+      starter:`#include <stdio.h>\n\nint main() {\n    // your code here\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}`
+    },
+    {
+      id:'c2', title:'Sum of Two Numbers', difficulty:'easy',
+      tags:['Math','Variables'],
+      desc:'Read two integers from stdin and print their sum.',
+      example:{ input:'3 7', output:'10' },
+      constraints:'Numbers fit in int.',
+      tests:[{input:'3 7',expected:'10\n'},{input:'-5 5',expected:'0\n'}],
+      starter:`#include <stdio.h>\n\nint main() {\n    int a, b;\n    scanf("%d %d", &a, &b);\n    // print sum\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nint main() {\n    int a, b;\n    scanf("%d %d", &a, &b);\n    printf("%d\\n", a + b);\n    return 0;\n}`
+    },
+    {
+      id:'c3', title:'Factorial', difficulty:'medium',
+      tags:['Loops','Math'],
+      desc:'Given a non-negative integer N, compute and print N! (factorial).',
+      example:{ input:'5', output:'120' },
+      constraints:'0 ≤ N ≤ 12. Result fits in long long.',
+      tests:[{input:'5',expected:'120\n'},{input:'0',expected:'1\n'},{input:'10',expected:'3628800\n'}],
+      starter:`#include <stdio.h>\n\nint main() {\n    int n;\n    scanf("%d", &n);\n    // compute factorial\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nint main() {\n    int n; long long f = 1;\n    scanf("%d", &n);\n    for(int i=2;i<=n;i++) f*=i;\n    printf("%lld\\n", f);\n    return 0;\n}`
+    },
+    {
+      id:'c4', title:'Reverse a String', difficulty:'medium',
+      tags:['Strings','Arrays'],
+      desc:'Read a string (no spaces) and print it reversed.',
+      example:{ input:'hello', output:'olleh' },
+      constraints:'Length ≤ 100.',
+      tests:[{input:'hello',expected:'olleh\n'},{input:'abcd',expected:'dcba\n'}],
+      starter:`#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[105];\n    scanf("%s", s);\n    // reverse and print\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[105];\n    scanf("%s", s);\n    int n = strlen(s);\n    for(int i=n-1;i>=0;i--) printf("%c",s[i]);\n    printf("\\n");\n    return 0;\n}`
+    },
+    {
+      id:'c5', title:'Check Prime', difficulty:'hard',
+      tags:['Math','Loops','Conditionals'],
+      desc:'Given N, print YES if it is prime, NO otherwise.',
+      example:{ input:'7', output:'YES' },
+      constraints:'1 ≤ N ≤ 10^6.',
+      tests:[{input:'7',expected:'YES\n'},{input:'1',expected:'NO\n'},{input:'4',expected:'NO\n'}],
+      starter:`#include <stdio.h>\n\nint main() {\n    int n;\n    scanf("%d", &n);\n    // check prime\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n#include <math.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    if(n<2){printf("NO\\n");return 0;}\n    for(int i=2;i<=(int)sqrt(n);i++) if(n%i==0){printf("NO\\n");return 0;}\n    printf("YES\\n");\n    return 0;\n}`
+    },
+  ],
+  python: [
+    {
+      id:'py1', title:'Hello, World!', difficulty:'easy',
+      tags:['I/O','Basics'],
+      desc:'Print <code>Hello, World!</code>',
+      example:{ input:'(none)', output:'Hello, World!' },
+      constraints:'Single print statement.',
+      tests:[{input:'',expected:'Hello, World!\n'}],
+      starter:`# your code here\n`,
+      solution:`print("Hello, World!")`
+    },
+    {
+      id:'py2', title:'FizzBuzz', difficulty:'easy',
+      tags:['Loops','Conditionals'],
+      desc:'Print numbers 1 to N. For multiples of 3 print Fizz, multiples of 5 print Buzz, multiples of both print FizzBuzz.',
+      example:{ input:'15', output:'1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz' },
+      constraints:'1 ≤ N ≤ 100.',
+      tests:[{input:'5',expected:'1\n2\nFizz\n4\nBuzz\n'}],
+      starter:`n = int(input())\n# your loop here\n`,
+      solution:`n = int(input())\nfor i in range(1, n+1):\n    if i%15==0: print("FizzBuzz")\n    elif i%3==0: print("Fizz")\n    elif i%5==0: print("Buzz")\n    else: print(i)`
+    },
+    {
+      id:'py3', title:'Palindrome Check', difficulty:'medium',
+      tags:['Strings'],
+      desc:'Given a string, print YES if it reads the same forwards and backwards, NO otherwise.',
+      example:{ input:'racecar', output:'YES' },
+      constraints:'Lowercase letters only, length ≤ 1000.',
+      tests:[{input:'racecar',expected:'YES\n'},{input:'hello',expected:'NO\n'}],
+      starter:`s = input()\n# check palindrome\n`,
+      solution:`s = input()\nprint("YES" if s == s[::-1] else "NO")`
+    },
+  ],
+  java: [
+    {
+      id:'j1', title:'Hello, World!', difficulty:'easy',
+      tags:['I/O','Basics'],
+      desc:'Print <code>Hello, World!</code> using Java.',
+      example:{ input:'(none)', output:'Hello, World!' },
+      constraints:'Use System.out.println.',
+      tests:[{input:'',expected:'Hello, World!\n'}],
+      starter:`public class Main {\n    public static void main(String[] args) {\n        // your code here\n    }\n}`,
+      solution:`public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`
+    },
+    {
+      id:'j2', title:'Sum of Array', difficulty:'medium',
+      tags:['Arrays','Loops'],
+      desc:'Read N integers and print their sum.',
+      example:{ input:'3\n1 2 3', output:'6' },
+      constraints:'1 ≤ N ≤ 1000. Values fit in int.',
+      tests:[{input:'3\n1 2 3',expected:'6\n'}],
+      starter:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // read and sum\n    }\n}`,
+      solution:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt(), sum = 0;\n        for(int i=0;i<n;i++) sum += sc.nextInt();\n        System.out.println(sum);\n    }\n}`
+    },
+  ],
+  cpp: [
+    {
+      id:'cpp1', title:'Hello, World!', difficulty:'easy',
+      tags:['I/O','Basics'],
+      desc:'Print <code>Hello, World!</code> using C++.',
+      example:{ input:'(none)', output:'Hello, World!' },
+      constraints:'Use cout.',
+      tests:[{input:'',expected:'Hello, World!\n'}],
+      starter:`#include <iostream>\nusing namespace std;\n\nint main() {\n    // your code here\n    return 0;\n}`,
+      solution:`#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}`
+    },
+    {
+      id:'cpp2', title:'Vector Sum', difficulty:'medium',
+      tags:['STL','Vectors'],
+      desc:'Read N integers into a vector and print their sum.',
+      example:{ input:'4\n1 2 3 4', output:'10' },
+      constraints:'1 ≤ N ≤ 10^5.',
+      tests:[{input:'4\n1 2 3 4',expected:'10\n'}],
+      starter:`#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    vector<int> v(n);\n    for(auto& x : v) cin >> x;\n    // compute and print sum\n    return 0;\n}`,
+      solution:`#include <iostream>\n#include <vector>\n#include <numeric>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    vector<int> v(n);\n    for(auto& x : v) cin >> x;\n    cout << accumulate(v.begin(), v.end(), 0) << "\\n";\n    return 0;\n}`
+    },
+  ],
+  csharp: [
+    {
+      id:'cs1', title:'Hello, World!', difficulty:'easy',
+      tags:['I/O','Basics'],
+      desc:'Print <code>Hello, World!</code> using C#.',
+      example:{ input:'(none)', output:'Hello, World!' },
+      constraints:'Use Console.WriteLine.',
+      tests:[{input:'',expected:'Hello, World!\n'}],
+      starter:`using System;\nclass Program {\n    static void Main() {\n        // your code here\n    }\n}`,
+      solution:`using System;\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello, World!");\n    }\n}`
+    },
+  ],
+  javascript: [
+    {
+      id:'js1', title:'Hello, World!', difficulty:'easy',
+      tags:['I/O','Basics'],
+      desc:'Print <code>Hello, World!</code> using Node.js.',
+      example:{ input:'(none)', output:'Hello, World!' },
+      constraints:'Use console.log.',
+      tests:[{input:'',expected:'Hello, World!\n'}],
+      starter:`// your code here\n`,
+      solution:`console.log("Hello, World!");`
+    },
+  ],
+};
+
+/* Judge0 language IDs */
+const JUDGE0_IDS = { c:50, java:62, python:71, cpp:54, csharp:51, javascript:63 };
+const FILE_EXT   = { c:'main.c', java:'Main.java', python:'main.py', cpp:'main.cpp', csharp:'Program.cs', javascript:'main.js' };
+const MONACO_LANG = { c:'c', java:'java', python:'python', cpp:'cpp', csharp:'csharp', javascript:'javascript' };
+const JUDGE0_BASE = 'https://judge0-ce.p.rapidapi.com';
+// ⚠️  REPLACE WITH YOUR RAPIDAPI KEY ↓
+const RAPIDAPI_KEY = 'YOUR_RAPIDAPI_KEY_HERE';
+
+/* ── State ── */
+let editor, currentLang = 'c', currentProblem = null, aiMode = 'hint';
+let solved = JSON.parse(localStorage.getItem('itstudyhub_solved') || '{}');
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+require(['vs/editor/editor.main'], function() {
+  monaco.editor.defineTheme('itstudyhub', {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [
+      { token:'comment',    foreground:'4a4a4a', fontStyle:'italic' },
+      { token:'keyword',    foreground:'00ff88' },
+      { token:'string',     foreground:'88ddff' },
+      { token:'number',     foreground:'ffaa55' },
+      { token:'type',       foreground:'aaddff' },
+      { token:'function',   foreground:'ffdd88' },
+    ],
+    colors: {
+      'editor.background':           '#0a0a0a',
+      'editor.foreground':           '#e8e8e8',
+      'editorLineNumber.foreground': '#333',
+      'editorLineNumber.activeForeground': '#00ff88',
+      'editor.selectionBackground':  '#00ff8820',
+      'editor.lineHighlightBackground':'#111111',
+      'editorCursor.foreground':     '#00ff88',
+      'editorIndentGuide.background':'#1e1e1e',
+    }
+  });
+
+  editor = monaco.editor.create(document.getElementById('monaco-container'), {
+    theme: 'itstudyhub',
+    language: 'c',
+    fontSize: 13.5,
+    fontFamily: "'Fira Code', 'Cascadia Code', 'Courier New', monospace",
+    fontLigatures: true,
+    lineNumbers: 'on',
+    minimap: { enabled: false },
+    scrollBeyondLastLine: false,
+    automaticLayout: true,
+    padding: { top: 12 },
+    suggest: { showKeywords: true },
+    tabSize: 4,
+    cursorStyle: 'line',
+    cursorBlinking: 'phase',
+  });
+
+  loadProblems('c');
+});
+
+/* ══════════════════════════════════════
+   LANGUAGE & PROBLEMS
+══════════════════════════════════════ */
+function setLang(lang, label) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('course-label').textContent = label + ' Practice';
+  loadProblems(lang);
+}
+
+function loadProblems(lang) {
+  const list = document.getElementById('problem-list');
+  const probs = PROBLEMS[lang] || [];
+  list.innerHTML = '';
+  if (!probs.length) {
+    list.innerHTML = '<div style="padding:1rem;font-size:.75rem;color:var(--muted)">No problems yet for this language.</div>';
+    return;
+  }
+  probs.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'problem-item' + (solved[p.id] ? ' solved' : '');
+    div.setAttribute('data-id', p.id);
+    div.innerHTML = `
+      <div class="p-dot"></div>
+      <div class="p-info">
+        <div class="p-title">${i+1}. ${p.title}</div>
+        <div class="p-meta">${p.tags.join(' · ')}</div>
+      </div>
+      <span class="diff-badge diff-${p.difficulty}">${p.difficulty}</span>
+    `;
+    div.onclick = () => loadProblem(p, div);
+    list.appendChild(div);
+  });
+  // auto-load first
+  const first = list.querySelector('.problem-item');
+  if (first) first.click();
+}
+
+function loadProblem(p, el) {
+  currentProblem = p;
+  document.querySelectorAll('.problem-item').forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+
+  // update editor
+  const model = editor.getModel();
+  monaco.editor.setModelLanguage(model, MONACO_LANG[currentLang]);
+  editor.setValue(p.starter);
+  document.getElementById('file-tab-name').textContent = FILE_EXT[currentLang];
+
+  // update problem panel
+  document.getElementById('pd-title').textContent = p.title;
+  document.getElementById('pd-tags').innerHTML =
+    [`<span class="diff-badge diff-${p.difficulty}">${p.difficulty}</span>`,
+     ...p.tags.map(t => `<span class="tag">${t}</span>`)].join('');
+  document.getElementById('pd-desc').innerHTML = p.desc;
+  document.getElementById('pd-example').innerHTML =
+    `<div class="label">Input</div><div class="val">${p.example.input}</div>
+     <div class="label" style="margin-top:.4rem">Output</div><div class="val">${p.example.output}</div>`;
+  document.getElementById('pd-constraints').innerHTML = `<div class="val">${p.constraints}</div>`;
+
+  // reset output
+  clearOutput();
+  renderTests();
+  document.getElementById('chat-log').innerHTML = '';
+  document.getElementById('exec-time').textContent = '';
+}
+
+/* ══════════════════════════════════════
+   RUN CODE (Judge0)
+══════════════════════════════════════ */
+async function runCode(stdinOverride) {
+  if (!editor) return;
+  const code   = editor.getValue();
+  const stdin  = stdinOverride !== undefined ? stdinOverride : document.getElementById('stdin-input').value;
+  const langId = JUDGE0_IDS[currentLang];
+
+  setStatus('running');
+  setOutput('Running…', false);
+  document.getElementById('run-btn').disabled = true;
+  const t0 = Date.now();
+
+  try {
+    // Submit
+    const subRes = await fetch(`${JUDGE0_BASE}/submissions?base64_encoded=false&wait=false`, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'X-RapidAPI-Key': RAPIDAPI_KEY,
+        'X-RapidAPI-Host':'judge0-ce.p.rapidapi.com'
+      },
+      body: JSON.stringify({ source_code: code, language_id: langId, stdin })
+    });
+    const { token } = await subRes.json();
+
+    // Poll
+    let result;
+    for (let i=0; i<20; i++) {
+      await sleep(800);
+      const r = await fetch(`${JUDGE0_BASE}/submissions/${token}?base64_encoded=false`, {
+        headers:{
+          'X-RapidAPI-Key': RAPIDAPI_KEY,
+          'X-RapidAPI-Host':'judge0-ce.p.rapidapi.com'
+        }
+      });
+      result = await r.json();
+      if (result.status && result.status.id > 2) break;
+    }
+
+    const ms = Date.now() - t0;
+    document.getElementById('exec-time').textContent = `${ms}ms`;
+
+    const sid = result.status?.id;
+    if (sid === 3) {
+      // Accepted
+      setStatus('ok');
+      setOutput(result.stdout || '(no output)', false);
+    } else if (sid === 6) {
+      setStatus('err');
+      setOutput(result.compile_output || 'Compilation error', true);
+    } else {
+      setStatus('err');
+      setOutput(result.stderr || result.message || result.status?.description || 'Runtime error', true);
+    }
+    return result;
+  } catch(e) {
+    setStatus('err');
+    setOutput('⚠ Network error — check your RapidAPI key or try again.', true);
+  } finally {
+    document.getElementById('run-btn').disabled = false;
+  }
+}
+
+/* ══════════════════════════════════════
+   TESTS
+══════════════════════════════════════ */
+function renderTests() {
+  if (!currentProblem) return;
+  const el = document.getElementById('test-results');
+  el.innerHTML = currentProblem.tests.map((t,i) => `
+    <div style="background:#111;border:1px solid var(--border2);border-radius:6px;padding:.65rem .8rem" id="test-${i}">
+      <div style="font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:.3rem">Test ${i+1}</div>
+      <div style="font-family:var(--mono);font-size:.72rem;color:#aaa">Input: <span style="color:var(--text)">${t.input || '(none)'}</span></div>
+      <div style="font-family:var(--mono);font-size:.72rem;color:#aaa">Expected: <span style="color:var(--text)">${t.expected.trim()}</span></div>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:.3rem" id="test-res-${i}">—</div>
+    </div>
+  `).join('');
+}
+
+async function runTests() {
+  if (!currentProblem) return;
+  let allPassed = true;
+  for (let i=0; i<currentProblem.tests.length; i++) {
+    const t = currentProblem.tests[i];
+    document.getElementById(`test-res-${i}`).textContent = '⏳ Running…';
+    document.getElementById(`test-res-${i}`).style.color = 'var(--warn)';
+    const result = await runCode(t.input);
+    const actual = (result?.stdout || '').replace(/\r/g,'');
+    const pass = actual === t.expected;
+    if (!pass) allPassed = false;
+    document.getElementById(`test-res-${i}`).textContent = pass ? '✅ Passed' : `❌ Got: "${actual.trim()}"`;
+    document.getElementById(`test-res-${i}`).style.color = pass ? 'var(--accent)' : 'var(--danger)';
+    document.getElementById(`test-${i}`).style.borderColor = pass ? '#00ff8840' : '#ff444440';
+  }
+  if (allPassed) {
+    solved[currentProblem.id] = true;
+    localStorage.setItem('itstudyhub_solved', JSON.stringify(solved));
+    document.querySelectorAll('.problem-item').forEach(el => {
+      if (el.dataset.id === currentProblem.id) el.classList.add('solved');
+    });
+    document.querySelector(`.problem-item[data-id="${currentProblem.id}"] .p-dot`).style.background = 'var(--accent)';
+  }
+}
+
+/* ══════════════════════════════════════
+   AI HELP (Anthropic API)
+══════════════════════════════════════ */
+function setAIMode(mode, btn) {
+  aiMode = mode;
+  document.querySelectorAll('.ai-choice-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+async function askAI() {
+  if (!currentProblem) return;
+  const btn = document.getElementById('ai-ask-btn');
+  const customQ = document.getElementById('ai-custom-input').value.trim();
+  btn.disabled = true;
+
+  const code = editor.getValue();
+  const modeInstructions = {
+    hint:     'Give only a short hint (2-3 sentences max). Do NOT show any code or the solution. Just a conceptual nudge.',
+    explain:  'Give a thorough explanation of the approach, the algorithm, and why the logic works. You can use pseudocode but avoid the exact solution.',
+    solution: 'Show the complete working solution with clear comments explaining each part.',
+  };
+
+  const userMsg = customQ
+    ? `The student has a specific question: "${customQ}"`
+    : `The student clicked "${aiMode}" help.`;
+
+  appendChat('user', customQ || `Get ${aiMode}`);
+  const loading = appendChat('ai', '…thinking', true);
+  document.getElementById('ai-custom-input').value = '';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        system: `You are an IT Study Hub coding mentor helping a student at Techno India University.
+The student is solving a coding problem.
+
+Problem: ${currentProblem.title}
+Description: ${currentProblem.desc.replace(/<[^>]+>/g,'')}
+Example Input: ${currentProblem.example.input}
+Example Output: ${currentProblem.example.output}
+Language: ${currentLang}
+
+Student's current code:
+\`\`\`${currentLang}
+${code}
+\`\`\`
+
+Instructions: ${modeInstructions[aiMode]}
+Be friendly, concise, and encouraging. Never be condescending. Format with markdown if helpful.`,
+        messages:[{ role:'user', content: userMsg }]
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'Sorry, I could not generate a response. Check the API key.';
+    loading.remove();
+    appendChat('ai', reply);
+  } catch(e) {
+    loading.remove();
+    appendChat('ai', '⚠ Could not reach AI. Make sure the Anthropic API is available.');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function appendChat(role, text, isLoading=false) {
+  const log = document.getElementById('chat-log');
+  const div = document.createElement('div');
+  div.className = 'chat-msg ' + role + (isLoading ? ' loading' : '');
+  if (role === 'ai') {
+    div.innerHTML = `<span class="ai-label">🤖 AI Mentor</span>${simpleMarkdown(text)}`;
+  } else {
+    div.textContent = text;
+  }
+  log.appendChild(div);
+  div.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  return div;
+}
+
+function simpleMarkdown(text) {
+  return text
+    .replace(/```[\w]*\n?([\s\S]*?)```/g, '<pre style="background:#0d0d0d;border:1px solid #222;border-radius:5px;padding:.5rem;margin:.3rem 0;overflow-x:auto;font-size:.72rem"><code>$1</code></pre>')
+    .replace(/`([^`]+)`/g, '<code style="background:#1a1a1a;padding:1px 5px;border-radius:3px;font-size:.78rem">$1</code>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
+
+/* ══════════════════════════════════════
+   HELPERS
+══════════════════════════════════════ */
+function setOutput(text, isErr) {
+  const el = document.getElementById('output-area');
+  el.textContent = text;
+  el.className = isErr ? 'err-text' : '';
+}
+function clearOutput() {
+  const el = document.getElementById('output-area');
+  el.innerHTML = '<span class="output-placeholder">// Run your code to see output here</span>';
+  el.className = '';
+  setStatus('idle');
+}
+function setStatus(s) {
+  const d = document.getElementById('status-dot');
+  d.className = 'status-dot ' + s;
+}
+function resetCode() {
+  if (currentProblem) editor.setValue(currentProblem.starter);
+}
+function switchTab(tab, btn) {
+  document.querySelectorAll('.rtab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.right-panel').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
+  const panel = document.getElementById('panel-'+tab);
+  panel.classList.add('active');
+  panel.style.display = tab === 'ai' ? 'flex' : 'block';
+}
+function sleep(ms) { return new Promise(r => setTimeout(r,ms)); }
+</script>
+</body>
+</html>
