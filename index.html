@@ -423,7 +423,308 @@
   </div>
 </section>
 
+<!-- ══════════════════════════════
+   PRACTICE SECTION
+   Paste this AFTER </section> of features-section
+   and BEFORE <section class="premium-section">
+══════════════════════════════ -->
 
+<section class="practice-section reveal">
+  <div class="practice-inner">
+
+    <!-- LEFT: text -->
+    <div class="practice-left">
+      <div class="section-label">Live Practice Panel</div>
+      <h2 class="section-title">Code. Run. <span style="color:var(--lime)">Learn.</span></h2>
+      <p class="section-sub" style="margin-bottom:32px;">A full in-browser IDE — Monaco editor, real code execution across 6 languages, AI mentor hints, and 70+ problems sorted by difficulty. No installs. No signups. Just code.</p>
+
+      <div class="practice-langs">
+        <span class="plang">⚙️ C</span>
+        <span class="plang">☕ Java</span>
+        <span class="plang">🐍 Python</span>
+        <span class="plang">➕ C++</span>
+        <span class="plang">🔷 C#</span>
+        <span class="plang">🌐 JS</span>
+      </div>
+
+      <div class="practice-stats">
+        <div class="pstat">
+          <div class="pstat-val">70+</div>
+          <div class="pstat-lab">Problems</div>
+        </div>
+        <div class="pstat">
+          <div class="pstat-val">3</div>
+          <div class="pstat-lab">Difficulty Tiers</div>
+        </div>
+        <div class="pstat">
+          <div class="pstat-val">AI</div>
+          <div class="pstat-lab">Mentor Built-in</div>
+        </div>
+        <div class="pstat">
+          <div class="pstat-val">0</div>
+          <div class="pstat-lab">Signups Needed</div>
+        </div>
+      </div>
+
+      <a href="practice-panel.html" class="btn-lime" style="margin-top:36px; display:inline-flex;">
+        Launch Practice Panel
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-left:4px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <!-- RIGHT: fake terminal preview -->
+    <div class="practice-right">
+      <div class="practice-preview">
+
+        <!-- topbar -->
+        <div class="pp-topbar">
+          <div class="pp-dots">
+            <span style="background:#ff5f56"></span>
+            <span style="background:#ffbd2e"></span>
+            <span style="background:#27c93f"></span>
+          </div>
+          <span class="pp-title">practice-panel.html — IT Study Hub</span>
+          <a href="practice-panel.html" class="pp-launch">Open ↗</a>
+        </div>
+
+        <!-- mock editor -->
+        <div class="pp-body">
+          <div class="pp-sidebar">
+            <div class="pp-prob active">1. Hello, World!</div>
+            <div class="pp-prob">2. Sum of Two Numbers</div>
+            <div class="pp-prob solved">3. Factorial ✓</div>
+            <div class="pp-prob">4. Reverse String</div>
+            <div class="pp-prob">5. Check Prime</div>
+          </div>
+          <div class="pp-editor">
+            <div class="pp-line"><span class="pp-kw">#include</span> <span class="pp-str">&lt;stdio.h&gt;</span></div>
+            <div class="pp-line"> </div>
+            <div class="pp-line"><span class="pp-kw">int</span> <span class="pp-fn">main</span>() {</div>
+            <div class="pp-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="pp-fn">printf</span>(<span class="pp-str">"Hello, World!\n"</span>);</div>
+            <div class="pp-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="pp-kw">return</span> <span class="pp-num">0</span>;</div>
+            <div class="pp-line">}</div>
+            <div class="pp-line"> </div>
+            <div class="pp-output">
+              <span class="pp-out-label">▶ Output</span>
+              <span class="pp-out-ok">Hello, World!</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- practice section styles — add to index-page.css OR inline here -->
+<style>
+.practice-section {
+  padding: 100px 48px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.practice-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.practice-langs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.plang {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  color: var(--muted2);
+  transition: all 0.2s;
+}
+
+.plang:hover {
+  border-color: var(--lime);
+  color: var(--lime);
+}
+
+.practice-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.pstat {
+  background: var(--bg);
+  padding: 16px 12px;
+  text-align: center;
+}
+
+.pstat-val {
+  font-family: var(--ff-display);
+  font-size: 28px;
+  color: var(--lime);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.pstat-lab {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Preview card */
+.practice-preview {
+  background: #0a0a0f;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+}
+
+.pp-topbar {
+  background: #111118;
+  border-bottom: 1px solid #1e1e2e;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pp-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.pp-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+}
+
+.pp-title {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: #6b6b80;
+  flex: 1;
+  text-align: center;
+}
+
+.pp-launch {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--lime);
+  text-decoration: none;
+  border: 1px solid rgba(200,241,53,0.3);
+  padding: 3px 10px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.pp-launch:hover {
+  background: var(--lime);
+  color: #000;
+}
+
+.pp-body {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  height: 280px;
+}
+
+.pp-sidebar {
+  background: #111118;
+  border-right: 1px solid #1e1e2e;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pp-prob {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: #6b6b80;
+  padding: 6px 8px;
+  border-radius: 5px;
+  cursor: default;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pp-prob.active {
+  background: #001a0d;
+  color: #c8f135;
+  border: 1px solid #00ff8820;
+}
+
+.pp-prob.solved { color: #43e97b; }
+
+.pp-editor {
+  background: #0a0a0a;
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.pp-line { color: #e8e8e8; }
+.pp-kw   { color: #c8f135; }
+.pp-fn   { color: #ffdd88; }
+.pp-str  { color: #88ddff; }
+.pp-num  { color: #ffaa55; }
+
+.pp-output {
+  margin-top: auto;
+  background: #050505;
+  border-top: 1px solid #1e1e2e;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: auto -16px -16px;
+}
+
+.pp-out-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: #6b6b80;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pp-out-ok {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: #43e97b;
+}
+
+@media (max-width: 900px) {
+  .practice-section { padding: 70px 24px; }
+  .practice-inner { grid-template-columns: 1fr; gap: 40px; }
+  .practice-right { display: none; }
+  .practice-stats { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
 <!-- ═══════ PREMIUM TEASER ═══════ -->
 <section class="premium-section" id="premium">
   <div class="prem-bg-glow"></div>
