@@ -669,6 +669,106 @@ const PROBLEMS = {
       starter:`#include <stdio.h>\n\nint main() {\n    int n;\n    scanf("%d", &n);\n    // check prime\n    return 0;\n}`,
       solution:`#include <stdio.h>\n#include <math.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    if(n<2){printf("NO\\n");return 0;}\n    for(int i=2;i<=(int)sqrt(n);i++) if(n%i==0){printf("NO\\n");return 0;}\n    printf("YES\\n");\n    return 0;\n}`
     },
+    {
+      id:'c6', title:'Max of Array', difficulty:'easy',
+      tags:['Arrays','Loops'],
+      desc:'Read N integers and print the maximum value.',
+      example:{ input:'5\n3 1 4 1 5', output:'5' },
+      constraints:'1 ≤ N ≤ 1000.',
+      tests:[{input:'5\n3 1 4 1 5',expected:'5\n'},{input:'3\n-1 -5 -2',expected:'-1\n'}],
+      starter:`#include <stdio.h>\n#include <limits.h>\n\nint main() {\n    int n;\n    scanf("%d", &n);\n    int mx = INT_MIN, x;\n    // find max\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n#include <limits.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int mx=INT_MIN,x;\n    for(int i=0;i<n;i++){scanf("%d",&x);if(x>mx)mx=x;}\n    printf("%d\\n",mx);\n    return 0;\n}`
+    },
+    {
+      id:'c7', title:'Count Even and Odd', difficulty:'easy',
+      tags:['Loops','Conditionals'],
+      desc:'Read N integers. Print the count of even numbers, then the count of odd numbers on separate lines.',
+      example:{ input:'5\n1 2 3 4 5', output:'2\n3' },
+      constraints:'1 ≤ N ≤ 1000.',
+      tests:[{input:'5\n1 2 3 4 5',expected:'2\n3\n'},{input:'4\n2 4 6 8',expected:'4\n0\n'}],
+      starter:`#include <stdio.h>\n\nint main() {\n    int n;\n    scanf("%d", &n);\n    int even=0, odd=0, x;\n    // count evens and odds\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int even=0,odd=0,x;\n    for(int i=0;i<n;i++){scanf("%d",&x);if(x%2==0)even++;else odd++;}\n    printf("%d\\n%d\\n",even,odd);\n    return 0;\n}`
+    },
+    {
+      id:'c8', title:'Fibonacci Series', difficulty:'medium',
+      tags:['Loops','Math'],
+      desc:'Print the first N terms of the Fibonacci sequence (0, 1, 1, 2, 3…), one per line.',
+      example:{ input:'6', output:'0\n1\n1\n2\n3\n5' },
+      constraints:'1 ≤ N ≤ 50.',
+      tests:[{input:'6',expected:'0\n1\n1\n2\n3\n5\n'},{input:'1',expected:'0\n'}],
+      starter:`#include <stdio.h>\n\nint main() {\n    int n;\n    scanf("%d", &n);\n    // print fibonacci\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    long long a=0,b=1;\n    for(int i=0;i<n;i++){printf("%lld\\n",a);long long c=a+b;a=b;b=c;}\n    return 0;\n}`
+    },
+    {
+      id:'c9', title:'Linear Search', difficulty:'medium',
+      tags:['Arrays','Search'],
+      desc:'Read N integers, then target T. Print the 0-based index of first occurrence of T, or -1 if not found.',
+      example:{ input:'5\n10 20 30 40 50\n30', output:'2' },
+      constraints:'1 ≤ N ≤ 1000.',
+      tests:[{input:'5\n10 20 30 40 50\n30',expected:'2\n'},{input:'3\n1 2 3\n9',expected:'-1\n'}],
+      starter:`#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int a[1005];\n    for(int i=0;i<n;i++) scanf("%d",&a[i]);\n    int t; scanf("%d",&t);\n    // search\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int a[1005];\n    for(int i=0;i<n;i++) scanf("%d",&a[i]);\n    int t; scanf("%d",&t);\n    for(int i=0;i<n;i++) if(a[i]==t){printf("%d\\n",i);return 0;}\n    printf("-1\\n");\n    return 0;\n}`
+    },
+    {
+      id:'c10', title:'Bubble Sort', difficulty:'hard',
+      tags:['Sorting','Arrays'],
+      desc:'Read N integers and print them sorted ascending using bubble sort.',
+      example:{ input:'5\n5 3 1 4 2', output:'1 2 3 4 5' },
+      constraints:'1 ≤ N ≤ 500.',
+      tests:[{input:'5\n5 3 1 4 2',expected:'1 2 3 4 5\n'},{input:'3\n3 1 2',expected:'1 2 3\n'}],
+      starter:`#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int a[505];\n    for(int i=0;i<n;i++) scanf("%d",&a[i]);\n    // bubble sort\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int a[505];\n    for(int i=0;i<n;i++) scanf("%d",&a[i]);\n    for(int i=0;i<n-1;i++) for(int j=0;j<n-i-1;j++) if(a[j]>a[j+1]){int t=a[j];a[j]=a[j+1];a[j+1]=t;}\n    for(int i=0;i<n;i++) printf("%d%s",a[i],i<n-1?" ":"\\n");\n    return 0;\n}`
+    },
+    {
+      id:'c11', title:'GCD of Two Numbers', difficulty:'medium',
+      tags:['Math','Recursion'],
+      desc:'Read two positive integers A and B. Print their GCD.',
+      example:{ input:'12 8', output:'4' },
+      constraints:'1 ≤ A, B ≤ 10^9.',
+      tests:[{input:'12 8',expected:'4\n'},{input:'100 75',expected:'25\n'},{input:'7 13',expected:'1\n'}],
+      starter:`#include <stdio.h>\n\nint gcd(int a, int b) {\n    // implement GCD\n}\n\nint main() {\n    int a, b;\n    scanf("%d %d", &a, &b);\n    printf("%d\\n", gcd(a, b));\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nint gcd(int a,int b){return b==0?a:gcd(b,a%b);}\n\nint main(){\n    int a,b; scanf("%d %d",&a,&b);\n    printf("%d\\n",gcd(a,b));\n    return 0;\n}`
+    },
+    {
+      id:'c12', title:'Right Triangle Pattern', difficulty:'easy',
+      tags:['Loops','Patterns'],
+      desc:'Given N, print a right-angled triangle of stars with N rows.',
+      example:{ input:'4', output:'*\n**\n***\n****' },
+      constraints:'1 ≤ N ≤ 20.',
+      tests:[{input:'4',expected:'*\n**\n***\n****\n'},{input:'2',expected:'*\n**\n'}],
+      starter:`#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    // print triangle\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    for(int i=1;i<=n;i++){for(int j=0;j<i;j++) printf("*");printf("\\n");}\n    return 0;\n}`
+    },
+    {
+      id:'c13', title:'Count Vowels', difficulty:'easy',
+      tags:['Strings','Loops'],
+      desc:'Read a string and print the number of vowels (a, e, i, o, u — lowercase).',
+      example:{ input:'hello', output:'2' },
+      constraints:'Length ≤ 200. Lowercase only.',
+      tests:[{input:'hello',expected:'2\n'},{input:'aeiou',expected:'5\n'},{input:'xyz',expected:'0\n'}],
+      starter:`#include <stdio.h>\n\nint main() {\n    char s[205]; scanf("%s",s);\n    int count=0;\n    // count vowels\n    printf("%d\\n",count);\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nint main() {\n    char s[205]; scanf("%s",s);\n    int count=0;\n    for(int i=0;s[i];i++) if(s[i]=='a'||s[i]=='e'||s[i]=='i'||s[i]=='o'||s[i]=='u') count++;\n    printf("%d\\n",count);\n    return 0;\n}`
+    },
+    {
+      id:'c14', title:'Matrix Transpose', difficulty:'hard',
+      tags:['Arrays','2D','Matrix'],
+      desc:'Read an N×N matrix and print its transpose.',
+      example:{ input:'2\n1 2\n3 4', output:'1 3\n2 4' },
+      constraints:'1 ≤ N ≤ 10.',
+      tests:[{input:'2\n1 2\n3 4',expected:'1 3\n2 4\n'},{input:'3\n1 2 3\n4 5 6\n7 8 9',expected:'1 4 7\n2 5 8\n3 6 9\n'}],
+      starter:`#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int a[10][10];\n    for(int i=0;i<n;i++) for(int j=0;j<n;j++) scanf("%d",&a[i][j]);\n    // print transpose\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int a[10][10];\n    for(int i=0;i<n;i++) for(int j=0;j<n;j++) scanf("%d",&a[i][j]);\n    for(int i=0;i<n;i++){for(int j=0;j<n;j++) printf("%d%s",a[j][i],j<n-1?" ":"\\n");}\n    return 0;\n}`
+    },
+    {
+      id:'c15', title:'Power Function', difficulty:'medium',
+      tags:['Math','Recursion'],
+      desc:'Given base B and exponent E, print B^E without using pow().',
+      example:{ input:'2 10', output:'1024' },
+      constraints:'1 ≤ B ≤ 10, 0 ≤ E ≤ 15.',
+      tests:[{input:'2 10',expected:'1024\n'},{input:'3 4',expected:'81\n'},{input:'5 0',expected:'1\n'}],
+      starter:`#include <stdio.h>\n\nlong long power(long long b, int e) {\n    // implement\n}\n\nint main() {\n    long long b; int e;\n    scanf("%lld %d",&b,&e);\n    printf("%lld\\n",power(b,e));\n    return 0;\n}`,
+      solution:`#include <stdio.h>\n\nlong long power(long long b,int e){return e==0?1:b*power(b,e-1);}\n\nint main(){\n    long long b; int e;\n    scanf("%lld %d",&b,&e);\n    printf("%lld\\n",power(b,e));\n    return 0;\n}`
+    },
   ],
   python: [
     {
@@ -684,7 +784,7 @@ const PROBLEMS = {
     {
       id:'py2', title:'FizzBuzz', difficulty:'easy',
       tags:['Loops','Conditionals'],
-      desc:'Print numbers 1 to N. For multiples of 3 print Fizz, multiples of 5 print Buzz, multiples of both print FizzBuzz.',
+      desc:'Print numbers 1 to N. Multiples of 3 → Fizz, multiples of 5 → Buzz, both → FizzBuzz.',
       example:{ input:'15', output:'1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz' },
       constraints:'1 ≤ N ≤ 100.',
       tests:[{input:'5',expected:'1\n2\nFizz\n4\nBuzz\n'}],
@@ -694,12 +794,132 @@ const PROBLEMS = {
     {
       id:'py3', title:'Palindrome Check', difficulty:'medium',
       tags:['Strings'],
-      desc:'Given a string, print YES if it reads the same forwards and backwards, NO otherwise.',
+      desc:'Given a string, print YES if it is a palindrome, NO otherwise.',
       example:{ input:'racecar', output:'YES' },
-      constraints:'Lowercase letters only, length ≤ 1000.',
+      constraints:'Lowercase letters, length ≤ 1000.',
       tests:[{input:'racecar',expected:'YES\n'},{input:'hello',expected:'NO\n'}],
       starter:`s = input()\n# check palindrome\n`,
       solution:`s = input()\nprint("YES" if s == s[::-1] else "NO")`
+    },
+    {
+      id:'py4', title:'Sum of List', difficulty:'easy',
+      tags:['Lists','Math'],
+      desc:'Read N integers on one line (space-separated) and print their sum.',
+      example:{ input:'1 2 3 4 5', output:'15' },
+      constraints:'1 ≤ N ≤ 1000.',
+      tests:[{input:'1 2 3 4 5',expected:'15\n'},{input:'10 -3 7',expected:'14\n'}],
+      starter:`nums = list(map(int, input().split()))\n# print sum\n`,
+      solution:`nums = list(map(int, input().split()))\nprint(sum(nums))`
+    },
+    {
+      id:'py5', title:'Count Words', difficulty:'easy',
+      tags:['Strings','I/O'],
+      desc:'Read a line of text and print the number of words.',
+      example:{ input:'hello world foo bar', output:'4' },
+      constraints:'Line has at most 1000 characters.',
+      tests:[{input:'hello world foo bar',expected:'4\n'},{input:'one',expected:'1\n'}],
+      starter:`line = input()\n# count words\n`,
+      solution:`line = input()\nprint(len(line.split()))`
+    },
+    {
+      id:'py6', title:'Second Largest', difficulty:'medium',
+      tags:['Lists','Sorting'],
+      desc:'Given N integers, print the second largest.',
+      example:{ input:'5\n3 1 4 1 5', output:'4' },
+      constraints:'N ≥ 2. At least 2 distinct values.',
+      tests:[{input:'5\n3 1 4 1 5',expected:'4\n'},{input:'3\n100 200 300',expected:'200\n'}],
+      starter:`n = int(input())\nnums = list(map(int, input().split()))\n# find second largest\n`,
+      solution:`n = int(input())\nnums = list(map(int, input().split()))\nnums_sorted = sorted(set(nums), reverse=True)\nprint(nums_sorted[1])`
+    },
+    {
+      id:'py7', title:'Filter Even Numbers', difficulty:'medium',
+      tags:['Lists','Comprehension'],
+      desc:'Read N integers. Print only the even ones in order, space-separated.',
+      example:{ input:'6\n1 2 3 4 5 6', output:'2 4 6' },
+      constraints:'1 ≤ N ≤ 500.',
+      tests:[{input:'6\n1 2 3 4 5 6',expected:'2 4 6\n'},{input:'3\n1 3 5',expected:'\n'}],
+      starter:`n = int(input())\nnums = list(map(int, input().split()))\n# filter evens\n`,
+      solution:`n = int(input())\nnums = list(map(int, input().split()))\nprint(' '.join(str(x) for x in nums if x%2==0))`
+    },
+    {
+      id:'py8', title:'Word Frequency', difficulty:'medium',
+      tags:['Dictionary','Strings'],
+      desc:'Read a line of words. Print each unique word and its count, sorted alphabetically.',
+      example:{ input:'apple banana apple cherry banana apple', output:'apple 3\nbanana 2\ncherry 1' },
+      constraints:'Lowercase. ≤ 200 words.',
+      tests:[{input:'apple banana apple cherry banana apple',expected:'apple 3\nbanana 2\ncherry 1\n'}],
+      starter:`words = input().split()\n# count frequencies\n`,
+      solution:`words = input().split()\nfreq = {}\nfor w in words: freq[w] = freq.get(w,0)+1\nfor k in sorted(freq): print(k, freq[k])`
+    },
+    {
+      id:'py9', title:'Recursive Fibonacci', difficulty:'medium',
+      tags:['Recursion','Math'],
+      desc:'Print the Nth Fibonacci number (0-indexed: fib(0)=0, fib(1)=1).',
+      example:{ input:'7', output:'13' },
+      constraints:'0 ≤ N ≤ 30.',
+      tests:[{input:'7',expected:'13\n'},{input:'0',expected:'0\n'},{input:'10',expected:'55\n'}],
+      starter:`def fib(n):\n    # base cases + recursion\n    pass\n\nn = int(input())\nprint(fib(n))\n`,
+      solution:`def fib(n):\n    if n<=1: return n\n    return fib(n-1)+fib(n-2)\n\nn = int(input())\nprint(fib(n))`
+    },
+    {
+      id:'py10', title:'Stack Simulation', difficulty:'hard',
+      tags:['Stack','Data Structures'],
+      desc:'Simulate a stack. Process Q operations: PUSH x, POP, TOP. Print result for POP/TOP, or "EMPTY" if empty.',
+      example:{ input:'4\nPUSH 5\nPUSH 3\nTOP\nPOP', output:'3\n3' },
+      constraints:'1 ≤ Q ≤ 1000.',
+      tests:[{input:'4\nPUSH 5\nPUSH 3\nTOP\nPOP',expected:'3\n3\n'},{input:'2\nPOP\nTOP',expected:'EMPTY\nEMPTY\n'}],
+      starter:`q = int(input())\nstack = []\nfor _ in range(q):\n    op = input().split()\n    # handle PUSH, POP, TOP\n`,
+      solution:`q = int(input())\nstack = []\nfor _ in range(q):\n    op = input().split()\n    if op[0]=='PUSH': stack.append(int(op[1]))\n    elif op[0]=='POP': print(stack.pop() if stack else 'EMPTY')\n    elif op[0]=='TOP': print(stack[-1] if stack else 'EMPTY')`
+    },
+    {
+      id:'py11', title:'Caesar Cipher', difficulty:'medium',
+      tags:['Strings','Encryption'],
+      desc:'Given lowercase string S and shift K, print the Caesar cipher of S.',
+      example:{ input:'hello 3', output:'khoor' },
+      constraints:'Lowercase letters. 0 ≤ K ≤ 25.',
+      tests:[{input:'hello 3',expected:'khoor\n'},{input:'xyz 2',expected:'zab\n'}],
+      starter:`parts = input().split()\ns, k = parts[0], int(parts[1])\n# apply caesar cipher\n`,
+      solution:`parts = input().split()\ns, k = parts[0], int(parts[1])\nprint(''.join(chr((ord(c)-ord('a')+k)%26+ord('a')) for c in s))`
+    },
+    {
+      id:'py12', title:'Binary Search', difficulty:'hard',
+      tags:['Search','Algorithms'],
+      desc:'Given a sorted list and target T, print the index using binary search, or -1.',
+      example:{ input:'5\n1 3 5 7 9\n5', output:'2' },
+      constraints:'1 ≤ N ≤ 10^5. Sorted ascending.',
+      tests:[{input:'5\n1 3 5 7 9\n5',expected:'2\n'},{input:'4\n2 4 6 8\n5',expected:'-1\n'}],
+      starter:`n = int(input())\narr = list(map(int, input().split()))\nt = int(input())\n# binary search\n`,
+      solution:`n = int(input())\narr = list(map(int, input().split()))\nt = int(input())\nlo,hi,res=0,n-1,-1\nwhile lo<=hi:\n    mid=(lo+hi)//2\n    if arr[mid]==t: res=mid; break\n    elif arr[mid]<t: lo=mid+1\n    else: hi=mid-1\nprint(res)`
+    },
+    {
+      id:'py13', title:'Anagram Check', difficulty:'medium',
+      tags:['Strings','Sorting'],
+      desc:'Given two strings A and B, print YES if they are anagrams, NO otherwise.',
+      example:{ input:'listen\nsilent', output:'YES' },
+      constraints:'Lowercase only. Lengths ≤ 1000.',
+      tests:[{input:'listen\nsilent',expected:'YES\n'},{input:'hello\nworld',expected:'NO\n'}],
+      starter:`a = input()\nb = input()\n# check anagram\n`,
+      solution:`a = input()\nb = input()\nprint("YES" if sorted(a)==sorted(b) else "NO")`
+    },
+    {
+      id:'py14', title:'Prime Sieve', difficulty:'hard',
+      tags:['Math','Sieve'],
+      desc:'Given N, print the count of prime numbers up to N using the Sieve of Eratosthenes.',
+      example:{ input:'10', output:'4' },
+      constraints:'1 ≤ N ≤ 10^6.',
+      tests:[{input:'10',expected:'4\n'},{input:'1',expected:'0\n'},{input:'20',expected:'8\n'}],
+      starter:`n = int(input())\n# sieve of eratosthenes\n`,
+      solution:`n = int(input())\nif n<2: print(0)\nelse:\n    sieve=[True]*(n+1); sieve[0]=sieve[1]=False\n    for i in range(2,int(n**0.5)+1):\n        if sieve[i]:\n            for j in range(i*i,n+1,i): sieve[j]=False\n    print(sum(sieve))`
+    },
+    {
+      id:'py15', title:'Matrix Multiplication', difficulty:'hard',
+      tags:['2D Arrays','Math'],
+      desc:'Read two N×N matrices A and B and print their product C = A × B.',
+      example:{ input:'2\n1 2\n3 4\n5 6\n7 8', output:'19 22\n43 50' },
+      constraints:'1 ≤ N ≤ 10.',
+      tests:[{input:'2\n1 2\n3 4\n5 6\n7 8',expected:'19 22\n43 50\n'}],
+      starter:`n = int(input())\nA = [list(map(int,input().split())) for _ in range(n)]\nB = [list(map(int,input().split())) for _ in range(n)]\n# compute C = A x B\n`,
+      solution:`n = int(input())\nA = [list(map(int,input().split())) for _ in range(n)]\nB = [list(map(int,input().split())) for _ in range(n)]\nC = [[sum(A[i][k]*B[k][j] for k in range(n)) for j in range(n)] for i in range(n)]\nfor row in C: print(' '.join(map(str,row)))`
     },
   ],
   java: [
@@ -714,14 +934,124 @@ const PROBLEMS = {
       solution:`public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`
     },
     {
-      id:'j2', title:'Sum of Array', difficulty:'medium',
+      id:'j2', title:'Sum of Array', difficulty:'easy',
       tags:['Arrays','Loops'],
       desc:'Read N integers and print their sum.',
       example:{ input:'3\n1 2 3', output:'6' },
-      constraints:'1 ≤ N ≤ 1000. Values fit in int.',
-      tests:[{input:'3\n1 2 3',expected:'6\n'}],
+      constraints:'1 ≤ N ≤ 1000.',
+      tests:[{input:'3\n1 2 3',expected:'6\n'},{input:'4\n-1 2 -3 4',expected:'2\n'}],
       starter:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // read and sum\n    }\n}`,
       solution:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt(), sum = 0;\n        for(int i=0;i<n;i++) sum += sc.nextInt();\n        System.out.println(sum);\n    }\n}`
+    },
+    {
+      id:'j3', title:'Reverse a String', difficulty:'easy',
+      tags:['Strings'],
+      desc:'Read a string and print it reversed.',
+      example:{ input:'java', output:'avaj' },
+      constraints:'Length ≤ 200. No spaces.',
+      tests:[{input:'java',expected:'avaj\n'},{input:'hello',expected:'olleh\n'}],
+      starter:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        // reverse and print\n    }\n}`,
+      solution:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        System.out.println(new StringBuilder(s).reverse());\n    }\n}`
+    },
+    {
+      id:'j4', title:'FizzBuzz', difficulty:'easy',
+      tags:['Loops','Conditionals'],
+      desc:'Print FizzBuzz from 1 to N.',
+      example:{ input:'5', output:'1\n2\nFizz\n4\nBuzz' },
+      constraints:'1 ≤ N ≤ 100.',
+      tests:[{input:'5',expected:'1\n2\nFizz\n4\nBuzz\n'}],
+      starter:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // fizzbuzz loop\n    }\n}`,
+      solution:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        for(int i=1;i<=n;i++){\n            if(i%15==0) System.out.println("FizzBuzz");\n            else if(i%3==0) System.out.println("Fizz");\n            else if(i%5==0) System.out.println("Buzz");\n            else System.out.println(i);\n        }\n    }\n}`
+    },
+    {
+      id:'j5', title:'Fibonacci Iterative', difficulty:'medium',
+      tags:['Loops','Math'],
+      desc:'Print the first N Fibonacci numbers (0, 1, 1, 2…), one per line.',
+      example:{ input:'6', output:'0\n1\n1\n2\n3\n5' },
+      constraints:'1 ≤ N ≤ 50.',
+      tests:[{input:'6',expected:'0\n1\n1\n2\n3\n5\n'},{input:'1',expected:'0\n'}],
+      starter:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // print fibonacci\n    }\n}`,
+      solution:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long a=0,b=1;\n        for(int i=0;i<n;i++){System.out.println(a);long c=a+b;a=b;b=c;}\n    }\n}`
+    },
+    {
+      id:'j6', title:'Palindrome Check', difficulty:'medium',
+      tags:['Strings'],
+      desc:'Read a string and print YES if palindrome, NO otherwise.',
+      example:{ input:'racecar', output:'YES' },
+      constraints:'Lowercase letters only.',
+      tests:[{input:'racecar',expected:'YES\n'},{input:'hello',expected:'NO\n'}],
+      starter:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        // check palindrome\n    }\n}`,
+      solution:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        String rev = new StringBuilder(s).reverse().toString();\n        System.out.println(s.equals(rev)?"YES":"NO");\n    }\n}`
+    },
+    {
+      id:'j7', title:'ArrayList Sort', difficulty:'medium',
+      tags:['ArrayList','Collections','Sorting'],
+      desc:'Read N integers into an ArrayList and print them sorted ascending, space-separated.',
+      example:{ input:'5\n5 3 1 4 2', output:'1 2 3 4 5' },
+      constraints:'1 ≤ N ≤ 10^5.',
+      tests:[{input:'5\n5 3 1 4 2',expected:'1 2 3 4 5\n'}],
+      starter:`import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        ArrayList<Integer> list = new ArrayList<>();\n        for(int i=0;i<n;i++) list.add(sc.nextInt());\n        // sort and print\n    }\n}`,
+      solution:`import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        ArrayList<Integer> list = new ArrayList<>();\n        for(int i=0;i<n;i++) list.add(sc.nextInt());\n        Collections.sort(list);\n        StringBuilder sb = new StringBuilder();\n        for(int i=0;i<list.size();i++){if(i>0)sb.append(' ');sb.append(list.get(i));}\n        System.out.println(sb);\n    }\n}`
+    },
+    {
+      id:'j8', title:'HashMap Word Count', difficulty:'medium',
+      tags:['HashMap','Strings'],
+      desc:'Read a line of words. Print each unique word and its count, sorted alphabetically.',
+      example:{ input:'apple banana apple cherry', output:'apple 2\nbanana 1\ncherry 1' },
+      constraints:'Lowercase. ≤ 500 words.',
+      tests:[{input:'apple banana apple cherry',expected:'apple 2\nbanana 1\ncherry 1\n'}],
+      starter:`import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String[] words = sc.nextLine().split(" ");\n        Map<String,Integer> map = new TreeMap<>();\n        // count words\n    }\n}`,
+      solution:`import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String[] words = sc.nextLine().split(" ");\n        Map<String,Integer> map = new TreeMap<>();\n        for(String w:words) map.put(w,map.getOrDefault(w,0)+1);\n        for(Map.Entry<String,Integer> e:map.entrySet()) System.out.println(e.getKey()+" "+e.getValue());\n    }\n}`
+    },
+    {
+      id:'j9', title:'Factorial Recursive', difficulty:'medium',
+      tags:['Recursion','Math'],
+      desc:'Compute N! using a recursive method.',
+      example:{ input:'6', output:'720' },
+      constraints:'0 ≤ N ≤ 12.',
+      tests:[{input:'6',expected:'720\n'},{input:'0',expected:'1\n'},{input:'10',expected:'3628800\n'}],
+      starter:`import java.util.Scanner;\npublic class Main {\n    static long fact(int n) {\n        // base case + recursion\n    }\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        System.out.println(fact(sc.nextInt()));\n    }\n}`,
+      solution:`import java.util.Scanner;\npublic class Main {\n    static long fact(int n){return n<=1?1:n*fact(n-1);}\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        System.out.println(fact(sc.nextInt()));\n    }\n}`
+    },
+    {
+      id:'j10', title:'Stack with LinkedList', difficulty:'hard',
+      tags:['Stack','LinkedList','Data Structures'],
+      desc:'Process Q operations (PUSH x, POP, PEEK) using java.util.LinkedList as a stack. Print POP/PEEK results or "EMPTY".',
+      example:{ input:'5\nPUSH 10\nPUSH 20\nPEEK\nPOP\nPOP', output:'20\n20\n10' },
+      constraints:'1 ≤ Q ≤ 1000.',
+      tests:[{input:'5\nPUSH 10\nPUSH 20\nPEEK\nPOP\nPOP',expected:'20\n20\n10\n'},{input:'2\nPOP\nPEEK',expected:'EMPTY\nEMPTY\n'}],
+      starter:`import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int q = Integer.parseInt(sc.nextLine());\n        LinkedList<Integer> stack = new LinkedList<>();\n        // process operations\n    }\n}`,
+      solution:`import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int q = Integer.parseInt(sc.nextLine());\n        LinkedList<Integer> stack = new LinkedList<>();\n        for(int i=0;i<q;i++){\n            String[] op = sc.nextLine().split(" ");\n            if(op[0].equals("PUSH")) stack.push(Integer.parseInt(op[1]));\n            else if(op[0].equals("POP")) System.out.println(stack.isEmpty()?"EMPTY":stack.pop());\n            else System.out.println(stack.isEmpty()?"EMPTY":stack.peek());\n        }\n    }\n}`
+    },
+    {
+      id:'j11', title:'Binary Search', difficulty:'hard',
+      tags:['Search','Algorithms'],
+      desc:'Given sorted N integers and target T, print its index using binary search, or -1.',
+      example:{ input:'5\n1 3 5 7 9\n7', output:'3' },
+      constraints:'1 ≤ N ≤ 10^5.',
+      tests:[{input:'5\n1 3 5 7 9\n7',expected:'3\n'},{input:'4\n2 4 6 8\n5',expected:'-1\n'}],
+      starter:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int[] arr = new int[n];\n        for(int i=0;i<n;i++) arr[i]=sc.nextInt();\n        int t = sc.nextInt();\n        // binary search\n    }\n}`,
+      solution:`import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int[] arr = new int[n];\n        for(int i=0;i<n;i++) arr[i]=sc.nextInt();\n        int t=sc.nextInt(),lo=0,hi=n-1,res=-1;\n        while(lo<=hi){int mid=(lo+hi)/2;if(arr[mid]==t){res=mid;break;}else if(arr[mid]<t)lo=mid+1;else hi=mid-1;}\n        System.out.println(res);\n    }\n}`
+    },
+    {
+      id:'j12', title:'Anagram Check', difficulty:'medium',
+      tags:['Strings','Sorting'],
+      desc:'Given two strings, print YES if they are anagrams, NO otherwise.',
+      example:{ input:'listen\nsilent', output:'YES' },
+      constraints:'Lowercase only.',
+      tests:[{input:'listen\nsilent',expected:'YES\n'},{input:'abc\nxyz',expected:'NO\n'}],
+      starter:`import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        char[] a = sc.next().toCharArray();\n        char[] b = sc.next().toCharArray();\n        // check anagram\n    }\n}`,
+      solution:`import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        char[] a = sc.next().toCharArray();\n        char[] b = sc.next().toCharArray();\n        Arrays.sort(a); Arrays.sort(b);\n        System.out.println(Arrays.equals(a,b)?"YES":"NO");\n    }\n}`
+    },
+    {
+      id:'j13', title:'Inheritance — Shape Area', difficulty:'hard',
+      tags:['OOP','Inheritance'],
+      desc:'Define Shape (abstract), Circle, Rectangle subclasses. Read shape type and dimensions, print area to 2 decimal places.',
+      example:{ input:'Circle 5', output:'78.54' },
+      constraints:'Positive integer dimensions ≤ 100.',
+      tests:[{input:'Circle 5',expected:'78.54\n'},{input:'Rectangle 4 6',expected:'24.00\n'}],
+      starter:`import java.util.Scanner;\nabstract class Shape {\n    abstract double area();\n}\nclass Circle extends Shape {\n    // constructor + area\n}\nclass Rectangle extends Shape {\n    // constructor + area\n}\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        // read and print area\n    }\n}`,
+      solution:`import java.util.Scanner;\nabstract class Shape{abstract double area();}\nclass Circle extends Shape{double r;Circle(double r){this.r=r;}double area(){return Math.PI*r*r;}}\nclass Rectangle extends Shape{double w,h;Rectangle(double w,double h){this.w=w;this.h=h;}double area(){return w*h;}}\npublic class Main{\n    public static void main(String[] args){\n        Scanner sc=new Scanner(System.in);\n        String type=sc.next();\n        Shape s;\n        if(type.equals("Circle")) s=new Circle(sc.nextDouble());\n        else s=new Rectangle(sc.nextDouble(),sc.nextDouble());\n        System.out.printf("%.2f%n",s.area());\n    }\n}`
     },
   ],
   cpp: [
@@ -736,14 +1066,114 @@ const PROBLEMS = {
       solution:`#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}`
     },
     {
-      id:'cpp2', title:'Vector Sum', difficulty:'medium',
+      id:'cpp2', title:'Vector Sum', difficulty:'easy',
       tags:['STL','Vectors'],
       desc:'Read N integers into a vector and print their sum.',
       example:{ input:'4\n1 2 3 4', output:'10' },
       constraints:'1 ≤ N ≤ 10^5.',
-      tests:[{input:'4\n1 2 3 4',expected:'10\n'}],
+      tests:[{input:'4\n1 2 3 4',expected:'10\n'},{input:'3\n-1 2 -3',expected:'-2\n'}],
       starter:`#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    vector<int> v(n);\n    for(auto& x : v) cin >> x;\n    // compute and print sum\n    return 0;\n}`,
       solution:`#include <iostream>\n#include <vector>\n#include <numeric>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    vector<int> v(n);\n    for(auto& x : v) cin >> x;\n    cout << accumulate(v.begin(), v.end(), 0) << "\\n";\n    return 0;\n}`
+    },
+    {
+      id:'cpp3', title:'FizzBuzz', difficulty:'easy',
+      tags:['Loops','Conditionals'],
+      desc:'Print FizzBuzz from 1 to N.',
+      example:{ input:'5', output:'1\n2\nFizz\n4\nBuzz' },
+      constraints:'1 ≤ N ≤ 100.',
+      tests:[{input:'5',expected:'1\n2\nFizz\n4\nBuzz\n'}],
+      starter:`#include <iostream>\nusing namespace std;\nint main(){\n    int n; cin>>n;\n    // fizzbuzz\n    return 0;\n}`,
+      solution:`#include <iostream>\nusing namespace std;\nint main(){\n    int n; cin>>n;\n    for(int i=1;i<=n;i++){\n        if(i%15==0) cout<<"FizzBuzz\\n";\n        else if(i%3==0) cout<<"Fizz\\n";\n        else if(i%5==0) cout<<"Buzz\\n";\n        else cout<<i<<"\\n";\n    }\n    return 0;\n}`
+    },
+    {
+      id:'cpp4', title:'Reverse a String', difficulty:'easy',
+      tags:['Strings','STL'],
+      desc:'Read a string and print it reversed using std::reverse.',
+      example:{ input:'cplusplus', output:'sulpspulc' },
+      constraints:'No spaces. Length ≤ 200.',
+      tests:[{input:'cplusplus',expected:'sulpspulc\n'},{input:'hello',expected:'olleh\n'}],
+      starter:`#include <iostream>\n#include <string>\n#include <algorithm>\nusing namespace std;\nint main(){\n    string s; cin>>s;\n    // reverse and print\n    return 0;\n}`,
+      solution:`#include <iostream>\n#include <string>\n#include <algorithm>\nusing namespace std;\nint main(){\n    string s; cin>>s;\n    reverse(s.begin(),s.end());\n    cout<<s<<"\\n";\n    return 0;\n}`
+    },
+    {
+      id:'cpp5', title:'Sort with STL', difficulty:'medium',
+      tags:['STL','Sorting'],
+      desc:'Read N integers and print them sorted ascending using std::sort.',
+      example:{ input:'5\n5 3 1 4 2', output:'1 2 3 4 5' },
+      constraints:'1 ≤ N ≤ 10^5.',
+      tests:[{input:'5\n5 3 1 4 2',expected:'1 2 3 4 5\n'},{input:'3\n3 1 2',expected:'1 2 3\n'}],
+      starter:`#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\nint main(){\n    int n; cin>>n;\n    vector<int> v(n);\n    for(auto& x:v) cin>>x;\n    // sort and print\n    return 0;\n}`,
+      solution:`#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\nint main(){\n    int n; cin>>n;\n    vector<int> v(n);\n    for(auto& x:v) cin>>x;\n    sort(v.begin(),v.end());\n    for(int i=0;i<n;i++) cout<<v[i]<<(i<n-1?" ":"\\n");\n    return 0;\n}`
+    },
+    {
+      id:'cpp6', title:'Map Word Frequency', difficulty:'medium',
+      tags:['STL','Map','Strings'],
+      desc:'Read a line of words. Print each unique word and its count, sorted alphabetically.',
+      example:{ input:'apple banana apple cherry', output:'apple 2\nbanana 1\ncherry 1' },
+      constraints:'Lowercase. ≤ 500 words.',
+      tests:[{input:'apple banana apple cherry',expected:'apple 2\nbanana 1\ncherry 1\n'}],
+      starter:`#include <iostream>\n#include <map>\n#include <string>\n#include <sstream>\nusing namespace std;\nint main(){\n    string line; getline(cin,line);\n    map<string,int> freq;\n    // count words\n    return 0;\n}`,
+      solution:`#include <iostream>\n#include <map>\n#include <string>\n#include <sstream>\nusing namespace std;\nint main(){\n    string line; getline(cin,line);\n    map<string,int> freq;\n    istringstream ss(line); string w;\n    while(ss>>w) freq[w]++;\n    for(auto& p:freq) cout<<p.first<<" "<<p.second<<"\\n";\n    return 0;\n}`
+    },
+    {
+      id:'cpp7', title:'Stack using STL', difficulty:'medium',
+      tags:['Stack','STL','Data Structures'],
+      desc:'Use std::stack to process Q operations: PUSH x, POP, TOP. Print results for POP/TOP, or "EMPTY".',
+      example:{ input:'4\nPUSH 5\nPUSH 3\nTOP\nPOP', output:'3\n3' },
+      constraints:'1 ≤ Q ≤ 1000.',
+      tests:[{input:'4\nPUSH 5\nPUSH 3\nTOP\nPOP',expected:'3\n3\n'},{input:'2\nPOP\nTOP',expected:'EMPTY\nEMPTY\n'}],
+      starter:`#include <iostream>\n#include <stack>\n#include <string>\nusing namespace std;\nint main(){\n    int q; cin>>q; cin.ignore();\n    stack<int> st;\n    // process operations\n    return 0;\n}`,
+      solution:`#include <iostream>\n#include <stack>\n#include <string>\nusing namespace std;\nint main(){\n    int q; cin>>q; cin.ignore();\n    stack<int> st;\n    for(int i=0;i<q;i++){\n        string op; getline(cin,op);\n        if(op.substr(0,4)=="PUSH") st.push(stoi(op.substr(5)));\n        else if(op=="POP"){if(st.empty())cout<<"EMPTY\\n";else{cout<<st.top()<<"\\n";st.pop();}}\n        else{cout<<(st.empty()?"EMPTY":to_string(st.top()))<<"\\n";}\n    }\n    return 0;\n}`
+    },
+    {
+      id:'cpp8', title:'Binary Search', difficulty:'medium',
+      tags:['Search','Algorithms'],
+      desc:'Given sorted N integers and target T, print its index using binary search, or -1.',
+      example:{ input:'5\n1 3 5 7 9\n5', output:'2' },
+      constraints:'1 ≤ N ≤ 10^5.',
+      tests:[{input:'5\n1 3 5 7 9\n5',expected:'2\n'},{input:'4\n2 4 6 8\n5',expected:'-1\n'}],
+      starter:`#include <iostream>\n#include <vector>\nusing namespace std;\nint main(){\n    int n; cin>>n;\n    vector<int> v(n);\n    for(auto& x:v) cin>>x;\n    int t; cin>>t;\n    // binary search\n    return 0;\n}`,
+      solution:`#include <iostream>\n#include <vector>\nusing namespace std;\nint main(){\n    int n; cin>>n;\n    vector<int> v(n);\n    for(auto& x:v) cin>>x;\n    int t; cin>>t;\n    int lo=0,hi=n-1,res=-1;\n    while(lo<=hi){int mid=(lo+hi)/2;if(v[mid]==t){res=mid;break;}else if(v[mid]<t)lo=mid+1;else hi=mid-1;}\n    cout<<res<<"\\n";\n    return 0;\n}`
+    },
+    {
+      id:'cpp9', title:'Struct — Student Grade', difficulty:'medium',
+      tags:['Struct','OOP'],
+      desc:'Define a Student struct with name and grade. Read N students, print the name of the one with the highest grade.',
+      example:{ input:'3\nAlice 85\nBob 92\nCarol 78', output:'Bob' },
+      constraints:'1 ≤ N ≤ 100.',
+      tests:[{input:'3\nAlice 85\nBob 92\nCarol 78',expected:'Bob\n'},{input:'2\nX 50\nY 50',expected:'X\n'}],
+      starter:`#include <iostream>\n#include <string>\nusing namespace std;\nstruct Student {\n    string name;\n    int grade;\n};\nint main(){\n    int n; cin>>n;\n    // read students and find max\n    return 0;\n}`,
+      solution:`#include <iostream>\n#include <string>\nusing namespace std;\nstruct Student{string name;int grade;};\nint main(){\n    int n; cin>>n;\n    Student best; best.grade=-1;\n    for(int i=0;i<n;i++){\n        Student s; cin>>s.name>>s.grade;\n        if(s.grade>best.grade) best=s;\n    }\n    cout<<best.name<<"\\n";\n    return 0;\n}`
+    },
+    {
+      id:'cpp10', title:'Sieve of Eratosthenes', difficulty:'hard',
+      tags:['Math','Sieve','Arrays'],
+      desc:'Given N, print all prime numbers up to N, space-separated.',
+      example:{ input:'20', output:'2 3 5 7 11 13 17 19' },
+      constraints:'2 ≤ N ≤ 10^6.',
+      tests:[{input:'20',expected:'2 3 5 7 11 13 17 19\n'},{input:'10',expected:'2 3 5 7\n'}],
+      starter:`#include <iostream>\n#include <vector>\nusing namespace std;\nint main(){\n    int n; cin>>n;\n    vector<bool> sieve(n+1,true);\n    // sieve\n    return 0;\n}`,
+      solution:`#include <iostream>\n#include <vector>\nusing namespace std;\nint main(){\n    int n; cin>>n;\n    vector<bool> s(n+1,true); s[0]=s[1]=false;\n    for(int i=2;i*i<=n;i++) if(s[i]) for(int j=i*i;j<=n;j+=i) s[j]=false;\n    bool first=true;\n    for(int i=2;i<=n;i++) if(s[i]){if(!first)cout<<' ';cout<<i;first=false;}\n    cout<<"\\n";\n    return 0;\n}`
+    },
+    {
+      id:'cpp11', title:'Tower of Hanoi', difficulty:'hard',
+      tags:['Recursion','Classic'],
+      desc:'Print the moves to solve Tower of Hanoi with N disks (pegs A, B, C).',
+      example:{ input:'2', output:'Move disk 1 from A to B\nMove disk 2 from A to C\nMove disk 1 from B to C' },
+      constraints:'1 ≤ N ≤ 5.',
+      tests:[{input:'2',expected:'Move disk 1 from A to B\nMove disk 2 from A to C\nMove disk 1 from B to C\n'}],
+      starter:`#include <iostream>\nusing namespace std;\nvoid hanoi(int n, char from, char to, char aux){\n    // implement recursion\n}\nint main(){\n    int n; cin>>n;\n    hanoi(n,'A','C','B');\n    return 0;\n}`,
+      solution:`#include <iostream>\nusing namespace std;\nvoid hanoi(int n,char from,char to,char aux){\n    if(n==0) return;\n    hanoi(n-1,from,aux,to);\n    cout<<"Move disk "<<n<<" from "<<from<<" to "<<to<<"\\n";\n    hanoi(n-1,aux,to,from);\n}\nint main(){\n    int n; cin>>n;\n    hanoi(n,'A','C','B');\n    return 0;\n}`
+    },
+    {
+      id:'cpp12', title:'Priority Queue — Top K', difficulty:'hard',
+      tags:['STL','Priority Queue','Heap'],
+      desc:'Read N integers and print the K largest in descending order.',
+      example:{ input:'6 3\n4 1 7 3 9 2', output:'9 7 4' },
+      constraints:'1 ≤ K ≤ N ≤ 10^5.',
+      tests:[{input:'6 3\n4 1 7 3 9 2',expected:'9 7 4\n'},{input:'4 2\n1 2 3 4',expected:'4 3\n'}],
+      starter:`#include <iostream>\n#include <vector>\n#include <queue>\nusing namespace std;\nint main(){\n    int n,k; cin>>n>>k;\n    vector<int> v(n);\n    for(auto& x:v) cin>>x;\n    // use priority_queue to find top K\n    return 0;\n}`,
+      solution:`#include <iostream>\n#include <vector>\n#include <queue>\nusing namespace std;\nint main(){\n    int n,k; cin>>n>>k;\n    vector<int> v(n);\n    for(auto& x:v) cin>>x;\n    priority_queue<int> pq(v.begin(),v.end());\n    for(int i=0;i<k;i++){cout<<pq.top();if(i<k-1)cout<<' ';pq.pop();}\n    cout<<"\\n";\n    return 0;\n}`
     },
   ],
   csharp: [
@@ -757,6 +1187,96 @@ const PROBLEMS = {
       starter:`using System;\nclass Program {\n    static void Main() {\n        // your code here\n    }\n}`,
       solution:`using System;\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello, World!");\n    }\n}`
     },
+    {
+      id:'cs2', title:'Sum of Two Numbers', difficulty:'easy',
+      tags:['Math','I/O'],
+      desc:'Read two integers on one line (space-separated) and print their sum.',
+      example:{ input:'3 7', output:'10' },
+      constraints:'Values fit in int.',
+      tests:[{input:'3 7',expected:'10\n'},{input:'-5 5',expected:'0\n'}],
+      starter:`using System;\nclass Program {\n    static void Main() {\n        string[] parts = Console.ReadLine().Split();\n        // parse and sum\n    }\n}`,
+      solution:`using System;\nclass Program {\n    static void Main() {\n        var p = Console.ReadLine().Split();\n        Console.WriteLine(int.Parse(p[0])+int.Parse(p[1]));\n    }\n}`
+    },
+    {
+      id:'cs3', title:'FizzBuzz', difficulty:'easy',
+      tags:['Loops','Conditionals'],
+      desc:'Print FizzBuzz from 1 to N.',
+      example:{ input:'5', output:'1\n2\nFizz\n4\nBuzz' },
+      constraints:'1 ≤ N ≤ 100.',
+      tests:[{input:'5',expected:'1\n2\nFizz\n4\nBuzz\n'}],
+      starter:`using System;\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        // fizzbuzz\n    }\n}`,
+      solution:`using System;\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        for(int i=1;i<=n;i++){\n            if(i%15==0) Console.WriteLine("FizzBuzz");\n            else if(i%3==0) Console.WriteLine("Fizz");\n            else if(i%5==0) Console.WriteLine("Buzz");\n            else Console.WriteLine(i);\n        }\n    }\n}`
+    },
+    {
+      id:'cs4', title:'Reverse a String', difficulty:'easy',
+      tags:['Strings'],
+      desc:'Read a string and print it reversed.',
+      example:{ input:'csharp', output:'praHsc' },
+      constraints:'No spaces. Length ≤ 200.',
+      tests:[{input:'csharp',expected:'praHsc\n'},{input:'hello',expected:'olleh\n'}],
+      starter:`using System;\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        // reverse and print\n    }\n}`,
+      solution:`using System;\nclass Program {\n    static void Main() {\n        char[] c = Console.ReadLine().ToCharArray();\n        Array.Reverse(c);\n        Console.WriteLine(new string(c));\n    }\n}`
+    },
+    {
+      id:'cs5', title:'LINQ Max', difficulty:'medium',
+      tags:['List','LINQ'],
+      desc:'Read N integers and use LINQ to print the maximum value.',
+      example:{ input:'5\n3 1 4 1 5', output:'5' },
+      constraints:'1 ≤ N ≤ 10^5.',
+      tests:[{input:'5\n3 1 4 1 5',expected:'5\n'},{input:'3\n-10 -3 -7',expected:'-3\n'}],
+      starter:`using System;\nusing System.Linq;\nclass Program {\n    static void Main() {\n        Console.ReadLine();\n        var nums = Console.ReadLine().Split().Select(int.Parse).ToArray();\n        // print max using LINQ\n    }\n}`,
+      solution:`using System;\nusing System.Linq;\nclass Program {\n    static void Main() {\n        Console.ReadLine();\n        Console.WriteLine(Console.ReadLine().Split().Select(int.Parse).Max());\n    }\n}`
+    },
+    {
+      id:'cs6', title:'Dictionary Word Count', difficulty:'medium',
+      tags:['Dictionary','Strings'],
+      desc:'Read a line of words. Print each unique word and its count, sorted alphabetically.',
+      example:{ input:'apple banana apple cherry', output:'apple 2\nbanana 1\ncherry 1' },
+      constraints:'Lowercase. ≤ 500 words.',
+      tests:[{input:'apple banana apple cherry',expected:'apple 2\nbanana 1\ncherry 1\n'}],
+      starter:`using System;\nusing System.Collections.Generic;\nclass Program {\n    static void Main() {\n        string[] words = Console.ReadLine().Split();\n        var freq = new Dictionary<string,int>();\n        // count and print\n    }\n}`,
+      solution:`using System;\nusing System.Collections.Generic;\nclass Program {\n    static void Main() {\n        var words = Console.ReadLine().Split();\n        var f = new SortedDictionary<string,int>();\n        foreach(var w in words) f[w] = f.ContainsKey(w)?f[w]+1:1;\n        foreach(var kv in f) Console.WriteLine(kv.Key+" "+kv.Value);\n    }\n}`
+    },
+    {
+      id:'cs7', title:'Fibonacci with Memoization', difficulty:'medium',
+      tags:['Recursion','Dictionary','Memoization'],
+      desc:'Compute the Nth Fibonacci number using memoization (0-indexed).',
+      example:{ input:'10', output:'55' },
+      constraints:'0 ≤ N ≤ 40.',
+      tests:[{input:'10',expected:'55\n'},{input:'0',expected:'0\n'},{input:'7',expected:'13\n'}],
+      starter:`using System;\nusing System.Collections.Generic;\nclass Program {\n    static Dictionary<int,long> memo = new Dictionary<int,long>();\n    static long Fib(int n) {\n        // implement with memo\n    }\n    static void Main() {\n        Console.WriteLine(Fib(int.Parse(Console.ReadLine())));\n    }\n}`,
+      solution:`using System;\nusing System.Collections.Generic;\nclass Program {\n    static Dictionary<int,long> memo = new Dictionary<int,long>();\n    static long Fib(int n){\n        if(n<=1) return n;\n        if(memo.ContainsKey(n)) return memo[n];\n        return memo[n]=Fib(n-1)+Fib(n-2);\n    }\n    static void Main(){\n        Console.WriteLine(Fib(int.Parse(Console.ReadLine())));\n    }\n}`
+    },
+    {
+      id:'cs8', title:'OOP — Bank Account', difficulty:'hard',
+      tags:['OOP','Classes'],
+      desc:'Create a BankAccount class with Deposit(amount) and Withdraw(amount). Process Q transactions and print final balance.',
+      example:{ input:'3\nDEPOSIT 100\nWITHDRAW 30\nDEPOSIT 50', output:'120' },
+      constraints:'1 ≤ Q ≤ 1000. Withdrawal never exceeds balance.',
+      tests:[{input:'3\nDEPOSIT 100\nWITHDRAW 30\nDEPOSIT 50',expected:'120\n'}],
+      starter:`using System;\nclass BankAccount {\n    public int Balance { get; private set; } = 0;\n    public void Deposit(int amount) { }\n    public void Withdraw(int amount) { }\n}\nclass Program {\n    static void Main() {\n        var account = new BankAccount();\n        int q = int.Parse(Console.ReadLine());\n        // process transactions\n    }\n}`,
+      solution:`using System;\nclass BankAccount{\n    public int Balance{get;private set;}=0;\n    public void Deposit(int a){Balance+=a;}\n    public void Withdraw(int a){Balance-=a;}\n}\nclass Program{\n    static void Main(){\n        var acc=new BankAccount();\n        int q=int.Parse(Console.ReadLine());\n        for(int i=0;i<q;i++){\n            var p=Console.ReadLine().Split();\n            if(p[0]=="DEPOSIT") acc.Deposit(int.Parse(p[1]));\n            else acc.Withdraw(int.Parse(p[1]));\n        }\n        Console.WriteLine(acc.Balance);\n    }\n}`
+    },
+    {
+      id:'cs9', title:'Stack<T>', difficulty:'medium',
+      tags:['Stack','Generics'],
+      desc:'Use C# Stack&lt;int&gt; to process Q operations: PUSH x, POP, PEEK.',
+      example:{ input:'4\nPUSH 5\nPUSH 3\nPEEK\nPOP', output:'3\n3' },
+      constraints:'1 ≤ Q ≤ 1000.',
+      tests:[{input:'4\nPUSH 5\nPUSH 3\nPEEK\nPOP',expected:'3\n3\n'},{input:'2\nPOP\nPEEK',expected:'EMPTY\nEMPTY\n'}],
+      starter:`using System;\nusing System.Collections.Generic;\nclass Program {\n    static void Main() {\n        int q = int.Parse(Console.ReadLine());\n        var stack = new Stack<int>();\n        // process operations\n    }\n}`,
+      solution:`using System;\nusing System.Collections.Generic;\nclass Program{\n    static void Main(){\n        int q=int.Parse(Console.ReadLine());\n        var st=new Stack<int>();\n        for(int i=0;i<q;i++){\n            var p=Console.ReadLine().Split();\n            if(p[0]=="PUSH") st.Push(int.Parse(p[1]));\n            else if(p[0]=="POP") Console.WriteLine(st.Count==0?"EMPTY":st.Pop().ToString());\n            else Console.WriteLine(st.Count==0?"EMPTY":st.Peek().ToString());\n        }\n    }\n}`
+    },
+    {
+      id:'cs10', title:'LINQ Filter and Sort', difficulty:'hard',
+      tags:['LINQ','Lambda'],
+      desc:'Read N integers. Use LINQ to print numbers greater than the average, sorted ascending.',
+      example:{ input:'6\n1 2 3 4 5 6', output:'4 5 6' },
+      constraints:'1 ≤ N ≤ 10^4.',
+      tests:[{input:'6\n1 2 3 4 5 6',expected:'4 5 6\n'},{input:'4\n10 20 30 40',expected:'30 40\n'}],
+      starter:`using System;\nusing System.Linq;\nclass Program {\n    static void Main() {\n        Console.ReadLine();\n        var nums = Console.ReadLine().Split().Select(int.Parse).ToArray();\n        // filter, sort, print\n    }\n}`,
+      solution:`using System;\nusing System.Linq;\nclass Program{\n    static void Main(){\n        Console.ReadLine();\n        var nums=Console.ReadLine().Split().Select(int.Parse).ToArray();\n        double avg=nums.Average();\n        Console.WriteLine(string.Join(" ",nums.Where(x=>x>avg).OrderBy(x=>x)));\n    }\n}`
+    },
   ],
   javascript: [
     {
@@ -769,16 +1289,125 @@ const PROBLEMS = {
       starter:`// your code here\n`,
       solution:`console.log("Hello, World!");`
     },
+    {
+      id:'js2', title:'Sum of Numbers', difficulty:'easy',
+      tags:['Math','I/O'],
+      desc:'Read a line of space-separated integers and print their sum.',
+      example:{ input:'1 2 3 4 5', output:'15' },
+      constraints:'Values fit in Number.',
+      tests:[{input:'1 2 3 4 5',expected:'15\n'},{input:'10 -3 7',expected:'14\n'}],
+      starter:`const nums = require('fs').readFileSync('/dev/stdin','utf8').trim().split(' ').map(Number);\n// print sum\n`,
+      solution:`const nums = require('fs').readFileSync('/dev/stdin','utf8').trim().split(' ').map(Number);\nconsole.log(nums.reduce((a,b)=>a+b,0));`
+    },
+    {
+      id:'js3', title:'FizzBuzz', difficulty:'easy',
+      tags:['Loops','Conditionals'],
+      desc:'Print FizzBuzz from 1 to N.',
+      example:{ input:'5', output:'1\n2\nFizz\n4\nBuzz' },
+      constraints:'1 ≤ N ≤ 100.',
+      tests:[{input:'5',expected:'1\n2\nFizz\n4\nBuzz\n'}],
+      starter:`const n = parseInt(require('fs').readFileSync('/dev/stdin','utf8'));\n// fizzbuzz loop\n`,
+      solution:`const n = parseInt(require('fs').readFileSync('/dev/stdin','utf8'));\nfor(let i=1;i<=n;i++){\n  if(i%15===0) console.log("FizzBuzz");\n  else if(i%3===0) console.log("Fizz");\n  else if(i%5===0) console.log("Buzz");\n  else console.log(i);\n}`
+    },
+    {
+      id:'js4', title:'Reverse a String', difficulty:'easy',
+      tags:['Strings'],
+      desc:'Read a string and print it reversed.',
+      example:{ input:'javascript', output:'tpircSAvaj' },
+      constraints:'No spaces. Length ≤ 200.',
+      tests:[{input:'javascript',expected:'tpircSAvaj\n'},{input:'hello',expected:'olleh\n'}],
+      starter:`const s = require('fs').readFileSync('/dev/stdin','utf8').trim();\n// reverse and print\n`,
+      solution:`const s = require('fs').readFileSync('/dev/stdin','utf8').trim();\nconsole.log(s.split('').reverse().join(''));`
+    },
+    {
+      id:'js5', title:'Palindrome Check', difficulty:'easy',
+      tags:['Strings'],
+      desc:'Print YES if the string is a palindrome, NO otherwise.',
+      example:{ input:'racecar', output:'YES' },
+      constraints:'Lowercase. Length ≤ 1000.',
+      tests:[{input:'racecar',expected:'YES\n'},{input:'hello',expected:'NO\n'}],
+      starter:`const s = require('fs').readFileSync('/dev/stdin','utf8').trim();\n// check palindrome\n`,
+      solution:`const s = require('fs').readFileSync('/dev/stdin','utf8').trim();\nconsole.log(s===s.split('').reverse().join('')?'YES':'NO');`
+    },
+    {
+      id:'js6', title:'Filter & Map (Even Squares)', difficulty:'medium',
+      tags:['Arrays','Functional'],
+      desc:'Read N integers. Print the squares of all even numbers, space-separated.',
+      example:{ input:'6\n1 2 3 4 5 6', output:'4 16 36' },
+      constraints:'1 ≤ N ≤ 1000.',
+      tests:[{input:'6\n1 2 3 4 5 6',expected:'4 16 36\n'},{input:'3\n1 3 5',expected:'\n'}],
+      starter:`const lines = require('fs').readFileSync('/dev/stdin','utf8').trim().split('\\n');\nconst nums = lines[1].split(' ').map(Number);\n// filter evens, square, print\n`,
+      solution:`const lines = require('fs').readFileSync('/dev/stdin','utf8').trim().split('\\n');\nconst nums = lines[1].split(' ').map(Number);\nconsole.log(nums.filter(x=>x%2===0).map(x=>x*x).join(' '));`
+    },
+    {
+      id:'js7', title:'Object Word Frequency', difficulty:'medium',
+      tags:['Objects','Strings'],
+      desc:'Read a line of words. Print each unique word and its count, sorted alphabetically.',
+      example:{ input:'apple banana apple cherry', output:'apple 2\nbanana 1\ncherry 1' },
+      constraints:'Lowercase. ≤ 500 words.',
+      tests:[{input:'apple banana apple cherry',expected:'apple 2\nbanana 1\ncherry 1\n'}],
+      starter:`const words = require('fs').readFileSync('/dev/stdin','utf8').trim().split(' ');\nconst freq = {};\n// count and print sorted\n`,
+      solution:`const words = require('fs').readFileSync('/dev/stdin','utf8').trim().split(' ');\nconst freq={};\nwords.forEach(w=>freq[w]=(freq[w]||0)+1);\nObject.keys(freq).sort().forEach(k=>console.log(k+' '+freq[k]));`
+    },
+    {
+      id:'js8', title:'Closure Counter', difficulty:'medium',
+      tags:['Closures','Functions'],
+      desc:'Implement makeCounter() returning a function that increments each call. Read N and print each call result.',
+      example:{ input:'3', output:'1\n2\n3' },
+      constraints:'1 ≤ N ≤ 100.',
+      tests:[{input:'3',expected:'1\n2\n3\n'},{input:'5',expected:'1\n2\n3\n4\n5\n'}],
+      starter:`function makeCounter() {\n    // return a closure\n}\nconst n = parseInt(require('fs').readFileSync('/dev/stdin','utf8'));\nconst counter = makeCounter();\nfor(let i=0;i<n;i++) console.log(counter());\n`,
+      solution:`function makeCounter(){let c=0;return()=>++c;}\nconst n=parseInt(require('fs').readFileSync('/dev/stdin','utf8'));\nconst counter=makeCounter();\nfor(let i=0;i<n;i++) console.log(counter());`
+    },
+    {
+      id:'js9', title:'Promise Chain', difficulty:'hard',
+      tags:['Promises','Async'],
+      desc:'Read two numbers A and B. Use Promise chaining: first add them, then multiply by 2, then print.',
+      example:{ input:'3 4', output:'14' },
+      constraints:'Values fit in Number.',
+      tests:[{input:'3 4',expected:'14\n'},{input:'5 5',expected:'20\n'}],
+      starter:`const [a,b] = require('fs').readFileSync('/dev/stdin','utf8').trim().split(' ').map(Number);\nPromise.resolve([a,b])\n    .then(([x,y]) => { /* add */ })\n    .then(sum => { /* multiply by 2 */ })\n    .then(result => console.log(result));\n`,
+      solution:`const [a,b]=require('fs').readFileSync('/dev/stdin','utf8').trim().split(' ').map(Number);\nPromise.resolve([a,b]).then(([x,y])=>x+y).then(s=>s*2).then(r=>console.log(r));`
+    },
+    {
+      id:'js10', title:'Class — Queue', difficulty:'hard',
+      tags:['Classes','Data Structures'],
+      desc:'Implement a Queue class (enqueue, dequeue, peek). Process Q operations and print DEQUEUE/PEEK results or "EMPTY".',
+      example:{ input:'5\nENQUEUE 1\nENQUEUE 2\nPEEK\nDEQUEUE\nDEQUEUE', output:'1\n1\n2' },
+      constraints:'1 ≤ Q ≤ 1000.',
+      tests:[{input:'5\nENQUEUE 1\nENQUEUE 2\nPEEK\nDEQUEUE\nDEQUEUE',expected:'1\n1\n2\n'},{input:'2\nDEQUEUE\nPEEK',expected:'EMPTY\nEMPTY\n'}],
+      starter:`class Queue {\n    constructor() { this.data = []; }\n    enqueue(x) { /* add to back */ }\n    dequeue() { /* remove from front */ }\n    peek() { /* view front */ }\n}\nconst lines = require('fs').readFileSync('/dev/stdin','utf8').trim().split('\\n');\nconst q = new Queue();\nconst n = parseInt(lines[0]);\nfor(let i=1;i<=n;i++) {\n    const parts = lines[i].split(' ');\n    // handle operations\n}\n`,
+      solution:`class Queue{constructor(){this.data=[];}enqueue(x){this.data.push(x);}dequeue(){return this.data.length?this.data.shift():'EMPTY';}peek(){return this.data.length?this.data[0]:'EMPTY';}}\nconst lines=require('fs').readFileSync('/dev/stdin','utf8').trim().split('\\n');\nconst q=new Queue(),n=parseInt(lines[0]);\nfor(let i=1;i<=n;i++){const p=lines[i].split(' ');if(p[0]==='ENQUEUE')q.enqueue(parseInt(p[1]));else if(p[0]==='DEQUEUE')console.log(q.dequeue());else console.log(q.peek());}`
+    },
+    {
+      id:'js11', title:'Destructuring & Spread', difficulty:'medium',
+      tags:['ES6','Destructuring'],
+      desc:'Read N integers. Use destructuring to get first/last and spread for middle. Print first, last, then sum of middle.',
+      example:{ input:'5\n10 20 30 40 50', output:'10\n50\n90' },
+      constraints:'N ≥ 3.',
+      tests:[{input:'5\n10 20 30 40 50',expected:'10\n50\n90\n'},{input:'3\n1 5 9',expected:'1\n9\n5\n'}],
+      starter:`const lines = require('fs').readFileSync('/dev/stdin','utf8').trim().split('\\n');\nconst arr = lines[1].split(' ').map(Number);\nconst [first, ...rest] = arr;\nconst last = rest.pop();\n// print first, last, sum of middle\n`,
+      solution:`const lines=require('fs').readFileSync('/dev/stdin','utf8').trim().split('\\n');\nconst arr=lines[1].split(' ').map(Number);\nconst [first,...rest]=arr;\nconst last=rest.pop();\nconsole.log(first);\nconsole.log(last);\nconsole.log(rest.reduce((a,b)=>a+b,0));`
+    },
+    {
+      id:'js12', title:'Recursive Flatten', difficulty:'hard',
+      tags:['Recursion','Arrays'],
+      desc:'Read a JSON array (possibly nested) and print all numbers flattened, space-separated.',
+      example:{ input:'[1,[2,[3,4]],5]', output:'1 2 3 4 5' },
+      constraints:'Depth ≤ 5. ≤ 20 elements.',
+      tests:[{input:'[1,[2,[3,4]],5]',expected:'1 2 3 4 5\n'},{input:'[1,2,3]',expected:'1 2 3\n'}],
+      starter:`const input = require('fs').readFileSync('/dev/stdin','utf8').trim();\nconst arr = JSON.parse(input);\nfunction flatten(a) {\n    // recursively flatten\n}\nconsole.log(flatten(arr).join(' '));\n`,
+      solution:`const input=require('fs').readFileSync('/dev/stdin','utf8').trim();\nconst arr=JSON.parse(input);\nfunction flatten(a){return a.reduce((acc,x)=>Array.isArray(x)?acc.concat(flatten(x)):acc.concat(x),[]);}\nconsole.log(flatten(arr).join(' '));`
+    },
   ],
 };
 
-/* Judge0 language IDs */
-const JUDGE0_IDS = { c:50, java:62, python:71, cpp:54, csharp:51, javascript:63 };
-const FILE_EXT   = { c:'main.c', java:'Main.java', python:'main.py', cpp:'main.cpp', csharp:'Program.cs', javascript:'main.js' };
+
+/* ── Piston API (free, no key needed) ── */
+const PISTON_URL  = 'https://emkc.org/api/v2/piston/execute';
+const PISTON_LANG = { c:'c', java:'java', python:'python3', cpp:'c++', csharp:'csharp', javascript:'javascript' };
+const FILE_EXT    = { c:'main.c', java:'Main.java', python:'main.py', cpp:'main.cpp', csharp:'Program.cs', javascript:'main.js' };
 const MONACO_LANG = { c:'c', java:'java', python:'python', cpp:'cpp', csharp:'csharp', javascript:'javascript' };
-const JUDGE0_BASE = 'https://judge0-ce.p.rapidapi.com';
-// ⚠️  REPLACE WITH YOUR RAPIDAPI KEY ↓
-const RAPIDAPI_KEY = 'YOUR_RAPIDAPI_KEY_HERE';
 
 /* ── State ── */
 let editor, currentLang = 'c', currentProblem = null, aiMode = 'hint';
@@ -904,9 +1533,8 @@ function loadProblem(p, el) {
 ══════════════════════════════════════ */
 async function runCode(stdinOverride) {
   if (!editor) return;
-  const code   = editor.getValue();
-  const stdin  = stdinOverride !== undefined ? stdinOverride : document.getElementById('stdin-input').value;
-  const langId = JUDGE0_IDS[currentLang];
+  const code  = editor.getValue();
+  const stdin = stdinOverride !== undefined ? stdinOverride : document.getElementById('stdin-input').value;
 
   setStatus('running');
   setOutput('Running…', false);
@@ -914,51 +1542,42 @@ async function runCode(stdinOverride) {
   const t0 = Date.now();
 
   try {
-    // Submit
-    const subRes = await fetch(`${JUDGE0_BASE}/submissions?base64_encoded=false&wait=false`, {
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'X-RapidAPI-Key': RAPIDAPI_KEY,
-        'X-RapidAPI-Host':'judge0-ce.p.rapidapi.com'
-      },
-      body: JSON.stringify({ source_code: code, language_id: langId, stdin })
+    const res = await fetch(PISTON_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        language: PISTON_LANG[currentLang],
+        version: '*',
+        files: [{ name: FILE_EXT[currentLang], content: code }],
+        stdin: stdin
+      })
     });
-    const { token } = await subRes.json();
 
-    // Poll
-    let result;
-    for (let i=0; i<20; i++) {
-      await sleep(800);
-      const r = await fetch(`${JUDGE0_BASE}/submissions/${token}?base64_encoded=false`, {
-        headers:{
-          'X-RapidAPI-Key': RAPIDAPI_KEY,
-          'X-RapidAPI-Host':'judge0-ce.p.rapidapi.com'
-        }
-      });
-      result = await r.json();
-      if (result.status && result.status.id > 2) break;
-    }
-
+    const data = await res.json();
     const ms = Date.now() - t0;
     document.getElementById('exec-time').textContent = `${ms}ms`;
 
-    const sid = result.status?.id;
-    if (sid === 3) {
-      // Accepted
-      setStatus('ok');
-      setOutput(result.stdout || '(no output)', false);
-    } else if (sid === 6) {
+    const stdout = data.run?.stdout || '';
+    const stderr = data.run?.stderr || '';
+    const code_  = data.run?.code;
+
+    if (stderr && !stdout) {
       setStatus('err');
-      setOutput(result.compile_output || 'Compilation error', true);
+      setOutput(stderr, true);
+    } else if (code_ !== 0 && stderr) {
+      setStatus('err');
+      setOutput(stderr, true);
     } else {
-      setStatus('err');
-      setOutput(result.stderr || result.message || result.status?.description || 'Runtime error', true);
+      setStatus('ok');
+      setOutput(stdout || '(no output)', false);
     }
-    return result;
+
+    // return a compat object so runTests() still works
+    return { stdout, stderr, run: data.run };
+
   } catch(e) {
     setStatus('err');
-    setOutput('⚠ Network error — check your RapidAPI key or try again.', true);
+    setOutput('⚠ Network error — could not reach Piston API.', true);
   } finally {
     document.getElementById('run-btn').disabled = false;
   }
@@ -988,7 +1607,7 @@ async function runTests() {
     document.getElementById(`test-res-${i}`).textContent = '⏳ Running…';
     document.getElementById(`test-res-${i}`).style.color = 'var(--warn)';
     const result = await runCode(t.input);
-    const actual = (result?.stdout || '').replace(/\r/g,'');
+    const actual = (result?.stdout || result?.run?.stdout || '').replace(/\r/g,'');
     const pass = actual === t.expected;
     if (!pass) allPassed = false;
     document.getElementById(`test-res-${i}`).textContent = pass ? '✅ Passed' : `❌ Got: "${actual.trim()}"`;
