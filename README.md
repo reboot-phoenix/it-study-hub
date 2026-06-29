@@ -33,9 +33,9 @@
 
 <div align="center">
 
-| Home | Courses | Quiz |
-|:---:|:---:|:---:|
-| Dark cyberpunk landing page with animated hero | 6 subject cards with skill level indicators | 25-question placement system with instant results |
+| Home | Courses | Practice | Quiz |
+|:---:|:---:|:---:|:---:|
+| Dark cyberpunk landing page with animated hero | 6 subject cards with skill level indicators | Full in-browser IDE with AI mentor | 25-question placement system with instant results |
 
 > **🔗 Live at:** [`www.itstudyhub.dpdns.org`](https://www.itstudyhub.dpdns.org)
 
@@ -48,13 +48,23 @@
 > *"Too many resources. No clear direction. No community."*  
 > **We built the solution.**
 
-**IT Study Hub** is a fully functional, premium-quality educational web platform built exclusively for IT students at **Techno India University**. It brings together 6 programming courses, a smart placement quiz system, a tech blog, collaborative file sharing, and a student community — all wrapped in a professional dark-themed interface built entirely from scratch.
+**IT Study Hub** is a fully functional, premium-quality educational web platform built for IT students at **Techno India University**. It brings together 6 programming courses, a full in-browser code practice panel, a smart placement quiz system, a tech blog, collaborative file sharing, and a student community — all wrapped in a professional dark-themed interface built entirely from scratch.
 
 No templates. No frameworks. Pure HTML, CSS, and JavaScript.
 
 ---
 
 ## ✨ Core Features
+
+### 💻 Live Practice Panel *(New)*
+> *Code. Run. Learn. No installs. No signups.*
+
+- **Full in-browser IDE** powered by Monaco Editor (the engine behind VS Code)
+- **Real code execution** via Judge0 CE across all 6 languages
+- **70+ curated problems** sorted into Beginner / Intermediate / Advanced tiers
+- **AI Mentor system** — stuck? get hints without being handed the answer
+- **Stdin support**, execution time display, and error highlighting
+- Zero setup — works instantly from the browser
 
 ### 🎯 Placement Quiz System
 > *Know your level before you spend a rupee.*
@@ -83,6 +93,7 @@ Each track contains **Beginner → Intermediate → Advanced** levels so no stud
 - **Scroll-triggered reveal animations** on all content sections
 - **Fully responsive** — mobile, tablet, and desktop
 - **Professional typography** — Bebas Neue + DM Sans + JetBrains Mono
+- **External CSS architecture** — 5 modular stylesheets (`global.css`, `index-page.css`, `course-page.css`, `quiz-page.css`, `pages.css`)
 
 ### 📁 File Share Hub
 Collaborative space for students to download and share class notes, past papers, and PDF handouts.
@@ -90,8 +101,11 @@ Collaborative space for students to download and share class notes, past papers,
 ### 📝 Tech Blog
 Regular editorial content covering AI, Cybersecurity, Web Development, and IT career insights.
 
-### 🔒 Authentication System
-Firebase-powered authentication with email/password login, session persistence via `onAuthStateChanged`, and role-based access control (free / pro / elite) enforced at the Firestore level.
+### 🔒 Authentication & Access Control
+Firebase-powered authentication with email/password login, session persistence via `onAuthStateChanged`, and role-based access control (free / pro / elite / admin) enforced at the Firestore level.
+
+### 💳 Premium Plans
+Razorpay-integrated payment system with three tiers — Starter (₹199), Pro (₹499), Elite (₹999) — unlocking advanced lessons, all PDFs, certificates, and lifetime access.
 
 ---
 
@@ -100,25 +114,42 @@ Firebase-powered authentication with email/password login, session persistence v
 ```
 it-study-hub/
 │
-├── 📄 index.html             ← Main landing page & site portal
-├── 📄 courses.html           ← Overview of all 6 course tracks
-├── 📄 ESD.html               ← Placement quiz system
-├── 📄 blog.html              ← Tech blog & editorial feed
-├── 📄 fileshare.html         ← Student file sharing hub
-├── 📄 team.html              ← Team profiles
-├── 📄 about.html             ← Project documentation
-├── 📄 contactus.html         ← Contact forms
-├── 📄 Login.html             ← Sign-in & enrollment (drag-to-authenticate)
-├── 📄 privacypolicy.html     ← Privacy & compliance
-├── 📄 global.html            ← Shared layout utilities
+├── 📄 index.html               ← Main landing page & site portal
+├── 📄 courses.html             ← Overview of all 6 course tracks
+├── 📄 practice-panel.html      ← Full in-browser IDE (Monaco + Judge0 + AI Mentor)
+├── 📄 quiz.html                ← Placement quiz system
+├── 📄 blog.html                ← Tech blog & editorial feed
+├── 📄 blog-post.html           ← Individual blog post reader
+├── 📄 fileshare.html           ← Student file sharing hub
+├── 📄 global.html              ← Global leaderboard & student dashboard
+├── 📄 team.html                ← Team profiles
+├── 📄 about.html               ← Project documentation
+├── 📄 contactus.html           ← Contact form
+├── 📄 support.html             ← FAQ & support channels
+├── 📄 Login.html               ← Sign-in & enrollment (drag-to-authenticate)
+├── 📄 profile.html             ← Student profile & progress dashboard
+├── 📄 premium.html             ← Premium plans & pricing
+├── 📄 admin.html               ← Admin dashboard (restricted)
+├── 📄 privacypolicy.html       ← Privacy & compliance
+├── 📄 terms.html               ← Terms of service
 │
 ├── 🗂️ Language Course Pages
-│   ├── c.html                ← C Programming track
-│   ├── java.html             ← OOPs Java track
-│   ├── python.html           ← Python track
-│   ├── c++.html              ← C++ track
-│   ├── csharp.html           ← C# track
-│   └── web.html              ← HTML + CSS + JS track
+│   ├── c.html                  ← C Programming track
+│   ├── java.html               ← OOPs Java track
+│   ├── python.html             ← Python track
+│   ├── c__.html                ← C++ track
+│   ├── csharp.html             ← C# track
+│   └── web.html                ← HTML + CSS + JS track
+│
+├── 🎨 Stylesheets
+│   ├── global.css              ← Tokens, reset, nav, cursor, animations (all pages)
+│   ├── index-page.css          ← Landing page exclusive styles
+│   ├── course-page.css         ← Shared styles for all 6 course pages
+│   ├── quiz-page.css           ← Quiz page exclusive styles
+│   └── pages.css               ← All remaining page styles
+│
+├── 📜 JavaScript Modules
+│   └── premium-modal.js        ← Razorpay payment modal (included on course pages)
 │
 └── 🖼️ Team Assets
     └── team_image.jpeg
@@ -129,20 +160,24 @@ it-study-hub/
 ## 🛠️ Tech Stack
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                    TECH STACK                       │
-├──────────────┬──────────────────────────────────────┤
-│  Structure   │  HTML5                               │
-│  Styling     │  CSS3 (Grid, Flexbox, Animations)    │
-│  Logic       │  Vanilla JavaScript (ES6+)           │
-│  Auth        │  Firebase Authentication             │
-│  Database    │  Cloud Firestore                     │
-│  Storage     │  Firebase Storage                    │
-│  Hosting     │  GitHub Pages + Custom Domain        │
-│  Domain      │  www.itstudyhub.dpdns.org            │
-│  Version     │  Git + GitHub                        │
-│  Fonts       │  Bebas Neue · DM Sans · JetBrains   │
-└──────────────┴──────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│                      TECH STACK                         │
+├──────────────┬──────────────────────────────────────────┤
+│  Structure   │  HTML5                                   │
+│  Styling     │  CSS3 (Grid, Flexbox, Animations)        │
+│  Logic       │  Vanilla JavaScript (ES6+)               │
+│  IDE Engine  │  Monaco Editor (via CDN)                 │
+│  Code Runner │  Judge0 CE (via RapidAPI)                │
+│  AI Mentor   │  Anthropic Claude API                    │
+│  Auth        │  Firebase Authentication                 │
+│  Database    │  Cloud Firestore                         │
+│  Storage     │  Firebase Storage                        │
+│  Payments    │  Razorpay                                │
+│  Hosting     │  GitHub Pages + Custom Domain            │
+│  Domain      │  www.itstudyhub.dpdns.org               │
+│  Version     │  Git + GitHub                            │
+│  Fonts       │  Bebas Neue · DM Sans · JetBrains Mono  │
+└──────────────┴──────────────────────────────────────────┘
 
   ✅ Zero frameworks    ✅ Zero libraries    ✅ 100% from scratch
 ```
@@ -193,7 +228,10 @@ open index.html
 - [x] 🔐 Firebase Authentication — real student accounts with session persistence
 - [x] 👑 Premium plan system — ₹199 / ₹499 / ₹999 tiers with Firestore enforcement
 - [x] 🏆 Global leaderboard — XP-based rankings pulled from Firestore
-- [ ] 📊 Full 25-question quiz for all subjects
+- [x] 💻 Live Practice Panel — Monaco editor + Judge0 + AI mentor + 70+ problems
+- [x] 🎨 External CSS architecture — 5 modular stylesheets across 23 pages
+- [ ] 📊 Full 25-question quiz for all 6 subjects
+- [ ] 🔗 Practice panel integrated into individual course pages
 - [ ] 💬 Discussion forum for student Q&A
 - [ ] 📈 Personal dashboard with quiz history & progress tracking
 - [ ] 🌍 Open platform beyond TIU to all IT students in India
