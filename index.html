@@ -7,6 +7,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="index-page.css">
+<style>
+/* ── Stat counters (replaces fake skill bars) ── */
+.stat-counters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.stat-counter-item {
+  background: rgba(200,241,53,0.04);
+  border: 1px solid rgba(200,241,53,0.12);
+  border-radius: 12px;
+  padding: 20px 16px;
+  text-align: center;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.stat-counter-item:hover {
+  border-color: rgba(200,241,53,0.3);
+  transform: translateY(-2px);
+}
+.stat-counter-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  line-height: 1;
+  color: #c8f135;
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+.stat-counter-label {
+  font-size: 11px;
+  color: #6b6b80;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+</style>
 </head>
 <body>
 
@@ -321,31 +356,31 @@
       </div>
     </div>
     <div class="how-visual reveal">
-      <div class="section-label" style="margin-bottom:24px;">Skill Progression</div>
-      <div class="skill-bars">
-        <div class="skill-row">
-          <div class="skill-header"><span class="skill-name">C Programming</span><span class="skill-pct">87%</span></div>
-          <div class="skill-track"><div class="skill-fill" data-w="87"></div></div>
+      <div class="section-label" style="margin-bottom:24px;">Platform at a Glance</div>
+      <div class="stat-counters">
+        <div class="stat-counter-item">
+          <div class="stat-counter-num" data-target="6">0</div>
+          <div class="stat-counter-label">Programming Courses</div>
         </div>
-        <div class="skill-row">
-          <div class="skill-header"><span class="skill-name">OOPs Java</span><span class="skill-pct">92%</span></div>
-          <div class="skill-track"><div class="skill-fill" data-w="92"></div></div>
+        <div class="stat-counter-item">
+          <div class="stat-counter-num" data-target="70">0</div>
+          <div class="stat-counter-label">Practice Problems</div>
         </div>
-        <div class="skill-row">
-          <div class="skill-header"><span class="skill-name">Python</span><span class="skill-pct">78%</span></div>
-          <div class="skill-track"><div class="skill-fill" data-w="78"></div></div>
+        <div class="stat-counter-item">
+          <div class="stat-counter-num" data-target="3">0</div>
+          <div class="stat-counter-label">Skill Levels per Course</div>
         </div>
-        <div class="skill-row">
-          <div class="skill-header"><span class="skill-name">C++</span><span class="skill-pct">83%</span></div>
-          <div class="skill-track"><div class="skill-fill" data-w="83"></div></div>
+        <div class="stat-counter-item">
+          <div class="stat-counter-num" data-target="25">0</div>
+          <div class="stat-counter-label">Quiz Questions per Subject</div>
         </div>
-        <div class="skill-row">
-          <div class="skill-header"><span class="skill-name">C#</span><span class="skill-pct">70%</span></div>
-          <div class="skill-track"><div class="skill-fill" data-w="70"></div></div>
+        <div class="stat-counter-item">
+          <div class="stat-counter-num" data-target="6">0</div>
+          <div class="stat-counter-label">Languages in Practice Panel</div>
         </div>
-        <div class="skill-row">
-          <div class="skill-header"><span class="skill-name">HTML + CSS + JS</span><span class="skill-pct">95%</span></div>
-          <div class="skill-track"><div class="skill-fill" data-w="95"></div></div>
+        <div class="stat-counter-item">
+          <div class="stat-counter-num" data-target="100">0</div>
+          <div class="stat-counter-label stat-pct">% Free Core Resources</div>
         </div>
       </div>
     </div>
@@ -834,7 +869,7 @@
     </div>
     <div class="footer-col">
       <h5>Platform</h5>
-      <a href="haha.html">Home</a>
+      <a href="index.html">Home</a>
       <a href="blog.html">Blog</a>
       <a href="fileshare.html">File Share</a>
       <a href="team.html">Members</a>
@@ -851,7 +886,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 IT Study Hub · Techno India University · ESD Group Project</p>
+    <p>© 2026 IT Study Hub · Techno India University · ESD Group Project</p>
     <a href="mailto:itstudyhub.tiu@gmail.com" class="footer-email">itstudyhub.tiu@gmail.com</a>
   </div>
 </footer>
@@ -885,18 +920,32 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 revealEls.forEach(el => observer.observe(el));
 
-/* ── Skill bars ── */
-const barObserver = new IntersectionObserver(entries => {
+/* ── Stat counters ── */
+const counterObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.querySelectorAll('.skill-fill').forEach(bar => {
-        bar.style.width = bar.dataset.w + '%';
-      });
-    }
+    if (!entry.isIntersecting) return;
+    entry.target.querySelectorAll('.stat-counter-num').forEach(el => {
+      const target = parseInt(el.dataset.target, 10);
+      const isPct = el.nextElementSibling && el.nextElementSibling.classList.contains('stat-pct');
+      const duration = 1200;
+      const step = 16;
+      const steps = duration / step;
+      let current = 0;
+      const increment = target / steps;
+      const timer = setInterval(() => {
+        current = Math.min(current + increment, target);
+        el.textContent = Math.floor(current) + (isPct ? '%' : '+');
+        if (current >= target) {
+          el.textContent = target + (isPct ? '%' : (target >= 10 ? '+' : ''));
+          clearInterval(timer);
+        }
+      }, step);
+    });
+    counterObserver.unobserve(entry.target);
   });
 }, { threshold: 0.3 });
 const howVisual = document.querySelector('.how-visual');
-if (howVisual) barObserver.observe(howVisual);
+if (howVisual) counterObserver.observe(howVisual);
 
 /* ── Dropdown toggle ── */
 function toggleDropdown() {
