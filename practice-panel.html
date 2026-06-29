@@ -497,19 +497,153 @@
   ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* ── Progress bars ── */
+  .progress-bar-wrap { padding:.45rem .75rem; border-bottom:1px solid var(--border); }
+  .prog-row { display:flex; align-items:center; gap:.4rem; margin-bottom:3px; }
+  .prog-label { font-family:var(--mono); font-size:.58rem; color:var(--muted); width:36px; }
+  .prog-bar-bg { flex:1; height:4px; background:var(--border2); border-radius:2px; overflow:hidden; }
+  .prog-bar-fill { height:100%; border-radius:2px; transition:width .4s; }
+  .prog-count { font-family:var(--mono); font-size:.58rem; color:var(--muted); min-width:28px; text-align:right; }
+
+  /* ── Tag filter ── */
+  .tag-filter { padding:.35rem .75rem; border-bottom:1px solid var(--border); display:flex; gap:.3rem; flex-wrap:wrap; align-items:center; }
+  .tag-filter-label { font-family:var(--mono); font-size:.58rem; color:var(--muted); }
+  .tag-pill { font-family:var(--mono); font-size:.58rem; padding:2px 6px; border-radius:3px; background:#1a1a1a; border:1px solid var(--border2); color:var(--muted); cursor:pointer; transition:all .15s; }
+  .tag-pill.active, .tag-pill:hover { border-color:var(--accent); color:var(--accent); background:#00ff8810; }
+
+  /* ── Streak ── */
+  .streak-banner { padding:.3rem .75rem; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:.62rem; color:var(--warn); display:none; align-items:center; gap:.4rem; }
+
+  /* ── Sidebar header ── */
+  .sidebar-header { display:flex; align-items:center; justify-content:space-between; }
+  .random-btn { font-family:var(--mono); font-size:.6rem; background:none; border:1px solid var(--border2); color:var(--muted); padding:2px 6px; border-radius:3px; cursor:pointer; transition:all .15s; }
+  .random-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  /* ── Timer ── */
+  .timer-display { font-family:var(--mono); font-size:.72rem; padding:3px 9px; border-radius:4px; border:1px solid var(--border2); color:var(--muted); cursor:pointer; transition:all .2s; user-select:none; }
+  .timer-display.running { color:var(--warn); border-color:var(--warn); }
+  .timer-display.danger { color:var(--danger); border-color:var(--danger); animation:pulse 1s infinite; }
+  .timer-display.done { color:var(--accent); border-color:var(--accent); }
+
+  /* ── Font size ── */
+  .font-ctrl { display:flex; align-items:center; gap:3px; }
+  .font-ctrl button { background:#1a1a1a; border:1px solid var(--border2); color:var(--muted); width:20px; height:20px; border-radius:3px; cursor:pointer; font-size:.7rem; display:flex; align-items:center; justify-content:center; }
+  .font-ctrl button:hover { border-color:var(--accent); color:var(--accent); }
+  .font-ctrl span { font-family:var(--mono); font-size:.62rem; color:var(--muted); min-width:20px; text-align:center; }
+
+  /* ── User chip ── */
+  .user-chip { display:flex; align-items:center; gap:.4rem; font-family:var(--mono); font-size:.65rem; color:var(--muted); }
+  .user-avatar { width:24px; height:24px; border-radius:50%; background:var(--accent); color:#000; display:flex; align-items:center; justify-content:center; font-size:.6rem; font-weight:700; flex-shrink:0; overflow:hidden; }
+
+  /* ── Hints ── */
+  .hints-section { margin-top:.75rem; }
+  .hint-btn { width:100%; background:#1a1a1a; border:1px solid var(--border2); color:var(--muted); font-family:var(--mono); font-size:.67rem; padding:.4rem .7rem; border-radius:5px; cursor:pointer; text-align:left; transition:all .2s; margin-bottom:.35rem; display:flex; align-items:center; gap:.4rem; }
+  .hint-btn:hover, .hint-btn.revealed { border-color:#ffaa0060; color:var(--warn); background:#1a1200; }
+  .hint-content { background:#0d0d0d; border:1px solid #ffaa0025; border-radius:5px; padding:.55rem .7rem; font-size:.77rem; line-height:1.65; color:#ddd; margin-bottom:.4rem; display:none; }
+  .hint-content.show { display:block; }
+
+  /* ── Diff view in tests ── */
+  .test-card { background:#111; border:1px solid var(--border2); border-radius:6px; padding:.55rem .7rem; margin-bottom:.4rem; transition:border-color .3s; }
+  .test-header { font-family:var(--mono); font-size:.62rem; color:var(--muted); margin-bottom:.3rem; display:flex; justify-content:space-between; align-items:center; }
+  .test-row { font-family:var(--mono); font-size:.7rem; color:#aaa; margin-bottom:2px; }
+  .test-row span { color:var(--text); }
+  .diff-view { background:#0d0d0d; border:1px solid #ff444430; border-radius:4px; padding:.4rem .6rem; margin-top:.3rem; font-family:var(--mono); font-size:.67rem; display:none; }
+  .diff-view.show { display:block; }
+  .diff-exp { color:#88ffaa; }
+  .diff-got { color:#ff8888; }
+
+  /* ── History panel ── */
+  .history-entry { background:#111; border:1px solid var(--border2); border-radius:6px; padding:.55rem .7rem; margin-bottom:.35rem; }
+  .history-entry .h-title { font-size:.76rem; font-weight:600; margin-bottom:.2rem; }
+  .history-entry .h-meta { font-family:var(--mono); font-size:.62rem; color:var(--muted); }
+
+  /* ── Leaderboard ── */
+  .lb-entry { display:flex; align-items:center; gap:.6rem; padding:.45rem .55rem; border-radius:6px; margin-bottom:.3rem; background:#111; border:1px solid var(--border2); }
+  .lb-entry.me { border-color:#00ff8840; background:#001a0d; }
+  .lb-rank { font-family:var(--mono); font-size:.72rem; font-weight:700; min-width:28px; color:var(--muted); }
+  .lb-rank.gold { color:#ffd700; }
+  .lb-rank.silver { color:#c0c0c0; }
+  .lb-rank.bronze { color:#cd7f32; }
+  .lb-avatar { width:26px; height:26px; border-radius:50%; background:var(--accent); color:#000; display:flex; align-items:center; justify-content:center; font-size:.58rem; font-weight:700; flex-shrink:0; overflow:hidden; }
+  .lb-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+  .lb-name { flex:1; font-size:.77rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .lb-xp { font-family:var(--mono); font-size:.67rem; color:#f7b731; }
+  .lb-solved { font-family:var(--mono); font-size:.6rem; color:var(--muted); }
+
+  /* ── Auth gate ── */
+  #authLoader { display:flex; align-items:center; justify-content:center; height:100vh; flex-direction:column; gap:14px; }
+  .loader-ring { width:38px; height:38px; border:3px solid var(--border2); border-top-color:var(--accent); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  #gateScreen { display:none; align-items:center; justify-content:center; height:100vh; }
+  .gate-card { background:var(--surface); border:1px solid var(--border2); border-radius:16px; padding:40px; text-align:center; max-width:380px; }
+  .gate-card h2 { font-size:26px; font-weight:800; margin:14px 0 8px; }
+  .gate-card p { font-size:13px; color:var(--muted); line-height:1.7; margin-bottom:22px; }
+  .gate-btn { display:inline-block; background:var(--accent); color:#000; font-family:var(--mono); font-size:11px; font-weight:700; padding:12px 26px; border-radius:6px; text-decoration:none; letter-spacing:1px; }
+  #practiceApp { display:none; flex-direction:column; height:100vh; }
+
+  /* ── Confetti ── */
+  #confetti-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; display:none; }
+
+  /* ── Toast ── */
+  .toast { position:fixed; bottom:20px; right:20px; background:var(--surface); border:1px solid var(--border2); border-radius:8px; padding:.55rem .9rem; font-family:var(--mono); font-size:.7rem; color:var(--text); transform:translateY(80px); opacity:0; transition:all .3s; z-index:9000; max-width:280px; }
+  .toast.show { transform:translateY(0); opacity:1; }
+  .toast.success { border-color:var(--accent); color:var(--accent); }
+  .toast.error { border-color:var(--danger); color:var(--danger); }
+
+  /* ── Mobile ── */
+  @media(max-width:768px) {
+    .workspace { grid-template-columns:1fr; height:auto; overflow:visible; }
+    .sidebar { max-height:220px; border-right:none; border-bottom:1px solid var(--border2); }
+    .right-pane { height:380px; }
+    #practiceApp { height:auto; }
+    #monaco-container { min-height:240px; }
+    .topbar-title { display:none; }
+  }
+
+  /* cursor */
+  #cur { width:10px; height:10px; background:#c8f135; border-radius:50%; position:fixed; pointer-events:none; z-index:9999; mix-blend-mode:difference; transition:transform .15s ease; }
+  #curR { width:36px; height:36px; border:1px solid #c8f135; border-radius:50%; position:fixed; pointer-events:none; z-index:9998; opacity:.5; transition:all .2s ease; }
 </style>
 </head>
 <body>
+
+<!-- Auth Loader -->
+<div id="authLoader">
+  <div class="loader-ring"></div>
+  <div style="font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-top:8px">Loading…</div>
+</div>
+
+<!-- Gate (not logged in) -->
+<div id="gateScreen">
+  <div class="gate-card">
+    <div style="font-size:48px">⌨️</div>
+    <h2 style="font-family:var(--sans)">Sign In to Practice</h2>
+    <p>Your progress, XP, streak and leaderboard rank are all saved to your account.</p>
+    <a href="Login.html" class="gate-btn">Sign In / Create Account →</a>
+  </div>
+</div>
+
+<!-- Main App -->
+<div id="practiceApp">
 
 <!-- Top bar -->
 <div class="topbar">
   <a class="topbar-logo" href="index.html">IT STUDY HUB</a>
   <span class="topbar-sep">›</span>
-  <span class="topbar-title" id="course-label">C Programming</span>
-  <span class="topbar-sep">›</span>
-  <span class="topbar-title">Practice</span>
+  <span class="topbar-title" id="course-label">C Practice</span>
   <div class="topbar-right">
-    <button class="btn btn-run" id="run-btn" onclick="runCode()">▶ Run</button>
+    <div class="font-ctrl">
+      <button onclick="changeFontSize(-1)" title="Decrease font size">A-</button>
+      <span id="font-size-label">14</span>
+      <button onclick="changeFontSize(1)" title="Increase font size">A+</button>
+    </div>
+    <div class="timer-display" id="timer-display" onclick="toggleTimer()" title="Click to start/stop timer">⏱ 00:00</div>
+    <div class="user-chip">
+      <div class="user-avatar" id="topbar-avatar">?</div>
+      <span id="topbar-name" style="font-size:.65rem;color:var(--muted)"></span>
+    </div>
+    <button class="btn btn-run" id="run-btn" onclick="runAndTest()" title="Run (Ctrl+Enter)">▶ Run</button>
   </div>
 </div>
 
@@ -518,7 +652,6 @@
 
   <!-- LEFT: problem list -->
   <div class="sidebar">
-    <!-- language selector -->
     <div class="lang-strip" id="lang-strip">
       <button class="lang-btn active" onclick="setLang('c','C')">C</button>
       <button class="lang-btn" onclick="setLang('java','Java')">Java</button>
@@ -527,8 +660,12 @@
       <button class="lang-btn" onclick="setLang('csharp','C#')">C#</button>
       <button class="lang-btn" onclick="setLang('javascript','JS')">JS</button>
     </div>
+    <div class="streak-banner" id="streak-banner">🔥 <span id="streak-text"></span></div>
+    <div class="progress-bar-wrap" id="progress-bars"></div>
+    <div class="tag-filter" id="tag-filter"><span class="tag-filter-label">Filter:</span></div>
     <div class="sidebar-header">
-      <span>Problems</span>
+      <span id="prob-count" style="font-family:var(--mono);font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Problems</span>
+      <button class="random-btn" onclick="loadRandomProblem()">🎲 Random</button>
     </div>
     <div class="problem-list" id="problem-list"></div>
   </div>
@@ -538,20 +675,18 @@
     <div class="editor-topbar">
       <div class="file-tab active" id="file-tab-name">main.c</div>
       <div class="editor-actions">
-        <button class="btn btn-ghost btn-sm" onclick="resetCode()">↺ Reset</button>
+        <button class="btn btn-ghost btn-sm" onclick="resetCode()" title="Reset to starter (Ctrl+Shift+R)">↺ Reset</button>
+        <button class="btn btn-ghost btn-sm" onclick="clearOutput()">⌫ Clear</button>
       </div>
     </div>
-
     <div id="monaco-container"></div>
-
     <div class="output-strip">
       <div class="output-header">
         <div class="status-dot" id="status-dot"></div>
         <span class="output-label">Output</span>
-        <span style="margin-left:auto;font-family:var(--mono);font-size:.65rem;color:var(--muted)" id="exec-time"></span>
-        <button class="btn btn-ghost btn-sm" onclick="clearOutput()" style="margin-left:.5rem">Clear</button>
+        <span style="margin-left:auto;font-family:var(--mono);font-size:.62rem;color:var(--muted)" id="exec-time"></span>
       </div>
-      <div id="output-area"><span class="output-placeholder">// Run your code to see output here</span></div>
+      <div id="output-area"><span class="output-placeholder">// Hit Run to see output</span></div>
       <div class="stdin-row">
         <span class="stdin-label">stdin ›</span>
         <input id="stdin-input" placeholder="provide input if needed…" spellcheck="false"/>
@@ -559,15 +694,17 @@
     </div>
   </div>
 
-  <!-- RIGHT: problem description + AI -->
+  <!-- RIGHT: tabs -->
   <div class="right-pane">
     <div class="right-tabs">
       <button class="rtab active" onclick="switchTab('desc',this)">📋 Problem</button>
-      <button class="rtab" onclick="switchTab('ai',this)">🤖 AI Help</button>
       <button class="rtab" onclick="switchTab('tests',this)">✓ Tests</button>
+      <button class="rtab" onclick="switchTab('ai',this)">🤖 AI</button>
+      <button class="rtab" onclick="switchTab('history',this)">📜 History</button>
+      <button class="rtab" onclick="switchTab('lb',this)">🏆 Board</button>
     </div>
 
-    <!-- Problem description panel -->
+    <!-- Problem panel -->
     <div class="right-content right-panel active" id="panel-desc">
       <div class="prob-title" id="pd-title">Loading…</div>
       <div class="prob-tags" id="pd-tags"></div>
@@ -576,42 +713,168 @@
       <div class="prob-example" id="pd-example"></div>
       <div class="prob-section-label">Constraints</div>
       <div class="prob-example" id="pd-constraints"></div>
-    </div>
-
-    <!-- AI Help panel -->
-    <div class="right-content right-panel" id="panel-ai" style="display:flex;flex-direction:column;padding:0">
-      <div style="flex:1;overflow-y:auto;padding:1rem">
-        <div class="ai-intro">
-          <strong>AI Study Assistant</strong><br>
-          Choose how much help you want. I'll look at your current code and give you guidance — never judge you for asking.
-        </div>
-        <div class="ai-choice">
-          <button class="ai-choice-btn selected" id="mode-hint" onclick="setAIMode('hint',this)">💡 Hint<br><span style="color:var(--muted);font-size:.6rem">nudge only</span></button>
-          <button class="ai-choice-btn" id="mode-explain" onclick="setAIMode('explain',this)">🔍 Explain<br><span style="color:var(--muted);font-size:.6rem">full breakdown</span></button>
-          <button class="ai-choice-btn" id="mode-solution" onclick="setAIMode('solution',this)">✅ Solution<br><span style="color:var(--muted);font-size:.6rem">show answer</span></button>
-        </div>
-        <div class="chat-log" id="chat-log"></div>
-      </div>
-      <div class="ai-input-row">
-        <input id="ai-custom-input" placeholder="Ask something specific… (optional)" onkeydown="if(event.key==='Enter')askAI()"/>
-        <button class="btn btn-ai" id="ai-ask-btn" onclick="askAI()">Ask →</button>
-      </div>
+      <div class="hints-section" id="hints-section"></div>
     </div>
 
     <!-- Tests panel -->
     <div class="right-content right-panel" id="panel-tests">
-      <div id="test-results" style="display:flex;flex-direction:column;gap:.5rem"></div>
-      <button class="btn btn-run" style="margin-top:1rem;width:100%" onclick="runTests()">▶ Run All Tests</button>
+      <div id="test-results"></div>
+      <button class="btn btn-run" style="margin-top:.75rem;width:100%" onclick="runTests()">▶ Run All Tests</button>
+    </div>
+
+    <!-- AI panel -->
+    <div class="right-panel" id="panel-ai" style="display:flex;flex-direction:column;padding:0">
+      <div style="flex:1;overflow-y:auto;padding:.85rem">
+        <div class="ai-intro">
+          <strong>AI Study Mentor</strong><br>
+          Choose how much help you want. I won't judge you for asking.
+        </div>
+        <div class="ai-choice">
+          <button class="ai-choice-btn selected" id="mode-hint" onclick="setAIMode('hint',this)">💡 Hint<br><span style="color:var(--muted);font-size:.58rem">nudge only</span></button>
+          <button class="ai-choice-btn" id="mode-explain" onclick="setAIMode('explain',this)">🔍 Explain<br><span style="color:var(--muted);font-size:.58rem">full breakdown</span></button>
+          <button class="ai-choice-btn" id="mode-solution" onclick="setAIMode('solution',this)">✅ Solution<br><span style="color:var(--muted);font-size:.58rem">show answer</span></button>
+        </div>
+        <div class="chat-log" id="chat-log"></div>
+      </div>
+      <div class="ai-input-row">
+        <input id="ai-custom-input" placeholder="Ask something specific…" onkeydown="if(event.key==='Enter')askAI()"/>
+        <button class="btn btn-ai" id="ai-ask-btn" onclick="askAI()">Ask →</button>
+      </div>
+    </div>
+
+    <!-- History panel -->
+    <div class="right-content right-panel" id="panel-history">
+      <div style="font-family:var(--mono);font-size:.62rem;color:var(--muted);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.1em">Submission History</div>
+      <div id="history-list"><div style="font-size:.78rem;color:var(--muted)">No submissions yet.</div></div>
+    </div>
+
+    <!-- Leaderboard panel -->
+    <div class="right-content right-panel" id="panel-lb">
+      <div style="font-family:var(--mono);font-size:.62rem;color:var(--muted);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.1em">🏆 Practice Leaderboard</div>
+      <div id="lb-list"><div style="font-size:.78rem;color:var(--muted)">Loading…</div></div>
     </div>
   </div>
 </div>
+</div>
+
+<!-- Confetti -->
+<canvas id="confetti-canvas"></canvas>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+<!-- Cursor -->
+<div id="cur"></div><div id="curR"></div>
 
 <!-- Monaco loader -->
-<script>
-var require = { paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } };
-</script>
+<script>var require={paths:{vs:'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs'}};</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/editor/editor.main.noscript.js"></script>
+
+<!-- Firebase module -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, increment, collection, getDocs, orderBy, query, arrayUnion } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:"AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
+  authDomain:"it-study-hub.firebaseapp.com",
+  projectId:"it-study-hub",
+  storageBucket:"it-study-hub.firebasestorage.app",
+  messagingSenderId:"566661039167",
+  appId:"1:566661039167:web:122691d263631e404ea48a"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+window._db = db;
+window._fs = { doc, getDoc, updateDoc, increment, collection, getDocs, orderBy, query, arrayUnion };
+
+onAuthStateChanged(auth, async (user) => {
+  document.getElementById('authLoader').style.display = 'none';
+  if (!user) {
+    document.getElementById('gateScreen').style.display = 'flex';
+    return;
+  }
+  window._currentUser = user;
+  const name = user.displayName || user.email.split('@')[0];
+  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const av = document.getElementById('topbar-avatar');
+  if (user.photoURL) av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  else av.textContent = initials;
+  document.getElementById('topbar-name').textContent = name.split(' ')[0];
+  window._userName = name; window._userInitials = initials; window._userPhotoURL = user.photoURL||null;
+  try {
+    const snap = await getDoc(doc(db,'users',user.uid));
+    const data = snap.exists() ? snap.data() : {};
+    window._practiceData = data.practice || {};
+    window._userXP = data.xp || 0;
+  } catch(e) { window._practiceData={}; window._userXP=0; }
+  document.getElementById('practiceApp').style.display = 'flex';
+  window._initStreak && window._initStreak();
+  window._appReady && window._appReady();
+});
+
+window._saveSolve = async function(problemId, lang, timeMs) {
+  const user = window._currentUser; if (!user) return;
+  const {doc:_d, updateDoc:_u, increment:_i, arrayUnion:_a} = window._fs;
+  const now = Date.now();
+  try {
+    await _u(_d(db,'users',user.uid), {
+      [`practice.solved.${problemId}`]: {ts:now, lang, timeMs},
+      xp: _i(10)
+    });
+    window._userXP = (window._userXP||0)+10;
+    const today = new Date().toDateString();
+    const pd = window._practiceData;
+    if (!pd.lastDay || pd.lastDay!==today) {
+      const yesterday = new Date(Date.now()-86400000).toDateString();
+      const newStreak = pd.lastDay===yesterday ? (pd.streak||0)+1 : 1;
+      await _u(_d(db,'users',user.uid), {'practice.streak':newStreak,'practice.lastDay':today});
+      window._practiceData.streak = newStreak;
+      window._practiceData.lastDay = today;
+      window._showStreak && window._showStreak(newStreak);
+    }
+  } catch(e) { console.warn('Firestore save failed',e); }
+};
+
+window._loadLeaderboard = async function() {
+  const {collection:_c, getDocs:_g, orderBy:_o, query:_q} = window._fs;
+  const el = document.getElementById('lb-list');
+  try {
+    const snap = await _g(_q(_c(db,'users'),_o('xp','desc')));
+    const users = [];
+    snap.forEach(d => {
+      const data = d.data();
+      const solved = data.practice?.solved ? Object.keys(data.practice.solved).length : 0;
+      users.push({uid:d.id, name:data.name||data.email?.split('@')[0]||'Anonymous', xp:data.xp||0, solved, photo:data.photoURL||null});
+    });
+    const myUid = window._currentUser?.uid;
+    el.innerHTML = users.slice(0,20).map((u,i) => {
+      const rc = i===0?'gold':i===1?'silver':i===2?'bronze':'';
+      const isMe = u.uid===myUid;
+      const ini = (u.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      const av2 = u.photo ? `<img src="${u.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : ini;
+      return `<div class="lb-entry${isMe?' me':''}">
+        <div class="lb-rank${rc?' '+rc:''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div>
+        <div class="lb-avatar">${av2}</div>
+        <div class="lb-name">${u.name}${isMe?' (you)':''}</div>
+        <div class="lb-xp">${u.xp.toLocaleString()} XP</div>
+        <div class="lb-solved">${u.solved}✓</div>
+      </div>`;
+    }).join('');
+  } catch(e) { el.innerHTML='<div style="font-size:.78rem;color:var(--muted)">Could not load leaderboard.</div>'; }
+};
+
+window._initStreak = function() {
+  const s = window._practiceData?.streak||0;
+  if (s>0) window._showStreak(s);
+};
+window._showStreak = function(count) {
+  const banner = document.getElementById('streak-banner');
+  document.getElementById('streak-text').textContent = `${count} day streak! Keep it up 🔥`;
+  banner.style.display = 'flex';
+};
+</script>
 
 <script>
 /* ══════════════════════════════════════
@@ -1403,129 +1666,203 @@ const PROBLEMS = {
 };
 
 
-/* ── Piston API (free, no key needed) ── */
-const PISTON_URL  = 'https://emkc.org/api/v2/piston/execute';
-const PISTON_LANG = { c:'c', java:'java', python:'python3', cpp:'c++', csharp:'csharp', javascript:'javascript' };
+/* ── Judge0 CE (free, no key, no signup) ── */
+const JUDGE0_URL  = 'https://ce.judge0.com';
+const LANG_ID     = { c:50, java:62, python:71, cpp:54, csharp:51, javascript:63 };
 const FILE_EXT    = { c:'main.c', java:'Main.java', python:'main.py', cpp:'main.cpp', csharp:'Program.cs', javascript:'main.js' };
 const MONACO_LANG = { c:'c', java:'java', python:'python', cpp:'cpp', csharp:'csharp', javascript:'javascript' };
 
 /* ── State ── */
-let editor, currentLang = 'c', currentProblem = null, aiMode = 'hint';
-let solved = JSON.parse(localStorage.getItem('itstudyhub_solved') || '{}');
+let editor, currentLang='c', currentProblem=null, aiMode='hint';
+let solved={}, submissionHistory=[], editorFontSize=14;
+let timerInterval=null, timerSeconds=0, timerRunning=false;
+let activeTagFilter=null;
 
-/* ══════════════════════════════════════
-   INIT
-══════════════════════════════════════ */
-require(['vs/editor/editor.main'], function() {
-  monaco.editor.defineTheme('itstudyhub', {
-    base: 'vs-dark',
-    inherit: true,
-    rules: [
-      { token:'comment',    foreground:'4a4a4a', fontStyle:'italic' },
-      { token:'keyword',    foreground:'00ff88' },
-      { token:'string',     foreground:'88ddff' },
-      { token:'number',     foreground:'ffaa55' },
-      { token:'type',       foreground:'aaddff' },
-      { token:'function',   foreground:'ffdd88' },
-    ],
-    colors: {
-      'editor.background':           '#0a0a0a',
-      'editor.foreground':           '#e8e8e8',
-      'editorLineNumber.foreground': '#333',
-      'editorLineNumber.activeForeground': '#00ff88',
-      'editor.selectionBackground':  '#00ff8820',
-      'editor.lineHighlightBackground':'#111111',
-      'editorCursor.foreground':     '#00ff88',
-      'editorIndentGuide.background':'#1e1e1e',
-    }
+/* ── Called by Firebase module once auth is confirmed ── */
+window._appReady = function() {
+  // Merge Firebase + localStorage solved data
+  const fsSolved = window._practiceData?.solved || {};
+  const lsSolved = JSON.parse(localStorage.getItem('itstudyhub_solved')||'{}');
+  solved = {...lsSolved, ...fsSolved};
+  submissionHistory = JSON.parse(localStorage.getItem('itstudyhub_history')||'[]');
+
+  // URL lang param
+  const urlLang = new URLSearchParams(location.search).get('lang');
+  if (urlLang && LANG_ID[urlLang]) {
+    currentLang = urlLang;
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.getAttribute('onclick')?.includes(`'${urlLang}'`)) btn.classList.add('active');
+    });
+    const labels={c:'C',java:'Java',python:'Python',cpp:'C++',csharp:'C#',javascript:'JS'};
+    document.getElementById('course-label').textContent = labels[urlLang]+' Practice';
+  }
+
+  require(['vs/editor/editor.main'], function() {
+    monaco.editor.defineTheme('itstudyhub', {
+      base:'vs-dark', inherit:true,
+      rules:[
+        {token:'comment',foreground:'4a4a4a',fontStyle:'italic'},
+        {token:'keyword',foreground:'00ff88'},
+        {token:'string',foreground:'88ddff'},
+        {token:'number',foreground:'ffaa55'},
+        {token:'type',foreground:'aaddff'},
+        {token:'function',foreground:'ffdd88'},
+      ],
+      colors:{
+        'editor.background':'#0a0a0a','editor.foreground':'#e8e8e8',
+        'editorLineNumber.foreground':'#333','editorLineNumber.activeForeground':'#00ff88',
+        'editor.selectionBackground':'#00ff8820','editor.lineHighlightBackground':'#111111',
+        'editorCursor.foreground':'#00ff88',
+      }
+    });
+    editor = monaco.editor.create(document.getElementById('monaco-container'), {
+      theme:'itstudyhub', language:'c', fontSize:editorFontSize,
+      fontFamily:"'JetBrains Mono','Fira Code','Courier New',monospace",
+      fontLigatures:true, lineNumbers:'on', minimap:{enabled:false},
+      scrollBeyondLastLine:false, automaticLayout:true, padding:{top:12},
+      tabSize:4, cursorStyle:'line', cursorBlinking:'phase',
+    });
+    editor.addAction({id:'run-code',label:'Run',keybindings:[monaco.KeyMod.CtrlCmd|monaco.KeyCode.Enter],run:()=>runAndTest()});
+    editor.addAction({id:'reset-code',label:'Reset',keybindings:[monaco.KeyMod.CtrlCmd|monaco.KeyMod.Shift|monaco.KeyCode.KeyR],run:()=>resetCode()});
+    loadProblems(currentLang);
   });
+};
 
-  editor = monaco.editor.create(document.getElementById('monaco-container'), {
-    theme: 'itstudyhub',
-    language: 'c',
-    fontSize: 13.5,
-    fontFamily: "'Fira Code', 'Cascadia Code', 'Courier New', monospace",
-    fontLigatures: true,
-    lineNumbers: 'on',
-    minimap: { enabled: false },
-    scrollBeyondLastLine: false,
-    automaticLayout: true,
-    padding: { top: 12 },
-    suggest: { showKeywords: true },
-    tabSize: 4,
-    cursorStyle: 'line',
-    cursorBlinking: 'phase',
-  });
+/* ── Timer ── */
+function toggleTimer() {
+  if (timerRunning) {
+    clearInterval(timerInterval); timerRunning=false;
+    document.getElementById('timer-display').className='timer-display done';
+  } else {
+    timerSeconds=0; timerRunning=true;
+    document.getElementById('timer-display').className='timer-display running';
+    timerInterval=setInterval(()=>{
+      timerSeconds++;
+      const m=Math.floor(timerSeconds/60).toString().padStart(2,'0');
+      const s=(timerSeconds%60).toString().padStart(2,'0');
+      document.getElementById('timer-display').textContent=`⏱ ${m}:${s}`;
+      if(timerSeconds>600) document.getElementById('timer-display').classList.add('danger');
+    },1000);
+  }
+}
+function resetTimer(){clearInterval(timerInterval);timerRunning=false;timerSeconds=0;document.getElementById('timer-display').textContent='⏱ 00:00';document.getElementById('timer-display').className='timer-display';}
 
-  loadProblems('c');
-});
+/* ── Font size ── */
+function changeFontSize(delta){editorFontSize=Math.max(10,Math.min(22,editorFontSize+delta));if(editor)editor.updateOptions({fontSize:editorFontSize});document.getElementById('font-size-label').textContent=editorFontSize;}
 
 /* ══════════════════════════════════════
    LANGUAGE & PROBLEMS
 ══════════════════════════════════════ */
 function setLang(lang, label) {
-  currentLang = lang;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  currentLang=lang; activeTagFilter=null;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
   event.target.classList.add('active');
-  document.getElementById('course-label').textContent = label + ' Practice';
+  document.getElementById('course-label').textContent = label+' Practice';
   loadProblems(lang);
 }
 
-function loadProblems(lang) {
-  const list = document.getElementById('problem-list');
-  const probs = PROBLEMS[lang] || [];
-  list.innerHTML = '';
-  if (!probs.length) {
-    list.innerHTML = '<div style="padding:1rem;font-size:.75rem;color:var(--muted)">No problems yet for this language.</div>';
-    return;
-  }
-  probs.forEach((p, i) => {
-    const div = document.createElement('div');
-    div.className = 'problem-item' + (solved[p.id] ? ' solved' : '');
-    div.setAttribute('data-id', p.id);
-    div.innerHTML = `
-      <div class="p-dot"></div>
-      <div class="p-info">
-        <div class="p-title">${i+1}. ${p.title}</div>
-        <div class="p-meta">${p.tags.join(' · ')}</div>
-      </div>
-      <span class="diff-badge diff-${p.difficulty}">${p.difficulty}</span>
-    `;
-    div.onclick = () => loadProblem(p, div);
+function buildTagFilter(probs) {
+  const allTags=[...new Set(probs.flatMap(p=>p.tags))].sort();
+  const el=document.getElementById('tag-filter');
+  el.innerHTML='<span class="tag-filter-label">Filter:</span>';
+  allTags.forEach(tag=>{
+    const pill=document.createElement('span');
+    pill.className='tag-pill'+(activeTagFilter===tag?' active':'');
+    pill.textContent=tag;
+    pill.onclick=()=>{activeTagFilter=activeTagFilter===tag?null:tag;buildTagFilter(probs);renderProblemList(probs);};
+    el.appendChild(pill);
+  });
+}
+
+function renderProgressBars(probs) {
+  const easy=probs.filter(p=>p.difficulty==='easy');
+  const med=probs.filter(p=>p.difficulty==='medium');
+  const hard=probs.filter(p=>p.difficulty==='hard');
+  const sE=easy.filter(p=>solved[p.id]).length, sM=med.filter(p=>solved[p.id]).length, sH=hard.filter(p=>solved[p.id]).length;
+  const row=(label,color,s,t)=>t===0?'':
+    `<div class="prog-row"><div class="prog-label" style="color:${color}">${label}</div><div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${Math.round(s/t*100)}%;background:${color}"></div></div><div class="prog-count">${s}/${t}</div></div>`;
+  document.getElementById('progress-bars').innerHTML=
+    row('Easy','var(--accent)',sE,easy.length)+row('Med','var(--warn)',sM,med.length)+row('Hard','var(--danger)',sH,hard.length);
+}
+
+function renderProblemList(probs) {
+  const list=document.getElementById('problem-list');
+  const filtered=activeTagFilter?probs.filter(p=>p.tags.includes(activeTagFilter)):probs;
+  document.getElementById('prob-count').textContent=`${filtered.length} problem${filtered.length!==1?'s':''}`;
+  list.innerHTML='';
+  if(!filtered.length){list.innerHTML='<div style="padding:1rem;font-size:.75rem;color:var(--muted)">No problems match this filter.</div>';return;}
+  filtered.forEach((p,i)=>{
+    const div=document.createElement('div');
+    div.className='problem-item'+(solved[p.id]?' solved':'');
+    div.setAttribute('data-id',p.id);
+    const diffClass=p.difficulty==='medium'?'med':p.difficulty;
+    div.innerHTML=`<div class="p-dot"></div><div class="p-info"><div class="p-title">${probs.indexOf(p)+1}. ${p.title}</div><div class="p-meta">${p.tags.join(' · ')}</div></div><span class="diff-badge diff-${diffClass}">${p.difficulty}</span>`;
+    div.onclick=()=>loadProblem(p,div);
     list.appendChild(div);
   });
-  // auto-load first
-  const first = list.querySelector('.problem-item');
-  if (first) first.click();
+  if(!list.querySelector('.active')){const first=list.querySelector('.problem-item');if(first)first.click();}
+}
+
+function loadProblems(lang) {
+  const probs=PROBLEMS[lang]||[];
+  if(!probs.length){document.getElementById('problem-list').innerHTML='<div style="padding:1rem;font-size:.75rem;color:var(--muted)">No problems yet.</div>';return;}
+  buildTagFilter(probs);
+  renderProgressBars(probs);
+  renderProblemList(probs);
+}
+
+function loadRandomProblem() {
+  const probs=PROBLEMS[currentLang]||[];if(!probs.length)return;
+  const unsolved=probs.filter(p=>!solved[p.id]);
+  const pool=unsolved.length?unsolved:probs;
+  const p=pool[Math.floor(Math.random()*pool.length)];
+  document.querySelectorAll('.problem-item').forEach(el=>{if(el.dataset.id===p.id)el.click();});
+  showToast('🎲 Random problem!');
 }
 
 function loadProblem(p, el) {
-  currentProblem = p;
-  document.querySelectorAll('.problem-item').forEach(x => x.classList.remove('active'));
+  currentProblem=p;
+  document.querySelectorAll('.problem-item').forEach(x=>x.classList.remove('active'));
   el.classList.add('active');
-
-  // update editor
-  const model = editor.getModel();
-  monaco.editor.setModelLanguage(model, MONACO_LANG[currentLang]);
+  resetTimer();
+  const model=editor.getModel();
+  monaco.editor.setModelLanguage(model,MONACO_LANG[currentLang]);
   editor.setValue(p.starter);
-  document.getElementById('file-tab-name').textContent = FILE_EXT[currentLang];
+  document.getElementById('file-tab-name').textContent=FILE_EXT[currentLang];
+  document.getElementById('pd-title').textContent=p.title;
+  const dc=p.difficulty==='medium'?'med':p.difficulty;
+  document.getElementById('pd-tags').innerHTML=
+    [`<span class="diff-badge diff-${dc}">${p.difficulty}</span>`,...p.tags.map(t=>`<span class="tag">${t}</span>`)].join('');
+  document.getElementById('pd-desc').innerHTML=p.desc;
+  document.getElementById('pd-example').innerHTML=
+    `<div class="label">Input</div><div class="val">${p.example.input}</div><div class="label" style="margin-top:.4rem">Output</div><div class="val">${p.example.output}</div>`;
+  document.getElementById('pd-constraints').innerHTML=`<div class="val">${p.constraints}</div>`;
+  renderHints(p);
+  clearOutput();renderTests();
+  document.getElementById('chat-log').innerHTML='';
+  document.getElementById('exec-time').textContent='';
+  // Switch to problem tab
+  document.querySelectorAll('.rtab').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.rtab').classList.add('active');
+  document.querySelectorAll('.right-panel').forEach(p2=>{p2.classList.remove('active');p2.style.display='';});
+  document.getElementById('panel-desc').classList.add('active');
+}
 
-  // update problem panel
-  document.getElementById('pd-title').textContent = p.title;
-  document.getElementById('pd-tags').innerHTML =
-    [`<span class="diff-badge diff-${p.difficulty}">${p.difficulty}</span>`,
-     ...p.tags.map(t => `<span class="tag">${t}</span>`)].join('');
-  document.getElementById('pd-desc').innerHTML = p.desc;
-  document.getElementById('pd-example').innerHTML =
-    `<div class="label">Input</div><div class="val">${p.example.input}</div>
-     <div class="label" style="margin-top:.4rem">Output</div><div class="val">${p.example.output}</div>`;
-  document.getElementById('pd-constraints').innerHTML = `<div class="val">${p.constraints}</div>`;
-
-  // reset output
-  clearOutput();
-  renderTests();
-  document.getElementById('chat-log').innerHTML = '';
-  document.getElementById('exec-time').textContent = '';
+/* ── Hints ── */
+function renderHints(p) {
+  const s=document.getElementById('hints-section');
+  if(!p.hints||!p.hints.length){s.innerHTML='';return;}
+  s.innerHTML='<div class="prob-section-label" style="margin-top:.75rem">Hints</div>';
+  p.hints.forEach((hint,i)=>{
+    s.innerHTML+=`<button class="hint-btn" id="hint-btn-${i}" onclick="toggleHint(${i})">💡 Hint ${i+1} <span style="margin-left:auto;font-size:.58rem">(click to reveal)</span></button><div class="hint-content" id="hint-content-${i}">${hint}</div>`;
+  });
+}
+function toggleHint(i) {
+  const btn=document.getElementById(`hint-btn-${i}`),content=document.getElementById(`hint-content-${i}`);
+  const rev=content.classList.contains('show');
+  content.classList.toggle('show',!rev);btn.classList.toggle('revealed',!rev);
+  btn.querySelector('span').textContent=rev?'(click to reveal)':'(click to hide)';
 }
 
 /* ══════════════════════════════════════
@@ -1542,13 +1879,12 @@ async function runCode(stdinOverride) {
   const t0 = Date.now();
 
   try {
-    const res = await fetch(PISTON_URL, {
+    const res = await fetch(`${JUDGE0_URL}/submissions?base64_encoded=false&wait=true`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        language: PISTON_LANG[currentLang],
-        version: '*',
-        files: [{ name: FILE_EXT[currentLang], content: code }],
+        source_code: code,
+        language_id: LANG_ID[currentLang],
         stdin: stdin
       })
     });
@@ -1557,14 +1893,10 @@ async function runCode(stdinOverride) {
     const ms = Date.now() - t0;
     document.getElementById('exec-time').textContent = `${ms}ms`;
 
-    const stdout = data.run?.stdout || '';
-    const stderr = data.run?.stderr || '';
-    const code_  = data.run?.code;
+    const stdout = data.stdout || '';
+    const stderr = data.stderr || data.compile_output || '';
 
     if (stderr && !stdout) {
-      setStatus('err');
-      setOutput(stderr, true);
-    } else if (code_ !== 0 && stderr) {
       setStatus('err');
       setOutput(stderr, true);
     } else {
@@ -1572,14 +1904,23 @@ async function runCode(stdinOverride) {
       setOutput(stdout || '(no output)', false);
     }
 
-    // return a compat object so runTests() still works
-    return { stdout, stderr, run: data.run };
+    return { stdout, stderr };
 
   } catch(e) {
     setStatus('err');
-    setOutput('⚠ Network error — could not reach Piston API.', true);
+    setOutput('⚠ Network error — check your RapidAPI key or try again.', true);
   } finally {
     document.getElementById('run-btn').disabled = false;
+  }
+}
+
+/* Run code with stdin box AND auto-run all test cases */
+async function runAndTest() {
+  // First run with whatever is in the stdin box (shows output immediately)
+  await runCode();
+  // Then auto-run all test cases if a problem is loaded
+  if (currentProblem) {
+    await runTests();
   }
 }
 
@@ -1587,41 +1928,89 @@ async function runCode(stdinOverride) {
    TESTS
 ══════════════════════════════════════ */
 function renderTests() {
-  if (!currentProblem) return;
-  const el = document.getElementById('test-results');
-  el.innerHTML = currentProblem.tests.map((t,i) => `
-    <div style="background:#111;border:1px solid var(--border2);border-radius:6px;padding:.65rem .8rem" id="test-${i}">
-      <div style="font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:.3rem">Test ${i+1}</div>
-      <div style="font-family:var(--mono);font-size:.72rem;color:#aaa">Input: <span style="color:var(--text)">${t.input || '(none)'}</span></div>
-      <div style="font-family:var(--mono);font-size:.72rem;color:#aaa">Expected: <span style="color:var(--text)">${t.expected.trim()}</span></div>
-      <div style="font-size:.72rem;color:var(--muted);margin-top:.3rem" id="test-res-${i}">—</div>
-    </div>
-  `).join('');
+  if(!currentProblem) return;
+  document.getElementById('test-results').innerHTML=currentProblem.tests.map((t,i)=>`
+    <div class="test-card" id="test-${i}">
+      <div class="test-header"><span>Test ${i+1}</span><span id="test-status-${i}" style="color:var(--muted)">pending</span></div>
+      <div class="test-row">Input: <span>${t.input||'(none)'}</span></div>
+      <div class="test-row">Expected: <span>${t.expected.trim()}</span></div>
+      <div class="diff-view" id="test-diff-${i}"></div>
+    </div>`).join('');
 }
 
 async function runTests() {
-  if (!currentProblem) return;
-  let allPassed = true;
-  for (let i=0; i<currentProblem.tests.length; i++) {
-    const t = currentProblem.tests[i];
-    document.getElementById(`test-res-${i}`).textContent = '⏳ Running…';
-    document.getElementById(`test-res-${i}`).style.color = 'var(--warn)';
-    const result = await runCode(t.input);
-    const actual = (result?.stdout || result?.run?.stdout || '').replace(/\r/g,'');
-    const pass = actual === t.expected;
-    if (!pass) allPassed = false;
-    document.getElementById(`test-res-${i}`).textContent = pass ? '✅ Passed' : `❌ Got: "${actual.trim()}"`;
-    document.getElementById(`test-res-${i}`).style.color = pass ? 'var(--accent)' : 'var(--danger)';
-    document.getElementById(`test-${i}`).style.borderColor = pass ? '#00ff8840' : '#ff444440';
+  if(!currentProblem) return;
+  let allPassed=true;
+  const t0=Date.now();
+  for(let i=0;i<currentProblem.tests.length;i++){
+    const t=currentProblem.tests[i];
+    document.getElementById(`test-status-${i}`).textContent='⏳ running';
+    document.getElementById(`test-status-${i}`).style.color='var(--warn)';
+    const result=await runCode(t.input);
+    const actual=(result?.stdout||'').replace(/
+/g,'');
+    const pass=actual===t.expected;
+    if(!pass) allPassed=false;
+    const statusEl=document.getElementById(`test-status-${i}`);
+    const diffEl=document.getElementById(`test-diff-${i}`);
+    const cardEl=document.getElementById(`test-${i}`);
+    if(pass){
+      statusEl.textContent='✅ passed';statusEl.style.color='var(--accent)';
+      cardEl.style.borderColor='#00ff8840';diffEl.classList.remove('show');
+    } else {
+      statusEl.textContent='❌ failed';statusEl.style.color='var(--danger)';
+      cardEl.style.borderColor='#ff444440';
+      diffEl.innerHTML=`<div class="diff-exp">Expected: ${t.expected.trim()}</div><div class="diff-got">Got:      ${actual.trim()||'(no output)'}</div>`;
+      diffEl.classList.add('show');
+    }
   }
-  if (allPassed) {
-    solved[currentProblem.id] = true;
-    localStorage.setItem('itstudyhub_solved', JSON.stringify(solved));
-    document.querySelectorAll('.problem-item').forEach(el => {
-      if (el.dataset.id === currentProblem.id) el.classList.add('solved');
+  const timeMs=Date.now()-t0;
+  if(allPassed && !solved[currentProblem.id]){
+    solved[currentProblem.id]=true;
+    localStorage.setItem('itstudyhub_solved',JSON.stringify(solved));
+    document.querySelectorAll('.problem-item').forEach(el=>{
+      if(el.dataset.id===currentProblem.id){el.classList.add('solved');el.querySelector('.p-dot').style.background='var(--accent)';}
     });
-    document.querySelector(`.problem-item[data-id="${currentProblem.id}"] .p-dot`).style.background = 'var(--accent)';
+    renderProgressBars(PROBLEMS[currentLang]);
+    if(window._saveSolve) window._saveSolve(currentProblem.id,currentLang,timeMs);
+    addToHistory(currentProblem,currentLang,true,timeMs);
+    fireConfetti();
+    showToast('🎉 Solved! +10 XP earned','success');
+  } else if(allPassed){
+    showToast('✅ All tests passed!','success');
+  } else {
+    addToHistory(currentProblem,currentLang,false,timeMs);
   }
+}
+
+/* ── History ── */
+function addToHistory(p,lang,passed,timeMs){
+  const entry={id:p.id,title:p.title,lang,passed,timeMs,ts:Date.now(),difficulty:p.difficulty};
+  submissionHistory.unshift(entry);
+  if(submissionHistory.length>50) submissionHistory.pop();
+  localStorage.setItem('itstudyhub_history',JSON.stringify(submissionHistory));
+}
+function renderHistory(){
+  const el=document.getElementById('history-list');
+  if(!submissionHistory.length){el.innerHTML='<div style="font-size:.78rem;color:var(--muted)">No submissions yet.</div>';return;}
+  const icons={c:'⚙️',java:'☕',python:'🐍',cpp:'➕',csharp:'🔷',javascript:'🟨'};
+  el.innerHTML=submissionHistory.slice(0,20).map(e=>{
+    const date=new Date(e.ts).toLocaleDateString('en-IN',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    const dc=e.difficulty==='medium'?'med':e.difficulty;
+    return `<div class="history-entry"><div class="h-title">${e.passed?'✅':'❌'} ${e.title} <span class="diff-badge diff-${dc}">${e.difficulty}</span></div><div class="h-meta">${icons[e.lang]||''} ${e.lang} · ${date} · ${(e.timeMs/1000).toFixed(1)}s</div></div>`;
+  }).join('');
+}
+
+/* ── Confetti ── */
+function fireConfetti(){
+  const canvas=document.getElementById('confetti-canvas');
+  canvas.style.display='block';canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  const ctx=canvas.getContext('2d');
+  const colors=['#00ff88','#0af','#ffaa00','#ff6688','#c8f135'];
+  const p=Array.from({length:120},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height-canvas.height,r:Math.random()*6+3,d:Math.random()*120+80,color:colors[Math.floor(Math.random()*5)],tilt:0,ta:0,ti:Math.random()*.07+.05}));
+  let frame=0;
+  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);p.forEach(q=>{q.ta+=q.ti;q.y+=(Math.cos(frame*.01+q.d)+1+q.r/2)*1.5;q.tilt=Math.sin(q.ta)*15;ctx.beginPath();ctx.lineWidth=q.r;ctx.strokeStyle=q.color;ctx.moveTo(q.x+q.tilt+q.r/4,q.y);ctx.lineTo(q.x+q.tilt,q.y+q.tilt+q.r/4);ctx.stroke();});frame++;if(frame<150)requestAnimationFrame(draw);else{ctx.clearRect(0,0,canvas.width,canvas.height);canvas.style.display='none';}}
+  draw();
 }
 
 /* ══════════════════════════════════════
@@ -1735,15 +2124,29 @@ function setStatus(s) {
 function resetCode() {
   if (currentProblem) editor.setValue(currentProblem.starter);
 }
-function switchTab(tab, btn) {
-  document.querySelectorAll('.rtab').forEach(b => b.classList.remove('active'));
+function switchTab(tab,btn){
+  document.querySelectorAll('.rtab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.right-panel').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
-  const panel = document.getElementById('panel-'+tab);
+  document.querySelectorAll('.right-panel').forEach(p=>{p.classList.remove('active');p.style.display='';});
+  const panel=document.getElementById('panel-'+tab);
   panel.classList.add('active');
-  panel.style.display = tab === 'ai' ? 'flex' : 'block';
+  panel.style.display=tab==='ai'?'flex':'block';
+  if(tab==='history') renderHistory();
+  if(tab==='lb' && window._loadLeaderboard) window._loadLeaderboard();
 }
-function sleep(ms) { return new Promise(r => setTimeout(r,ms)); }
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${type} show`;
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+/* Cursor */
+const _cur=document.getElementById('cur'),_curR=document.getElementById('curR');
+let _mx=0,_my=0,_rx=0,_ry=0;
+document.addEventListener('mousemove',e=>{_mx=e.clientX;_my=e.clientY;});
+(function anim(){_cur.style.left=(_mx-5)+'px';_cur.style.top=(_my-5)+'px';_rx+=(_mx-_rx)*.12;_ry+=(_my-_ry)*.12;_curR.style.left=(_rx-18)+'px';_curR.style.top=(_ry-18)+'px';requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>_cur.style.transform='scale(2)');el.addEventListener('mouseleave',()=>_cur.style.transform='scale(1)');});
 </script>
 </body>
 </html>
