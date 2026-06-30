@@ -61,6 +61,99 @@
   .practice-cta-box { flex-direction: column; align-items: flex-start; }
   .practice-cta-btn { width: 100%; text-align: center; }
 }
+
+/* ── Level Map (grid layout) ── */
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 18px;
+  margin-bottom: 44px;
+}
+.level-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  background: var(--surface, #14141c);
+  border: 1px solid var(--border, #25252f);
+  border-radius: 16px;
+  padding: 20px 12px 16px;
+  transition: transform 0.2s, border-color 0.2s;
+  position: relative;
+}
+.level-node:hover { transform: translateY(-3px); border-color: rgba(200,241,53,0.35); }
+.level-node.locked { opacity: 0.45; cursor: pointer; }
+.level-node.locked:hover { transform: none; }
+.level-circle {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700;
+  font-family: var(--ff-display, 'Syne', sans-serif);
+}
+.level-circle.done { background: rgba(67,233,123,0.15); color: #43e97b; }
+.level-circle.current { background: rgba(200,241,53,0.15); color: #c8f135; border: 2px solid #c8f135; }
+.level-circle.locked-c { background: rgba(255,255,255,0.05); color: #5a5a68; }
+.level-circle.premium-c { background: rgba(247,183,49,0.12); color: #f7b731; }
+.level-label {
+  font-size: 11px; text-align: center; color: var(--muted2, #9a9aab);
+  line-height: 1.3;
+}
+.level-node.current .level-label { color: #fff; font-weight: 500; }
+.level-xp-badge {
+  position: absolute; top: -6px; right: -6px;
+  background: #c8f135; color: #0a0a0f;
+  font-size: 9px; font-weight: 700; font-family: var(--ff-mono, monospace);
+  padding: 2px 6px; border-radius: 99px;
+}
+@media (max-width: 900px) {
+  .level-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 540px) {
+  .level-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Knowledge Check (quiz) box ── */
+.quiz-box {
+  margin: 40px 0;
+  padding: 28px;
+  background: var(--surface, #14141c);
+  border: 1px solid var(--border, #25252f);
+  border-radius: 16px;
+}
+.quiz-box-title {
+  font-family: var(--ff-display, 'Syne', sans-serif);
+  font-size: 18px; font-weight: 700; color: #fff;
+  margin-bottom: 4px; display: flex; align-items: center; gap: 8px;
+}
+.quiz-box-sub {
+  font-size: 12px; color: var(--muted2, #9a9aab); margin-bottom: 20px;
+}
+.quiz-q { margin-bottom: 24px; }
+.quiz-q-text { font-size: 14px; color: #fff; margin-bottom: 12px; font-weight: 500; }
+.quiz-q pre { margin: 10px 0; }
+.quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opt {
+  text-align: left;
+  background: var(--surface2, #1a1a24);
+  border: 1px solid var(--border, #25252f);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13px; color: #d4d4e0;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.quiz-opt:hover:not(:disabled) { border-color: rgba(200,241,53,0.35); }
+.quiz-opt.correct { background: rgba(67,233,123,0.12); border-color: #43e97b; color: #43e97b; }
+.quiz-opt.wrong { background: rgba(232,75,75,0.12); border-color: #e84b4b; color: #e84b4b; }
+.quiz-opt:disabled { cursor: default; }
+.quiz-result {
+  font-size: 12px; margin-top: 8px; font-family: var(--ff-mono, monospace);
+}
+.quiz-result.ok { color: #43e97b; }
+.quiz-result.bad { color: #e84b4b; }
+
 </style>
 </head>
 <body>
@@ -96,13 +189,8 @@
   </div>
 
   <div class="fade-up" style="animation-delay:0.15s;">
-    <div class="sec-label">Free Modules</div>
-    <div class="modules-grid" id="freeGrid"></div>
-  </div>
-
-  <div class="fade-up" style="animation-delay:0.2s;">
-    <div class="sec-label">Premium Modules</div>
-    <div class="modules-grid" id="premiumGrid"></div>
+    <div class="sec-label">Level Map</div>
+    <div class="level-grid" id="levelGrid"></div>
   </div>
 
   <div class="fade-up" style="animation-delay:0.25s;">
@@ -138,7 +226,7 @@
     <div class="les-nav-btns">
       <button class="lnav-btn" onclick="goBack()">← Back</button>
       <button class="lnav-btn" id="prevBtn" onclick="prevLesson()">← Prev</button>
-      <button class="lnav-btn" id="markBtn" onclick="markDone()">✓ Mark Done</button>
+      <button class="lnav-btn" id="markBtn" onclick="markDone()">↓ Take Quiz</button>
       <button class="lnav-btn" id="nextBtn" onclick="nextLesson()">Next →</button>
     </div>
   </div>
@@ -168,6 +256,69 @@ function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')|
 function isPremium(){const s=getSession();return s&&(s.isAdmin||s.plan==='pro'||s.plan==='elite'||s.email===ADMIN_EMAIL);}
 function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_c_done')||'[]');}catch(e){return[];}}
 function saveCompleted(a){localStorage.setItem('ish_c_done',JSON.stringify(a));}
+
+const QUIZZES = {
+  1: { mcqs: [
+        {q:'Which symbol marks the entry point of every C program?', opts:['main()','start()','init()','run()'], correct:0},
+        {q:'What does printf() belong to?', opts:['math.h','stdio.h','stdlib.h','string.h'], correct:1}
+      ],
+      predict: {code:'#include <stdio.h>\nint main() {\n  printf("IT");\n  printf("Hub");\n  return 0;\n}', opts:['IT Hub','ITHub','IT\\nHub','Error'], correct:1} },
+  2: { mcqs: [
+        {q:'How many bytes does a float typically occupy?', opts:['2','4','8','1'], correct:1},
+        {q:'What does (float)a/b do when a and b are ints?', opts:['Casts the result after division','Casts a to float before division','Causes a syntax error','Rounds the result'], correct:1}
+      ],
+      predict: {code:'int a = 7, b = 2;\nprintf("%d", a/b);', opts:['3.5','3','4','Error'], correct:1} },
+  3: { mcqs: [
+        {q:'What does the % operator return?', opts:['Percentage','Remainder of division','Float division','Power'], correct:1},
+        {q:'Which operator is bitwise AND?', opts:['&&','&','||','|'], correct:1}
+      ],
+      predict: {code:'int a = 5;\nprintf("%d", a++);\nprintf("%d", a);', opts:['56','66','55','Error'], correct:0} },
+  4: { mcqs: [
+        {q:'What happens if you forget break in a switch case?', opts:['Compile error','Falls through to next case','Nothing happens','Program crashes'], correct:1},
+        {q:'Which keyword runs a default block in switch?', opts:['else','default','otherwise','base'], correct:1}
+      ],
+      predict: {code:'int x = 5;\nif (x > 10)\n  printf("Big");\nelse if (x > 3)\n  printf("Medium");\nelse\n  printf("Small");', opts:['Big','Medium','Small','Error'], correct:1} },
+  5: { mcqs: [
+        {q:'Which loop guarantees at least one execution?', opts:['for','while','do-while','if'], correct:2},
+        {q:'What does continue do inside a loop?', opts:['Exits the loop entirely','Skips to the next iteration','Pauses the loop','Restarts the loop'], correct:1}
+      ],
+      predict: {code:'for(int i=0;i<3;i++){\n  if(i==1) continue;\n  printf("%d",i);\n}', opts:['012','02','01','0123'], correct:1} },
+  6: { mcqs: [
+        {q:'What is a function prototype?', opts:['The function body','A declaration before main()','A loop inside a function','A global variable'], correct:1},
+        {q:'Which header provides sqrt()?', opts:['stdio.h','stdlib.h','math.h','string.h'], correct:2}
+      ],
+      predict: {code:'int add(int a,int b){return a+b;}\nint main(){\n  printf("%d", add(3,4));\n}', opts:['34','7','Error','12'], correct:1} },
+  7: { mcqs: [
+        {q:'What does a static local variable do across calls?', opts:['Resets every call','Retains its value','Becomes global','Causes an error'], correct:1},
+        {q:'What is the base case in recursion for?', opts:['Speed optimization','Stopping the recursive calls','Memory allocation','Type casting'], correct:1}
+      ],
+      predict: {code:'int f(int n){\n  if(n==0) return 1;\n  return n*f(n-1);\n}\nprintf("%d", f(4));', opts:['4','10','24','Error'], correct:2} },
+  8: { mcqs: [
+        {q:'What does the & operator do?', opts:['Dereferences a pointer','Gives the address of a variable','Multiplies two values','Compares two values'], correct:1},
+        {q:'What does *ptr do?', opts:['Declares ptr','Gives the address','Dereferences to get the value','Deletes ptr'], correct:2}
+      ],
+      predict: {code:'int x=10;\nint *p=&x;\n*p = 20;\nprintf("%d", x);', opts:['10','20','Error','Address value'], correct:1} },
+  9: { mcqs: [
+        {q:'What does an array name decay into?', opts:['An int','A pointer to its first element','A string','A function'], correct:1},
+        {q:'Does C check array bounds automatically?', opts:['Yes, always','No, never','Only for 2D arrays','Only in debug mode'], correct:1}
+      ],
+      predict: {code:'int arr[]={10,20,30};\nprintf("%d", *(arr+1));', opts:['10','20','30','Error'], correct:1} },
+  10: { mcqs: [
+        {q:'How does C know where a string ends?', opts:['A length variable','The null terminator \\0','A # symbol','It counts characters'], correct:1},
+        {q:'Which function is unsafe and should be avoided?', opts:['fgets()','strcpy()','gets()','strlen()'], correct:2}
+      ],
+      predict: {code:'char s[20]="Hi";\nstrcat(s," there");\nprintf("%s", s);', opts:['Hi','Hi there','there Hi','Error'], correct:1} },
+  11: { mcqs: [
+        {q:'What does typedef help with?', opts:['Faster execution','Cleaner syntax for custom types','Memory allocation','Pointer arithmetic'], correct:1},
+        {q:'In a union, how much memory is allocated?', opts:['Sum of all members','Size of the largest member','Size of the smallest member','One byte'], correct:1}
+      ],
+      predict: {code:'struct P{int x,y;};\nstruct P p={3,4};\nprintf("%d", p.x+p.y);', opts:['34','7','Error','3'], correct:1} },
+  12: { mcqs: [
+        {q:'Which function allocates AND zero-initializes memory?', opts:['malloc()','calloc()','realloc()','free()'], correct:1},
+        {q:'What must follow every successful fopen()?', opts:['malloc()','A matching fclose()','printf()','Nothing'], correct:1}
+      ],
+      predict: {code:'int *p = malloc(sizeof(int));\n*p = 42;\nprintf("%d", *p);\nfree(p);', opts:['42','Error','Garbage value','0'], correct:0} }
+};
 
 const MODS = [
   {id:1,free:true,icon:'📖',level:'Beginner',title:'Intro to C',
@@ -630,32 +781,42 @@ fclose(fp);</code></pre>
 ];
 
 let currentId = null;
-let completed = getCompleted();
+let completed = getCompleted(); // modules where quiz is fully passed
 const TOTAL_FREE = 6;
+const quizState = getQuizState();
+
+function getQuizState(){try{return JSON.parse(localStorage.getItem('ish_c_quiz')||'{}');}catch(e){return{};}}
+function saveQuizState(s){localStorage.setItem('ish_c_quiz',JSON.stringify(s));}
 
 // RENDER INDEX
 renderIndex();
 
 function renderIndex() {
-  const free = MODS.filter(m => m.free);
-  const prem = MODS.filter(m => !m.free);
-  document.getElementById('freeGrid').innerHTML = free.map(renderCard).join('');
-  document.getElementById('premiumGrid').innerHTML = prem.map(renderCard).join('');
+  document.getElementById('levelGrid').innerHTML = MODS.map(renderLevelNode).join('');
   updateProgress();
 }
 
-function renderCard(m) {
+function renderLevelNode(m) {
   const done = completed.includes(m.id);
   const locked = !m.free && !isPremium();
-  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}`;
-  const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
+  // "current" = first not-done, not-locked module
+  const firstAvailable = MODS.find(x => !completed.includes(x.id) && (x.free || isPremium()));
+  const isCurrent = firstAvailable && firstAvailable.id === m.id;
+
+  let circleClass = 'level-circle';
+  let circleContent = m.id;
+  if (locked) { circleClass += ' locked-c'; circleContent = '🔒'; }
+  else if (done) { circleClass += ' done'; circleContent = '✓'; }
+  else if (isCurrent) { circleClass += ' current'; }
+  else if (!m.free) { circleClass += ' premium-c'; }
+
   const click = locked ? `onclick="window.location.href='premium.html'"` : `onclick="openLesson(${m.id})"`;
-  return `<div class="${cls}" ${click}>
-    <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
-    <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
-    <div class="mod-title">${m.title}</div>
-    <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
-    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">→</span></div>
+  const nodeCls = `level-node${locked?' locked':''}${isCurrent?' current':''}`;
+
+  return `<div class="${nodeCls}" ${click}>
+    ${!m.free?'<span class="level-xp-badge">★ PRO</span>':''}
+    <div class="${circleClass}">${circleContent}</div>
+    <div class="level-label">${m.title}</div>
   </div>`;
 }
 
@@ -665,6 +826,92 @@ function updateProgress() {
   document.getElementById('progFill').style.width = pct+'%';
   document.getElementById('progPct').textContent = pct+'%';
   document.getElementById('progLabel').textContent = `${freeDone} of ${TOTAL_FREE} free modules completed`;
+}
+
+function renderQuizBox(m) {
+  const quiz = QUIZZES[m.id];
+  if (!quiz) return '';
+  const state = quizState[m.id] || {};
+  const allDone = state.mcq0 && state.mcq1 && state.predict;
+
+  const mcqHtml = quiz.mcqs.map((q,qi) => {
+    const answered = state['mcq'+qi];
+    return `<div class="quiz-q">
+      <div class="quiz-q-text">${qi+1}. ${q.q}</div>
+      <div class="quiz-opts" id="mcq-${m.id}-${qi}">
+        ${q.opts.map((opt,oi)=>`<button class="quiz-opt" ${answered?'disabled':''} onclick="answerMCQ(${m.id},${qi},${oi})">${opt}</button>`).join('')}
+      </div>
+      ${answered?`<div class="quiz-result ok">✓ Correct +${5} XP</div>`:''}
+    </div>`;
+  }).join('');
+
+  const p = quiz.predict;
+  const pAnswered = state.predict;
+  const predictHtml = `<div class="quiz-q">
+    <div class="quiz-q-text">Predict the output:</div>
+    <pre><code>${p.code.replace(/</g,'&lt;')}</code></pre>
+    <div class="quiz-opts" id="predict-${m.id}">
+      ${p.opts.map((opt,oi)=>`<button class="quiz-opt" ${pAnswered?'disabled':''} onclick="answerPredict(${m.id},${oi})">${opt}</button>`).join('')}
+    </div>
+    ${pAnswered?`<div class="quiz-result ok">✓ Correct +5 XP</div>`:''}
+  </div>`;
+
+  return `<div class="quiz-box">
+    <div class="quiz-box-title">🧠 Knowledge Check</div>
+    <div class="quiz-box-sub">${allDone?'All checks complete for this module! Head to the practice panel for the code challenge.':'Answer all 3 to mark this module complete and earn XP.'}</div>
+    ${mcqHtml}
+    ${predictHtml}
+  </div>`;
+}
+
+window.answerMCQ = async function(modId, qi, oi) {
+  const quiz = QUIZZES[modId];
+  const correct = quiz.mcqs[qi].correct === oi;
+  const wrapper = document.getElementById(`mcq-${modId}-${qi}`);
+  [...wrapper.children].forEach((btn,i)=>{
+    btn.disabled = true;
+    if (i===oi) btn.classList.add(correct?'correct':'wrong');
+    if (i===quiz.mcqs[qi].correct && !correct) btn.classList.add('correct');
+  });
+  if (correct) {
+    quizState[modId] = quizState[modId] || {};
+    quizState[modId]['mcq'+qi] = true;
+    saveQuizState(quizState);
+    if (window.ishAwardXP) await window.ishAwardXP(`c_mod${modId}_mcq${qi}`, 5);
+    checkModuleComplete(modId);
+  }
+  setTimeout(()=>openLesson(currentId), correct ? 700 : 1200);
+};
+
+window.answerPredict = async function(modId, oi) {
+  const quiz = QUIZZES[modId];
+  const correct = quiz.predict.correct === oi;
+  const wrapper = document.getElementById(`predict-${modId}`);
+  [...wrapper.children].forEach((btn,i)=>{
+    btn.disabled = true;
+    if (i===oi) btn.classList.add(correct?'correct':'wrong');
+    if (i===quiz.predict.correct && !correct) btn.classList.add('correct');
+  });
+  if (correct) {
+    quizState[modId] = quizState[modId] || {};
+    quizState[modId].predict = true;
+    saveQuizState(quizState);
+    if (window.ishAwardXP) await window.ishAwardXP(`c_mod${modId}_predict`, 5);
+    checkModuleComplete(modId);
+  }
+  setTimeout(()=>openLesson(currentId), correct ? 700 : 1200);
+};
+
+async function checkModuleComplete(modId) {
+  const state = quizState[modId] || {};
+  const quiz = QUIZZES[modId];
+  const allMcq = quiz.mcqs.every((_,i) => state['mcq'+i]);
+  if (allMcq && state.predict && !completed.includes(modId)) {
+    completed.push(modId);
+    saveCompleted(completed);
+    if (window.ishAwardXP) await window.ishAwardXP(`c_mod${modId}_bonus`, 10);
+    showToast('🎉 Module complete! +10 XP bonus');
+  }
 }
 
 function openLesson(id) {
@@ -679,7 +926,7 @@ function openLesson(id) {
 
   const done = completed.includes(id);
   const mb = document.getElementById('markBtn');
-  mb.textContent = done ? '✓ Completed' : '✓ Mark Done';
+  mb.textContent = done ? '✓ Completed' : '↓ Take Quiz';
   mb.classList.toggle('done-btn', done);
   document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
@@ -706,11 +953,12 @@ function openLesson(id) {
          <div class="concepts-title">Key Concepts Covered</div>
          <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
        </div>
+       ${renderQuizBox(m)}
        <div class="practice-cta-box">
          <div class="practice-cta-left">
            <div class="practice-cta-label">⚙️ Ready to apply what you learned?</div>
            <div class="practice-cta-title">Practice <span style="color:var(--lime)">${m.title}</span> in the IDE</div>
-           <div class="practice-cta-desc">Run real C code in your browser — no install needed. AI mentor hints available if you get stuck.</div>
+           <div class="practice-cta-desc">Run real C code in your browser — no install needed. AI mentor hints available if you get stuck. +15 XP for passing a challenge.</div>
          </div>
          <a href="practice-panel.html" class="practice-cta-btn">Launch Practice Panel →</a>
        </div>
@@ -777,15 +1025,9 @@ function nextLesson() {
 
 function markDone() {
   if(!currentId) return;
-  const m = MODS.find(x=>x.id===currentId);
-  if(!m.free&&!isPremium()) return;
-  
-  if(!completed.includes(currentId)){
-    completed.push(currentId);
-    saveCompleted(completed);
-    showToast('✓ Module marked complete! ⚙️');
-  }
-  openLesson(currentId);
+  const quizBox = document.querySelector('.quiz-box');
+  if (quizBox) { quizBox.scrollIntoView({behavior:'smooth', block:'center'}); }
+  else { showToast('Scroll down to the Knowledge Check to complete this module'); }
 }
 
 function showToast(msg){
@@ -802,6 +1044,12 @@ document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 (function anim(){cur.style.left=(mx-5)+'px';cur.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=(rx-18)+'px';curR.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
 document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
 document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
+</script>
+
+<script type="module">
+import { initXP, awardXP } from './xp-engine.js';
+initXP();
+window.ishAwardXP = awardXP;
 </script>
 </body>
 </html>
