@@ -7,6 +7,61 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="course-page.css">
+<style>
+.practice-cta-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 40px 0;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, rgba(200,241,53,0.08), rgba(200,241,53,0.02));
+  border: 1px solid rgba(200,241,53,0.25);
+  border-radius: 16px;
+  flex-wrap: wrap;
+}
+.practice-cta-label {
+  font-family: var(--ff-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #c8f135;
+  margin-bottom: 8px;
+}
+.practice-cta-title {
+  font-family: var(--ff-display, 'Syne', sans-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.practice-cta-desc {
+  font-size: 13px;
+  color: var(--muted2, #9a9aab);
+  max-width: 480px;
+  line-height: 1.5;
+}
+.practice-cta-btn {
+  flex-shrink: 0;
+  background: #c8f135;
+  color: #0a0a0f;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 14px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.practice-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(200,241,53,0.3);
+}
+@media (max-width: 640px) {
+  .practice-cta-box { flex-direction: column; align-items: flex-start; }
+  .practice-cta-btn { width: 100%; text-align: center; }
+}
+</style>
 </head>
 <body>
 <div class="read-progress" id="readProgress"></div>
@@ -137,7 +192,16 @@ int main() {
   <li><code>printf()</code> - The built-in function to output text.</li>
   <li><code>return 0;</code> - Signals to the OS that the program executed successfully.</li>
 </ul>
-<p>Use GCC to compile: <code>gcc main.c -o main</code> and run with <code>./main</code>.</p>`},
+<p>Use GCC to compile: <code>gcc main.c -o main</code> and run with <code>./main</code>.</p>
+<h2>Why Learn C First?</h2>
+<p>C forces you to understand what's actually happening under the hood — memory, pointers, and how data is stored. This foundation makes every other language easier to learn, and it's still the #1 language asked about in TCS, Infosys, and Tech Mahindra coding rounds.</p>
+<h2>Common Beginner Mistakes</h2>
+<ul>
+  <li>Forgetting the semicolon <code>;</code> at the end of statements</li>
+  <li>Missing <code>#include &lt;stdio.h&gt;</code> and then wondering why <code>printf</code> fails</li>
+  <li>Forgetting <code>\\n</code> for newlines — output runs together on one line</li>
+  <li>Case sensitivity — <code>Main()</code> is not the same as <code>main()</code></li>
+</ul>`},
 
   {id:2,free:true,icon:'🔢',level:'Beginner',title:'Variables & Data Types',
    excerpt:'In C, every variable must be declared with a specific data type before use. Learn int, float, char, and memory basics.',
@@ -163,7 +227,14 @@ const float GRAVITY = 9.81;
 int a = 5;
 int b = 2;
 float result = (float)a / b; // Casts a to float before dividing: 2.5</code></pre>
-<blockquote>The <code>sizeof()</code> operator is incredibly useful in C to find out exactly how many bytes a data type is occupying on your specific architecture.</blockquote>`},
+<blockquote>The <code>sizeof()</code> operator is incredibly useful in C to find out exactly how many bytes a data type is occupying on your specific architecture.</blockquote>
+<h2>Integer Overflow — A Real Bug</h2>
+<p>Every data type has a range. Exceeding it causes <strong>overflow</strong>, which silently wraps around instead of throwing an error — a classic interview gotcha question.</p>
+<pre><code>#include &lt;limits.h&gt;
+int max = INT_MAX;       // 2147483647
+printf("%d\\n", max + 1); // wraps to -2147483648!</code></pre>
+<h2>Placement Tip</h2>
+<p>Interviewers love asking "what is the output" questions involving implicit type casting, like <code>5/2</code> (integer division = 2) vs <code>5.0/2</code> (float division = 2.5). Practice spotting these.</p>`},
 
   {id:3,free:true,icon:'➕',level:'Beginner',title:'Operators & Expressions',
    excerpt:'Understand how to manipulate data using arithmetic, relational, logical, and bitwise operators in C.',
@@ -184,7 +255,16 @@ if (a < b && a > 0) {
 
 // Bitwise operations are heavily used in systems programming
 int flags = 0x01; // 0000 0001
-flags = flags << 1; // Shifts bits left: 0000 0010 (Value becomes 2)</code></pre>`},
+flags = flags << 1; // Shifts bits left: 0000 0010 (Value becomes 2)</code></pre>
+<h2>Operator Precedence</h2>
+<p>Just like math, C operators follow precedence rules. Multiplication and division happen before addition and subtraction. When unsure, use parentheses to be explicit and avoid bugs.</p>
+<pre><code>int result = 5 + 3 * 2;   // 11, not 16 (* runs first)
+int safe   = (5 + 3) * 2; // 16 — parentheses force order</code></pre>
+<h2>The ++ and -- Trap</h2>
+<p>Pre-increment <code>++a</code> and post-increment <code>a++</code> behave differently when used inside expressions — a very common interview trick question.</p>
+<pre><code>int a = 5;
+printf("%d\\n", a++); // prints 5, THEN increments (a becomes 6)
+printf("%d\\n", ++a); // increments FIRST (a becomes 7), then prints 7</code></pre>`},
 
   {id:4,free:true,icon:'🔀',level:'Beginner',title:'Control Flow',
    excerpt:'Control flow determines the order in which statements execute. C gives you powerful tools to write logic that responds to data.',
@@ -210,7 +290,23 @@ switch(dir) {
     case 'W': printf("West"); break;
     default:  printf("Unknown Direction");
 }</code></pre>
-<blockquote>Always remember to include the <code>break</code> statement inside your switch cases, otherwise execution will "fall through" to the next case.</blockquote>`},
+<blockquote>Always remember to include the <code>break</code> statement inside your switch cases, otherwise execution will "fall through" to the next case.</blockquote>
+<h2>Nested Conditionals</h2>
+<p>You can nest if statements inside each other for multi-level decisions — common in grading systems, eligibility checks, and validation logic.</p>
+<pre><code>int age = 20, hasID = 1;
+if (age >= 18) {
+    if (hasID) {
+        printf("Entry allowed\\n");
+    } else {
+        printf("ID required\\n");
+    }
+} else {
+    printf("Underage\\n");
+}</code></pre>
+<h2>Ternary Operator — A Shortcut</h2>
+<p>For simple if-else logic, the ternary operator <code>condition ? true_value : false_value</code> is more concise and frequently seen in interview code.</p>
+<pre><code>int a = 10, b = 20;
+int max = (a > b) ? a : b; // max = 20</code></pre>`},
 
   {id:5,free:true,icon:'🔁',level:'Beginner',title:'Loops & Iteration',
    excerpt:'Execute blocks of code repeatedly based on specific conditions using for, while, and do-while loops.',
@@ -238,7 +334,28 @@ int input;
 do {
     printf("Enter a positive number: ");
     scanf("%d", &input);
-} while(input <= 0);</code></pre>`},
+} while(input <= 0);</code></pre>
+<h2>Nested Loops — Pattern Printing</h2>
+<p>Nested loops are a favorite placement-round topic, especially pattern-printing problems. Practicing these builds strong loop intuition.</p>
+<pre><code>// Print a right triangle of stars
+for(int i = 1; i <= 5; i++) {
+    for(int j = 1; j <= i; j++) {
+        printf("*");
+    }
+    printf("\\n");
+}
+/* Output:
+*
+**
+***
+****
+***** */</code></pre>
+<h2>Avoiding Infinite Loops</h2>
+<p>An infinite loop happens when the condition never becomes false. Always make sure your loop variable is updated correctly.</p>
+<pre><code>// BUG: forgot to increment i — infinite loop!
+for(int i = 0; i < 5;) {
+    printf("%d ", i);
+}</code></pre>`},
 
   {id:6,free:true,icon:'🛠️',level:'Beginner',title:'Functions Basics',
    excerpt:'Break down complex problems into modular blocks of code. Learn function declarations, definitions, and standard library functions.',
@@ -265,44 +382,251 @@ int addNumbers(int a, int b) {
 <p>C provides built-in functions via headers. For example, <code>&lt;math.h&gt;</code> provides <code>pow()</code>, <code>sqrt()</code>, and <code>abs()</code>.</p>
 <pre><code>#include &lt;math.h&gt;
 // ...
-double root = sqrt(25.0); // Returns 5.0</code></pre>`},
+double root = sqrt(25.0); // Returns 5.0</code></pre>
+<h2>void Functions — No Return Value</h2>
+<p>Not every function needs to return data. Use <code>void</code> when a function only performs an action (like printing).</p>
+<pre><code>void greet(char name[]) {
+    printf("Hello, %s!\\n", name);
+    // no return statement needed
+}
+
+int main() {
+    greet("Ashtid");
+    return 0;
+}</code></pre>
+<h2>Why Functions Matter for Interviews</h2>
+<p>Almost every DSA problem you'll solve on LeetCode or in placement rounds is structured as a function: given inputs, return an output. Getting comfortable with function signatures, parameters, and return types now makes DSA much smoother later.</p>`},
 
   // PREMIUM MODULES
   {id:7,free:false,icon:'🧩',level:'Intermediate',title:'Advanced Functions',
    excerpt:'Deep dive into recursive functions, pass by reference vs value, and understanding how variable scope works in C.',
    tags:['Intermediate','Scope','Recursion'],visual:'🧩',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
    concepts:['Pass by Value/Reference','Recursion','Local vs Global Scope','Static Variables','extern Keyword'],
-   body:``},
+   body:`<p>Functions in C go far beyond simple input-output. Understanding scope, recursion, and how data is passed is critical for writing efficient, bug-free programs.</p>
+<h2>Pass by Value vs Pass by Reference</h2>
+<p>By default, C passes arguments <strong>by value</strong> — a copy of the variable is made. The original is unchanged. To modify the original, pass a <strong>pointer</strong> (pass by reference).</p>
+<pre><code>// Pass by value — original unchanged
+void doubleVal(int x) { x = x * 2; }
+
+// Pass by reference — original is modified
+void doubleRef(int *x) { *x = *x * 2; }
+
+int main() {
+    int a = 5;
+    doubleVal(a);  // a is still 5
+    doubleRef(&a); // a is now 10
+}</code></pre>
+<h2>Recursion</h2>
+<p>A function that calls itself is recursive. Every recursive function needs a <strong>base case</strong> to stop the recursion, otherwise it causes a stack overflow.</p>
+<pre><code>int factorial(int n) {
+    if (n == 0) return 1;       // base case
+    return n * factorial(n - 1); // recursive call
+}
+// factorial(5) = 5*4*3*2*1 = 120</code></pre>
+<h2>Variable Scope & Static Variables</h2>
+<p><strong>Local variables</strong> exist only inside the function they're declared in. <strong>Global variables</strong> are accessible everywhere. <strong>Static local variables</strong> retain their value between function calls.</p>
+<pre><code>void counter() {
+    static int count = 0; // persists across calls
+    count++;
+    printf("Called %d times\\n", count);
+}
+// Calling counter() 3 times prints 1, 2, 3</code></pre>
+<blockquote>Avoid global variables where possible — they make code harder to debug and test. Prefer passing data explicitly via parameters.</blockquote>`},
 
   {id:8,free:false,icon:'👉',level:'Advanced',title:'Pointers',
    excerpt:'Pointers store the memory address of another variable. Access RAM directly and master C\'s most powerful feature.',
    tags:['Advanced','Pointers','Memory'],visual:'👉',bg:'linear-gradient(135deg,#10080a,#200f12)',
    concepts:['Pointer Declaration','& and * Operators','Pointer Arithmetic','Double Pointers','void Pointers'],
-   body:``},
+   body:`<p>A <strong>pointer</strong> is a variable that stores the memory address of another variable. Pointers are C's most powerful — and most dangerous — feature. Mastering them separates good C programmers from great ones.</p>
+<h2>Declaring & Using Pointers</h2>
+<pre><code>int age = 20;
+int *ptr = &age; // ptr holds the ADDRESS of age
+
+printf("Value: %d\\n", age);   // 20
+printf("Address: %p\\n", ptr); // e.g. 0x7ffee4b3c
+printf("Via ptr: %d\\n", *ptr); // 20 (dereferencing)</code></pre>
+<p>The <code>&</code> operator gives the address of a variable. The <code>*</code> operator dereferences a pointer to get the value at that address.</p>
+<h2>Pointer Arithmetic</h2>
+<p>Pointers support arithmetic — incrementing a pointer moves it to the next memory location of its type.</p>
+<pre><code>int arr[] = {10, 20, 30};
+int *p = arr; // points to arr[0]
+
+printf("%d\\n", *p);     // 10
+printf("%d\\n", *(p+1)); // 20 (moves 4 bytes forward for int)
+printf("%d\\n", *(p+2)); // 30</code></pre>
+<h2>Double Pointers</h2>
+<p>A pointer to a pointer stores the address of another pointer. Essential for dynamic 2D arrays and modifying pointer arguments inside functions.</p>
+<pre><code>int x = 5;
+int *p = &x;
+int **pp = &p; // pointer to pointer
+
+printf("%d\\n", **pp); // 5</code></pre>
+<blockquote>Always initialize pointers before use. An uninitialized pointer (wild pointer) causes undefined behavior and is one of the most common bugs in C programs.</blockquote>`},
 
   {id:9,free:false,icon:'📦',level:'Advanced',title:'Arrays',
    excerpt:'Arrays store multiple values in contiguous memory blocks. Learn 1D/2D arrays and how they relate fundamentally to pointers.',
    tags:['Advanced','Arrays','Data Structures'],visual:'📦',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
    concepts:['1D & 2D Arrays','Array Initialization','Array with Pointers','Passing Arrays to Functions','Memory Layout'],
-   body:``},
+   body:`<p>An array is a collection of elements of the <strong>same data type</strong> stored in <strong>contiguous memory locations</strong>. In C, arrays and pointers are deeply linked — the array name itself is a pointer to the first element.</p>
+<h2>1D Arrays</h2>
+<pre><code>int marks[5] = {85, 90, 78, 92, 88};
+
+// Accessing elements
+printf("%d\\n", marks[0]); // 85
+printf("%d\\n", marks[4]); // 88
+
+// Iterating
+for(int i = 0; i < 5; i++) {
+    printf("marks[%d] = %d\\n", i, marks[i]);
+}</code></pre>
+<h2>2D Arrays</h2>
+<p>Think of a 2D array as a table — rows and columns. Commonly used for matrices and grids.</p>
+<pre><code>int matrix[3][3] = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+// Access row 1, column 2
+printf("%d\\n", matrix[1][2]); // 6</code></pre>
+<h2>Arrays & Pointers</h2>
+<p>The array name decays to a pointer to its first element. This is why you can use pointer arithmetic to traverse arrays.</p>
+<pre><code>int arr[] = {10, 20, 30};
+int *p = arr; // equivalent to &arr[0]
+
+// These are all equivalent:
+printf("%d\\n", arr[1]);   // 20
+printf("%d\\n", *(arr+1)); // 20
+printf("%d\\n", *(p+1));   // 20</code></pre>
+<blockquote>C does not perform bounds checking on arrays. Accessing <code>arr[10]</code> on a 5-element array is undefined behavior — no error, just corrupted memory. Always track your array size carefully.</blockquote>`},
 
   {id:10,free:false,icon:'📝',level:'Advanced',title:'Strings & char Arrays',
    excerpt:'C doesn\'t have a native String type. Learn to manipulate null-terminated character arrays and master string.h functions.',
    tags:['Advanced','Strings','char'],visual:'📝',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
    concepts:['Null Terminator \\0','String Declaration','strlen, strcpy, strcat','strcmp & strrev','Character Arrays vs Pointers'],
-   body:``},
+   body:`<p>C has no built-in <code>String</code> type. Instead, strings are <strong>null-terminated character arrays</strong> — a sequence of <code>char</code> values ending with a special <code>'\\0'</code> (null) character that signals the end of the string.</p>
+<h2>Declaring Strings</h2>
+<pre><code>char name1[] = "TIU";         // compiler adds \\0 automatically
+char name2[4] = {'T','I','U','\\0'}; // same thing, manual
+
+// String literal (read-only, stored in data segment)
+char *name3 = "IT Study Hub";</code></pre>
+<h2>string.h Functions</h2>
+<p>The <code>&lt;string.h&gt;</code> header provides essential string manipulation functions:</p>
+<pre><code>#include &lt;string.h&gt;
+
+char s1[20] = "Hello";
+char s2[] = "World";
+
+printf("%lu\\n", strlen(s1));    // 5 (not counting \\0)
+strcat(s1, s2);                  // s1 is now "HelloWorld"
+strcpy(s1, "Reset");             // s1 is now "Reset"
+printf("%d\\n", strcmp("abc","abc")); // 0 (equal)
+printf("%d\\n", strcmp("abc","xyz")); // negative (abc < xyz)</code></pre>
+<h2>Reading Strings from User</h2>
+<pre><code>char input[50];
+printf("Enter name: ");
+fgets(input, sizeof(input), stdin); // safer than scanf for strings
+// fgets preserves the newline — strip it if needed:
+input[strcspn(input, "\\n")] = '\\0';</code></pre>
+<blockquote>Never use <code>gets()</code> — it has no bounds checking and is a classic buffer overflow vulnerability. Always use <code>fgets()</code> with a size limit.</blockquote>`},
 
   {id:11,free:false,icon:'🏗️',level:'Advanced',title:'Structures & Unions',
    excerpt:'Group different data types together under a single name to create complex, custom data types.',
    tags:['Advanced','struct','typedef'],visual:'🏗️',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
    concepts:['struct Definition','Accessing Members','typedef','Nested Structures','Unions vs Structures','Memory Alignment'],
-   body:``},
+   body:`<p>A <strong>structure</strong> (<code>struct</code>) groups variables of different types under a single name. Think of it as a custom data type — the foundation of object-oriented thinking in C.</p>
+<h2>Defining & Using Structs</h2>
+<pre><code>struct Student {
+    char name[50];
+    int rollNo;
+    float cgpa;
+};
+
+int main() {
+    struct Student s1;
+    strcpy(s1.name, "Aditya");
+    s1.rollNo = 101;
+    s1.cgpa = 9.2f;
+
+    printf("Name: %s, CGPA: %.1f\\n", s1.name, s1.cgpa);
+}</code></pre>
+<h2>typedef — Cleaner Syntax</h2>
+<p>Use <code>typedef</code> to avoid writing <code>struct</code> every time:</p>
+<pre><code>typedef struct {
+    char name[50];
+    int rollNo;
+    float cgpa;
+} Student;
+
+Student s1; // no need to write "struct Student"</code></pre>
+<h2>Nested Structures & Pointers to Structs</h2>
+<pre><code>typedef struct { int day, month, year; } Date;
+typedef struct { char name[50]; Date dob; } Person;
+
+Person p = {"Rahul", {15, 8, 2003}};
+printf("Born: %d/%d/%d\\n", p.dob.day, p.dob.month, p.dob.year);
+
+// Pointer to struct — use -> operator
+Person *ptr = &p;
+printf("%s\\n", ptr->name); // arrow operator for pointer access</code></pre>
+<h2>Unions</h2>
+<p>A <strong>union</strong> is like a struct, but all members <strong>share the same memory location</strong>. Only one member holds a valid value at a time. Unions save memory when only one field is active.</p>
+<pre><code>union Data {
+    int i;
+    float f;
+    char str[20];
+};
+// sizeof(union Data) = size of the LARGEST member only</code></pre>
+<blockquote>Structs are the building block of complex data structures like linked lists, trees, and graphs — all of which you'll encounter in DSA and placement interviews.</blockquote>`},
 
   {id:12,free:false,icon:'💾',level:'Advanced',title:'Memory & File I/O',
    excerpt:'The ultimate C skills: reading/writing external files and dynamically allocating memory on the heap during runtime.',
    tags:['Advanced','malloc','File Handling'],visual:'💾',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
    concepts:['malloc, calloc, realloc','free & Memory Leaks','fopen, fclose','fprintf, fscanf','fread, fwrite','EOF Handling'],
-   body:``}
+   body:`<p>Dynamic memory allocation and file I/O are the hallmark of professional C programming. These features are used in everything from database engines to embedded firmware.</p>
+<h2>Dynamic Memory Allocation</h2>
+<p>The stack has limited size. For large or runtime-determined data, allocate from the <strong>heap</strong> using <code>&lt;stdlib.h&gt;</code> functions:</p>
+<pre><code>#include &lt;stdlib.h&gt;
+
+// malloc — allocates uninitialized memory
+int *arr = (int*) malloc(5 * sizeof(int));
+
+// calloc — allocates AND zero-initializes
+int *arr2 = (int*) calloc(5, sizeof(int));
+
+// realloc — resize existing allocation
+arr = (int*) realloc(arr, 10 * sizeof(int));
+
+// Always free when done — or you get a memory leak
+free(arr);
+free(arr2);
+arr = NULL; // good practice after freeing</code></pre>
+<h2>File I/O</h2>
+<p>C uses <strong>file pointers</strong> (<code>FILE *</code>) to interact with external files. Always close files after use.</p>
+<pre><code>FILE *fp;
+
+// Writing to a file
+fp = fopen("data.txt", "w"); // "w" = write, "r" = read, "a" = append
+if (fp == NULL) { printf("Error opening file!"); return 1; }
+fprintf(fp, "Hello, File!\\n");
+fclose(fp);
+
+// Reading from a file
+char line[100];
+fp = fopen("data.txt", "r");
+while (fgets(line, sizeof(line), fp) != NULL) {
+    printf("%s", line);
+}
+fclose(fp);</code></pre>
+<h2>EOF & Error Handling</h2>
+<pre><code>int ch;
+fp = fopen("data.txt", "r");
+while ((ch = fgetc(fp)) != EOF) {
+    putchar(ch); // read character by character
+}
+fclose(fp);</code></pre>
+<blockquote>Every <code>malloc</code> must have a matching <code>free</code>. Every <code>fopen</code> must have a matching <code>fclose</code>. Forgetting these is the cause of memory leaks and file corruption bugs in real-world software.</blockquote>`}
 ];
 
 let currentId = null;
@@ -381,6 +705,14 @@ function openLesson(id) {
        <div class="concepts-box">
          <div class="concepts-title">Key Concepts Covered</div>
          <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
+       </div>
+       <div class="practice-cta-box">
+         <div class="practice-cta-left">
+           <div class="practice-cta-label">⚙️ Ready to apply what you learned?</div>
+           <div class="practice-cta-title">Practice <span style="color:var(--lime)">${m.title}</span> in the IDE</div>
+           <div class="practice-cta-desc">Run real C code in your browser — no install needed. AI mentor hints available if you get stuck.</div>
+         </div>
+         <a href="practice-panel.html" class="practice-cta-btn">Launch Practice Panel →</a>
        </div>
        <div class="les-footer">
          <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
