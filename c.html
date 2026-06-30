@@ -65,7 +65,7 @@
 /* ── Level Map (grid layout) ── */
 .level-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 18px;
   margin-bottom: 44px;
 }
@@ -174,8 +174,8 @@
     <p class="course-desc">Master the language that powers operating systems, embedded devices, and the foundations of modern computing. Learn pointers, memory, and low-level logic.</p>
     <div class="course-chips">
       <span class="chip chip-lime">⚙️ C Language</span>
-      <span class="chip chip-lime">6 Free Modules</span>
-      <span class="chip chip-gold">6 Premium Modules</span>
+      <span class="chip chip-lime">10 Free Modules</span>
+      <span class="chip chip-gold">3 Premium Modules</span>
       <span class="chip chip-lime">Real PDF Notes</span>
     </div>
   </div>
@@ -184,7 +184,7 @@
     <div class="prog-pct" id="progPct">0%</div>
     <div class="prog-bar-wrap">
       <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
-      <div class="prog-label" id="progLabel">0 of 6 free modules completed</div>
+      <div class="prog-label" id="progLabel">0 of 10 free modules completed</div>
     </div>
   </div>
 
@@ -260,65 +260,97 @@ function saveCompleted(a){localStorage.setItem('ish_c_done',JSON.stringify(a));}
 const QUIZZES = {
   1: { mcqs: [
         {q:'Which symbol marks the entry point of every C program?', opts:['main()','start()','init()','run()'], correct:0},
-        {q:'What does printf() belong to?', opts:['math.h','stdio.h','stdlib.h','string.h'], correct:1}
+        {q:'What does printf() belong to?', opts:['math.h','stdio.h','stdlib.h','string.h'], correct:1},
+        {q:'What does #include do?', opts:['Runs the program','Includes a library before compiling','Declares a variable','Ends the program'], correct:1}
       ],
-      predict: {code:'#include <stdio.h>\nint main() {\n  printf("IT");\n  printf("Hub");\n  return 0;\n}', opts:['IT Hub','ITHub','IT\\nHub','Error'], correct:1} },
+      predict: {code:'#include <stdio.h>\nint main() {\n  printf("IT");\n  printf("Hub");\n  return 0;\n}', opts:['IT Hub','ITHub','IT\\nHub','Error'], correct:1},
+      challenge: {type:'fill', prompt:'Fill in the blank to print "Hello" to the console:', code:'#include <stdio.h>\nint main() {\n  ____("Hello");\n  return 0;\n}', opts:['printf','print','echo','cout'], correct:0} },
   2: { mcqs: [
         {q:'How many bytes does a float typically occupy?', opts:['2','4','8','1'], correct:1},
-        {q:'What does (float)a/b do when a and b are ints?', opts:['Casts the result after division','Casts a to float before division','Causes a syntax error','Rounds the result'], correct:1}
+        {q:'What does (float)a/b do when a and b are ints?', opts:['Casts the result after division','Casts a to float before division','Causes a syntax error','Rounds the result'], correct:1},
+        {q:'Which keyword creates a compile-time constant via the preprocessor?', opts:['const','#define','static','final'], correct:1}
       ],
-      predict: {code:'int a = 7, b = 2;\nprintf("%d", a/b);', opts:['3.5','3','4','Error'], correct:1} },
+      predict: {code:'int a = 7, b = 2;\nprintf("%d", a/b);', opts:['3.5','3','4','Error'], correct:1},
+      challenge: {type:'pick', prompt:'Which line correctly declares a constant PI using #define?', opts:['#define PI = 3.14','const #define PI 3.14','#define PI 3.14','define PI 3.14;'], correct:2} },
   3: { mcqs: [
         {q:'What does the % operator return?', opts:['Percentage','Remainder of division','Float division','Power'], correct:1},
-        {q:'Which operator is bitwise AND?', opts:['&&','&','||','|'], correct:1}
+        {q:'Which operator is bitwise AND?', opts:['&&','&','||','|'], correct:1},
+        {q:'What does the ! operator do?', opts:['Increments a value','Logical NOT','Bitwise NOT','Multiplication'], correct:1}
       ],
-      predict: {code:'int a = 5;\nprintf("%d", a++);\nprintf("%d", a);', opts:['56','66','55','Error'], correct:0} },
+      predict: {code:'int a = 5;\nprintf("%d", a++);\nprintf("%d", a);', opts:['56','66','55','Error'], correct:0},
+      challenge: {type:'fill', prompt:'Fill in the blank to check if a is greater than b AND positive:', code:'if (a > b ____ a > 0) {\n  printf("yes");\n}', opts:['&&','||','&','!'], correct:0} },
   4: { mcqs: [
         {q:'What happens if you forget break in a switch case?', opts:['Compile error','Falls through to next case','Nothing happens','Program crashes'], correct:1},
-        {q:'Which keyword runs a default block in switch?', opts:['else','default','otherwise','base'], correct:1}
+        {q:'Which keyword runs a default block in switch?', opts:['else','default','otherwise','base'], correct:1},
+        {q:'What does the ternary operator ?: replace?', opts:['A for loop','A simple if-else','A switch statement','A function call'], correct:1}
       ],
-      predict: {code:'int x = 5;\nif (x > 10)\n  printf("Big");\nelse if (x > 3)\n  printf("Medium");\nelse\n  printf("Small");', opts:['Big','Medium','Small','Error'], correct:1} },
+      predict: {code:'int x = 5;\nif (x > 10)\n  printf("Big");\nelse if (x > 3)\n  printf("Medium");\nelse\n  printf("Small");', opts:['Big','Medium','Small','Error'], correct:1},
+      challenge: {type:'pick', prompt:'Which line correctly uses the ternary operator to set max to the larger of a and b?', opts:['max = a > b ? a : b;','max = if(a>b) a else b;','max = a > b then a else b;','max = (a>b) a : b;'], correct:0} },
   5: { mcqs: [
         {q:'Which loop guarantees at least one execution?', opts:['for','while','do-while','if'], correct:2},
-        {q:'What does continue do inside a loop?', opts:['Exits the loop entirely','Skips to the next iteration','Pauses the loop','Restarts the loop'], correct:1}
+        {q:'What does continue do inside a loop?', opts:['Exits the loop entirely','Skips to the next iteration','Pauses the loop','Restarts the loop'], correct:1},
+        {q:'What three parts make up a for loop header?', opts:['start, end, step','init, condition, increment','min, max, count','begin, check, loop'], correct:1}
       ],
-      predict: {code:'for(int i=0;i<3;i++){\n  if(i==1) continue;\n  printf("%d",i);\n}', opts:['012','02','01','0123'], correct:1} },
+      predict: {code:'for(int i=0;i<3;i++){\n  if(i==1) continue;\n  printf("%d",i);\n}', opts:['012','02','01','0123'], correct:1},
+      challenge: {type:'fill', prompt:'Fill in the blank to loop from 0 to 4:', code:'for(int i=0; i ____ 5; i++) {\n  printf("%d", i);\n}', opts:['<','<=','==','>'], correct:0} },
   6: { mcqs: [
         {q:'What is a function prototype?', opts:['The function body','A declaration before main()','A loop inside a function','A global variable'], correct:1},
-        {q:'Which header provides sqrt()?', opts:['stdio.h','stdlib.h','math.h','string.h'], correct:2}
+        {q:'Which header provides sqrt()?', opts:['stdio.h','stdlib.h','math.h','string.h'], correct:2},
+        {q:'What keyword is used when a function returns nothing?', opts:['null','void','empty','none'], correct:1}
       ],
-      predict: {code:'int add(int a,int b){return a+b;}\nint main(){\n  printf("%d", add(3,4));\n}', opts:['34','7','Error','12'], correct:1} },
+      predict: {code:'int add(int a,int b){return a+b;}\nint main(){\n  printf("%d", add(3,4));\n}', opts:['34','7','Error','12'], correct:1},
+      challenge: {type:'pick', prompt:'Which is the correct function definition that returns the square of a number?', opts:['int square(int x) { return x * x; }','void square(int x) { return x * x; }','int square(x) { return x * x; }','square(int x) { return x * x; }'], correct:0} },
   7: { mcqs: [
-        {q:'What does a static local variable do across calls?', opts:['Resets every call','Retains its value','Becomes global','Causes an error'], correct:1},
-        {q:'What is the base case in recursion for?', opts:['Speed optimization','Stopping the recursive calls','Memory allocation','Type casting'], correct:1}
-      ],
-      predict: {code:'int f(int n){\n  if(n==0) return 1;\n  return n*f(n-1);\n}\nprintf("%d", f(4));', opts:['4','10','24','Error'], correct:2} },
-  8: { mcqs: [
         {q:'What does the & operator do?', opts:['Dereferences a pointer','Gives the address of a variable','Multiplies two values','Compares two values'], correct:1},
-        {q:'What does *ptr do?', opts:['Declares ptr','Gives the address','Dereferences to get the value','Deletes ptr'], correct:2}
+        {q:'What does *ptr do?', opts:['Declares ptr','Gives the address','Dereferences to get the value','Deletes ptr'], correct:2},
+        {q:'What is the correct way to declare a pointer to an int?', opts:['int ptr;','int *ptr;','ptr int;','pointer int ptr;'], correct:1}
       ],
-      predict: {code:'int x=10;\nint *p=&x;\n*p = 20;\nprintf("%d", x);', opts:['10','20','Error','Address value'], correct:1} },
-  9: { mcqs: [
+      predict: {code:'int x=10;\nint *p=&x;\n*p = 20;\nprintf("%d", x);', opts:['10','20','Error','Address value'], correct:1},
+      challenge: {type:'fill', prompt:'Fill in the blank to print the value pointed to by p:', code:'int x = 99;\nint *p = &x;\nprintf("%d", ____p);', opts:['*','&','%','#'], correct:0} },
+  8: { mcqs: [
         {q:'What does an array name decay into?', opts:['An int','A pointer to its first element','A string','A function'], correct:1},
-        {q:'Does C check array bounds automatically?', opts:['Yes, always','No, never','Only for 2D arrays','Only in debug mode'], correct:1}
+        {q:'Does C check array bounds automatically?', opts:['Yes, always','No, never','Only for 2D arrays','Only in debug mode'], correct:1},
+        {q:'How do you access row 2, column 3 of a 2D array named grid?', opts:['grid(2,3)','grid[2][3]','grid[2,3]','grid.2.3'], correct:1}
       ],
-      predict: {code:'int arr[]={10,20,30};\nprintf("%d", *(arr+1));', opts:['10','20','30','Error'], correct:1} },
-  10: { mcqs: [
+      predict: {code:'int arr[]={10,20,30};\nprintf("%d", *(arr+1));', opts:['10','20','30','Error'], correct:1},
+      challenge: {type:'pick', prompt:'Which line correctly initializes an array of 5 integers all set to 0?', opts:['int arr[5] = {0};','int arr[5] = 0;','int arr(5) = {0};','array arr[5] = {0};'], correct:0} },
+  9: { mcqs: [
         {q:'How does C know where a string ends?', opts:['A length variable','The null terminator \\0','A # symbol','It counts characters'], correct:1},
-        {q:'Which function is unsafe and should be avoided?', opts:['fgets()','strcpy()','gets()','strlen()'], correct:2}
+        {q:'Which function is unsafe and should be avoided?', opts:['fgets()','strcpy()','gets()','strlen()'], correct:2},
+        {q:'What does strcmp("abc","abc") return?', opts:['1','-1','0','true'], correct:2}
       ],
-      predict: {code:'char s[20]="Hi";\nstrcat(s," there");\nprintf("%s", s);', opts:['Hi','Hi there','there Hi','Error'], correct:1} },
-  11: { mcqs: [
+      predict: {code:'char s[20]="Hi";\nstrcat(s," there");\nprintf("%s", s);', opts:['Hi','Hi there','there Hi','Error'], correct:1},
+      challenge: {type:'fill', prompt:'Fill in the blank to safely read a line of text into buf:', code:'char buf[50];\n____(buf, sizeof(buf), stdin);', opts:['fgets','gets','scanf','readline'], correct:0} },
+  10: { mcqs: [
         {q:'What does typedef help with?', opts:['Faster execution','Cleaner syntax for custom types','Memory allocation','Pointer arithmetic'], correct:1},
-        {q:'In a union, how much memory is allocated?', opts:['Sum of all members','Size of the largest member','Size of the smallest member','One byte'], correct:1}
+        {q:'In a union, how much memory is allocated?', opts:['Sum of all members','Size of the largest member','Size of the smallest member','One byte'], correct:1},
+        {q:'How do you access a struct member through a pointer?', opts:['ptr.member','ptr->member','ptr::member','ptr[member]'], correct:1}
       ],
-      predict: {code:'struct P{int x,y;};\nstruct P p={3,4};\nprintf("%d", p.x+p.y);', opts:['34','7','Error','3'], correct:1} },
-  12: { mcqs: [
+      predict: {code:'struct P{int x,y;};\nstruct P p={3,4};\nprintf("%d", p.x+p.y);', opts:['34','7','Error','3'], correct:1},
+      challenge: {type:'pick', prompt:'Which line correctly defines a struct named Point with int x and y?', opts:['struct Point { int x; int y; };','struct Point(int x, int y);','Point struct { int x, y };','struct { int x, y } Point;'], correct:0} },
+  11: { mcqs: [
         {q:'Which function allocates AND zero-initializes memory?', opts:['malloc()','calloc()','realloc()','free()'], correct:1},
-        {q:'What must follow every successful fopen()?', opts:['malloc()','A matching fclose()','printf()','Nothing'], correct:1}
+        {q:'What must follow every successful fopen()?', opts:['malloc()','A matching fclose()','printf()','Nothing'], correct:1},
+        {q:'What does EOF represent?', opts:['A file error','End of file marker','A memory address','An empty string'], correct:1}
       ],
-      predict: {code:'int *p = malloc(sizeof(int));\n*p = 42;\nprintf("%d", *p);\nfree(p);', opts:['42','Error','Garbage value','0'], correct:0} }
+      predict: {code:'int *p = malloc(sizeof(int));\n*p = 42;\nprintf("%d", *p);\nfree(p);', opts:['42','Error','Garbage value','0'], correct:0},
+      challenge: {type:'fill', prompt:'Fill in the blank to free dynamically allocated memory pointed to by p:', code:'int *p = malloc(sizeof(int));\n// ... use p ...\n____(p);', opts:['free','delete','malloc','clear'], correct:0} },
+  12: { mcqs: [
+        {q:'What does a static local variable do across calls?', opts:['Resets every call','Retains its value','Becomes global','Causes an error'], correct:1},
+        {q:'What is the base case in recursion for?', opts:['Speed optimization','Stopping the recursive calls','Memory allocation','Type casting'], correct:1},
+        {q:'Pass by reference in C is achieved using:', opts:['Arrays only','Pointers','Global variables','Return values only'], correct:1}
+      ],
+      predict: {code:'int f(int n){\n  if(n==0) return 1;\n  return n*f(n-1);\n}\nprintf("%d", f(4));', opts:['4','10','24','Error'], correct:2},
+      challenge: {type:'pick', prompt:'Which function correctly computes factorial recursively?', opts:['int fact(int n){ if(n==0) return 1; return n*fact(n-1); }','int fact(int n){ return n*fact(n-1); }','int fact(int n){ if(n==0) return 0; return n*fact(n-1); }','int fact(int n){ while(n>0) return n*fact(n); }'], correct:0} },
+  13: { mcqs: [
+        {q:'What does a function pointer store?', opts:['A functions return value','The memory address of a function','A functions parameters','A functions name as text'], correct:1},
+        {q:'What real-world C function commonly uses callbacks?', opts:['printf()','qsort()','malloc()','strlen()'], correct:1},
+        {q:'For a dynamic 2D array, what is the correct allocation order?', opts:['Allocate columns, then rows','Allocate rows, then each rows columns','Allocate everything in one malloc only','2D arrays cannot be dynamic'], correct:1}
+      ],
+      predict: {code:'int add(int a,int b){return a+b;}\nint (*op)(int,int) = add;\nprintf("%d", op(2,3));', opts:['23','5','Error','Address'], correct:1},
+      challenge: {type:'fill', prompt:'Fill in the blank to declare a function pointer matching int func(int, int):', code:'int (____ op)(int, int);', opts:['*','&','**','%'], correct:0} }
 };
+
 
 const MODS = [
   {id:1,free:true,icon:'📖',level:'Beginner',title:'Intro to C',
@@ -549,7 +581,7 @@ int main() {
 <p>Almost every DSA problem you'll solve on LeetCode or in placement rounds is structured as a function: given inputs, return an output. Getting comfortable with function signatures, parameters, and return types now makes DSA much smoother later.</p>`},
 
   // PREMIUM MODULES
-  {id:7,free:false,icon:'🧩',level:'Intermediate',title:'Advanced Functions',
+  {id:12,free:false,icon:'🧩',level:'Intermediate',title:'Advanced Functions',
    excerpt:'Deep dive into recursive functions, pass by reference vs value, and understanding how variable scope works in C.',
    tags:['Intermediate','Scope','Recursion'],visual:'🧩',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
    concepts:['Pass by Value/Reference','Recursion','Local vs Global Scope','Static Variables','extern Keyword'],
@@ -584,7 +616,7 @@ int main() {
 // Calling counter() 3 times prints 1, 2, 3</code></pre>
 <blockquote>Avoid global variables where possible — they make code harder to debug and test. Prefer passing data explicitly via parameters.</blockquote>`},
 
-  {id:8,free:false,icon:'👉',level:'Advanced',title:'Pointers',
+  {id:7,free:true,icon:'👉',level:'Intermediate',title:'Pointers',
    excerpt:'Pointers store the memory address of another variable. Access RAM directly and master C\'s most powerful feature.',
    tags:['Advanced','Pointers','Memory'],visual:'👉',bg:'linear-gradient(135deg,#10080a,#200f12)',
    concepts:['Pointer Declaration','& and * Operators','Pointer Arithmetic','Double Pointers','void Pointers'],
@@ -614,7 +646,7 @@ int **pp = &p; // pointer to pointer
 printf("%d\\n", **pp); // 5</code></pre>
 <blockquote>Always initialize pointers before use. An uninitialized pointer (wild pointer) causes undefined behavior and is one of the most common bugs in C programs.</blockquote>`},
 
-  {id:9,free:false,icon:'📦',level:'Advanced',title:'Arrays',
+  {id:8,free:true,icon:'📦',level:'Intermediate',title:'Arrays',
    excerpt:'Arrays store multiple values in contiguous memory blocks. Learn 1D/2D arrays and how they relate fundamentally to pointers.',
    tags:['Advanced','Arrays','Data Structures'],visual:'📦',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
    concepts:['1D & 2D Arrays','Array Initialization','Array with Pointers','Passing Arrays to Functions','Memory Layout'],
@@ -651,7 +683,7 @@ printf("%d\\n", *(arr+1)); // 20
 printf("%d\\n", *(p+1));   // 20</code></pre>
 <blockquote>C does not perform bounds checking on arrays. Accessing <code>arr[10]</code> on a 5-element array is undefined behavior — no error, just corrupted memory. Always track your array size carefully.</blockquote>`},
 
-  {id:10,free:false,icon:'📝',level:'Advanced',title:'Strings & char Arrays',
+  {id:9,free:true,icon:'📝',level:'Intermediate',title:'Strings & char Arrays',
    excerpt:'C doesn\'t have a native String type. Learn to manipulate null-terminated character arrays and master string.h functions.',
    tags:['Advanced','Strings','char'],visual:'📝',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
    concepts:['Null Terminator \\0','String Declaration','strlen, strcpy, strcat','strcmp & strrev','Character Arrays vs Pointers'],
@@ -682,7 +714,7 @@ fgets(input, sizeof(input), stdin); // safer than scanf for strings
 input[strcspn(input, "\\n")] = '\\0';</code></pre>
 <blockquote>Never use <code>gets()</code> — it has no bounds checking and is a classic buffer overflow vulnerability. Always use <code>fgets()</code> with a size limit.</blockquote>`},
 
-  {id:11,free:false,icon:'🏗️',level:'Advanced',title:'Structures & Unions',
+  {id:10,free:true,icon:'🏗️',level:'Intermediate',title:'Structures & Unions',
    excerpt:'Group different data types together under a single name to create complex, custom data types.',
    tags:['Advanced','struct','typedef'],visual:'🏗️',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
    concepts:['struct Definition','Accessing Members','typedef','Nested Structures','Unions vs Structures','Memory Alignment'],
@@ -731,7 +763,7 @@ printf("%s\\n", ptr->name); // arrow operator for pointer access</code></pre>
 // sizeof(union Data) = size of the LARGEST member only</code></pre>
 <blockquote>Structs are the building block of complex data structures like linked lists, trees, and graphs — all of which you'll encounter in DSA and placement interviews.</blockquote>`},
 
-  {id:12,free:false,icon:'💾',level:'Advanced',title:'Memory & File I/O',
+  {id:11,free:false,icon:'💾',level:'Advanced',title:'Memory & File I/O',
    excerpt:'The ultimate C skills: reading/writing external files and dynamically allocating memory on the heap during runtime.',
    tags:['Advanced','malloc','File Handling'],visual:'💾',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
    concepts:['malloc, calloc, realloc','free & Memory Leaks','fopen, fclose','fprintf, fscanf','fread, fwrite','EOF Handling'],
@@ -777,12 +809,59 @@ while ((ch = fgetc(fp)) != EOF) {
     putchar(ch); // read character by character
 }
 fclose(fp);</code></pre>
-<blockquote>Every <code>malloc</code> must have a matching <code>free</code>. Every <code>fopen</code> must have a matching <code>fclose</code>. Forgetting these is the cause of memory leaks and file corruption bugs in real-world software.</blockquote>`}
+<blockquote>Every <code>malloc</code> must have a matching <code>free</code>. Every <code>fopen</code> must have a matching <code>fclose</code>. Forgetting these is the cause of memory leaks and file corruption bugs in real-world software.</blockquote>`},
+
+  {id:13,free:false,icon:'🎯',level:'Advanced',title:'Function Pointers & Memory Patterns',
+   excerpt:'The most advanced C topic: pointers that point to functions, dynamic 2D arrays, and the memory patterns used in real systems code.',
+   tags:['Advanced','Function Pointers','2D Arrays'],visual:'🎯',bg:'linear-gradient(135deg,#0a0a1a,#14102a)',
+   concepts:['Function Pointer Syntax','Callbacks','Dynamic 2D Arrays','Pointer to Pointer to Pointer','Array of Function Pointers'],
+   body:`<p>This is the deep end of C — the patterns used in real operating systems, compilers, and game engines. If you understand this module, you understand C at a systems-programming level.</p>
+<h2>Function Pointers</h2>
+<p>Just like data, functions live at a memory address. A <strong>function pointer</strong> stores that address, letting you call a function indirectly — the foundation of callbacks and plugin systems.</p>
+<pre><code>int add(int a, int b) { return a + b; }
+int sub(int a, int b) { return a - b; }
+
+int main() {
+    int (*operation)(int, int); // function pointer declaration
+
+    operation = add;
+    printf("%d\\n", operation(5, 3)); // 8
+
+    operation = sub;
+    printf("%d\\n", operation(5, 3)); // 2
+}</code></pre>
+<h2>Callbacks — Passing Functions as Arguments</h2>
+<p>Function pointers let you pass behavior, not just data, into other functions. This is exactly how C's <code>qsort()</code> works.</p>
+<pre><code>void process(int x, int (*callback)(int)) {
+    printf("Result: %d\\n", callback(x));
+}
+int square(int x) { return x * x; }
+
+int main() {
+    process(5, square); // Result: 25
+}</code></pre>
+<h2>Dynamic 2D Arrays</h2>
+<p>A true 2D array needs runtime sizing when the dimensions aren't known at compile time. This requires an array of pointers, each pointing to its own allocated row.</p>
+<pre><code>int rows = 3, cols = 4;
+int **grid = malloc(rows * sizeof(int*));
+for (int i = 0; i < rows; i++) {
+    grid[i] = malloc(cols * sizeof(int));
+}
+grid[1][2] = 99; // works like a normal 2D array
+
+// Cleanup — free each row, then the row array
+for (int i = 0; i < rows; i++) free(grid[i]);
+free(grid);</code></pre>
+<h2>Pointer to Pointer to Pointer (***)</h2>
+<p>Rare, but it shows up when dynamically allocating arrays of 2D arrays — common in matrix libraries and 3D simulation code.</p>
+<pre><code>int ***cube; // pointer to pointer to pointer
+// Used for 3D dynamic structures — each level of * adds one dimension of indirection</code></pre>
+<blockquote>Function pointers and multi-level pointers are rarely needed in everyday code, but they appear constantly in systems-level interviews and in real codebases like the Linux kernel. Mastering this module puts you ahead of most peers.</blockquote>`}
 ];
 
 let currentId = null;
 let completed = getCompleted(); // modules where quiz is fully passed
-const TOTAL_FREE = 6;
+const TOTAL_FREE = 10;
 const quizState = getQuizState();
 
 function getQuizState(){try{return JSON.parse(localStorage.getItem('ish_c_quiz')||'{}');}catch(e){return{};}}
@@ -832,7 +911,8 @@ function renderQuizBox(m) {
   const quiz = QUIZZES[m.id];
   if (!quiz) return '';
   const state = quizState[m.id] || {};
-  const allDone = state.mcq0 && state.mcq1 && state.predict;
+  const allMcqDone = quiz.mcqs.every((_,i)=>state['mcq'+i]);
+  const allDone = allMcqDone && state.predict && state.challenge;
 
   const mcqHtml = quiz.mcqs.map((q,qi) => {
     const answered = state['mcq'+qi];
@@ -841,14 +921,14 @@ function renderQuizBox(m) {
       <div class="quiz-opts" id="mcq-${m.id}-${qi}">
         ${q.opts.map((opt,oi)=>`<button class="quiz-opt" ${answered?'disabled':''} onclick="answerMCQ(${m.id},${qi},${oi})">${opt}</button>`).join('')}
       </div>
-      ${answered?`<div class="quiz-result ok">✓ Correct +${5} XP</div>`:''}
+      ${answered?`<div class="quiz-result ok">✓ Correct +5 XP</div>`:''}
     </div>`;
   }).join('');
 
   const p = quiz.predict;
   const pAnswered = state.predict;
   const predictHtml = `<div class="quiz-q">
-    <div class="quiz-q-text">Predict the output:</div>
+    <div class="quiz-q-text">${quiz.mcqs.length+1}. Predict the output:</div>
     <pre><code>${p.code.replace(/</g,'&lt;')}</code></pre>
     <div class="quiz-opts" id="predict-${m.id}">
       ${p.opts.map((opt,oi)=>`<button class="quiz-opt" ${pAnswered?'disabled':''} onclick="answerPredict(${m.id},${oi})">${opt}</button>`).join('')}
@@ -856,11 +936,25 @@ function renderQuizBox(m) {
     ${pAnswered?`<div class="quiz-result ok">✓ Correct +5 XP</div>`:''}
   </div>`;
 
+  const c = quiz.challenge;
+  const cAnswered = state.challenge;
+  const challengeLabel = c.type === 'fill' ? 'Fill in the blank:' : 'Pick the correct line:';
+  const challengeHtml = `<div class="quiz-q">
+    <div class="quiz-q-text">${quiz.mcqs.length+2}. 💻 Code Challenge — ${challengeLabel}</div>
+    <div style="font-size:12px;color:var(--muted2,#9a9aab);margin-bottom:10px;">${c.prompt}</div>
+    <pre><code>${c.code.replace(/</g,'&lt;')}</code></pre>
+    <div class="quiz-opts" id="challenge-${m.id}">
+      ${c.opts.map((opt,oi)=>`<button class="quiz-opt" ${cAnswered?'disabled':''} onclick="answerChallenge(${m.id},${oi})">${opt.replace(/</g,'&lt;')}</button>`).join('')}
+    </div>
+    ${cAnswered?`<div class="quiz-result ok">✓ Correct +15 XP</div>`:''}
+  </div>`;
+
   return `<div class="quiz-box">
     <div class="quiz-box-title">🧠 Knowledge Check</div>
-    <div class="quiz-box-sub">${allDone?'All checks complete for this module! Head to the practice panel for the code challenge.':'Answer all 3 to mark this module complete and earn XP.'}</div>
+    <div class="quiz-box-sub">${allDone?'All checks complete for this module! Head to the practice panel for the full coding challenge.':`Answer all ${quiz.mcqs.length+2} to mark this module complete and earn XP.`}</div>
     ${mcqHtml}
     ${predictHtml}
+    ${challengeHtml}
   </div>`;
 }
 
@@ -902,11 +996,30 @@ window.answerPredict = async function(modId, oi) {
   setTimeout(()=>openLesson(currentId), correct ? 700 : 1200);
 };
 
+window.answerChallenge = async function(modId, oi) {
+  const quiz = QUIZZES[modId];
+  const correct = quiz.challenge.correct === oi;
+  const wrapper = document.getElementById(`challenge-${modId}`);
+  [...wrapper.children].forEach((btn,i)=>{
+    btn.disabled = true;
+    if (i===oi) btn.classList.add(correct?'correct':'wrong');
+    if (i===quiz.challenge.correct && !correct) btn.classList.add('correct');
+  });
+  if (correct) {
+    quizState[modId] = quizState[modId] || {};
+    quizState[modId].challenge = true;
+    saveQuizState(quizState);
+    if (window.ishAwardXP) await window.ishAwardXP(`c_mod${modId}_challenge`, 15);
+    checkModuleComplete(modId);
+  }
+  setTimeout(()=>openLesson(currentId), correct ? 700 : 1200);
+};
+
 async function checkModuleComplete(modId) {
   const state = quizState[modId] || {};
   const quiz = QUIZZES[modId];
   const allMcq = quiz.mcqs.every((_,i) => state['mcq'+i]);
-  if (allMcq && state.predict && !completed.includes(modId)) {
+  if (allMcq && state.predict && state.challenge && !completed.includes(modId)) {
     completed.push(modId);
     saveCompleted(completed);
     if (window.ishAwardXP) await window.ishAwardXP(`c_mod${modId}_bonus`, 10);
