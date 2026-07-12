@@ -276,7 +276,7 @@ window.openPremiumModal = async function(courseName) {
   const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
   const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
 
-  const auth = getAuth();
+  const auth = getAuth(window._fbApp);
   const user = auth.currentUser;
 
   if (!user) {
@@ -286,7 +286,7 @@ window.openPremiumModal = async function(courseName) {
     return;
   }
 
-  const db = getFirestore();
+  const db = getFirestore(window._fbApp);
   const snap = await getDoc(doc(db, 'users', user.uid));
   const data = snap.exists() ? snap.data() : {};
 
@@ -337,7 +337,7 @@ window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
 
   // Get current user for prefill (name/email only — not for auth)
   const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
-  const auth = getAuth();
+  const auth = getAuth(window._fbApp);
   const user = auth.currentUser;
 
   const options = {
@@ -367,8 +367,8 @@ window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
       try {
         const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
         const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
-        const db   = getFirestore();
-        const auth = getAuth();
+        const db   = getFirestore(window._fbApp);
+        const auth = getAuth(window._fbApp);
         const user = auth.currentUser;
 
         if (user) {

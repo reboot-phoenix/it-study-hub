@@ -302,6 +302,27 @@
   <p>© 2026 IT Study Hub · Techno India University · Secure Payments via Razorpay</p>
 </footer>
 
+<!-- Firebase init — must come before premium-modal.js -->
+<script type="module">
+  import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
+    authDomain: "it-study-hub.firebaseapp.com",
+    projectId: "it-study-hub",
+    storageBucket: "it-study-hub.firebasestorage.app",
+    messagingSenderId: "566661039167",
+    appId: "1:566661039167:web:122691d263631e404ea48a"
+  };
+
+  // Only initialize if not already done
+  if (!getApps().length) {
+    window._fbApp = initializeApp(firebaseConfig);
+  } else {
+    window._fbApp = getApps()[0];
+  }
+</script>
+
 <!-- Include the shared premium modal -->
 <script src="premium-modal.js"></script>
 
