@@ -250,8 +250,21 @@ function showAlreadyPremium(plan) {
 // ── Public API ──
 window.openPremiumModal = function(courseName) {
   // Check if already premium via localStorage session
-  const session = JSON.parse(localStorage.getItem('ish_session') || 'null');
-  if (session && (session.plan === 'pro' || session.plan === 'elite' || session.isAdmin)) {
+  const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
+const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
+const auth = getAuth();
+const user = auth.currentUser;
+if (!user) {
+  if (confirm('Please sign in first to purchase a premium plan.\n\nGo to Login page?')) {
+    window.location.href = 'Login.html';
+  }
+  return;
+}
+const db = getFirestore();
+const snap = await getDoc(doc(db, 'users', user.uid));
+const data = snap.exists() ? snap.data() : {};
+const isPremiumUser = data.plan === 'pro' || data.plan === 'elite' || data.isAdmin === true;
+if (isPremiumUser) {
     // Build modal then immediately show premium state
     const overlay = buildModal(courseName);
     document.body.appendChild(overlay);
