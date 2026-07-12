@@ -302,9 +302,12 @@
   <p>© 2026 IT Study Hub · Techno India University · Secure Payments via Razorpay</p>
 </footer>
 
-<!-- Firebase init — must come before premium-modal.js -->
+<!-- Firebase init — must run before premium-modal.js -->
+<!-- Using type=module because Firebase SDK uses ES modules -->
 <script type="module">
   import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js';
+  import { getAuth } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js';
+  import { getFirestore } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
@@ -315,12 +318,12 @@
     appId: "1:566661039167:web:122691d263631e404ea48a"
   };
 
-  // Only initialize if not already done
-  if (!getApps().length) {
-    window._fbApp = initializeApp(firebaseConfig);
-  } else {
-    window._fbApp = getApps()[0];
-  }
+  const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+  window._fbApp = app;
+
+  // Pre-initialize auth and firestore so they're ready when modal needs them
+  window._fbAuth = getAuth(app);
+  window._fbDb = getFirestore(app);
 </script>
 
 <!-- Include the shared premium modal -->

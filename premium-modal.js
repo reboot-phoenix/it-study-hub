@@ -268,16 +268,31 @@ function showAlreadyPremium(plan) {
   </div>`;
 }
 
+// ── Helper: wait for Firebase to restore auth session ──
+function getCurrentUser(auth) {
+  return new Promise((resolve) => {
+    if (auth.currentUser !== null) {
+      resolve(auth.currentUser);
+      return;
+    }
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      unsubscribe();
+      resolve(user);
+    });
+  });
+}
+
 // ── Public API ──
-// FIX 1: Must be async because we use await inside
 window.openPremiumModal = async function(courseName) {
 
-  // FIX 2: Check premium status from Firestore, NOT localStorage
   const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
   const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
 
-  const auth = getAuth(window._fbApp);
-  const user = auth.currentUser;
+  // Use pre-initialized instances from premium.html if available
+  const auth = window._fbAuth || getAuth(window._fbApp);
+
+  // Wait for Firebase to finish restoring session (currentUser is null until then)
+  const user = await getCurrentUser(auth);
 
   if (!user) {
     if (confirm('Please sign in first to purchase a premium plan.\n\nGo to Login page?')) {
@@ -286,7 +301,7 @@ window.openPremiumModal = async function(courseName) {
     return;
   }
 
-  const db = getFirestore(window._fbApp);
+  const db = window._fbDb || getFirestore(window._fbApp);
   const snap = await getDoc(doc(db, 'users', user.uid));
   const data = snap.exists() ? snap.data() : {};
 
@@ -337,7 +352,7 @@ window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
 
   // Get current user for prefill (name/email only — not for auth)
   const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
-  const auth = getAuth(window._fbApp);
+  const auth = window._fbAuth || getAuth(window._fbApp);
   const user = auth.currentUser;
 
   const options = {
@@ -367,8 +382,8 @@ window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
       try {
         const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
         const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
-        const db   = getFirestore(window._fbApp);
-        const auth = getAuth(window._fbApp);
+        const db   = window._fbDb || getFirestore(window._fbApp);
+        const auth = window._fbAuth || getAuth(window._fbApp);
         const user = auth.currentUser;
 
         if (user) {
