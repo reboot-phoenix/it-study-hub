@@ -799,7 +799,9 @@ onAuthStateChanged(auth, async (user) => {
   const name = user.displayName || user.email.split('@')[0];
   const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
   const av = document.getElementById('topbar-avatar');
-  if (user.photoURL) av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  // Only allow safe photo URLs — blocks XSS via onerror attribute attacks
+  const isSafeURL = user.photoURL && (user.photoURL.startsWith('https://firebasestorage.googleapis.com') || user.photoURL.startsWith('https://lh3.googleusercontent.com'));
+  if (isSafeURL) av.innerHTML = `<img src="${user.photoURL.replace(/"/g,'&quot;')}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
   else av.textContent = initials;
   document.getElementById('topbar-name').textContent = name.split(' ')[0];
   window._userName = name; window._userInitials = initials; window._userPhotoURL = user.photoURL||null;
@@ -849,15 +851,20 @@ window._loadLeaderboard = async function() {
       users.push({uid:d.id, name:data.name||data.email?.split('@')[0]||'Anonymous', xp:data.xp||0, solved, photo:data.photoURL||null});
     });
     const myUid = window._currentUser?.uid;
+    // Sanitize helper — prevents XSS from malicious display names or photo URLs
+    const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     el.innerHTML = users.slice(0,20).map((u,i) => {
       const rc = i===0?'gold':i===1?'silver':i===2?'bronze':'';
       const isMe = u.uid===myUid;
-      const ini = (u.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      const av2 = u.photo ? `<img src="${u.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : ini;
+      const safeName = esc(u.name || '?');
+      const ini = safeName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      // Only allow Firebase Storage URLs for photos — blocks tracking pixels and XSS via onerror
+      const isSafePhoto = u.photo && (u.photo.startsWith('https://firebasestorage.googleapis.com') || u.photo.startsWith('https://lh3.googleusercontent.com'));
+      const av2 = isSafePhoto ? `<img src="${esc(u.photo)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : ini;
       return `<div class="lb-entry${isMe?' me':''}">
         <div class="lb-rank${rc?' '+rc:''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div>
         <div class="lb-avatar">${av2}</div>
-        <div class="lb-name">${u.name}${isMe?' (you)':''}</div>
+        <div class="lb-name">${safeName}${isMe?' (you)':''}</div>
         <div class="lb-xp">${u.xp.toLocaleString()} XP</div>
         <div class="lb-solved">${u.solved}✓</div>
       </div>`;

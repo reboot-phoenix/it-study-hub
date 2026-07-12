@@ -337,6 +337,9 @@ async function renderLeaderboard(myUid, myXP) {
 
     document.getElementById('sbRank').textContent = '#' + myRank;
     document.getElementById('wRank').textContent = '#' + myRank;
+    // Sanitize helper — prevents XSS by escaping HTML special chars
+    const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
     document.getElementById('lbStatus').textContent = users.length + ' students ranked';
 
     // Check if I'm in top 10
@@ -349,7 +352,7 @@ async function renderLeaderboard(myUid, myXP) {
       const rankClass = rank===1?'r1':rank===2?'r2':rank===3?'r3':isMe?'rme':'';
       const rowClass = isMe?'lb-row is-me':rank<=3?'lb-row top-3':'lb-row';
       const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
-      const displayName = u.name || u.email?.split('@')[0] || 'Student';
+      const displayName = esc(u.name || u.email?.split('@')[0] || 'Student');
       html += `
         <div class="${rowClass}">
           <div class="rank-num ${rankClass}">${medal||rank}</div>
@@ -362,7 +365,7 @@ async function renderLeaderboard(myUid, myXP) {
     // Add my row if not in top 10
     if (!myInTop) {
       const session = JSON.parse(localStorage.getItem('ish_session')||'{}');
-      const myName = session.name || 'You';
+      const myName = esc(session.name || 'You');
       html += `<div style="padding:8px 24px;font-family:var(--ff-mono);font-size:10px;color:var(--muted);text-align:center;border-top:1px solid var(--border);">· · ·</div>
         <div class="lb-row is-me">
           <div class="rank-num rme">${myRank}</div>
