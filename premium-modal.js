@@ -255,6 +255,22 @@ function buildModal(courseName) {
     if (e.target === overlay) window.closePremiumModal();
   });
 
+  // Hook into the site's custom cursor (scale up on hover)
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursorRing');
+  if (cursor && ring) {
+    overlay.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'scale(2)';
+        ring.style.transform   = 'scale(1.5)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'scale(1)';
+        ring.style.transform   = 'scale(1)';
+      });
+    });
+  }
+
   return overlay;
 }
 
