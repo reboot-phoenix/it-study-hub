@@ -228,7 +228,7 @@ function buildModal(courseName) {
         </div>
         <div class="pm-divider"></div>
         <ul class="pm-features">${feats}</ul>
-        <button class="pm-btn ${btnClass}" onclick="window.handlePremiumPurchase('${plan.id}', ${plan.price}, '${plan.name}')">${plan.cta}</button>
+        <button class="pm-btn ${btnClass}" onclick="window.handlePremiumPurchase(this, '${plan.id}', ${plan.price}, '${plan.name}')">${plan.cta}</button>
       </div>`;
   }).join('');
 
@@ -319,8 +319,7 @@ window.closePremiumModal = function() {
 };
 
 // ── Razorpay Payment Handler ──
-window.handlePremiumPurchase = async function(planId, amount, planName) {
-  const btn = event.currentTarget;
+window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
   const originalText = btn.textContent;
   btn.textContent = 'Loading...';
   btn.disabled = true;
