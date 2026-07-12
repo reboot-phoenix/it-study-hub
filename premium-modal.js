@@ -2,9 +2,30 @@
 //  IT Study Hub — Premium Modal + Razorpay
 //  Include this script on any course page.
 //  Call: window.openPremiumModal(courseName)
+//
+//  RAZORPAY SETUP REQUIRED:
+//  1. Go to https://dashboard.razorpay.com
+//  2. Settings → API Keys → Generate Test Key
+//  3. Replace RZP_KEY_ID below with your key (rzp_test_xxxx)
+//  4. When going live, swap to your live key (rzp_live_xxxx)
+//
+//  SECURITY NOTE:
+//  This file handles the CLIENT side only.
+//  After payment, Razorpay gives you 3 values:
+//    - razorpay_payment_id
+//    - razorpay_order_id
+//    - razorpay_signature
+//  In a real production app you MUST verify these on a server
+//  (Firebase Cloud Function) before activating premium.
+//  For now this is a student project so we write to Firestore
+//  directly, which is acceptable at this stage.
 // ══════════════════════════════════════════════════
 
 (function() {
+
+// ── REPLACE THIS WITH YOUR ACTUAL RAZORPAY TEST KEY ──
+// Get it from: https://dashboard.razorpay.com → Settings → API Keys
+const RZP_KEY_ID = 'rzp_test_TCbxQ8kFJk4J53';
 
 const PLANS = [
   {
@@ -248,38 +269,41 @@ function showAlreadyPremium(plan) {
 }
 
 // ── Public API ──
-window.openPremiumModal = function(courseName) {
-  // Check if already premium via localStorage session
-  const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
-const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
-const auth = getAuth();
-const user = auth.currentUser;
-if (!user) {
-  if (confirm('Please sign in first to purchase a premium plan.\n\nGo to Login page?')) {
-    window.location.href = 'Login.html';
-  }
-  return;
-}
-const db = getFirestore();
-const snap = await getDoc(doc(db, 'users', user.uid));
-const data = snap.exists() ? snap.data() : {};
-const isPremiumUser = data.plan === 'pro' || data.plan === 'elite' || data.isAdmin === true;
-if (isPremiumUser) {
-    // Build modal then immediately show premium state
-    const overlay = buildModal(courseName);
-    document.body.appendChild(overlay);
-    requestAnimationFrame(() => overlay.classList.add('pm-visible'));
-    showAlreadyPremium(session.plan || 'Pro');
-    return;
-  }
+// FIX 1: Must be async because we use await inside
+window.openPremiumModal = async function(courseName) {
 
-  if (!session) {
-    // Not logged in — redirect to login
+  // FIX 2: Check premium status from Firestore, NOT localStorage
+  const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
+  const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
     if (confirm('Please sign in first to purchase a premium plan.\n\nGo to Login page?')) {
       window.location.href = 'Login.html';
     }
     return;
   }
+
+  const db = getFirestore();
+  const snap = await getDoc(doc(db, 'users', user.uid));
+  const data = snap.exists() ? snap.data() : {};
+
+  // FIX 3: isPremiumUser check uses Firestore data, not localStorage
+  const isPremiumUser = data.plan === 'pro' || data.plan === 'elite' || data.isAdmin === true;
+
+  if (isPremiumUser) {
+    const overlay = buildModal(courseName);
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add('pm-visible'));
+    // FIX 4: was session.plan (undefined), now correctly uses data.plan from Firestore
+    showAlreadyPremium(data.plan || 'Pro');
+    return;
+  }
+
+  // FIX 5: Removed the dead `if (!session)` block that was left over from old code
+  // We already handle the not-logged-in case above with `if (!user)`
 
   const overlay = buildModal(courseName);
   document.body.appendChild(overlay);
@@ -312,54 +336,56 @@ window.handlePremiumPurchase = async function(planId, amount, planName) {
     });
   }
 
-  const session = JSON.parse(localStorage.getItem('ish_session') || 'null');
+  // Get current user for prefill (name/email only — not for auth)
+  const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   const options = {
-    // ── REPLACE WITH YOUR RAZORPAY KEY ID ──
-    key: 'rzp_test_REPLACE_WITH_YOUR_KEY',
-    amount: amount * 100, // Razorpay uses paise
+    key: RZP_KEY_ID,
+    amount: amount * 100, // Razorpay expects paise (₹499 → 49900)
     currency: 'INR',
     name: 'IT Study Hub',
     description: `${planName} Plan — Premium Access`,
     image: '',
     prefill: {
-      name:  session?.name  || '',
-      email: session?.email || '',
+      name:  user?.displayName || '',
+      email: user?.email || '',
     },
     theme: { color: '#c8f135' },
-    modal: { backdropclose: false },
     handler: async function(response) {
-      // ── Payment success ──
-      // In production: verify payment_id on your backend / Firebase Function
-      // For now: update localStorage + Firestore directly
-      console.log('Payment success:', response.razorpay_payment_id);
+      // ── Payment success callback ──
+      // response contains:
+      //   response.razorpay_payment_id  — proof of payment
+      //   response.razorpay_order_id    — if you created an order server-side
+      //   response.razorpay_signature   — for server-side verification
+      //
+      // What we do here: write plan to Firestore directly.
+      // This is acceptable for a student project. For production,
+      // you'd send response to a Firebase Cloud Function to verify
+      // the signature before trusting it.
 
-      // Update localStorage session with plan
-      if (session) {
-        session.plan = planId;
-        localStorage.setItem('ish_session', JSON.stringify(session));
-      }
-
-      // ── Update Firestore if Firebase is loaded ──
       try {
         const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
         const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
-        // Use existing app instance if available
-        if (window._fbApp) {
-          const db  = getFirestore(window._fbApp);
-          const auth = getAuth(window._fbApp);
-          const user = auth.currentUser;
-          if (user) {
-            await updateDoc(doc(db, 'users', user.uid), {
-              plan: planId,
-              planActivatedAt: new Date().toISOString(),
-              razorpayPaymentId: response.razorpay_payment_id
-            });
-          }
-        }
-      } catch(e) { console.warn('Firestore update skipped:', e); }
+        const db   = getFirestore();
+        const auth = getAuth();
+        const user = auth.currentUser;
 
-      // Show success inside modal
+        if (user) {
+          await updateDoc(doc(db, 'users', user.uid), {
+            plan: planId,
+            planActivatedAt: new Date().toISOString(),
+            razorpayPaymentId: response.razorpay_payment_id
+          });
+        }
+      } catch(e) {
+        console.warn('Firestore update failed:', e);
+        // Still show success UI — payment went through even if Firestore write failed
+        // In production you'd handle this more carefully
+      }
+
+      // Show success screen inside modal
       const modal = document.querySelector('.pm-modal');
       if (modal) {
         modal.innerHTML = `
@@ -371,8 +397,8 @@ window.handlePremiumPurchase = async function(planId, amount, planName) {
           </div>`;
       }
     },
-    // Handle payment failure
     modal: {
+      backdropclose: false,
       ondismiss: function() {
         btn.textContent = originalText;
         btn.disabled = false;
