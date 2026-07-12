@@ -174,6 +174,7 @@ if (!document.getElementById('pm-styles')) {
       font-family: 'JetBrains Mono', monospace; font-size: 12px;
       font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
       cursor: pointer; transition: all 0.2s;
+      user-select: none; -webkit-user-select: none;
     }
     .pm-btn-lime { background: #c8f135; color: #000; }
     .pm-btn-lime:hover { background: #d4ff3d; transform: translateY(-1px); }
