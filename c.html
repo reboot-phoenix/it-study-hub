@@ -7,6 +7,65 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="course-page.css">
+<style>
+/* ── XP & Quiz Styles ─────────────────────────────── */
+.xp-bar-wrap{background:rgba(255,255,255,0.06);border-radius:8px;padding:12px 16px;margin-bottom:12px;border:1px solid rgba(200,241,53,0.15);}
+.xp-label{font-size:11px;color:#c8f135;font-family:var(--ff-mono,monospace);letter-spacing:.08em;margin-bottom:6px;}
+.xp-track{height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;}
+.xp-fill{height:100%;background:linear-gradient(90deg,#c8f135,#a8d020);border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+.xp-nums{display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:rgba(255,255,255,0.4);font-family:var(--ff-mono,monospace);}
+.xp-burst{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(10,10,12,0.95);border:1px solid #c8f135;border-radius:16px;padding:24px 40px;text-align:center;z-index:9999;animation:burstIn .4s ease;pointer-events:none;}
+.xp-burst-pts{font-family:var(--ff-display,'Syne'),sans-serif;font-size:48px;font-weight:800;color:#c8f135;line-height:1;}
+.xp-burst-txt{color:rgba(255,255,255,0.7);font-size:14px;margin-top:6px;}
+@keyframes burstIn{from{opacity:0;transform:translate(-50%,-50%) scale(.7);}to{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+
+/* Quiz Overlay */
+.quiz-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:8000;overflow-y:auto;padding:40px 20px;}
+.quiz-overlay.active{display:flex;align-items:flex-start;justify-content:center;}
+.quiz-box{background:#0f1012;border:1px solid rgba(200,241,53,0.2);border-radius:20px;max-width:680px;width:100%;padding:36px;margin:auto;}
+.quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.quiz-title{font-family:var(--ff-display,'Syne'),sans-serif;font-size:22px;font-weight:700;color:#fff;}
+.quiz-subtitle{font-size:13px;color:#c8f135;margin-top:2px;}
+.quiz-progress-text{font-size:12px;color:rgba(255,255,255,0.4);font-family:monospace;}
+.quiz-q-num{font-size:11px;color:#c8f135;letter-spacing:.1em;margin-bottom:8px;font-family:monospace;}
+.quiz-question{font-size:16px;color:#fff;line-height:1.6;margin-bottom:20px;font-weight:500;}
+.quiz-options{display:flex;flex-direction:column;gap:10px;}
+.quiz-opt{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 18px;cursor:pointer;color:rgba(255,255,255,0.85);font-size:14px;text-align:left;transition:all .2s;font-family:inherit;}
+.quiz-opt:hover:not(:disabled){background:rgba(200,241,53,0.08);border-color:rgba(200,241,53,0.35);color:#fff;}
+.quiz-opt.selected{background:rgba(200,241,53,0.1);border-color:#c8f135;color:#c8f135;}
+.quiz-opt.correct{background:rgba(50,200,80,0.15);border-color:#32c850;color:#32c850;pointer-events:none;}
+.quiz-opt.wrong{background:rgba(240,60,60,0.12);border-color:#f03c3c;color:#f03c3c;pointer-events:none;}
+.quiz-opt.reveal-correct{background:rgba(50,200,80,0.08);border-color:#32c850;color:#32c850;pointer-events:none;}
+.quiz-feedback{margin-top:14px;padding:12px 16px;border-radius:8px;font-size:13px;display:none;}
+.quiz-feedback.correct{background:rgba(50,200,80,0.1);border:1px solid rgba(50,200,80,0.3);color:#32c850;display:block;}
+.quiz-feedback.wrong{background:rgba(240,60,60,0.1);border:1px solid rgba(240,60,60,0.3);color:#f06060;display:block;}
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;}
+.quiz-btn{background:#c8f135;color:#0a0a0c;border:none;border-radius:8px;padding:11px 24px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;transition:opacity .2s;}
+.quiz-btn:disabled{opacity:.35;cursor:not-allowed;}
+.quiz-btn.secondary{background:rgba(255,255,255,0.08);color:#fff;}
+.quiz-result{text-align:center;padding:20px 0;}
+.quiz-result-score{font-family:var(--ff-display,'Syne'),sans-serif;font-size:56px;font-weight:800;line-height:1;}
+.quiz-result-score.pass{color:#c8f135;}
+.quiz-result-score.fail{color:#f06060;}
+.quiz-result-msg{font-size:16px;color:rgba(255,255,255,0.7);margin:12px 0 6px;}
+.quiz-result-sub{font-size:13px;color:rgba(255,255,255,0.4);}
+.quiz-result-xp{font-size:22px;color:#c8f135;font-weight:700;margin-top:16px;}
+.quiz-result-btns{display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;}
+
+/* Module gate lock UI inside lesson */
+.quiz-gate{background:rgba(200,241,53,0.04);border:1px solid rgba(200,241,53,0.2);border-radius:16px;padding:28px;margin-top:32px;text-align:center;}
+.quiz-gate-icon{font-size:40px;margin-bottom:12px;}
+.quiz-gate-title{font-family:var(--ff-display,'Syne'),sans-serif;font-size:20px;font-weight:700;color:#c8f135;margin-bottom:8px;}
+.quiz-gate-desc{font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:20px;}
+.quiz-gate-btn{background:#c8f135;color:#0a0a0c;border:none;border-radius:8px;padding:12px 28px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;}
+.quiz-gate-btn:hover{opacity:.9;}
+.quiz-passed-badge{background:rgba(50,200,80,0.1);border:1px solid rgba(50,200,80,0.3);border-radius:10px;padding:12px 20px;display:inline-flex;align-items:center;gap:10px;color:#32c850;font-size:14px;font-weight:600;}
+
+/* Sidebar XP */
+.sb-xp{background:rgba(200,241,53,0.06);border-radius:8px;padding:10px 12px;margin-bottom:8px;}
+.sb-xp-label{font-size:10px;color:#c8f135;font-family:monospace;margin-bottom:4px;}
+.sb-xp-val{font-size:20px;font-weight:700;color:#c8f135;font-family:var(--ff-display,'Syne'),sans-serif;}
+</style>
 </head>
 <body>
 <div class="read-progress" id="readProgress"></div>
@@ -19,20 +78,27 @@
   </div>
 </nav>
 
+<!-- INDEX PAGE -->
 <div id="indexPage">
   <div class="fade-up">
     <div class="course-eyebrow">Subject 01 · IT Study Hub</div>
     <h1 class="course-title">C <em>Programming</em></h1>
-    <p class="course-desc">Master the language that built the modern world. From variables and loops to pointers, recursion, and systems programming — everything you need to think like a computer.</p>
+    <p class="course-desc">Master the language that built the modern world. From variables and loops to pointers, recursion, and systems programming — 12 modules of rigorous academic content with interactive quizzes and XP rewards.</p>
     <div class="course-chips">
       <span class="chip chip-lime">⚙️ C Language</span>
       <span class="chip chip-lime">6 Free Modules</span>
       <span class="chip chip-gold">6 Premium Modules</span>
       <span class="chip chip-lime">Real PDF Notes</span>
+      <span class="chip chip-lime">🎯 XP System</span>
     </div>
   </div>
 
   <div class="progress-card fade-up" style="animation-delay:0.1s;">
+    <div class="xp-bar-wrap">
+      <div class="xp-label">⚡ TOTAL XP EARNED</div>
+      <div class="xp-track"><div class="xp-fill" id="totalXpFill" style="width:0%"></div></div>
+      <div class="xp-nums"><span id="totalXpVal">0 XP</span><span id="totalXpMax">— / 1200 XP</span></div>
+    </div>
     <div class="prog-pct" id="progPct">0%</div>
     <div class="prog-bar-wrap">
       <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
@@ -87,7 +153,8 @@
   </div>
 </div>
 
-<div id="lessonPage">
+<!-- LESSON PAGE -->
+<div id="lessonPage" style="display:none;">
   <div class="lesson-topbar">
     <div class="les-breadcrumb">C Programming <span>/</span> <span id="lesCrumb">—</span></div>
     <div class="les-nav-btns">
@@ -101,6 +168,10 @@
     <div class="lesson-article" id="lessonContent"></div>
     <aside class="lesson-sidebar">
       <div class="sb-card">
+        <div class="sb-xp">
+          <div class="sb-xp-label">⚡ YOUR XP</div>
+          <div class="sb-xp-val" id="sbXp">0</div>
+        </div>
         <div class="sb-label">Progress</div>
         <div class="prog-bar-track" style="margin-bottom:8px;"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
         <div class="prog-label" id="sbProgLabel">0 / 6 free</div>
@@ -113,6 +184,17 @@
   </div>
 </div>
 
+<!-- QUIZ OVERLAY -->
+<div class="quiz-overlay" id="quizOverlay">
+  <div class="quiz-box" id="quizBox"></div>
+</div>
+
+<!-- XP Burst -->
+<div class="xp-burst" id="xpBurst" style="display:none;">
+  <div class="xp-burst-pts" id="xpBurstPts">+10</div>
+  <div class="xp-burst-txt">XP Earned!</div>
+</div>
+
 <div class="toast" id="toast"></div>
 <div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
@@ -123,152 +205,497 @@ function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')|
 function isPremium(){const s=getSession();return s&&(s.isAdmin||s.email===ADMIN_EMAIL);}
 function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_c_done')||'[]');}catch(e){return[];}}
 function saveCompleted(a){localStorage.setItem('ish_c_done',JSON.stringify(a));}
+function getXP(){return parseInt(localStorage.getItem('ish_c_xp')||'0',10);}
+function addXP(pts){const x=getXP()+pts;localStorage.setItem('ish_c_xp',x);showXpBurst(pts);updateXPUI();}
+function getQuizPassed(){try{return JSON.parse(localStorage.getItem('ish_c_quiz_passed')||'[]');}catch(e){return[];}}
+function setQuizPassed(a){localStorage.setItem('ish_c_quiz_passed',JSON.stringify(a));}
+function isQuizPassed(id){return getQuizPassed().includes(id);}
+function markQuizPassed(id){const a=getQuizPassed();if(!a.includes(id)){a.push(id);setQuizPassed(a);}}
 
+function updateXPUI(){
+  const xp=getXP();
+  const maxXp=1200;
+  document.querySelectorAll('#totalXpFill').forEach(el=>el.style.width=Math.min(100,(xp/maxXp)*100)+'%');
+  document.querySelectorAll('#totalXpVal').forEach(el=>el.textContent=xp+' XP');
+  document.querySelectorAll('#totalXpMax').forEach(el=>el.textContent=xp+' / '+maxXp+' XP');
+  document.querySelectorAll('#sbXp').forEach(el=>el.textContent=xp);
+}
+
+function showXpBurst(pts){
+  const b=document.getElementById('xpBurst');
+  document.getElementById('xpBurstPts').textContent='+'+pts;
+  b.style.display='block';
+  setTimeout(()=>b.style.display='none',2000);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// ALL 12 MODULES WITH FULL CONTENT FROM PDFs
+// ══════════════════════════════════════════════════════════════════
 const MODS = [
-  // ── FREE ──────────────────────────────────────────────────────────────────
-  {id:1, free:true, icon:'🖥️', level:'Beginner', title:'Introduction to C',
-   excerpt:'Trace the origins of C from Bell Labs to modern systems. Set up your compiler, dissect a real C program, understand tokens and data types, and write your first programs.',
-   tags:['Beginner','History','I/O'], visual:'🖥️', bg:'linear-gradient(135deg,#0a1a0a,#0f2010)',
-   concepts:['History of C','C Features & Applications','gcc Compiler Setup','Structure of a C Program','Tokens & Keywords','Variables & Constants','Data Types','printf & scanf','Comments'],
-   body:`<p>C was created by <strong>Dennis Ritchie</strong> at Bell Labs between 1969 and 1973. It was designed to write the <em>UNIX operating system</em> — and that heritage means C still powers operating systems, embedded chips, databases, and browsers today.</p>
-<h2>Why Learn C?</h2>
-<p>C is the closest you can get to hardware without writing assembly. It teaches you how memory actually works, why data types have sizes, and what a pointer really is. Every modern language — Python, Java, JavaScript — has C in its DNA.</p>
-<blockquote>Learn C and you understand the machine. Learn Python first and you understand convenience.</blockquote>
-<h2>Structure of a C Program</h2>
-<p>Every C program has a fixed skeleton. Let's break it down line by line:</p>
-<pre><code>#include &lt;stdio.h&gt;   // Preprocessor directive — imports the I/O library
 
-int main() {          // Entry point — execution always starts here
-    printf("Hello, World!\\n");  // Output function
-    return 0;         // Return 0 = success signal to the OS
-}</code></pre>
-<p>Save it as <code>hello.c</code>. Compile with <code>gcc hello.c -o hello</code>. Run with <code>./hello</code>.</p>
-<h2>Tokens, Keywords & Identifiers</h2>
-<p>The C compiler breaks your source code into <strong>tokens</strong> — the smallest meaningful units. Tokens include keywords, identifiers, operators, constants, and string literals.</p>
+// ── FREE MODULE 1 ──────────────────────────────────────────────────
+{id:1, free:true, icon:'🖥️', level:'Beginner', title:'Introduction to C & C Basics',
+ excerpt:'Trace the origins of C from Bell Labs through BCPL and B. Understand the 4-stage compilation pipeline, tokens, keywords, data types, I/O functions, and write your first real programs.',
+ tags:['Beginner','History','I/O','Data Types'], visual:'🖥️', bg:'linear-gradient(135deg,#0a1a0a,#0f2010)',
+ concepts:['History & Evolution of C','Features & Applications','Structure of a C Program','Tokens, Keywords & Identifiers','Variables & Constants','Data Types Deep-Dive','Input/Output Functions','Comments & Coding Style','First Programs'],
+ body:`
+<p>C was created by <strong>Dennis Ritchie</strong> at AT&T Bell Labs in 1972. It was designed to rewrite the <em>UNIX operating system</em> — and that heritage means C still powers operating systems, embedded chips, databases, and compilers today.</p>
+
+<h2>1. History and Evolution of C</h2>
+<p>Before C, engineers faced a painful choice: assembly language (fast, hardware-specific, unmanageable) or high-level languages (portable, but lacking low-level control). C dissolved this trade-off by introducing a type system that mapped directly to physical hardware.</p>
+<p><strong>The Evolutionary Lineage:</strong></p>
 <ul>
-  <li><strong>Keywords</strong> are reserved — <code>int</code>, <code>return</code>, <code>if</code>, <code>while</code> mean something specific to the compiler.</li>
-  <li><strong>Identifiers</strong> are names you create — <code>myAge</code>, <code>total</code>. They must start with a letter or underscore.</li>
+  <li><strong>ALGOL 60</strong> — introduced structured blocks and lexical scope, but lacked low-level I/O</li>
+  <li><strong>CPL (1963)</strong> — ambitious but too complex to compile efficiently</li>
+  <li><strong>BCPL (1967)</strong> — stripped, typeless language; operated on raw "words" in memory</li>
+  <li><strong>B Language (1969)</strong> — Ken Thompson's BCPL derivative for early Unix on PDP-7</li>
+  <li><strong>C (1972)</strong> — Dennis Ritchie added a type system; Unix kernel rewritten in C by 1973</li>
 </ul>
-<h2>Data Types & Variables</h2>
+<p><strong>Standardization Timeline:</strong> K&R C (1978) → ANSI C89 → C99 (inline functions, <code>//</code> comments) → C11 (threading) → C17 → C23 (native <code>bool</code>, <code>true</code>, <code>false</code>).</p>
+
+<h2>2. Features and Applications of C</h2>
+<p>C is a <em>middle-level language</em> — it gives you high-level structured control (functions, loops, structs) alongside low-level power (pointers, bitwise operators, manual memory). Key traits:</p>
+<ul>
+  <li><strong>Speed:</strong> No garbage collector. Compiled directly to machine instructions.</li>
+  <li><strong>Portability:</strong> Standard-compliant C runs on microcontrollers to supercomputers.</li>
+  <li><strong>Transparency:</strong> You control every byte. Nothing is hidden.</li>
+</ul>
+<p>Real-world uses: Linux kernel, Python (CPython), V8 JavaScript engine, MySQL, PostgreSQL, embedded firmware.</p>
+<blockquote>Industrial best practice: always use <code>#include &lt;stdint.h&gt;</code> and fixed-width types like <code>int32_t</code> or <code>uint16_t</code> for platform-independent code. Never assume <code>int</code> is always 32 bits.</blockquote>
+
+<h2>3. Structure of a C Program</h2>
+<p>A C source file has distinct zones: preprocessor directives, global definitions, the <code>main()</code> entry function, and user-defined functions. The build passes through 4 stages:</p>
+<pre><code>// Stage 1: Preprocessing — expands #include, #define, strips comments
+// Stage 2: Compilation — parses C, validates types, generates assembly
+// Stage 3: Assembly — converts .s to binary .o object file
+// Stage 4: Linking — merges .o files + libraries into final executable
+
+gcc -E main.c -o main.i    // Stop after preprocessing
+gcc -S main.c -o main.s    // Stop after compilation (assembly output)
+gcc -c main.c -o main.o    // Stop after assembly (object file)
+gcc main.o -o main         // Final link</code></pre>
+<pre><code>#include &lt;stdio.h&gt;          // Preprocessor: import I/O declarations
+#define FACTOR 1.59154943   // Macro: text substitution before compile
+
+void log_status(void);      // Forward declaration (prototype)
+
+int main(void) {
+    double input = 45.5;
+    log_status();
+    printf("Result: %.4f\n", input * FACTOR);
+    return 0;               // 0 = success to OS
+}
+
+void log_status(void) {
+    printf("[SYSTEM] Engine initialized.\n");
+}</code></pre>
+<blockquote>Never end a <code>#define</code> with a semicolon. <code>#define MAX 100;</code> will insert a stray semicolon into every expression using <code>MAX</code>, causing compilation errors.</blockquote>
+
+<h2>4. Tokens, Keywords, and Identifiers</h2>
+<p>The compiler breaks source code into <strong>tokens</strong> — the smallest meaningful units. The 6 token families:</p>
+<ul>
+  <li><strong>Keywords:</strong> Reserved words — <code>int</code>, <code>return</code>, <code>if</code>, <code>while</code>, <code>struct</code>, <code>void</code>, etc.</li>
+  <li><strong>Identifiers:</strong> Names you create — <code>myAge</code>, <code>total_sum</code>. Must start with a letter or underscore.</li>
+  <li><strong>Constants/Literals:</strong> Fixed values — <code>42</code>, <code>3.14</code>, <code>'A'</code></li>
+  <li><strong>String Literals:</strong> <code>"Hello, World!"</code></li>
+  <li><strong>Operators:</strong> <code>+</code>, <code>&&</code>, <code>>></code>, <code>*</code></li>
+  <li><strong>Punctuators:</strong> <code>{</code>, <code>}</code>, <code>;</code>, <code>,</code>, <code>(</code></li>
+</ul>
+<p>C is <strong>strictly case-sensitive</strong>: <code>system_load</code>, <code>System_Load</code>, and <code>SYSTEM_LOAD</code> are three different identifiers.</p>
+
+<h2>5. Variables and Constants</h2>
 <pre><code>#include &lt;stdio.h&gt;
+#define EXPANSION_RATE 1.18    // Preprocessor macro — no memory, no type-check
 
-int main() {
-    int age = 20;           // 4 bytes, whole numbers
-    float gpa = 9.4f;       // 4 bytes, decimal
-    double pi = 3.14159;    // 8 bytes, high-precision decimal
-    char grade = 'A';       // 1 byte, single character
+int main(void) {
+    const int BASE_THRESHOLD = 4000;  // const — type-checked, block-scoped
+    int active_load = 1500;           // Mutable variable
 
-    printf("Age: %d, GPA: %.1f, Grade: %c\\n", age, gpa, grade);
+    active_load = 2200;               // Mutation allowed
+    // BASE_THRESHOLD = 5000;         // ERROR: read-only!
+
+    double scaled = (double)active_load * EXPANSION_RATE;
+    printf("Active: %d | Scaled: %.2f | Base: %d\n",
+           active_load, scaled, BASE_THRESHOLD);
     return 0;
 }</code></pre>
-<h2>Input with scanf</h2>
-<pre><code>int age;
-printf("Enter your age: ");
-scanf("%d", &age);   // &age means "address of age" — crucial!
-printf("You are %d years old.\\n", age);</code></pre>
-<p>The <code>&</code> before <code>age</code> is not optional. <code>scanf</code> needs the <em>address</em> of the variable so it can write the value there. Forgetting <code>&</code> is one of the most common beginner bugs.</p>`},
+<blockquote>Critical pitfall: declaring <code>int total;</code> without initializing it gives you a "garbage value" — leftover bits from a previous process. Always initialize variables.</blockquote>
 
-  {id:2, free:true, icon:'🔀', level:'Beginner', title:'Operators & Decision Making',
-   excerpt:'Learn every operator C offers — arithmetic, relational, logical, bitwise, and more. Then master if-else, nested conditions, and switch-case to control program flow.',
-   tags:['Beginner','Operators','Conditionals'], visual:'🔀', bg:'linear-gradient(135deg,#0a0a1a,#101028)',
-   concepts:['Arithmetic Operators','Relational Operators','Logical Operators','Assignment Operators','Increment & Decrement','Bitwise Operators Intro','if Statement','if-else','Nested if-else','switch-case'],
-   body:`<p>Operators are the verbs of C — they tell the program what to <em>do</em> with data. Decision statements are the grammar — they tell the program <em>when</em> to do it.</p>
-<h2>Arithmetic & Relational Operators</h2>
-<pre><code>int a = 10, b = 3;
+<h2>6. Data Types Deep-Dive</h2>
+<p>Data types tell the compiler how many bytes to allocate and how to interpret the binary bits:</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;float.h&gt;
 
-// Arithmetic
-printf("%d\\n", a + b);   // 13
-printf("%d\\n", a % b);   // 1 (modulus — remainder after division)
+int main(void) {
+    // char: 1 byte, -128 to 127
+    char grade = 'A';
+    printf("char: %c  ASCII: %d\n", grade, grade);
 
-// Relational — produce 1 (true) or 0 (false)
-printf("%d\\n", a > b);   // 1
-printf("%d\\n", a == b);  // 0
-printf("%d\\n", a != b);  // 1</code></pre>
-<h2>Logical Operators</h2>
+    // int: 4 bytes, -2,147,483,648 to 2,147,483,647
+    int age = 20;
+    printf("int: %d  Size: %zu bytes\n", age, sizeof(int));
+
+    // float: 4 bytes, ~6 significant digits
+    float gpa = 9.4f;
+    printf("float: %.2f\n", gpa);
+
+    // double: 8 bytes, ~15 significant digits
+    double pi = 3.14159265358979;
+    printf("double: %.14f\n", pi);
+
+    // unsigned int: 0 to 4,294,967,295
+    unsigned int count = 4294967295u;
+    printf("unsigned int max: %u\n", count);
+
+    printf("INT_MAX = %d | INT_MIN = %d\n", INT_MAX, INT_MIN);
+    return 0;
+}</code></pre>
+<blockquote>Integer overflow is silent and catastrophic. Adding 1 to a variable already at <code>INT_MAX</code> wraps it to <code>INT_MIN</code> — no warning, no error, just wrong output.</blockquote>
+
+<h2>7. Input and Output Functions</h2>
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int age;
+    double voltage;
+    char ch;
+
+    // getchar() — reads a single raw character (unformatted)
+    printf("Enter a character: ");
+    ch = (char)getchar();
+
+    // scanf() — formatted input: ALWAYS use & for primitives!
+    printf("Enter age and voltage: ");
+    if (scanf("%d %lf", &age, &voltage) != 2) {
+        printf("Invalid input!\n");
+        return 1;
+    }
+
+    printf("Character: %c\n", ch);
+    printf("Age: %d years | Voltage: %.3f V\n", age, voltage);
+
+    // putchar() — outputs a single character
+    putchar('\n');
+    putchar(ch);
+
+    return 0;
+}</code></pre>
+<p><strong>Format specifiers reference:</strong> <code>%d</code> (int), <code>%f</code> (float), <code>%lf</code> (double), <code>%c</code> (char), <code>%s</code> (string), <code>%p</code> (pointer address), <code>%lu</code> (unsigned long), <code>%zu</code> (size_t).</p>
+<blockquote>Forgetting <code>&</code> in <code>scanf()</code> is one of the most common C bugs. Without it, <code>scanf</code> interprets the variable's current value as a memory address — and writes there, causing a segmentation fault.</blockquote>
+
+<h2>8. Comments and Coding Style</h2>
+<pre><code>/* Multi-line block comment — ideal for file headers and function docs.
+   Cannot be nested: /* trying this */ breaks the comment! */
+
+// Single-line comment — brief inline notes
+
+/**
+ * @brief Converts Fahrenheit to Celsius.
+ * @param f  Temperature in Fahrenheit
+ * @return   Temperature in Celsius
+ */
+double fahrenheitToCelsius(double f) {
+    return (f - 32.0) * (5.0 / 9.0);
+}
+
+int main(void) {
+    printf("38°C = %.2f°F\n", fahrenheitToCelsius(100.4)); // 38.0000
+    return 0;
+}</code></pre>
+<p>Style conventions: use lowercase <code>snake_case</code> for variables/functions, UPPERCASE for macros, 4-space indentation (never mix tabs and spaces), always align braces consistently.</p>
+`,
+ quiz:[
+  {q:"Who created the C programming language and at which organization?",
+   opts:["Ken Thompson at MIT","Dennis Ritchie at AT&T Bell Labs","Linus Torvalds at Helsinki University","Brian Kernighan at IBM"],
+   ans:1, xp:10, exp:"Dennis Ritchie developed C at AT&T Bell Laboratories in 1972, closely tied to the Unix OS development."},
+  {q:"Which language directly preceded C in its evolutionary lineage?",
+   opts:["ALGOL 60","FORTRAN","B Language","Pascal"],
+   ans:2, xp:10, exp:"The B language (Ken Thompson, 1969) directly preceded C. Ritchie extended B's type system to create C."},
+  {q:"What is the correct output of: int x = INT_MAX; x++; printf('%d', x);",
+   opts:["INT_MAX + 1","A compiler error","INT_MIN (wraps around)","0"],
+   ans:2, xp:10, exp:"Signed integer overflow in C is undefined behavior; in practice on most systems it wraps to INT_MIN."},
+  {q:"Which format specifier is correct for reading a double with scanf()?",
+   opts:["%f","%d","%lf","%Lf"],
+   ans:2, xp:10, exp:"scanf() requires %lf for double. Using %f reads a float, not a double — a common bug."},
+  {q:"What does the preprocessor do during compilation?",
+   opts:["Converts C to machine code","Expands macros, includes headers, strips comments","Links object files","Optimizes loops"],
+   ans:1, xp:10, exp:"The preprocessor is a text-substitution engine that runs BEFORE the compiler sees your code."},
+  {q:"Which statement correctly declares a read-only constant in C?",
+   opts:["#define const PI 3.14","const double PI = 3.14;","readonly double PI = 3.14;","fixed double PI = 3.14;"],
+   ans:1, xp:10, exp:"const keyword creates a type-checked, block-scoped read-only variable. #define creates an untyped macro."},
+  {q:"What is the size of a double on modern 64-bit systems?",
+   opts:["4 bytes","2 bytes","8 bytes","16 bytes"],
+   ans:2, xp:10, exp:"A double is 8 bytes (64 bits) and provides about 15 significant decimal digits of precision."},
+  {q:"Why is it dangerous to omit & in scanf(\"%d\", age) ?",
+   opts:["scanf won't find the variable","It causes a compile error","age's value is treated as a memory address — segfault!","The program ignores the input"],
+   ans:2, xp:10, exp:"scanf needs the ADDRESS of where to write. Without &, it treats the current value of age as a pointer and writes to that (random) memory location."}
+ ]
+},
+
+// ── FREE MODULE 2 ──────────────────────────────────────────────────
+{id:2, free:true, icon:'🔀', level:'Beginner', title:'Operators & Decision Making',
+ excerpt:'Master every operator C offers — arithmetic, relational, logical, bitwise, and assignment. Then control program flow with if-else chains, nested conditions, and switch-case matrices.',
+ tags:['Beginner','Operators','Conditionals'], visual:'🔀', bg:'linear-gradient(135deg,#0a0a1a,#101028)',
+ concepts:['Arithmetic Operators','Relational Operators','Logical Operators','Assignment Operators','Increment & Decrement','Bitwise Operators','Conditional Statements','if-else Architecture','Nested Conditions','switch-case Statement'],
+ body:`
+<p>Operators are the computational engines of C. Decision statements are the cognitive pathways that allow software to branch based on runtime conditions. Together, they form the foundation of all algorithmic logic.</p>
+
+<h2>1. Arithmetic Operators</h2>
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a = 17, b = 5;
+
+    printf("Addition       : %d + %d = %d\n", a, b, a + b);  // 22
+    printf("Subtraction    : %d - %d = %d\n", a, b, a - b);  // 12
+    printf("Multiplication : %d * %d = %d\n", a, b, a * b);  // 85
+    printf("Division       : %d / %d = %d\n", a, b, a / b);  // 3 (integer division!)
+    printf("Modulus        : %d %% %d = %d\n", a, b, a % b); // 2
+
+    // Integer division truncates — use float cast for real division
+    printf("Real division  : %.4f\n", (double)a / b);          // 3.4000
+    return 0;
+}</code></pre>
+<blockquote>Integer division truncates toward zero: 17/5 = 3, not 3.4. Always cast to double when you need decimal results.</blockquote>
+
+<h2>2. Relational and Logical Operators</h2>
 <pre><code>int age = 20, marks = 85;
 
-// && (AND) — both must be true
-if (age >= 18 && marks >= 60) {
-    printf("Eligible for scholarship\\n");
+// Relational — produce 1 (true) or 0 (false)
+printf("%d\n", age > 18);   // 1
+printf("%d\n", age == 18);  // 0
+printf("%d\n", age != 18);  // 1
+printf("%d\n", marks >= 85); // 1
+
+// Logical operators
+if (age >= 18 && marks >= 75) {    // AND — both must be true
+    printf("Scholarship eligible\n");
 }
 
-// || (OR) — at least one must be true
-if (age < 10 || marks > 90) {
-    printf("Special case\\n");
+if (age < 10 || marks > 95) {     // OR — at least one true
+    printf("Special case\n");
 }
 
-// ! (NOT) — flips true/false
-if (!0) printf("This always runs\\n");  // !0 is true</code></pre>
-<h2>Increment, Decrement & Assignment</h2>
-<pre><code>int x = 5;
-printf("%d\\n", x++);  // Prints 5, THEN increments → x is 6
-printf("%d\\n", ++x);  // Increments FIRST → x is 7, prints 7
+if (!(age < 18)) {                 // NOT — flips truth value
+    printf("Adult user\n");
+}
 
-x += 10;  // Shorthand for x = x + 10
-x *= 2;   // Shorthand for x = x * 2</code></pre>
-<h2>if-else and Nested Conditions</h2>
+// Short-circuit evaluation: && stops at first false, || stops at first true
+int x = 0;
+if (x != 0 && 10/x > 2) {  // Safe: 10/x never executes if x == 0
+    printf("This won't crash\n");
+}</code></pre>
+
+<h2>3. Assignment and Increment/Decrement</h2>
+<pre><code>int x = 10;
+
+// Compound assignment
+x += 5;   // x = x + 5  →  15
+x -= 3;   // x = x - 3  →  12
+x *= 2;   // x = x * 2  →  24
+x /= 4;   // x = x / 4  →  6
+x %= 4;   // x = x % 4  →  2
+
+// Prefix vs Postfix — critical distinction!
+int a = 5;
+printf("%d\n", a++);  // Prints 5, THEN increments → a is 6
+printf("%d\n", a);    // Now prints 6
+
+int b = 5;
+printf("%d\n", ++b);  // Increments FIRST → b is 6, THEN prints 6
+
+// Classic exam trap
+int c = 5;
+int d = c++ + ++c;  // Undefined behavior — NEVER do this!</code></pre>
+
+<h2>4. Bitwise Operators</h2>
+<pre><code>unsigned int a = 0b1100;  // 12 in decimal
+unsigned int b = 0b1010;  // 10 in decimal
+
+printf("AND    : %d\n", a & b);   // 0b1000 = 8  (both bits must be 1)
+printf("OR     : %d\n", a | b);   // 0b1110 = 14 (at least one bit is 1)
+printf("XOR    : %d\n", a ^ b);   // 0b0110 = 6  (bits differ)
+printf("NOT    : %u\n", ~a);      // Inverts all bits (two's complement)
+printf("LEFT   : %d\n", a << 2);  // 0b110000 = 48 (multiply by 4)
+printf("RIGHT  : %d\n", a >> 1);  // 0b0110   = 6  (divide by 2)
+
+// Practical: checking if bit N is set
+int flags = 0b00101100;
+int n = 3;
+if (flags & (1 << n)) {
+    printf("Bit %d is SET\n", n);  // Bit 3 = 1 → prints this
+}</code></pre>
+
+<h2>5. if-else and Nested Conditions</h2>
 <pre><code>int marks = 72;
 
 if (marks >= 90) {
-    printf("Grade: A\\n");
+    printf("Grade: A (Distinction)\n");
+} else if (marks >= 80) {
+    printf("Grade: B (First Class)\n");
 } else if (marks >= 70) {
-    printf("Grade: B\\n");  // This runs
+    printf("Grade: C (Second Class)\n");  // ← This runs
 } else if (marks >= 50) {
-    printf("Grade: C\\n");
+    printf("Grade: D (Pass)\n");
 } else {
-    printf("Grade: F\\n");
+    printf("Grade: F (Fail)\n");
+}
+
+// Ternary operator — compact single-expression if-else
+const char *status = (marks >= 50) ? "PASS" : "FAIL";
+printf("Status: %s\n", status);</code></pre>
+
+<h2>6. switch-case Statement</h2>
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int day = 3;
+
+    switch (day) {
+        case 1:  printf("Monday\n");    break;
+        case 2:  printf("Tuesday\n");   break;
+        case 3:  printf("Wednesday\n"); break;  // ← Runs
+        case 4:  printf("Thursday\n");  break;
+        case 5:  printf("Friday\n");    break;
+        case 6:
+        case 7:  printf("Weekend\n");   break;  // Cases 6 & 7 share a block
+        default: printf("Invalid day\n");
+    }
+
+    // Fall-through demonstration (intentional)
+    int x = 2;
+    switch (x) {
+        case 1:
+        case 2:
+        case 3:
+            printf("1, 2, or 3\n"); // Runs for x=1,2,3
+            break;
+        default:
+            printf("Other\n");
+    }
+    return 0;
 }</code></pre>
-<h2>switch-case</h2>
-<p>Use <code>switch</code> when one variable is matched against specific integer or character values. It's cleaner than a long if-else chain:</p>
-<pre><code>int day = 3;
-switch (day) {
-    case 1: printf("Monday\\n");    break;
-    case 2: printf("Tuesday\\n");   break;
-    case 3: printf("Wednesday\\n"); break;  // Runs
-    default: printf("Weekend\\n");
-}
-</code></pre>
-<blockquote><strong>Never forget <code>break</code>.</strong> Without it, C falls through into the next case — a common bug that causes mysterious output.</blockquote>`},
+<blockquote><strong>Never forget <code>break</code></strong> in switch. Without it, execution falls through into the next case — printing output for cases you didn't intend to match.</blockquote>
+`,
+ quiz:[
+  {q:"What is the result of 17 / 5 in C when both operands are integers?",
+   opts:["3.4","3","4","2"],
+   ans:1, xp:10, exp:"Integer division truncates toward zero. 17/5 = 3 (remainder 2 discarded). Use (double)17/5 for 3.4."},
+  {q:"What is the output of: int a=5; printf('%d', a++); printf('%d', a);",
+   opts:["5 5","5 6","6 6","6 5"],
+   ans:1, xp:10, exp:"a++ is postfix: uses current value (5) THEN increments. So first print is 5, second print is 6."},
+  {q:"What does the expression 12 & 10 evaluate to in C? (12 = 1100b, 10 = 1010b)",
+   opts:["2","8","14","22"],
+   ans:1, xp:10, exp:"Bitwise AND: 1100 & 1010 = 1000 = 8. Both bits must be 1 to produce 1."},
+  {q:"In a switch statement, what happens if you omit the 'break' keyword after a case?",
+   opts:["Compilation error","The program skips the case","Fall-through: execution continues into the next case","The switch exits automatically"],
+   ans:2, xp:10, exp:"Without break, C 'falls through' to execute subsequent cases regardless of their values — a common source of bugs."},
+  {q:"Which logical operator uses short-circuit evaluation to skip the right operand?",
+   opts:["& and |","&& and ||","^ and ~","<< and >>"],
+   ans:1, xp:10, exp:"&& stops evaluation at first false. || stops at first true. This enables safe patterns like: if (ptr != NULL && ptr->value > 0)."},
+  {q:"What is the value of x after: int x = 10; x *= 2; x -= 5; x /= 3;",
+   opts:["5","7","8","6"],
+   ans:0, xp:10, exp:"x=10 → x*=2 gives 20 → x-=5 gives 15 → x/=3 gives 5 (integer division)."},
+  {q:"What does the bitwise left shift operator (<<) do to a value?",
+   opts:["Divides by powers of 2","Multiplies by powers of 2","Inverts all bits","Performs logical AND"],
+   ans:1, xp:10, exp:"a << n multiplies a by 2^n. Example: 3 << 2 = 12 (3 × 4). This is often faster than multiplication."},
+  {q:"Which of these is NOT a valid relational operator in C?",
+   opts:[">=","<=","<>","!="],
+   ans:2, xp:10, exp:"C uses != for 'not equal'. The operator <> is used in Pascal/SQL, not C."}
+ ]
+},
 
-  {id:3, free:true, icon:'🔁', level:'Beginner', title:'Loops & Pattern Programming',
-   excerpt:'Automate repetition with for, while, and do-while loops. Add precision with break, continue, and goto. Then put it all together with number and star pattern exercises.',
-   tags:['Beginner','Loops','Patterns'], visual:'🔁', bg:'linear-gradient(135deg,#0f0a0a,#201010)',
-   concepts:['for Loop','while Loop','do-while Loop','Nested Loops','break Statement','continue Statement','goto Statement','Number Patterns','Star Patterns','Logic Building'],
-   body:`<p>Loops are what make computers useful — no human wants to write <code>printf</code> a hundred times. Mastering loops unlocks the ability to process data, build patterns, and automate everything.</p>
-<h2>The Three Loop Types</h2>
-<pre><code>// for — best when iteration count is KNOWN
-for (int i = 1; i <= 5; i++) {
-    printf("%d ", i);  // 1 2 3 4 5
-}
+// ── FREE MODULE 3 ──────────────────────────────────────────────────
+{id:3, free:true, icon:'🔁', level:'Beginner', title:'Loops & Pattern Programming',
+ excerpt:'Master for, while, and do-while loops down to their assembly mechanics. Add precision with break, continue, and goto. Build star and numeric patterns with nested loop coordinate logic.',
+ tags:['Beginner','Loops','Patterns'], visual:'🔁', bg:'linear-gradient(135deg,#0f0a0a,#201010)',
+ concepts:['while Loop Architecture','for Loop Optimization','do-while Model','Nested Loops','break / continue / goto','Pattern Programming','Floyd Triangle','Matrix Patterns'],
+ body:`
+<p>Loops allow programs to repeat operations across enormous datasets with maximum efficiency. Mastering loop selection and structure is non-negotiable for every systems programmer.</p>
 
-// while — best when condition drives the loop (count unknown)
-int n = 1;
-while (n <= 5) {
-    printf("%d ", n);
-    n++;
-}
+<h2>1. The while Loop (Entry-Controlled)</h2>
+<p>The <code>while</code> loop evaluates its condition <em>before</em> each iteration. If the condition is false initially, the body is never executed. Best for scenarios where iteration count is unknown at the start.</p>
+<pre><code>#include &lt;stdio.h&gt;
 
-// do-while — runs at LEAST once before checking condition
-int attempt = 0;
-do {
-    printf("Attempting...\\n");
-    attempt++;
-} while (attempt < 3);</code></pre>
-<h2>break and continue</h2>
-<pre><code>for (int i = 1; i <= 10; i++) {
-    if (i == 5) continue;  // Skip 5, keep looping
-    if (i == 8) break;     // Stop entirely at 8
-    printf("%d ", i);      // Prints: 1 2 3 4 6 7
+int main(void) {
+    int retryCount = 3;
+
+    // Entry-controlled: checks condition first
+    while (retryCount > 0) {
+        printf("Attempting connection... Retries left: %d\n", retryCount);
+        retryCount--;          // UPDATE — forgetting this = infinite loop!
+    }
+    printf("Connection sequence complete.\n");
+
+    // Sentinel-controlled: loop until specific input
+    int input;
+    printf("Enter numbers (0 to stop): ");
+    while (scanf("%d", &input) == 1 && input != 0) {
+        printf("  → Processed: %d\n", input);
+    }
+    return 0;
 }</code></pre>
-<h2>Nested Loops — Star Pattern</h2>
-<p>Nested loops are the key to patterns. The <strong>outer loop</strong> controls rows; the <strong>inner loop</strong> controls columns:</p>
-<pre><code>// Right triangle
+
+<h2>2. The for Loop (Deterministic Iteration)</h2>
+<p>Use <code>for</code> when the iteration count is known before the loop starts. The three-expression structure: <code>initialization ; condition ; post-step</code>.</p>
+<pre><code>// Classic counting loop
+for (int i = 1; i <= 10; i++) {
+    printf("%d ", i);
+}
+printf("\n");   // 1 2 3 4 5 6 7 8 9 10
+
+// Reverse iteration
+for (int i = 10; i >= 1; i--) {
+    printf("%d ", i);
+}
+printf("\n");   // 10 9 8 7 ... 1
+
+// Step by 2
+for (int i = 0; i <= 20; i += 2) {
+    printf("%d ", i);   // Even numbers 0-20
+}
+
+// Multiple variables (C99+)
+for (int i = 0, j = 10; i < j; i++, j--) {
+    printf("i=%d j=%d\n", i, j);
+}</code></pre>
+
+<h2>3. The do-while Loop (Exit-Controlled)</h2>
+<p>The <code>do-while</code> loop guarantees the body executes <em>at least once</em> before checking the condition. Ideal for menu systems and input validation.</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int choice;
+
+    do {
+        printf("\n--- MENU ---\n");
+        printf("1. View Data\n");
+        printf("2. Add Entry\n");
+        printf("3. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: printf("Displaying data...\n"); break;
+            case 2: printf("Adding entry...\n");    break;
+            case 3: printf("Goodbye!\n");           break;
+            default: printf("Invalid choice.\n");
+        }
+    } while (choice != 3);   // Keep looping until user exits
+
+    return 0;
+}</code></pre>
+
+<h2>4. Nested Loops and Patterns</h2>
+<p>The <strong>outer loop</strong> controls rows; the <strong>inner loop</strong> controls columns. This maps to a 2D coordinate system.</p>
+<pre><code>// Right triangle star pattern
 int rows = 5;
 for (int i = 1; i <= rows; i++) {
     for (int j = 1; j <= i; j++) {
         printf("* ");
     }
-    printf("\\n");
+    printf("\n");
 }
 /*
 *
@@ -276,468 +703,1809 @@ for (int i = 1; i <= rows; i++) {
 * * *
 * * * *
 * * * * *
-*/</code></pre>
-<h2>Number Pattern — Sum of Digits</h2>
-<pre><code>int num = 12345, sum = 0;
-while (num > 0) {
-    sum += num % 10;  // Extract last digit
-    num /= 10;        // Remove last digit
-}
-printf("Sum of digits: %d\\n", sum);  // 15</code></pre>
-<blockquote>Pattern problems are the best loop training. Before writing code, always ask: what does the <em>row</em> value determine? What does the <em>column</em> value determine?</blockquote>`},
+*/
 
-  {id:4, free:true, icon:'🧩', level:'Intermediate', title:'Functions & Modular Programming',
-   excerpt:'Break programs into reusable pieces. Understand function declarations, parameter passing, return values, recursion, and storage classes — the pillars of clean, modular C code.',
-   tags:['Intermediate','Functions','Recursion'], visual:'🧩', bg:'linear-gradient(135deg,#0a0f14,#101828)',
-   concepts:['Function Basics','Declaration vs Definition','Parameters & Arguments','Return Values','Call by Value','Recursion','Storage Classes','Scope & Lifetime','Header Files','Modular Design'],
-   body:`<p>Functions are the building blocks of every real program. A function packages a specific task into a named, reusable unit. Instead of writing the same logic twice, you write it once and call it.</p>
-<h2>Declaring and Defining Functions</h2>
+// Pyramid pattern
+for (int i = 1; i <= rows; i++) {
+    // Print leading spaces
+    for (int sp = 1; sp <= rows - i; sp++) printf(" ");
+    // Print stars
+    for (int j = 1; j <= 2*i - 1; j++) printf("*");
+    printf("\n");
+}
+/*
+    *
+   ***
+  *****
+ *******
+*********
+*/
+
+// Floyd's Triangle (numeric pattern)
+int num = 1;
+for (int i = 1; i <= 5; i++) {
+    for (int j = 1; j <= i; j++) {
+        printf("%d ", num++);
+    }
+    printf("\n");
+}
+/*
+1
+2 3
+4 5 6
+7 8 9 10
+11 12 13 14 15
+*/</code></pre>
+
+<h2>5. break, continue, and goto</h2>
+<pre><code>// break — exit loop immediately
+for (int i = 1; i <= 10; i++) {
+    if (i == 6) break;
+    printf("%d ", i);   // 1 2 3 4 5
+}
+
+// continue — skip this iteration, keep looping
+for (int i = 1; i <= 10; i++) {
+    if (i % 2 == 0) continue;   // Skip even numbers
+    printf("%d ", i);             // 1 3 5 7 9
+}
+
+// goto — unconditional jump (use sparingly; only for cleanup)
+    int errorCode = 1;
+    if (errorCode) goto cleanup;
+    printf("Normal execution\n");
+
+cleanup:
+    printf("Cleaning up resources...\n");
+
+// Nested loop break-out using goto
+for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 5; j++) {
+        if (i == 2 && j == 3) goto done;
+        printf("(%d,%d) ", i, j);
+    }
+}
+done: printf("\nDone.\n");</code></pre>
+
+<h2>6. Classic Loop Algorithms</h2>
+<pre><code>// Sum of digits
+int num = 12345, sum = 0;
+while (num > 0) {
+    sum += num % 10;   // Extract last digit
+    num /= 10;          // Remove last digit
+}
+printf("Sum of digits: %d\n", sum);   // 15
+
+// Prime number check
+int n = 37, isPrime = 1;
+for (int i = 2; i * i <= n; i++) {   // Only need to check up to √n
+    if (n % i == 0) { isPrime = 0; break; }
+}
+printf("%d is %s\n", n, isPrime ? "PRIME" : "NOT PRIME");
+
+// Fibonacci sequence
+int a = 0, b = 1, temp;
+for (int i = 0; i < 10; i++) {
+    printf("%d ", a);
+    temp = a + b;
+    a = b;
+    b = temp;
+}   // 0 1 1 2 3 5 8 13 21 34</code></pre>
+`,
+ quiz:[
+  {q:"Which loop is best when you don't know the number of iterations in advance?",
+   opts:["for loop","while loop","do-while loop","All are equally suitable"],
+   ans:1, xp:10, exp:"while is the entry-controlled non-deterministic loop — it runs based on a condition, not a count. Perfect for 'loop until X happens' scenarios."},
+  {q:"What is the key difference between while and do-while loops?",
+   opts:["do-while is faster","do-while executes the body at least once before checking the condition","while can't use break","do-while requires an integer condition"],
+   ans:1, xp:10, exp:"do-while is exit-controlled: it runs the body FIRST, then checks the condition. Guaranteed minimum one execution."},
+  {q:"What does 'continue' do inside a loop?",
+   opts:["Exits the loop entirely","Restarts the loop from the beginning with counter reset","Skips the current iteration and continues with the next","Pauses execution"],
+   ans:2, xp:10, exp:"continue skips the rest of the current iteration's body and jumps to the loop's update expression (for) or condition check (while)."},
+  {q:"In the pattern loop: for(i=1;i<=5;i++) for(j=1;j<=i;j++) print(*) — how many stars total?",
+   opts:["5","10","15","25"],
+   ans:2, xp:10, exp:"Row 1: 1 star, Row 2: 2, Row 3: 3, Row 4: 4, Row 5: 5. Total = 1+2+3+4+5 = 15 stars."},
+  {q:"What is the correct way to avoid an infinite while loop?",
+   opts:["Add a return statement","Ensure the loop variable is updated so the condition eventually becomes false","Use break in every loop","Declare the variable as const"],
+   ans:1, xp:10, exp:"The loop condition must eventually evaluate to false. Always ensure the loop body contains an update (increment, decrement, input change) that can satisfy the exit condition."},
+  {q:"What is the output: for(int i=1;i<=5;i++){if(i==3)continue; printf('%d ',i);}",
+   opts:["1 2 3 4 5","1 2 4 5","1 2","3 4 5"],
+   ans:1, xp:10, exp:"When i==3, continue skips printf for that iteration. Output: 1 2 4 5."},
+  {q:"Which loop type is most appropriate for a menu-driven program?",
+   opts:["for loop","while loop","do-while loop","goto loop"],
+   ans:2, xp:10, exp:"do-while is ideal for menus: display the menu at least once (guaranteed execution), then loop back only if the user didn't choose to exit."},
+  {q:"What is Floyd's Triangle?",
+   opts:["A star pyramid pattern","Consecutive integers arranged in a right-triangle pattern starting from 1","A diamond of zeros and ones","Alternating plus and minus signs"],
+   ans:1, xp:10, exp:"Floyd's Triangle fills rows with consecutive integers: Row 1: [1], Row 2: [2,3], Row 3: [4,5,6], etc."}
+ ]
+},
+
+// ── FREE MODULE 4 ──────────────────────────────────────────────────
+{id:4, free:true, icon:'🧩', level:'Intermediate', title:'Functions & Modular Programming',
+ excerpt:'Decompose programs into reusable components. Cover declarations, prototypes, stack frames, call-by-value, recursion, storage classes, and multi-file modular system design.',
+ tags:['Intermediate','Functions','Recursion'], visual:'🧩', bg:'linear-gradient(135deg,#0a0f14,#101828)',
+ concepts:['Function Basics & Architecture','Parameterization & Return','Call by Value Mechanics','Recursion Engineering','Storage Classes & Scope','Multi-File Modular Design'],
+ body:`
+<p>Functions are the architectural pillars of all professional software. They enforce the Divide and Conquer principle — decomposing complex problems into isolated, reusable, testable units.</p>
+
+<h2>1. Function Basics — The Three Pillars</h2>
+<p>Every function requires three components:</p>
 <pre><code>#include &lt;stdio.h&gt;
 
-// Declaration (prototype) — tells the compiler the function exists
-int add(int a, int b);
+// 1. PROTOTYPE (Declaration) — informs compiler of the function's signature BEFORE use
+int calculateRectangleArea(int width, int height);
+void printSystemStatus(void);
 
-int main() {
-    int result = add(5, 3);
-    printf("Sum: %d\\n", result);  // 8
+int main(void) {
+    // 3. INVOCATION — suspend main(), jump to function, return here
+    printSystemStatus();
+    int area = calculateRectangleArea(8, 5);
+    printf("Rectangle Area: %d sq units\n", area);
     return 0;
 }
 
-// Definition — the actual implementation
-int add(int a, int b) {
-    return a + b;
-}</code></pre>
-<h2>Call by Value</h2>
-<p>In C, function arguments are <strong>copied</strong>. The original variable is never modified unless you pass a pointer:</p>
-<pre><code>void doubleIt(int x) {
-    x = x * 2;  // Only modifies the local copy!
+// 2. DEFINITION — actual executable implementation
+int calculateRectangleArea(int width, int height) {
+    if (width <= 0 || height <= 0) return -1;  // Guard clause
+    return width * height;
 }
 
-int n = 10;
-doubleIt(n);
-printf("%d\\n", n);  // Still 10 — call by value!</code></pre>
-<h2>Recursion</h2>
-<p>A function that calls itself. Every recursive function needs a <strong>base case</strong> (the stopping condition) or it runs forever:</p>
-<pre><code>// Factorial: n! = n × (n-1) × ... × 1
+void printSystemStatus(void) {
+    printf("[SYSTEM] Engine active. Ready for computation.\n");
+}</code></pre>
+
+<h2>2. Call by Value — Variable Isolation</h2>
+<p>In C, function arguments are <strong>copies</strong> — the original variable is NEVER modified unless you pass its address (pointer):</p>
+<pre><code>void attemptDoubling(int x) {
+    x = x * 2;   // Modifies only the LOCAL COPY — not the original!
+    printf("Inside function: x = %d\n", x);
+}
+
+int main(void) {
+    int value = 10;
+    attemptDoubling(value);
+    printf("Outside function: value = %d\n", value);  // Still 10!
+    return 0;
+}
+
+// Proof: check addresses
+void checkAddresses(int param) {
+    printf("Param address inside function : %p\n", (void*)&param);
+}
+int n = 42;
+printf("Variable address in main : %p\n", (void*)&n);
+checkAddresses(n);   // Different addresses → these are separate memory locations!</code></pre>
+
+<h2>3. Recursion Engineering</h2>
+<p>A recursive function calls itself. <strong>Every recursive function needs:</strong></p>
+<ul>
+  <li>A <strong>base case</strong> — the stopping condition (no recursive call)</li>
+  <li>An <strong>inductive step</strong> — the recursive call that reduces the problem</li>
+</ul>
+<pre><code>// Factorial: n! = n × (n-1) × ... × 1 × 0! = 1
 int factorial(int n) {
-    if (n == 0) return 1;          // Base case
-    return n * factorial(n - 1);   // Recursive call
+    if (n < 0) return -1;      // Error guard
+    if (n == 0) return 1;      // Base case: 0! = 1
+    return n * factorial(n - 1); // Inductive: reduces toward 0
 }
 
-printf("%d\\n", factorial(5));  // 120</code></pre>
-<h2>Storage Classes</h2>
-<pre><code>auto int x = 5;     // Default — exists only in its block
-static int count;   // Retains value between function calls!
-extern int g;       // Declared elsewhere (another file)
-register int i;     // Hint: store in CPU register (fast loop counter)</code></pre>
-<blockquote>Think of recursion as a stack of sticky notes. Each call adds a note; each return removes one. The base case is when you stop adding notes and start resolving them.</blockquote>`},
+// Stack trace for factorial(4):
+// factorial(4) → 4 * factorial(3)
+// factorial(3) → 3 * factorial(2)
+// factorial(2) → 2 * factorial(1)
+// factorial(1) → 1 * factorial(0)
+// factorial(0) → returns 1  (BASE CASE HIT — stack unwinds)
+// factorial(1) → 1 * 1 = 1
+// factorial(2) → 2 * 1 = 2
+// factorial(3) → 3 * 2 = 6
+// factorial(4) → 4 * 6 = 24 ✓
 
-  {id:5, free:true, icon:'📦', level:'Intermediate', title:'Arrays & Strings',
-   excerpt:'Store and manipulate collections of data. Cover 1D and 2D arrays, matrix operations, string I/O, standard string functions, and practical mini-projects using arrays.',
-   tags:['Intermediate','Arrays','Strings'], visual:'📦', bg:'linear-gradient(135deg,#0a0f1a,#101828)',
-   concepts:['1D Arrays','2D Arrays','Matrix Operations','String Basics','String I/O with gets/fgets','strlen strcpy strcmp strcat','Character Arrays','Practical Exercises','Mini Projects'],
-   body:`<p>An <strong>array</strong> stores multiple values of the same data type in contiguous memory. Instead of declaring <code>int a, b, c, d, e</code>, you declare <code>int arr[5]</code>. Arrays and strings are inseparable in C.</p>
-<h2>1D Arrays</h2>
-<pre><code>int marks[5] = {85, 90, 78, 92, 88};
-
-// Access by index (0-based!)
-printf("%d\\n", marks[0]);  // 85
-printf("%d\\n", marks[4]);  // 88
-
-// Loop through array
-int sum = 0;
-for (int i = 0; i < 5; i++) {
-    sum += marks[i];
+// Fibonacci
+int fibonacci(int n) {
+    if (n <= 0) return 0;
+    if (n == 1) return 1;
+    return fibonacci(n - 1) + fibonacci(n - 2);  // Binary recursion
 }
-printf("Average: %.1f\\n", (float)sum / 5);  // 86.6</code></pre>
-<h2>2D Arrays & Matrices</h2>
-<pre><code>int matrix[3][3] = {
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9}
-};
 
-// Print matrix
-for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-        printf("%d ", matrix[i][j]);
-    }
-    printf("\\n");
+// Tower of Hanoi
+void hanoi(int n, char from, char to, char aux) {
+    if (n == 0) return;           // Base case
+    hanoi(n-1, from, aux, to);   // Move n-1 disks to auxiliary
+    printf("Move disk %d: %c → %c\n", n, from, to);
+    hanoi(n-1, aux, to, from);   // Move n-1 disks from aux to target
 }</code></pre>
-<h2>Strings in C</h2>
-<p>C has no built-in string type. A string is just a <strong>character array</strong> ending with a null terminator <code>'\\0'</code>:</p>
+<blockquote>Think of recursion as a stack of sticky notes. Each call ADDS a note (stack frame). Each return REMOVES one. Missing the base case means the stack grows until the system kills it with a stack overflow.</blockquote>
+
+<h2>4. Storage Classes and Variable Lifetimes</h2>
+<pre><code>#include &lt;stdio.h&gt;
+
+// GLOBAL — file scope, persists for entire program lifetime
+int globalCounter = 0;
+
+void demonstrateStorage(void) {
+    auto int autoVar = 100;    // auto — default; destroyed on function return
+    static int staticCount = 0;  // static — persists between calls!
+    register int loopIdx;      // register — hint to keep in CPU register (fast)
+
+    staticCount++;
+    printf("auto (recreated each call): %d\n", autoVar);
+    printf("static (persists): %d\n", staticCount);
+}
+
+int main(void) {
+    demonstrateStorage();  // static: 1
+    demonstrateStorage();  // static: 2
+    demonstrateStorage();  // static: 3
+    return 0;
+}
+
+// EXTERN — access a global variable defined in another file
+// In file utils.c:  int sharedData = 42;
+// In file main.c:   extern int sharedData;  // Reference, not definition</code></pre>
+
+<h2>5. Multi-File Modular Design</h2>
+<pre><code>// math_utils.h — PUBLIC INTERFACE (header file)
+#ifndef MATH_UTILS_H   // Include guard: prevents double-inclusion
+#define MATH_UTILS_H
+
+int add(int a, int b);
+int subtract(int a, int b);
+double power(double base, int exp);
+
+#endif  // MATH_UTILS_H
+
+// math_utils.c — PRIVATE IMPLEMENTATION
+#include "math_utils.h"
+#include &lt;stdio.h&gt;
+
+int add(int a, int b) { return a + b; }
+int subtract(int a, int b) { return a - b; }
+double power(double base, int exp) {
+    double result = 1.0;
+    for (int i = 0; i < exp; i++) result *= base;
+    return result;
+}
+
+// main.c — consumer
+#include &lt;stdio.h&gt;
+#include "math_utils.h"   // Use quotes for local headers
+
+int main(void) {
+    printf("3 + 4 = %d\n", add(3, 4));
+    printf("2^10 = %.0f\n", power(2.0, 10));
+    return 0;
+}
+
+// Build: gcc main.c math_utils.c -o program</code></pre>
+`,
+ quiz:[
+  {q:"What is a function prototype (forward declaration) used for?",
+   opts:["To define the function's logic","To allocate memory for the function","To inform the compiler of the function's name, return type, and parameters before it's defined","To import external libraries"],
+   ans:2, xp:10, exp:"A prototype tells the compiler what to expect when it sees a function call — enabling type-checking before the actual definition appears in the code."},
+  {q:"In call-by-value, what happens to the original variable when the function modifies its parameter?",
+   opts:["It's modified permanently","Nothing — the function operates on a copy","It's set to zero","A runtime error occurs"],
+   ans:1, xp:10, exp:"C copies the argument value into a new stack location for the parameter. The original variable's memory is untouched."},
+  {q:"What happens if a recursive function has no base case?",
+   opts:["It returns 0 by default","The compiler rejects it","Stack overflow — it grows until memory is exhausted","It loops forever without crashing"],
+   ans:2, xp:10, exp:"Without a base case to stop recursion, each call pushes a new stack frame indefinitely, causing a stack overflow (segfault or crash)."},
+  {q:"What is the value of factorial(0) by mathematical definition?",
+   opts:["0","1","undefined","-1"],
+   ans:1, xp:10, exp:"0! = 1 by mathematical convention. This is also the base case in recursive factorial implementations."},
+  {q:"What does the 'static' keyword do to a LOCAL variable inside a function?",
+   opts:["Makes it faster","Makes it read-only","Gives it persistent storage that survives between function calls","Exports it to other files"],
+   ans:2, xp:10, exp:"A static local variable is initialized only once and retains its value between calls, unlike auto variables which are recreated each time."},
+  {q:"What is the purpose of an include guard (#ifndef HEADER_H / #define HEADER_H / #endif)?",
+   opts:["To encrypt the header file","To prevent the header from being included more than once","To mark functions as inline","To create conditional compilation for debugging"],
+   ans:1, xp:10, exp:"Without include guards, if file A and B both include the same header, and main.c includes both A and B, the header gets processed twice — causing redefinition errors."},
+  {q:"Which storage class tells the compiler to try storing a variable in a CPU register?",
+   opts:["auto","static","extern","register"],
+   ans:3, xp:10, exp:"register is a hint to the compiler to use a CPU register instead of RAM for a variable — useful for heavily-used loop counters. Modern compilers often ignore this hint."},
+  {q:"What does 'extern' do when used with a variable declaration?",
+   opts:["Creates a new global variable","Declares that the variable is defined in another translation unit (file)","Makes the variable static","Allocates it on the heap"],
+   ans:1, xp:10, exp:"extern is a reference declaration, not a definition. It tells the compiler 'this variable exists elsewhere — find it during linking.'"}
+ ]
+},
+
+// ── FREE MODULE 5 ──────────────────────────────────────────────────
+{id:5, free:true, icon:'📦', level:'Intermediate', title:'Arrays & Strings',
+ excerpt:'Store data collections in contiguous memory. Master 1D/2D arrays, matrix arithmetic, the null-terminator string model, bounded I/O, and the standard string.h library functions.',
+ tags:['Intermediate','Arrays','Strings'], visual:'📦', bg:'linear-gradient(135deg,#0a0f1a,#101828)',
+ concepts:['1D Arrays & Memory Layouts','2D Arrays & Matrix Computing','Matrix Transformations','Character Arrays & String Foundations','String I/O & Buffer Management','string.h Library'],
+ body:`
+<p>An array is a fixed-size, contiguous block of memory holding elements of a single type. C strings are character arrays terminated by a null byte. These two structures underpin nearly every algorithm in C.</p>
+
+<h2>1. One-Dimensional Arrays & Memory Layout</h2>
+<p>Arrays store elements at consecutive memory addresses. Element access is O(1) using the formula: <code>Address = BaseAddress + (Index × sizeof(Type))</code></p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int marks[5] = {85, 90, 78, 92, 88};  // 5 × 4 bytes = 20 bytes contiguous
+
+    // Access by index (0-based — going to 5 is UNDEFINED BEHAVIOR)
+    printf("marks[0] = %d at address %p\n", marks[0], (void*)&marks[0]);
+    printf("marks[1] = %d at address %p\n", marks[1], (void*)&marks[1]);
+    // Addresses will differ by exactly 4 bytes (sizeof int)
+
+    // Traverse and compute
+    int sum = 0, min = marks[0], max = marks[0];
+    for (int i = 0; i < 5; i++) {
+        sum += marks[i];
+        if (marks[i] < min) min = marks[i];
+        if (marks[i] > max) max = marks[i];
+    }
+    printf("Sum: %d | Average: %.1f | Min: %d | Max: %d\n",
+           sum, (float)sum/5, min, max);
+
+    // Partial initialization — remaining elements are set to 0
+    int scores[10] = {1, 2, 3};   // [1, 2, 3, 0, 0, 0, 0, 0, 0, 0]
+    int zeros[5]   = {0};          // All zeros
+
+    return 0;
+}</code></pre>
+
+<h2>2. Two-Dimensional Arrays & Matrices</h2>
+<p>A 2D array is stored in <strong>row-major order</strong> — all of row 0, then all of row 1, etc. Linear address = BaseAddress + (row × cols + col) × sizeof(Type).</p>
+<pre><code>#include &lt;stdio.h&gt;
+#define ROWS 3
+#define COLS 3
+
+int main(void) {
+    int A[ROWS][COLS] = {{1,2,3},{4,5,6},{7,8,9}};
+    int B[ROWS][COLS] = {{9,8,7},{6,5,4},{3,2,1}};
+    int C[ROWS][COLS] = {0};   // Result matrix
+
+    // Matrix Addition
+    for (int i = 0; i < ROWS; i++)
+        for (int j = 0; j < COLS; j++)
+            C[i][j] = A[i][j] + B[i][j];
+
+    printf("Matrix A + B:\n");
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) printf("%3d ", C[i][j]);
+        printf("\n");
+    }
+
+    // Matrix Multiplication (requires A.cols == B.rows)
+    int P[ROWS][COLS] = {0};
+    for (int i = 0; i < ROWS; i++)
+        for (int j = 0; j < COLS; j++)
+            for (int k = 0; k < COLS; k++)
+                P[i][j] += A[i][k] * B[k][j];
+
+    // Transpose: swap A[i][j] with A[j][i]
+    int T[COLS][ROWS];
+    for (int i = 0; i < ROWS; i++)
+        for (int j = 0; j < COLS; j++)
+            T[j][i] = A[i][j];
+
+    return 0;
+}</code></pre>
+
+<h2>3. Character Arrays & The String Model</h2>
+<p>C has no built-in string type. A "string" is a <code>char</code> array terminated by a null byte <code>'\0'</code> (ASCII 0). This sentinel character marks the end of the string.</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    // String literal initialization — compiler adds '\0' automatically
+    char name[20] = "Dithsa";
+    // Stored as: ['D','i','t','h','s','a','\0', ... (garbage)]
+
+    // Manual char array — YOU must add '\0'
+    char manual[7] = {'D','i','t','h','s','a','\0'};
+
+    printf("Name: %s\n", name);
+    printf("Length: %lu\n", strlen(name));   // 6 (doesn't count '\0')
+    printf("sizeof: %lu\n", sizeof(name));   // 20 (the full array size)
+
+    // Accessing individual characters
+    for (int i = 0; name[i] != '\0'; i++) {
+        printf("name[%d] = '%c' (ASCII %d)\n", i, name[i], name[i]);
+    }
+    return 0;
+}</code></pre>
+
+<h2>4. String I/O — Safe vs Unsafe</h2>
 <pre><code>#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
-char name[20] = "Dithsa";
+int main(void) {
+    char input[50];
 
-printf("Length: %lu\\n", strlen(name));     // 6
-printf("Name: %s\\n", name);
+    // UNSAFE — gets() has NO buffer limit → stack overflow vulnerability!
+    // gets(input);   // NEVER USE THIS
 
-char copy[20];
-strcpy(copy, name);  // Copy string
-strcat(copy, " Dutta");  // Concatenate
-printf("%s\\n", copy);   // Dithsa Dutta
+    // SAFE — fgets() limits input to sizeof(input)-1 characters
+    printf("Enter your name: ");
+    fgets(input, sizeof(input), stdin);
 
-// Safe input
-char input[50];
-fgets(input, sizeof(input), stdin);  // Safer than gets()</code></pre>
-<blockquote><strong>Never use <code>gets()</code></strong> — it doesn't check buffer boundaries and is a classic security vulnerability. Always use <code>fgets()</code> instead.</blockquote>`},
+    // fgets includes '\n' — strip it if needed
+    input[strcspn(input, "\n")] = '\0';
 
-  {id:6, free:true, icon:'🎯', level:'Intermediate', title:'Pointers Fundamentals',
-   excerpt:'Unlock the most powerful — and feared — feature of C. Understand memory addresses, pointer arithmetic, arrays and pointers, double pointers, and dynamic memory allocation.',
-   tags:['Intermediate','Pointers','Memory'], visual:'🎯', bg:'linear-gradient(135deg,#0f0a0a,#201010)',
-   concepts:['Introduction to Pointers','Memory Addresses','Pointer Declaration','Pointer Arithmetic','Arrays & Pointers','Pointers with Functions','Double Pointers','malloc calloc realloc free','Dynamic Memory Basics'],
-   body:`<p>A <strong>pointer</strong> is a variable that stores a memory address. That's it. But this simple concept gives you direct control over memory — which is why C can do things other languages cannot.</p>
-<h2>Declaring and Using Pointers</h2>
-<pre><code>#include &lt;stdio.h&gt;
+    printf("Hello, %s!\n", input);
 
-int main() {
-    int age = 20;
-    int *ptr = &age;   // ptr stores the address of age
+    // %s in scanf stops at whitespace — can't read "John Doe"
+    // Use fgets for multi-word strings
 
-    printf("Value of age: %d\\n", age);    // 20
-    printf("Address of age: %p\\n", &age); // e.g. 0x7fff5c...
-    printf("Value of ptr: %p\\n", ptr);    // Same address
-    printf("Dereferenced: %d\\n", *ptr);   // 20 — go to that address, read value
+    // puts() — outputs string + newline
+    puts("This is a line with automatic newline.");
 
-    *ptr = 25;   // Modify age THROUGH the pointer
-    printf("age is now: %d\\n", age);  // 25!
     return 0;
 }</code></pre>
-<h2>Pointer Arithmetic</h2>
-<p>When you add 1 to a pointer, it advances by the <em>size of its type</em> — not literally by 1 byte:</p>
-<pre><code>int arr[4] = {10, 20, 30, 40};
-int *p = arr;  // Points to arr[0]
 
-printf("%d\\n", *p);       // 10
-printf("%d\\n", *(p + 1)); // 20  — advances 4 bytes (sizeof int)
-printf("%d\\n", *(p + 3)); // 40</code></pre>
-<h2>Pointers with Functions — Call by Reference</h2>
-<pre><code>void swap(int *a, int *b) {
+<h2>5. The string.h Library</h2>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char src[50] = "Hello, C!";
+    char dest[50];
+    char joined[100] = "IT ";
+
+    // strlen — count characters (not counting '\0')
+    printf("Length: %lu\n", strlen(src));   // 9
+
+    // strcpy — copy string (UNSAFE if dest is too small!)
+    strcpy(dest, src);   // dest = "Hello, C!"
+    // SAFER: strncpy(dest, src, sizeof(dest)-1); dest[sizeof(dest)-1] = '\0';
+
+    // strcat — concatenate strings
+    strcat(joined, "Study Hub");   // joined = "IT Study Hub"
+    // SAFER: strncat(joined, "Study Hub", sizeof(joined)-strlen(joined)-1);
+
+    // strcmp — compare strings (returns 0 if equal, <0 or >0 otherwise)
+    if (strcmp(src, dest) == 0) printf("Strings are identical\n");
+
+    // strstr — find substring
+    char *found = strstr(src, "C!");
+    if (found) printf("Found 'C!' at position: %ld\n", found - src);
+
+    // strchr — find first occurrence of a character
+    char *pos = strchr(src, ',');
+    if (pos) printf("Comma at index: %ld\n", pos - src);
+
+    return 0;
+}</code></pre>
+<blockquote><strong>Never use <code>gets()</code></strong> or unbounded <code>strcpy()</code>/<code>strcat()</code> in production code. These are the root cause of thousands of real-world security vulnerabilities. Always use bounded alternatives with explicit size limits.</blockquote>
+`,
+ quiz:[
+  {q:"What is stored at index sizeof(arr)-1 for a string array char arr[10] = \"Hello\"?",
+   opts:["'o'","'\\0' (null terminator)","garbage value","0x00FF"],
+   ans:0, xp:10, exp:"sizeof(arr)=10, so index 9 contains whatever was left in memory. 'Hello' uses indices 0-4, \\0 at index 5, then garbage at 6-9. The \\0 is at index 5, not 9."},
+  {q:"What does strlen('Hello') return?",
+   opts:["6 (including null terminator)","5 (excluding null terminator)","10 (sizeof the array)","4"],
+   ans:1, xp:10, exp:"strlen counts characters until (not including) the '\\0' null terminator. 'Hello' has 5 characters."},
+  {q:"In row-major order for int A[3][4], what is the linear index of element A[2][3]?",
+   opts:["11","9","10","7"],
+   ans:0, xp:10, exp:"Linear index = row × num_cols + col = 2 × 4 + 3 = 11. Row-major means all of row 0 (indices 0-3), then row 1 (4-7), then row 2 (8-11)."},
+  {q:"Why is gets() considered dangerous and removed in C11?",
+   opts:["It's slower than fgets","It doesn't support Unicode","It has no buffer size limit, making buffer overflow attacks trivial","It only works on Linux"],
+   ans:2, xp:10, exp:"gets() reads until a newline with NO size check. An attacker can type more data than the buffer holds, overwriting stack memory — a classic security exploit."},
+  {q:"What does strcmp('abc', 'abc') return?",
+   opts:["1","-1","0","true"],
+   ans:2, xp:10, exp:"strcmp returns 0 if both strings are identical. It returns negative if the first is lexicographically smaller, positive if larger."},
+  {q:"What is the correct way to read a string with spaces using standard C I/O?",
+   opts:["scanf(\"%s\", str)","gets(str)","fgets(str, sizeof(str), stdin)","scanf(\"%[^\\n]\", str)"],
+   ans:2, xp:10, exp:"fgets is the standard safe choice. It reads up to size-1 characters and always null-terminates. scanf %s stops at whitespace, making it unsuitable for multi-word input."},
+  {q:"For matrix multiplication of A[m][n] × B[n][p], what condition must be satisfied?",
+   opts:["m == p","n must match in both matrices (A's columns == B's rows)","m == n == p","All dimensions must be equal"],
+   ans:1, xp:10, exp:"Matrix multiplication requires A's column count to equal B's row count. A[m][n] × B[n][p] produces C[m][p]."},
+  {q:"What function safely copies at most n characters and should be followed by manual null-termination?",
+   opts:["strcpy","strncpy","memcpy","sprintf"],
+   ans:1, xp:10, exp:"strncpy copies at most n characters but does NOT guarantee null-termination if the source is >= n chars. Always add dest[n-1] = '\\0' after strncpy."}
+ ]
+},
+
+// ── FREE MODULE 6 ──────────────────────────────────────────────────
+{id:6, free:true, icon:'🎯', level:'Intermediate', title:'Pointer Fundamentals',
+ excerpt:'Unlock C\'s most powerful feature. Understand physical memory addresses, pointer declarations, arithmetic, array-pointer equivalence, call-by-reference, and dynamic heap allocation.',
+ tags:['Intermediate','Pointers','Memory'], visual:'🎯', bg:'linear-gradient(135deg,#0f0a0a,#201010)',
+ concepts:['Memory Addresses & Pointer Architecture','Declaration & Dereferencing','Pointer Arithmetic','Array-Pointer Equivalence','Call by Reference','Double Pointers','Heap Management (malloc/calloc/realloc/free)'],
+ body:`
+<p>A pointer is a variable that stores a physical memory address. This single concept unlocks direct hardware control, efficient data passing, and dynamic memory — things no other abstraction achieves.</p>
+
+<h2>1. Memory Addresses & Indirection</h2>
+<p>Every byte in RAM has a unique hexadecimal address. Variables map to these addresses at compile time. A pointer stores the address of another variable — this is called <strong>indirection</strong>.</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int totalCount = 42;
+
+    // & operator: "address of"
+    printf("Value of totalCount  : %d\n",  totalCount);
+    printf("Address of totalCount: %p\n", (void*)&totalCount);
+    // Output: something like 0x7ffd5e3b1a4c
+
+    // int* pointer: stores an address to an int
+    int *ptr = &totalCount;
+
+    printf("Value stored in ptr  : %p\n", (void*)ptr);   // Same as &totalCount
+    printf("Dereferenced (*ptr)  : %d\n", *ptr);          // 42
+
+    // Modify the original variable THROUGH the pointer
+    *ptr = 99;
+    printf("totalCount is now    : %d\n", totalCount);    // 99!
+
+    return 0;
+}</code></pre>
+
+<h2>2. Pointer Declaration and Dereferencing</h2>
+<pre><code>int  n   = 10;
+int *p   = &n;    // p is a pointer to int; stores address of n
+int **pp = &p;    // pp is a pointer to pointer to int
+
+printf("%d\n",  n);    // 10  — direct access
+printf("%d\n", *p);    // 10  — dereference p (go to address p holds)
+printf("%d\n", **pp);  // 10  — double dereference
+
+// Common mistakes:
+int *bad;          // Uninitialized pointer — WILD POINTER, do not dereference!
+*bad = 5;          // UNDEFINED BEHAVIOR — may crash or corrupt memory
+
+int *null_ptr = NULL;  // Safe: NULL pointer (address 0)
+if (null_ptr != NULL) {
+    *null_ptr = 5;     // Guard against NULL dereference
+}
+
+// Always initialize pointers or set to NULL
+int *safe = NULL;</code></pre>
+
+<h2>3. Pointer Arithmetic and Type Scaling</h2>
+<pre><code>int arr[5] = {10, 20, 30, 40, 50};
+int *p = arr;   // Points to arr[0]
+
+printf("%d\n", *p);        // 10 — arr[0]
+printf("%d\n", *(p + 1));  // 20 — arr[1] (advances 4 bytes, not 1!)
+printf("%d\n", *(p + 4));  // 50 — arr[4]
+
+p++;   // p now points to arr[1]
+printf("%d\n", *p);        // 20
+
+// Pointer difference: gives number of ELEMENTS, not bytes
+int *end = &arr[4];
+printf("Distance: %td elements\n", end - p);  // 3
+
+// Comparison
+if (p < end) printf("p is before end\n");
+
+// For char*: each step is 1 byte (sizeof char == 1)
+char str[] = "Hello";
+char *cp = str;
+while (*cp != '\0') {
+    printf("%c", *cp);
+    cp++;   // Advances 1 byte
+}
+printf("\n");</code></pre>
+
+<h2>4. Arrays and Pointers — Identity Equivalence</h2>
+<pre><code>int arr[5] = {1, 2, 3, 4, 5};
+
+// arr is a CONSTANT pointer to arr[0] — these are equivalent:
+printf("%d\n", arr[2]);       // Subscript notation
+printf("%d\n", *(arr + 2));   // Pointer offset notation
+
+// Passing arrays to functions — decay to pointer
+void printArray(int *a, int n) {   // 'a' receives base address
+    for (int i = 0; i < n; i++)
+        printf("%d ", *(a + i));   // Same as a[i]
+}
+// Call: printArray(arr, 5);
+
+// Cannot do: arr++;    (arr is const pointer — its address can't change)
+int *p = arr;
+p++;          // p is a variable pointer — this is fine</code></pre>
+
+<h2>5. Call by Reference — Modifying Original Variables</h2>
+<pre><code>#include &lt;stdio.h&gt;
+
+// SWAP using pointers — the classic call-by-reference example
+void swap(int *a, int *b) {
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-int x = 5, y = 10;
-swap(&x, &y);
-printf("x=%d y=%d\\n", x, y);  // x=10 y=5 — truly swapped!</code></pre>
-<h2>Dynamic Memory Allocation</h2>
-<pre><code>#include &lt;stdlib.h&gt;
-
-// malloc — allocate n bytes (uninitialized)
-int *arr = (int*)malloc(5 * sizeof(int));
-
-// calloc — allocate and zero-initialize
-int *arr2 = (int*)calloc(5, sizeof(int));
-
-// Use it
-arr[0] = 100;
-
-// Always free when done!
-free(arr);
-arr = NULL;  // Prevent dangling pointer</code></pre>
-<blockquote><strong>The golden rule:</strong> for every <code>malloc</code> or <code>calloc</code>, there must be a matching <code>free</code>. Missing it causes a memory leak — your program silently consumes RAM until the OS kills it.</blockquote>`},
-
-  // ── PREMIUM ───────────────────────────────────────────────────────────────
-  {id:7, free:false, icon:'🧠', level:'Advanced', title:'Deep Memory Management & Architecture',
-   excerpt:'Go under the hood. Understand stack vs heap internals, memory alignment, struct padding, fragmentation, cache locality, memory leak detection, and undefined behavior analysis.',
-   tags:['Advanced','Memory','Systems'], visual:'🧠', bg:'linear-gradient(135deg,#0a0a0f,#141420)',
-   concepts:['Stack Memory Internals','Heap Memory Internals','Memory Alignment','Padding in Structures','Memory Fragmentation','Cache Locality','Memory Leak Detection','Profiling Memory','Undefined Behavior','Performance Optimization'],
-   body:`<p>Understanding C's memory model is what separates a C programmer from a C <em>expert</em>. Every bug involving segfaults, corruption, and UB traces back to not knowing this material.</p>
-<h2>Stack vs Heap</h2>
-<pre><code>void stackExample() {
-    int x = 10;      // Stack — auto-managed, freed on return
-    int arr[100];    // Stack — fixed size, fast
+// Increment and return multiple values via pointer parameters
+void analyzeArray(int *arr, int n, int *outSum, int *outMax) {
+    *outSum = 0;
+    *outMax = arr[0];
+    for (int i = 0; i < n; i++) {
+        *outSum += arr[i];
+        if (arr[i] > *outMax) *outMax = arr[i];
+    }
 }
 
-void heapExample() {
-    int *p = malloc(100 * sizeof(int));  // Heap — manual manage
-    // ... use p ...
-    free(p);  // YOU must do this
+int main(void) {
+    int x = 5, y = 10;
+    swap(&x, &y);
+    printf("x=%d y=%d\n", x, y);   // x=10 y=5
+
+    int data[] = {3, 7, 2, 9, 1};
+    int total, maximum;
+    analyzeArray(data, 5, &total, &maximum);
+    printf("Sum=%d Max=%d\n", total, maximum);   // Sum=22 Max=9
+    return 0;
 }</code></pre>
-<p>Stack frames are created and destroyed automatically as functions are called and returned. The heap is a free-floating pool — you own it.</p>
-<h2>Struct Padding & Memory Alignment</h2>
-<pre><code>struct Padded {
-    char a;    // 1 byte
-               // 3 bytes padding added by compiler!
-    int b;     // 4 bytes
-    char c;    // 1 byte
-               // 3 bytes padding
+
+<h2>6. Dynamic Heap Memory</h2>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    int n = 5;
+
+    // malloc — allocate raw bytes (UNINITIALIZED — contains garbage)
+    int *arr = (int*)malloc(n * sizeof(int));
+    if (!arr) { fprintf(stderr, "malloc failed!\n"); return 1; }
+
+    for (int i = 0; i < n; i++) arr[i] = (i+1) * 10;
+
+    // calloc — allocate AND zero-initialize
+    double *matrix = (double*)calloc(n * n, sizeof(double));
+    if (!matrix) { free(arr); return 1; }
+
+    // realloc — resize existing allocation
+    int newSize = 10;
+    int *expanded = (int*)realloc(arr, newSize * sizeof(int));
+    if (!expanded) { free(arr); free(matrix); return 1; }
+    arr = expanded;   // Use arr = NULL after if realloc fails
+
+    // Free ALL allocations — rule: one free() per malloc/calloc
+    free(arr);
+    arr = NULL;       // Prevent dangling pointer!
+    free(matrix);
+    matrix = NULL;
+
+    return 0;
+}</code></pre>
+<blockquote>The golden rules: (1) Every <code>malloc</code>/<code>calloc</code> must have exactly one matching <code>free</code>. (2) Set pointer to NULL after freeing — prevents dangling pointer use. (3) Always check the return value of malloc for NULL before using it.</blockquote>
+`,
+ quiz:[
+  {q:"What does the & operator do when applied to a variable?",
+   opts:["Performs bitwise AND","Returns the variable's value","Returns the physical memory address of the variable","Creates a copy of the variable"],
+   ans:2, xp:10, exp:"& is the 'address-of' operator. &x gives the hexadecimal memory address where x is stored, not its value."},
+  {q:"What does *(ptr + 2) access when ptr points to an int array?",
+   opts:["The value 2 bytes after ptr","The 3rd element of the array (index 2)","The address stored at ptr + 2","A compile error"],
+   ans:1, xp:10, exp:"Pointer arithmetic scales by type size. For int*, adding 2 advances 2×4=8 bytes, pointing to the element at index 2. Dereferencing gives its value."},
+  {q:"What is a 'dangling pointer'?",
+   opts:["A pointer that hasn't been declared","A pointer set to NULL","A pointer that still holds an address after the memory it pointed to was freed","A pointer pointing to a stack variable"],
+   ans:2, xp:10, exp:"After free(ptr), the memory is returned to the OS. Using ptr afterward (without setting it to NULL) is undefined behavior — it 'dangles' over freed memory."},
+  {q:"What is the difference between malloc() and calloc()?",
+   opts:["malloc is faster and calloc is safer","malloc allocates uninitialized memory; calloc allocates and zero-initializes","calloc is for single values; malloc for arrays","They're identical"],
+   ans:1, xp:10, exp:"malloc gives you raw (garbage-filled) bytes. calloc takes count×size parameters and sets all bytes to zero. Use calloc when you need a clean initial state."},
+  {q:"Which of these correctly declares a pointer to a pointer to int (double pointer)?",
+   opts:["int &ptr","int **ptr","int *ptr[]","int ptr**"],
+   ans:1, xp:10, exp:"int **ptr declares a double pointer — a pointer to an address that itself contains another address pointing to an int."},
+  {q:"What is the result of: int arr[3]={10,20,30}; int *p=arr; p++; printf('%d',*p);",
+   opts:["10","20","30","Address value"],
+   ans:1, xp:10, exp:"p initially points to arr[0]=10. After p++, it points to arr[1]=20. Dereferencing *p gives 20."},
+  {q:"Why must you ALWAYS check the return value of malloc()?",
+   opts:["malloc may return NULL if memory allocation fails","malloc always returns 0 on success","malloc is slow and might time out","The OS can block malloc calls"],
+   ans:0, xp:10, exp:"malloc returns NULL if the system cannot allocate the requested memory. Dereferencing NULL causes an immediate segfault — always check before use."},
+  {q:"What is pointer arithmetic's scale rule?",
+   opts:["Adding 1 to any pointer advances exactly 1 byte","Adding 1 advances by sizeof(pointed_type) bytes","Adding 1 doubles the pointer value","Pointer arithmetic only works on char*"],
+   ans:1, xp:10, exp:"Pointer arithmetic is scaled by the pointed-to type's size. For int* (4 bytes), p+1 advances 4 bytes. For double* (8 bytes), it advances 8 bytes. Only char* advances 1 byte per step."}
+ ]
+},
+
+// ── PREMIUM MODULE 7 ──────────────────────────────────────────────
+{id:7, free:false, icon:'🧠', level:'Advanced', title:'Deep Memory Management & Architecture',
+ excerpt:'Go under the hood. Stack frame lifecycle, heap allocator internals, struct padding, memory alignment rules, CPU cache locality, Valgrind profiling, and undefined behavior analysis.',
+ tags:['Advanced','Memory','Systems'], visual:'🧠', bg:'linear-gradient(135deg,#0a0a0f,#141420)',
+ concepts:['Stack Memory Internals (ESP/RSP/EBP)','Heap Allocator Chunks & Free Lists','Memory Alignment & Struct Padding','Memory Fragmentation','CPU Cache Locality (L1/L2/L3)','Memory Leak Detection','Valgrind & ASan','Undefined Behavior'],
+ body:`
+<p>Professional C engineers must understand not just how to write code, but how the hardware executes it. This module exposes the micro-architectural layer beneath your C source code.</p>
+
+<h2>1. Stack Memory Internals</h2>
+<p>The call stack is a LIFO memory region managed by two CPU hardware registers:</p>
+<ul>
+  <li><strong>ESP/RSP (Stack Pointer)</strong> — tracks the current top of the stack</li>
+  <li><strong>EBP/RBP (Base/Frame Pointer)</strong> — anchors the current function's stack frame</li>
+</ul>
+<pre><code>#include &lt;stdio.h&gt;
+
+void profileStackGrowth(int depth) {
+    int localVar = 0x42;
+    printf("Depth [%d] | Local variable address: %p\n",
+           depth, (void*)&localVar);
+    // Stack grows DOWNWARD — addresses decrease with each nested call
+    if (depth > 1) profileStackGrowth(depth - 1);
+}
+
+int main(void) {
+    profileStackGrowth(4);
+    // Output shows decreasing addresses: 0x7fff...8c, 0x7fff...5c, etc.
+    return 0;
+}</code></pre>
+<p>Calling convention: push arguments → push return address → save old EBP → subtract from RSP to make space for locals → execute → reverse on return.</p>
+
+<h2>2. Heap Internals & Allocator Mechanics</h2>
+<p>The heap is a free-floating memory pool. Each <code>malloc()</code> allocates a "chunk" containing a metadata header (size, free/in-use flags) + your payload space.</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    // malloc overhead: typically 8-16 bytes of metadata per allocation
+    void *a = malloc(16);
+    void *b = malloc(32);
+    void *c = malloc(16);
+
+    // Free list: when you free, the chunk goes into a bin for reuse
+    free(b);   // b's chunk joins free list
+
+    // realloc: may move allocation if it needs to grow
+    a = realloc(a, 100);   // If space available, expand in-place; else new location
+
+    free(a);
+    free(c);   // Always free in pairs with malloc
+    return 0;
+}</code></pre>
+
+<h2>3. Memory Alignment & Structure Padding</h2>
+<p>The CPU reads data most efficiently when values are aligned to their natural boundary (int at multiples of 4, double at multiples of 8). The compiler inserts invisible padding bytes to enforce this.</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+struct Unoptimized {
+    char   a;    // 1 byte at offset 0
+                 // 3 bytes PADDING (compiler inserts!)
+    int    b;    // 4 bytes at offset 4
+    char   c;    // 1 byte at offset 8
+                 // 3 bytes PADDING
+    // Total: 12 bytes (not 6!)
 };
-// sizeof = 12 bytes, not 6!
 
-struct Packed {
-    char a;    // 1 byte
-    char c;    // 1 byte — group same-size members together
-    int b;     // 4 bytes
+struct Optimized {
+    char   a;    // 1 byte at offset 0
+    char   c;    // 1 byte at offset 1  ← moved here!
+                 // 2 bytes padding
+    int    b;    // 4 bytes at offset 4
+    // Total: 8 bytes (saved 4 bytes by reordering!)
 };
-// sizeof = 8 bytes — more efficient</code></pre>
-<h2>Detecting Memory Leaks with Valgrind</h2>
-<pre><code>// Compile with debug info
-gcc -g -o program program.c
 
-// Run under Valgrind
-valgrind --leak-check=full ./program</code></pre>
-<blockquote>Cache locality is a huge performance factor. Accessing <code>arr[i]</code> in sequential order is dramatically faster than random access, because modern CPUs prefetch cache lines.</blockquote>`},
+int main(void) {
+    printf("Unoptimized: %zu bytes\n", sizeof(struct Unoptimized));  // 12
+    printf("Optimized  : %zu bytes\n", sizeof(struct Optimized));    // 8
 
-  {id:8, free:false, icon:'⚡', level:'Advanced', title:'Advanced Pointers & Function Pointers',
-   excerpt:'Decode complex pointer declarations, master function pointers, build callback systems, implement dynamic dispatch, and create real-world generic programming patterns in pure C.',
-   tags:['Advanced','Function Pointers','Callbacks'], visual:'⚡', bg:'linear-gradient(135deg,#100a0a,#1e0f0f)',
-   concepts:['Complex Pointer Declarations','Triple Pointers','Function Pointers','Arrays of Function Pointers','Callback Mechanisms','Dynamic Dispatch','Generic Programming','Plugin Architectures','State Machine Implementation'],
-   body:`<p>Function pointers are what allow C to have callbacks, dynamic dispatch, and plugin systems — features usually associated with object-oriented languages.</p>
-<h2>Function Pointers</h2>
-<pre><code>// A function pointer that takes two ints and returns int
+    // Rule: order struct members LARGEST to SMALLEST for minimum padding
+    return 0;
+}</code></pre>
+
+<h2>4. CPU Cache Locality</h2>
+<p>Modern CPUs fetch data in cache lines (typically 64 bytes). Accessing memory sequentially is dramatically faster than random access because sequential access triggers hardware prefetching.</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+#define N 1000
+
+// CACHE-FRIENDLY: row-major traversal — sequential memory access
+void rowMajor(int arr[N][N]) {
+    long sum = 0;
+    for (int i = 0; i < N; i++)
+        for (int j = 0; j < N; j++)
+            sum += arr[i][j];   // Accesses arr[i][0], arr[i][1], ... sequentially
+}
+
+// CACHE-HOSTILE: column-major traversal — jumps N*4 bytes each step
+void colMajor(int arr[N][N]) {
+    long sum = 0;
+    for (int j = 0; j < N; j++)
+        for (int i = 0; i < N; i++)
+            sum += arr[i][j];   // Jumps 4000 bytes between accesses — cache miss!
+}
+// rowMajor is typically 3-10x faster than colMajor due to cache behavior</code></pre>
+
+<h2>5. Memory Leak Detection with Valgrind</h2>
+<pre><code>// Compile with debug symbols
+gcc -g -O0 -o program program.c
+
+// Run under Valgrind memcheck
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./program
+
+// Valgrind output on a leak:
+// 40 bytes in 1 blocks are definitely lost in loss record 1 of 1
+//   at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck.so)
+//   by 0x40060A: main (program.c:5)
+
+// AddressSanitizer (ASan) — faster runtime detection
+gcc -g -fsanitize=address -o program program.c
+./program   // ASan reports errors in real-time</code></pre>
+
+<h2>6. Undefined Behavior (UB)</h2>
+<p>UB means the C standard makes no guarantee about what happens. The compiler is free to delete the code, return any value, or crash the program. Common UB sources:</p>
+<ul>
+  <li>Dereferencing NULL or uninitialized pointers</li>
+  <li>Accessing array out of bounds</li>
+  <li>Signed integer overflow</li>
+  <li>Use-after-free (UAF)</li>
+  <li>Strict aliasing violations (casting incompatible pointer types)</li>
+  <li>Double-free (calling <code>free</code> twice on the same pointer)</li>
+</ul>
+`,
+ quiz:[
+  {q:"In which direction does the call stack grow on x86/x86-64 systems?",
+   opts:["Upward (toward higher addresses)","Downward (toward lower addresses)","Randomly","It doesn't grow"],
+   ans:1, xp:10, exp:"The call stack grows DOWNWARD on x86 systems. Each new function call decreases the stack pointer (RSP), meaning nested calls have lower addresses."},
+  {q:"Why does struct padding exist in C?",
+   opts:["To waste memory","To align data members to their natural boundaries for efficient CPU access","To prevent buffer overflows","To allow the struct to grow dynamically"],
+   ans:1, xp:10, exp:"CPUs read data most efficiently when values are aligned to natural boundaries (e.g., int at address divisible by 4). The compiler inserts padding bytes to ensure this alignment."},
+  {q:"How do you minimize struct padding?",
+   opts:["Add #pragma pack(1)","Order members from largest to smallest data type","Use calloc instead of malloc","Declare all members as char"],
+   ans:1, xp:10, exp:"By ordering struct members from largest to smallest type, you minimize the padding the compiler needs to insert. This is the most portable optimization."},
+  {q:"Why is column-major matrix traversal slower than row-major in C?",
+   opts:["Because the outer loop runs more times","Because it causes cache misses — each access jumps N*sizeof(int) bytes","Because integers are column-indexed","Because the compiler can't optimize it"],
+   ans:1, xp:10, exp:"C stores 2D arrays in row-major order. Column traversal jumps across entire rows, causing frequent cache misses. Row traversal accesses sequential memory — cache-friendly."},
+  {q:"What tool detects memory leaks by running the program in a virtual CPU?",
+   opts:["GDB","Valgrind","GCC -Wall","objdump"],
+   ans:1, xp:10, exp:"Valgrind runs your program inside a virtual machine that monitors every memory operation. Its Memcheck tool reports all heap leaks, invalid reads/writes, and use-after-free bugs."},
+  {q:"What is 'use-after-free' (UAF) undefined behavior?",
+   opts:["Calling free() on a NULL pointer","Freeing the same pointer twice","Accessing memory after calling free() on its pointer","Not calling free() at all"],
+   ans:2, xp:10, exp:"After free(), the memory is returned to the allocator and may be reused. Reading/writing it afterwards corrupts the allocator's state and is a critical security vulnerability."},
+  {q:"Which tool provides faster in-process memory error detection compared to Valgrind?",
+   opts:["Electric Fence","Purify","AddressSanitizer (ASan)","nm"],
+   ans:2, xp:10, exp:"AddressSanitizer (gcc/clang -fsanitize=address) instruments the binary at compile time, detecting errors at runtime with ~2x overhead vs Valgrind's ~20x."},
+  {q:"What is the ESP/RSP register used for?",
+   opts:["Base address of the current stack frame","Current top of the call stack","Instruction pointer","General purpose computation"],
+   ans:1, xp:10, exp:"RSP (64-bit) / ESP (32-bit) is the Stack Pointer register — it tracks the current top boundary of the call stack, adjusting dynamically with every push/pop operation."}
+ ]
+},
+
+// ── PREMIUM MODULE 8 ──────────────────────────────────────────────
+{id:8, free:false, icon:'⚡', level:'Advanced', title:'Advanced Pointers & Function Pointers',
+ excerpt:'Decode complex pointer declarations with the Right-Left rule. Master function pointers, jump tables, callback systems, void* generic programming, and finite state machines.',
+ tags:['Advanced','Function Pointers','Callbacks'], visual:'⚡', bg:'linear-gradient(135deg,#100a0a,#1e0f0f)',
+ concepts:['Complex Pointer Declarations','Right-Left Parsing Rule','Triple Pointers','Function Pointer Syntax','Jump Tables (O(1) dispatch)','Callback Mechanisms','void* Generic Programming','State Machines'],
+ body:`
+<p>Function pointers elevate C to a language capable of runtime polymorphism, callbacks, and plug-in architectures — typically associated only with object-oriented languages.</p>
+
+<h2>1. Complex Pointer Declarations — The Right-Left Rule</h2>
+<p>Parse any complex declaration by: (1) Start at the variable name. (2) Scan RIGHT for <code>[]</code> or <code>()</code>. (3) Scan LEFT for <code>*</code>. (4) Unwind parentheses outward.</p>
+<pre><code>// Simple cases:
+int *p;            // p is a pointer to int
+int *arr[5];       // arr is an array of 5 pointers to int
+int (*ptr)[5];     // ptr is a pointer to an array of 5 ints
+
+// Intermediate:
+int (*cfg[5])(char);
+// cfg → array of 5 → * → pointer to → (char) → function taking char
+// → returns int
+// Final: array of 5 pointers to functions(char) returning int
+
+// Advanced:
+int (*(*fp)(int))[3];
+// fp → * → pointer to → (int) → function taking int
+// → returns * → pointer to → [3] → array of 3 ints
+// Final: pointer to a function(int) returning a pointer to int[3]
+
+// Tool: use cdecl.org to decipher any complex declaration</code></pre>
+
+<h2>2. Function Pointers — Syntax and Core Mechanics</h2>
+<pre><code>#include &lt;stdio.h&gt;
+
 int add(int a, int b) { return a + b; }
+int sub(int a, int b) { return a - b; }
 int mul(int a, int b) { return a * b; }
 
-int (*op)(int, int);  // Declare function pointer
+int main(void) {
+    // Declaration: return_type (*name)(param_types)
+    int (*op)(int, int);
 
-op = add;
-printf("%d\\n", op(3, 4));  // 7
+    op = add;
+    printf("3 + 4 = %d\n", op(3, 4));   // 7
 
-op = mul;
-printf("%d\\n", op(3, 4));  // 12</code></pre>
-<h2>Callback Mechanisms</h2>
-<p>The standard library's <code>qsort</code> uses a callback to let you define custom sorting:</p>
-<pre><code>#include &lt;stdlib.h&gt;
+    op = mul;
+    printf("3 * 4 = %d\n", op(3, 4));   // 12
 
-int compare(const void *a, const void *b) {
-    return (*(int*)a - *(int*)b);
+    // typedef for cleaner syntax
+    typedef int (*BinaryOp)(int, int);
+    BinaryOp operations[] = {add, sub, mul};
+
+    for (int i = 0; i < 3; i++) {
+        printf("op[%d](10, 3) = %d\n", i, operations[i](10, 3));
+    }
+    // Output: 13, 7, 30
+    return 0;
+}</code></pre>
+
+<h2>3. Jump Tables — O(1) Dispatch</h2>
+<pre><code>#include &lt;stdio.h&gt;
+typedef void (*CommandHandler)(void);
+
+void cmdHelp(void)  { printf("Available: help, run, stop, exit\n"); }
+void cmdRun(void)   { printf("Execution started...\n"); }
+void cmdStop(void)  { printf("Execution halted.\n"); }
+void cmdExit(void)  { printf("Goodbye!\n"); }
+
+int main(void) {
+    CommandHandler dispatch[] = {cmdHelp, cmdRun, cmdStop, cmdExit};
+    const char *names[]       = {"help", "run", "stop", "exit"};
+
+    int choice = 1;   // Simulate user choosing "run"
+
+    if (choice >= 0 && choice < 4) {
+        printf("Executing: %s\n", names[choice]);
+        dispatch[choice]();   // O(1) — no if-else chain!
+    }
+    return 0;
 }
+// vs an if-else chain: O(N) scan through N conditions
+// Jump table: O(1) direct index into function array</code></pre>
 
-int arr[] = {5, 2, 8, 1, 9};
-qsort(arr, 5, sizeof(int), compare);  // sorted!</code></pre>
-<h2>Arrays of Function Pointers — State Machine</h2>
-<pre><code>typedef void (*StateHandler)();
-
-void stateIdle()    { printf("IDLE\\n"); }
-void stateRunning() { printf("RUNNING\\n"); }
-void statePaused()  { printf("PAUSED\\n"); }
-
-StateHandler states[] = { stateIdle, stateRunning, statePaused };
-
-int current = 0;
-states[current]();   // IDLE
-current = 1;
-states[current]();   // RUNNING</code></pre>
-<blockquote>cdecl.org is the tool you need for parsing complex declarations like <code>int (*(*fp)(int))[3]</code>. Nobody memorizes these — they look them up.</blockquote>`},
-
-  {id:9, free:false, icon:'🔗', level:'Advanced', title:'Data Structures in Pure C',
-   excerpt:'Build linked lists, stacks, queues, binary search trees, hash tables, and graph representations from scratch in C — no STL, no safety net. Pure algorithmic engineering.',
-   tags:['Advanced','Data Structures','Algorithms'], visual:'🔗', bg:'linear-gradient(135deg,#0a1a0a,#0f2010)',
-   concepts:['Linked Lists','Doubly Linked Lists','Circular Linked Lists','Stack Implementation','Queue Implementation','Priority Queues','Binary Search Trees','Hash Tables','Graph Representations','Complexity Analysis'],
-   body:`<p>In C, you build every data structure yourself using pointers and <code>malloc</code>. This is painful and educational in equal measure — and it gives you a deep understanding of how abstractions work.</p>
-<h2>Singly Linked List</h2>
+<h2>4. Callbacks — Decoupled Algorithms</h2>
 <pre><code>#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
+// qsort's callback signature: takes two const void* pointers, returns int
+int compareAscending(const void *a, const void *b) {
+    return (*(int*)a - *(int*)b);   // Cast back to int*, dereference, subtract
+}
+int compareDescending(const void *a, const void *b) {
+    return (*(int*)b - *(int*)a);
+}
+
+// Custom callback: apply a function to each element
+void mapArray(int *arr, int n, int (*transform)(int)) {
+    for (int i = 0; i < n; i++) arr[i] = transform(arr[i]);
+}
+int doubleVal(int x) { return x * 2; }
+int squareVal(int x) { return x * x; }
+
+int main(void) {
+    int data[] = {5, 2, 8, 1, 9, 3};
+    int n = 6;
+
+    qsort(data, n, sizeof(int), compareAscending);
+    printf("Sorted ASC: ");
+    for (int i = 0; i < n; i++) printf("%d ", data[i]);   // 1 2 3 5 8 9
+
+    mapArray(data, n, squareVal);
+    printf("\nSquared: ");
+    for (int i = 0; i < n; i++) printf("%d ", data[i]);
+    return 0;
+}</code></pre>
+
+<h2>5. void* Generic Programming</h2>
+<pre><code>#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Generic swap — works on any type
+void genericSwap(void *a, void *b, size_t size) {
+    char temp[size];   // VLA as temp buffer (C99)
+    memcpy(temp, a, size);
+    memcpy(a, b, size);
+    memcpy(b, temp, size);
+}
+
+int main(void) {
+    int x = 5, y = 10;
+    genericSwap(&x, &y, sizeof(int));
+    printf("x=%d y=%d\n", x, y);   // x=10 y=5
+
+    double p = 3.14, q = 2.71;
+    genericSwap(&p, &q, sizeof(double));
+    printf("p=%.2f q=%.2f\n", p, q);   // p=2.71 q=3.14
+    return 0;
+}</code></pre>
+
+<h2>6. Finite State Machines with Function Pointers</h2>
+<pre><code>#include &lt;stdio.h&gt;
+typedef enum { STATE_IDLE, STATE_RUNNING, STATE_PAUSED, STATE_STOPPED } State;
+typedef State (*StateFunc)(void);
+
+State handleIdle(void)    { printf("[IDLE] Waiting...\n");    return STATE_RUNNING; }
+State handleRunning(void) { printf("[RUNNING] Working...\n"); return STATE_PAUSED;  }
+State handlePaused(void)  { printf("[PAUSED] On hold.\n");    return STATE_STOPPED; }
+State handleStopped(void) { printf("[STOPPED] Done.\n");       return STATE_STOPPED; }
+
+StateFunc stateTable[] = {handleIdle, handleRunning, handlePaused, handleStopped};
+
+int main(void) {
+    State current = STATE_IDLE;
+    for (int i = 0; i < 4; i++) {
+        current = stateTable[current]();   // O(1) state dispatch!
+    }
+    return 0;
+}</code></pre>
+`,
+ quiz:[
+  {q:"Using the Right-Left rule, what does 'int (*arr[5])(void)' mean?",
+   opts:["A function returning an array of 5 int pointers","An array of 5 pointers to functions taking no args and returning int","A pointer to an array of 5 int functions","A pointer to a function returning 5 ints"],
+   ans:1, xp:10, exp:"Start at arr → [5] (array of 5) → * (pointers to) → (void) (function taking void) → int (returning int). Result: array of 5 pointers to functions(void)->int."},
+  {q:"What is the main advantage of a jump table (array of function pointers) over an if-else chain?",
+   opts:["Jump tables use less memory","Jump tables allow O(1) constant-time dispatch regardless of case count","Jump tables are easier to read","Jump tables can handle strings"],
+   ans:1, xp:10, exp:"An if-else chain scans O(N) conditions. A function pointer array uses an index directly into the array — O(1) lookup regardless of how many cases exist."},
+  {q:"In qsort's callback, why are parameters typed as 'const void*'?",
+   opts:["To prevent sorting from modifying the data","To make the callback usable with any data type (type erasure via void*)","Because qsort only works with void pointers","To improve performance"],
+   ans:1, xp:10, exp:"void* is C's generic pointer — it can hold any address without specifying the type. This lets qsort work on arrays of any element type with the same implementation."},
+  {q:"What is wrong with: int *fp(int); — is this a function pointer?",
+   opts:["Yes, it declares fp as a function pointer to int","No — this declares fp as a FUNCTION that returns int*","Yes, but the syntax is incomplete","No — function pointers must use typedef"],
+   ans:1, xp:10, exp:"Without parentheses around *fp, operator precedence binds fp to (int) first: fp is a function taking int, returning int*. A function POINTER needs: int (*fp)(int);"},
+  {q:"What does a finite state machine (FSM) implemented with function pointers accomplish?",
+   opts:["It prevents stack overflows","Each state is a function; the current state determines which function runs next — clean O(1) dispatch","It compiles faster","It avoids the need for loops"],
+   ans:1, xp:10, exp:"FSM with function pointers: stateTable[currentState]() calls the correct handler and returns the next state. No if-else chains, clean modular state logic."},
+  {q:"Why must you cast void* back to the correct type before dereferencing in a generic callback?",
+   opts:["C doesn't auto-cast","void* has no associated size or type information — the compiler can't dereference without knowing the type","It's just a convention","To avoid compiler warnings only"],
+   ans:1, xp:10, exp:"void* is untyped. The compiler doesn't know how many bytes to read or how to interpret the bit pattern without an explicit cast to the correct pointer type."},
+  {q:"What does 'int (**pp)(char)' declare?",
+   opts:["Array of pointers to functions","Pointer to a function taking char returning int","Pointer to a pointer to a function taking char returning int","Double pointer to int"],
+   ans:2, xp:10, exp:"**pp: pp is a pointer (*) to another pointer (*) to a function(char) returning int. This is a double function pointer."},
+  {q:"In a callback-based sort, what must the comparison function return for element 'a' to sort BEFORE 'b'?",
+   opts:["0","A positive integer","A negative integer","1"],
+   ans:2, xp:10, exp:"qsort's comparator: return negative if a < b (a comes first), 0 if equal, positive if a > b (b comes first). This convention is followed by stdlib.h's qsort."}
+ ]
+},
+
+// ── PREMIUM MODULE 9 ──────────────────────────────────────────────
+{id:9, free:false, icon:'🔗', level:'Advanced', title:'Data Structures in Pure C',
+ excerpt:'Build linked lists, stacks, queues, BSTs, hash tables, and graphs from scratch using pointers and malloc. No STL. No safety net. Pure algorithmic engineering with Big O analysis.',
+ tags:['Advanced','Data Structures','Algorithms'], visual:'🔗', bg:'linear-gradient(135deg,#0a1a0a,#0f2010)',
+ concepts:['Linked List Architectures','Stacks & Queues','Binary Search Trees (BST)','Hash Tables & Collision Resolution','Graph Representations','Complexity Analysis (Big O)'],
+ body:`
+<p>Data structures are the scaffolding of performant software. In C, you build them yourself with pointers and heap memory — exposing exactly how they work at the hardware level.</p>
+
+<h2>1. Linked Lists — Self-Referential Structures</h2>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
 typedef struct Node {
     int data;
-    struct Node *next;
+    struct Node *next;   // Points to a node of the SAME type
 } Node;
 
-// Create a new node
 Node* createNode(int val) {
     Node *n = (Node*)malloc(sizeof(Node));
+    if (!n) { perror("malloc"); exit(1); }
     n->data = val;
     n->next = NULL;
     return n;
 }
 
-// Insert at front
+// Insert at front — O(1)
 Node* insertFront(Node *head, int val) {
     Node *n = createNode(val);
     n->next = head;
     return n;
 }
 
-// Print list
-void printList(Node *head) {
-    while (head) {
-        printf("%d → ", head->data);
-        head = head->next;
+// Delete by value — O(n)
+Node* deleteNode(Node *head, int target) {
+    if (!head) return NULL;
+    if (head->data == target) {
+        Node *tmp = head->next;
+        free(head);
+        return tmp;
     }
-    printf("NULL\\n");
+    head->next = deleteNode(head->next, target);  // Recursive delete
+    return head;
+}
+
+// Print and free entire list
+void freeList(Node *head) {
+    while (head) {
+        Node *tmp = head;
+        head = head->next;
+        free(tmp);
+    }
 }</code></pre>
-<h2>Stack Using Linked List</h2>
-<pre><code>typedef struct Stack {
-    Node *top;
+
+<h2>2. Stacks and Queues</h2>
+<pre><code>// STACK: LIFO — array implementation
+#define MAX 100
+typedef struct {
+    int data[MAX];
+    int top;
 } Stack;
 
-void push(Stack *s, int val) {
-    s->top = insertFront(s->top, val);
+void stackInit(Stack *s) { s->top = -1; }
+int  stackEmpty(Stack *s) { return s->top == -1; }
+int  stackFull(Stack *s)  { return s->top == MAX - 1; }
+void push(Stack *s, int v) { if (!stackFull(s))  s->data[++s->top] = v; }
+int  pop(Stack *s)          { if (!stackEmpty(s)) return s->data[s->top--]; return -1; }
+int  peek(Stack *s)         { if (!stackEmpty(s)) return s->data[s->top];   return -1; }
+
+// QUEUE: FIFO — circular array implementation
+typedef struct {
+    int data[MAX];
+    int front, rear, size;
+} Queue;
+
+void queueInit(Queue *q) { q->front=0; q->rear=-1; q->size=0; }
+void enqueue(Queue *q, int v) {
+    if (q->size == MAX) return;
+    q->rear = (q->rear + 1) % MAX;   // Circular wrap
+    q->data[q->rear] = v;
+    q->size++;
+}
+int dequeue(Queue *q) {
+    if (q->size == 0) return -1;
+    int v = q->data[q->front];
+    q->front = (q->front + 1) % MAX;
+    q->size--;
+    return v;
+}</code></pre>
+
+<h2>3. Binary Search Tree (BST)</h2>
+<pre><code>typedef struct BSTNode {
+    int key;
+    struct BSTNode *left, *right;
+} BSTNode;
+
+BSTNode* bstInsert(BSTNode *root, int key) {
+    if (!root) {
+        BSTNode *n = malloc(sizeof(BSTNode));
+        n->key = key; n->left = n->right = NULL;
+        return n;
+    }
+    if (key < root->key) root->left  = bstInsert(root->left,  key);
+    else if (key > root->key) root->right = bstInsert(root->right, key);
+    return root;   // Equal keys: ignore duplicates
 }
 
-int pop(Stack *s) {
-    if (!s->top) return -1;
-    int val = s->top->data;
-    Node *tmp = s->top;
-    s->top = s->top->next;
-    free(tmp);
-    return val;
-}</code></pre>
-<blockquote>Always free every node when destroying a linked list. Traverse the list, free each node, then set the head to NULL. Partial cleanup causes leaks.</blockquote>`},
+// In-order traversal produces SORTED output — BST property!
+void inOrder(BSTNode *root) {
+    if (!root) return;
+    inOrder(root->left);
+    printf("%d ", root->key);
+    inOrder(root->right);
+}
 
-  {id:10, free:false, icon:'📂', level:'Advanced', title:'Systems Programming with C',
-   excerpt:'Write programs that talk to the OS. File handling internals, binary files, command-line arguments, environment variables, processes, signals, pipes, and IPC concepts.',
-   tags:['Advanced','Systems','File I/O'], visual:'📂', bg:'linear-gradient(135deg,#0a0f1a,#101828)',
-   concepts:['File Handling Internals','Binary Files','Buffering Mechanisms','Command-line Arguments','Environment Variables','Process Concepts','Signals','Pipes','IPC Basics','System-Level Programming'],
-   body:`<p>Systems programming is where C is irreplaceable. This module bridges the gap between your program and the operating system.</p>
-<h2>File Handling</h2>
+BSTNode* bstSearch(BSTNode *root, int key) {
+    if (!root || root->key == key) return root;
+    if (key < root->key) return bstSearch(root->left, key);
+    return bstSearch(root->right, key);
+}
+// BST operations: O(log n) average, O(n) worst case (unbalanced)</code></pre>
+
+<h2>4. Hash Tables with Chaining</h2>
+<pre><code>#define TABLE_SIZE 17   // Prime number reduces collisions
+
+typedef struct HNode { int key; int value; struct HNode *next; } HNode;
+typedef struct { HNode *buckets[TABLE_SIZE]; } HashTable;
+
+int hashFunc(int key) { return abs(key) % TABLE_SIZE; }
+
+void htInsert(HashTable *ht, int key, int value) {
+    int idx = hashFunc(key);
+    HNode *n = malloc(sizeof(HNode));
+    n->key = key; n->value = value; n->next = ht->buckets[idx];
+    ht->buckets[idx] = n;   // Insert at head of chain
+}
+
+int htGet(HashTable *ht, int key) {
+    int idx = hashFunc(key);
+    for (HNode *n = ht->buckets[idx]; n; n = n->next)
+        if (n->key == key) return n->value;
+    return -1;   // Not found
+}
+// Average O(1) insert/lookup when load factor is low</code></pre>
+
+<h2>5. Big O Complexity Matrix</h2>
+<pre><code>// OPERATION           | ARRAY  | LL (Singly) | BST (avg) | Hash Table
+// ──────────────────────────────────────────────────────────────────
+// Access by index     | O(1)   | O(n)        | —         | —
+// Search              | O(n)   | O(n)        | O(log n)  | O(1)
+// Insert (front)      | O(n)   | O(1)        | O(log n)  | O(1)
+// Insert (end)        | O(1)*  | O(n)        | O(log n)  | O(1)
+// Delete              | O(n)   | O(n)        | O(log n)  | O(1)
+// Memory              | Static | Dynamic     | Dynamic   | Dynamic
+
+// Key principle: no data structure is best for all operations.
+// Choose based on your dominant operation pattern.</code></pre>
+`,
+ quiz:[
+  {q:"What makes a struct 'self-referential' in C?",
+   opts:["It contains a static member","It contains a pointer to the same struct type","It uses typedef","It allocates memory with malloc"],
+   ans:1, xp:10, exp:"A self-referential struct contains a member that is a pointer to another struct of the exact same type — enabling linked list chains."},
+  {q:"What is the time complexity of searching a Singly Linked List?",
+   opts:["O(1)","O(log n)","O(n)","O(n²)"],
+   ans:2, xp:10, exp:"Linked lists have no random access — you must traverse from head to find an element. In the worst case (element at tail or not found), you visit all n nodes: O(n)."},
+  {q:"Which data structure follows the LIFO (Last In, First Out) principle?",
+   opts:["Queue","Linked List","Stack","Binary Tree"],
+   ans:2, xp:10, exp:"Stack is LIFO — the last element pushed is the first popped. Think of a stack of plates: you always take from the top."},
+  {q:"What property of BST in-order traversal makes it useful?",
+   opts:["It visits nodes in insertion order","It produces elements in sorted order","It's faster than pre-order","It uses O(1) space"],
+   ans:1, xp:10, exp:"BST in-order (left → root → right) visits all keys in ascending sorted order due to the BST ordering property (left < root < right)."},
+  {q:"Why is a prime number preferred as the hash table size?",
+   opts:["Primes are faster to compute","Primes reduce clustering and distributes keys more uniformly when using modulo hashing","Primes allow more buckets","It's a convention without mathematical reason"],
+   ans:1, xp:10, exp:"When TABLE_SIZE is prime, key % TABLE_SIZE produces a more uniform distribution, reducing collision clusters compared to composite numbers."},
+  {q:"What is the worst-case time complexity of BST operations on an unbalanced tree?",
+   opts:["O(log n)","O(1)","O(n)","O(n log n)"],
+   ans:2, xp:10, exp:"If you insert elements in sorted order (1, 2, 3, ..., n), the BST degenerates into a linked list. All operations become O(n). Balanced BSTs (AVL, Red-Black) guarantee O(log n)."},
+  {q:"In a circular array-based Queue, how is the rear pointer advanced without exceeding array bounds?",
+   opts:["rear = rear + 1","rear = rear % MAX","rear = (rear + 1) % MAX","rear = MAX - rear"],
+   ans:2, xp:10, exp:"Circular increment: rear = (rear + 1) % MAX wraps around from MAX-1 back to 0, making the array behave like a ring buffer."},
+  {q:"What technique does a hash table with 'chaining' use to handle collisions?",
+   opts:["Probing to the next empty slot","Resizing the table","Storing all colliding elements in a linked list at the same bucket","Rehashing with a different function"],
+   ans:2, xp:10, exp:"Separate chaining: each bucket holds a linked list. When two keys hash to the same index, they share that bucket's list. This avoids eviction but uses extra memory."}
+ ]
+},
+
+// ── PREMIUM MODULE 10 ──────────────────────────────────────────────
+{id:10, free:false, icon:'📂', level:'Advanced', title:'Systems Programming with C',
+ excerpt:'Bridge C programs to the OS. Cover POSIX file I/O, binary streams, I/O buffering, command-line arguments, process lifecycle (fork/exec/wait), signals, and anonymous pipes.',
+ tags:['Advanced','Systems','File I/O'], visual:'📂', bg:'linear-gradient(135deg,#0a0f1a,#101828)',
+ concepts:['File Handling Internals & Binary Streams','I/O Buffering (setvbuf)','Command-Line Arguments','Environment Variables','Process Architecture (fork/exec/wait)','Signals (sigaction)','Inter-Process Communication & Pipes'],
+ body:`
+<p>Systems programming is the discipline of writing software that interfaces directly with the operating system. This is where C is irreplaceable — only C gives you this level of OS access.</p>
+
+<h2>1. File Handling Internals</h2>
+<p>Two file abstraction layers in C: the high-level <code>FILE*</code> stream (buffered, portable) and the low-level POSIX <code>int</code> file descriptor (direct kernel handle).</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct { int id; double freq; char label[32]; } Telemetry;
+
+int main(void) {
+    // Binary write: struct directly to disk
+    FILE *fp = fopen("data.bin", "wb");
+    if (!fp) { perror("fopen"); return 1; }
+
+    Telemetry record = {42, 9.8, "Sensor-Alpha"};
+    size_t written = fwrite(&record, sizeof(Telemetry), 1, fp);
+    printf("Wrote %zu record(s)\n", written);
+    fclose(fp);
+
+    // Binary read with random access
+    fp = fopen("data.bin", "rb");
+    Telemetry readBack;
+    fseek(fp, 0, SEEK_SET);   // Seek to beginning
+    fread(&readBack, sizeof(Telemetry), 1, fp);
+    printf("Read: ID=%d Freq=%.1f Label=%s\n",
+           readBack.id, readBack.freq, readBack.label);
+
+    long pos = ftell(fp);   // Current file position
+    printf("File position: %ld bytes\n", pos);
+    fclose(fp);
+    return 0;
+}</code></pre>
+
+<h2>2. I/O Buffering — setvbuf</h2>
 <pre><code>#include &lt;stdio.h&gt;
 
-// Writing to a file
-FILE *fp = fopen("data.txt", "w");
-if (!fp) { perror("Failed to open file"); return 1; }
+int main(void) {
+    // 3 buffering modes:
+    // _IOFBF: Fully buffered — flush when buffer fills (default for files)
+    // _IOLBF: Line buffered — flush on newline (default for terminals)
+    // _IONBF: Unbuffered — immediate I/O (used for stderr, real-time logging)
 
-fprintf(fp, "Hello from C!\\n");
-fwrite(&someInt, sizeof(int), 1, fp);  // Binary write
-fclose(fp);
+    char mybuf[4096];
 
-// Reading back
-fp = fopen("data.txt", "r");
-char line[256];
-while (fgets(line, sizeof(line), fp)) {
-    printf("%s", line);
-}
-fclose(fp);</code></pre>
-<h2>Command-Line Arguments</h2>
-<pre><code>int main(int argc, char *argv[]) {
-    // argc = argument count (including program name)
-    // argv = array of strings
-    printf("Program: %s\\n", argv[0]);
+    // Override stdout buffering to fully-buffered with 4KB buffer
+    setvbuf(stdout, mybuf, _IOFBF, sizeof(mybuf));
+
+    printf("This won't appear until fflush or buffer fills\n");
+    fflush(stdout);   // Force flush immediately
+
+    // Unbuffered: useful for real-time log output
+    setvbuf(stderr, NULL, _IONBF, 0);
+    fprintf(stderr, "Error: immediate output!\n");
+
+    return 0;
+}</code></pre>
+
+<h2>3. Command-Line Arguments & Environment</h2>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char *argv[]) {
+    // argc: argument count (includes program name)
+    // argv[0]: program name, argv[1..argc-1]: arguments
+    printf("Program: %s\n", argv[0]);
+    printf("Argument count: %d\n", argc - 1);
+
     for (int i = 1; i < argc; i++) {
-        printf("Arg %d: %s\\n", i, argv[i]);
+        printf("argv[%d] = \"%s\"\n", i, argv[i]);
+    }
+
+    // Run as: ./program hello world 42
+    // Output: argv[1]="hello", argv[2]="world", argv[3]="42"
+
+    // Environment variables
+    char *path = getenv("PATH");
+    char *home = getenv("HOME");
+    if (path) printf("PATH: %.60s...\n", path);
+    if (home) printf("HOME: %s\n", home);
+
+    // setenv — set or override an env variable
+    setenv("MY_VAR", "Hello from C!", 1);
+    printf("MY_VAR: %s\n", getenv("MY_VAR"));
+
+    return 0;
+}</code></pre>
+
+<h2>4. Process Architecture — fork/exec/wait</h2>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/wait.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    pid_t pid = fork();   // Create child process (clone of parent)
+
+    if (pid < 0) {
+        perror("fork failed");
+        return 1;
+    } else if (pid == 0) {
+        // CHILD PROCESS (pid == 0)
+        printf("Child PID: %d | Parent PID: %d\n", getpid(), getppid());
+
+        // exec: replace this process image with a new program
+        execlp("ls", "ls", "-l", NULL);   // Run 'ls -l'
+        perror("exec failed");   // Only reached if exec fails
+        exit(1);
+    } else {
+        // PARENT PROCESS (pid > 0, holds child's PID)
+        printf("Parent PID: %d | Created child: %d\n", getpid(), pid);
+
+        int status;
+        waitpid(pid, &status, 0);   // Wait for child to finish
+
+        if (WIFEXITED(status)) {
+            printf("Child exited with code: %d\n", WEXITSTATUS(status));
+        }
     }
     return 0;
 }</code></pre>
-<h2>Environment Variables</h2>
-<pre><code>#include &lt;stdlib.h&gt;
 
-char *path = getenv("PATH");
-if (path) printf("PATH: %s\\n", path);</code></pre>
-<h2>Signals</h2>
-<pre><code>#include &lt;signal.h&gt;
+<h2>5. Signal Handling with sigaction</h2>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;signal.h&gt;
+#include &lt;unistd.h&gt;
 
-void handler(int sig) {
-    printf("\\nCaught signal %d — cleaning up...\\n", sig);
-    exit(0);
+volatile sig_atomic_t running = 1;   // sig_atomic_t: safe to set from signal handler
+
+void sigintHandler(int signum) {
+    printf("\nCaught SIGINT (%d) — shutting down...\n", signum);
+    running = 0;   // Signal main loop to exit
 }
 
-signal(SIGINT, handler);  // Ctrl+C now calls our handler
-while(1) { /* runs until Ctrl+C */ }</code></pre>
-<blockquote>Always check the return value of <code>fopen</code>. If it returns <code>NULL</code>, the file couldn't be opened. Ignoring this leads to segfaults when you try to use the null pointer.</blockquote>`},
+int main(void) {
+    struct sigaction sa = {0};
+    sa.sa_handler = sigintHandler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART;   // Restart interrupted syscalls
+    sigaction(SIGINT, &sa, NULL);   // More reliable than signal()
 
-  {id:11, free:false, icon:'🔧', level:'Advanced', title:'Compiler, Preprocessor & Build Systems',
-   excerpt:'Understand what happens between your .c file and the executable. Compilation stages, preprocessor macros, conditional compilation, linkers, static/dynamic libraries, and Makefiles.',
-   tags:['Advanced','Build Systems','Preprocessor'], visual:'🔧', bg:'linear-gradient(135deg,#0a0f14,#101828)',
-   concepts:['Compilation Stages','Preprocessor Internals','Macros & Advanced Macros','Conditional Compilation','Linkers & Loaders','Static Libraries','Dynamic Libraries','Symbol Tables','Object Files','Makefiles','Build Automation'],
-   body:`<p>Most programmers use <code>gcc file.c -o app</code> without thinking about what that command actually does. This module opens the black box.</p>
-<h2>The 4 Compilation Stages</h2>
-<pre><code># Stage 1: Preprocessing (.c → .i) — expands #includes, #defines
+    printf("Running. Press Ctrl+C to stop.\n");
+    while (running) {
+        sleep(1);
+        printf("tick...\n");
+    }
+    printf("Clean exit.\n");
+    return 0;
+}</code></pre>
+
+<h2>6. Anonymous Pipes — IPC</h2>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    int pipefd[2];   // pipefd[0] = read end, pipefd[1] = write end
+    if (pipe(pipefd) == -1) { perror("pipe"); return 1; }
+
+    pid_t pid = fork();
+    if (pid == 0) {
+        // CHILD: reads from pipe
+        close(pipefd[1]);   // Close unused write end
+        char buf[128];
+        ssize_t n = read(pipefd[0], buf, sizeof(buf)-1);
+        buf[n] = '\0';
+        printf("Child received: \"%s\"\n", buf);
+        close(pipefd[0]);
+    } else {
+        // PARENT: writes to pipe
+        close(pipefd[0]);   // Close unused read end
+        const char *msg = "Hello from parent!";
+        write(pipefd[1], msg, strlen(msg));
+        close(pipefd[1]);   // Close write end → sends EOF to child
+        wait(NULL);
+    }
+    return 0;
+}</code></pre>
+`,
+ quiz:[
+  {q:"What is the difference between FILE* and a POSIX file descriptor (int)?",
+   opts:["FILE* is binary only; int is text only","FILE* is a high-level buffered stream; int fd is a low-level kernel handle","FILE* is slower; int fd is faster in all cases","They are identical"],
+   ans:1, xp:10, exp:"FILE* wraps a raw file descriptor with buffering, error flags, and position tracking. POSIX int fd is the raw OS-level handle used directly by system calls like read()/write()."},
+  {q:"What does fseek(fp, 0, SEEK_SET) do?",
+   opts:["Close the file","Move the file position to the beginning","Move to the end","Flush the buffer"],
+   ans:1, xp:10, exp:"fseek with SEEK_SET moves the file position indicator to the offset relative to the start of the file. fseek(fp, 0, SEEK_SET) moves to the very beginning."},
+  {q:"After fork(), what is the value of pid in the CHILD process?",
+   opts:["The parent's PID","The child's own PID","0","A negative error code"],
+   ans:2, xp:10, exp:"fork() returns 0 in the child process and the child's PID in the parent. This is how you distinguish which code path each process takes."},
+  {q:"What is the purpose of waitpid() in a parent process?",
+   opts:["Pause the parent for a fixed time","Prevent zombie processes by collecting the child's exit status","Send a signal to the child","Create a pipe between parent and child"],
+   ans:1, xp:10, exp:"Without wait/waitpid, a terminated child process becomes a 'zombie' — it occupies a PID entry in the process table until the parent collects its exit status."},
+  {q:"Why is sigaction() preferred over signal() for setting signal handlers?",
+   opts:["sigaction is faster","sigaction is more portable and allows specifying additional flags like SA_RESTART","signal() has been removed in modern C","sigaction handles more signal types"],
+   ans:1, xp:10, exp:"signal() behavior is implementation-defined — handlers may be reset after one use. sigaction is POSIX-standard, supports SA_RESTART, and provides reliable persistent handler registration."},
+  {q:"In pipe(pipefd), which index is the READ end and which is the WRITE end?",
+   opts:["pipefd[0]=write, pipefd[1]=read","pipefd[0]=read, pipefd[1]=write","Both can be read and write","It depends on the OS"],
+   ans:1, xp:10, exp:"By POSIX convention: pipefd[0] is the read end, pipefd[1] is the write end. Data flows from write end → kernel buffer → read end."},
+  {q:"What does _IONBF mode in setvbuf() do to a stream?",
+   opts:["Sets a 4KB buffer","Makes it line-buffered","Makes it completely unbuffered — every write goes immediately to the kernel","Increases buffer to 64KB"],
+   ans:2, xp:10, exp:"_IONBF (No BuFfer): every I/O call passes directly to the OS without any user-space buffering. Useful for real-time output like error logs or debug streams."},
+  {q:"What happens to the process image when exec() is called successfully?",
+   opts:["A child process is created","The process gets a new PID","The current process is completely replaced by the new program","The parent process gets a copy"],
+   ans:2, xp:10, exp:"exec() completely replaces the calling process's code, data, stack, and heap with the new program. The PID remains the same, but everything else is overwritten. exec() only returns on failure."}
+ ]
+},
+
+// ── PREMIUM MODULE 11 ──────────────────────────────────────────────
+{id:11, free:false, icon:'🔧', level:'Advanced', title:'Compiler, Preprocessor & Build Systems',
+ excerpt:'Understand the full toolchain. Multi-stage compilation, preprocessor text manipulation, macro metaprogramming, ELF object files, static/dynamic libraries, and Makefile automation.',
+ tags:['Advanced','Build Systems','Preprocessor'], visual:'🔧', bg:'linear-gradient(135deg,#0a0f14,#101828)',
+ concepts:['Multi-Stage Compilation Pipeline','Preprocessor Internals','Conditional Compilation','Macro Metaprogramming (#, ##)','ELF Object Files & Symbol Tables','Static vs Dynamic Libraries','Makefile Automation'],
+ body:`
+<p>Most C programmers type <code>gcc file.c -o app</code> without understanding the four distinct processing stages that transform your source text into a CPU-executable binary.</p>
+
+<h2>1. The Four Compilation Stages</h2>
+<pre><code># Stage 1: Preprocessing (.c → .i)
+# Strips comments, expands #include and #define, processes #ifdef
 gcc -E main.c -o main.i
 
-# Stage 2: Compilation (.i → .s) — C to assembly
+# Stage 2: Compilation (.i → .s)
+# Parses C, type-checks, optimizes, generates assembly language
 gcc -S main.i -o main.s
 
-# Stage 3: Assembly (.s → .o) — assembly to machine code
+# Stage 3: Assembly (.s → .o)
+# Converts assembly to binary machine code (relocatable object file)
 gcc -c main.s -o main.o
 
-# Stage 4: Linking (.o → executable) — links all object files + libraries
-gcc main.o -o main</code></pre>
-<h2>Preprocessor Macros</h2>
-<pre><code>#define MAX(a, b)  ((a) > (b) ? (a) : (b))
-#define SQUARE(x)  ((x) * (x))
+# Stage 4: Linking (.o + libraries → executable)
+# Resolves symbol references, merges object files, produces final binary
+gcc main.o -o program
 
-// Conditional compilation
-#ifdef DEBUG
-    printf("Debug: value = %d\\n", val);
+# Examine intermediate artifacts:
+cat main.i       # Preprocessed C
+cat main.s       # Assembly output
+nm main.o        # Symbol table of object file
+objdump -d main.o  # Disassembly of object file</code></pre>
+
+<h2>2. Preprocessor Internals</h2>
+<pre><code>#include &lt;stdio.h&gt;       // System header (angle brackets: search system paths)
+#include "my_lib.h"     // Local header (quotes: search current directory first)
+
+// Object-like macro — text substitution
+#define MAX_BUFFER 4096
+#define PI 3.14159265358979
+
+// Function-like macro — ALWAYS parenthesize everything!
+#define SQUARE(x)   ((x) * (x))       // Safe
+#define BAD_SQUARE(x)  x * x           // DANGEROUS: 2+3 → 2+3*2+3 = 11, not 25!
+#define MAX(a, b)   ((a) > (b) ? (a) : (b))
+
+// Verify: gcc -E test.c shows exact expansion
+int arr[MAX_BUFFER];
+double area = PI * SQUARE(5.0);   // Expands to: 3.14... * ((5.0) * (5.0))</code></pre>
+
+<h2>3. Conditional Compilation</h2>
+<pre><code>// Platform detection
+#ifdef _WIN32
+    #define OS_NAME "Windows"
+    #include &lt;windows.h&gt;
+#elif defined(__linux__)
+    #define OS_NAME "Linux"
+    #include &lt;unistd.h&gt;
+#elif defined(__APPLE__)
+    #define OS_NAME "macOS"
+    #include &lt;unistd.h&gt;
+#else
+    #define OS_NAME "Unknown"
 #endif
 
-// Include guard (prevents double-inclusion)
-#ifndef MYHEADER_H
-#define MYHEADER_H
-// ... header content ...
-#endif</code></pre>
-<h2>Makefile</h2>
-<pre><code># Makefile
-CC = gcc
-CFLAGS = -Wall -g
+// Debug vs release builds
+#ifdef DEBUG
+    #define LOG(msg) fprintf(stderr, "[DEBUG %s:%d] %s\n", __FILE__, __LINE__, msg)
+#else
+    #define LOG(msg)  // Empty — stripped in release build
+#endif
 
-all: program
+// Compile with: gcc -DDEBUG program.c -o program_debug
+// Or:          gcc program.c -o program  (LOG becomes no-op)</code></pre>
 
-program: main.o utils.o
-    $(CC) $(CFLAGS) -o program main.o utils.o
+<h2>4. Macro Metaprogramming — # and ##</h2>
+<pre><code>// Stringification (#): converts token to string literal
+#define STRINGIFY(x)  #x
+printf("%s\n", STRINGIFY(Hello World));   // Prints: Hello World (as string)
+printf("%s\n", STRINGIFY(3 + 4));         // Prints: 3 + 4
 
-main.o: main.c
-    $(CC) $(CFLAGS) -c main.c
+// Token pasting (##): concatenates tokens
+#define CONCAT(a, b)  a ## b
+int CONCAT(my, Variable) = 42;   // Creates: myVariable = 42
 
-utils.o: utils.c
-    $(CC) $(CFLAGS) -c utils.c
+// Creating multiple related functions/variables with macros:
+#define DECLARE_ARRAY(type, name, size) \
+    type name[size]; \
+    int name ## _count = 0; \
+    void name ## _add(type val) { name[name ## _count++] = val; }
+
+DECLARE_ARRAY(int, scores, 100)
+// Expands to: int scores[100]; int scores_count = 0; void scores_add(int val) {...}</code></pre>
+
+<h2>5. Object Files and Symbol Tables</h2>
+<pre><code># Compile to object file
+gcc -c module.c -o module.o
+
+# View symbols: T=text(code), D=data, B=bss(zero-init), U=undefined(external)
+nm module.o
+# 0000000000000000 T add_function     ← Defined text symbol (function)
+# 0000000000000020 T sub_function
+#                  U printf           ← Undefined: will be resolved by linker
+
+# Disassemble
+objdump -d module.o
+
+# ELF sections:
+# .text   — executable machine code
+# .data   — initialized global/static variables
+# .bss    — uninitialized global/static variables (zero at startup)
+# .rodata — read-only data (string literals, const arrays)
+# .symtab — symbol table</code></pre>
+
+<h2>6. Static vs Dynamic Libraries and Makefiles</h2>
+<pre><code># Static library (.a): code linked AT COMPILE TIME into executable
+ar rcs libmath.a add.o sub.o mul.o   # Create archive
+gcc main.c -L. -lmath -o program     # Link statically
+# Result: one big self-contained executable
+
+# Dynamic library (.so / .dll): loaded AT RUNTIME
+gcc -fPIC -c utils.c -o utils.o
+gcc -shared -o libutils.so utils.o
+gcc main.c -L. -lutils -o program
+export LD_LIBRARY_PATH=.   # Tell loader where to find .so</code></pre>
+<pre><code># Makefile — dependency tracking + incremental builds
+CC     = gcc
+CFLAGS = -Wall -Wextra -g -std=c11
+
+all: program   # Default target
+
+program: main.o utils.o math.o
+	$(CC) $(CFLAGS) -o $@ $^    # $@ = target, $^ = all dependencies
+
+main.o: main.c utils.h math.h
+	$(CC) $(CFLAGS) -c $< -o $@ # $< = first dependency
+
+utils.o: utils.c utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+math.o: math.c math.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-    rm -f *.o program</code></pre>
-<blockquote>Makefile indentation <strong>must</strong> use a real tab character, not spaces. This is one of the most common Makefile errors that will waste hours of your time.</blockquote>`},
+	rm -f *.o program
 
-  {id:12, free:false, icon:'🏆', level:'Advanced', title:'Professional C Development & Capstone',
-   excerpt:'Bring it all together. GDB debugging, Valgrind profiling, secure coding practices, multithreading basics, network programming, API design, and 10 industry-grade capstone projects.',
-   tags:['Advanced','GDB','Capstone Projects'], visual:'🏆', bg:'linear-gradient(135deg,#0f0f0a,#1e1a0f)',
-   concepts:['Debugging with GDB','Profiling with Valgrind','Code Optimization','Secure Coding Practices','Multithreading Basics','Network Programming Basics','Reusable Libraries','API Design','Industry Standards','Capstone Projects'],
-   body:`<p>Professional C development isn't just about writing code — it's about writing code that works correctly, performs well, and can be maintained. This module covers the tools and practices that separate production-grade C from hobbyist C.</p>
-<h2>Debugging with GDB</h2>
-<pre><code># Compile with debug symbols
-gcc -g -o program program.c
+.PHONY: all clean   # Declare non-file targets
+# CRITICAL: Makefile recipes use REAL TABS, not spaces!</code></pre>
+`,
+ quiz:[
+  {q:"What is the output file format after Stage 2 (Compilation) of the GCC pipeline?",
+   opts:[".i (preprocessed C)",".s (assembly code)",".o (object file)",".exe (executable)"],
+   ans:1, xp:10, exp:"Stage 2 (Compilation) produces .s — assembly language for the target CPU. Stage 1→.i, Stage 3→.o, Stage 4→executable."},
+  {q:"Why must function-like macros always parenthesize all parameters?",
+   opts:["It makes them faster","Without parens, operator precedence in expanded expressions causes incorrect results","It's just a style convention","Parentheses are required by the standard"],
+   ans:1, xp:10, exp:"#define SQUARE(x) x*x — if called as SQUARE(2+3), expands to 2+3*2+3 = 11, not 25! With ((x)*(x)): (2+3)*(2+3) = 25. Always parenthesize."},
+  {q:"What does the # (stringification) operator do in a macro?",
+   opts:["Concatenates two tokens","Converts the argument token to a string literal","Creates a new identifier","Marks a conditional compilation block"],
+   ans:1, xp:10, exp:"#x converts the macro argument to a string literal at preprocessing time. #define STR(x) #x → STR(hello) becomes the string literal \"hello\"."},
+  {q:"What is the .bss section in an ELF object file?",
+   opts:["Binary symbol section — stores all symbols","Block Started by Symbol — uninitialized global/static variables","Binary service section","Byte sequence section"],
+   ans:1, xp:10, exp:".bss stores uninitialized global and static variables. They're guaranteed to be zero-initialized at program startup without actually storing zeros in the file (just a size record)."},
+  {q:"What is the main advantage of a static library (.a) over a dynamic library (.so)?",
+   opts:["Smaller executable size","Runtime loading flexibility","Self-contained executable — no runtime dependency on external .so files","Better performance in all cases"],
+   ans:2, xp:10, exp:"Static linking embeds all library code into the executable. The binary runs on any system without needing the library installed. Dynamic libraries are shared between processes but require deployment."},
+  {q:"Why must Makefile recipe lines use TAB characters, not spaces?",
+   opts:["Spaces cause slower builds","It's a required syntax: Make's parser distinguishes rules from recipes by requiring a TAB at the start of recipe lines","Spaces are reserved for variable declarations","Modern Make versions accept both"],
+   ans:1, xp:10, exp:"Make's original parser uses TAB to identify recipe lines. This is a historical quirk from 1976. Spaces cause 'missing separator' errors. Always use real TABs (\\t), not spaces."},
+  {q:"What does the nm command show when applied to an object file?",
+   opts:["Assembly language output","The symbol table — functions and variables defined or referenced in the file","The preprocessed source","Compilation errors"],
+   ans:1, xp:10, exp:"nm lists all symbols: T (text/code), D (data), B (bss), U (undefined — needs to be found by linker). Essential for debugging 'undefined reference' linker errors."},
+  {q:"What compiler flag enables debug symbols for use with GDB?",
+   opts:["-O2","-Wall","-g","-static"],
+   ans:2, xp:10, exp:"-g (or -g3) embeds debug information (line numbers, variable names, types) into the binary. Without -g, GDB shows only assembly with no source context."}
+ ]
+},
+
+// ── PREMIUM MODULE 12 ──────────────────────────────────────────────
+{id:12, free:false, icon:'🏆', level:'Advanced', title:'Professional C Development & Capstone',
+ excerpt:'Capstone synthesis: GDB debugging, Valgrind profiling, secure coding standards (SEI CERT/MISRA), POSIX multithreading, network socket programming, and 10 industry-grade projects.',
+ tags:['Advanced','GDB','Multithreading','Capstone'], visual:'🏆', bg:'linear-gradient(135deg,#0f0f0a,#1e1a0f)',
+ concepts:['GDB Debugging Internals','Valgrind Memory Profiling','Code Optimization Techniques','Secure Coding (SEI CERT C / MISRA)','POSIX Multithreading (pthreads/mutex)','Network Socket Programming','API Design Standards','10 Capstone Projects'],
+ body:`
+<p>Professional C development is not just about writing code — it's about writing code that is correct, secure, performant, and maintainable. This capstone module integrates all prior knowledge into production-grade practice.</p>
+
+<h2>1. GDB — The GNU Debugger</h2>
+<pre><code># Compile with debug info and no optimization
+gcc -g -O0 -o program program.c
 
 # Start GDB
 gdb ./program
 
-# Common GDB commands
-(gdb) break main      # Set breakpoint at main
-(gdb) run             # Start execution
-(gdb) next            # Step over (one line at a time)
-(gdb) step            # Step into function calls
-(gdb) print myVar     # Print variable value
-(gdb) backtrace       # Show call stack
-(gdb) watch ptr       # Break when ptr changes
-(gdb) quit</code></pre>
-<h2>Secure Coding Practices</h2>
-<pre><code>// DANGEROUS — buffer overflow vulnerability
-char buf[10];
-gets(buf);            // NEVER use gets()
-strcpy(buf, input);   // NEVER use without length check
+# Essential GDB Commands:
+(gdb) break main          # Set breakpoint at start of main()
+(gdb) break file.c:42    # Breakpoint at specific line
+(gdb) run arg1 arg2      # Start execution with arguments
+(gdb) next               # Step over (execute one line, skip function calls)
+(gdb) step               # Step into (enter function calls)
+(gdb) finish             # Run until current function returns
+(gdb) print myVar        # Print variable value
+(gdb) print *ptr         # Dereference and print pointer
+(gdb) watch ptr          # Break when ptr's value changes
+(gdb) backtrace          # Print full call stack
+(gdb) frame 2            # Switch to stack frame 2
+(gdb) info locals        # Show all local variables
+(gdb) x/10xw 0x601040   # Examine 10 hex words starting at address
+(gdb) continue           # Continue until next breakpoint
+(gdb) quit               # Exit GDB</code></pre>
 
-// SAFE alternatives
+<h2>2. Code Optimization</h2>
+<pre><code>// Loop unrolling — reduce loop overhead
+// Before:
+for (int i = 0; i < 8; i++) arr[i] = 0;
+
+// Unrolled (what -O2 does automatically):
+arr[0]=arr[1]=arr[2]=arr[3]=arr[4]=arr[5]=arr[6]=arr[7]=0;
+
+// Strength reduction — replace expensive ops with cheap ones
+int x = n * 8;     // Multiplication
+int y = n << 3;    // Equivalent bit shift — faster on some hardware
+
+// Avoid recomputing in hot loops
+double radius = 5.0;
+// Bad: computes sqrt(2*PI) every iteration
+for (int i=0; i<10000; i++) area[i] = radius * sqrt(2.0*3.14159);
+// Good: hoist constant expression out of loop
+double factor = radius * sqrt(2.0 * 3.14159);
+for (int i=0; i<10000; i++) area[i] = factor;</code></pre>
+
+<h2>3. Secure Coding Practices (SEI CERT C)</h2>
+<pre><code>#include &lt;string.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;errno.h&gt;
+
+// NEVER use these:
+gets(buf);                          // No bounds check → CVE
+strcpy(dst, src);                   // If src > sizeof(dst) → overflow
+sprintf(buf, format, user_input);  // Format string attack
+
+// ALWAYS use:
 fgets(buf, sizeof(buf), stdin);
-strncpy(buf, input, sizeof(buf) - 1);
-buf[sizeof(buf) - 1] = '\\0';  // Always null-terminate manually
+strncpy(dst, src, sizeof(dst)-1); dst[sizeof(dst)-1] = '\0';
+snprintf(buf, sizeof(buf), "%s", user_input);   // Never pass user data as format
 
-// Integer overflow check
-if (a > INT_MAX - b) {
-    // Handle overflow before adding
+// Integer overflow check (SEI CERT INT30-C)
+int safeAdd(int a, int b, int *result) {
+    if ((b > 0 && a > INT_MAX - b) ||
+        (b < 0 && a < INT_MIN - b)) {
+        return 0;  // Overflow would occur
+    }
+    *result = a + b;
+    return 1;
+}
+
+// Validate all inputs
+void processBuffer(const char *data, size_t len) {
+    if (!data || len == 0 || len > MAX_SAFE_LEN) return;  // Guard
+    // ... process safely
 }</code></pre>
-<h2>Capstone Projects</h2>
-<p>Apply everything you've learned in one of these industry-grade projects:</p>
-<ol>
-  <li><strong>Custom Memory Allocator</strong> — implement <code>malloc</code> and <code>free</code> from scratch</li>
-  <li><strong>Mini Database Engine</strong> — B-tree storage, SQL-like query parsing</li>
-  <li><strong>Command Shell</strong> — fork, exec, pipes, signal handling</li>
-  <li><strong>HTTP Server</strong> — sockets, HTTP/1.1, multi-client with threads</li>
-  <li><strong>File Compression Tool</strong> — Huffman encoding implementation</li>
-  <li><strong>Library Management System</strong> — file I/O, struct arrays, CRUD</li>
-  <li><strong>Text Editor</strong> — terminal control sequences, gap buffer</li>
-  <li><strong>Packet Analyzer</strong> — raw sockets, pcap-style capture</li>
-  <li><strong>Multithreaded Downloader</strong> — pthreads, concurrent file chunks</li>
-  <li><strong>OS Utilities Toolkit</strong> — clone <code>ls</code>, <code>cat</code>, <code>grep</code> using syscalls</li>
-</ol>
-<blockquote>Start with Project 3 (Shell) or Project 6 (Library System) — they are the best balance of challenge and achievability for first-time capstone work.</blockquote>`}
-];
 
+<h2>4. POSIX Multithreading</h2>
+<pre><code>#include &lt;pthread.h&gt;
+#include &lt;stdio.h&gt;
+
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+int sharedCounter = 0;
+
+void* workerThread(void *arg) {
+    int id = *(int*)arg;
+    for (int i = 0; i < 1000; i++) {
+        pthread_mutex_lock(&lock);     // Acquire lock
+        sharedCounter++;               // Critical section — only one thread at a time
+        pthread_mutex_unlock(&lock);   // Release lock
+    }
+    printf("Thread %d finished.\n", id);
+    return NULL;
+}
+
+int main(void) {
+    pthread_t threads[4];
+    int ids[4] = {0, 1, 2, 3};
+
+    for (int i = 0; i < 4; i++)
+        pthread_create(&threads[i], NULL, workerThread, &ids[i]);
+
+    for (int i = 0; i < 4; i++)
+        pthread_join(threads[i], NULL);  // Wait for completion
+
+    printf("Final counter: %d\n", sharedCounter);  // Should be 4000
+    pthread_mutex_destroy(&lock);
+    // Compile: gcc -pthread -o program program.c
+    return 0;
+}</code></pre>
+
+<h2>5. Network Socket Programming</h2>
+<pre><code>#include &lt;sys/socket.h&gt;
+#include &lt;netinet/in.h&gt;
+#include &lt;arpa/inet.h&gt;
+
+// TCP Server skeleton
+int serverFd = socket(AF_INET, SOCK_STREAM, 0);   // Create TCP socket
+
+struct sockaddr_in addr = {
+    .sin_family = AF_INET,
+    .sin_port   = htons(8080),      // Host to network byte order
+    .sin_addr.s_addr = INADDR_ANY   // Bind to all interfaces
+};
+
+bind(serverFd, (struct sockaddr*)&addr, sizeof(addr));
+listen(serverFd, 5);   // Queue up to 5 pending connections
+
+int clientFd = accept(serverFd, NULL, NULL);  // Block until client connects
+char buf[1024];
+recv(clientFd, buf, sizeof(buf)-1, 0);   // Receive data
+send(clientFd, "HTTP/1.1 200 OK\r\n\r\n", 19, 0);  // Send response
+close(clientFd);</code></pre>
+
+<h2>6. 10 Industrial Capstone Projects</h2>
+<ol>
+  <li><strong>Custom Memory Allocator</strong> — implement <code>malloc</code>/<code>free</code> from scratch using sbrk() and free lists</li>
+  <li><strong>Mini Database Engine</strong> — B-tree storage, SQL-like query parsing, transaction primitives</li>
+  <li><strong>Command Shell</strong> — fork/exec, pipe chaining (<code>ls | grep .c</code>), signal handling, readline</li>
+  <li><strong>HTTP Server</strong> — TCP sockets, HTTP/1.1 parsing, multi-client with pthreads</li>
+  <li><strong>File Compression Tool</strong> — Huffman encoding from scratch, bit-level I/O</li>
+  <li><strong>Library Management System</strong> — file I/O, struct arrays, CRUD, binary search</li>
+  <li><strong>Text Editor</strong> — terminal control (termios), gap buffer, undo/redo stack</li>
+  <li><strong>Packet Analyzer</strong> — raw sockets, Ethernet/IP/TCP header parsing, pcap-style</li>
+  <li><strong>Multithreaded Downloader</strong> — pthreads, mutex, concurrent file chunk assembly</li>
+  <li><strong>OS Utilities Toolkit</strong> — clone <code>ls</code>, <code>cat</code>, <code>wc</code>, <code>grep</code> using syscalls</li>
+</ol>
+<blockquote>Start with Project 3 (Shell) or Project 6 (Library System) — they provide the best balance of challenge and achievability for first-time capstone work. The shell project alone integrates fork, exec, pipe, signal, and file descriptor concepts from modules 4, 10, and 12.</blockquote>
+`,
+ quiz:[
+  {q:"Which GDB command shows the full function call history leading to the current execution point?",
+   opts:["print","frame","backtrace","info locals"],
+   ans:2, xp:10, exp:"backtrace (or bt) prints the complete call stack — every function that was called to reach the current point. Essential for diagnosing crashes and understanding recursive calls."},
+  {q:"What is 'strength reduction' in code optimization?",
+   opts:["Reducing the number of function calls","Replacing expensive operations with computationally cheaper equivalents (e.g., multiply→shift)","Removing unused variables","Inlining small functions"],
+   ans:1, xp:10, exp:"Strength reduction replaces high-cost operations with equivalent cheaper ones. Example: n*8 → n<<3 (bit shift instead of multiply), or array subscripting → pointer increment."},
+  {q:"What type of vulnerability does snprintf prevent that sprintf does not?",
+   opts:["Integer overflow","Format string injection attacks","Null pointer dereference","Stack underflow"],
+   ans:0, xp:10, exp:"snprintf takes a buffer size limit, preventing buffer overflows that unlimited sprintf can cause. Both can be vulnerable to format string attacks if user input is passed as the format — NEVER do that."},
+  {q:"What is a race condition in multithreaded C programming?",
+   opts:["A deadlock between two threads","Two threads accessing shared data concurrently without synchronization, causing undefined results","A thread running faster than expected","Stack overflow from too many threads"],
+   ans:1, xp:10, exp:"A race condition occurs when two threads read/write shared data without a mutex. The final value depends on which thread runs last — non-deterministic and often catastrophic bugs."},
+  {q:"What does pthread_join() do?",
+   opts:["Creates a new thread","Merges two threads into one","Blocks the calling thread until the target thread finishes execution","Sends a signal to another thread"],
+   ans:2, xp:10, exp:"pthread_join blocks until the specified thread completes, then retrieves its return value. Without join, the main thread may exit before worker threads finish, cleaning up their resources prematurely."},
+  {q:"In the TCP socket API, what does the listen() call do?",
+   opts:["Accepts a client connection","Binds to a port","Marks the socket as passive — willing to accept incoming connections","Sends data to a client"],
+   ans:2, xp:10, exp:"listen() marks the socket as a server socket that will accept connections. The backlog parameter specifies how many pending connections can queue. You still need accept() to actually accept each connection."},
+  {q:"What is htons() used for when setting a network port?",
+   opts:["Converting string to integer","Host-to-network byte order conversion for short integers","Encrypting port numbers","Allocating socket buffers"],
+   ans:1, xp:10, exp:"Network protocols use big-endian byte order. htons (Host TO Network Short) converts a 16-bit port number from the host's byte order to network byte order. Without it, port numbers are wrong on little-endian systems."},
+  {q:"Which of the 10 capstone projects best integrates the most advanced module topics (fork, exec, pipe, signals)?",
+   opts:["Library Management System","HTTP Server","Command Shell","Text Editor"],
+   ans:2, xp:10, exp:"The Command Shell (Project 3) requires fork/exec for running programs, pipe() for chaining commands, signal handling for Ctrl+C, and file descriptor manipulation — integrating Modules 4, 10, and 12 fully."}
+ ]
+}
+
+]; // end MODS array
+
+// ══════════════════════════════════════════════════════════════════
+// STATE & QUIZ ENGINE
+// ══════════════════════════════════════════════════════════════════
 let currentId = null;
 let completed = getCompleted();
 
-// RENDER INDEX
+let quizState = {
+  modId: null,
+  questions: [],
+  current: 0,
+  answers: [],
+  score: 0,
+  answered: false
+};
+
 renderIndex();
 
 function renderIndex() {
@@ -746,11 +2514,13 @@ function renderIndex() {
   document.getElementById('freeGrid').innerHTML = free.map(renderCard).join('');
   document.getElementById('premiumGrid').innerHTML = prem.map(renderCard).join('');
   updateProgress();
+  updateXPUI();
 }
 
 function renderCard(m) {
   const done = completed.includes(m.id);
   const locked = !m.free && !isPremium();
+  const quizPass = isQuizPassed(m.id);
   const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}`;
   const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
   const click = locked ? `onclick="window.location.href='premium.html'"` : `onclick="openLesson(${m.id})"`;
@@ -759,7 +2529,11 @@ function renderCard(m) {
     <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
     <div class="mod-title">${m.title}</div>
     <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
-    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">→</span></div>
+    <div class="mod-footer">
+      <span class="mod-level">${m.level}</span>
+      ${quizPass ? '<span style="color:#32c850;font-size:11px;">✓ Quiz Passed</span>' : ''}
+      <span class="mod-arrow">→</span>
+    </div>
   </div>`;
 }
 
@@ -776,30 +2550,32 @@ function openLesson(id) {
   if (!m) return;
   if (!m.free && !isPremium()) { window.location.href='premium.html'; return; }
   currentId = id;
-  document.getElementById('indexPage').style.display = 'none';
-  document.getElementById('lessonPage').style.display = 'block';
+  document.getElementById('indexPage').style.display='none';
+  document.getElementById('lessonPage').style.display='block';
   window.scrollTo(0,0);
   document.getElementById('lesCrumb').textContent = m.title;
-
   const done = completed.includes(id);
   const mb = document.getElementById('markBtn');
   mb.textContent = done ? '✓ Completed' : '✓ Mark Done';
   mb.classList.toggle('done-btn', done);
-  document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
-  document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
+  document.getElementById('prevBtn').style.opacity = id>1?'1':'0.3';
+  document.getElementById('nextBtn').style.opacity = id<MODS.length?'1':'0.3';
 
-  const html = !m.free && !isPremium()
+  const quizPassed = isQuizPassed(id);
+
+  const html = (!m.free && !isPremium())
     ? `<div class="premium-lock"><div style="font-size:48px;margin-bottom:16px;">⭐</div>
-       <div style="font-family:var(--ff-display);font-size:28px;margin-bottom:10px;">Premium Module</div>
-       <div style="font-size:14px;color:var(--muted2);margin-bottom:24px;">Sign in as admin to unlock all advanced content.</div>
+       <div style="font-family:var(--ff-display,'Syne'),sans-serif;font-size:28px;margin-bottom:10px;">Premium Module</div>
+       <div style="font-size:14px;color:var(--muted2,rgba(255,255,255,0.4));margin-bottom:24px;">Sign in as admin to unlock all advanced content.</div>
        <button class="lock-btn" onclick="window.location.href='premium.html'">Unlock Premium</button></div>`
     : `<div class="les-cat ${!m.free?'prem':''}">Module ${String(id).padStart(2,'0')} · ${m.level} · ${m.free?'Free':'Premium'}</div>
        <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
          <span class="meta-item">📖 C Programming</span>
-         <span class="meta-item">⏱ ~10 min read</span>
+         <span class="meta-item">⏱ ~15 min read</span>
          <span class="meta-item">⚙️ ${m.level}</span>
+         <span class="meta-item">⚡ ${m.quiz.length * 10} XP Available</span>
        </div>
        <div class="les-visual" style="background:${m.bg};">
          <div class="les-visual-grid"></div>
@@ -810,16 +2586,18 @@ function openLesson(id) {
          <div class="concepts-title">Key Concepts Covered</div>
          <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
        </div>
+       ${buildQuizGate(id, quizPassed)}
        <div class="les-footer">
          <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
          <div class="nav-lessons">
            ${id>1?`<div class="nlc" onclick="openLesson(${id-1})"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
-           ${id<MODS.length?`<div class="nlc" onclick="openLesson(${id+1})" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
+           ${id<MODS.length?`<div class="nlc" onclick="${canGoNext(id)?`openLesson(${id+1})`:`alert('Complete the module quiz with 75% or higher to proceed!')`}" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
          </div>
        </div>`;
 
   document.getElementById('lessonContent').innerHTML = html;
   renderSidebar();
+  updateXPUI();
 
   window.onscroll = () => {
     const pct = document.body.scrollHeight - window.innerHeight > 0
@@ -828,28 +2606,203 @@ function openLesson(id) {
   };
 }
 
+function canGoNext(id) {
+  return isQuizPassed(id);
+}
+
+function buildQuizGate(modId, quizPassed) {
+  const m = MODS.find(x=>x.id===modId);
+  if (quizPassed) {
+    return `<div class="quiz-gate">
+      <div class="quiz-gate-icon">🏆</div>
+      <div class="quiz-gate-title">Module Quiz — Passed!</div>
+      <div style="margin-bottom:12px;"><span class="quiz-passed-badge">✓ Score ≥ 75% · Quiz Unlocked Next Module</span></div>
+      <button class="quiz-gate-btn" onclick="startQuiz(${modId})">Retake Quiz for More XP</button>
+    </div>`;
+  }
+  return `<div class="quiz-gate">
+    <div class="quiz-gate-icon">🎯</div>
+    <div class="quiz-gate-title">Module Quiz Required</div>
+    <div class="quiz-gate-desc">Score 75% or higher to unlock the next module.<br>Each correct answer earns you XP points!</div>
+    <button class="quiz-gate-btn" onclick="startQuiz(${modId})">Start Quiz — ${m.quiz.length} Questions · ${m.quiz.length * 10} XP</button>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// QUIZ SYSTEM
+// ══════════════════════════════════════════════════════════════════
+function startQuiz(modId) {
+  const m = MODS.find(x=>x.id===modId);
+  if (!m) return;
+  quizState = {
+    modId: modId,
+    questions: m.quiz,
+    current: 0,
+    answers: new Array(m.quiz.length).fill(-1),
+    score: 0,
+    answered: false
+  };
+  document.getElementById('quizOverlay').classList.add('active');
+  renderQuizQuestion();
+  window.scrollTo(0,0);
+}
+
+function renderQuizQuestion() {
+  const qs = quizState.questions;
+  const i  = quizState.current;
+  const q  = qs[i];
+  const total = qs.length;
+  const selectedAns = quizState.answers[i];
+
+  const optHTML = q.opts.map((opt, idx) => {
+    let cls = 'quiz-opt';
+    if (selectedAns !== -1) {
+      if (idx === q.ans) cls += ' reveal-correct';
+      if (idx === selectedAns && idx !== q.ans) cls += ' wrong';
+      if (idx === selectedAns && idx === q.ans) cls = 'quiz-opt correct';
+    }
+    return `<button class="${cls}" onclick="selectAnswer(${idx})" ${selectedAns !== -1 ? 'disabled' : ''}>${String.fromCharCode(65+idx)}. ${opt}</button>`;
+  }).join('');
+
+  const feedbackHTML = selectedAns !== -1
+    ? `<div class="quiz-feedback ${selectedAns === q.ans ? 'correct' : 'wrong'}">
+        ${selectedAns === q.ans ? '✓ Correct!' : '✗ Incorrect.'} ${q.exp}
+       </div>`
+    : '';
+
+  const xpInfo = `<span style="font-size:12px;color:#c8f135;">+${q.xp} XP for correct answer</span>`;
+
+  document.getElementById('quizBox').innerHTML = `
+    <div class="quiz-header">
+      <div>
+        <div class="quiz-title">Module ${String(quizState.modId).padStart(2,'0')} Quiz</div>
+        <div class="quiz-subtitle">Score ≥ 75% to unlock next module</div>
+      </div>
+      <div class="quiz-progress-text">Q${i+1} / ${total}</div>
+    </div>
+    <div class="quiz-q-num">QUESTION ${i+1} OF ${total}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options">${optHTML}</div>
+    ${feedbackHTML}
+    <div class="quiz-nav">
+      ${xpInfo}
+      ${selectedAns !== -1
+        ? i < total - 1
+          ? `<button class="quiz-btn" onclick="nextQuizQ()">Next Question →</button>`
+          : `<button class="quiz-btn" onclick="showQuizResult()">See Results</button>`
+        : `<button class="quiz-btn" disabled>Select an answer</button>`
+      }
+    </div>
+  `;
+}
+
+function selectAnswer(optIdx) {
+  if (quizState.answers[quizState.current] !== -1) return; // Already answered
+  quizState.answers[quizState.current] = optIdx;
+  const q = quizState.questions[quizState.current];
+  if (optIdx === q.ans) {
+    quizState.score++;
+    addXP(q.xp);
+  }
+  renderQuizQuestion();
+}
+
+function nextQuizQ() {
+  if (quizState.current < quizState.questions.length - 1) {
+    quizState.current++;
+    renderQuizQuestion();
+  }
+}
+
+function showQuizResult() {
+  const total = quizState.questions.length;
+  const score = quizState.score;
+  const pct   = Math.round((score / total) * 100);
+  const pass  = pct >= 75;
+  const modId = quizState.modId;
+
+  if (pass) {
+    markQuizPassed(modId);
+    if (!completed.includes(modId)) {
+      completed.push(modId);
+      saveCompleted(completed);
+    }
+  }
+
+  const totalXpEarned = quizState.questions.filter((_,i) => quizState.answers[i] === quizState.questions[i].ans).reduce((s,q) => s+q.xp, 0);
+
+  document.getElementById('quizBox').innerHTML = `
+    <div class="quiz-result">
+      <div class="quiz-result-score ${pass?'pass':'fail'}">${pct}%</div>
+      <div class="quiz-result-msg">${pass ? '🎉 Excellent! You passed the quiz!' : '😤 Not quite — need 75% to proceed.'}</div>
+      <div class="quiz-result-sub">${score} / ${total} correct answers</div>
+      ${totalXpEarned > 0 ? `<div class="quiz-result-xp">+${totalXpEarned} XP Earned This Attempt</div>` : ''}
+      ${pass ? `<div style="margin-top:12px;"><span class="quiz-passed-badge">✓ Next Module Unlocked!</span></div>` : ''}
+      <div class="quiz-result-btns">
+        <button class="quiz-btn secondary" onclick="retryQuiz()">↺ Retry Quiz</button>
+        <button class="quiz-btn" onclick="closeQuiz()">← Back to Lesson</button>
+        ${pass && modId < MODS.length ? `<button class="quiz-btn" onclick="closeQuizAndNext()">Next Module →</button>` : ''}
+      </div>
+    </div>
+  `;
+  updateXPUI();
+  renderSidebar();
+}
+
+function retryQuiz() {
+  startQuiz(quizState.modId);
+}
+
+function closeQuiz() {
+  document.getElementById('quizOverlay').classList.remove('active');
+  openLesson(quizState.modId);
+}
+
+function closeQuizAndNext() {
+  const nextId = quizState.modId + 1;
+  document.getElementById('quizOverlay').classList.remove('active');
+  if (nextId <= MODS.length) openLesson(nextId);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// SIDEBAR & NAVIGATION
+// ══════════════════════════════════════════════════════════════════
 function renderSidebar() {
   const freeDone = completed.filter(id=>MODS.find(m=>m.id===id&&m.free)).length;
   const pct = Math.round((freeDone/6)*100);
   document.getElementById('sbProgFill').style.width = pct+'%';
   document.getElementById('sbProgLabel').textContent = `${freeDone} / 6 free`;
+  document.getElementById('sbXp').textContent = getXP();
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
-    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
+    const done=completed.includes(m.id);
+    const active=m.id===currentId;
+    const locked=!m.free&&!isPremium();
+    const quizPass=isQuizPassed(m.id);
     return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`window.location.href='premium.html'`:`openLesson(${m.id})`}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
       ${locked?'<span style="font-size:10px;opacity:0.5;">🔒</span>':''}
+      ${quizPass?'<span style="font-size:10px;color:#32c850;">⚡</span>':''}
     </button>`;
   }).join('');
 }
 
 function goBack(){document.getElementById('lessonPage').style.display='none';document.getElementById('indexPage').style.display='block';renderIndex();window.scrollTo(0,0);}
 function prevLesson(){if(currentId>1)openLesson(currentId-1);}
-function nextLesson(){if(currentId<MODS.length)openLesson(currentId+1);}
+function nextLesson(){
+  if(currentId<MODS.length){
+    if(canGoNext(currentId)){
+      openLesson(currentId+1);
+    } else {
+      showToast('Complete the quiz with 75%+ to unlock the next module! 🎯');
+    }
+  }
+}
 function markDone(){
   if(!currentId)return;
   const m=MODS.find(x=>x.id===currentId);
   if(!m.free&&!isPremium())return;
+  if(!isQuizPassed(currentId)){showToast('Pass the quiz first to mark this module done! 🎯');return;}
   if(!completed.includes(currentId)){completed.push(currentId);saveCompleted(completed);showToast('✓ Module marked complete! 🎯');}
   openLesson(currentId);
 }
@@ -862,6 +2815,11 @@ document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 (function anim(){cur.style.left=(mx-5)+'px';cur.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=(rx-18)+'px';curR.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
 document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
 document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
+
+// Close quiz on overlay click (outside box)
+document.getElementById('quizOverlay').addEventListener('click', function(e){
+  if(e.target === this) closeQuiz();
+});
 </script>
 </body>
 </html>
