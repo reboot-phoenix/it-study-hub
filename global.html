@@ -48,6 +48,8 @@
         <div class="profile-name" id="sbName">Loading...</div>
         <div class="profile-email" id="sbEmail"></div>
         <div class="admin-badge" id="sbAdminBadge" style="display:none;">⭐ ADMIN</div>
+        <div id="sbPremiumBadge" style="display:none;margin-top:8px;background:linear-gradient(135deg,rgba(200,241,53,0.15),rgba(200,241,53,0.05));border:1px solid rgba(200,241,53,0.35);border-radius:6px;padding:5px 10px;font-family:var(--ff-mono);font-size:10px;letter-spacing:1px;color:#c8f135;text-align:center;">⚡ PREMIUM</div>
+        <div id="sbEliteBadge" style="display:none;margin-top:8px;background:linear-gradient(135deg,rgba(247,183,49,0.15),rgba(247,183,49,0.05));border:1px solid rgba(247,183,49,0.35);border-radius:6px;padding:5px 10px;font-family:var(--ff-mono);font-size:10px;letter-spacing:1px;color:#f7b731;text-align:center;">🏆 ELITE</div>
       </div>
 
       <div class="sb-label">Your Stats</div>
@@ -85,6 +87,7 @@
           <div class="rank-chip">🏆 Global Rank <span id="wRank">#—</span></div>
           <div class="rank-chip">⚡ Total XP <span id="wXP">0</span></div>
           <div class="rank-chip" id="adminChip" style="display:none;">⭐ <span>Admin Access</span></div>
+          <div class="rank-chip" id="premiumChip" style="display:none;background:linear-gradient(135deg,rgba(200,241,53,0.12),rgba(200,241,53,0.04));border-color:rgba(200,241,53,0.3);">⚡ <span id="premiumChipLabel">Premium</span></div>
         </div>
       </div>
 
@@ -316,6 +319,26 @@ function renderStats(data, isAdmin) {
   document.getElementById('sbQuizzes').textContent = quizzes;
   document.getElementById('sbBest').textContent = best;
   document.getElementById('wXP').textContent = xp.toLocaleString();
+
+  // ── Premium badge indicators ──
+  const plan = data.plan || '';
+  const isElite = plan === 'elite';
+  const isPro   = plan === 'pro' || plan === 'basic';
+  if (isAdmin) {
+    // Admin gets its own badge; no extra premium badge needed
+  } else if (isElite) {
+    document.getElementById('sbEliteBadge').style.display = 'block';
+    const pc = document.getElementById('premiumChip');
+    pc.style.display = 'flex';
+    pc.style.background = 'linear-gradient(135deg,rgba(247,183,49,0.12),rgba(247,183,49,0.04))';
+    pc.style.borderColor = 'rgba(247,183,49,0.35)';
+    document.getElementById('premiumChipLabel').textContent = 'Elite Member 🏆';
+    pc.querySelector('span:first-child') && (pc.childNodes[0].textContent = '🏆 ');
+  } else if (isPro) {
+    document.getElementById('sbPremiumBadge').style.display = 'block';
+    document.getElementById('premiumChip').style.display = 'flex';
+    document.getElementById('premiumChipLabel').textContent = 'Premium';
+  }
 }
 
 // ── LEADERBOARD ──

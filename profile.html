@@ -52,6 +52,8 @@
         <span class="chip chip-blue" id="chipRank">#— GLOBAL</span>
         <span class="chip chip-gold" id="chipXP">0 XP</span>
         <span class="chip chip-gold" id="adminChip" style="display:none;">⭐ ADMIN</span>
+        <span id="chipPremium" style="display:none;padding:4px 12px;border-radius:6px;font-family:var(--ff-mono,monospace);font-size:10px;font-weight:700;letter-spacing:1px;background:linear-gradient(135deg,rgba(200,241,53,0.18),rgba(200,241,53,0.06));border:1px solid rgba(200,241,53,0.4);color:#c8f135;">⚡ PREMIUM</span>
+        <span id="chipElite" style="display:none;padding:4px 12px;border-radius:6px;font-family:var(--ff-mono,monospace);font-size:10px;font-weight:700;letter-spacing:1px;background:linear-gradient(135deg,rgba(247,183,49,0.18),rgba(247,183,49,0.06));border:1px solid rgba(247,183,49,0.4);color:#f7b731;">🏆 ELITE</span>
       </div>
     </div>
   </div>
@@ -236,6 +238,9 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('chipLevel').textContent = '⭐ ADMIN';
   }
 
+  // ── Premium / Elite badge (resolved after Firestore data loads below) ──
+  // Deferred to after userData fetch
+
   // Get Firestore data
   try {
     const snap = await getDoc(doc(db, 'users', user.uid));
@@ -248,6 +253,18 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById('statXP').textContent = (userData.xp||0).toLocaleString();
   document.getElementById('chipXP').textContent = (userData.xp||0).toLocaleString() + ' XP';
   document.getElementById('statQuizzes').textContent = userData.quizzesDone || 0;
+
+  // ── Premium / Elite badge ──
+  if (!isAdmin) {
+    const plan = userData.plan || '';
+    if (plan === 'elite') {
+      document.getElementById('chipElite').style.display = 'inline-block';
+      document.getElementById('chipLevel').textContent = '🏆 ELITE';
+    } else if (plan === 'pro' || plan === 'basic') {
+      document.getElementById('chipPremium').style.display = 'inline-block';
+      document.getElementById('chipLevel').textContent = '⚡ PREMIUM';
+    }
+  }
 
   // Rank
   await loadRank(user.uid, userData.xp||0);

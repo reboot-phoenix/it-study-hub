@@ -206,6 +206,67 @@
   <div class="quiz-box" id="quizBox"></div>
 </div>
 
+<!-- C TERMINAL PANEL -->
+<div id="terminalPanel" style="display:none;position:fixed;bottom:0;left:0;right:0;height:340px;background:#0a0c10;border-top:2px solid #c8f135;z-index:7000;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace;box-shadow:0 -8px 40px rgba(0,0,0,0.7);transform:translateY(100%);transition:transform 0.3s cubic-bezier(.4,0,.2,1);" id="terminalPanel">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:#0c0f14;border-bottom:1px solid rgba(200,241,53,0.15);">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:11px;color:#c8f135;letter-spacing:1px;">⚙️ C PRACTICE TERMINAL</span>
+      <span style="font-size:10px;color:rgba(255,255,255,0.3);">· Powered by JDoodle</span>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="runCode()" style="background:#c8f135;color:#000;border:none;padding:5px 14px;border-radius:6px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.5px;">▶ RUN</button>
+      <button onclick="clearTerminal()" style="background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1);padding:5px 10px;border-radius:6px;font-family:inherit;font-size:11px;cursor:pointer;">CLR</button>
+      <button onclick="closeTerminal()" style="background:transparent;color:rgba(255,101,132,0.7);border:1px solid rgba(255,101,132,0.2);padding:5px 10px;border-radius:6px;font-family:inherit;font-size:11px;cursor:pointer;">✕</button>
+    </div>
+  </div>
+  <div style="display:flex;flex:1;overflow:hidden;">
+    <div style="flex:1;display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,0.06);">
+      <div style="font-size:10px;color:rgba(255,255,255,0.3);padding:6px 12px;letter-spacing:.5px;">CODE EDITOR</div>
+      <textarea id="termCode" spellcheck="false" style="flex:1;background:transparent;border:none;color:#e0e8ff;font-family:'JetBrains Mono',monospace;font-size:13px;padding:8px 14px;resize:none;outline:none;line-height:1.6;" placeholder="// Write your C code here...
+#include &lt;stdio.h&gt;
+
+int main() {
+    printf(&quot;Hello, C!\\n&quot;);
+    return 0;
+}">#include &lt;stdio.h&gt;
+
+int main() {
+    printf("Hello, C!\\n");
+    return 0;
+}</textarea>
+    </div>
+    <div style="width:42%;display:flex;flex-direction:column;">
+      <div style="font-size:10px;color:rgba(255,255,255,0.3);padding:6px 12px;letter-spacing:.5px;">OUTPUT</div>
+      <div id="termOutput" style="flex:1;color:#a8e890;font-size:13px;padding:8px 14px;overflow-y:auto;white-space:pre-wrap;line-height:1.6;">// Output will appear here after clicking RUN</div>
+    </div>
+  </div>
+</div>
+
+<!-- Terminal Toggle Button -->
+<button onclick="toggleTerminal()" id="termToggleBtn" title="Open C Practice Terminal" style="position:fixed;bottom:24px;right:24px;z-index:6999;background:#0a0c10;border:1px solid rgba(200,241,53,0.4);border-radius:12px;padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#c8f135;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 24px rgba(0,0,0,0.5);transition:all 0.2s;" onmouseover="this.style.background='rgba(200,241,53,0.1)'" onmouseout="this.style.background='#0a0c10'">
+  <span style="font-size:15px;">⚙️</span> C Terminal
+</button>
+
+<!-- Firebase init for c.html (needed by resolvePremiumStatus + openPremiumModal) -->
+<script type="module">
+  import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js';
+  import { getAuth } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js';
+  import { getFirestore } from 'https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js';
+  const firebaseConfig = {
+    apiKey:"AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
+    authDomain:"it-study-hub.firebaseapp.com",
+    projectId:"it-study-hub",
+    storageBucket:"it-study-hub.firebasestorage.app",
+    messagingSenderId:"566661039167",
+    appId:"1:566661039167:web:122691d263631e404ea48a"
+  };
+  const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+  window._fbApp = app;
+  window._fbAuth = getAuth(app);
+  window._fbDb = getFirestore(app);
+</script>
+<script src="premium-modal.js"></script>
+
 <!-- XP Burst -->
 <div class="xp-burst" id="xpBurst" style="display:none;">
   <div class="xp-burst-pts" id="xpBurstPts">+10</div>
@@ -219,16 +280,51 @@
 <script>
 const ADMIN_EMAIL = 'itstudyhub.tiu@gmail.com';
 function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){return null;}}
-function isPremium(){
-  const s=getSession();
-  // Check both admin flag AND email match — also check a direct premium flag
-  if(!s) return false;
-  if(s.isAdmin) return true;
-  if(s.email===ADMIN_EMAIL) return true;
-  if(s.isPremium) return true;
-  if(s.premium) return true;
-  return false;
+
+// ── Cached premium state (resolved asynchronously from Firestore) ──
+let _premiumResolved = false;
+let _isPremiumCache = false;
+
+async function resolvePremiumStatus() {
+  if (_premiumResolved) return _isPremiumCache;
+  // Fast path: check localStorage first
+  const s = getSession();
+  if (s && (s.isAdmin || s.email === ADMIN_EMAIL || s.isPremium || s.premium || s.plan === 'pro' || s.plan === 'elite')) {
+    _isPremiumCache = true; _premiumResolved = true; return true;
+  }
+  // Authoritative path: check Firestore
+  try {
+    const { getApps, initializeApp } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js');
+    const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
+    const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
+    const firebaseConfig = {
+      apiKey:"AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
+      authDomain:"it-study-hub.firebaseapp.com",
+      projectId:"it-study-hub",
+      storageBucket:"it-study-hub.firebasestorage.app",
+      messagingSenderId:"566661039167",
+      appId:"1:566661039167:web:122691d263631e404ea48a"
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    // Wait for auth to restore session
+    const user = await new Promise(res => {
+      if (auth.currentUser !== null) { res(auth.currentUser); return; }
+      const unsub = auth.onAuthStateChanged(u => { unsub(); res(u); });
+    });
+    if (!user) { _premiumResolved = true; _isPremiumCache = false; return false; }
+    const db = getFirestore(app);
+    const snap = await getDoc(doc(db,'users',user.uid));
+    const data = snap.exists() ? snap.data() : {};
+    const premium = data.isAdmin === true || data.plan === 'pro' || data.plan === 'elite' || data.plan === 'basic' || user.email === ADMIN_EMAIL;
+    // Update localStorage cache for fast path next time
+    if (s) { s.isPremium = premium; localStorage.setItem('ish_session', JSON.stringify(s)); }
+    _isPremiumCache = premium; _premiumResolved = true;
+    return premium;
+  } catch(e) { console.warn('Premium check failed:', e); _premiumResolved = true; _isPremiumCache = false; return false; }
 }
+
+function isPremium(){ return _isPremiumCache; } // sync fallback (used in renderSidebar)
 function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_c_done')||'[]');}catch(e){return[];}}
 function saveCompleted(a){localStorage.setItem('ish_c_done',JSON.stringify(a));}
 function getXP(){return parseInt(localStorage.getItem('ish_c_xp')||'0',10);}
@@ -2698,11 +2794,30 @@ function updateProgress() {
   document.getElementById('progLabel').textContent = `${freeDone} of 6 free modules completed`;
 }
 
-function openLesson(id) {
+async function openLesson(id) {
   const m = MODS.find(x=>x.id===id);
   if (!m) return;
-  // FIXED: Premium check — allow access if any premium flag is set
-  if (!m.free && !isPremium()) { window.location.href='premium.html'; return; }
+  // Async Firestore premium check — no redirect, shows inline gate
+  if (!m.free) {
+    const premium = await resolvePremiumStatus();
+    if (!premium) {
+      // Show inline premium gate inside lesson page
+      document.getElementById('indexPage').style.display='none';
+      document.getElementById('lessonPage').style.display='block';
+      window.scrollTo(0,0);
+      document.getElementById('lesCrumb').textContent = m.title;
+      document.getElementById('lessonContent').innerHTML = `
+        <div style="padding:60px 20px;text-align:center;max-width:560px;margin:0 auto;">
+          <div style="font-size:56px;margin-bottom:20px;">🔒</div>
+          <h2 style="font-family:var(--ff-display,'Syne'),sans-serif;font-size:28px;font-weight:800;color:#c8f135;margin-bottom:12px;">Premium Module</h2>
+          <p style="font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:28px;">"${m.title}" is part of the premium curriculum. Unlock all 6 advanced modules with a Pro or Elite plan.</p>
+          <button onclick="window.openPremiumModal('C Programming')" style="background:#c8f135;color:#000;border:none;padding:14px 32px;border-radius:10px;font-family:var(--ff-mono,monospace);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px;">⚡ UNLOCK PREMIUM →</button>
+          <div style="margin-top:16px;"><button onclick="goBack()" style="background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1);padding:10px 20px;border-radius:8px;font-size:12px;cursor:pointer;">← Back to Course</button></div>
+        </div>`;
+      renderSidebar();
+      return;
+    }
+  }
   currentId = id;
   document.getElementById('indexPage').style.display='none';
   document.getElementById('lessonPage').style.display='block';
@@ -2871,7 +2986,7 @@ function renderSidebar() {
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
     const done=completed.includes(m.id), active=m.id===currentId;
     const locked=!m.free&&!isPremium(), quizPass=isQuizPassed(m.id);
-    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`window.location.href='premium.html'`:`openLesson(${m.id})`}">
+    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`openLesson(${m.id})`:`openLesson(${m.id})`}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
       ${locked?'<span style="font-size:10px;opacity:0.5;">🔒</span>':''}
@@ -2920,6 +3035,69 @@ document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick
 document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
 
 document.getElementById('quizOverlay').addEventListener('click',function(e){if(e.target===this)closeQuiz();});
+
+// ── C Practice Terminal ──
+let termOpen = false;
+function toggleTerminal() {
+  termOpen ? closeTerminal() : openTerminal();
+}
+function openTerminal() {
+  termOpen = true;
+  const p = document.getElementById('terminalPanel');
+  p.style.display = 'flex';
+  requestAnimationFrame(() => { p.style.transform = 'translateY(0)'; });
+  document.getElementById('termToggleBtn').style.borderColor = '#c8f135';
+  document.getElementById('termToggleBtn').style.color = '#c8f135';
+  document.getElementById('termToggleBtn').innerHTML = '<span style="font-size:15px;">⚙️</span> Close Terminal';
+}
+function closeTerminal() {
+  termOpen = false;
+  const p = document.getElementById('terminalPanel');
+  p.style.transform = 'translateY(100%)';
+  setTimeout(() => { p.style.display = 'none'; }, 310);
+  document.getElementById('termToggleBtn').innerHTML = '<span style="font-size:15px;">⚙️</span> C Terminal';
+}
+function clearTerminal() {
+  document.getElementById('termOutput').textContent = '// Output cleared. Write code and click RUN.';
+  document.getElementById('termCode').value = '#include <stdio.h>\n\nint main() {\n    printf("Hello, C!\\n");\n    return 0;\n}';
+}
+async function runCode() {
+  const code = document.getElementById('termCode').value;
+  const out = document.getElementById('termOutput');
+  out.style.color = '#9090a8';
+  out.textContent = '⏳ Compiling and running...';
+  try {
+    const resp = await fetch('https://api.jdoodle.com/v1/execute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        clientId: 'YOUR_JDOODLE_CLIENT_ID',
+        clientSecret: 'YOUR_JDOODLE_SECRET',
+        script: code,
+        language: 'c',
+        versionIndex: '5'
+      })
+    });
+    const data = await resp.json();
+    if (data.output) {
+      out.style.color = '#a8e890';
+      out.textContent = data.output;
+    } else if (data.error) {
+      out.style.color = '#f06060';
+      out.textContent = '⚠️ Error:\n' + data.error;
+    } else {
+      out.style.color = '#9090a8';
+      out.textContent = JSON.stringify(data, null, 2);
+    }
+  } catch(e) {
+    // Fallback: open in a compiler tab if API not configured
+    out.style.color = '#f7b731';
+    out.textContent = '⚡ API not configured yet.\n\nOpening Programiz online C compiler in a new tab — paste your code there to run it!';
+    setTimeout(() => {
+      window.open('https://www.programiz.com/c-programming/online-compiler/', '_blank');
+    }, 1200);
+  }
+}
 </script>
 </body>
 </html>

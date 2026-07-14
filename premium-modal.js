@@ -282,7 +282,17 @@ function showAlreadyPremium(plan) {
     <div class="pm-crown">👑</div>
     <h3>You're already on ${plan} plan!</h3>
     <p>All premium content is unlocked. Enjoy learning.</p>
+    <button class="pm-btn pm-btn-lime" style="margin-top:24px;max-width:200px;" onclick="window.closePremiumModal()">Close ✕</button>
   </div>`;
+  // Hook cursor into newly-added button
+  const cursor = document.getElementById('cursor') || document.getElementById('cur');
+  const ring   = document.getElementById('cursorRing') || document.getElementById('curR');
+  if (cursor && ring) {
+    document.querySelectorAll('.pm-already button').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2)'; if(ring) ring.style.transform='scale(1.5)'; });
+      el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)'; if(ring) ring.style.transform='scale(1)'; });
+    });
+  }
 }
 
 // ── Helper: wait for Firebase to restore auth session ──
@@ -329,7 +339,7 @@ window.openPremiumModal = async function(courseName) {
     const overlay = buildModal(courseName);
     document.body.appendChild(overlay);
     requestAnimationFrame(() => overlay.classList.add('pm-visible'));
-    // FIX 4: was session.plan (undefined), now correctly uses data.plan from Firestore
+    document.body.style.overflow = 'hidden';
     showAlreadyPremium(data.plan || 'Pro');
     return;
   }
