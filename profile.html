@@ -651,14 +651,59 @@ const SUBJECTS = [
   {key:'javascript',label:'JavaScript',color:'#c8f135'},
 ];
 const ALL_BADGES = [
-  {id:'hello_world',icon:'🌟',label:'Hello World'},
-  {id:'first_quiz',icon:'🎯',label:'First Quiz'},
-  {id:'c_master',icon:'⚙️',label:'C Master'},
-  {id:'java_hero',icon:'☕',label:'Java Hero'},
-  {id:'python_pro',icon:'🐍',label:'Python Pro'},
-  {id:'bug_hunter',icon:'🐞',label:'Bug Hunter'},
-  {id:'night_owl',icon:'🦉',label:'Night Owl'},
-  {id:'admin_star',icon:'⭐',label:'Admin'},
+  // ── Getting Started ──────────────────────────────────
+  {id:'hello_world',    icon:'🌱', label:'Hello World',     desc:'Created your account'},
+  {id:'first_login',    icon:'🔑', label:'First Login',     desc:'Logged in for the first time'},
+  {id:'profile_pic',    icon:'📸', label:'Face to the Name',desc:'Uploaded a profile photo'},
+  {id:'name_set',       icon:'✏️', label:'Named',           desc:'Set your display name'},
+
+  // ── Quiz & Learning ──────────────────────────────────
+  {id:'first_quiz',     icon:'🎯', label:'First Shot',      desc:'Completed your first quiz'},
+  {id:'quiz_5',         icon:'🏹', label:'On a Roll',       desc:'Completed 5 quizzes'},
+  {id:'quiz_10',        icon:'🎪', label:'Quiz Veteran',    desc:'Completed 10 quizzes'},
+  {id:'quiz_25',        icon:'🧠', label:'Quiz Machine',    desc:'Completed 25 quizzes'},
+  {id:'perfect_score',  icon:'💯', label:'Perfection',      desc:'Scored 100% on any quiz'},
+  {id:'above_90',       icon:'🔥', label:'On Fire',         desc:'Scored above 90% on a quiz'},
+  {id:'above_75',       icon:'✅', label:'Solid Pass',      desc:'Scored above 75% on a quiz'},
+  {id:'comeback',       icon:'↩️', label:'Comeback Kid',    desc:'Passed a quiz after failing it'},
+  {id:'speed_run',      icon:'⚡', label:'Speed Runner',    desc:'Completed a quiz in under 2 min'},
+
+  // ── Course Completion ────────────────────────────────
+  {id:'c_master',       icon:'🖥️', label:'C Master',        desc:'Completed all C modules'},
+  {id:'java_hero',      icon:'☕', label:'Java Hero',        desc:'Completed all Java modules'},
+  {id:'python_pro',     icon:'🐍', label:'Python Pro',       desc:'Completed all Python modules'},
+  {id:'cpp_champion',   icon:'⚔️', label:'C++ Champion',    desc:'Completed all C++ modules'},
+  {id:'r_researcher',   icon:'📊', label:'R Researcher',    desc:'Completed all R modules'},
+  {id:'js_wizard',      icon:'🪄', label:'JS Wizard',       desc:'Completed all JavaScript modules'},
+  {id:'all_courses',    icon:'🎓', label:'Graduate',         desc:'Completed every course'},
+  {id:'prem_unlock',    icon:'🔓', label:'Unlocked',         desc:'Accessed a premium module'},
+  {id:'prem_complete',  icon:'👑', label:'Premium Scholar',  desc:'Completed all premium modules'},
+
+  // ── XP & Rank ────────────────────────────────────────
+  {id:'xp_100',         icon:'💫', label:'First Steps',     desc:'Earned 100 XP'},
+  {id:'xp_500',         icon:'⭐', label:'Rising Star',     desc:'Earned 500 XP'},
+  {id:'xp_1000',        icon:'🌟', label:'Star Student',    desc:'Earned 1,000 XP'},
+  {id:'xp_5000',        icon:'🚀', label:'Rocket',          desc:'Earned 5,000 XP'},
+  {id:'xp_10000',       icon:'🌠', label:'Shooting Star',   desc:'Earned 10,000 XP'},
+  {id:'top_10',         icon:'🏅', label:'Top 10',          desc:'Reached top 10 on leaderboard'},
+  {id:'top_3',          icon:'🥉', label:'Podium',          desc:'Reached top 3 on leaderboard'},
+  {id:'rank_1',         icon:'🥇', label:'The GOAT',        desc:'Reached #1 on the leaderboard'},
+
+  // ── Streaks & Dedication ─────────────────────────────
+  {id:'day_3',          icon:'📅', label:'3-Day Streak',    desc:'Studied 3 days in a row'},
+  {id:'day_7',          icon:'🗓️', label:'Week Warrior',   desc:'Studied 7 days in a row'},
+  {id:'day_30',         icon:'🔆', label:'Monthly Grind',   desc:'Studied 30 days in a row'},
+  {id:'night_owl',      icon:'🦉', label:'Night Owl',       desc:'Studied past midnight'},
+  {id:'early_bird',     icon:'🐦', label:'Early Bird',      desc:'Studied before 7 AM'},
+  {id:'weekend_hero',   icon:'🛡️', label:'Weekend Hero',   desc:'Studied on a Saturday and Sunday'},
+
+  // ── Community & Special ──────────────────────────────
+  {id:'bug_hunter',     icon:'🐞', label:'Bug Hunter',      desc:'Found and reported a site bug'},
+  {id:'admin_star',     icon:'🛡️', label:'Admin',          desc:'IT Study Hub team member'},
+  {id:'beta_tester',    icon:'🧪', label:'Beta Tester',     desc:'Used the platform in early access'},
+  {id:'og_member',      icon:'🏛️', label:'OG Member',      desc:'Joined in the first batch'},
+  {id:'top_contributor',icon:'🤝', label:'Contributor',     desc:'Helped improve the platform'},
+  {id:'feedback',       icon:'💬', label:'Voice',           desc:'Submitted platform feedback'},
 ];
 
 const app = initializeApp(firebaseConfig);
