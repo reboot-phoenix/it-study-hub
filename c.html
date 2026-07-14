@@ -2772,7 +2772,7 @@ function renderCard(m) {
   const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>'
               : m.free ? '<span class="mod-badge badge-free">FREE</span>'
               : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
-  const click = locked ? `onclick="window.location.href='premium.html'"` : `onclick="openLesson(${m.id})"`;
+  const click = `onclick="openLesson(${m.id})"`;
   return `<div class="${cls}" ${click}>
     <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
     <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
@@ -3090,12 +3090,8 @@ async function runCode() {
       out.textContent = JSON.stringify(data, null, 2);
     }
   } catch(e) {
-    // Fallback: open in a compiler tab if API not configured
-    out.style.color = '#f7b731';
-    out.textContent = '⚡ API not configured yet.\n\nOpening Programiz online C compiler in a new tab — paste your code there to run it!';
-    setTimeout(() => {
-      window.open('https://www.programiz.com/c-programming/online-compiler/', '_blank');
-    }, 1200);
+    out.style.color = '#f06060';
+    out.textContent = '⚠️ Terminal Error\n\n' + (e.message || 'Could not connect to the compiler API.') + '\n\nMake sure your JDoodle client credentials are set in the runCode() function.';
   }
 }
 </script>
