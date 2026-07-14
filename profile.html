@@ -6,7 +6,445 @@
 <title>My Profile — IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
-<link rel="stylesheet" href="pages.css">
+<style>
+/* ── Reset & Base ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --lime:  #c8f135;
+  --gold:  #f7b731;
+  --red:   #ff5f56;
+  --green: #43e97b;
+  --bg:    #0a0a0c;
+  --surface: #111114;
+  --surface2: #17171b;
+  --border: rgba(255,255,255,0.07);
+  --border-lime: rgba(200,241,53,0.18);
+  --muted: rgba(255,255,255,0.35);
+  --muted2: rgba(255,255,255,0.55);
+  --text: rgba(255,255,255,0.92);
+  --ff-display: "Syne", sans-serif;
+  --ff-body: "DM Sans", sans-serif;
+  --ff-mono: "JetBrains Mono", monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--ff-body);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Nav ────────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px;
+  background: rgba(10,10,12,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: var(--ff-display); font-weight: 800; font-size: 16px;
+  letter-spacing: 2px; text-decoration: none; color: #fff; text-transform: uppercase;
+}
+.nav-logo span { color: var(--lime); }
+.nav-back {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--ff-mono); font-size: 11px; letter-spacing: .5px;
+  color: var(--muted2); text-decoration: none;
+  transition: color .2s;
+}
+.nav-back:hover { color: var(--lime); }
+
+/* ── Auth States ─────────────────────────────────────────── */
+#authLoader {
+  display: flex; align-items: center; justify-content: center;
+  height: 100vh;
+}
+.loader-ring {
+  width: 36px; height: 36px;
+  border: 2px solid var(--border);
+  border-top-color: var(--lime);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#gateScreen {
+  display: none; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 40px 20px;
+}
+.gate-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 52px 48px;
+  text-align: center;
+  max-width: 440px; width: 100%;
+}
+.gate-icon {
+  width: 64px; height: 64px;
+  background: rgba(200,241,53,0.08);
+  border: 1px solid var(--border-lime);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+}
+.gate-icon svg { stroke: var(--lime); }
+.gate-card h2 {
+  font-family: var(--ff-display); font-size: 28px; font-weight: 800;
+  margin-bottom: 10px;
+}
+.gate-card p { font-size: 14px; color: var(--muted2); line-height: 1.7; margin-bottom: 28px; }
+.gate-btn {
+  display: inline-block;
+  background: var(--lime); color: #000;
+  font-family: var(--ff-mono); font-size: 11px; font-weight: 700;
+  padding: 13px 28px; border-radius: 8px;
+  text-decoration: none; letter-spacing: 1px;
+  transition: opacity .2s;
+}
+.gate-btn:hover { opacity: .88; }
+
+/* ── Profile Page Wrapper ────────────────────────────────── */
+#profilePage {
+  display: none;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 100px 24px 80px;
+}
+
+/* ── Hero ────────────────────────────────────────────────── */
+.profile-hero {
+  display: flex;
+  align-items: flex-end;
+  gap: 28px;
+  margin-bottom: 40px;
+  padding: 36px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.profile-hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--lime), transparent 60%);
+}
+
+/* Avatar */
+.pfp-wrap {
+  position: relative; flex-shrink: 0;
+  width: 96px; height: 96px;
+}
+.pfp-img, .pfp-initials {
+  width: 96px; height: 96px; border-radius: 50%;
+  border: 2px solid var(--border-lime);
+}
+.pfp-img { object-fit: cover; display: none; }
+.pfp-initials {
+  background: rgba(200,241,53,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-display); font-size: 30px; font-weight: 800;
+  color: var(--lime);
+}
+.pfp-edit-btn {
+  position: absolute; bottom: 0; right: 0;
+  width: 28px; height: 28px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s;
+  padding: 0;
+}
+.pfp-edit-btn svg { stroke: var(--muted2); }
+.pfp-edit-btn:hover { border-color: var(--lime); }
+.pfp-edit-btn:hover svg { stroke: var(--lime); }
+#pfpInput { display: none; }
+
+/* Hero info */
+.profile-info { flex: 1; min-width: 0; }
+.profile-name-display {
+  font-family: var(--ff-display); font-size: 28px; font-weight: 800;
+  line-height: 1.1; margin-bottom: 4px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.profile-email-display {
+  font-family: var(--ff-mono); font-size: 11px; color: var(--muted);
+  margin-bottom: 14px; letter-spacing: .3px;
+}
+.profile-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  display: inline-flex; align-items: center;
+  padding: 4px 11px; border-radius: 6px;
+  font-family: var(--ff-mono); font-size: 10px; font-weight: 700;
+  letter-spacing: .08em; white-space: nowrap;
+}
+.chip-lime {
+  background: rgba(200,241,53,0.1);
+  border: 1px solid rgba(200,241,53,0.25);
+  color: var(--lime);
+}
+.chip-blue {
+  background: rgba(96,165,250,0.1);
+  border: 1px solid rgba(96,165,250,0.25);
+  color: #60a5fa;
+}
+.chip-gold {
+  background: rgba(247,183,49,0.1);
+  border: 1px solid rgba(247,183,49,0.25);
+  color: var(--gold);
+}
+
+/* ── Stats Row ───────────────────────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  position: relative; overflow: hidden;
+  transition: border-color .2s;
+}
+.stat-card:hover { border-color: rgba(255,255,255,0.14); }
+.stat-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 40%; height: 1px;
+}
+.stat-card.lime::after { background: var(--lime); }
+.stat-card.gold::after { background: var(--gold); }
+.stat-card.green::after { background: var(--green); }
+.stat-val {
+  font-family: var(--ff-display); font-size: 32px; font-weight: 800;
+  line-height: 1; margin-bottom: 6px;
+}
+.stat-card.lime .stat-val { color: var(--lime); }
+.stat-card.gold .stat-val { color: var(--gold); }
+.stat-card.green .stat-val { color: var(--green); }
+.stat-label {
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: .1em;
+  color: var(--muted); text-transform: uppercase;
+}
+
+/* ── Two-col grid ─────────────────────────────────────────── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* ── Cards ───────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 16px;
+}
+.card:last-child { margin-bottom: 0; }
+.card-header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px; margin-bottom: 22px;
+}
+.card-title-wrap {}
+.card-title {
+  font-family: var(--ff-display); font-size: 16px; font-weight: 700;
+  margin-bottom: 4px;
+}
+.card-sub { font-size: 13px; color: var(--muted2); line-height: 1.5; }
+.card-icon {
+  width: 38px; height: 38px; flex-shrink: 0;
+  background: rgba(200,241,53,0.07);
+  border: 1px solid var(--border-lime);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.card-icon svg { stroke: var(--lime); }
+
+/* ── Form ────────────────────────────────────────────────── */
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block;
+  font-family: var(--ff-mono); font-size: 10px; font-weight: 600;
+  letter-spacing: .1em; color: var(--muted); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.form-group input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: var(--ff-body); font-size: 14px;
+  outline: none;
+  transition: border-color .2s;
+}
+.form-group input:focus { border-color: rgba(200,241,53,0.4); }
+.form-group input:disabled { color: var(--muted); cursor: not-allowed; }
+.form-group input::placeholder { color: rgba(255,255,255,0.2); }
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn-lime {
+  width: 100%; padding: 12px;
+  background: var(--lime); color: #000;
+  border: none; border-radius: 8px;
+  font-family: var(--ff-mono); font-size: 12px; font-weight: 700;
+  letter-spacing: .5px; cursor: pointer;
+  transition: opacity .2s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-lime:hover { opacity: .88; }
+.btn-lime:disabled { opacity: .5; cursor: not-allowed; }
+.btn-danger {
+  padding: 11px 20px;
+  background: rgba(255,95,86,0.08);
+  border: 1px solid rgba(255,95,86,0.25);
+  color: var(--red); border-radius: 8px;
+  font-family: var(--ff-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: .5px; cursor: pointer;
+  transition: background .2s;
+}
+.btn-danger:hover { background: rgba(255,95,86,0.15); }
+
+/* ── Quiz Scores ─────────────────────────────────────────── */
+.score-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.score-item:last-child { border-bottom: none; padding-bottom: 0; }
+.score-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.score-info { flex: 1; min-width: 0; }
+.score-name {
+  font-size: 13px; font-weight: 500; margin-bottom: 6px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.score-bar-wrap {
+  height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px;
+  overflow: hidden;
+}
+.score-bar {
+  height: 100%; border-radius: 2px;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+.score-right { text-align: right; flex-shrink: 0; }
+.score-pct {
+  font-family: var(--ff-display); font-size: 18px; font-weight: 800;
+  line-height: 1; margin-bottom: 2px;
+}
+.score-lvl {
+  font-family: var(--ff-mono); font-size: 9px; letter-spacing: .08em;
+  color: var(--muted); text-transform: uppercase;
+}
+
+/* ── Badges ──────────────────────────────────────────────── */
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+}
+.badge {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+  transition: border-color .2s, transform .2s;
+}
+.badge:not(.locked):hover {
+  border-color: rgba(200,241,53,0.3);
+  transform: translateY(-2px);
+}
+.badge.locked { opacity: .35; filter: grayscale(1); }
+.badge-icon { font-size: 26px; margin-bottom: 8px; display: block; }
+.badge-name {
+  font-family: var(--ff-mono); font-size: 9px;
+  color: var(--muted2); letter-spacing: .05em;
+  text-transform: uppercase; line-height: 1.3;
+}
+
+/* ── Danger zone ─────────────────────────────────────────── */
+.danger-card {
+  background: var(--surface);
+  border: 1px solid rgba(255,95,86,0.12);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 16px;
+}
+.danger-card .card-icon { background: rgba(255,95,86,0.07); border-color: rgba(255,95,86,0.2); }
+.danger-card .card-icon svg { stroke: var(--red); }
+.danger-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+
+/* ── Spinner ─────────────────────────────────────────────── */
+.spinner {
+  display: inline-block; width: 12px; height: 12px;
+  border: 1.5px solid var(--border);
+  border-top-color: var(--lime); border-radius: 50%;
+  animation: spin .7s linear infinite;
+  vertical-align: middle; margin-right: 6px;
+}
+
+/* ── Divider label ───────────────────────────────────────── */
+.section-label {
+  font-family: var(--ff-mono); font-size: 10px; font-weight: 600;
+  letter-spacing: .12em; color: var(--muted); text-transform: uppercase;
+  margin-bottom: 12px; margin-top: 28px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+/* ── Toast ───────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 20px;
+  font-family: var(--ff-mono); font-size: 12px; color: var(--text);
+  opacity: 0; transition: all .3s; z-index: 9000; white-space: nowrap;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: rgba(200,241,53,0.35); color: var(--lime); }
+.toast.error   { border-color: rgba(255,95,86,0.35);  color: var(--red); }
+
+/* ── Fade-up ─────────────────────────────────────────────── */
+.fade-up {
+  opacity: 0; transform: translateY(16px);
+  animation: fadeUp .5s ease forwards;
+}
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 640px) {
+  #profilePage { padding: 80px 16px 60px; }
+  .profile-hero { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .stats-row { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .stat-val { font-size: 22px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  nav { padding: 14px 16px; }
+}
+</style>
 </head>
 <body>
 
@@ -26,10 +464,12 @@
 <!-- GATE -->
 <div id="gateScreen">
   <div class="gate-card">
-    <div style="font-size:48px;margin-bottom:20px;">👤</div>
-    <div style="font-family:var(--ff-display);font-size:32px;font-weight:800;margin-bottom:10px;">Sign In First</div>
-    <div style="font-size:14px;color:var(--muted2);line-height:1.7;margin-bottom:28px;">You need an account to view your profile, stats and settings.</div>
-    <a href="Login.html" style="display:inline-block;background:var(--lime);color:#000;font-family:var(--ff-mono);font-size:12px;font-weight:700;padding:13px 28px;border-radius:6px;text-decoration:none;letter-spacing:1px;">Sign In / Create Account →</a>
+    <div class="gate-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    </div>
+    <h2>Sign in to continue</h2>
+    <p>You need an account to view your profile, track your XP, and manage settings.</p>
+    <a href="Login.html" class="gate-btn">Sign In / Create Account →</a>
   </div>
 </div>
 
@@ -39,9 +479,11 @@
   <!-- HERO -->
   <div class="profile-hero fade-up">
     <div class="pfp-wrap">
-      <img id="pfpImg" class="pfp-img" src="" alt="" style="display:none;" onerror="this.style.display='none';document.getElementById('pfpInitials').style.display='flex';">
+      <img id="pfpImg" class="pfp-img" src="" alt="" onerror="this.style.display='none';document.getElementById('pfpInitials').style.display='flex';">
       <div id="pfpInitials" class="pfp-initials">?</div>
-      <button class="pfp-edit-btn" onclick="document.getElementById('pfpInput').click()" title="Change photo">📷</button>
+      <button class="pfp-edit-btn" onclick="document.getElementById('pfpInput').click()" title="Change photo">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </button>
       <input type="file" id="pfpInput" accept="image/*" onchange="handlePfpChange(event)">
     </div>
     <div class="profile-info">
@@ -51,36 +493,43 @@
         <span class="chip chip-lime" id="chipLevel">STUDENT</span>
         <span class="chip chip-blue" id="chipRank">#— GLOBAL</span>
         <span class="chip chip-gold" id="chipXP">0 XP</span>
-        <span class="chip chip-gold" id="adminChip" style="display:none;">⭐ ADMIN</span>
-        <span id="chipPremium" style="display:none;padding:4px 12px;border-radius:6px;font-family:var(--ff-mono,monospace);font-size:10px;font-weight:700;letter-spacing:1px;background:linear-gradient(135deg,rgba(200,241,53,0.18),rgba(200,241,53,0.06));border:1px solid rgba(200,241,53,0.4);color:#c8f135;">⚡ PREMIUM</span>
-        <span id="chipElite" style="display:none;padding:4px 12px;border-radius:6px;font-family:var(--ff-mono,monospace);font-size:10px;font-weight:700;letter-spacing:1px;background:linear-gradient(135deg,rgba(247,183,49,0.18),rgba(247,183,49,0.06));border:1px solid rgba(247,183,49,0.4);color:#f7b731;">🏆 ELITE</span>
+        <span id="adminChip" style="display:none;" class="chip chip-lime">ADMIN</span>
+        <span id="chipPremium" style="display:none;" class="chip chip-lime">PREMIUM</span>
+        <span id="chipElite" style="display:none;" class="chip chip-gold">ELITE</span>
       </div>
     </div>
   </div>
 
-  <!-- STATS ROW -->
-  <div class="grid-3 fade-up" style="animation-delay:0.1s;">
-    <div class="stat-mini">
-      <div class="stat-mini-val" style="color:var(--lime);" id="statRank">#—</div>
-      <div class="stat-mini-label">Global Rank</div>
+  <!-- STATS -->
+  <div class="stats-row fade-up" style="animation-delay:0.08s;">
+    <div class="stat-card lime">
+      <div class="stat-val" id="statRank">#—</div>
+      <div class="stat-label">Global Rank</div>
     </div>
-    <div class="stat-mini">
-      <div class="stat-mini-val" style="color:var(--gold);" id="statXP">0</div>
-      <div class="stat-mini-label">Total XP</div>
+    <div class="stat-card gold">
+      <div class="stat-val" id="statXP">0</div>
+      <div class="stat-label">Total XP</div>
     </div>
-    <div class="stat-mini">
-      <div class="stat-mini-val" style="color:var(--green);" id="statQuizzes">0</div>
-      <div class="stat-mini-label">Quizzes Done</div>
+    <div class="stat-card green">
+      <div class="stat-val" id="statQuizzes">0</div>
+      <div class="stat-label">Quizzes Done</div>
     </div>
   </div>
 
-  <!-- SETTINGS + SCORES -->
-  <div class="grid-2 fade-up" style="animation-delay:0.15s;">
+  <!-- EDIT PROFILE + CHANGE PASSWORD -->
+  <div class="section-label fade-up" style="animation-delay:0.14s;">Account Settings</div>
+  <div class="grid-2 fade-up" style="animation-delay:0.16s;">
 
-    <!-- EDIT PROFILE -->
     <div class="card">
-      <div class="card-title">Edit Profile</div>
-      <div class="card-sub">Update your display name shown on the leaderboard.</div>
+      <div class="card-header">
+        <div class="card-title-wrap">
+          <div class="card-title">Edit Profile</div>
+          <div class="card-sub">Update your display name shown on the leaderboard.</div>
+        </div>
+        <div class="card-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </div>
+      </div>
       <div class="form-group">
         <label>Display Name</label>
         <input type="text" id="nameInput" placeholder="Your name">
@@ -92,10 +541,16 @@
       <button class="btn-lime" id="saveNameBtn" onclick="saveName()">Save Changes</button>
     </div>
 
-    <!-- CHANGE PASSWORD -->
     <div class="card">
-      <div class="card-title">Change Password</div>
-      <div class="card-sub">Use a strong password with at least 8 characters.</div>
+      <div class="card-header">
+        <div class="card-title-wrap">
+          <div class="card-title">Change Password</div>
+          <div class="card-sub">Use a strong password with at least 8 characters.</div>
+        </div>
+        <div class="card-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+      </div>
       <div class="form-group">
         <label>New Password</label>
         <input type="password" id="newPass" placeholder="Min. 8 characters">
@@ -110,28 +565,52 @@
   </div>
 
   <!-- QUIZ SCORES -->
-  <div class="card fade-up" style="animation-delay:0.2s;margin-bottom:20px;">
-    <div class="card-title">Quiz Performance</div>
-    <div class="card-sub">Your placement quiz scores across all subjects.</div>
+  <div class="section-label fade-up" style="animation-delay:0.2s;">Performance</div>
+  <div class="card fade-up" style="animation-delay:0.22s;">
+    <div class="card-header">
+      <div class="card-title-wrap">
+        <div class="card-title">Quiz Scores</div>
+        <div class="card-sub">Your placement quiz results across all subjects.</div>
+      </div>
+      <div class="card-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+    </div>
     <div id="scoresContainer">
-      <div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);text-align:center;padding:20px;"><span class="spinner"></span> Loading scores...</div>
+      <div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);padding:16px 0;"><span class="spinner"></span> Loading scores...</div>
     </div>
   </div>
 
   <!-- BADGES -->
-  <div class="card fade-up" style="animation-delay:0.25s;margin-bottom:20px;">
-    <div class="card-title">Badges & Achievements</div>
-    <div class="card-sub">Earn badges by completing courses and hitting milestones.</div>
-    <div class="badge-row" id="badgeContainer">
+  <div class="section-label fade-up" style="animation-delay:0.26s;">Achievements</div>
+  <div class="card fade-up" style="animation-delay:0.28s;">
+    <div class="card-header">
+      <div class="card-title-wrap">
+        <div class="card-title">Badges</div>
+        <div class="card-sub">Earn badges by completing courses and hitting milestones.</div>
+      </div>
+      <div class="card-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+      </div>
+    </div>
+    <div class="badge-grid" id="badgeContainer">
       <div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);"><span class="spinner"></span> Loading...</div>
     </div>
   </div>
 
   <!-- DANGER ZONE -->
-  <div class="card fade-up" style="animation-delay:0.3s;border-color:rgba(255,95,86,0.15);">
-    <div class="card-title" style="color:var(--red);">Danger Zone</div>
-    <div class="card-sub">These actions are permanent and cannot be undone.</div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+  <div class="section-label fade-up" style="animation-delay:0.32s; color:rgba(255,95,86,0.6);">Danger Zone</div>
+  <div class="danger-card fade-up" style="animation-delay:0.34s;">
+    <div class="card-header" style="margin-bottom:0;">
+      <div class="card-title-wrap">
+        <div class="card-title" style="color:var(--red);">Irreversible Actions</div>
+        <div class="card-sub">These actions are permanent and cannot be undone.</div>
+      </div>
+      <div class="card-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+    </div>
+    <div class="danger-actions">
       <button class="btn-danger" onclick="handleLogout()">Sign Out</button>
       <button class="btn-danger" onclick="confirmDelete()">Delete Account</button>
     </div>
@@ -164,12 +643,12 @@ const firebaseConfig = {
 
 const ADMIN_EMAIL = "bscit.tiu2012@gmail.com";
 const SUBJECTS = [
-  {key:'c',label:'C Programming',icon:'⚙️',color:'#60a5fa'},
-  {key:'java',label:'OOPs Java',icon:'☕',color:'#f7b731'},
-  {key:'python',label:'Python',icon:'🐍',color:'#43e97b'},
-  {key:'cpp',label:'C++',icon:'➕',color:'#a78bfa'},
-  {key:'csharp',label:'C#',icon:'🔷',color:'#38bdf8'},
-  {key:'web',label:'HTML+CSS+JS',icon:'🌐',color:'#c8f135'},
+  {key:'c',label:'C Programming',color:'#60a5fa'},
+  {key:'java',label:'OOPs Java',color:'#f7b731'},
+  {key:'python',label:'Python',color:'#43e97b'},
+  {key:'cpp',label:'C++',color:'#a78bfa'},
+  {key:'r',label:'R Language',color:'#f97316'},
+  {key:'javascript',label:'JavaScript',color:'#c8f135'},
 ];
 const ALL_BADGES = [
   {id:'hello_world',icon:'🌟',label:'Hello World'},
@@ -190,7 +669,7 @@ const storage = getStorage(app);
 let currentUser = null;
 let userData = {};
 
-// ── INSTANT SESSION PRE-CHECK (eliminates flicker) ──
+// ── INSTANT SESSION PRE-CHECK ──
 (function() {
   try {
     const s = JSON.parse(localStorage.getItem('ish_session') || 'null');
@@ -218,7 +697,6 @@ onAuthStateChanged(auth, async (user) => {
   const name = user.displayName || user.email.split('@')[0];
   const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
 
-  // PFP
   if (user.photoURL) {
     const img = document.getElementById('pfpImg');
     img.src = user.photoURL;
@@ -228,20 +706,16 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('pfpInitials').textContent = initials;
   }
 
-  // Hero
   document.getElementById('heroName').textContent = name;
   document.getElementById('heroEmail').textContent = user.email;
   document.getElementById('nameInput').value = name;
   document.getElementById('emailInput').value = user.email;
+
   if (isAdmin) {
-    document.getElementById('adminChip').style.display = 'inline-block';
-    document.getElementById('chipLevel').textContent = '⭐ ADMIN';
+    document.getElementById('adminChip').style.display = 'inline-flex';
+    document.getElementById('chipLevel').textContent = 'ADMIN';
   }
 
-  // ── Premium / Elite badge (resolved after Firestore data loads below) ──
-  // Deferred to after userData fetch
-
-  // Get Firestore data
   try {
     const snap = await getDoc(doc(db, 'users', user.uid));
     userData = snap.exists() ? snap.data() : { xp:100, quizzesDone:0, scores:{}, badges:['hello_world'] };
@@ -249,27 +723,22 @@ onAuthStateChanged(auth, async (user) => {
     userData = { xp:100, quizzesDone:0, scores:{}, badges:['hello_world'] };
   }
 
-  // XP + quizzes
   document.getElementById('statXP').textContent = (userData.xp||0).toLocaleString();
   document.getElementById('chipXP').textContent = (userData.xp||0).toLocaleString() + ' XP';
   document.getElementById('statQuizzes').textContent = userData.quizzesDone || 0;
 
-  // ── Premium / Elite badge ──
   if (!isAdmin) {
     const plan = userData.plan || '';
     if (plan === 'elite') {
-      document.getElementById('chipElite').style.display = 'inline-block';
-      document.getElementById('chipLevel').textContent = '🏆 ELITE';
+      document.getElementById('chipElite').style.display = 'inline-flex';
+      document.getElementById('chipLevel').textContent = 'ELITE';
     } else if (plan === 'pro' || plan === 'basic') {
-      document.getElementById('chipPremium').style.display = 'inline-block';
-      document.getElementById('chipLevel').textContent = '⚡ PREMIUM';
+      document.getElementById('chipPremium').style.display = 'inline-flex';
+      document.getElementById('chipLevel').textContent = 'PREMIUM';
     }
   }
 
-  // Rank
   await loadRank(user.uid, userData.xp||0);
-
-  // Scores, badges
   renderScores(userData.scores || {});
   renderBadges(userData.badges || []);
 });
@@ -287,7 +756,6 @@ async function loadRank(uid, myXP) {
   }
 }
 
-// ── SAVE NAME ──
 window.saveName = async function() {
   const name = document.getElementById('nameInput').value.trim();
   if (!name) { showToast('Name cannot be empty', 'error'); return; }
@@ -298,44 +766,41 @@ window.saveName = async function() {
     await updateDoc(doc(db, 'users', currentUser.uid), { name });
     document.getElementById('heroName').textContent = name;
     localStorage.setItem('ish_session', JSON.stringify({
-      ...JSON.parse(localStorage.getItem('ish_session')||'{}'),
-      name
+      ...JSON.parse(localStorage.getItem('ish_session')||'{}'), name
     }));
-    showToast('✓ Name updated!', 'success');
+    showToast('Name updated', 'success');
   } catch(e) { showToast('Could not save. Try again.', 'error'); }
   btn.disabled = false; btn.textContent = 'Save Changes';
 };
 
-// ── SAVE PASSWORD ──
 window.savePassword = async function() {
   const newPass = document.getElementById('newPass').value;
   const confirm = document.getElementById('confirmPass').value;
   if (!newPass || !confirm) { showToast('Fill in both fields', 'error'); return; }
   if (newPass !== confirm) { showToast('Passwords do not match', 'error'); return; }
-  if (newPass.length < 8) { showToast('Password must be at least 8 characters', 'error'); return; }
+  if (newPass.length < 8) { showToast('Minimum 8 characters', 'error'); return; }
   const btn = document.getElementById('savePassBtn');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Updating...';
   try {
     await updatePassword(currentUser, newPass);
     document.getElementById('newPass').value = '';
     document.getElementById('confirmPass').value = '';
-    showToast('✓ Password updated!', 'success');
+    showToast('Password updated', 'success');
   } catch(e) {
     if (e.code === 'auth/requires-recent-login') {
-      showToast('Please sign out and sign back in first, then try again.', 'error');
+      showToast('Sign out and sign back in first', 'error');
     } else {
-      showToast('Could not update password.', 'error');
+      showToast('Could not update password', 'error');
     }
   }
   btn.disabled = false; btn.textContent = 'Update Password';
 };
 
-// ── PFP UPLOAD ──
 window.handlePfpChange = async function(e) {
   const file = e.target.files[0];
   if (!file) return;
   if (file.size > 2 * 1024 * 1024) { showToast('Image must be under 2MB', 'error'); return; }
-  showToast('Uploading photo...', 'success');
+  showToast('Uploading...', 'success');
   try {
     const storageRef = ref(storage, `pfp/${currentUser.uid}`);
     await uploadBytes(storageRef, file);
@@ -345,24 +810,23 @@ window.handlePfpChange = async function(e) {
     const img = document.getElementById('pfpImg');
     img.src = url; img.style.display = 'block';
     document.getElementById('pfpInitials').style.display = 'none';
-    showToast('✓ Profile photo updated!', 'success');
+    showToast('Photo updated', 'success');
   } catch(e) { showToast('Upload failed. Try a smaller image.', 'error'); }
 };
 
-// ── SCORES ──
 function renderScores(scores) {
   const container = document.getElementById('scoresContainer');
-  if (Object.keys(scores).length === 0) {
-    container.innerHTML = `<div style="text-align:center;padding:20px;font-family:var(--ff-mono);font-size:12px;color:var(--muted);">No quizzes taken yet. <a href="ESD.html" style="color:var(--lime);">Take your first quiz →</a></div>`;
+  const filled = SUBJECTS.filter(s => scores[s.key]);
+  if (filled.length === 0) {
+    container.innerHTML = `<div style="padding:20px 0;font-family:var(--ff-mono);font-size:12px;color:var(--muted);">No quizzes taken yet. <a href="ESD.html" style="color:var(--lime);">Take your first quiz →</a></div>`;
     return;
   }
-  container.innerHTML = SUBJECTS.map(sub => {
+  container.innerHTML = filled.map(sub => {
     const s = scores[sub.key];
-    if (!s) return '';
     const pct = s.pct || 0;
     const lvl = s.level || 'beginner';
     return `<div class="score-item">
-      <div class="score-icon">${sub.icon}</div>
+      <div class="score-icon" style="font-size:16px;">${sub.key === 'c' ? 'C' : sub.key === 'java' ? 'J' : sub.key === 'python' ? 'Py' : sub.key === 'cpp' ? 'C+' : sub.key === 'r' ? 'R' : 'JS'}</div>
       <div class="score-info">
         <div class="score-name">${sub.label}</div>
         <div class="score-bar-wrap"><div class="score-bar" style="width:${pct}%;background:${sub.color};"></div></div>
@@ -375,36 +839,32 @@ function renderScores(scores) {
   }).join('');
 }
 
-// ── BADGES ──
 function renderBadges(earned) {
   document.getElementById('badgeContainer').innerHTML = ALL_BADGES.map(b => {
     const has = earned.includes(b.id);
-    return `<div class="badge ${has?'':'locked'}" title="${has?'Earned!':'Locked'}">
+    return `<div class="badge ${has?'':'locked'}" title="${has?'Earned':'Locked'}">
       <span class="badge-icon">${b.icon}</span>
       <span class="badge-name">${b.label}</span>
     </div>`;
   }).join('');
 }
 
-// ── LOGOUT ──
 window.handleLogout = async function() {
   await signOut(auth);
   localStorage.removeItem('ish_session');
   window.location.href = 'index.html';
 };
 
-// ── DELETE ACCOUNT ──
 window.confirmDelete = function() {
-  if (!confirm('Are you sure? This will permanently delete your account and all your data. This cannot be undone.')) return;
+  if (!confirm('This will permanently delete your account and all data. This cannot be undone.')) return;
   deleteUser(currentUser)
     .then(() => { localStorage.removeItem('ish_session'); window.location.href = 'index.html'; })
     .catch(e => {
-      if (e.code === 'auth/requires-recent-login') showToast('Please sign out and sign back in first.', 'error');
-      else showToast('Could not delete account.', 'error');
+      if (e.code === 'auth/requires-recent-login') showToast('Sign out and sign back in first', 'error');
+      else showToast('Could not delete account', 'error');
     });
 };
 
-// ── TOAST ──
 function showToast(msg, type='success') {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -413,8 +873,6 @@ function showToast(msg, type='success') {
 }
 window.showToast = showToast;
 </script>
-
-<!-- Also enable Firebase Storage in Firebase Console! -->
 
 <script>
 const c=document.getElementById('cur'),r=document.getElementById('curR');
