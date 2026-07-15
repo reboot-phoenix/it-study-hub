@@ -363,21 +363,68 @@ body::after{
 
 /* editor chrome bar */
 .editor-chrome{
-  height:38px;flex-shrink:0;
-  background:rgba(3,5,8,0.96);
+  height:44px;flex-shrink:0;
+  background:rgba(3,5,8,0.97);
   border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 .75rem;gap:.5rem;
+  display:flex;align-items:center;padding:0 .85rem;gap:.6rem;
+  position:relative;
 }
-.file-tab{
-  display:flex;align-items:center;gap:.35rem;
-  font-family:var(--mono);font-size:.63rem;color:var(--txt2);
-  padding:.15rem .6rem;border-radius:5px 5px 0 0;
-  background:var(--glass);border:1px solid var(--border);border-bottom:none;
-  position:relative;top:1px;
+.chrome-sep{width:1px;height:18px;background:var(--txt3);flex-shrink:0;}
+.editor-actions{margin-left:auto;display:flex;gap:.35rem;align-items:center;}
+
+/* ── Language dropdown ── */
+.lang-dropdown-wrap{position:relative;flex-shrink:0;}
+
+.lang-dropdown-btn{
+  display:flex;align-items:center;gap:.5rem;
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:.3rem .65rem .3rem .5rem;
+  cursor:pointer;transition:all .18s;
+  font-family:var(--mono);font-size:.72rem;font-weight:600;
+  color:var(--txt);
 }
-.file-tab.active{color:var(--txt);background:var(--bg2);border-color:var(--border2);}
-.tab-dot{width:5px;height:5px;border-radius:50%;background:var(--g);}
-.editor-actions{margin-left:auto;display:flex;gap:.3rem;align-items:center;}
+.lang-dropdown-btn:hover{border-color:var(--border2);background:var(--glass2);}
+.lang-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--g);box-shadow:0 0 6px var(--g-glow);
+  flex-shrink:0;
+}
+.lang-chevron{
+  color:var(--txt3);transition:transform .18s;flex-shrink:0;
+}
+.lang-dropdown-wrap.open .lang-chevron{transform:rotate(180deg);}
+.lang-dropdown-wrap.open .lang-dropdown-btn{
+  border-color:var(--border2);
+  background:var(--glass2);
+  box-shadow:0 0 0 1px rgba(0,255,136,0.08);
+}
+
+.lang-menu{
+  display:none;
+  position:absolute;top:calc(100% + 6px);left:0;
+  background:rgba(4,8,12,0.98);
+  border:1px solid var(--border2);
+  border-radius:10px;
+  padding:.35rem;
+  min-width:160px;
+  z-index:200;
+  box-shadow:0 16px 40px rgba(0,0,0,.7), 0 0 0 1px rgba(0,255,136,0.05);
+  backdrop-filter:blur(20px);
+}
+.lang-dropdown-wrap.open .lang-menu{display:block;}
+
+.lang-menu-item{
+  display:flex;align-items:center;gap:.55rem;
+  padding:.45rem .6rem;border-radius:6px;
+  font-family:var(--mono);font-size:.7rem;color:var(--txt2);
+  cursor:pointer;transition:all .15s;
+}
+.lang-menu-item:hover{background:var(--g3);color:var(--txt);}
+.lang-menu-item.active{background:var(--g3);color:var(--g);}
+.lm-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.lm-ext{margin-left:auto;font-size:.6rem;color:var(--txt3);}
 
 #monaco-container{flex:1;overflow:hidden;min-height:0;}
 
@@ -711,17 +758,6 @@ body::after{
 
     <!-- LEFT RAIL -->
     <div class="left-rail">
-      <div class="rail-section">
-        <span>Language</span>
-      </div>
-      <div class="lang-strip">
-        <button class="lang-btn active" onclick="setLang('c','C',this)">C</button>
-        <button class="lang-btn" onclick="setLang('cpp','C++',this)">C++</button>
-        <button class="lang-btn" onclick="setLang('java','Java',this)">Java</button>
-        <button class="lang-btn" onclick="setLang('python','Python',this)">Python</button>
-        <button class="lang-btn" onclick="setLang('r','R',this)">R</button>
-        <button class="lang-btn" onclick="setLang('javascript','JS',this)">JS</button>
-      </div>
       <div class="streak-banner" id="streak-banner">🔥 <span id="streak-text"></span></div>
       <div class="progress-bar-wrap" id="progress-bars"></div>
       <div class="tag-filter" id="tag-filter"><span class="tag-filter-label">Filter:</span></div>
@@ -735,12 +771,40 @@ body::after{
     <!-- CENTER -->
     <div class="center-pane">
       <div class="editor-chrome">
-        <div class="file-tab active" id="file-tab-name">
-          <span class="tab-dot"></span>
-          main.c
+        <!-- Language dropdown -->
+        <div class="lang-dropdown-wrap">
+          <button class="lang-dropdown-btn" id="lang-dropdown-btn" onclick="toggleLangMenu()">
+            <span class="lang-dot"></span>
+            <span id="lang-label-display">C</span>
+            <span id="file-tab-name" style="color:var(--txt3);font-size:.58rem;">main.c</span>
+            <svg class="lang-chevron" viewBox="0 0 10 6" width="10" height="6"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+          </button>
+          <div class="lang-menu" id="lang-menu">
+            <div class="lang-menu-item active" onclick="setLang('c','C',this)">
+              <span class="lm-dot" style="background:#00ff88"></span>C<span class="lm-ext">.c</span>
+            </div>
+            <div class="lang-menu-item" onclick="setLang('cpp','C++',this)">
+              <span class="lm-dot" style="background:#00b4ff"></span>C++<span class="lm-ext">.cpp</span>
+            </div>
+            <div class="lang-menu-item" onclick="setLang('java','Java',this)">
+              <span class="lm-dot" style="background:#f89820"></span>Java<span class="lm-ext">.java</span>
+            </div>
+            <div class="lang-menu-item" onclick="setLang('python','Python',this)">
+              <span class="lm-dot" style="background:#3572a5"></span>Python<span class="lm-ext">.py</span>
+            </div>
+            <div class="lang-menu-item" onclick="setLang('javascript','JS',this)">
+              <span class="lm-dot" style="background:#f7df1e"></span>JavaScript<span class="lm-ext">.js</span>
+            </div>
+            <div class="lang-menu-item" onclick="setLang('r','R',this)">
+              <span class="lm-dot" style="background:#276dc3"></span>R<span class="lm-ext">.r</span>
+            </div>
+          </div>
         </div>
+
+        <div class="chrome-sep"></div>
+
         <div class="editor-actions">
-          <button class="btn btn-ghost btn-sm" onclick="resetCode()" title="Reset (Ctrl+Shift+R)">↺ Reset</button>
+          <button class="btn btn-ghost btn-sm" onclick="resetCode()" title="Reset">↺ Reset</button>
           <button class="btn btn-ghost btn-sm" onclick="clearOutput()">⌫ Clear</button>
         </div>
       </div>
@@ -1450,11 +1514,22 @@ function changeFontSize(d){editorFontSize=Math.max(10,Math.min(22,editorFontSize
 
 /* ── Language / Problems ── */
 // FIX: pass btn explicitly — avoid relying on global event object
+function toggleLangMenu(){
+  document.querySelector('.lang-dropdown-wrap').classList.toggle('open');
+}
+// close dropdown on outside click
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.lang-dropdown-wrap')) document.querySelector('.lang-dropdown-wrap')?.classList.remove('open');
+});
 function setLang(lang,label,btn){
   currentLang=lang; activeTagFilter=null;
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.lang-menu-item').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  const dotColors={c:'#00ff88',cpp:'#00b4ff',java:'#f89820',python:'#3572a5',javascript:'#f7df1e',r:'#276dc3'};
+  document.querySelector('.lang-dot').style.cssText=`background:${dotColors[lang]||'#00ff88'};box-shadow:0 0 6px ${dotColors[lang]||'#00ff88'}55`;
+  document.getElementById('lang-label-display').textContent=label;
   document.getElementById('course-label').textContent=label+' Practice';
+  btn.closest('.lang-dropdown-wrap').classList.remove('open');
   loadProblems(lang);
 }
 function buildTagFilter(probs){
