@@ -912,31 +912,33 @@ body::after{
     <div class="right-pane">
       <div class="right-tabs">
         <button class="rtab active" onclick="switchTab('desc',this)">
-          <span>📋</span>Problem
+          <span class="rtab-icon">📋</span>Problem
         </button>
         <button class="rtab" onclick="switchTab('tests',this)">
-          <span>✓</span>Tests
+          <span class="rtab-icon">✓</span>Tests
         </button>
         <button class="rtab" onclick="switchTab('ai',this)">
-          <span>🤖</span>AI
+          <span class="rtab-icon">🤖</span>AI
         </button>
         <button class="rtab" onclick="switchTab('history',this)">
-          <span>📜</span>Log
+          <span class="rtab-icon">📜</span>Log
         </button>
         <button class="rtab" onclick="switchTab('lb',this)">
-          <span>🏆</span>Board
+          <span class="rtab-icon">🏆</span>Board
         </button>
       </div>
 
       <!-- Problem -->
       <div class="right-content right-panel active" id="panel-desc">
-        <div class="prob-title" id="pd-title">← Select a problem</div>
-        <div class="prob-tags" id="pd-tags"></div>
+        <div class="prob-hero" id="pd-hero">
+          <div class="prob-title" id="pd-title">← Select a problem</div>
+          <div class="prob-meta-row" id="pd-tags"></div>
+        </div>
         <div class="prob-desc" id="pd-desc"></div>
         <div class="section-label">Example</div>
-        <div class="prob-example" id="pd-example"></div>
+        <div class="example-grid" id="pd-example"></div>
         <div class="section-label">Constraints</div>
-        <div class="prob-example" id="pd-constraints"></div>
+        <div class="constraints-box" id="pd-constraints"></div>
         <div class="hints-section" id="hints-section"></div>
       </div>
 
@@ -1675,11 +1677,31 @@ function loadProblem(p,el){
   editor.setValue(p.starter);
   document.getElementById('file-tab-name').textContent=FILE_EXT[currentLang];
   document.getElementById('pd-title').textContent=p.title;
+
+  // hero left-border colour by difficulty
   const dc=p.difficulty==='medium'?'med':p.difficulty;
-  document.getElementById('pd-tags').innerHTML=[`<span class="diff-badge diff-${dc}">${p.difficulty}</span>`,...p.tags.map(t=>`<span class="tag">${t}</span>`)].join('');
+  const hero=document.getElementById('pd-hero');
+  hero.className='prob-hero diff-'+dc;
+
+  // tags row: badge + topic tags
+  document.getElementById('pd-tags').innerHTML=
+    [`<span class="diff-badge diff-${dc}">${p.difficulty}</span>`,
+     ...p.tags.map(t=>`<span class="tag">${t}</span>`)].join('');
+
   document.getElementById('pd-desc').innerHTML=p.desc;
-  document.getElementById('pd-example').innerHTML=`<div class="label">Input</div><div class="val">${p.example.input}</div><div class="label" style="margin-top:.4rem">Output</div><div class="val">${p.example.output}</div>`;
-  document.getElementById('pd-constraints').innerHTML=`<div class="val">${p.constraints}</div>`;
+
+  // example as two side-by-side cards
+  document.getElementById('pd-example').innerHTML=`
+    <div class="example-card">
+      <div class="example-card-label">Input</div>
+      <div class="example-card-val">${p.example.input||'(none)'}</div>
+    </div>
+    <div class="example-card">
+      <div class="example-card-label">Output</div>
+      <div class="example-card-val">${p.example.output}</div>
+    </div>`;
+
+  document.getElementById('pd-constraints').textContent=p.constraints;
   renderHints(p);clearOutput();renderTests();
   document.getElementById('chat-log').innerHTML='';document.getElementById('exec-time').textContent='';
   document.querySelectorAll('.rtab').forEach(b=>b.classList.remove('active'));
@@ -1690,14 +1712,29 @@ function loadProblem(p,el){
 function renderHints(p){
   const s=document.getElementById('hints-section');
   if(!p.hints||!p.hints.length){s.innerHTML='';return;}
-  s.innerHTML='<div class="prob-section-label" style="margin-top:.75rem">Hints</div>';
-  p.hints.forEach((hint,i)=>{s.innerHTML+=`<button class="hint-btn" id="hint-btn-${i}" onclick="toggleHint(${i})">💡 Hint ${i+1} <span style="margin-left:auto;font-size:.58rem">(click to reveal)</span></button><div class="hint-content" id="hint-content-${i}">${hint}</div>`;});
+  s.innerHTML=`
+    <div class="hints-header">
+      <span class="hints-title">Hints</span>
+      <span class="hints-count">${p.hints.length} available</span>
+    </div>`;
+  p.hints.forEach((hint,i)=>{
+    s.innerHTML+=`
+      <div class="hint-item">
+        <button class="hint-btn" id="hint-btn-${i}" onclick="toggleHint(${i})">
+          <div class="hint-btn-left"><span class="hint-lock">🔒</span> Hint ${i+1}</div>
+          <span class="hint-reveal-text">tap to reveal</span>
+        </button>
+        <div class="hint-content" id="hint-content-${i}">${hint}</div>
+      </div>`;
+  });
 }
 function toggleHint(i){
   const btn=document.getElementById(`hint-btn-${i}`),content=document.getElementById(`hint-content-${i}`);
   const rev=content.classList.contains('show');
-  content.classList.toggle('show',!rev);btn.classList.toggle('revealed',!rev);
-  btn.querySelector('span').textContent=rev?'(click to reveal)':'(click to hide)';
+  content.classList.toggle('show',!rev);
+  btn.classList.toggle('revealed',!rev);
+  btn.querySelector('.hint-lock').textContent=rev?'🔒':'🔓';
+  btn.querySelector('.hint-reveal-text').textContent=rev?'tap to reveal':'tap to hide';
 }
 
 /* ── Run Code ── */
