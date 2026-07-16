@@ -357,13 +357,37 @@ nav {
   color: var(--muted); text-transform: uppercase;
 }
 
-/* ── Badges ──────────────────────────────────────────────── */
-.badge-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 12px;
+/* ── HORIZONTAL BADGE LAYOUT ─────────────────────────────── */
+.badge-category-header {
+  font-family: var(--ff-mono); 
+  font-size: 10px; 
+  font-weight: 600;
+  color: var(--lime); 
+  text-transform: uppercase; 
+  letter-spacing: 0.1em;
+  margin: 24px 0 12px;
 }
+.badge-category-header:first-child { margin-top: 0; }
+
+.badge-scroll {
+  display: flex; 
+  gap: 12px; 
+  overflow-x: auto; 
+  padding-bottom: 12px;
+  /* Custom scrollbar for dark theme */
+  scrollbar-width: thin; 
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+.badge-scroll::-webkit-scrollbar { height: 6px; }
+.badge-scroll::-webkit-scrollbar-track { background: transparent; }
+.badge-scroll::-webkit-scrollbar-thumb { 
+  background: rgba(255,255,255,0.1); 
+  border-radius: 4px; 
+}
+.badge-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
 .badge {
+  flex: 0 0 100px; /* Fixed width for horizontal scrolling */
   background: var(--surface2);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -467,10 +491,12 @@ nav {
   </a>
 </nav>
 
+<!-- AUTH LOADER -->
 <div id="authLoader">
   <div class="loader-ring"></div>
 </div>
 
+<!-- GATE -->
 <div id="gateScreen">
   <div class="gate-card">
     <div class="gate-icon">
@@ -482,8 +508,10 @@ nav {
   </div>
 </div>
 
+<!-- PROFILE PAGE -->
 <div id="profilePage">
 
+  <!-- HERO -->
   <div class="profile-hero fade-up">
     <div class="pfp-wrap">
       <img id="pfpImg" class="pfp-img" src="" alt="" onerror="this.style.display='none';document.getElementById('pfpInitials').style.display='flex';">
@@ -507,6 +535,7 @@ nav {
     </div>
   </div>
 
+  <!-- STATS -->
   <div class="stats-row fade-up" style="animation-delay:0.08s;">
     <div class="stat-card lime">
       <div class="stat-val" id="statRank">#—</div>
@@ -522,6 +551,7 @@ nav {
     </div>
   </div>
 
+  <!-- EDIT PROFILE + CHANGE PASSWORD -->
   <div class="section-label fade-up" style="animation-delay:0.14s;">Account Settings</div>
   <div class="grid-2 fade-up" style="animation-delay:0.16s;">
 
@@ -569,6 +599,7 @@ nav {
 
   </div>
 
+  <!-- QUIZ SCORES -->
   <div class="section-label fade-up" style="animation-delay:0.2s;">Performance</div>
   <div class="card fade-up" style="animation-delay:0.22s;">
     <div class="card-header">
@@ -585,6 +616,7 @@ nav {
     </div>
   </div>
 
+  <!-- BADGES -->
   <div class="section-label fade-up" style="animation-delay:0.26s;">Achievements</div>
   <div class="card fade-up" style="animation-delay:0.28s;">
     <div class="card-header">
@@ -596,11 +628,13 @@ nav {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
       </div>
     </div>
-    <div class="badge-grid" id="badgeContainer">
+    <!-- Replaced badge-grid with an empty container for JS to populate -->
+    <div id="badgeContainer">
       <div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);"><span class="spinner"></span> Loading...</div>
     </div>
   </div>
 
+  <!-- DANGER ZONE -->
   <div class="section-label fade-up" style="animation-delay:0.32s; color:rgba(255,95,86,0.6);">Danger Zone</div>
   <div class="danger-card fade-up" style="animation-delay:0.34s;">
     <div class="card-header" style="margin-bottom:0;">
@@ -620,11 +654,14 @@ nav {
 
 </div>
 
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- CURSOR -->
 <div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
+<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut, updatePassword, updateProfile, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
@@ -654,60 +691,61 @@ const SUBJECTS = [
 const getSvg = (path, color = "var(--lime)") => 
   `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
 
+// Added "cat" property for categorization
 const ALL_BADGES = [
   // ── Getting Started ──────────────────────────────────
-  {id:'hello_world',    icon: getSvg('<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>', 'var(--lime)'), label:'Hello World', desc:'Created your account'},
-  {id:'first_login',    icon: getSvg('<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>', 'var(--lime)'), label:'First Login', desc:'Logged in for the first time'},
-  {id:'profile_pic',    icon: getSvg('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>', 'var(--lime)'), label:'Face to the Name',desc:'Uploaded a profile photo'},
-  {id:'name_set',       icon: getSvg('<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>', 'var(--lime)'), label:'Named', desc:'Set your display name'},
+  {id:'hello_world',    cat:'Getting Started', icon: getSvg('<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>', 'var(--lime)'), label:'Hello World', desc:'Created your account'},
+  {id:'first_login',    cat:'Getting Started', icon: getSvg('<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>', 'var(--lime)'), label:'First Login', desc:'Logged in for the first time'},
+  {id:'profile_pic',    cat:'Getting Started', icon: getSvg('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>', 'var(--lime)'), label:'Face to the Name',desc:'Uploaded a profile photo'},
+  {id:'name_set',       cat:'Getting Started', icon: getSvg('<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>', 'var(--lime)'), label:'Named', desc:'Set your display name'},
 
   // ── Quiz & Learning ──────────────────────────────────
-  {id:'first_quiz',     icon: getSvg('<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>', '#60a5fa'), label:'First Shot', desc:'Completed your first quiz'},
-  {id:'quiz_5',         icon: getSvg('<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>', '#60a5fa'), label:'On a Roll', desc:'Completed 5 quizzes'},
-  {id:'quiz_10',        icon: getSvg('<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>', '#60a5fa'), label:'Quiz Veteran', desc:'Completed 10 quizzes'},
-  {id:'quiz_25',        icon: getSvg('<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>', '#a78bfa'), label:'Quiz Machine', desc:'Completed 25 quizzes'},
-  {id:'perfect_score',  icon: getSvg('<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>', 'var(--gold)'), label:'Perfection', desc:'Scored 100% on any quiz'},
-  {id:'above_90',       icon: getSvg('<path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/>', '#ff5f56'), label:'On Fire', desc:'Scored above 90% on a quiz'},
-  {id:'above_75',       icon: getSvg('<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><polyline points="9 11 12 14 22 4"/>', 'var(--green)'), label:'Solid Pass', desc:'Scored above 75% on a quiz'},
-  {id:'comeback',       icon: getSvg('<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>', 'var(--lime)'), label:'Comeback Kid', desc:'Passed a quiz after failing it'},
-  {id:'speed_run',      icon: getSvg('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>', '#f97316'), label:'Speed Runner', desc:'Completed a quiz in under 2 min'},
+  {id:'first_quiz',     cat:'Quiz & Learning', icon: getSvg('<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>', '#60a5fa'), label:'First Shot', desc:'Completed your first quiz'},
+  {id:'quiz_5',         cat:'Quiz & Learning', icon: getSvg('<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>', '#60a5fa'), label:'On a Roll', desc:'Completed 5 quizzes'},
+  {id:'quiz_10',        cat:'Quiz & Learning', icon: getSvg('<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>', '#60a5fa'), label:'Quiz Veteran', desc:'Completed 10 quizzes'},
+  {id:'quiz_25',        cat:'Quiz & Learning', icon: getSvg('<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>', '#a78bfa'), label:'Quiz Machine', desc:'Completed 25 quizzes'},
+  {id:'perfect_score',  cat:'Quiz & Learning', icon: getSvg('<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>', 'var(--gold)'), label:'Perfection', desc:'Scored 100% on any quiz'},
+  {id:'above_90',       cat:'Quiz & Learning', icon: getSvg('<path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/>', '#ff5f56'), label:'On Fire', desc:'Scored above 90% on a quiz'},
+  {id:'above_75',       cat:'Quiz & Learning', icon: getSvg('<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><polyline points="9 11 12 14 22 4"/>', 'var(--green)'), label:'Solid Pass', desc:'Scored above 75% on a quiz'},
+  {id:'comeback',       cat:'Quiz & Learning', icon: getSvg('<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>', 'var(--lime)'), label:'Comeback Kid', desc:'Passed a quiz after failing it'},
+  {id:'speed_run',      cat:'Quiz & Learning', icon: getSvg('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>', '#f97316'), label:'Speed Runner', desc:'Completed a quiz in under 2 min'},
 
   // ── Course Completion (Colors mapped to subjects) ─────
-  {id:'c_master',       icon: getSvg('<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>', '#60a5fa'), label:'C Master', desc:'Completed all C modules'},
-  {id:'java_hero',      icon: getSvg('<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>', 'var(--gold)'), label:'Java Hero', desc:'Completed all Java modules'},
-  {id:'python_pro',     icon: getSvg('<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>', 'var(--green)'), label:'Python Pro', desc:'Completed all Python modules'},
-  {id:'cpp_champion',   icon: getSvg('<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>', '#a78bfa'), label:'C++ Champion', desc:'Completed all C++ modules'},
-  {id:'r_researcher',   icon: getSvg('<line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>', '#f97316'), label:'R Researcher', desc:'Completed all R modules'},
-  {id:'js_wizard',      icon: getSvg('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>', 'var(--lime)'), label:'JS Wizard', desc:'Completed all JavaScript modules'},
-  {id:'all_courses',    icon: getSvg('<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>', 'var(--text)'), label:'Graduate', desc:'Completed every course'},
-  {id:'prem_unlock',    icon: getSvg('<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>', 'var(--gold)'), label:'Unlocked', desc:'Accessed a premium module'},
-  {id:'prem_complete',  icon: getSvg('<polygon points="2 4 6 20 18 20 22 4 17 8 12 2 7 8 2 4"/>', 'var(--gold)'), label:'Premium Scholar', desc:'Completed all premium modules'},
+  {id:'c_master',       cat:'Course Mastery', icon: getSvg('<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>', '#60a5fa'), label:'C Master', desc:'Completed all C modules'},
+  {id:'java_hero',      cat:'Course Mastery', icon: getSvg('<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>', 'var(--gold)'), label:'Java Hero', desc:'Completed all Java modules'},
+  {id:'python_pro',     cat:'Course Mastery', icon: getSvg('<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>', 'var(--green)'), label:'Python Pro', desc:'Completed all Python modules'},
+  {id:'cpp_champion',   cat:'Course Mastery', icon: getSvg('<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>', '#a78bfa'), label:'C++ Champion', desc:'Completed all C++ modules'},
+  {id:'r_researcher',   cat:'Course Mastery', icon: getSvg('<line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>', '#f97316'), label:'R Researcher', desc:'Completed all R modules'},
+  {id:'js_wizard',      cat:'Course Mastery', icon: getSvg('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>', 'var(--lime)'), label:'JS Wizard', desc:'Completed all JavaScript modules'},
+  {id:'all_courses',    cat:'Course Mastery', icon: getSvg('<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>', 'var(--text)'), label:'Graduate', desc:'Completed every course'},
+  {id:'prem_unlock',    cat:'Course Mastery', icon: getSvg('<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>', 'var(--gold)'), label:'Unlocked', desc:'Accessed a premium module'},
+  {id:'prem_complete',  cat:'Course Mastery', icon: getSvg('<polygon points="2 4 6 20 18 20 22 4 17 8 12 2 7 8 2 4"/>', 'var(--gold)'), label:'Premium Scholar', desc:'Completed all premium modules'},
 
   // ── XP & Rank ────────────────────────────────────────
-  {id:'xp_100',         icon: getSvg('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>', '#60a5fa'), label:'First Steps', desc:'Earned 100 XP'},
-  {id:'xp_500',         icon: getSvg('<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', '#a78bfa'), label:'Rising Star', desc:'Earned 500 XP'},
-  {id:'xp_1000',        icon: getSvg('<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>', 'var(--gold)'), label:'Star Student', desc:'Earned 1,000 XP'},
-  {id:'xp_5000',        icon: getSvg('<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5-4 5-4v5"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 4-5 4-5h-5"/>', '#f97316'), label:'Rocket', desc:'Earned 5,000 XP'},
-  {id:'xp_10000',       icon: getSvg('<path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"/><polyline points="13 11 9 17 15 17 11 23"/>', 'var(--lime)'), label:'Shooting Star', desc:'Earned 10,000 XP'},
-  {id:'top_10',         icon: getSvg('<polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>', 'var(--green)'), label:'Top 10', desc:'Reached top 10 on leaderboard'},
-  {id:'top_3',          icon: getSvg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>', '#60a5fa'), label:'Podium', desc:'Reached top 3 on leaderboard'},
-  {id:'rank_1',         icon: getSvg('<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/>', 'var(--gold)'), label:'The GOAT', desc:'Reached #1 on the leaderboard'},
+  {id:'xp_100',         cat:'Rank & XP', icon: getSvg('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>', '#60a5fa'), label:'First Steps', desc:'Earned 100 XP'},
+  {id:'xp_500',         cat:'Rank & XP', icon: getSvg('<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', '#a78bfa'), label:'Rising Star', desc:'Earned 500 XP'},
+  {id:'xp_1000',        cat:'Rank & XP', icon: getSvg('<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>', 'var(--gold)'), label:'Star Student', desc:'Earned 1,000 XP'},
+  {id:'xp_5000',        cat:'Rank & XP', icon: getSvg('<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5-4 5-4v5"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 4-5 4-5h-5"/>', '#f97316'), label:'Rocket', desc:'Earned 5,000 XP'},
+  {id:'xp_10000',       cat:'Rank & XP', icon: getSvg('<path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"/><polyline points="13 11 9 17 15 17 11 23"/>', 'var(--lime)'), label:'Shooting Star', desc:'Earned 10,000 XP'},
+  {id:'top_10',         cat:'Rank & XP', icon: getSvg('<polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>', 'var(--green)'), label:'Top 10', desc:'Reached top 10 on leaderboard'},
+  {id:'top_3',          cat:'Rank & XP', icon: getSvg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>', '#60a5fa'), label:'Podium', desc:'Reached top 3 on leaderboard'},
+  {id:'rank_1',         cat:'Rank & XP', icon: getSvg('<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/>', 'var(--gold)'), label:'The GOAT', desc:'Reached #1 on the leaderboard'},
 
   // ── Streaks & Dedication ─────────────────────────────
-  {id:'day_3',          icon: getSvg('<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>', '#60a5fa'), label:'3-Day Streak', desc:'Studied 3 days in a row'},
-  {id:'day_7',          icon: getSvg('<path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>', '#a78bfa'), label:'Week Warrior', desc:'Studied 7 days in a row'},
-  {id:'day_30',         icon: getSvg('<path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.33-6 4Z"/>', 'var(--gold)'), label:'Monthly Grind', desc:'Studied 30 days in a row'},
-  {id:'night_owl',      icon: getSvg('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>', '#a78bfa'), label:'Night Owl', desc:'Studied past midnight'},
-  {id:'early_bird',     icon: getSvg('<path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/><line x1="23" y1="22" x2="1" y2="22"/><polyline points="8 6 12 2 16 6"/>', '#f97316'), label:'Early Bird', desc:'Studied before 7 AM'},
-  {id:'weekend_hero',   icon: getSvg('<path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.19M15 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.19"/><line x1="23" y1="13" x2="23" y2="11"/><polyline points="11 6 7 12 13 12 9 18"/>', 'var(--lime)'), label:'Weekend Hero', desc:'Studied on a Saturday and Sunday'},
+  {id:'day_3',          cat:'Dedication', icon: getSvg('<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>', '#60a5fa'), label:'3-Day Streak', desc:'Studied 3 days in a row'},
+  {id:'day_7',          cat:'Dedication', icon: getSvg('<path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>', '#a78bfa'), label:'Week Warrior', desc:'Studied 7 days in a row'},
+  {id:'day_30',         cat:'Dedication', icon: getSvg('<path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.33-6 4Z"/>', 'var(--gold)'), label:'Monthly Grind', desc:'Studied 30 days in a row'},
+  {id:'night_owl',      cat:'Dedication', icon: getSvg('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>', '#a78bfa'), label:'Night Owl', desc:'Studied past midnight'},
+  {id:'early_bird',     cat:'Dedication', icon: getSvg('<path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/><line x1="23" y1="22" x2="1" y2="22"/><polyline points="8 6 12 2 16 6"/>', '#f97316'), label:'Early Bird', desc:'Studied before 7 AM'},
+  {id:'weekend_hero',   cat:'Dedication', icon: getSvg('<path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.19M15 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.19"/><line x1="23" y1="13" x2="23" y2="11"/><polyline points="11 6 7 12 13 12 9 18"/>', 'var(--lime)'), label:'Weekend Hero', desc:'Studied on a Saturday and Sunday'},
 
   // ── Community & Special ──────────────────────────────
-  {id:'bug_hunter',     icon: getSvg('<path d="M14 4.18v-.18l2-2"/><path d="M10 4.18v-.18l-2-2"/><path d="M6 13h12"/><path d="M6 18h12"/><path d="M12 8v14"/><path d="M5 21a9 9 0 0 1 14 0"/>', 'var(--red)'), label:'Bug Hunter', desc:'Found and reported a site bug'},
-  {id:'admin_star',     icon: getSvg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v8"/><path d="M9 12h6"/>', 'var(--lime)'), label:'Admin', desc:'IT Study Hub team member'},
-  {id:'beta_tester',    icon: getSvg('<path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/>', '#60a5fa'), label:'Beta Tester', desc:'Used the platform in early access'},
-  {id:'og_member',      icon: getSvg('<polygon points="12 2 2 7 22 7"/><line x1="6" y1="22" x2="6" y2="7"/><line x1="10" y1="22" x2="10" y2="7"/><line x1="14" y1="22" x2="14" y2="7"/><line x1="18" y1="22" x2="18" y2="7"/><line x1="2" y1="22" x2="22" y2="22"/>', 'var(--gold)'), label:'OG Member', desc:'Joined in the first batch'},
-  {id:'top_contributor',icon: getSvg('<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>', '#ff5f56'), label:'Contributor', desc:'Helped improve the platform'},
-  {id:'feedback',       icon: getSvg('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>', '#a78bfa'), label:'Voice', desc:'Submitted platform feedback'},
+  {id:'bug_hunter',     cat:'Community', icon: getSvg('<path d="M14 4.18v-.18l2-2"/><path d="M10 4.18v-.18l-2-2"/><path d="M6 13h12"/><path d="M6 18h12"/><path d="M12 8v14"/><path d="M5 21a9 9 0 0 1 14 0"/>', 'var(--red)'), label:'Bug Hunter', desc:'Found and reported a site bug'},
+  {id:'admin_star',     cat:'Community', icon: getSvg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v8"/><path d="M9 12h6"/>', 'var(--lime)'), label:'Admin', desc:'IT Study Hub team member'},
+  {id:'beta_tester',    cat:'Community', icon: getSvg('<path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/>', '#60a5fa'), label:'Beta Tester', desc:'Used the platform in early access'},
+  {id:'og_member',      cat:'Community', icon: getSvg('<polygon points="12 2 2 7 22 7"/><line x1="6" y1="22" x2="6" y2="7"/><line x1="10" y1="22" x2="10" y2="7"/><line x1="14" y1="22" x2="14" y2="7"/><line x1="18" y1="22" x2="18" y2="7"/><line x1="2" y1="22" x2="22" y2="22"/>', 'var(--gold)'), label:'OG Member', desc:'Joined in the first batch'},
+  {id:'top_contributor',cat:'Community', icon: getSvg('<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>', '#ff5f56'), label:'Contributor', desc:'Helped improve the platform'},
+  {id:'feedback',       cat:'Community', icon: getSvg('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>', '#a78bfa'), label:'Voice', desc:'Submitted platform feedback'},
 ];
 
 const app = initializeApp(firebaseConfig);
@@ -888,14 +926,33 @@ function renderScores(scores) {
   }).join('');
 }
 
+// ── NEW RENDER FUNCTION FOR CATEGORIES ──
 function renderBadges(earned) {
-  document.getElementById('badgeContainer').innerHTML = ALL_BADGES.map(b => {
-    const has = earned.includes(b.id);
-    return `<div class="badge ${has?'':'locked'}" title="${has?'Earned':'Locked'}">
-      <span class="badge-icon">${b.icon}</span>
-      <span class="badge-name">${b.label}</span>
-    </div>`;
-  }).join('');
+  const container = document.getElementById('badgeContainer');
+  
+  // Group badges by their category
+  const grouped = {};
+  ALL_BADGES.forEach(b => {
+    if (!grouped[b.cat]) grouped[b.cat] = [];
+    grouped[b.cat].push(b);
+  });
+
+  let html = '';
+  // Loop through each category and build the horizontal row
+  for (const [catName, badges] of Object.entries(grouped)) {
+    html += `<div class="badge-category-header">${catName}</div>`;
+    html += `<div class="badge-scroll">`;
+    html += badges.map(b => {
+      const has = earned.includes(b.id);
+      return `<div class="badge ${has ? '' : 'locked'}" title="${has ? 'Earned' : 'Locked'}">
+        <span class="badge-icon">${b.icon}</span>
+        <span class="badge-name">${b.label}</span>
+      </div>`;
+    }).join('');
+    html += `</div>`;
+  }
+  
+  container.innerHTML = html;
 }
 
 window.handleLogout = async function() {
