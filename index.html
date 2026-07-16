@@ -7,41 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="index-page.css">
-<style>
-/* ── Stat counters (replaces fake skill bars) ── */
-.stat-counters {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-.stat-counter-item {
-  background: rgba(200,241,53,0.04);
-  border: 1px solid rgba(200,241,53,0.12);
-  border-radius: 12px;
-  padding: 20px 16px;
-  text-align: center;
-  transition: border-color 0.2s, transform 0.2s;
-}
-.stat-counter-item:hover {
-  border-color: rgba(200,241,53,0.3);
-  transform: translateY(-2px);
-}
-.stat-counter-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 48px;
-  line-height: 1;
-  color: #c8f135;
-  letter-spacing: 0.02em;
-  margin-bottom: 6px;
-}
-.stat-counter-label {
-  font-size: 11px;
-  color: #6b6b80;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  line-height: 1.4;
-}
-</style>
 </head>
 <body>
 
@@ -165,8 +130,8 @@
         <div class="t-output">[<span class="t-blue">2</span>] Java — OOP</div>
         <div class="t-output">[<span class="t-blue">3</span>] Python</div>
         <div class="t-output">[<span class="t-blue">4</span>] C++</div>
-        <div class="t-output">[<span class="t-blue">5</span>] R Language</div>
-        <div class="t-output">[<span class="t-blue">6</span>] <span class="t-accent">JavaScript</span></div>
+        <div class="t-output">[<span class="t-blue">5</span>] C#</div>
+        <div class="t-output">[<span class="t-blue">6</span>] <span class="t-accent">HTML + CSS + JS</span></div>
         <br>
         <div><span class="t-prompt">$ </span><span class="t-cursor"></span></div>
       </div>
@@ -182,7 +147,7 @@
     <div class="ticker-item"><strong>3</strong> Skill Levels</div>
     <div class="ticker-item"><strong>100%</strong> Free Resources</div>
     <div class="ticker-item"><strong>TIU</strong> Students Community</div>
-    <div class="ticker-item"><strong>C · Java · Python · C++ · R · JavaScript</strong></div>
+    <div class="ticker-item"><strong>C · Java · Python · C++ · C# · Web</strong></div>
     <div class="ticker-item"><strong>Placement</strong> Quiz System</div>
     <div class="ticker-item"><strong>Latest</strong> Tech Blog</div>
     <div class="ticker-item"><strong>6</strong> Programming Courses</div>
@@ -190,7 +155,7 @@
     <div class="ticker-item"><strong>3</strong> Skill Levels</div>
     <div class="ticker-item"><strong>100%</strong> Free Resources</div>
     <div class="ticker-item"><strong>TIU</strong> Students Community</div>
-    <div class="ticker-item"><strong>C · Java · Python · C++ · R · JavaScript</strong></div>
+    <div class="ticker-item"><strong>C · Java · Python · C++ · C# · Web</strong></div>
     <div class="ticker-item"><strong>Placement</strong> Quiz System</div>
     <div class="ticker-item"><strong>Latest</strong> Tech Blog</div>
   </div>
@@ -210,7 +175,7 @@
 
   <div class="courses-grid reveal">
     <a href="c.html" class="course-card">
-      <div class="course-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4"/><polyline points="9 12 11 14 15 10"/></svg></div>
+      <div class="course-icon">⚙️</div>
       <div class="course-tag">Subject 01</div>
       <div class="course-name">C PROGRAMMING</div>
       <div class="course-desc">Pointers, memory management, data structures. The foundation every programmer needs.</div>
@@ -228,7 +193,7 @@
       </div>
     </a>
     <a href="java.html" class="course-card">
-      <div class="course-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17c0 2.5 2 3 5 3s5-.5 5-3c0-1.5-1.5-3-3.5-4C15.5 12 17 11 17 9c0-2.5-2-4-5-4S7 6.5 7 9c0 2 1.5 3 3.5 4C8.5 14 7 15.5 7 17z"/><path d="M9 21h6"/></svg></div>
+      <div class="course-icon">☕</div>
       <div class="course-tag">Subject 02</div>
       <div class="course-name">OOPS JAVA</div>
       <div class="course-desc">Classes, inheritance, polymorphism, interfaces. Master object-oriented design.</div>
@@ -246,7 +211,7 @@
       </div>
     </a>
     <a href="python.html" class="course-card">
-      <div class="course-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C9 2 7 3.5 7 6v2h5"/><path d="M12 22c3 0 5-1.5 5-4v-2h-5"/><path d="M7 8H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h3"/><path d="M17 16h3a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-3"/><circle cx="9.5" cy="6.5" r="0.5" fill="currentColor"/><circle cx="14.5" cy="17.5" r="0.5" fill="currentColor"/></svg></div>
+      <div class="course-icon">🐍</div>
       <div class="course-tag">Subject 03</div>
       <div class="course-name">PYTHON</div>
       <div class="course-desc">From scripting to data science. Python's clean syntax makes concepts click fast.</div>
@@ -264,7 +229,7 @@
       </div>
     </a>
     <a href="c++.html" class="course-card">
-      <div class="course-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="17" y1="12" x2="21" y2="12"/><line x1="19" y1="10" x2="19" y2="14"/></svg></div>
+      <div class="course-icon">➕</div>
       <div class="course-tag">Subject 04</div>
       <div class="course-name">C++</div>
       <div class="course-desc">Templates, STL, virtual functions, operator overloading. C with superpowers.</div>
@@ -281,11 +246,11 @@
         <span class="course-arrow">→</span>
       </div>
     </a>
-    <a href="r.html" class="course-card">
-      <div class="course-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="8" y1="21" x2="8" y2="3"/><path d="M8 12h5a3 3 0 0 0 0-6H8"/><path d="M13 12l4 9"/></svg></div>
+    <a href="csharp.html" class="course-card">
+      <div class="course-icon">🔷</div>
       <div class="course-tag">Subject 05</div>
-      <div class="course-name">R LANGUAGE</div>
-      <div class="course-desc">Statistical computing and data visualization. The go-to language for data analysis and research.</div>
+      <div class="course-name">C#</div>
+      <div class="course-desc">Microsoft's powerhouse. LINQ, delegates, async/await and the .NET ecosystem.</div>
       <div class="course-meta">
         <div class="course-levels">
           <span class="level-pip lp-b">BEG</span>
@@ -294,16 +259,16 @@
         </div>
         <div class="course-syllabus">
           <p>What you'll learn:</p>
-          <ul><li>R Basics & Data Types</li><li>Vectors & Data Frames</li><li>Control Flow & Functions</li><li>ggplot2 Visualization</li><li>Statistical Analysis</li></ul>
+          <ul><li>Intro to C# & .NET</li><li>Variables & Operators</li><li>OOP: Classes & Objects</li><li>LINQ Basics</li><li>Async / Await</li></ul>
         </div>
         <span class="course-arrow">→</span>
       </div>
     </a>
-    <a href="javascript.html" class="course-card">
-      <div class="course-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M14 8v8"/><path d="M10 12c0 2.5 4 2.5 4 0v-4"/></svg></div>
+    <a href="web.html" class="course-card">
+      <div class="course-icon">🌐</div>
       <div class="course-tag">Subject 06</div>
-      <div class="course-name">JAVASCRIPT</div>
-      <div class="course-desc">The language of the web. Master DOM, async programming, ES6+ and build interactive apps.</div>
+      <div class="course-name">HTML+CSS+JS</div>
+      <div class="course-desc">Build real websites from scratch. DOM, flexbox, events — the holy trinity of web.</div>
       <div class="course-meta">
         <div class="course-levels">
           <span class="level-pip lp-b">BEG</span>
@@ -312,7 +277,7 @@
         </div>
         <div class="course-syllabus">
           <p>What you'll learn:</p>
-          <ul><li>Variables & Data Types</li><li>Functions & Scope</li><li>DOM Manipulation</li><li>ES6+ Features</li><li>Async / Await & Fetch API</li></ul>
+          <ul><li>HTML Structure & Semantic Tags</li><li>CSS Basics & Flexbox/Grid</li><li>JavaScript Fundamentals</li><li>DOM Manipulation</li><li>Mini Projects</li></ul>
         </div>
         <span class="course-arrow">→</span>
       </div>
@@ -356,31 +321,31 @@
       </div>
     </div>
     <div class="how-visual reveal">
-      <div class="section-label" style="margin-bottom:24px;">Platform at a Glance</div>
-      <div class="stat-counters">
-        <div class="stat-counter-item">
-          <div class="stat-counter-num" data-target="6">0</div>
-          <div class="stat-counter-label">Programming Courses</div>
+      <div class="section-label" style="margin-bottom:24px;">Skill Progression</div>
+      <div class="skill-bars">
+        <div class="skill-row">
+          <div class="skill-header"><span class="skill-name">C Programming</span><span class="skill-pct">87%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-w="87"></div></div>
         </div>
-        <div class="stat-counter-item">
-          <div class="stat-counter-num" data-target="70">0</div>
-          <div class="stat-counter-label">Practice Problems</div>
+        <div class="skill-row">
+          <div class="skill-header"><span class="skill-name">OOPs Java</span><span class="skill-pct">92%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-w="92"></div></div>
         </div>
-        <div class="stat-counter-item">
-          <div class="stat-counter-num" data-target="3">0</div>
-          <div class="stat-counter-label">Skill Levels per Course</div>
+        <div class="skill-row">
+          <div class="skill-header"><span class="skill-name">Python</span><span class="skill-pct">78%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-w="78"></div></div>
         </div>
-        <div class="stat-counter-item">
-          <div class="stat-counter-num" data-target="25">0</div>
-          <div class="stat-counter-label">Quiz Questions per Subject</div>
+        <div class="skill-row">
+          <div class="skill-header"><span class="skill-name">C++</span><span class="skill-pct">83%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-w="83"></div></div>
         </div>
-        <div class="stat-counter-item">
-          <div class="stat-counter-num" data-target="6">0</div>
-          <div class="stat-counter-label">Languages in Practice Panel</div>
+        <div class="skill-row">
+          <div class="skill-header"><span class="skill-name">C#</span><span class="skill-pct">70%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-w="70"></div></div>
         </div>
-        <div class="stat-counter-item">
-          <div class="stat-counter-num" data-target="100">0</div>
-          <div class="stat-counter-label stat-pct">% Free Core Resources</div>
+        <div class="skill-row">
+          <div class="skill-header"><span class="skill-name">HTML + CSS + JS</span><span class="skill-pct">95%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-w="95"></div></div>
         </div>
       </div>
     </div>
@@ -401,7 +366,7 @@
     <a href="blog-post.html?id=0" class="blog-card featured">
       <div class="blog-thumb">
         <div class="blog-thumb-gradient" style="background:linear-gradient(135deg,#0a0a1a,#0d0d28)"></div>
-        <div class="blog-thumb-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/><path d="M9 13c.83 1 2.17 1 3 0"/></svg></div>
+        <div class="blog-thumb-icon">🤖</div>
       </div>
       <div class="blog-body">
         <div class="blog-category">Trend · AI · Programming</div>
@@ -414,7 +379,7 @@
     <a href="blog-post.html?id=1" class="blog-card">
       <div class="blog-thumb" style="height:140px;">
         <div class="blog-thumb-gradient" style="background:linear-gradient(135deg,#0a140a,#0f1f0f)"></div>
-        <div class="blog-thumb-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg></div>
+        <div class="blog-thumb-icon">☕</div>
       </div>
       <div class="blog-body">
         <div class="blog-category">Tutorial · Java · OOP</div>
@@ -427,7 +392,7 @@
     <a href="blog-post.html?id=2" class="blog-card">
       <div class="blog-thumb" style="height:140px;">
         <div class="blog-thumb-gradient" style="background:linear-gradient(135deg,#14090a,#1e0f10)"></div>
-        <div class="blog-thumb-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
+        <div class="blog-thumb-icon">💼</div>
       </div>
       <div class="blog-body">
         <div class="blog-category">Career · Interview · Tips</div>
@@ -448,12 +413,12 @@
       <p class="section-sub reveal" style="margin-top:16px;">Everything on this platform is designed around your syllabus, your pace, and your goals.</p>
     </div>
     <div class="features-grid reveal">
-      <a href="quiz.html" class="feature-item"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="feature-name">Placement Quiz</div><div class="feature-text">Find your exact skill level before enrolling. No guessing, no wasted time.</div></a>
-      <a href="fileshare.html" class="feature-item"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div><div class="feature-name">File Share</div><div class="feature-text">Download notes, PDFs, and study materials shared by the community.</div></a>
-      <a href="blog.html" class="feature-item"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div class="feature-name">Tech Blog</div><div class="feature-text">Regular posts on AI, cybersecurity, web development and more.</div></a>
-      <a href="team.html" class="feature-item"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="feature-name">Members Area</div><div class="feature-text">Join a growing community of IT students learning together.</div></a>
-      <a href="courses.html" class="feature-item"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="feature-name">3 Skill Levels</div><div class="feature-text">Beginner, Intermediate and Advanced tracks for every subject.</div></a>
-      <a href="fileshare.html" class="feature-item"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="feature-name">Free Resources</div><div class="feature-text">Core study materials are completely free for all TIU students.</div></a>
+      <a href="quiz.html" class="feature-item"><div class="feature-icon">🎯</div><div class="feature-name">Placement Quiz</div><div class="feature-text">Find your exact skill level before enrolling. No guessing, no wasted time.</div></a>
+      <a href="fileshare.html" class="feature-item"><div class="feature-icon">📁</div><div class="feature-name">File Share</div><div class="feature-text">Download notes, PDFs, and study materials shared by the community.</div></a>
+      <a href="blog.html" class="feature-item"><div class="feature-icon">📝</div><div class="feature-name">Tech Blog</div><div class="feature-text">Regular posts on AI, cybersecurity, web development and more.</div></a>
+      <a href="team.html" class="feature-item"><div class="feature-icon">👥</div><div class="feature-name">Members Area</div><div class="feature-text">Join a growing community of IT students learning together.</div></a>
+      <a href="courses.html" class="feature-item"><div class="feature-icon">⚡</div><div class="feature-name">3 Skill Levels</div><div class="feature-text">Beginner, Intermediate and Advanced tracks for every subject.</div></a>
+      <a href="fileshare.html" class="feature-item"><div class="feature-icon">🆓</div><div class="feature-name">Free Resources</div><div class="feature-text">Core study materials are completely free for all TIU students.</div></a>
     </div>
   </div>
 </section>
@@ -474,12 +439,12 @@
       <p class="section-sub" style="margin-bottom:32px;">A full in-browser IDE — Monaco editor, real code execution across 6 languages, AI mentor hints, and 70+ problems sorted by difficulty. No installs. No signups. Just code.</p>
 
       <div class="practice-langs">
-        <span class="plang">C</span>
-        <span class="plang">Java</span>
-        <span class="plang">Python</span>
-        <span class="plang">C++</span>
-        <span class="plang">R</span>
-        <span class="plang">JS</span>
+        <span class="plang">⚙️ C</span>
+        <span class="plang">☕ Java</span>
+        <span class="plang">🐍 Python</span>
+        <span class="plang">➕ C++</span>
+        <span class="plang">🔷 C#</span>
+        <span class="plang">🌐 JS</span>
       </div>
 
       <div class="practice-stats">
@@ -795,35 +760,35 @@
     <div class="prem-right reveal">
       <div class="prem-feature-list">
         <div class="pfl-item">
-          <div class="pfl-icon" style="background:rgba(200,241,53,0.12);color:var(--lime)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <div class="pfl-icon" style="background:rgba(200,241,53,0.12);color:var(--lime)">📚</div>
           <div>
             <div class="pfl-name">Advanced Lessons</div>
             <div class="pfl-sub">Go beyond the basics into real-world systems code</div>
           </div>
         </div>
         <div class="pfl-item">
-          <div class="pfl-icon" style="background:rgba(200,241,53,0.12);color:var(--lime)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+          <div class="pfl-icon" style="background:rgba(200,241,53,0.12);color:var(--lime)">📄</div>
           <div>
             <div class="pfl-name">PDF Notes & Cheat Sheets</div>
             <div class="pfl-sub">Download and study offline, anytime</div>
           </div>
         </div>
         <div class="pfl-item">
-          <div class="pfl-icon" style="background:rgba(200,241,53,0.12);color:var(--lime)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+          <div class="pfl-icon" style="background:rgba(200,241,53,0.12);color:var(--lime)">🏆</div>
           <div>
             <div class="pfl-name">Completion Certificates</div>
             <div class="pfl-sub">Shareable PDFs you can add to your resume</div>
           </div>
         </div>
         <div class="pfl-item">
-          <div class="pfl-icon" style="background:rgba(247,183,49,0.12);color:var(--gold)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div class="pfl-icon" style="background:rgba(247,183,49,0.12);color:var(--gold)">💬</div>
           <div>
             <div class="pfl-name">Mentor Q&A Sessions</div>
             <div class="pfl-sub">Elite only — direct doubt clearing with mentors</div>
           </div>
         </div>
         <div class="pfl-item">
-          <div class="pfl-icon" style="background:rgba(247,183,49,0.12);color:var(--gold)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div class="pfl-icon" style="background:rgba(247,183,49,0.12);color:var(--gold)">⚡</div>
           <div>
             <div class="pfl-name">Instant Access</div>
             <div class="pfl-sub">Account upgrades immediately after Razorpay checkout</div>
@@ -864,12 +829,12 @@
       <a href="java.html">OOPs Java</a>
       <a href="python.html">Python</a>
       <a href="c++.html">C++</a>
-      <a href="r.html">R Language</a>
-      <a href="javascript.html">JavaScript</a>
+      <a href="csharp.html">C#</a>
+      <a href="web.html">HTML + CSS + JS</a>
     </div>
     <div class="footer-col">
       <h5>Platform</h5>
-      <a href="index.html">Home</a>
+      <a href="haha.html">Home</a>
       <a href="blog.html">Blog</a>
       <a href="fileshare.html">File Share</a>
       <a href="team.html">Members</a>
@@ -886,7 +851,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 IT Study Hub · Techno India University · ESD Group Project</p>
+    <p>© 2025 IT Study Hub · Techno India University · ESD Group Project</p>
     <a href="mailto:itstudyhub.tiu@gmail.com" class="footer-email">itstudyhub.tiu@gmail.com</a>
   </div>
 </footer>
@@ -920,32 +885,18 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 revealEls.forEach(el => observer.observe(el));
 
-/* ── Stat counters ── */
-const counterObserver = new IntersectionObserver(entries => {
+/* ── Skill bars ── */
+const barObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    entry.target.querySelectorAll('.stat-counter-num').forEach(el => {
-      const target = parseInt(el.dataset.target, 10);
-      const isPct = el.nextElementSibling && el.nextElementSibling.classList.contains('stat-pct');
-      const duration = 1200;
-      const step = 16;
-      const steps = duration / step;
-      let current = 0;
-      const increment = target / steps;
-      const timer = setInterval(() => {
-        current = Math.min(current + increment, target);
-        el.textContent = Math.floor(current) + (isPct ? '%' : '+');
-        if (current >= target) {
-          el.textContent = target + (isPct ? '%' : (target >= 10 ? '+' : ''));
-          clearInterval(timer);
-        }
-      }, step);
-    });
-    counterObserver.unobserve(entry.target);
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.skill-fill').forEach(bar => {
+        bar.style.width = bar.dataset.w + '%';
+      });
+    }
   });
 }, { threshold: 0.3 });
 const howVisual = document.querySelector('.how-visual');
-if (howVisual) counterObserver.observe(howVisual);
+if (howVisual) barObserver.observe(howVisual);
 
 /* ── Dropdown toggle ── */
 function toggleDropdown() {
