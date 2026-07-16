@@ -836,6 +836,16 @@
   </div>
 </div>
 
+<!-- Turnstile callbacks must be in a regular (non-module) script so Cloudflare can call them globally -->
+<script>
+  window._loginToken  = null;
+  window._signupToken = null;
+  window.onLoginTurnstileSuccess  = function(token) { window._loginToken  = token; };
+  window.onLoginTurnstileExpired  = function()      { window._loginToken  = null; };
+  window.onSignupTurnstileSuccess = function(token) { window._signupToken = token; };
+  window.onSignupTurnstileExpired = function()      { window._signupToken = null; };
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, sendPasswordResetEmail, GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
@@ -852,17 +862,6 @@ const firebaseConfig = {
 const ADMIN_EMAIL = "itstudyhub.tiu@gmail.com";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-// ── TURNSTILE STATE ──
-// Tracks whether the human-check has been passed for each panel.
-// Set to true by Cloudflare callbacks, reset on expiry or after use.
-let loginTurnstileToken  = null;
-let signupTurnstileToken = null;
-
-window.onLoginTurnstileSuccess  = (token) => { loginTurnstileToken  = token; };
-window.onLoginTurnstileExpired  = ()      => { loginTurnstileToken  = null; };
-window.onSignupTurnstileSuccess = (token) => { signupTurnstileToken = token; };
-window.onSignupTurnstileExpired = ()      => { signupTurnstileToken = null; };
 
 // ── DISPOSABLE EMAIL CHECKER ──
 // Uses mailcheck.ai (free, no API key) to block temp/disposable addresses.
