@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login — IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Cloudflare Turnstile -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
   :root {
     --bg: #04040a;
@@ -474,6 +476,16 @@
 
   .terms a { color: var(--lime); text-decoration: none; }
 
+  /* ── TURNSTILE ── */
+  .cf-turnstile-wrap {
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: center;
+  }
+  .cf-turnstile iframe {
+    border-radius: 8px !important;
+  }
+
   /* ── GLOBAL ERROR BANNER ── */
   .error-banner {
     background: var(--red-dim);
@@ -721,6 +733,17 @@
         </button>
       </div>
 
+      <!-- Cloudflare Turnstile: human verification -->
+      <div class="cf-turnstile-wrap">
+        <div class="cf-turnstile"
+          id="loginTurnstile"
+          data-sitekey="0x4AAAAAAD3LHYkI1tYdYZn1"
+          data-theme="dark"
+          data-callback="onLoginTurnstileSuccess"
+          data-expired-callback="onLoginTurnstileExpired">
+        </div>
+      </div>
+
       <div class="drag-wrap" id="loginDragWrap">
         <div class="drag-track" id="loginTrack">
           <div class="drag-fill" id="loginFill"></div>
@@ -784,6 +807,17 @@
         </button>
       </div>
 
+      <!-- Cloudflare Turnstile: human verification -->
+      <div class="cf-turnstile-wrap">
+        <div class="cf-turnstile"
+          id="signupTurnstile"
+          data-sitekey="0x4AAAAAAD3LHYkI1tYdYZn1"
+          data-theme="dark"
+          data-callback="onSignupTurnstileSuccess"
+          data-expired-callback="onSignupTurnstileExpired">
+        </div>
+      </div>
+
       <div class="drag-wrap" id="signupDragWrap" style="margin-top:8px;">
         <div class="drag-track" id="signupTrack">
           <div class="drag-fill" id="signupFill"></div>
@@ -818,6 +852,33 @@ const firebaseConfig = {
 const ADMIN_EMAIL = "itstudyhub.tiu@gmail.com";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+// ── TURNSTILE STATE ──
+// Tracks whether the human-check has been passed for each panel.
+// Set to true by Cloudflare callbacks, reset on expiry or after use.
+let loginTurnstileToken  = null;
+let signupTurnstileToken = null;
+
+window.onLoginTurnstileSuccess  = (token) => { loginTurnstileToken  = token; };
+window.onLoginTurnstileExpired  = ()      => { loginTurnstileToken  = null; };
+window.onSignupTurnstileSuccess = (token) => { signupTurnstileToken = token; };
+window.onSignupTurnstileExpired = ()      => { signupTurnstileToken = null; };
+
+// ── DISPOSABLE EMAIL CHECKER ──
+// Uses mailcheck.ai (free, no API key) to block temp/disposable addresses.
+// Bypassed for Google/GitHub OAuth since those already verify real emails.
+async function isDisposableEmail(email) {
+  try {
+    const domain = email.split('@')[1];
+    if (!domain) return false;
+    const res = await fetch(`https://api.mailcheck.ai/domain/${encodeURIComponent(domain)}`);
+    if (!res.ok) return false; // fail open — don't block if API is down
+    const data = await res.json();
+    return data.disposable === true;
+  } catch {
+    return false; // fail open
+  }
+}
 
 // ── NO AUTO-REDIRECT ON LOGIN PAGE ──
 // We deliberately do NOT redirect here even if Firebase still has a session.
@@ -865,6 +926,16 @@ window.handleLogin = async function(fromSlider) {
   const email    = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
   if (!email || !password) { showError('Please fill in email and password first.'); throw new Error('EMPTY'); }
+
+  // ── TURNSTILE GUARD ──
+  if (!loginTurnstileToken) {
+    showError('Please complete the human verification (Cloudflare) first.');
+    throw new Error('NO_TURNSTILE');
+  }
+  // Reset token after use — one token per attempt
+  loginTurnstileToken = null;
+  if (window.turnstile) window.turnstile.reset('#loginTurnstile');
+
   try {
     // Always sign out current session first — clean slate every login
     const { signOut } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
@@ -911,6 +982,23 @@ window.handleSignup = async function(fromSlider) {
   }
   passErr.classList.remove('show');
   document.getElementById('signupPassword').classList.remove('input-error');
+
+  // ── TURNSTILE GUARD ──
+  if (!signupTurnstileToken) {
+    showError('Please complete the human verification (Cloudflare) first.');
+    throw new Error('NO_TURNSTILE');
+  }
+  signupTurnstileToken = null;
+  if (window.turnstile) window.turnstile.reset('#signupTurnstile');
+
+  // ── DISPOSABLE EMAIL GUARD ──
+  showSuccess('Checking email…');
+  const disposable = await isDisposableEmail(email);
+  if (disposable) {
+    showError('Temporary or disposable email addresses are not allowed. Please use a real email.');
+    throw new Error('DISPOSABLE_EMAIL');
+  }
+
   try {
     const { signOut } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
     try { await signOut(auth); } catch(_) {}
@@ -1000,6 +1088,8 @@ function friendlyError(code) {
     'auth/popup-closed-by-user':'GitHub sign-in was cancelled.',
     'auth/unauthorized-domain':'This domain is not authorized. Add it in Firebase Console → Authentication → Authorized Domains.',
     'auth/operation-not-allowed':'GitHub Sign-In is not enabled in Firebase Console.',
+    'NO_TURNSTILE':'Please complete the human verification first.',
+    'DISPOSABLE_EMAIL':'Temporary email addresses are not allowed. Use a real email.',
   };
   return map[code] || 'Something went wrong. Please try again.';
 }
