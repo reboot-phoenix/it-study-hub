@@ -272,7 +272,6 @@
 </head>
 <body>
 
-<!-- LEFT PANEL -->
 <div class="left-panel">
   <div class="lp-logo">IT <span>STUDY</span> HUB</div>
   <div class="lp-center">
@@ -288,7 +287,6 @@
   <div class="lp-bottom">© 2026 IT Study Hub · Built for students</div>
 </div>
 
-<!-- RIGHT PANEL -->
 <div class="right-panel">
   <div class="auth-box">
 
@@ -300,10 +298,8 @@
     <div class="error-banner" id="errorBanner"><span>⚠️</span><span id="errorText">Something went wrong.</span></div>
     <div class="success-banner" id="successBanner"><span>✅</span><span id="successText">Done!</span></div>
 
-    <!-- ══ SIGN IN PANEL ══ -->
     <div class="form-panel active" id="loginPanel">
 
-      <!-- Step 1: Email entry -->
       <div id="loginForm">
         <div class="form-title">Welcome back</div>
         <div class="form-sub">Enter your email — we'll send you a magic sign-in link.</div>
@@ -347,7 +343,6 @@
         <div class="terms">Don't have an account? <a href="#" onclick="event.preventDefault(); window.switchTab('signup')">Sign up free</a></div>
       </div>
 
-      <!-- Step 2: Sent confirmation -->
       <div class="sent-state" id="loginSent">
         <div class="sent-icon">📬</div>
         <div class="sent-title">Check your inbox!</div>
@@ -359,10 +354,8 @@
       </div>
     </div>
 
-    <!-- ══ SIGN UP PANEL ══ -->
     <div class="form-panel" id="signupPanel">
 
-      <!-- Step 1: Details entry -->
       <div id="signupForm">
         <div class="form-title">Create account</div>
         <div class="form-sub">Join thousands of students leveling up their skills.</div>
@@ -417,7 +410,6 @@
         </div>
       </div>
 
-      <!-- Step 2: Sent confirmation -->
       <div class="sent-state" id="signupSent">
         <div class="sent-icon">🚀</div>
         <div class="sent-title">Almost there!</div>
@@ -432,7 +424,6 @@
   </div>
 </div>
 
-<!-- Turnstile Modal -->
 <div class="ts-overlay" id="tsOverlay">
   <div class="ts-modal">
     <div class="ts-modal-title">Quick Human Check ☁️</div>
@@ -442,7 +433,6 @@
   </div>
 </div>
 
-<!-- Custom cursor -->
 <div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 <script>
@@ -540,18 +530,20 @@ window.onModalTurnstileExpired = () => { tsToken = null; };
 window.showTsOverlay = function(onDone) {
   tsOnDone = onDone;
   const container = document.getElementById('tsModalWidget');
-  container.innerHTML = '';
+  
   if (tsWidgetId !== null && window.turnstile) {
     try { window.turnstile.remove(tsWidgetId); } catch(_) {}
     tsWidgetId = null;
   }
+  container.innerHTML = '';
+  
   document.getElementById('tsOverlay').classList.add('show');
   if (window.turnstile) {
     tsWidgetId = window.turnstile.render(container, {
       sitekey: TURNSTILE_SITEKEY,
       theme: 'dark',
-      callback: 'onModalTurnstileSuccess',
-      'expired-callback': 'onModalTurnstileExpired',
+      callback: window.onModalTurnstileSuccess,
+      'expired-callback': window.onModalTurnstileExpired,
     });
   }
 };
@@ -627,6 +619,7 @@ async function doSendLoginLink() {
   } catch(e) {
     showError(friendlyError(e.code) || e.message);
     showVerdict(false, 'login');
+    throw e;
   }
 }
 
@@ -656,6 +649,7 @@ async function doSendSignupLink() {
   } catch(e) {
     showError(friendlyError(e.code) || e.message);
     showVerdict(false, 'signup');
+    throw e;
   }
 }
 
