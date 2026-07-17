@@ -114,17 +114,18 @@ nav {
 }
 .pfp-img { object-fit: cover; display: none; }
 .pfp-initials {
-  background: rgba(200,241,53,0.12);
+  background: radial-gradient(circle at 40% 35%, rgba(200,241,53,0.22), rgba(10,10,12,0.95) 75%);
   display: flex; align-items: center; justify-content: center;
   font-family: var(--ff-display); font-size: 30px; font-weight: 800;
   color: var(--lime);
 }
 .pfp-avatar-display {
-  background: var(--surface2);
+  background: radial-gradient(circle at 40% 35%, rgba(200,241,53,0.18), rgba(10,10,12,0.95) 70%);
   display: none;
   align-items: center; justify-content: center;
-  font-size: 44px; line-height: 1;
+  font-size: 48px; line-height: 1;
 }
+
 .pfp-edit-btn {
   position: absolute; bottom: 2px; right: 2px;
   width: 28px; height: 28px;
@@ -200,12 +201,12 @@ nav {
 .stat-card.lime::after { background: var(--lime); }
 .stat-card.gold::after { background: var(--gold); }
 .stat-card.green::after { background: var(--green); }
-.stat-card.blue::after  { background: var(--blue); }
+.stat-card.blue::after  { background: #ff6b35; }
 .stat-val { font-family: var(--ff-display); font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
 .stat-card.lime .stat-val { color: var(--lime); }
 .stat-card.gold .stat-val { color: var(--gold); }
 .stat-card.green .stat-val { color: var(--green); }
-.stat-card.blue .stat-val { color: var(--blue); }
+.stat-card.blue .stat-val { color: #ff6b35; }
 .stat-label { font-family: var(--ff-mono); font-size: 9px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
 
 /* ── Two-col grid ── */
@@ -380,6 +381,93 @@ nav {
 .privilege-row-desc { font-size: 12px; color: var(--muted2); line-height: 1.5; }
 .privilege-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-family: var(--ff-mono); font-size: 9px; font-weight: 700; letter-spacing: .06em; }
 
+/* ── Streak Heatmap ─────────────────────────────────────── */
+.streak-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px; margin-bottom: 16px;
+}
+.streak-top {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.streak-stats { display: flex; gap: 28px; }
+.streak-stat { text-align: center; }
+.streak-stat-val {
+  font-family: var(--ff-display); font-size: 28px; font-weight: 800;
+  line-height: 1; margin-bottom: 3px;
+}
+.streak-stat-val.fire { color: #ff6b35; }
+.streak-stat-val.cool { color: var(--blue); }
+.streak-stat-val.lime { color: var(--lime); }
+.streak-stat-lbl {
+  font-family: var(--ff-mono); font-size: 9px; letter-spacing: .1em;
+  color: var(--muted); text-transform: uppercase;
+}
+/* Month label row */
+.heatmap-wrap { overflow-x: auto; padding-bottom: 4px; }
+.heatmap-month-label {
+  font-family: var(--ff-mono); font-size: 10px; color: var(--muted);
+  letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px;
+}
+.heatmap-grid {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  min-width: 0;
+}
+.heatmap-day {
+  width: 16px; height: 16px; border-radius: 3px;
+  background: var(--surface2);
+  border: 1px solid rgba(255,255,255,0.04);
+  cursor: default; position: relative;
+  transition: transform .15s;
+  flex-shrink: 0;
+}
+.heatmap-day:hover { transform: scale(1.3); z-index: 2; }
+/* Activity levels */
+.heatmap-day[data-level="1"] { background: rgba(200,241,53,0.18); border-color: rgba(200,241,53,0.25); }
+.heatmap-day[data-level="2"] { background: rgba(200,241,53,0.40); border-color: rgba(200,241,53,0.45); }
+.heatmap-day[data-level="3"] { background: rgba(200,241,53,0.65); border-color: rgba(200,241,53,0.70); }
+.heatmap-day[data-level="4"] { background: #c8f135; border-color: #c8f135; box-shadow: 0 0 6px rgba(200,241,53,0.5); }
+/* Today ring */
+.heatmap-day.today { outline: 2px solid rgba(200,241,53,0.6); outline-offset: 1px; }
+/* Tooltip */
+.heatmap-day::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  background: var(--surface3); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 8px;
+  font-family: var(--ff-mono); font-size: 10px; color: var(--text);
+  white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: opacity .15s; z-index: 10;
+}
+.heatmap-day:hover::after { opacity: 1; }
+/* Streak milestones row */
+.streak-milestones {
+  display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap;
+}
+.streak-milestone {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px;
+  flex: 1; min-width: 120px; transition: border-color .2s;
+}
+.streak-milestone.earned {
+  border-color: rgba(200,241,53,0.3);
+  background: rgba(200,241,53,0.04);
+}
+.streak-milestone.earned .sm-icon { filter: none; }
+.streak-milestone .sm-icon { font-size: 20px; filter: grayscale(1); opacity: .35; transition: filter .2s, opacity .2s; }
+.streak-milestone.earned .sm-icon { filter: none; opacity: 1; }
+.streak-milestone-body {}
+.sm-title { font-size: 12px; font-weight: 600; margin-bottom: 1px; }
+.sm-desc  { font-family: var(--ff-mono); font-size: 9px; color: var(--muted); letter-spacing: .04em; }
+.streak-milestone.earned .sm-title { color: var(--lime); }
+/* Heatmap legend */
+.heatmap-legend {
+  display: flex; align-items: center; gap: 6px; margin-top: 14px;
+  font-family: var(--ff-mono); font-size: 9px; color: var(--muted);
+}
+.legend-box { width: 11px; height: 11px; border-radius: 2px; }
+
 /* ── Responsive ── */
 @media (max-width: 720px) {
   #profilePage { padding: 80px 14px 60px; }
@@ -484,9 +572,51 @@ nav {
       <div class="stat-label">Quizzes Done</div>
     </div>
     <div class="stat-card blue">
-      <div class="stat-val" id="statStreak">0</div>
-      <div class="stat-label">Day Streak 🔥</div>
+      <div class="stat-val" id="statStreak" style="color:#ff6b35;">0🔥</div>
+      <div class="stat-label">Day Streak</div>
     </div>
+  </div>
+
+  <!-- STREAK HEATMAP -->
+  <div class="streak-card fade-up" style="animation-delay:.09s;" id="streakCard">
+    <div class="streak-top">
+      <div>
+        <div class="card-title" style="margin-bottom:4px;">Study Streak 🔥</div>
+        <div class="card-sub">Every day you study lights up. Keep the grid alive.</div>
+      </div>
+      <div class="streak-stats">
+        <div class="streak-stat">
+          <div class="streak-stat-val fire" id="streakCurrent">0</div>
+          <div class="streak-stat-lbl">Current</div>
+        </div>
+        <div class="streak-stat">
+          <div class="streak-stat-val cool" id="streakLongest">0</div>
+          <div class="streak-stat-lbl">Longest</div>
+        </div>
+        <div class="streak-stat">
+          <div class="streak-stat-val lime" id="streakMonthDays">0</div>
+          <div class="streak-stat-lbl">This Month</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heatmap -->
+    <div class="heatmap-wrap">
+      <div class="heatmap-month-label" id="heatmapMonthLabel"></div>
+      <div class="heatmap-grid" id="heatmapGrid"></div>
+      <div class="heatmap-legend">
+        Less
+        <div class="legend-box" style="background:var(--surface2);border:1px solid rgba(255,255,255,0.06);"></div>
+        <div class="legend-box" style="background:rgba(200,241,53,0.18);"></div>
+        <div class="legend-box" style="background:rgba(200,241,53,0.40);"></div>
+        <div class="legend-box" style="background:rgba(200,241,53,0.65);"></div>
+        <div class="legend-box" style="background:#c8f135;"></div>
+        More
+      </div>
+    </div>
+
+    <!-- Milestone badges -->
+    <div class="streak-milestones" id="streakMilestones"></div>
   </div>
 
   <!-- PRIVILEGES (role-specific, shown based on role) -->
@@ -793,7 +923,7 @@ window.selectAvatar = async function(emoji) {
 
   // Save to Firestore
   try {
-    await updateDoc(doc(db, 'users', currentUser.uid), { avatarEmoji: emoji, photoURL: null });
+    await setDoc(doc(db, 'users', currentUser.uid), { avatarEmoji: emoji, photoURL: null }, { merge: true });
     await updateProfile(currentUser, { photoURL: '' });
     showToast('Avatar updated', 'success');
   } catch(e) { showToast('Could not save avatar', 'error'); }
@@ -839,7 +969,7 @@ window.saveProfile = async function() {
       github:      document.getElementById('githubInput').value.trim(),
       bio:         document.getElementById('bioInput').value.trim(),
     };
-    await updateDoc(doc(db, 'users', currentUser.uid), fields);
+    await setDoc(doc(db, 'users', currentUser.uid), fields, { merge: true });
     Object.assign(userData, fields);
     document.getElementById('heroName').textContent = name;
     renderMetaRow();
@@ -959,6 +1089,7 @@ onAuthStateChanged(auth, async (user) => {
   // ── Scores & Badges ──
   renderScores(userData.scores || {});
   renderBadges(userData.badges || []);
+  renderStreakHeatmap(userData.studyDays || {}, userData.streak || 0, userData.longestStreak || 0);
 });
 
 async function loadRank(uid, myXP) {
@@ -984,7 +1115,7 @@ window.handlePfpChange = async function(e) {
     await uploadBytes(storageRef, file);
     const url = await getDownloadURL(storageRef);
     await updateProfile(currentUser, { photoURL: url });
-    await updateDoc(doc(db, 'users', currentUser.uid), { photoURL: url, avatarEmoji: null });
+    await setDoc(doc(db, 'users', currentUser.uid), { photoURL: url, avatarEmoji: null }, { merge: true });
     userData.avatarEmoji = null;
     const img = document.getElementById('pfpImg');
     img.src = url; img.style.display = 'block';
@@ -993,6 +1124,79 @@ window.handlePfpChange = async function(e) {
     showToast('Photo updated', 'success');
   } catch(e) { showToast('Upload failed. Try a smaller image.', 'error'); }
 };
+
+// ── STREAK HEATMAP ────────────────────────────────────────
+function renderStreakHeatmap(studyDays, currentStreak, longestStreak) {
+  // studyDays is a Firestore map like { "2026-07-01": 3, "2026-07-02": 1 }
+  // value = number of quizzes/activities that day (determines heat level)
+
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0,10);
+  const year = today.getFullYear();
+  const month = today.getMonth(); // 0-indexed
+
+  // Show last 12 weeks (84 days) up to today
+  const WEEKS = 15;
+  const DAYS = WEEKS * 7;
+  const startDate = new Date(today);
+  startDate.setDate(startDate.getDate() - DAYS + 1);
+
+  // Month label
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('heatmapMonthLabel').textContent =
+    `${monthNames[month]} ${year} · ${WEEKS}-week activity`;
+
+  // Count this-month active days
+  const thisMonthPrefix = `${year}-${String(month+1).padStart(2,'0')}`;
+  let monthDays = 0;
+  Object.keys(studyDays).forEach(d => { if (d.startsWith(thisMonthPrefix) && studyDays[d] > 0) monthDays++; });
+
+  document.getElementById('streakCurrent').textContent  = currentStreak;
+  document.getElementById('streakLongest').textContent  = longestStreak || currentStreak;
+  document.getElementById('streakMonthDays').textContent = monthDays;
+  document.getElementById('statStreak').textContent     = currentStreak; // update stat card too
+
+  // Build grid
+  const grid = document.getElementById('heatmapGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < DAYS; i++) {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + i);
+    if (d > today) break;
+    const key = d.toISOString().slice(0,10);
+    const count = studyDays[key] || 0;
+    const level = count === 0 ? 0 : count === 1 ? 1 : count <= 3 ? 2 : count <= 6 ? 3 : 4;
+    const isToday = key === todayStr;
+    const label = d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    const tip = count > 0 ? `${count} activit${count>1?'ies':'y'} · ${label}` : label;
+    const el = document.createElement('div');
+    el.className = 'heatmap-day' + (isToday ? ' today' : '');
+    el.setAttribute('data-level', level);
+    el.setAttribute('data-tip', tip);
+    grid.appendChild(el);
+  }
+
+  // Streak milestone badges
+  const MILESTONES = [
+    { days:3,   icon:'🔥', title:'3-Day Streak',   desc:'3 days in a row' },
+    { days:7,   icon:'⚡', title:'Week Warrior',   desc:'7-day streak' },
+    { days:15,  icon:'💫', title:'Fortnight Fire',  desc:'15 days straight' },
+    { days:30,  icon:'🌙', title:'Monthly Grind',   desc:'30 days straight' },
+    { days:60,  icon:'💎', title:'Diamond Habit',   desc:'60 days straight' },
+    { days:100, icon:'🚀', title:'Century Streak',  desc:'100 days — legendary' },
+  ];
+  const ms = document.getElementById('streakMilestones');
+  ms.innerHTML = MILESTONES.map(m => {
+    const earned = (longestStreak || currentStreak) >= m.days;
+    return `<div class="streak-milestone ${earned ? 'earned' : ''}">
+      <span class="sm-icon">${m.icon}</span>
+      <div class="streak-milestone-body">
+        <div class="sm-title">${m.title}</div>
+        <div class="sm-desc">${earned ? '✓ Earned' : m.desc}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
 
 function renderScores(scores) {
   const container = document.getElementById('scoresContainer');
