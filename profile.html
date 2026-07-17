@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <style>
-/* ── Reset & Base ─────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -15,9 +14,12 @@
   --gold:  #f7b731;
   --red:   #ff5f56;
   --green: #43e97b;
+  --blue:  #60a5fa;
+  --purple:#a78bfa;
   --bg:    #0a0a0c;
   --surface: #111114;
   --surface2: #17171b;
+  --surface3: #1e1e24;
   --border: rgba(255,255,255,0.07);
   --border-lime: rgba(200,241,53,0.18);
   --muted: rgba(255,255,255,0.35);
@@ -36,7 +38,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Nav ────────────────────────────────────────────────── */
+/* ── Nav ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
@@ -45,439 +47,351 @@ nav {
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }
-.nav-logo {
-  font-family: var(--ff-display); font-weight: 800; font-size: 16px;
-  letter-spacing: 2px; text-decoration: none; color: #fff; text-transform: uppercase;
-}
+.nav-logo { font-family: var(--ff-display); font-weight: 800; font-size: 16px; letter-spacing: 2px; text-decoration: none; color: #fff; text-transform: uppercase; }
 .nav-logo span { color: var(--lime); }
-.nav-back {
-  display: flex; align-items: center; gap: 6px;
-  font-family: var(--ff-mono); font-size: 11px; letter-spacing: .5px;
-  color: var(--muted2); text-decoration: none;
-  transition: color .2s;
-}
+.nav-back { display: flex; align-items: center; gap: 6px; font-family: var(--ff-mono); font-size: 11px; letter-spacing: .5px; color: var(--muted2); text-decoration: none; transition: color .2s; }
 .nav-back:hover { color: var(--lime); }
 
-/* ── Auth States ─────────────────────────────────────────── */
-#authLoader {
-  display: flex; align-items: center; justify-content: center;
-  height: 100vh;
-}
-.loader-ring {
-  width: 36px; height: 36px;
-  border: 2px solid var(--border);
-  border-top-color: var(--lime);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
+/* ── Auth States ── */
+#authLoader { display: flex; align-items: center; justify-content: center; height: 100vh; }
+.loader-ring { width: 36px; height: 36px; border: 2px solid var(--border); border-top-color: var(--lime); border-radius: 50%; animation: spin .7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-#gateScreen {
-  display: none; align-items: center; justify-content: center;
-  min-height: 100vh; padding: 40px 20px;
-}
-.gate-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 52px 48px;
-  text-align: center;
-  max-width: 440px; width: 100%;
-}
-.gate-icon {
-  width: 64px; height: 64px;
-  background: rgba(200,241,53,0.08);
-  border: 1px solid var(--border-lime);
-  border-radius: 16px;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 24px;
-}
+#gateScreen { display: none; align-items: center; justify-content: center; min-height: 100vh; padding: 40px 20px; }
+.gate-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 52px 48px; text-align: center; max-width: 440px; width: 100%; }
+.gate-icon { width: 64px; height: 64px; background: rgba(200,241,53,0.08); border: 1px solid var(--border-lime); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
 .gate-icon svg { stroke: var(--lime); }
-.gate-card h2 {
-  font-family: var(--ff-display); font-size: 28px; font-weight: 800;
-  margin-bottom: 10px;
-}
+.gate-card h2 { font-family: var(--ff-display); font-size: 28px; font-weight: 800; margin-bottom: 10px; }
 .gate-card p { font-size: 14px; color: var(--muted2); line-height: 1.7; margin-bottom: 28px; }
-.gate-btn {
-  display: inline-block;
-  background: var(--lime); color: #000;
-  font-family: var(--ff-mono); font-size: 11px; font-weight: 700;
-  padding: 13px 28px; border-radius: 8px;
-  text-decoration: none; letter-spacing: 1px;
-  transition: opacity .2s;
-}
+.gate-btn { display: inline-block; background: var(--lime); color: #000; font-family: var(--ff-mono); font-size: 11px; font-weight: 700; padding: 13px 28px; border-radius: 8px; text-decoration: none; letter-spacing: 1px; transition: opacity .2s; }
 .gate-btn:hover { opacity: .88; }
 
-/* ── Profile Page Wrapper ────────────────────────────────── */
+/* ── Profile Page ── */
 #profilePage {
   display: none;
-  max-width: 960px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 100px 24px 80px;
 }
 
-/* ── Hero ────────────────────────────────────────────────── */
-.profile-hero {
-  display: flex;
-  align-items: flex-end;
-  gap: 28px;
-  margin-bottom: 40px;
-  padding: 36px;
+/* ── Hero Banner ── */
+.profile-banner {
+  position: relative;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  position: relative;
+  border-radius: 24px;
   overflow: hidden;
+  margin-bottom: 24px;
 }
-.profile-hero::before {
+.banner-bg {
+  height: 140px;
+  background: linear-gradient(135deg, rgba(200,241,53,0.08) 0%, rgba(96,165,250,0.06) 50%, rgba(167,139,250,0.08) 100%);
+  position: relative;
+}
+.banner-bg::after {
   content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, var(--lime), transparent 60%);
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8f135' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.banner-content {
+  padding: 0 36px 32px;
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  margin-top: -48px;
+  position: relative;
 }
 
-/* Avatar */
+/* ── Avatar ── */
 .pfp-wrap {
   position: relative; flex-shrink: 0;
   width: 96px; height: 96px;
 }
-.pfp-img, .pfp-initials {
+.pfp-img, .pfp-initials, .pfp-avatar-display {
   width: 96px; height: 96px; border-radius: 50%;
-  border: 2px solid var(--border-lime);
+  border: 3px solid var(--bg);
+  outline: 2px solid var(--border-lime);
 }
 .pfp-img { object-fit: cover; display: none; }
 .pfp-initials {
-  background: rgba(200,241,53,0.1);
+  background: rgba(200,241,53,0.12);
   display: flex; align-items: center; justify-content: center;
   font-family: var(--ff-display); font-size: 30px; font-weight: 800;
   color: var(--lime);
 }
+.pfp-avatar-display {
+  background: var(--surface2);
+  display: none;
+  align-items: center; justify-content: center;
+  font-size: 44px; line-height: 1;
+}
 .pfp-edit-btn {
-  position: absolute; bottom: 0; right: 0;
+  position: absolute; bottom: 2px; right: 2px;
   width: 28px; height: 28px;
   background: var(--surface2); border: 1px solid var(--border);
   border-radius: 50%; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: border-color .2s;
-  padding: 0;
+  transition: all .2s; padding: 0;
+  z-index: 1;
 }
 .pfp-edit-btn svg { stroke: var(--muted2); }
-.pfp-edit-btn:hover { border-color: var(--lime); }
+.pfp-edit-btn:hover { border-color: var(--lime); background: rgba(200,241,53,0.1); }
 .pfp-edit-btn:hover svg { stroke: var(--lime); }
 #pfpInput { display: none; }
 
-/* Hero info */
-.profile-info { flex: 1; min-width: 0; }
+/* ── Banner Info ── */
+.banner-info { flex: 1; min-width: 0; padding-bottom: 4px; }
 .profile-name-display {
-  font-family: var(--ff-display); font-size: 28px; font-weight: 800;
-  line-height: 1.1; margin-bottom: 4px; white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis;
+  font-family: var(--ff-display); font-size: 26px; font-weight: 800;
+  line-height: 1.1; margin-bottom: 2px;
 }
 .profile-email-display {
   font-family: var(--ff-mono); font-size: 11px; color: var(--muted);
-  margin-bottom: 14px; letter-spacing: .3px;
+  margin-bottom: 12px; letter-spacing: .3px;
 }
+.profile-meta-row {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px;
+}
+.meta-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--muted2);
+}
+.meta-item svg { stroke: var(--muted); flex-shrink: 0; }
 .profile-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip {
-  display: inline-flex; align-items: center;
-  padding: 4px 11px; border-radius: 6px;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: 6px;
   font-family: var(--ff-mono); font-size: 10px; font-weight: 700;
   letter-spacing: .08em; white-space: nowrap;
 }
-.chip-lime {
-  background: rgba(200,241,53,0.1);
-  border: 1px solid rgba(200,241,53,0.25);
-  color: var(--lime);
-}
-.chip-blue {
-  background: rgba(96,165,250,0.1);
-  border: 1px solid rgba(96,165,250,0.25);
-  color: #60a5fa;
-}
-.chip-gold {
-  background: rgba(247,183,49,0.1);
-  border: 1px solid rgba(247,183,49,0.25);
-  color: var(--gold);
-}
+.chip-lime { background: rgba(200,241,53,0.1); border: 1px solid rgba(200,241,53,0.25); color: var(--lime); }
+.chip-blue { background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.25); color: #60a5fa; }
+.chip-gold { background: rgba(247,183,49,0.1); border: 1px solid rgba(247,183,49,0.25); color: var(--gold); }
+.chip-red  { background: rgba(255,95,86,0.1);  border: 1px solid rgba(255,95,86,0.25);  color: var(--red); }
+.chip-purple { background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.25); color: var(--purple); }
 
-/* ── Stats Row ───────────────────────────────────────────── */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px 20px;
-  text-align: center;
-  position: relative; overflow: hidden;
-  transition: border-color .2s;
-}
-.stat-card:hover { border-color: rgba(255,255,255,0.14); }
-.stat-card::after {
-  content: '';
-  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 40%; height: 1px;
-}
-.stat-card.lime::after { background: var(--lime); }
-.stat-card.gold::after { background: var(--gold); }
-.stat-card.green::after { background: var(--green); }
-.stat-val {
-  font-family: var(--ff-display); font-size: 32px; font-weight: 800;
-  line-height: 1; margin-bottom: 6px;
-}
-.stat-card.lime .stat-val { color: var(--lime); }
-.stat-card.gold .stat-val { color: var(--gold); }
-.stat-card.green .stat-val { color: var(--green); }
-.stat-label {
-  font-family: var(--ff-mono); font-size: 10px; letter-spacing: .1em;
-  color: var(--muted); text-transform: uppercase;
-}
-
-/* ── Two-col grid ─────────────────────────────────────────── */
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-/* ── Cards ───────────────────────────────────────────────── */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 28px;
-  margin-bottom: 16px;
-}
-.card:last-child { margin-bottom: 0; }
-.card-header {
-  display: flex; align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px; margin-bottom: 22px;
-}
-.card-title-wrap {}
-.card-title {
-  font-family: var(--ff-display); font-size: 16px; font-weight: 700;
-  margin-bottom: 4px;
-}
-.card-sub { font-size: 13px; color: var(--muted2); line-height: 1.5; }
-.card-icon {
-  width: 38px; height: 38px; flex-shrink: 0;
-  background: rgba(200,241,53,0.07);
-  border: 1px solid var(--border-lime);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-}
-.card-icon svg { stroke: var(--lime); }
-
-/* ── Form ────────────────────────────────────────────────── */
-.form-group { margin-bottom: 16px; }
-.form-group label {
-  display: block;
-  font-family: var(--ff-mono); font-size: 10px; font-weight: 600;
-  letter-spacing: .1em; color: var(--muted); text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.form-group input {
-  width: 100%;
+/* Edit profile button in banner */
+.banner-actions { flex-shrink: 0; padding-bottom: 4px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.btn-outline {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 16px;
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 11px 14px;
-  color: var(--text);
-  font-family: var(--ff-body); font-size: 14px;
-  outline: none;
-  transition: border-color .2s;
+  font-family: var(--ff-mono); font-size: 11px; font-weight: 600;
+  letter-spacing: .05em; color: var(--muted2); cursor: pointer;
+  transition: all .2s; white-space: nowrap;
 }
-.form-group input:focus { border-color: rgba(200,241,53,0.4); }
-.form-group input:disabled { color: var(--muted); cursor: not-allowed; }
-.form-group input::placeholder { color: rgba(255,255,255,0.2); }
+.btn-outline:hover { border-color: rgba(200,241,53,0.35); color: var(--lime); }
+.btn-outline svg { stroke: currentColor; }
 
-/* ── Buttons ─────────────────────────────────────────────── */
+/* ── Stats Row ── */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px 16px; text-align: center;
+  position: relative; overflow: hidden; transition: border-color .2s;
+}
+.stat-card:hover { border-color: rgba(255,255,255,0.12); }
+.stat-card::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 40%; height: 1px; }
+.stat-card.lime::after { background: var(--lime); }
+.stat-card.gold::after { background: var(--gold); }
+.stat-card.green::after { background: var(--green); }
+.stat-card.blue::after  { background: var(--blue); }
+.stat-val { font-family: var(--ff-display); font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+.stat-card.lime .stat-val { color: var(--lime); }
+.stat-card.gold .stat-val { color: var(--gold); }
+.stat-card.green .stat-val { color: var(--green); }
+.stat-card.blue .stat-val { color: var(--blue); }
+.stat-label { font-family: var(--ff-mono); font-size: 9px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+
+/* ── Two-col grid ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+
+/* ── Cards ── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px; margin-bottom: 16px;
+}
+.card:last-child { margin-bottom: 0; }
+.card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+.card-title { font-family: var(--ff-display); font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.card-sub { font-size: 12px; color: var(--muted2); line-height: 1.5; }
+.card-icon { width: 36px; height: 36px; flex-shrink: 0; background: rgba(200,241,53,0.07); border: 1px solid var(--border-lime); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.card-icon svg { stroke: var(--lime); }
+
+/* ── Privilege Cards ── */
+.privilege-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: border-color .2s, transform .2s;
+}
+.privilege-card:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
+.privilege-card.admin { border-color: rgba(200,241,53,0.15); }
+.privilege-card.premium { border-color: rgba(247,183,49,0.15); }
+.privilege-card.elite { border-color: rgba(167,139,250,0.15); }
+.privilege-icon { font-size: 22px; margin-bottom: 8px; }
+.privilege-title { font-family: var(--ff-mono); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
+.privilege-desc { font-size: 11px; color: var(--muted2); line-height: 1.5; }
+.privilege-locked { opacity: .4; filter: grayscale(.5); }
+
+/* ── Bio section ── */
+.bio-text { font-size: 13px; color: var(--muted2); line-height: 1.7; font-style: italic; }
+.bio-empty { font-family: var(--ff-mono); font-size: 11px; color: var(--muted); }
+
+/* ── Form (in modal) ── */
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-family: var(--ff-mono); font-size: 10px; font-weight: 600; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 12px; color: var(--text);
+  font-family: var(--ff-body); font-size: 13px; outline: none; transition: border-color .2s;
+}
+.form-group textarea { resize: vertical; min-height: 80px; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: rgba(200,241,53,0.4); }
+.form-group input:disabled { color: var(--muted); cursor: not-allowed; opacity: .6; }
+.form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+.form-group select option { background: #1e1e24; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ── Buttons ── */
 .btn-lime {
-  width: 100%; padding: 12px;
-  background: var(--lime); color: #000;
-  border: none; border-radius: 8px;
-  font-family: var(--ff-mono); font-size: 12px; font-weight: 700;
-  letter-spacing: .5px; cursor: pointer;
-  transition: opacity .2s;
+  width: 100%; padding: 11px; background: var(--lime); color: #000;
+  border: none; border-radius: 8px; font-family: var(--ff-mono); font-size: 12px; font-weight: 700;
+  letter-spacing: .5px; cursor: pointer; transition: opacity .2s;
   display: flex; align-items: center; justify-content: center; gap: 6px;
 }
 .btn-lime:hover { opacity: .88; }
 .btn-lime:disabled { opacity: .5; cursor: not-allowed; }
-.btn-danger {
-  padding: 11px 20px;
-  background: rgba(255,95,86,0.08);
-  border: 1px solid rgba(255,95,86,0.25);
-  color: var(--red); border-radius: 8px;
-  font-family: var(--ff-mono); font-size: 11px; font-weight: 700;
-  letter-spacing: .5px; cursor: pointer;
-  transition: background .2s;
-}
+.btn-danger { padding: 10px 18px; background: rgba(255,95,86,0.08); border: 1px solid rgba(255,95,86,0.25); color: var(--red); border-radius: 8px; font-family: var(--ff-mono); font-size: 11px; font-weight: 700; letter-spacing: .5px; cursor: pointer; transition: background .2s; }
 .btn-danger:hover { background: rgba(255,95,86,0.15); }
 
-/* ── Quiz Scores ─────────────────────────────────────────── */
-.score-item {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--border);
-}
+/* ── Quiz Scores ── */
+.score-item { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); }
 .score-item:last-child { border-bottom: none; padding-bottom: 0; }
-.score-icon {
-  width: 36px; height: 36px; flex-shrink: 0;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-}
+.score-icon { width: 34px; height: 34px; flex-shrink: 0; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; font-family: var(--ff-mono); }
 .score-info { flex: 1; min-width: 0; }
-.score-name {
-  font-size: 13px; font-weight: 500; margin-bottom: 6px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.score-bar-wrap {
-  height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px;
-  overflow: hidden;
-}
-.score-bar {
-  height: 100%; border-radius: 2px;
-  transition: width .6s cubic-bezier(.4,0,.2,1);
-}
+.score-name { font-size: 13px; font-weight: 500; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.score-bar-wrap { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+.score-bar { height: 100%; border-radius: 2px; transition: width .6s cubic-bezier(.4,0,.2,1); }
 .score-right { text-align: right; flex-shrink: 0; }
-.score-pct {
-  font-family: var(--ff-display); font-size: 18px; font-weight: 800;
-  line-height: 1; margin-bottom: 2px;
-}
-.score-lvl {
-  font-family: var(--ff-mono); font-size: 9px; letter-spacing: .08em;
-  color: var(--muted); text-transform: uppercase;
-}
+.score-pct { font-family: var(--ff-display); font-size: 16px; font-weight: 800; line-height: 1; margin-bottom: 2px; }
+.score-lvl { font-family: var(--ff-mono); font-size: 9px; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; }
 
-/* ── HORIZONTAL BADGE LAYOUT ─────────────────────────────── */
-.badge-category-header {
-  font-family: var(--ff-mono); 
-  font-size: 10px; 
-  font-weight: 600;
-  color: var(--lime); 
-  text-transform: uppercase; 
-  letter-spacing: 0.1em;
-  margin: 24px 0 12px;
-}
+/* ── Badges ── */
+.badge-category-header { font-family: var(--ff-mono); font-size: 10px; font-weight: 600; color: var(--lime); text-transform: uppercase; letter-spacing: 0.1em; margin: 20px 0 10px; }
 .badge-category-header:first-child { margin-top: 0; }
+.badge-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
+.badge-scroll::-webkit-scrollbar { height: 4px; }
+.badge-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+.badge { flex: 0 0 90px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 10px; text-align: center; transition: border-color .2s, transform .2s; }
+.badge:not(.locked):hover { border-color: rgba(200,241,53,0.3); transform: translateY(-2px); }
+.badge.locked { opacity: .3; filter: grayscale(1); }
+.badge-icon { display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+.badge-name { font-family: var(--ff-mono); font-size: 8px; color: var(--muted2); letter-spacing: .05em; text-transform: uppercase; line-height: 1.4; }
 
-.badge-scroll {
-  display: flex; 
-  gap: 12px; 
-  overflow-x: auto; 
-  padding-bottom: 12px;
-  /* Custom scrollbar for dark theme */
-  scrollbar-width: thin; 
-  scrollbar-color: rgba(255,255,255,0.1) transparent;
-}
-.badge-scroll::-webkit-scrollbar { height: 6px; }
-.badge-scroll::-webkit-scrollbar-track { background: transparent; }
-.badge-scroll::-webkit-scrollbar-thumb { 
-  background: rgba(255,255,255,0.1); 
-  border-radius: 4px; 
-}
-.badge-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+/* ── Danger zone ── */
+.danger-card { background: var(--surface); border: 1px solid rgba(255,95,86,0.12); border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+.danger-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
 
-.badge {
-  flex: 0 0 100px; /* Fixed width for horizontal scrolling */
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px 12px;
-  text-align: center;
-  transition: border-color .2s, transform .2s;
-}
-.badge:not(.locked):hover {
-  border-color: rgba(200,241,53,0.3);
-  transform: translateY(-2px);
-}
-.badge.locked { opacity: .35; filter: grayscale(1); }
-.badge-icon { 
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  margin-bottom: 10px; 
-}
-.badge-icon svg {
-  transition: stroke 0.3s ease;
-}
-.badge.locked .badge-icon svg {
-  stroke: var(--muted2);
-}
-.badge-name {
-  font-family: var(--ff-mono); font-size: 9px;
-  color: var(--muted2); letter-spacing: .05em;
-  text-transform: uppercase; line-height: 1.3;
-}
+/* ── Spinner ── */
+.spinner { display: inline-block; width: 11px; height: 11px; border: 1.5px solid var(--border); border-top-color: var(--lime); border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 6px; }
 
-/* ── Danger zone ─────────────────────────────────────────── */
-.danger-card {
-  background: var(--surface);
-  border: 1px solid rgba(255,95,86,0.12);
-  border-radius: 16px;
-  padding: 28px;
-  margin-bottom: 16px;
-}
-.danger-card .card-icon { background: rgba(255,95,86,0.07); border-color: rgba(255,95,86,0.2); }
-.danger-card .card-icon svg { stroke: var(--red); }
-.danger-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+/* ── Section label ── */
+.section-label { font-family: var(--ff-mono); font-size: 10px; font-weight: 600; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; margin-top: 24px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-/* ── Spinner ─────────────────────────────────────────────── */
-.spinner {
-  display: inline-block; width: 12px; height: 12px;
-  border: 1.5px solid var(--border);
-  border-top-color: var(--lime); border-radius: 50%;
-  animation: spin .7s linear infinite;
-  vertical-align: middle; margin-right: 6px;
-}
-
-/* ── Divider label ───────────────────────────────────────── */
-.section-label {
-  font-family: var(--ff-mono); font-size: 10px; font-weight: 600;
-  letter-spacing: .12em; color: var(--muted); text-transform: uppercase;
-  margin-bottom: 12px; margin-top: 28px;
-  display: flex; align-items: center; gap: 10px;
-}
-.section-label::after {
-  content: ''; flex: 1; height: 1px; background: var(--border);
-}
-
-/* ── Toast ───────────────────────────────────────────────── */
-.toast {
-  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 10px; padding: 12px 20px;
-  font-family: var(--ff-mono); font-size: 12px; color: var(--text);
-  opacity: 0; transition: all .3s; z-index: 9000; white-space: nowrap;
-  pointer-events: none;
-}
+/* ── Toast ── */
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 11px 18px; font-family: var(--ff-mono); font-size: 12px; color: var(--text); opacity: 0; transition: all .3s; z-index: 9000; white-space: nowrap; pointer-events: none; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .toast.success { border-color: rgba(200,241,53,0.35); color: var(--lime); }
-.toast.error   { border-color: rgba(255,95,86,0.35);  color: var(--red); }
+.toast.error   { border-color: rgba(255,95,86,0.35); color: var(--red); }
 
-/* ── Fade-up ─────────────────────────────────────────────── */
-.fade-up {
-  opacity: 0; transform: translateY(16px);
-  animation: fadeUp .5s ease forwards;
-}
+/* ── Fade-up ── */
+.fade-up { opacity: 0; transform: translateY(14px); animation: fadeUp .45s ease forwards; }
 @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-/* ── Responsive ──────────────────────────────────────────── */
-@media (max-width: 640px) {
-  #profilePage { padding: 80px 16px 60px; }
-  .profile-hero { flex-direction: column; align-items: flex-start; gap: 20px; }
-  .stats-row { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-  .stat-val { font-size: 22px; }
+/* ────────────────────────────────────────────────────────────
+   MODAL
+────────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 5000;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  width: 100%; max-width: 580px;
+  max-height: 90vh; overflow-y: auto;
+  padding: 32px;
+  transform: translateY(20px); transition: transform .25s;
+  scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+.modal-title { font-family: var(--ff-display); font-size: 20px; font-weight: 800; }
+.modal-close { width: 32px; height: 32px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color .2s; flex-shrink: 0; }
+.modal-close:hover { border-color: rgba(255,255,255,0.18); }
+.modal-close svg { stroke: var(--muted2); }
+
+/* ── Avatar Picker ── */
+.avatar-modal { max-width: 480px; }
+.avatar-section-title { font-family: var(--ff-mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 18px 0 10px; }
+.avatar-section-title:first-child { margin-top: 0; }
+.avatar-grid {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 4px;
+}
+.avatar-opt {
+  width: 100%; aspect-ratio: 1;
+  background: var(--surface2); border: 2px solid var(--border);
+  border-radius: 50%; cursor: pointer; font-size: 26px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.avatar-opt:hover { border-color: rgba(200,241,53,0.5); transform: scale(1.1); }
+.avatar-opt.selected { border-color: var(--lime); box-shadow: 0 0 0 2px rgba(200,241,53,0.2); }
+.avatar-upload-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 11px;
+  background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12);
+  border-radius: 10px; cursor: pointer; font-size: 13px; color: var(--muted2);
+  font-family: var(--ff-body); transition: all .2s; margin-top: 14px;
+}
+.avatar-upload-btn:hover { border-color: rgba(200,241,53,0.3); color: var(--lime); }
+
+/* Privilege row */
+.privilege-row { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.privilege-row:last-child { border-bottom: none; }
+.privilege-row-icon { width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.privilege-row-body { flex: 1; }
+.privilege-row-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.privilege-row-desc { font-size: 12px; color: var(--muted2); line-height: 1.5; }
+.privilege-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-family: var(--ff-mono); font-size: 9px; font-weight: 700; letter-spacing: .06em; }
+
+/* ── Responsive ── */
+@media (max-width: 720px) {
+  #profilePage { padding: 80px 14px 60px; }
+  .banner-content { flex-wrap: wrap; padding: 0 20px 24px; }
+  .banner-actions { width: 100%; flex-direction: row; justify-content: flex-start; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
   .grid-2 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .form-row { grid-template-columns: 1fr; }
   nav { padding: 14px 16px; }
+  .avatar-grid { grid-template-columns: repeat(5, 1fr); }
+  .modal { padding: 24px 20px; }
 }
 </style>
 </head>
@@ -492,9 +406,7 @@ nav {
 </nav>
 
 <!-- AUTH LOADER -->
-<div id="authLoader">
-  <div class="loader-ring"></div>
-</div>
+<div id="authLoader"><div class="loader-ring"></div></div>
 
 <!-- GATE -->
 <div id="gateScreen">
@@ -503,40 +415,62 @@ nav {
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
     </div>
     <h2>Sign in to continue</h2>
-    <p>You need an account to view your profile, track your XP, and manage settings.</p>
+    <p>You need an account to view your profile, track XP, and manage settings.</p>
     <a href="Login.html" class="gate-btn">Sign In / Create Account →</a>
   </div>
 </div>
 
-<!-- PROFILE PAGE -->
+<!-- ════════════════════════════════════════════════════════
+     PROFILE PAGE
+═══════════════════════════════════════════════════════════ -->
 <div id="profilePage">
 
-  <!-- HERO -->
-  <div class="profile-hero fade-up">
-    <div class="pfp-wrap">
-      <img id="pfpImg" class="pfp-img" src="" alt="" onerror="this.style.display='none';document.getElementById('pfpInitials').style.display='flex';">
-      <div id="pfpInitials" class="pfp-initials">?</div>
-      <button class="pfp-edit-btn" onclick="document.getElementById('pfpInput').click()" title="Change photo">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      </button>
-      <input type="file" id="pfpInput" accept="image/*" onchange="handlePfpChange(event)">
-    </div>
-    <div class="profile-info">
-      <div class="profile-name-display" id="heroName">Loading...</div>
-      <div class="profile-email-display" id="heroEmail"></div>
-      <div class="profile-chips">
-        <span class="chip chip-lime" id="chipLevel">STUDENT</span>
-        <span class="chip chip-blue" id="chipRank">#— GLOBAL</span>
-        <span class="chip chip-gold" id="chipXP">0 XP</span>
-        <span id="adminChip" style="display:none;" class="chip chip-lime">ADMIN</span>
-        <span id="chipPremium" style="display:none;" class="chip chip-lime">PREMIUM</span>
-        <span id="chipElite" style="display:none;" class="chip chip-gold">ELITE</span>
+  <!-- HERO BANNER -->
+  <div class="profile-banner fade-up">
+    <div class="banner-bg"></div>
+    <div class="banner-content">
+      <!-- Avatar -->
+      <div class="pfp-wrap">
+        <img id="pfpImg" class="pfp-img" src="" alt="" onerror="this.style.display='none';document.getElementById('pfpInitials').style.display='flex';">
+        <div id="pfpInitials" class="pfp-initials">?</div>
+        <div id="pfpAvatarDisplay" class="pfp-avatar-display"></div>
+        <button class="pfp-edit-btn" onclick="openAvatarModal()" title="Change avatar">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </button>
+        <input type="file" id="pfpInput" accept="image/*" onchange="handlePfpChange(event)">
+      </div>
+      <!-- Info -->
+      <div class="banner-info">
+        <div class="profile-name-display" id="heroName">Loading...</div>
+        <div class="profile-email-display" id="heroEmail"></div>
+        <div class="profile-meta-row" id="heroMetaRow"></div>
+        <div class="profile-chips">
+          <span class="chip chip-lime" id="chipLevel">STUDENT</span>
+          <span class="chip chip-blue" id="chipRank">#— GLOBAL</span>
+          <span class="chip chip-gold" id="chipXP">0 XP</span>
+          <span id="adminChip"   style="display:none;" class="chip chip-lime">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ADMIN
+          </span>
+          <span id="chipPremium" style="display:none;" class="chip chip-gold">⭐ PREMIUM</span>
+          <span id="chipElite"   style="display:none;" class="chip chip-purple">💎 ELITE</span>
+        </div>
+      </div>
+      <!-- Actions -->
+      <div class="banner-actions">
+        <button class="btn-outline" onclick="openEditModal()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit Profile
+        </button>
+        <button class="btn-outline" onclick="handleLogout()" style="color:rgba(255,95,86,0.7);border-color:rgba(255,95,86,0.12);">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- STATS -->
-  <div class="stats-row fade-up" style="animation-delay:0.08s;">
+  <!-- STATS ROW -->
+  <div class="stats-row fade-up" style="animation-delay:.06s;">
     <div class="stat-card lime">
       <div class="stat-val" id="statRank">#—</div>
       <div class="stat-label">Global Rank</div>
@@ -549,110 +483,63 @@ nav {
       <div class="stat-val" id="statQuizzes">0</div>
       <div class="stat-label">Quizzes Done</div>
     </div>
+    <div class="stat-card blue">
+      <div class="stat-val" id="statStreak">0</div>
+      <div class="stat-label">Day Streak 🔥</div>
+    </div>
   </div>
 
-  <!-- EDIT PROFILE + CHANGE PASSWORD -->
-  <div class="section-label fade-up" style="animation-delay:0.14s;">Account Settings</div>
-  <div class="grid-2 fade-up" style="animation-delay:0.16s;">
+  <!-- PRIVILEGES (role-specific, shown based on role) -->
+  <div id="privilegesSection" style="display:none;" class="fade-up" style="animation-delay:.1s;">
+    <div class="section-label" style="margin-top:0;">Your Privileges</div>
+    <div class="card" style="margin-bottom:20px; padding:20px 24px;">
+      <div id="privilegeList"></div>
+    </div>
+  </div>
 
-    <div class="card">
+  <!-- PERFORMANCE + BADGES side by side -->
+  <div class="grid-2 fade-up" style="animation-delay:.12s;">
+    <div class="card" style="margin-bottom:0;">
       <div class="card-header">
-        <div class="card-title-wrap">
-          <div class="card-title">Edit Profile</div>
-          <div class="card-sub">Update your display name shown on the leaderboard.</div>
+        <div>
+          <div class="card-title">Quiz Performance</div>
+          <div class="card-sub">Your scores across all subjects.</div>
         </div>
-        <div class="card-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </div>
+        <div class="card-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
       </div>
-      <div class="form-group">
-        <label>Display Name</label>
-        <input type="text" id="nameInput" placeholder="Your name">
-      </div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="emailInput" disabled>
-      </div>
-      <button class="btn-lime" id="saveNameBtn" onclick="saveName()">Save Changes</button>
+      <div id="scoresContainer"><div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);padding:12px 0;"><span class="spinner"></span> Loading...</div></div>
     </div>
 
-    <div class="card">
+    <div class="card" style="margin-bottom:0;">
       <div class="card-header">
-        <div class="card-title-wrap">
-          <div class="card-title">Change Password</div>
-          <div class="card-sub">Use a strong password with at least 8 characters.</div>
+        <div>
+          <div class="card-title">Achievements</div>
+          <div class="card-sub">Badges earned by hitting milestones.</div>
         </div>
-        <div class="card-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </div>
+        <div class="card-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
       </div>
-      <div class="form-group">
-        <label>New Password</label>
-        <input type="password" id="newPass" placeholder="Min. 8 characters">
-      </div>
-      <div class="form-group">
-        <label>Confirm Password</label>
-        <input type="password" id="confirmPass" placeholder="Repeat new password">
-      </div>
-      <button class="btn-lime" id="savePassBtn" onclick="savePassword()">Update Password</button>
-    </div>
-
-  </div>
-
-  <!-- QUIZ SCORES -->
-  <div class="section-label fade-up" style="animation-delay:0.2s;">Performance</div>
-  <div class="card fade-up" style="animation-delay:0.22s;">
-    <div class="card-header">
-      <div class="card-title-wrap">
-        <div class="card-title">Quiz Scores</div>
-        <div class="card-sub">Your placement quiz results across all subjects.</div>
-      </div>
-      <div class="card-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      </div>
-    </div>
-    <div id="scoresContainer">
-      <div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);padding:16px 0;"><span class="spinner"></span> Loading scores...</div>
-    </div>
-  </div>
-
-  <!-- BADGES -->
-  <div class="section-label fade-up" style="animation-delay:0.26s;">Achievements</div>
-  <div class="card fade-up" style="animation-delay:0.28s;">
-    <div class="card-header">
-      <div class="card-title-wrap">
-        <div class="card-title">Badges</div>
-        <div class="card-sub">Earn badges by completing courses and hitting milestones.</div>
-      </div>
-      <div class="card-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-      </div>
-    </div>
-    <!-- Replaced badge-grid with an empty container for JS to populate -->
-    <div id="badgeContainer">
-      <div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);"><span class="spinner"></span> Loading...</div>
+      <div id="badgeContainer"><div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);"><span class="spinner"></span> Loading...</div></div>
     </div>
   </div>
 
   <!-- DANGER ZONE -->
-  <div class="section-label fade-up" style="animation-delay:0.32s; color:rgba(255,95,86,0.6);">Danger Zone</div>
-  <div class="danger-card fade-up" style="animation-delay:0.34s;">
+  <div class="section-label fade-up" style="animation-delay:.18s; color:rgba(255,95,86,0.5);">Danger Zone</div>
+  <div class="danger-card fade-up" style="animation-delay:.2s;">
     <div class="card-header" style="margin-bottom:0;">
-      <div class="card-title-wrap">
+      <div>
         <div class="card-title" style="color:var(--red);">Irreversible Actions</div>
         <div class="card-sub">These actions are permanent and cannot be undone.</div>
       </div>
-      <div class="card-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div class="card-icon" style="background:rgba(255,95,86,0.07);border-color:rgba(255,95,86,0.2);">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       </div>
     </div>
     <div class="danger-actions">
-      <button class="btn-danger" onclick="handleLogout()">Sign Out</button>
       <button class="btn-danger" onclick="confirmDelete()">Delete Account</button>
     </div>
   </div>
 
-</div>
+</div><!-- /profilePage -->
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -661,10 +548,119 @@ nav {
 <div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
+<!-- ════════════════════════════════════════════════════════
+     AVATAR PICKER MODAL
+═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="avatarModalOverlay" onclick="closeAvatarModal(event)">
+  <div class="modal avatar-modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">Choose Your Avatar</div>
+      <button class="modal-close" onclick="closeAvatarModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="avatar-section-title">🐾 Cute Animals</div>
+    <div class="avatar-grid" id="avatarGridAnimals"></div>
+
+    <div class="avatar-section-title">🐉 Legendary</div>
+    <div class="avatar-grid" id="avatarGridLegendary"></div>
+
+    <div class="avatar-section-title">🌿 Nature & Cosmic</div>
+    <div class="avatar-grid" id="avatarGridNature"></div>
+
+    <div class="avatar-section-title">🤖 Tech & Sci-fi</div>
+    <div class="avatar-grid" id="avatarGridTech"></div>
+
+    <div class="avatar-section-title">📸 Upload your own photo</div>
+    <label class="avatar-upload-btn" for="pfpInput" onclick="closeAvatarModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Upload photo (max 2MB)
+    </label>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     EDIT PROFILE MODAL
+═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="editModalOverlay" onclick="closeEditModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">Edit Profile</div>
+      <button class="modal-close" onclick="closeEditModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Display Name</label>
+        <input type="text" id="nameInput" placeholder="Your full name">
+      </div>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="usernameInput" placeholder="@handle">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="emailInput" disabled>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>College / Institution</label>
+        <input type="text" id="collegeInput" placeholder="e.g. TIU, MIT, Oxford">
+      </div>
+      <div class="form-group">
+        <label>Date of Birth</label>
+        <input type="date" id="dobInput">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Degree / Program</label>
+        <input type="text" id="degreeInput" placeholder="e.g. B.Sc. IT, MCA">
+      </div>
+      <div class="form-group">
+        <label>Year of Study</label>
+        <select id="yearInput">
+          <option value="">— Select —</option>
+          <option value="1">1st Year</option>
+          <option value="2">2nd Year</option>
+          <option value="3">3rd Year</option>
+          <option value="4">4th Year</option>
+          <option value="grad">Graduate</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>LinkedIn</label>
+        <input type="url" id="linkedinInput" placeholder="linkedin.com/in/...">
+      </div>
+      <div class="form-group">
+        <label>GitHub</label>
+        <input type="url" id="githubInput" placeholder="github.com/...">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Bio</label>
+      <textarea id="bioInput" placeholder="Tell the community a bit about yourself..."></textarea>
+    </div>
+
+    <button class="btn-lime" id="saveProfileBtn" onclick="saveProfile()">Save Changes</button>
+  </div>
+</div>
+
 <!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut, updatePassword, updateProfile, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-storage.js";
 
@@ -678,75 +674,74 @@ const firebaseConfig = {
 };
 
 const ADMIN_EMAIL = "bscit.tiu2012@gmail.com";
+
 const SUBJECTS = [
-  {key:'c',label:'C Programming',color:'#60a5fa'},
-  {key:'java',label:'OOPs Java',color:'#f7b731'},
-  {key:'python',label:'Python',color:'#43e97b'},
-  {key:'cpp',label:'C++',color:'#a78bfa'},
-  {key:'r',label:'R Language',color:'#f97316'},
-  {key:'javascript',label:'JavaScript',color:'#c8f135'},
+  {key:'c',          label:'C Programming', color:'#60a5fa'},
+  {key:'java',       label:'OOPs Java',     color:'#f7b731'},
+  {key:'python',     label:'Python',        color:'#43e97b'},
+  {key:'cpp',        label:'C++',           color:'#a78bfa'},
+  {key:'r',          label:'R Language',    color:'#f97316'},
+  {key:'javascript', label:'JavaScript',    color:'#c8f135'},
 ];
 
-// Helper to keep the badge array clean
-const getSvg = (path, color = "var(--lime)") => 
-  `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+const SUBJECT_ABBR = {c:'C', java:'J', python:'Py', cpp:'C+', r:'R', javascript:'JS'};
 
-// Added "cat" property for categorization
+// ── AVATARS ──────────────────────────────────────────────
+const AVATARS = {
+  animals:  ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐧','🦋'],
+  legendary:['🐉','🦄','🦅','🦚','🐲','🦋','🦁','🦊','🐺','🦝','🦇','🦉'],
+  nature:   ['🌊','🔥','⚡','🌙','⭐','🌈','🍀','🌸','🌻','💎','🪐','✨'],
+  tech:     ['🤖','👾','🎮','💻','🛸','⚙️','🔬','🧬','🛡️','⚔️','🎯','🧠'],
+};
+
+const getSvgBadge = (path, color = "var(--lime)") =>
+  `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+
 const ALL_BADGES = [
-  // ── Getting Started ──────────────────────────────────
-  {id:'hello_world',    cat:'Getting Started', icon: getSvg('<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>', 'var(--lime)'), label:'Hello World', desc:'Created your account'},
-  {id:'first_login',    cat:'Getting Started', icon: getSvg('<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>', 'var(--lime)'), label:'First Login', desc:'Logged in for the first time'},
-  {id:'profile_pic',    cat:'Getting Started', icon: getSvg('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>', 'var(--lime)'), label:'Face to the Name',desc:'Uploaded a profile photo'},
-  {id:'name_set',       cat:'Getting Started', icon: getSvg('<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>', 'var(--lime)'), label:'Named', desc:'Set your display name'},
-
-  // ── Quiz & Learning ──────────────────────────────────
-  {id:'first_quiz',     cat:'Quiz & Learning', icon: getSvg('<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>', '#60a5fa'), label:'First Shot', desc:'Completed your first quiz'},
-  {id:'quiz_5',         cat:'Quiz & Learning', icon: getSvg('<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>', '#60a5fa'), label:'On a Roll', desc:'Completed 5 quizzes'},
-  {id:'quiz_10',        cat:'Quiz & Learning', icon: getSvg('<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>', '#60a5fa'), label:'Quiz Veteran', desc:'Completed 10 quizzes'},
-  {id:'quiz_25',        cat:'Quiz & Learning', icon: getSvg('<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>', '#a78bfa'), label:'Quiz Machine', desc:'Completed 25 quizzes'},
-  {id:'perfect_score',  cat:'Quiz & Learning', icon: getSvg('<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>', 'var(--gold)'), label:'Perfection', desc:'Scored 100% on any quiz'},
-  {id:'above_90',       cat:'Quiz & Learning', icon: getSvg('<path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/>', '#ff5f56'), label:'On Fire', desc:'Scored above 90% on a quiz'},
-  {id:'above_75',       cat:'Quiz & Learning', icon: getSvg('<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><polyline points="9 11 12 14 22 4"/>', 'var(--green)'), label:'Solid Pass', desc:'Scored above 75% on a quiz'},
-  {id:'comeback',       cat:'Quiz & Learning', icon: getSvg('<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>', 'var(--lime)'), label:'Comeback Kid', desc:'Passed a quiz after failing it'},
-  {id:'speed_run',      cat:'Quiz & Learning', icon: getSvg('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>', '#f97316'), label:'Speed Runner', desc:'Completed a quiz in under 2 min'},
-
-  // ── Course Completion (Colors mapped to subjects) ─────
-  {id:'c_master',       cat:'Course Mastery', icon: getSvg('<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>', '#60a5fa'), label:'C Master', desc:'Completed all C modules'},
-  {id:'java_hero',      cat:'Course Mastery', icon: getSvg('<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>', 'var(--gold)'), label:'Java Hero', desc:'Completed all Java modules'},
-  {id:'python_pro',     cat:'Course Mastery', icon: getSvg('<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>', 'var(--green)'), label:'Python Pro', desc:'Completed all Python modules'},
-  {id:'cpp_champion',   cat:'Course Mastery', icon: getSvg('<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>', '#a78bfa'), label:'C++ Champion', desc:'Completed all C++ modules'},
-  {id:'r_researcher',   cat:'Course Mastery', icon: getSvg('<line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>', '#f97316'), label:'R Researcher', desc:'Completed all R modules'},
-  {id:'js_wizard',      cat:'Course Mastery', icon: getSvg('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>', 'var(--lime)'), label:'JS Wizard', desc:'Completed all JavaScript modules'},
-  {id:'all_courses',    cat:'Course Mastery', icon: getSvg('<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>', 'var(--text)'), label:'Graduate', desc:'Completed every course'},
-  {id:'prem_unlock',    cat:'Course Mastery', icon: getSvg('<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>', 'var(--gold)'), label:'Unlocked', desc:'Accessed a premium module'},
-  {id:'prem_complete',  cat:'Course Mastery', icon: getSvg('<polygon points="2 4 6 20 18 20 22 4 17 8 12 2 7 8 2 4"/>', 'var(--gold)'), label:'Premium Scholar', desc:'Completed all premium modules'},
-
-  // ── XP & Rank ────────────────────────────────────────
-  {id:'xp_100',         cat:'Rank & XP', icon: getSvg('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>', '#60a5fa'), label:'First Steps', desc:'Earned 100 XP'},
-  {id:'xp_500',         cat:'Rank & XP', icon: getSvg('<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', '#a78bfa'), label:'Rising Star', desc:'Earned 500 XP'},
-  {id:'xp_1000',        cat:'Rank & XP', icon: getSvg('<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>', 'var(--gold)'), label:'Star Student', desc:'Earned 1,000 XP'},
-  {id:'xp_5000',        cat:'Rank & XP', icon: getSvg('<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5-4 5-4v5"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 4-5 4-5h-5"/>', '#f97316'), label:'Rocket', desc:'Earned 5,000 XP'},
-  {id:'xp_10000',       cat:'Rank & XP', icon: getSvg('<path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"/><polyline points="13 11 9 17 15 17 11 23"/>', 'var(--lime)'), label:'Shooting Star', desc:'Earned 10,000 XP'},
-  {id:'top_10',         cat:'Rank & XP', icon: getSvg('<polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>', 'var(--green)'), label:'Top 10', desc:'Reached top 10 on leaderboard'},
-  {id:'top_3',          cat:'Rank & XP', icon: getSvg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>', '#60a5fa'), label:'Podium', desc:'Reached top 3 on leaderboard'},
-  {id:'rank_1',         cat:'Rank & XP', icon: getSvg('<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/>', 'var(--gold)'), label:'The GOAT', desc:'Reached #1 on the leaderboard'},
-
-  // ── Streaks & Dedication ─────────────────────────────
-  {id:'day_3',          cat:'Dedication', icon: getSvg('<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>', '#60a5fa'), label:'3-Day Streak', desc:'Studied 3 days in a row'},
-  {id:'day_7',          cat:'Dedication', icon: getSvg('<path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>', '#a78bfa'), label:'Week Warrior', desc:'Studied 7 days in a row'},
-  {id:'day_30',         cat:'Dedication', icon: getSvg('<path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.33-6 4Z"/>', 'var(--gold)'), label:'Monthly Grind', desc:'Studied 30 days in a row'},
-  {id:'night_owl',      cat:'Dedication', icon: getSvg('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>', '#a78bfa'), label:'Night Owl', desc:'Studied past midnight'},
-  {id:'early_bird',     cat:'Dedication', icon: getSvg('<path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/><line x1="23" y1="22" x2="1" y2="22"/><polyline points="8 6 12 2 16 6"/>', '#f97316'), label:'Early Bird', desc:'Studied before 7 AM'},
-  {id:'weekend_hero',   cat:'Dedication', icon: getSvg('<path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.19M15 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.19"/><line x1="23" y1="13" x2="23" y2="11"/><polyline points="11 6 7 12 13 12 9 18"/>', 'var(--lime)'), label:'Weekend Hero', desc:'Studied on a Saturday and Sunday'},
-
-  // ── Community & Special ──────────────────────────────
-  {id:'bug_hunter',     cat:'Community', icon: getSvg('<path d="M14 4.18v-.18l2-2"/><path d="M10 4.18v-.18l-2-2"/><path d="M6 13h12"/><path d="M6 18h12"/><path d="M12 8v14"/><path d="M5 21a9 9 0 0 1 14 0"/>', 'var(--red)'), label:'Bug Hunter', desc:'Found and reported a site bug'},
-  {id:'admin_star',     cat:'Community', icon: getSvg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v8"/><path d="M9 12h6"/>', 'var(--lime)'), label:'Admin', desc:'IT Study Hub team member'},
-  {id:'beta_tester',    cat:'Community', icon: getSvg('<path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/>', '#60a5fa'), label:'Beta Tester', desc:'Used the platform in early access'},
-  {id:'og_member',      cat:'Community', icon: getSvg('<polygon points="12 2 2 7 22 7"/><line x1="6" y1="22" x2="6" y2="7"/><line x1="10" y1="22" x2="10" y2="7"/><line x1="14" y1="22" x2="14" y2="7"/><line x1="18" y1="22" x2="18" y2="7"/><line x1="2" y1="22" x2="22" y2="22"/>', 'var(--gold)'), label:'OG Member', desc:'Joined in the first batch'},
-  {id:'top_contributor',cat:'Community', icon: getSvg('<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>', '#ff5f56'), label:'Contributor', desc:'Helped improve the platform'},
-  {id:'feedback',       cat:'Community', icon: getSvg('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>', '#a78bfa'), label:'Voice', desc:'Submitted platform feedback'},
+  {id:'hello_world',   cat:'Getting Started', icon: getSvgBadge('<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>'),             label:'Hello World'},
+  {id:'first_login',   cat:'Getting Started', icon: getSvgBadge('<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>'), label:'First Login'},
+  {id:'profile_pic',   cat:'Getting Started', icon: getSvgBadge('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>'), label:'Face to Name'},
+  {id:'name_set',      cat:'Getting Started', icon: getSvgBadge('<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>'), label:'Named'},
+  {id:'first_quiz',    cat:'Quiz & Learning', icon: getSvgBadge('<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>', '#60a5fa'), label:'First Shot'},
+  {id:'quiz_5',        cat:'Quiz & Learning', icon: getSvgBadge('<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>', '#60a5fa'), label:'On a Roll'},
+  {id:'quiz_10',       cat:'Quiz & Learning', icon: getSvgBadge('<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>', '#60a5fa'), label:'Quiz Veteran'},
+  {id:'perfect_score', cat:'Quiz & Learning', icon: getSvgBadge('<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>', 'var(--gold)'), label:'Perfection'},
+  {id:'above_90',      cat:'Quiz & Learning', icon: getSvgBadge('<path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/>', '#ff5f56'), label:'On Fire'},
+  {id:'c_master',      cat:'Course Mastery',  icon: getSvgBadge('<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>', '#60a5fa'), label:'C Master'},
+  {id:'java_hero',     cat:'Course Mastery',  icon: getSvgBadge('<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>', 'var(--gold)'), label:'Java Hero'},
+  {id:'python_pro',    cat:'Course Mastery',  icon: getSvgBadge('<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>', 'var(--green)'), label:'Python Pro'},
+  {id:'xp_100',        cat:'Rank & XP',       icon: getSvgBadge('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>', '#60a5fa'), label:'First Steps'},
+  {id:'xp_1000',       cat:'Rank & XP',       icon: getSvgBadge('<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>', 'var(--gold)'), label:'Star Student'},
+  {id:'top_10',        cat:'Rank & XP',       icon: getSvgBadge('<polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>', 'var(--green)'), label:'Top 10'},
+  {id:'admin_star',    cat:'Community',       icon: getSvgBadge('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v8"/><path d="M9 12h6"/>', 'var(--lime)'), label:'Admin'},
+  {id:'beta_tester',   cat:'Community',       icon: getSvgBadge('<path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/>', '#60a5fa'), label:'Beta Tester'},
+  {id:'og_member',     cat:'Community',       icon: getSvgBadge('<polygon points="12 2 2 7 22 7"/><line x1="6" y1="22" x2="6" y2="7"/><line x1="10" y1="22" x2="10" y2="7"/><line x1="14" y1="22" x2="14" y2="7"/><line x1="18" y1="22" x2="18" y2="7"/><line x1="2" y1="22" x2="22" y2="22"/>', 'var(--gold)'), label:'OG Member'},
 ];
+
+// ── PRIVILEGES ────────────────────────────────────────────
+const PRIVILEGE_DEFS = {
+  admin: [
+    { icon: '🛡️', color: 'rgba(200,241,53,0.08)', title: 'Admin Dashboard', desc: 'Access the full admin panel, manage users and content.' },
+    { icon: '📊', color: 'rgba(200,241,53,0.08)', title: 'Analytics Access', desc: 'View platform-wide usage stats, quiz completions, and XP charts.' },
+    { icon: '✏️', color: 'rgba(200,241,53,0.08)', title: 'Content Editor', desc: 'Create, edit, and publish quiz questions and study modules.' },
+    { icon: '📣', color: 'rgba(200,241,53,0.08)', title: 'Announcements', desc: 'Post site-wide announcements visible to all students.' },
+    { icon: '🎖️', color: 'rgba(200,241,53,0.08)', title: 'Badge Granter', desc: 'Manually award special badges to standout community members.' },
+    { icon: '🚫', color: 'rgba(255,95,86,0.06)', title: 'Moderation', desc: 'Remove inappropriate profiles or flag abusive accounts.' },
+  ],
+  elite: [
+    { icon: '💎', color: 'rgba(167,139,250,0.08)', title: 'All Premium Content', desc: 'Full access to every premium module, lecture, and resource.' },
+    { icon: '⚡', color: 'rgba(167,139,250,0.08)', title: 'XP Boost ×2', desc: 'Earn double XP on every quiz and activity automatically.' },
+    { icon: '🏆', color: 'rgba(167,139,250,0.08)', title: 'Elite Leaderboard', desc: 'Appear on the exclusive Elite-only leaderboard.' },
+    { icon: '🤖', color: 'rgba(167,139,250,0.08)', title: 'AI Tutor (Beta)', desc: 'Early access to the AI-powered study assistant.' },
+    { icon: '📅', color: 'rgba(167,139,250,0.08)', title: 'Priority Support', desc: '24h guaranteed response from the IT Study Hub team.' },
+  ],
+  premium: [
+    { icon: '⭐', color: 'rgba(247,183,49,0.08)', title: 'Premium Modules', desc: 'Unlock advanced lectures and in-depth study materials.' },
+    { icon: '📈', color: 'rgba(247,183,49,0.08)', title: 'XP Boost ×1.5', desc: 'Earn 50% more XP on all completed activities.' },
+    { icon: '🎯', color: 'rgba(247,183,49,0.08)', title: 'Practice Mode', desc: 'Access unlimited practice quizzes with instant feedback.' },
+    { icon: '🔖', color: 'rgba(247,183,49,0.08)', title: 'Save Progress', desc: 'Bookmark lessons and resume exactly where you left off.' },
+  ],
+};
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -767,7 +762,130 @@ let userData = {};
   } catch(_) {}
 })();
 
-// ── AUTH ──
+// ── AVATAR MODAL ─────────────────────────────────────────
+function buildAvatarGrid(id, emojis) {
+  const grid = document.getElementById(id);
+  if (!grid) return;
+  grid.innerHTML = emojis.map(e => `<button class="avatar-opt" data-emoji="${e}" onclick="selectAvatar('${e}')">${e}</button>`).join('');
+}
+buildAvatarGrid('avatarGridAnimals', AVATARS.animals);
+buildAvatarGrid('avatarGridLegendary', AVATARS.legendary);
+buildAvatarGrid('avatarGridNature', AVATARS.nature);
+buildAvatarGrid('avatarGridTech', AVATARS.tech);
+
+window.openAvatarModal = function() {
+  document.getElementById('avatarModalOverlay').classList.add('open');
+};
+window.closeAvatarModal = function(e) {
+  if (!e || e.target === document.getElementById('avatarModalOverlay'))
+    document.getElementById('avatarModalOverlay').classList.remove('open');
+};
+window.selectAvatar = async function(emoji) {
+  document.querySelectorAll('.avatar-opt').forEach(b => b.classList.remove('selected'));
+  const sel = document.querySelector(`[data-emoji="${emoji}"]`);
+  if (sel) sel.classList.add('selected');
+
+  // Show in avatar display
+  const disp = document.getElementById('pfpAvatarDisplay');
+  disp.textContent = emoji; disp.style.display = 'flex';
+  document.getElementById('pfpImg').style.display = 'none';
+  document.getElementById('pfpInitials').style.display = 'none';
+
+  // Save to Firestore
+  try {
+    await updateDoc(doc(db, 'users', currentUser.uid), { avatarEmoji: emoji, photoURL: null });
+    await updateProfile(currentUser, { photoURL: '' });
+    showToast('Avatar updated', 'success');
+  } catch(e) { showToast('Could not save avatar', 'error'); }
+
+  document.getElementById('avatarModalOverlay').classList.remove('open');
+};
+
+// ── EDIT PROFILE MODAL ───────────────────────────────────
+window.openEditModal = function() {
+  // Populate fields
+  document.getElementById('nameInput').value = currentUser?.displayName || '';
+  document.getElementById('emailInput').value = currentUser?.email || '';
+  document.getElementById('usernameInput').value = userData.username || '';
+  document.getElementById('collegeInput').value = userData.college || '';
+  document.getElementById('dobInput').value = userData.dob || '';
+  document.getElementById('degreeInput').value = userData.degree || '';
+  document.getElementById('yearInput').value = userData.yearOfStudy || '';
+  document.getElementById('linkedinInput').value = userData.linkedin || '';
+  document.getElementById('githubInput').value = userData.github || '';
+  document.getElementById('bioInput').value = userData.bio || '';
+  document.getElementById('editModalOverlay').classList.add('open');
+};
+window.closeEditModal = function(e) {
+  if (!e || e.target === document.getElementById('editModalOverlay'))
+    document.getElementById('editModalOverlay').classList.remove('open');
+};
+
+window.saveProfile = async function() {
+  const name = document.getElementById('nameInput').value.trim();
+  if (!name) { showToast('Display name is required', 'error'); return; }
+  const btn = document.getElementById('saveProfileBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Saving...';
+  try {
+    await updateProfile(currentUser, { displayName: name });
+    const fields = {
+      name,
+      username:    document.getElementById('usernameInput').value.trim(),
+      college:     document.getElementById('collegeInput').value.trim(),
+      dob:         document.getElementById('dobInput').value,
+      degree:      document.getElementById('degreeInput').value.trim(),
+      yearOfStudy: document.getElementById('yearInput').value,
+      linkedin:    document.getElementById('linkedinInput').value.trim(),
+      github:      document.getElementById('githubInput').value.trim(),
+      bio:         document.getElementById('bioInput').value.trim(),
+    };
+    await updateDoc(doc(db, 'users', currentUser.uid), fields);
+    Object.assign(userData, fields);
+    document.getElementById('heroName').textContent = name;
+    renderMetaRow();
+    localStorage.setItem('ish_session', JSON.stringify({
+      ...JSON.parse(localStorage.getItem('ish_session')||'{}'), name
+    }));
+    showToast('Profile updated', 'success');
+    document.getElementById('editModalOverlay').classList.remove('open');
+  } catch(e) { showToast('Could not save. Try again.', 'error'); }
+  btn.disabled = false; btn.textContent = 'Save Changes';
+};
+
+// ── META ROW (college, DOB, year) ─────────────────────────
+function renderMetaRow() {
+  const row = document.getElementById('heroMetaRow');
+  const items = [];
+  if (userData.college)     items.push(`<span class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>${userData.college}</span>`);
+  if (userData.degree)      items.push(`<span class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>${userData.degree}${userData.yearOfStudy ? ' · Yr ' + userData.yearOfStudy : ''}</span>`);
+  if (userData.dob)         items.push(`<span class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${new Date(userData.dob).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</span>`);
+  if (userData.linkedin)    items.push(`<a class="meta-item" href="${userData.linkedin}" target="_blank" style="text-decoration:none;color:var(--blue);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</a>`);
+  if (userData.github)      items.push(`<a class="meta-item" href="${userData.github}" target="_blank" style="text-decoration:none;color:var(--muted2);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub</a>`);
+  row.innerHTML = items.join('');
+}
+
+// ── PRIVILEGES ────────────────────────────────────────────
+function renderPrivileges(role) {
+  const defs = PRIVILEGE_DEFS[role];
+  if (!defs) return;
+  document.getElementById('privilegesSection').style.display = 'block';
+  const roleColors = { admin:'var(--lime)', premium:'var(--gold)', elite:'var(--purple)' };
+  const roleLabel  = { admin:'Admin', premium:'Premium', elite:'Elite' };
+  const list = document.getElementById('privilegeList');
+  list.innerHTML = defs.map(p => `
+    <div class="privilege-row">
+      <div class="privilege-row-icon" style="background:${p.color};">${p.icon}</div>
+      <div class="privilege-row-body">
+        <div class="privilege-row-title">${p.title}
+          <span class="privilege-badge" style="background:${p.color};color:${roleColors[role]};margin-left:6px;">${roleLabel[role]}</span>
+        </div>
+        <div class="privilege-row-desc">${p.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── AUTH ────────────────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
   document.getElementById('authLoader').style.display = 'none';
   if (!user) {
@@ -784,25 +902,10 @@ onAuthStateChanged(auth, async (user) => {
   const name = user.displayName || user.email.split('@')[0];
   const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
 
-  if (user.photoURL) {
-    const img = document.getElementById('pfpImg');
-    img.src = user.photoURL;
-    img.style.display = 'block';
-    document.getElementById('pfpInitials').style.display = 'none';
-  } else {
-    document.getElementById('pfpInitials').textContent = initials;
-  }
-
   document.getElementById('heroName').textContent = name;
   document.getElementById('heroEmail').textContent = user.email;
-  document.getElementById('nameInput').value = name;
-  document.getElementById('emailInput').value = user.email;
 
-  if (isAdmin) {
-    document.getElementById('adminChip').style.display = 'inline-flex';
-    document.getElementById('chipLevel').textContent = 'ADMIN';
-  }
-
+  // Fetch user data first so we can show avatar
   try {
     const snap = await getDoc(doc(db, 'users', user.uid));
     userData = snap.exists() ? snap.data() : { xp:100, quizzesDone:0, scores:{}, badges:['hello_world'] };
@@ -810,22 +913,50 @@ onAuthStateChanged(auth, async (user) => {
     userData = { xp:100, quizzesDone:0, scores:{}, badges:['hello_world'] };
   }
 
+  // ── Avatar logic ──
+  if (userData.avatarEmoji) {
+    const disp = document.getElementById('pfpAvatarDisplay');
+    disp.textContent = userData.avatarEmoji; disp.style.display = 'flex';
+    document.getElementById('pfpInitials').style.display = 'none';
+  } else if (user.photoURL) {
+    const img = document.getElementById('pfpImg');
+    img.src = user.photoURL; img.style.display = 'block';
+    document.getElementById('pfpInitials').style.display = 'none';
+  } else {
+    document.getElementById('pfpInitials').textContent = initials;
+  }
+
+  // ── Stats ──
   document.getElementById('statXP').textContent = (userData.xp||0).toLocaleString();
   document.getElementById('chipXP').textContent = (userData.xp||0).toLocaleString() + ' XP';
   document.getElementById('statQuizzes').textContent = userData.quizzesDone || 0;
+  document.getElementById('statStreak').textContent = userData.streak || 0;
 
-  if (!isAdmin) {
+  // ── Chips & Privileges ──
+  if (isAdmin) {
+    document.getElementById('adminChip').style.display = 'inline-flex';
+    document.getElementById('chipLevel').textContent = 'ADMIN';
+    renderPrivileges('admin');
+  } else {
     const plan = userData.plan || '';
     if (plan === 'elite') {
       document.getElementById('chipElite').style.display = 'inline-flex';
       document.getElementById('chipLevel').textContent = 'ELITE';
-    } else if (plan === 'pro' || plan === 'basic') {
+      renderPrivileges('elite');
+    } else if (plan === 'pro' || plan === 'basic' || plan === 'premium') {
       document.getElementById('chipPremium').style.display = 'inline-flex';
       document.getElementById('chipLevel').textContent = 'PREMIUM';
+      renderPrivileges('premium');
     }
   }
 
+  // ── Meta row ──
+  renderMetaRow();
+
+  // ── Rank ──
   await loadRank(user.uid, userData.xp||0);
+
+  // ── Scores & Badges ──
   renderScores(userData.scores || {});
   renderBadges(userData.badges || []);
 });
@@ -843,60 +974,22 @@ async function loadRank(uid, myXP) {
   }
 }
 
-window.saveName = async function() {
-  const name = document.getElementById('nameInput').value.trim();
-  if (!name) { showToast('Name cannot be empty', 'error'); return; }
-  const btn = document.getElementById('saveNameBtn');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Saving...';
-  try {
-    await updateProfile(currentUser, { displayName: name });
-    await updateDoc(doc(db, 'users', currentUser.uid), { name });
-    document.getElementById('heroName').textContent = name;
-    localStorage.setItem('ish_session', JSON.stringify({
-      ...JSON.parse(localStorage.getItem('ish_session')||'{}'), name
-    }));
-    showToast('Name updated', 'success');
-  } catch(e) { showToast('Could not save. Try again.', 'error'); }
-  btn.disabled = false; btn.textContent = 'Save Changes';
-};
-
-window.savePassword = async function() {
-  const newPass = document.getElementById('newPass').value;
-  const confirm = document.getElementById('confirmPass').value;
-  if (!newPass || !confirm) { showToast('Fill in both fields', 'error'); return; }
-  if (newPass !== confirm) { showToast('Passwords do not match', 'error'); return; }
-  if (newPass.length < 8) { showToast('Minimum 8 characters', 'error'); return; }
-  const btn = document.getElementById('savePassBtn');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Updating...';
-  try {
-    await updatePassword(currentUser, newPass);
-    document.getElementById('newPass').value = '';
-    document.getElementById('confirmPass').value = '';
-    showToast('Password updated', 'success');
-  } catch(e) {
-    if (e.code === 'auth/requires-recent-login') {
-      showToast('Sign out and sign back in first', 'error');
-    } else {
-      showToast('Could not update password', 'error');
-    }
-  }
-  btn.disabled = false; btn.textContent = 'Update Password';
-};
-
 window.handlePfpChange = async function(e) {
   const file = e.target.files[0];
   if (!file) return;
   if (file.size > 2 * 1024 * 1024) { showToast('Image must be under 2MB', 'error'); return; }
-  showToast('Uploading...', 'success');
+  showToast('Uploading photo...', 'success');
   try {
     const storageRef = ref(storage, `pfp/${currentUser.uid}`);
     await uploadBytes(storageRef, file);
     const url = await getDownloadURL(storageRef);
     await updateProfile(currentUser, { photoURL: url });
-    await updateDoc(doc(db, 'users', currentUser.uid), { photoURL: url });
+    await updateDoc(doc(db, 'users', currentUser.uid), { photoURL: url, avatarEmoji: null });
+    userData.avatarEmoji = null;
     const img = document.getElementById('pfpImg');
     img.src = url; img.style.display = 'block';
     document.getElementById('pfpInitials').style.display = 'none';
+    document.getElementById('pfpAvatarDisplay').style.display = 'none';
     showToast('Photo updated', 'success');
   } catch(e) { showToast('Upload failed. Try a smaller image.', 'error'); }
 };
@@ -905,15 +998,13 @@ function renderScores(scores) {
   const container = document.getElementById('scoresContainer');
   const filled = SUBJECTS.filter(s => scores[s.key]);
   if (filled.length === 0) {
-    container.innerHTML = `<div style="padding:20px 0;font-family:var(--ff-mono);font-size:12px;color:var(--muted);">No quizzes taken yet. <a href="ESD.html" style="color:var(--lime);">Take your first quiz →</a></div>`;
+    container.innerHTML = `<div style="padding:14px 0;font-family:var(--ff-mono);font-size:11px;color:var(--muted);">No quizzes taken yet. <a href="ESD.html" style="color:var(--lime);">Take your first →</a></div>`;
     return;
   }
   container.innerHTML = filled.map(sub => {
-    const s = scores[sub.key];
-    const pct = s.pct || 0;
-    const lvl = s.level || 'beginner';
+    const s = scores[sub.key]; const pct = s.pct||0; const lvl = s.level||'beginner';
     return `<div class="score-item">
-      <div class="score-icon" style="font-size:16px;">${sub.key === 'c' ? 'C' : sub.key === 'java' ? 'J' : sub.key === 'python' ? 'Py' : sub.key === 'cpp' ? 'C+' : sub.key === 'r' ? 'R' : 'JS'}</div>
+      <div class="score-icon" style="color:${sub.color}">${SUBJECT_ABBR[sub.key]||sub.key}</div>
       <div class="score-info">
         <div class="score-name">${sub.label}</div>
         <div class="score-bar-wrap"><div class="score-bar" style="width:${pct}%;background:${sub.color};"></div></div>
@@ -926,32 +1017,22 @@ function renderScores(scores) {
   }).join('');
 }
 
-// ── NEW RENDER FUNCTION FOR CATEGORIES ──
 function renderBadges(earned) {
   const container = document.getElementById('badgeContainer');
-  
-  // Group badges by their category
   const grouped = {};
-  ALL_BADGES.forEach(b => {
-    if (!grouped[b.cat]) grouped[b.cat] = [];
-    grouped[b.cat].push(b);
-  });
-
+  ALL_BADGES.forEach(b => { if (!grouped[b.cat]) grouped[b.cat]=[]; grouped[b.cat].push(b); });
   let html = '';
-  // Loop through each category and build the horizontal row
-  for (const [catName, badges] of Object.entries(grouped)) {
-    html += `<div class="badge-category-header">${catName}</div>`;
-    html += `<div class="badge-scroll">`;
+  for (const [cat, badges] of Object.entries(grouped)) {
+    html += `<div class="badge-category-header">${cat}</div><div class="badge-scroll">`;
     html += badges.map(b => {
       const has = earned.includes(b.id);
-      return `<div class="badge ${has ? '' : 'locked'}" title="${has ? 'Earned' : 'Locked'}">
+      return `<div class="badge ${has?'':'locked'}" title="${b.label}">
         <span class="badge-icon">${b.icon}</span>
         <span class="badge-name">${b.label}</span>
       </div>`;
     }).join('');
-    html += `</div>`;
+    html += '</div>';
   }
-  
   container.innerHTML = html;
 }
 
@@ -973,11 +1054,14 @@ window.confirmDelete = function() {
 
 function showToast(msg, type='success') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast ${type} show`;
+  t.textContent = msg; t.className = `toast ${type} show`;
   setTimeout(() => t.classList.remove('show'), 3500);
 }
 window.showToast = showToast;
+window.openAvatarModal = window.openAvatarModal;
+window.closeAvatarModal = window.closeAvatarModal;
+window.openEditModal = window.openEditModal;
+window.closeEditModal = window.closeEditModal;
 </script>
 
 <script>
