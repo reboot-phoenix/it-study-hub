@@ -126,7 +126,7 @@ function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_java_don
 function saveCompleted(a){localStorage.setItem('ish_java_done',JSON.stringify(a));}
 
 const MODS = [
-  {
+{
   id: 1,
   free: true,
   icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>`,
@@ -2393,16 +2393,16 @@ function renderIndex() {
 function renderCard(m) {
   const done = completed.includes(m.id);
   const locked = !m.free && !isPremium();
-  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}`;
+  const cls = 'mod-card' + (!m.free?' premium-card':'') + (done?' done-card':'') + (locked?' locked':'');
   const badge = done ? '<span class="mod-badge badge-done"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> PREMIUM</span>';
-  const click = locked ? `onclick="window.location.href='premium.html'"` : `onclick="openLesson(${m.id})"`;
-  return `<div class="${cls}" ${click}>
-    <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
-    <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
-    <div class="mod-title">${m.title}</div>
-    <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
-    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span></div>
-  </div>`;
+  const click = locked ? 'onclick="window.location.href=\'premium.html\'"' : 'onclick="openLesson(' + m.id + ')"';
+  return '<div class="' + cls + '" ' + click + '>'
+    + '<div class="mod-top"><div class="mod-icon">' + m.icon + '</div>' + badge + '</div>'
+    + '<div class="mod-num">Module ' + String(m.id).padStart(2,'0') + '</div>'
+    + '<div class="mod-title">' + m.title + '</div>'
+    + '<div class="mod-desc">' + m.excerpt.substring(0,90) + '...</div>'
+    + '<div class="mod-footer"><span class="mod-level">' + m.level + '</span><span class="mod-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span></div>'
+    + '</div>';
 }
 
 function updateProgress() {
@@ -2410,7 +2410,7 @@ function updateProgress() {
   const pct = Math.round((freeDone/6)*100);
   document.getElementById('progFill').style.width = pct+'%';
   document.getElementById('progPct').textContent = pct+'%';
-  document.getElementById('progLabel').textContent = `${freeDone} of 6 free modules completed`;
+  document.getElementById('progLabel').textContent = freeDone + ' of 6 free modules completed';
 }
 
 function openLesson(id) {
@@ -2425,40 +2425,34 @@ function openLesson(id) {
 
   const done = completed.includes(id);
   const mb = document.getElementById('markBtn');
-  mb.textContent = done ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Completed' : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Mark Done';
+  mb.innerHTML = done ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Completed' : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Mark Done';
   mb.classList.toggle('done-btn', done);
   document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
 
-  const html = !m.free && !isPremium()
-    ? `<div class="premium-lock"><div style="font-size:48px;margin-bottom:16px;"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
-       <div style="font-family:var(--ff-display);font-size:28px;margin-bottom:10px;">Premium Module</div>
-       <div style="font-size:14px;color:var(--muted2);margin-bottom:24px;">Sign in as admin to unlock all advanced content.</div>
-       <button class="lock-btn" onclick="window.location.href='premium.html'">Unlock Premium</button></div>`
-    : `<div class="les-cat ${!m.free?'prem':''}">Module ${String(id).padStart(2,'0')} · ${m.level} · ${m.free?'Free':'Premium'}</div>
-       <h1 class="les-title">${m.title}</h1>
-       <p class="les-excerpt">${m.excerpt}</p>
-       <div class="les-meta">
-         <span class="meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Java OOP</span>
-         <span class="meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~10 min read</span>
-         <span class="meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> ${m.level}</span>
-       </div>
-       <div class="les-visual" style="background:${m.bg};">
-         <div class="les-visual-grid"></div>
-         <span style="position:relative;z-index:1;">${m.visual}</span>
-       </div>
-       <div class="art-body">${m.body}</div>
-       <div class="concepts-box">
-         <div class="concepts-title">Key Concepts Covered</div>
-         <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
-       </div>
-       <div class="les-footer">
-         <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
-         <div class="nav-lessons">
-           ${id>1?`<div class="nlc" onclick="openLesson(${id-1})"><div class="nlc-dir"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
-           ${id<MODS.length?`<div class="nlc" onclick="openLesson(${id+1})" style="text-align:right"><div class="nlc-dir">Next <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
-         </div>
-       </div>`;
+  let html;
+  if (!m.free && !isPremium()) {
+    html = '<div class="premium-lock"><div style="font-size:48px;margin-bottom:16px;"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><div style="font-family:var(--ff-display);font-size:28px;margin-bottom:10px;">Premium Module</div><div style="font-size:14px;color:var(--muted2);margin-bottom:24px;">Sign in as admin to unlock all advanced content.</div><button class="lock-btn" onclick="window.location.href=\'premium.html\'">Unlock Premium</button></div>';
+  } else {
+    const prevMod = MODS.find(x=>x.id===id-1);
+    const nextMod = MODS.find(x=>x.id===id+1);
+    const prevNav = id > 1 ? '<div class="nlc" onclick="openLesson(' + (id-1) + ')"><div class="nlc-dir"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Previous</div><div class="nlc-title">' + (prevMod ? prevMod.title : '') + '</div></div>' : '<div></div>';
+    const nextNav = id < MODS.length ? '<div class="nlc" onclick="openLesson(' + (id+1) + ')" style="text-align:right"><div class="nlc-dir">Next <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div><div class="nlc-title">' + (nextMod ? nextMod.title : '') + '</div></div>' : '<div></div>';
+
+    html = '<div class="les-cat ' + (!m.free?'prem':'') + '">Module ' + String(id).padStart(2,'0') + ' · ' + m.level + ' · ' + (m.free?'Free':'Premium') + '</div>'
+      + '<h1 class="les-title">' + m.title + '</h1>'
+      + '<p class="les-excerpt">' + m.excerpt + '</p>'
+      + '<div class="les-meta">'
+      + '<span class="meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Java OOP</span>'
+      + '<span class="meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~10 min read</span>'
+      + '<span class="meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> ' + m.level + '</span>'
+      + '</div>'
+      + '<div class="les-visual" style="background:' + m.bg + ';"><div class="les-visual-grid"></div><span style="position:relative;z-index:1;">' + m.visual + '</span></div>'
+      + '<div class="art-body">' + m.body + '</div>'
+      + '<div class="concepts-box"><div class="concepts-title">Key Concepts Covered</div><div class="concepts-list">' + m.concepts.map(c=>'<span class="concept-tag">' + c + '</span>').join('') + '</div></div>'
+      + '<div class="les-footer"><div class="les-tags">' + m.tags.map(t=>'<span class="les-tag">' + t + '</span>').join('') + '</div>'
+      + '<div class="nav-lessons">' + prevNav + nextNav + '</div></div>';
+  }
 
   document.getElementById('lessonContent').innerHTML = html;
   renderSidebar();
@@ -2474,14 +2468,17 @@ function renderSidebar() {
   const freeDone = completed.filter(id=>MODS.find(m=>m.id===id&&m.free)).length;
   const pct = Math.round((freeDone/6)*100);
   document.getElementById('sbProgFill').style.width = pct+'%';
-  document.getElementById('sbProgLabel').textContent = `${freeDone} / 6 free`;
+  document.getElementById('sbProgLabel').textContent = freeDone + ' / 6 free';
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
     const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
-    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`window.location.href='premium.html'`:`openLesson(${m.id})`}">
-      <span class="sb-num">${done?'<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>':m.id}</span>
-      <span class="sb-btn-title">${m.title}</span>
-      ${locked?'<span style="font-size:10px;opacity:0.5;"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>':''}
-    </button>`;
+    const onclick = locked ? 'window.location.href=\'premium.html\'' : 'openLesson(' + m.id + ')';
+    const checkIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    const lockIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>';
+    return '<button class="sb-btn' + (active?' active':'') + (done?' done-sb':'') + '" onclick="' + onclick + '">'
+      + '<span class="sb-num">' + (done?checkIcon:m.id) + '</span>'
+      + '<span class="sb-btn-title">' + m.title + '</span>'
+      + (locked?'<span style="font-size:10px;opacity:0.5;">' + lockIcon + '</span>':'')
+      + '</button>';
   }).join('');
 }
 
