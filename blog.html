@@ -7,6 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="pages.css">
+<style>
+.post-thumb { display:flex; align-items:center; justify-content:center; flex-direction:column; gap:0; background:linear-gradient(135deg,#08081a,#111128); }
+.thumb-icon { display:flex; align-items:center; justify-content:center; }
+.author-dot-svg { display:flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); flex-shrink:0; }
+.read-badge { display:inline-flex; align-items:center; gap:5px; }
+.feat-icon { display:flex; align-items:center; justify-content:center; }
+.sb-btn { display:inline-flex; align-items:center; gap:8px; justify-content:center; }
+</style>
 </head>
 <body>
 <div class="ambient ambient-1"></div>
@@ -30,11 +38,11 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <span class="sidebar-label">Categories</span>
-    <button class="cat-btn active" onclick="filterByCategory('all', this)">📰 All Stories <span class="cat-count">9</span></button>
-    <button class="cat-btn" onclick="filterByCategory('trend', this)">⚡ Tech Trends <span class="cat-count">2</span></button>
-    <button class="cat-btn" onclick="filterByCategory('career', this)">🎯 Career Growth <span class="cat-count">1</span></button>
-    <button class="cat-btn" onclick="filterByCategory('tutorial', this)">🛠 Code Tutorials <span class="cat-count">5</span></button>
-    <button class="cat-btn" onclick="filterByCategory('tips', this)">💡 Study Tips <span class="cat-count">1</span></button>
+    <button class="cat-btn active" onclick="filterByCategory('all', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> All Stories <span class="cat-count">9</span></button>
+    <button class="cat-btn" onclick="filterByCategory('trend', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.09 12.26A1 1 0 0 0 5 14h6l-2 8 8.91-10.26A1 1 0 0 0 17 10h-6l2-8Z"/></svg> Tech Trends <span class="cat-count">2</span></button>
+    <button class="cat-btn" onclick="filterByCategory('career', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Career Growth <span class="cat-count">1</span></button>
+    <button class="cat-btn" onclick="filterByCategory('tutorial', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Code Tutorials <span class="cat-count">5</span></button>
+    <button class="cat-btn" onclick="filterByCategory('tips', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.62-1.44 4.9-3.56 6.14L15 17H9l.56-1.86A7.001 7.001 0 0 1 5 9a7 7 0 0 1 7-7Z"/><path d="M9 21h6"/></svg> Study Tips <span class="cat-count">1</span></button>
 
     <span class="sidebar-label" style="margin-top:28px;">Trending Now</span>
     <div class="trending-card" onclick="openPost(0)">
@@ -64,10 +72,10 @@
     </div>
 
     <div class="subscribe-box" style="margin-top:16px;">
-      <div class="sb-title">Stay Sharp 🧠</div>
+      <div class="sb-title">Stay Sharp</div>
       <p class="sb-sub">Weekly code snippets, career tips, and tech news straight to your inbox.</p>
       <input type="email" class="sb-input" id="subEmail" placeholder="you@college.edu">
-      <button class="sb-btn" onclick="handleSubscribe()">JOIN THE LIST →</button>
+      <button class="sb-btn" onclick="handleSubscribe()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> JOIN THE LIST</button>
     </div>
   </aside>
 
@@ -90,20 +98,20 @@
         <div class="featured-grid">
           <div class="feat-visual">
             <div class="feat-grid-lines"></div>
-            <div class="feat-emoji">🤖</div>
+            <div class="feat-icon" aria-hidden="true"><svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.65)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/><circle cx="9" cy="13" r="1.5" fill="rgba(200,241,53,0.3)"/><circle cx="15" cy="13" r="1.5" fill="rgba(200,241,53,0.3)"/><path d="M12 17v2"/></svg></div>
           </div>
           <div class="feat-body">
-            <div class="feat-tag">⚡ Tech Trends <span class="feat-badge">FEATURED</span></div>
+            <div class="feat-tag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.09 12.26A1 1 0 0 0 5 14h6l-2 8 8.91-10.26A1 1 0 0 0 17 10h-6l2-8Z"/></svg> Tech Trends <span class="feat-badge">FEATURED</span></div>
             <h2 class="feat-title">The Rise of AI in Systems Programming</h2>
             <p class="feat-excerpt">Will LLMs replace C++ developers, or just make them faster? We explore how AI tools like GitHub Copilot and Claude are changing the landscape of low-level code — and what it means for students learning C and C++ today.</p>
             <div class="feat-footer">
               <div class="feat-author">
-                <div class="author-dot">👨‍💻</div>
+                <div class="author-dot" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg></div>
                 <span>Dithsa Dutta</span>
               </div>
               <span>May 15, 2026</span>
               <span>12 min read</span>
-              <div class="read-more-arrow">↗</div>
+              <div class="read-more-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
             </div>
           </div>
         </div>
@@ -117,7 +125,7 @@
         <!-- Injected by JS -->
       </div>
       <div class="empty-state" id="emptyState" style="display:none;">
-        <div class="es-icon">🔍</div>
+        <div class="es-icon" aria-hidden="true"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M16 16l4 4"/></svg></div>
         <p>No articles match your search.</p>
       </div>
     </section>
@@ -126,7 +134,7 @@
 
 <!-- TOAST -->
 <div class="toast" id="toast">
-  <div class="toast-icon" id="toastIcon">✅</div>
+  <div class="toast-icon" id="toastIcon"></div>
   <div>
     <div style="font-weight:700;font-size:13px;" id="toastTitle">Done!</div>
     <div style="font-family:var(--ff-mono);font-size:11px;color:var(--lime);" id="toastSub"></div>
@@ -399,6 +407,31 @@ slow_function()  # slow_function took 1.0012s</code></pre>
   }
 ];
 
+
+// ── Per-post thumbnail SVG icons ──
+const POST_ICONS = {
+  0: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/><circle cx="9" cy="13" r="1.5" fill="rgba(200,241,53,0.35)"/><circle cx="15" cy="13" r="1.5" fill="rgba(200,241,53,0.35)"/><path d="M12 17v2"/></svg>`,
+  1: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 19.34A1 1 0 0 0 5 21h14a1 1 0 0 0 .82-1.57C19.33 19 17 16 15 9"/><path d="M12 2C6.5 2 3 6 3 6" opacity=".5"/></svg>`,
+  2: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="rgba(96,165,250,0.35)"/></svg>`,
+  3: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(67,233,123,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+  4: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.62-1.44 4.9-3.56 6.14L15 17H9l.56-1.86A7.001 7.001 0 0 1 5 9a7 7 0 0 1 7-7Z"/><path d="M9 21h6"/></svg>`,
+  5: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8l2 2-2 2M13 10h3"/></svg>`,
+  6: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(67,233,123,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18" r="3"/><path d="M12 2v10"/><path d="M4.93 4.93l4.24 4.24M19.07 4.93l-4.24 4.24M2 12h3M19 12h3"/></svg>`,
+  7: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
+  8: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+  default: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.5)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
+};
+
+// ── Per-author SVG avatars (colour-coded) ──
+const AUTHOR_SVG = {
+  'Dithsa Dutta':      `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+  'Mithila Rani Saha': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(232,180,255,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+  'Snehanshu Sarkar':  `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+  'Argha Paul':        `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+  'IT Study Hub':      `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>`,
+  default:             `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+};
+
 // ── Category color map ──
 const CAT_COLORS = {
   trend: 'cat-trend',
@@ -422,10 +455,12 @@ function renderCards(posts) {
   }
   empty.style.display = 'none';
 
-  grid.innerHTML = filtered.map(post => `
-    <article class="post-card" onclick="openPost(${post.id})" style="animation:fadeUp 0.5s ease ${(post.id * 0.08)}s forwards;opacity:0;">
-      <div class="post-thumb" style="background:linear-gradient(135deg,#0a0a18,#111128);">
-        <span style="font-size:52px;filter:drop-shadow(0 0 20px rgba(255,255,255,0.1))">${post.emoji}</span>
+  // Sort newest-first by date
+  const sorted = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date));
+  grid.innerHTML = sorted.map((post, idx) => `
+    <article class="post-card" onclick="openPost(${post.id})" style="animation:fadeUp 0.5s ease ${idx * 0.07}s forwards;opacity:0;">
+      <div class="post-thumb post-thumb-${post.category}">
+        <div class="thumb-icon" aria-hidden="true">${POST_ICONS[post.id] || POST_ICONS.default}</div>
         <span class="post-cat-tag ${CAT_COLORS[post.category]}">${post.catLabel}</span>
       </div>
       <div class="post-content">
@@ -435,10 +470,13 @@ function renderCards(posts) {
       </div>
       <div class="post-footer">
         <div class="post-author">
-          <div class="author-avatar">${post.authorEmoji}</div>
-          ${post.author}
+          <div class="author-dot-svg" aria-hidden="true">${AUTHOR_SVG[post.author] || AUTHOR_SVG.default}</div>
+          <span>${post.author}</span>
         </div>
-        <span class="read-badge">🕒 ${post.readTime}</span>
+        <span class="read-badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          ${post.readTime}
+        </span>
       </div>
     </article>
   `).join('');
@@ -508,8 +546,13 @@ function handleSubscribe() {
 }
 
 // ── Toast ──
+const _TOAST_SVG = {
+  '✅': '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c8f135" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  '❌': '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ff5f56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  'ℹ️': '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+};
 function showToast(icon, title, sub) {
-  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastIcon').innerHTML = _TOAST_SVG[icon] || _TOAST_SVG['ℹ️'];
   document.getElementById('toastTitle').textContent = title;
   document.getElementById('toastSub').textContent = sub;
   const t = document.getElementById('toast');

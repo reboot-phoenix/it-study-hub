@@ -15,7 +15,7 @@
 <nav>
   <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
   <div class="nav-right">
-    <button class="nav-share-btn" onclick="copyLink()">⬡ Share Article</button>
+    <button class="nav-share-btn" onclick="copyLink()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share Article</button>
     <a href="blog.html" class="nav-back">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       All Articles
@@ -31,7 +31,7 @@
 
 <!-- TOAST -->
 <div id="toast" style="position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px 20px;font-size:13px;z-index:9990;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none;display:flex;align-items:center;gap:10px;">
-  <span id="toastIcon">✅</span>
+  <span id="toastIcon"></span>
   <span id="toastMsg">Copied!</span>
 </div>
 
@@ -574,6 +574,31 @@ for (int num : arr) {
   }
 ];
 
+
+// ── Per-post hero SVG art ──
+const POST_ART = {
+  0: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/><circle cx="9" cy="13" r="1.5" fill="rgba(200,241,53,0.25)"/><circle cx="15" cy="13" r="1.5" fill="rgba(200,241,53,0.25)"/><path d="M12 17v2"/></svg>`,
+  1: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 19.34A1 1 0 0 0 5 21h14a1 1 0 0 0 .82-1.57C19.33 19 17 16 15 9"/><path d="M12 2C6.5 2 3 6 3 6" opacity=".4"/></svg>`,
+  2: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="rgba(96,165,250,0.25)"/></svg>`,
+  3: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(67,233,123,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+  4: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.62-1.44 4.9-3.56 6.14L15 17H9l.56-1.86A7.001 7.001 0 0 1 5 9a7 7 0 0 1 7-7Z"/><path d="M9 21h6"/></svg>`,
+  5: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8l2 2-2 2M13 10h3"/></svg>`,
+  6: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(67,233,123,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18" r="3"/><path d="M12 2v10"/><path d="M4.93 4.93l4.24 4.24M19.07 4.93l-4.24 4.24M2 12h3M19 12h3"/></svg>`,
+  7: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
+  8: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+  default: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.45)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
+};
+
+// ── Per-author avatars ──
+const AUTHOR_ART = {
+  'Dithsa Dutta':      `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.9)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+  'Mithila Rani Saha': `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(232,180,255,0.9)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+  'Snehanshu Sarkar':  `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.9)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+  'Argha Paul':        `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.9)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+  'IT Study Hub':      `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.9)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>`,
+  default:             `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.7)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+};
+
 // ── Get post ID from URL ──
 const params = new URLSearchParams(window.location.search);
 const postId = parseInt(params.get('id'));
@@ -585,7 +610,7 @@ const root = document.getElementById('appRoot');
 if (!post) {
   root.innerHTML = `
     <div class="not-found">
-      <div class="nf-icon">📭</div>
+      <div class="nf-icon" aria-hidden="true"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h9"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="M16 19h6M19 16v6"/></svg></div>
       <h1 class="nf-title">Article Not Found</h1>
       <p class="nf-sub">This article doesn't exist or may have been moved.</p>
       <a href="blog.html" class="btn-lime">← Back to Blog</a>
@@ -621,21 +646,21 @@ if (!post) {
         <p class="art-excerpt">${post.excerpt}</p>
         <div class="art-meta">
           <div class="meta-author">
-            <div class="meta-avatar">${post.authorEmoji}</div>
+            <div class="meta-avatar" aria-hidden="true">${AUTHOR_ART[post.author] || AUTHOR_ART.default}</div>
             <div>
               <div class="meta-name">${post.author}</div>
               <div class="meta-role">${post.authorRole}</div>
             </div>
           </div>
           <div class="meta-divider"></div>
-          <div class="meta-item">📅 ${post.date}</div>
-          <div class="meta-item">🕒 ${post.readTime} read</div>
+          <div class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${post.date}</div>
+          <div class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${post.readTime} read</div>
         </div>
       </div>
 
       <div class="art-visual">
         <div class="art-visual-grid"></div>
-        <span style="position:relative;z-index:1;filter:drop-shadow(0 0 40px rgba(200,241,53,0.2))">${post.emoji}</span>
+        <div style="position:relative;z-index:1;" aria-hidden="true">${POST_ART[post.id] || POST_ART.default}</div>
       </div>
 
       <div class="art-body post-body">${numberedContent}</div>
@@ -648,7 +673,7 @@ if (!post) {
         <div class="related-grid">
           ${related.map(r => `
             <a class="related-card" href="blog-post.html?id=${r.id}">
-              <div class="rc-emoji">${r.emoji}</div>
+              <div class="rc-icon" aria-hidden="true">${POST_ART[r.id] || POST_ART.default}</div>
               <div class="rc-cat">${r.catLabel}</div>
               <div class="rc-title">${r.title}</div>
               <div class="rc-meta">${r.readTime} read · ${r.author}</div>
@@ -680,15 +705,15 @@ if (!post) {
 
       <div class="sidebar-card">
         <span class="sc-label">Share</span>
-        <button class="share-btn copy-btn" onclick="copyLink()">🔗 Copy Link</button>
-        <button class="share-btn" onclick="shareTwitter()">🐦 Share on Twitter</button>
-        <button class="share-btn" onclick="shareLinkedIn()">💼 Share on LinkedIn</button>
+        <button class="share-btn copy-btn" onclick="copyLink()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy Link</button>
+        <button class="share-btn" onclick="shareTwitter()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.7 5.3 4.3 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg> Share on X</button>
+        <button class="share-btn" onclick="shareLinkedIn()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> Share on LinkedIn</button>
       </div>
 
       <div class="sidebar-card" style="background:var(--lime-dim);border-color:var(--border-active);">
         <span class="sc-label" style="color:var(--lime)">Enjoyed this?</span>
         <p style="font-size:13px;color:var(--muted2);line-height:1.6;margin-bottom:14px;">Unlock advanced lessons and all 6 courses with Premium access.</p>
-        <a href="premium.html" style="display:block;background:var(--lime);color:#000;text-align:center;padding:10px;border-radius:8px;font-family:var(--ff-mono);font-size:11px;font-weight:700;text-decoration:none;letter-spacing:1px;">⚡ GO PREMIUM</a>
+        <a href="premium.html" style="display:flex;align-items:center;justify-content:center;gap:8px;background:var(--lime);color:#000;text-align:center;padding:10px;border-radius:8px;font-family:var(--ff-mono);font-size:11px;font-weight:700;text-decoration:none;letter-spacing:1px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.09 12.26A1 1 0 0 0 5 14h6l-2 8 8.91-10.26A1 1 0 0 0 17 10h-6l2-8Z"/></svg> GO PREMIUM</a>
       </div>
     </aside>
   </div>`;
@@ -731,8 +756,12 @@ function shareLinkedIn() {
   const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
   window.open(url, '_blank');
 }
+const _TSVG = {
+  '🔗': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8f135" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+  '✅': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8f135" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+};
 function showToast(icon, msg) {
-  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastIcon').innerHTML = _TSVG[icon] || _TSVG['✅'];
   document.getElementById('toastMsg').textContent = msg;
   const t = document.getElementById('toast');
   t.style.transform='translateY(0)'; t.style.opacity='1';
