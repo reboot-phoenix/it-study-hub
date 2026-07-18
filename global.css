@@ -1,33 +1,101 @@
 /* ══════════════════════════════════════════════════
-   IT Study Hub — global.css
-   Shared across ALL pages.
-   Includes: tokens, reset, noise, nav, ambient,
-             cursor, animations, toast, utilities.
+   IT Study Hub — global.css  (v2 — Tiered Edition)
+   FREE  → lime on obsidian  (unchanged)
+   PREMIUM / ELITE → molten gold on deep obsidian
+   ADMIN → sovereign crimson + platinum crown
 ══════════════════════════════════════════════════ */
 
-/* ── DESIGN TOKENS ── */
+/* ── GOOGLE FONTS (add Cinzel for admin crown) ── */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap');
+
+/* ════════════════════════════════
+   BASE TOKENS  (free / default)
+════════════════════════════════ */
 :root {
-  --bg:          #04040a;
-  --surface:     #0a0a14;
-  --surface2:    #111120;
-  --surface3:    #161625;
-  --border:      rgba(255,255,255,0.07);
-  --border2:     rgba(255,255,255,0.12);
+  --bg:            #04040a;
+  --surface:       #0a0a14;
+  --surface2:      #111120;
+  --surface3:      #161625;
+  --border:        rgba(255,255,255,0.07);
+  --border2:       rgba(255,255,255,0.12);
   --border-active: rgba(200,241,53,0.4);
-  --lime:        #c8f135;
-  --lime-dim:    rgba(200,241,53,0.12);
-  --lime-glow:   rgba(200,241,53,0.25);
-  --text:        #eeeef5;
-  --muted:       #6b6b80;
-  --muted2:      #9494a8;
-  --gold:        #f7b731;
-  --gold-dim:    rgba(247,183,49,0.12);
-  --green:       #43e97b;
-  --red:         #ff5f56;
-  --blue:        #60a5fa;
-  --ff-display:  'Syne', sans-serif;
-  --ff-body:     'DM Sans', sans-serif;
-  --ff-mono:     'JetBrains Mono', monospace;
+  --accent:        #c8f135;
+  --accent-dim:    rgba(200,241,53,0.12);
+  --accent-glow:   rgba(200,241,53,0.25);
+  --lime:          #c8f135;
+  --lime-dim:      rgba(200,241,53,0.12);
+  --lime-glow:     rgba(200,241,53,0.25);
+  --text:          #eeeef5;
+  --muted:         #6b6b80;
+  --muted2:        #9494a8;
+  --gold:          #f7b731;
+  --gold-dim:      rgba(247,183,49,0.12);
+  --green:         #43e97b;
+  --red:           #ff5f56;
+  --blue:          #60a5fa;
+  --ff-display:    'Syne', sans-serif;
+  --ff-body:       'DM Sans', sans-serif;
+  --ff-mono:       'JetBrains Mono', monospace;
+  --ff-crown:      'Cinzel', serif;
+
+  /* tier shimmer defaults (overridden per-tier below) */
+  --tier-line:     var(--accent);
+  --tier-glow:     var(--accent-glow);
+}
+
+/* ════════════════════════════════
+   PREMIUM TIER  (body.tier-premium)
+   Molten gold on deep obsidian
+════════════════════════════════ */
+body.tier-premium {
+  --accent:        #f7c948;
+  --accent-dim:    rgba(247,201,72,0.13);
+  --accent-glow:   rgba(247,201,72,0.28);
+  --border-active: rgba(247,201,72,0.45);
+  --tier-line:     #f7c948;
+  --tier-glow:     rgba(247,201,72,0.3);
+
+  /* slightly warmer bg */
+  --bg:            #060509;
+  --surface:       #0c0b10;
+  --surface2:      #131118;
+  --surface3:      #18161f;
+}
+
+/* ════════════════════════════════
+   ELITE TIER  (body.tier-elite)
+   Spectral violet-gold
+════════════════════════════════ */
+body.tier-elite {
+  --accent:        #e8b4ff;
+  --accent-dim:    rgba(232,180,255,0.12);
+  --accent-glow:   rgba(232,180,255,0.26);
+  --border-active: rgba(232,180,255,0.4);
+  --tier-line:     #e8b4ff;
+  --tier-glow:     rgba(232,180,255,0.28);
+
+  --bg:            #050409;
+  --surface:       #0b0a12;
+  --surface2:      #12101a;
+  --surface3:      #17151f;
+}
+
+/* ════════════════════════════════
+   ADMIN TIER  (body.tier-admin)
+   Sovereign crimson + platinum
+════════════════════════════════ */
+body.tier-admin {
+  --accent:        #ff4c6a;
+  --accent-dim:    rgba(255,76,106,0.12);
+  --accent-glow:   rgba(255,76,106,0.28);
+  --border-active: rgba(255,76,106,0.45);
+  --tier-line:     #ff4c6a;
+  --tier-glow:     rgba(255,76,106,0.32);
+
+  --bg:            #060307;
+  --surface:       #0d0a0e;
+  --surface2:      #130f14;
+  --surface3:      #19141a;
 }
 
 /* ── RESET ── */
@@ -46,6 +114,7 @@ body {
   font-family: var(--ff-body);
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background 0.6s ease, color 0.3s ease;
 }
 
 /* ── NOISE OVERLAY ── */
@@ -57,6 +126,28 @@ body::before {
   pointer-events: none;
   z-index: 0;
   opacity: 0.5;
+}
+
+/* ════════════════════════════════
+   TIER AURA  — ambient glow behind
+   the whole page per tier
+════════════════════════════════ */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, var(--tier-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+body.tier-premium::after,
+body.tier-elite::after,
+body.tier-admin::after {
+  opacity: 1;
 }
 
 /* ── AMBIENT BLOBS ── */
@@ -72,32 +163,31 @@ body::before {
 #cur {
   width: 10px;
   height: 10px;
-  background: #c8f135;
+  background: var(--accent);
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: difference;
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, background 0.4s ease;
 }
 
 #curR {
   width: 36px;
   height: 36px;
-  border: 1px solid #c8f135;
+  border: 1px solid var(--accent);
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
   z-index: 9998;
   opacity: 0.5;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease, border-color 0.4s ease;
 }
 
-/* index.html & premium.html use class-based cursor instead */
 .cursor {
   width: 10px;
   height: 10px;
-  background: var(--lime);
+  background: var(--accent);
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
@@ -109,7 +199,7 @@ body::before {
 .cursor-ring {
   width: 36px;
   height: 36px;
-  border: 1px solid var(--lime);
+  border: 1px solid var(--accent);
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
@@ -119,7 +209,10 @@ body::before {
   opacity: 0.5;
 }
 
-/* ── NAV (standard — sticky) ── */
+/* ════════════════════════════════
+   NAV  — standard sticky
+   Extra: tier-coloured top bar
+════════════════════════════════ */
 nav {
   position: sticky;
   top: 0;
@@ -129,9 +222,26 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(4,4,10,0.85);
-  backdrop-filter: blur(20px);
+  background: rgba(4,4,10,0.88);
+  backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--border);
+}
+
+/* Accent top line that takes the tier colour */
+nav::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--tier-line), transparent);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+body.tier-premium nav::after,
+body.tier-elite   nav::after,
+body.tier-admin   nav::after {
+  opacity: 1;
 }
 
 .nav-logo {
@@ -143,7 +253,7 @@ nav {
   text-decoration: none;
 }
 
-.nav-logo span { color: var(--lime); }
+.nav-logo span { color: var(--accent); }
 
 .nav-links {
   display: flex;
@@ -161,8 +271,8 @@ nav {
   letter-spacing: 0.05em;
 }
 
-.nav-link:hover  { color: var(--lime); }
-.nav-link.active { color: var(--lime); }
+.nav-link:hover  { color: var(--accent); }
+.nav-link.active { color: var(--accent); }
 
 .nav-right {
   display: flex;
@@ -183,15 +293,43 @@ nav {
   letter-spacing: 0.05em;
 }
 
-.nav-back:hover { color: var(--lime); }
+.nav-back:hover { color: var(--accent); }
 
-/* Read-progress bar (course & blog-post pages) */
+/* ── NAV TIER PILL (shows beside user name) ── */
+.nav-tier-pill {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: var(--accent-dim);
+  animation: pillfade 0.5s ease forwards;
+}
+
+@keyframes pillfade {
+  from { opacity:0; transform:translateY(-4px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+body.tier-premium .nav-tier-pill,
+body.tier-elite   .nav-tier-pill,
+body.tier-admin   .nav-tier-pill {
+  display: flex;
+}
+
+/* Read-progress bar */
 .read-progress {
   position: fixed;
   top: 0;
   left: 0;
   height: 2px;
-  background: var(--lime);
+  background: var(--accent);
   z-index: 9999;
   transition: width 0.1s linear;
   width: 0%;
@@ -206,7 +344,9 @@ nav {
   min-height: calc(100vh - 64px);
 }
 
-/* ── SIDEBAR (common base) ── */
+/* ════════════════════════════════
+   SIDEBAR
+════════════════════════════════ */
 .sidebar {
   background: var(--surface);
   border-right: 1px solid var(--border);
@@ -218,6 +358,14 @@ nav {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+/* Premium/Elite sidebar gets a faint left accent stripe */
+body.tier-premium .sidebar,
+body.tier-elite   .sidebar,
+body.tier-admin   .sidebar {
+  border-right-color: color-mix(in srgb, var(--accent) 22%, transparent);
 }
 
 .sidebar-label {
@@ -231,7 +379,7 @@ nav {
   padding: 0 4px;
 }
 
-/* ── SECTION LABEL (horizontal rule style) ── */
+/* ── SECTION LABEL ── */
 .section-label {
   font-family: var(--ff-mono);
   font-size: 11px;
@@ -250,7 +398,342 @@ nav {
   background: var(--border);
 }
 
-/* ── ANIMATIONS ── */
+/* ════════════════════════════════
+   PROFILE BOX  — tier upgrades
+════════════════════════════════ */
+
+/* Premium glow on avatar */
+body.tier-premium .profile-avatar,
+body.tier-elite   .profile-avatar {
+  box-shadow: 0 0 0 2px var(--accent), 0 0 18px var(--accent-glow);
+}
+
+body.tier-admin .profile-avatar {
+  box-shadow: 0 0 0 2px var(--accent), 0 0 24px var(--accent-glow);
+}
+
+/* ── SVG BADGE WRAPPERS ── */
+
+.badge-premium,
+.badge-elite {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+}
+
+.badge-premium {
+  background: rgba(247,201,72,0.07);
+  border: 1px solid rgba(247,201,72,0.35);
+}
+
+.badge-elite {
+  background: rgba(232,180,255,0.07);
+  border: 1px solid rgba(232,180,255,0.35);
+}
+
+.badge-label-text {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.badge-premium .badge-label-text { color: #f7c948; }
+.badge-elite   .badge-label-text { color: #e8b4ff; }
+
+.badge-icon { flex-shrink: 0; width: 28px; height: 28px; }
+
+/* ════════════════════════════════
+   ADMIN BADGE  — SVG crown treatment
+════════════════════════════════ */
+.admin-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(255,76,106,0.08);
+  border: 1px solid rgba(255,76,106,0.45);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-badge .badge-label-text {
+  font-family: var(--ff-crown);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: #ff4c6a;
+  text-transform: uppercase;
+}
+
+/* sheen sweep */
+.admin-badge::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  animation: sheen 3s ease infinite;
+}
+
+@keyframes sheen {
+  0%   { left: -100%; }
+  40%  { left: 150%; }
+  100% { left: 150%; }
+}
+
+/* ════════════════════════════════
+   WELCOME HERO — tier theming
+════════════════════════════════ */
+
+/* Premium welcome bar */
+body.tier-premium .welcome-hero,
+body.tier-elite   .welcome-hero {
+  border-bottom-color: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+body.tier-admin .welcome-hero {
+  border-bottom-color: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+/* Admin welcome gets a discreet crown label above the title */
+body.tier-admin .welcome-eyebrow::before {
+  content: '👑  ADMIN COMMAND CENTER  ';
+  font-family: var(--ff-crown);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* rank chips — accent border on premium+ */
+body.tier-premium .rank-chip,
+body.tier-elite   .rank-chip,
+body.tier-admin   .rank-chip {
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+  background: var(--accent-dim);
+}
+
+/* ════════════════════════════════
+   CARD SURFACES — premium glow border
+════════════════════════════════ */
+
+/* Any card/section inside premium+ gets a subtle accent border on hover */
+body.tier-premium main section,
+body.tier-elite   main section,
+body.tier-admin   main section {
+  transition: box-shadow 0.3s ease;
+}
+
+body.tier-premium main section:hover,
+body.tier-elite   main section:hover,
+body.tier-admin   main section:hover {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent),
+              0 8px 32px -8px var(--accent-glow);
+}
+
+/* ════════════════════════════════
+   LEADERBOARD — premium rows
+════════════════════════════════ */
+
+/* Top-3 medals keep default colour; is-me row takes tier accent */
+body.tier-premium .lb-row.is-me,
+body.tier-elite   .lb-row.is-me,
+body.tier-admin   .lb-row.is-me {
+  border-left-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* ════════════════════════════════
+   SCORE BARS — accent fill for
+   premium tiers
+════════════════════════════════ */
+
+/* The fill colour is set inline per subject, but override the track glow */
+body.tier-premium .score-bar-track,
+body.tier-elite   .score-bar-track,
+body.tier-admin   .score-bar-track {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* ════════════════════════════════
+   SKILL BARS — accent on premium
+════════════════════════════════ */
+body.tier-premium .skill-fill,
+body.tier-elite   .skill-fill {
+  background: linear-gradient(90deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 60%, #fff) 100%);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+body.tier-admin .skill-fill {
+  background: linear-gradient(90deg, #ff4c6a 0%, #ff9fb0 100%);
+  box-shadow: 0 0 10px rgba(255,76,106,0.35);
+}
+
+/* ════════════════════════════════
+   EXCLUSIVE PREMIUM PANEL
+   (injected by JS — .premium-panel)
+════════════════════════════════ */
+.premium-panel {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg,
+    var(--surface2) 0%,
+    color-mix(in srgb, var(--accent) 6%, var(--surface2)) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-radius: 16px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.5s ease 0.05s both;
+}
+
+.premium-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% -20%, var(--tier-glow), transparent 70%);
+  pointer-events: none;
+}
+
+.pp-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 12px var(--accent-glow));
+}
+
+.pp-body { flex: 1; }
+
+.pp-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.pp-title {
+  font-family: var(--ff-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.pp-desc {
+  font-size: 13px;
+  color: var(--muted2);
+  line-height: 1.6;
+}
+
+.pp-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pp-btn {
+  display: inline-block;
+  padding: 10px 22px;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  border: none;
+}
+
+.pp-btn-primary {
+  background: var(--accent);
+  color: #000;
+}
+
+.pp-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+.pp-btn-ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.pp-btn-ghost:hover {
+  background: var(--accent-dim);
+}
+
+/* ════════════════════════════════
+   ADMIN COMMAND STRIP
+   (shown only for tier-admin)
+════════════════════════════════ */
+.admin-strip {
+  display: none;
+}
+
+body.tier-admin .admin-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  grid-column: 1 / -1;
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+
+.admin-tile {
+  background: linear-gradient(135deg, var(--surface2), var(--surface3));
+  border: 1px solid color-mix(in srgb, #ff4c6a 22%, transparent);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-tile:hover {
+  border-color: rgba(255,76,106,0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255,76,106,0.15);
+}
+
+.admin-tile-icon { font-size: 22px; }
+
+.admin-tile-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: rgba(255,76,106,0.8);
+  text-transform: uppercase;
+}
+
+.admin-tile-title {
+  font-family: var(--ff-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ════════════════════════════════
+   ANIMATIONS
+════════════════════════════════ */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0);    }
@@ -262,7 +745,7 @@ nav {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1);   }
+  0%, 100% { opacity: 1; transform: scale(1);    }
   50%       { opacity: 0.5; transform: scale(0.8); }
 }
 
@@ -276,14 +759,14 @@ nav {
   width: 12px;
   height: 12px;
   border: 2px solid var(--border);
-  border-top-color: var(--lime);
+  border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   vertical-align: middle;
   margin-right: 6px;
 }
 
-/* ── TOAST (used on many pages) ── */
+/* ── TOAST ── */
 .toast {
   position: fixed;
   bottom: 28px;
@@ -294,7 +777,7 @@ nav {
   padding: 14px 20px;
   font-family: var(--ff-mono);
   font-size: 12px;
-  color: var(--lime);
+  color: var(--accent);
   z-index: 9997;
   transform: translateY(80px);
   opacity: 0;
@@ -312,7 +795,7 @@ nav {
 /* ── UTILITY BUTTONS ── */
 .btn-lime {
   display: inline-block;
-  background: var(--lime);
+  background: var(--accent);
   color: #000;
   font-family: var(--ff-mono);
   font-size: 12px;
@@ -328,14 +811,14 @@ nav {
 
 .btn-lime:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px var(--lime-glow);
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   nav { padding: 0 20px; }
-
   .layout { grid-template-columns: 1fr; }
-
   .sidebar { display: none; }
+  .premium-panel { flex-direction: column; }
+  .pp-actions { flex-direction: row; }
 }

@@ -13,7 +13,8 @@
 <nav>
   <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
   <div class="nav-right">
-    <span class="nav-user" id="navUserLabel" style="display:none;"></span>
+    <span class="nav-tier-pill" id="navTierPill"></span>
+    <span class="nav-user" id="navUserLabel" style="display:none;font-family:var(--ff-mono);font-size:11px;color:var(--muted2);letter-spacing:0.05em;"></span>
     <a href="index.html" class="nav-back">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Back Home
@@ -47,9 +48,43 @@
         <div class="profile-avatar" id="sbAvatar">?</div>
         <div class="profile-name" id="sbName">Loading...</div>
         <div class="profile-email" id="sbEmail"></div>
-        <div class="admin-badge" id="sbAdminBadge" style="display:none;">⭐ ADMIN</div>
-        <div id="sbPremiumBadge" style="display:none;margin-top:8px;background:linear-gradient(135deg,rgba(200,241,53,0.15),rgba(200,241,53,0.05));border:1px solid rgba(200,241,53,0.35);border-radius:6px;padding:5px 10px;font-family:var(--ff-mono);font-size:10px;letter-spacing:1px;color:#c8f135;text-align:center;">⚡ PREMIUM</div>
-        <div id="sbEliteBadge" style="display:none;margin-top:8px;background:linear-gradient(135deg,rgba(247,183,49,0.15),rgba(247,183,49,0.05));border:1px solid rgba(247,183,49,0.35);border-radius:6px;padding:5px 10px;font-family:var(--ff-mono);font-size:10px;letter-spacing:1px;color:#f7b731;text-align:center;">🏆 ELITE</div>
+        <!-- ADMIN SVG badge -->
+        <div class="admin-badge" id="sbAdminBadge" style="display:none;">
+          <svg class="badge-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M14 2 L26 9 L26 17 Q26 23 14 26 Q2 23 2 17 L2 9 Z" fill="rgba(255,76,106,0.12)" stroke="#ff4c6a" stroke-width="1.2"/>
+            <path d="M14 7 L20 10.5 L20 16 Q20 20 14 22 Q8 20 8 16 L8 10.5 Z" fill="none" stroke="rgba(255,76,106,0.3)" stroke-width="0.5"/>
+            <rect x="7" y="17" width="14" height="3" rx="1" fill="#ff4c6a"/>
+            <polygon points="7,17 9.5,8 11.5,14 14,6 16.5,14 18.5,8 21,17" fill="#ff4c6a"/>
+            <circle cx="7" cy="18.5" r="1.5" fill="#ffb3bf"/>
+            <circle cx="14" cy="18.5" r="1.5" fill="#ffb3bf"/>
+            <circle cx="21" cy="18.5" r="1.5" fill="#ffb3bf"/>
+            <circle cx="14" cy="6" r="2" fill="white" opacity="0.9"/>
+          </svg>
+          <span class="badge-label-text">Admin<br><span style="font-size:9px;opacity:0.7;letter-spacing:0.08em;">Full Access</span></span>
+        </div>
+
+        <!-- PREMIUM SVG badge -->
+        <div id="sbPremiumBadge" class="badge-premium" style="display:none;">
+          <svg class="badge-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <polygon points="14,1 17.5,10.5 27,10.5 19.5,16.5 22.5,26 14,20.5 5.5,26 8.5,16.5 1,10.5 10.5,10.5" fill="rgba(247,201,72,0.15)" stroke="#f7c948" stroke-width="1.2" stroke-linejoin="round"/>
+            <path d="M14 6 L10 18 L13 18 L10 23 L19 13 L15 13 Z" fill="#f7c948"/>
+          </svg>
+          <span class="badge-label-text">Premium<br><span style="font-size:9px;opacity:0.7;letter-spacing:0.08em;">⚡ Active</span></span>
+        </div>
+
+        <!-- ELITE SVG badge -->
+        <div id="sbEliteBadge" class="badge-elite" style="display:none;">
+          <svg class="badge-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="14" cy="14" r="12" fill="rgba(232,180,255,0.1)" stroke="#e8b4ff" stroke-width="1" stroke-dasharray="3 2"/>
+            <circle cx="14" cy="14" r="8" fill="rgba(232,180,255,0.08)" stroke="rgba(232,180,255,0.35)" stroke-width="0.5"/>
+            <polygon points="14,6 16.5,11.5 22,11.5 17.5,15 19.5,21 14,17.5 8.5,21 10.5,15 6,11.5 11.5,11.5" fill="#e8b4ff" opacity="0.9"/>
+            <circle cx="14" cy="2" r="1.5" fill="#e8b4ff"/>
+            <circle cx="14" cy="26" r="1.5" fill="#e8b4ff"/>
+            <circle cx="2" cy="14" r="1.2" fill="#e8b4ff" opacity="0.7"/>
+            <circle cx="26" cy="14" r="1.2" fill="#e8b4ff" opacity="0.7"/>
+          </svg>
+          <span class="badge-label-text">Elite<br><span style="font-size:9px;opacity:0.7;letter-spacing:0.08em;">✦ Member</span></span>
+        </div>
       </div>
 
       <div class="sb-label">Your Stats</div>
@@ -77,6 +112,41 @@
 
     <!-- MAIN -->
     <main class="main">
+
+      <!-- ADMIN COMMAND STRIP (only shown for tier-admin via CSS) -->
+      <div class="admin-strip" id="adminStrip">
+        <div class="admin-tile" onclick="window.location='admin-users.html'">
+          <div class="admin-tile-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff4c6a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><path d="M19 8v6M22 11h-6" stroke="#ff9fb0" stroke-width="1.2"/></svg>
+          </div>
+          <div class="admin-tile-label">Manage</div>
+          <div class="admin-tile-title">All Users</div>
+        </div>
+        <div class="admin-tile" onclick="window.location='admin-content.html'">
+          <div class="admin-tile-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff4c6a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+          </div>
+          <div class="admin-tile-label">Edit</div>
+          <div class="admin-tile-title">Course Content</div>
+        </div>
+        <div class="admin-tile" onclick="window.location='admin-analytics.html'">
+          <div class="admin-tile-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff4c6a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 17V13M11 17V9M15 17V11M19 17V7" stroke-width="1.6"/></svg>
+          </div>
+          <div class="admin-tile-label">View</div>
+          <div class="admin-tile-title">Platform Analytics</div>
+        </div>
+        <div class="admin-tile" onclick="window.location='admin-badges.html'">
+          <div class="admin-tile-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff4c6a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6Z"/></svg>
+          </div>
+          <div class="admin-tile-label">Award</div>
+          <div class="admin-tile-title">Badges &amp; XP</div>
+        </div>
+      </div>
+
+      <!-- PREMIUM EXCLUSIVE PANEL (injected by JS for premium/elite) -->
+      <div id="premiumPanel" style="display:none;"></div>
 
       <!-- WELCOME -->
       <div class="welcome-hero fade-up">
@@ -288,6 +358,52 @@ onAuthStateChanged(auth, async (user) => {
   } catch(e) {
     console.log('Firestore error:', e);
     userData = { name, email: user.email, isAdmin, xp: isAdmin?9999:100, quizzesDone:0, scores:{}, badges:['hello_world'] };
+  }
+
+  // ── TIER THEMING ──
+  const plan = userData.plan || '';
+  const isElite = plan === 'elite';
+  const isPro   = plan === 'pro' || plan === 'basic';
+  const tierPill = document.getElementById('navTierPill');
+
+  const SVG_CROWN = `<svg width="13" height="13" viewBox="0 0 28 28" fill="none" style="vertical-align:-1px" aria-hidden="true"><path d="M14 2 L26 9 L26 17 Q26 23 14 26 Q2 23 2 17 L2 9 Z" fill="rgba(255,76,106,0.2)" stroke="#ff4c6a" stroke-width="1.5"/><rect x="7" y="17" width="14" height="3" rx="1" fill="#ff4c6a"/><polygon points="7,17 9.5,8 11.5,14 14,6 16.5,14 18.5,8 21,17" fill="#ff4c6a"/><circle cx="14" cy="6" r="2" fill="white" opacity="0.9"/></svg>`;
+  const SVG_BOLT  = `<svg width="13" height="13" viewBox="0 0 28 28" fill="none" style="vertical-align:-1px" aria-hidden="true"><polygon points="14,1 17.5,10.5 27,10.5 19.5,16.5 22.5,26 14,20.5 5.5,26 8.5,16.5 1,10.5 10.5,10.5" fill="rgba(247,201,72,0.2)" stroke="#f7c948" stroke-width="1.2"/><path d="M14 6 L10 18 L13 18 L10 23 L19 13 L15 13 Z" fill="#f7c948"/></svg>`;
+  const SVG_GEM   = `<svg width="13" height="13" viewBox="0 0 28 28" fill="none" style="vertical-align:-1px" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="rgba(232,180,255,0.1)" stroke="#e8b4ff" stroke-width="1" stroke-dasharray="3 2"/><polygon points="14,6 16.5,11.5 22,11.5 17.5,15 19.5,21 14,17.5 8.5,21 10.5,15 6,11.5 11.5,11.5" fill="#e8b4ff" opacity="0.9"/></svg>`;
+
+  if (isAdmin) {
+    document.body.classList.add('tier-admin');
+    tierPill.innerHTML = SVG_CROWN + ' Admin';
+  } else if (isElite) {
+    document.body.classList.add('tier-elite');
+    tierPill.innerHTML = SVG_GEM + ' Elite';
+  } else if (isPro) {
+    document.body.classList.add('tier-premium');
+    tierPill.innerHTML = SVG_BOLT + ' Premium';
+  }
+
+  // ── PREMIUM PANEL ──
+  if (!isAdmin && (isPro || isElite)) {
+    const pp = document.getElementById('premiumPanel');
+    pp.style.display = '';
+    const ppIconSVG = isElite
+      ? `<svg width="44" height="44" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="rgba(232,180,255,0.1)" stroke="#e8b4ff" stroke-width="1" stroke-dasharray="3 2"/><circle cx="14" cy="14" r="8" fill="rgba(232,180,255,0.08)" stroke="rgba(232,180,255,0.3)" stroke-width="0.5"/><polygon points="14,6 16.5,11.5 22,11.5 17.5,15 19.5,21 14,17.5 8.5,21 10.5,15 6,11.5 11.5,11.5" fill="#e8b4ff" opacity="0.9"/><circle cx="14" cy="2" r="1.5" fill="#e8b4ff"/><circle cx="14" cy="26" r="1.5" fill="#e8b4ff"/></svg>`
+      : `<svg width="44" height="44" viewBox="0 0 28 28" fill="none" aria-hidden="true"><polygon points="14,1 17.5,10.5 27,10.5 19.5,16.5 22.5,26 14,20.5 5.5,26 8.5,16.5 1,10.5 10.5,10.5" fill="rgba(247,201,72,0.15)" stroke="#f7c948" stroke-width="1.2"/><path d="M14 6 L10 18 L13 18 L10 23 L19 13 L15 13 Z" fill="#f7c948"/></svg>`;
+    pp.innerHTML = `
+      <div class="premium-panel">
+        <div class="pp-icon">${ppIconSVG}</div>
+        <div class="pp-body">
+          <div class="pp-label">${isElite ? 'Elite Member' : 'Premium Member'} — Exclusive Access</div>
+          <div class="pp-title">${isElite ? 'Your Elite privileges are active' : 'Your Premium plan is active'}</div>
+          <div class="pp-desc">${isElite
+            ? 'You have unlimited access to all courses, priority support, early-feature previews, and the exclusive Elite leaderboard.'
+            : 'You have access to all premium quizzes, advanced skill breakdowns, and ad-free studying. Upgrade to Elite for even more.'
+          }</div>
+        </div>
+        <div class="pp-actions">
+          <a href="premium-courses.html" class="pp-btn pp-btn-primary">${isElite ? 'Elite Courses →' : 'Premium Courses →'}</a>
+          ${isElite ? '' : '<a href="premium.html" class="pp-btn pp-btn-ghost">Upgrade to Elite</a>'}
+        </div>
+      </div>`;
   }
 
   // ── RENDER DASHBOARD ──
