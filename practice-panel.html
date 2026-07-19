@@ -396,15 +396,121 @@ html, body {
   background: var(--bg-card);
 }
 
+/* ── Rich description (LeetCode-style markdown) ── */
 .prob-desc {
-  font-size: 15px; line-height: 1.8;
+  font-size: 15px; line-height: 1.85;
   color: #cdd9e5;
-  margin-bottom: 28px;
+  margin-bottom: 0;
+}
+.prob-desc p {
+  margin-bottom: 14px;
+}
+.prob-desc p:last-child { margin-bottom: 0; }
+.prob-desc strong, .prob-desc b {
+  color: var(--txt-hi); font-weight: 700;
+}
+.prob-desc em, .prob-desc i {
+  font-style: italic; color: #cdd9e5;
 }
 .prob-desc code {
   font-family: var(--font-mono);
   font-size: 13px;
+  background: rgba(99,110,123,0.2);
+  border: 1px solid var(--border);
+  padding: 1px 6px; border-radius: 4px;
+  color: #79c0ff;
+  white-space: nowrap;
+}
+
+/* Fenced code blocks inside description */
+.prob-desc pre {
   background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  font-family: var(--font-mono);
+  font-size: 13px; line-height: 1.7;
+  color: var(--txt-hi);
+  overflow-x: auto;
+  margin: 12px 0 18px;
+  white-space: pre;
+}
+.prob-desc pre code {
+  background: none; border: none; padding: 0;
+  font-size: 13px; color: var(--txt-hi);
+  white-space: pre;
+}
+
+/* Unordered lists (constraints) */
+.prob-desc ul {
+  list-style: none; padding: 0;
+  margin: 8px 0 14px 0;
+}
+.prob-desc ul li {
+  padding: 3px 0 3px 20px;
+  position: relative;
+  font-size: 15px; line-height: 1.7; color: #cdd9e5;
+}
+.prob-desc ul li::before {
+  content: '•';
+  position: absolute; left: 4px;
+  color: var(--txt-lo);
+}
+
+/* Section divider (&nbsp; lines / <hr>) */
+.prob-desc hr {
+  border: none; border-top: 1px solid var(--border);
+  margin: 20px 0;
+}
+
+/* Example header label */
+.ex-label {
+  font-size: 14px; font-weight: 700;
+  color: var(--txt-hi);
+  margin-bottom: 10px;
+  margin-top: 22px;
+}
+
+/* Example code block */
+.ex-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 18px;
+  font-family: var(--font-mono);
+  font-size: 13px; line-height: 1.8;
+  color: var(--txt-hi);
+  margin-bottom: 6px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.ex-block .ex-key { color: var(--txt-md); }
+
+/* Constraints list */
+.constraints-wrap {
+  margin-top: 22px;
+}
+.constraints-wrap .constraints-head {
+  font-size: 14px; font-weight: 700;
+  color: var(--txt-hi); margin-bottom: 10px;
+}
+.constraints-list {
+  list-style: none; padding: 0; margin: 0;
+}
+.constraints-list li {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 5px 0;
+  font-size: 14px; color: #cdd9e5; line-height: 1.6;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.constraints-list li:last-child { border-bottom: none; }
+.constraints-list li::before {
+  content: '•';
+  color: var(--txt-lo); flex-shrink: 0; font-size: 16px;
+}
+.constraints-list code {
+  font-family: var(--font-mono); font-size: 13px;
+  background: rgba(99,110,123,0.2);
   border: 1px solid var(--border);
   padding: 1px 6px; border-radius: 4px;
   color: #79c0ff;
@@ -419,7 +525,7 @@ html, body {
   letter-spacing: .01em;
 }
 
-/* Example blocks */
+/* Legacy example blocks (kept for compat) */
 .example-block {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -431,39 +537,17 @@ html, body {
   display: grid; grid-template-columns: 88px 1fr;
   padding: 0;
 }
-.example-row + .example-row {
-  border-top: 1px solid var(--border);
-}
+.example-row + .example-row { border-top: 1px solid var(--border); }
 .example-label {
-  font-size: 12px; font-weight: 700;
-  color: var(--txt-md);
-  font-family: var(--font-mono);
-  padding: 12px 14px;
+  font-size: 12px; font-weight: 700; color: var(--txt-md);
+  font-family: var(--font-mono); padding: 12px 14px;
   border-right: 1px solid var(--border);
   display: flex; align-items: flex-start;
-  background: rgba(255,255,255,.02);
-  letter-spacing: .04em;
+  background: rgba(255,255,255,.02); letter-spacing: .04em;
 }
 .example-val {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--txt-hi);
-  padding: 12px 16px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-/* Constraints */
-.constraints-box {
-  font-size: 13px; line-height: 1.9;
-  color: var(--txt-md);
-  font-family: var(--font-mono);
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 14px 18px;
-  margin-bottom: 24px;
+  font-family: var(--font-mono); font-size: 13px; color: var(--txt-hi);
+  padding: 12px 16px; line-height: 1.6; white-space: pre-wrap; word-break: break-all;
 }
 
 /* Hints */
@@ -1133,17 +1217,18 @@ html, body {
         </div>
 
         <!-- DESCRIPTION PANEL -->
-        <div class="left-panel" id="panel-desc" style="padding:24px 28px;overflow-y:auto;flex:1;">
+        <div class="left-panel" id="panel-desc" style="padding:28px 32px 40px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:var(--border) transparent;">
           <div id="pd-number" class="prob-number"></div>
-          <div id="pd-title" class="prob-title">← Select a problem</div>
+          <div id="pd-title" class="prob-title" style="margin-top:2px">← Select a problem from the list</div>
           <div id="pd-meta" class="prob-meta"></div>
-          <div id="pd-desc" class="prob-desc"></div>
+          <!-- all content rendered here by buildDescHTML -->
+          <div id="pd-desc"></div>
 
-          <div class="section-head" id="pd-example-head" style="display:none">Examples</div>
+          <!-- hidden legacy placeholders (kept for compatibility) -->
+          <div class="section-head" id="pd-example-head" style="display:none"></div>
           <div id="pd-examples"></div>
-
-          <div class="section-head" id="pd-constraints-head" style="display:none">Constraints</div>
-          <div id="pd-constraints" class="constraints-box" style="display:none"></div>
+          <div class="section-head" id="pd-constraints-head" style="display:none"></div>
+          <div id="pd-constraints" style="display:none"></div>
 
           <div id="hints-section"></div>
         </div>
@@ -1376,21 +1461,115 @@ window._loadLeaderboard = async function() {
 <script>
 const PROBLEMS = {
   c: [
-    {id:'c1',title:'Hello, World!',difficulty:'easy',tags:['I/O','Basics'],desc:'Print <code>Hello, World!</code> to stdout.',example:{input:'(none)',output:'Hello, World!'},constraints:'Use printf.',tests:[{input:'',expected:'Hello, World!\n'}],hints:['Use printf("Hello, World!\\n");'],starter:'#include <stdio.h>\n\nint main() {\n    // your code here\n    return 0;\n}'},
-    {id:'c2',title:'Sum of Two Numbers',difficulty:'easy',tags:['Math','Variables'],desc:'Read two integers and print their sum.',example:{input:'3 7',output:'10'},constraints:'Fit in int.',tests:[{input:'3 7',expected:'10\n'},{input:'-5 5',expected:'0\n'}],starter:'#include <stdio.h>\n\nint main() {\n    int a, b;\n    scanf("%d %d", &a, &b);\n    printf("%d\\n", a + b);\n    return 0;\n}'},
-    {id:'c3',title:'Factorial',difficulty:'medium',tags:['Loops','Math'],desc:'Given N (0 ≤ N ≤ 12), print N!',example:{input:'5',output:'120'},constraints:'Result fits in long long.',tests:[{input:'5',expected:'120\n'},{input:'0',expected:'1\n'},{input:'10',expected:'3628800\n'}],hints:['Loop from 2 to n, multiply accumulator.'],starter:'#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    long long f=1;\n    for(int i=2;i<=n;i++) f*=i;\n    printf("%lld\\n",f);\n    return 0;\n}'},
-    {id:'c4',title:'Reverse a String',difficulty:'medium',tags:['Strings','Arrays'],desc:'Read a string (no spaces) and print it reversed.',example:{input:'hello',output:'olleh'},constraints:'Length ≤ 100.',tests:[{input:'hello',expected:'olleh\n'},{input:'abcd',expected:'dcba\n'}],starter:'#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[105]; scanf("%s",s);\n    int n=strlen(s);\n    for(int i=n-1;i>=0;i--) printf("%c",s[i]);\n    printf("\\n");\n    return 0;\n}'},
-    {id:'c5',title:'Check Prime',difficulty:'hard',tags:['Math','Loops'],desc:'Given N, print YES if prime, NO otherwise.',example:{input:'7',output:'YES'},constraints:'1 ≤ N ≤ 10^6.',tests:[{input:'7',expected:'YES\n'},{input:'1',expected:'NO\n'},{input:'4',expected:'NO\n'}],hints:['Check divisors only up to sqrt(n).','n < 2 is never prime.'],starter:'#include <stdio.h>\n#include <math.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    if(n<2){printf("NO\\n");return 0;}\n    for(int i=2;i<=(int)sqrt(n);i++) if(n%i==0){printf("NO\\n");return 0;}\n    printf("YES\\n");\n    return 0;\n}'},
-    {id:'c6',title:'Max of Array',difficulty:'easy',tags:['Arrays','Loops'],desc:'Read N integers and print the maximum.',example:{input:'5\n3 1 4 1 5',output:'5'},constraints:'1 ≤ N ≤ 1000.',tests:[{input:'5\n3 1 4 1 5',expected:'5\n'},{input:'3\n-1 -5 -2',expected:'-1\n'}],starter:'#include <stdio.h>\n#include <limits.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int mx=INT_MIN,x;\n    for(int i=0;i<n;i++){scanf("%d",&x);if(x>mx)mx=x;}\n    printf("%d\\n",mx);\n    return 0;\n}'},
-    {id:'c7',title:'Count Even and Odd',difficulty:'easy',tags:['Loops','Conditionals'],desc:'Read N integers. Print even count then odd count on separate lines.',example:{input:'5\n1 2 3 4 5',output:'2\n3'},constraints:'1 ≤ N ≤ 1000.',tests:[{input:'5\n1 2 3 4 5',expected:'2\n3\n'},{input:'4\n2 4 6 8',expected:'4\n0\n'}],starter:'#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int e=0,o=0,x;\n    for(int i=0;i<n;i++){scanf("%d",&x);if(x%2==0)e++;else o++;}\n    printf("%d\\n%d\\n",e,o);\n    return 0;\n}'},
-    {id:'c8',title:'Fibonacci Series',difficulty:'medium',tags:['Loops','Math'],desc:'Print the first N Fibonacci terms (0,1,1,2,3…) one per line.',example:{input:'6',output:'0\n1\n1\n2\n3\n5'},constraints:'1 ≤ N ≤ 50.',tests:[{input:'6',expected:'0\n1\n1\n2\n3\n5\n'},{input:'1',expected:'0\n'}],starter:'#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    long long a=0,b=1;\n    for(int i=0;i<n;i++){printf("%lld\\n",a);long long c=a+b;a=b;b=c;}\n    return 0;\n}'},
-    {id:'c9',title:'Linear Search',difficulty:'medium',tags:['Arrays','Search'],desc:'Read N integers then target T. Print 0-based index of first T, or -1.',example:{input:'5\n10 20 30 40 50\n30',output:'2'},constraints:'1 ≤ N ≤ 1000.',tests:[{input:'5\n10 20 30 40 50\n30',expected:'2\n'},{input:'3\n1 2 3\n9',expected:'-1\n'}],starter:'#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int a[1005];\n    for(int i=0;i<n;i++) scanf("%d",&a[i]);\n    int t; scanf("%d",&t);\n    for(int i=0;i<n;i++) if(a[i]==t){printf("%d\\n",i);return 0;}\n    printf("-1\\n");\n    return 0;\n}'},
-    {id:'c10',title:'Bubble Sort',difficulty:'hard',tags:['Sorting','Arrays'],desc:'Read N integers and print them sorted ascending using bubble sort.',example:{input:'5\n5 3 1 4 2',output:'1 2 3 4 5'},constraints:'1 ≤ N ≤ 500.',tests:[{input:'5\n5 3 1 4 2',expected:'1 2 3 4 5\n'},{input:'3\n3 1 2',expected:'1 2 3\n'}],hints:['Outer loop n-1 times; inner loop n-i-1 times.'],starter:'#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int a[505];\n    for(int i=0;i<n;i++) scanf("%d",&a[i]);\n    for(int i=0;i<n-1;i++) for(int j=0;j<n-i-1;j++) if(a[j]>a[j+1]){int t=a[j];a[j]=a[j+1];a[j+1]=t;}\n    for(int i=0;i<n;i++) printf("%d%s",a[i],i<n-1?" ":"\\n");\n    return 0;\n}'},
-    {id:'c11',title:'GCD (Euclidean)',difficulty:'medium',tags:['Math','Recursion'],desc:'Read two integers A and B. Print their GCD.',example:{input:'12 8',output:'4'},constraints:'1 ≤ A,B ≤ 10^9.',tests:[{input:'12 8',expected:'4\n'},{input:'100 75',expected:'25\n'},{input:'7 13',expected:'1\n'}],starter:'#include <stdio.h>\nint gcd(int a,int b){return b==0?a:gcd(b,a%b);}\nint main(){\n    int a,b; scanf("%d %d",&a,&b);\n    printf("%d\\n",gcd(a,b));\n    return 0;\n}'},
-    {id:'c12',title:'Right Triangle Pattern',difficulty:'easy',tags:['Loops','Patterns'],desc:'Given N, print a right-angled star triangle with N rows.',example:{input:'4',output:'*\n**\n***\n****'},constraints:'1 ≤ N ≤ 20.',tests:[{input:'4',expected:'*\n**\n***\n****\n'},{input:'2',expected:'*\n**\n'}],starter:'#include <stdio.h>\nint main(){\n    int n; scanf("%d",&n);\n    for(int i=1;i<=n;i++){for(int j=0;j<i;j++) printf("*");printf("\\n");}\n    return 0;\n}'},
-    {id:'c13',title:'Count Vowels',difficulty:'easy',tags:['Strings','Loops'],desc:'Read a lowercase string and print the vowel count.',example:{input:'hello',output:'2'},constraints:'Length ≤ 200.',tests:[{input:'hello',expected:'2\n'},{input:'aeiou',expected:'5\n'},{input:'xyz',expected:'0\n'}],starter:'#include <stdio.h>\nint main(){\n    char s[205]; scanf("%s",s); int c=0;\n    for(int i=0;s[i];i++) if(s[i]==\'a\'||s[i]==\'e\'||s[i]==\'i\'||s[i]==\'o\'||s[i]==\'u\') c++;\n    printf("%d\\n",c);\n    return 0;\n}'},
-    {id:'c14',title:'Matrix Transpose',difficulty:'hard',tags:['2D Arrays','Matrix'],desc:'Read an N×N matrix and print its transpose.',example:{input:'2\n1 2\n3 4',output:'1 3\n2 4'},constraints:'1 ≤ N ≤ 10.',tests:[{input:'2\n1 2\n3 4',expected:'1 3\n2 4\n'},{input:'3\n1 2 3\n4 5 6\n7 8 9',expected:'1 4 7\n2 5 8\n3 6 9\n'}],hints:['Print a[j][i] instead of a[i][j].'],starter:'#include <stdio.h>\nint main(){\n    int n; scanf("%d",&n);\n    int a[10][10];\n    for(int i=0;i<n;i++) for(int j=0;j<n;j++) scanf("%d",&a[i][j]);\n    for(int i=0;i<n;i++){for(int j=0;j<n;j++) printf("%d%s",a[j][i],j<n-1?" ":"\\n");}\n    return 0;\n}'},
-    {id:'c15',title:'Power Function',difficulty:'medium',tags:['Math','Recursion'],desc:'Compute B^E without pow(). 1 ≤ B ≤ 10, 0 ≤ E ≤ 15.',example:{input:'2 10',output:'1024'},constraints:'Result fits in long long.',tests:[{input:'2 10',expected:'1024\n'},{input:'3 4',expected:'81\n'},{input:'5 0',expected:'1\n'}],starter:'#include <stdio.h>\nlong long power(long long b,int e){return e==0?1:b*power(b,e-1);}\nint main(){\n    long long b; int e;\n    scanf("%lld %d",&b,&e);\n    printf("%lld\\n",power(b,e));\n    return 0;\n}'},
+    {id:'c1',title:'Hello, World!',difficulty:'easy',tags:['I/O','Basics'],
+     desc:'Write a program that prints `Hello, World!` to standard output.\n\nThis is the classic first program in any language — it verifies your toolchain is set up and you can produce output.',
+     examples:[{input:'(none)',output:'Hello, World!'}],
+     constraints:['Only one line of output is required.','Output must match exactly, including punctuation and the exclamation mark.'],
+     tests:[{input:'',expected:'Hello, World!\n'}],
+     hints:['Use printf("Hello, World!\\n");'],
+     starter:'#include <stdio.h>\n\nint main() {\n    // your code here\n    return 0;\n}'},
+
+    {id:'c2',title:'Sum of Two Numbers',difficulty:'easy',tags:['Math','Variables'],
+     desc:'Read two integers **A** and **B** from a single line of input and print their sum.\n\nThis problem tests basic input/output and arithmetic in C.',
+     examples:[{input:'3 7',output:'10'},{input:'-5 5',output:'0'}],
+     constraints:['Both values fit in a 32-bit signed integer (`int`).','Input is always two space-separated integers on one line.'],
+     tests:[{input:'3 7',expected:'10\n'},{input:'-5 5',expected:'0\n'}],
+     starter:'#include <stdio.h>\n\nint main() {\n    int a, b;\n    scanf("%d %d", &a, &b);\n    printf("%d\\n", a + b);\n    return 0;\n}'},
+
+    {id:'c3',title:'Factorial',difficulty:'medium',tags:['Loops','Math'],
+     desc:'Given a non-negative integer **N**, compute and print **N!** (N factorial).\n\nRecall that:\n- `0! = 1`\n- `N! = N × (N−1) × ... × 2 × 1` for N ≥ 1',
+     examples:[{input:'5',output:'120',explanation:'5 × 4 × 3 × 2 × 1 = 120'},{input:'0',output:'1'},{input:'10',output:'3628800'}],
+     constraints:['`0 <= N <= 12`','The result always fits in a `long long`.'],
+     tests:[{input:'5',expected:'120\n'},{input:'0',expected:'1\n'},{input:'10',expected:'3628800\n'}],
+     hints:['Loop from 2 to n, multiplying an accumulator each step.','Initialize your accumulator to 1 before the loop.'],
+     starter:'#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    long long f=1;\n    for(int i=2;i<=n;i++) f*=i;\n    printf("%lld\\n",f);\n    return 0;\n}'},
+
+    {id:'c4',title:'Reverse a String',difficulty:'medium',tags:['Strings','Arrays'],
+     desc:'Read a string (guaranteed to have **no spaces**) and print it in reverse order.\n\nFor example, `"hello"` reversed is `"olleh"`.',
+     examples:[{input:'hello',output:'olleh'},{input:'abcd',output:'dcba'}],
+     constraints:['The string contains only printable ASCII characters.','Length of the string is at most `100`.','No spaces in the input string.'],
+     tests:[{input:'hello',expected:'olleh\n'},{input:'abcd',expected:'dcba\n'}],
+     starter:'#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[105]; scanf("%s",s);\n    int n=strlen(s);\n    for(int i=n-1;i>=0;i--) printf("%c",s[i]);\n    printf("\\n");\n    return 0;\n}'},
+
+    {id:'c5',title:'Check Prime',difficulty:'hard',tags:['Math','Loops'],
+     desc:'Given an integer **N**, determine whether it is **prime**.\n\nA prime number is greater than 1 and has no positive divisors other than 1 and itself.\n\nPrint `YES` if N is prime, `NO` otherwise.',
+     examples:[{input:'7',output:'YES',explanation:'7 has no divisors other than 1 and 7.'},{input:'1',output:'NO',explanation:'1 is not considered prime.'},{input:'4',output:'NO',explanation:'4 = 2 × 2, so it is composite.'}],
+     constraints:['`1 <= N <= 10^6`'],
+     tests:[{input:'7',expected:'YES\n'},{input:'1',expected:'NO\n'},{input:'4',expected:'NO\n'}],
+     hints:['Any number less than 2 is not prime.','You only need to check divisors up to √N — if none divide N, it is prime.','Use `(int)sqrt(n)` from `<math.h>`, or check `i*i <= n` to avoid floating point.'],
+     starter:'#include <stdio.h>\n#include <math.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    if(n<2){printf("NO\\n");return 0;}\n    for(int i=2;i<=(int)sqrt(n);i++) if(n%i==0){printf("NO\\n");return 0;}\n    printf("YES\\n");\n    return 0;\n}'},
+
+    {id:'c6',title:'Max of Array',difficulty:'easy',tags:['Arrays','Loops'],
+     desc:'Read **N** integers and print the **maximum** value among them.',
+     examples:[{input:'5\n3 1 4 1 5',output:'5'},{input:'3\n-1 -5 -2',output:'-1'}],
+     constraints:['`1 <= N <= 1000`','Each integer fits in a 32-bit signed `int`.'],
+     tests:[{input:'5\n3 1 4 1 5',expected:'5\n'},{input:'3\n-1 -5 -2',expected:'-1\n'}],
+     starter:'#include <stdio.h>\n#include <limits.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int mx=INT_MIN,x;\n    for(int i=0;i<n;i++){scanf("%d",&x);if(x>mx)mx=x;}\n    printf("%d\\n",mx);\n    return 0;\n}'},
+
+    {id:'c7',title:'Count Even and Odd',difficulty:'easy',tags:['Loops','Conditionals'],
+     desc:'Read **N** integers and count how many are **even** and how many are **odd**.\n\nPrint the even count on the first line and the odd count on the second line.',
+     examples:[{input:'5\n1 2 3 4 5',output:'2\n3',explanation:'Even: 2, 4 → count = 2. Odd: 1, 3, 5 → count = 3.'},{input:'4\n2 4 6 8',output:'4\n0'}],
+     constraints:['`1 <= N <= 1000`','All integers fit in a 32-bit signed `int`.'],
+     tests:[{input:'5\n1 2 3 4 5',expected:'2\n3\n'},{input:'4\n2 4 6 8',expected:'4\n0\n'}],
+     starter:'#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int e=0,o=0,x;\n    for(int i=0;i<n;i++){scanf("%d",&x);if(x%2==0)e++;else o++;}\n    printf("%d\\n%d\\n",e,o);\n    return 0;\n}'},
+
+    {id:'c8',title:'Fibonacci Series',difficulty:'medium',tags:['Loops','Math'],
+     desc:'Print the first **N** terms of the Fibonacci sequence, one per line.\n\nThe sequence starts: **0, 1, 1, 2, 3, 5, 8, 13, …** where each term is the sum of the two preceding terms.',
+     examples:[{input:'6',output:'0\n1\n1\n2\n3\n5'},{input:'1',output:'0'}],
+     constraints:['`1 <= N <= 50`','Use `long long` — the 50th Fibonacci number exceeds 32-bit range.'],
+     tests:[{input:'6',expected:'0\n1\n1\n2\n3\n5\n'},{input:'1',expected:'0\n'}],
+     starter:'#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    long long a=0,b=1;\n    for(int i=0;i<n;i++){printf("%lld\\n",a);long long c=a+b;a=b;b=c;}\n    return 0;\n}'},
+
+    {id:'c9',title:'Linear Search',difficulty:'medium',tags:['Arrays','Search'],
+     desc:'Read **N** integers into an array, then read a **target** value **T**.\n\nPrint the **0-based index** of the first occurrence of T in the array, or `-1` if T is not found.',
+     examples:[{input:'5\n10 20 30 40 50\n30',output:'2',explanation:'30 is at index 2 (0-based).'},{input:'3\n1 2 3\n9',output:'-1',explanation:'9 is not in the array.'}],
+     constraints:['`1 <= N <= 1000`','All values fit in a 32-bit signed `int`.'],
+     tests:[{input:'5\n10 20 30 40 50\n30',expected:'2\n'},{input:'3\n1 2 3\n9',expected:'-1\n'}],
+     starter:'#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int a[1005];\n    for(int i=0;i<n;i++) scanf("%d",&a[i]);\n    int t; scanf("%d",&t);\n    for(int i=0;i<n;i++) if(a[i]==t){printf("%d\\n",i);return 0;}\n    printf("-1\\n");\n    return 0;\n}'},
+
+    {id:'c10',title:'Bubble Sort',difficulty:'hard',tags:['Sorting','Arrays'],
+     desc:'Read **N** integers and sort them in **ascending order** using the **bubble sort** algorithm.\n\nPrint the sorted array space-separated on a single line.\n\nBubble sort repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order.',
+     examples:[{input:'5\n5 3 1 4 2',output:'1 2 3 4 5'},{input:'3\n3 1 2',output:'1 2 3'}],
+     constraints:['`1 <= N <= 500`','All values fit in a 32-bit signed `int`.','You **must** implement bubble sort — do not use library sort functions.'],
+     tests:[{input:'5\n5 3 1 4 2',expected:'1 2 3 4 5\n'},{input:'3\n3 1 2',expected:'1 2 3\n'}],
+     hints:['Outer loop runs `n-1` times.','Inner loop runs `n-i-1` times each pass.','Swap `a[j]` and `a[j+1]` whenever `a[j] > a[j+1]`.'],
+     starter:'#include <stdio.h>\n\nint main() {\n    int n; scanf("%d",&n);\n    int a[505];\n    for(int i=0;i<n;i++) scanf("%d",&a[i]);\n    for(int i=0;i<n-1;i++) for(int j=0;j<n-i-1;j++) if(a[j]>a[j+1]){int t=a[j];a[j]=a[j+1];a[j+1]=t;}\n    for(int i=0;i<n;i++) printf("%d%s",a[i],i<n-1?" ":"\\n");\n    return 0;\n}'},
+
+    {id:'c11',title:'GCD (Euclidean)',difficulty:'medium',tags:['Math','Recursion'],
+     desc:'Read two integers **A** and **B** and print their **Greatest Common Divisor (GCD)**.\n\nUse the **Euclidean algorithm**: `gcd(a, b) = gcd(b, a % b)`, with base case `gcd(a, 0) = a`.',
+     examples:[{input:'12 8',output:'4',explanation:'gcd(12,8) = gcd(8,4) = gcd(4,0) = 4'},{input:'100 75',output:'25'},{input:'7 13',output:'1',explanation:'7 and 13 are coprime.'}],
+     constraints:['`1 <= A, B <= 10^9`'],
+     tests:[{input:'12 8',expected:'4\n'},{input:'100 75',expected:'25\n'},{input:'7 13',expected:'1\n'}],
+     starter:'#include <stdio.h>\nint gcd(int a,int b){return b==0?a:gcd(b,a%b);}\nint main(){\n    int a,b; scanf("%d %d",&a,&b);\n    printf("%d\\n",gcd(a,b));\n    return 0;\n}'},
+
+    {id:'c12',title:'Right Triangle Pattern',difficulty:'easy',tags:['Loops','Patterns'],
+     desc:'Given an integer **N**, print a right-angled star triangle with **N rows**.\n\nRow `i` contains exactly `i` asterisks (`*`), for `i` from 1 to N.',
+     examples:[{input:'4',output:'*\n**\n***\n****'},{input:'2',output:'*\n**'}],
+     constraints:['`1 <= N <= 20`'],
+     tests:[{input:'4',expected:'*\n**\n***\n****\n'},{input:'2',expected:'*\n**\n'}],
+     starter:'#include <stdio.h>\nint main(){\n    int n; scanf("%d",&n);\n    for(int i=1;i<=n;i++){for(int j=0;j<i;j++) printf("*");printf("\\n");}\n    return 0;\n}'},
+
+    {id:'c13',title:'Count Vowels',difficulty:'easy',tags:['Strings','Loops'],
+     desc:'Read a lowercase string and print the **number of vowels** (`a`, `e`, `i`, `o`, `u`) it contains.',
+     examples:[{input:'hello',output:'2',explanation:'"hello" has vowels e and o.'},{input:'aeiou',output:'5'},{input:'xyz',output:'0'}],
+     constraints:['The string contains only lowercase English letters.','Length is at most `200`.'],
+     tests:[{input:'hello',expected:'2\n'},{input:'aeiou',expected:'5\n'},{input:'xyz',expected:'0\n'}],
+     starter:'#include <stdio.h>\nint main(){\n    char s[205]; scanf("%s",s); int c=0;\n    for(int i=0;s[i];i++) if(s[i]==\'a\'||s[i]==\'e\'||s[i]==\'i\'||s[i]==\'o\'||s[i]==\'u\') c++;\n    printf("%d\\n",c);\n    return 0;\n}'},
+
+    {id:'c14',title:'Matrix Transpose',difficulty:'hard',tags:['2D Arrays','Matrix'],
+     desc:'Read an **N × N** integer matrix and print its **transpose**.\n\nThe transpose of a matrix swaps rows and columns: element at position `(i, j)` moves to `(j, i)`.',
+     examples:[{input:'2\n1 2\n3 4',output:'1 3\n2 4'},{input:'3\n1 2 3\n4 5 6\n7 8 9',output:'1 4 7\n2 5 8\n3 6 9'}],
+     constraints:['`1 <= N <= 10`','All values fit in a 32-bit signed `int`.'],
+     tests:[{input:'2\n1 2\n3 4',expected:'1 3\n2 4\n'},{input:'3\n1 2 3\n4 5 6\n7 8 9',expected:'1 4 7\n2 5 8\n3 6 9\n'}],
+     hints:['To transpose, print `a[j][i]` instead of `a[i][j]`.'],
+     starter:'#include <stdio.h>\nint main(){\n    int n; scanf("%d",&n);\n    int a[10][10];\n    for(int i=0;i<n;i++) for(int j=0;j<n;j++) scanf("%d",&a[i][j]);\n    for(int i=0;i<n;i++){for(int j=0;j<n;j++) printf("%d%s",a[j][i],j<n-1?" ":"\\n");}\n    return 0;\n}'},
+
+    {id:'c15',title:'Power Function',difficulty:'medium',tags:['Math','Recursion'],
+     desc:'Compute **B^E** (B raised to the power E) **without using `pow()`**.\n\nImplement a recursive power function and print the result.',
+     examples:[{input:'2 10',output:'1024',explanation:'2^10 = 1024'},{input:'3 4',output:'81'},{input:'5 0',output:'1',explanation:'Any number to the power 0 is 1.'}],
+     constraints:['`1 <= B <= 10`','`0 <= E <= 15`','The result always fits in a `long long`.'],
+     tests:[{input:'2 10',expected:'1024\n'},{input:'3 4',expected:'81\n'},{input:'5 0',expected:'1\n'}],
+     starter:'#include <stdio.h>\nlong long power(long long b,int e){return e==0?1:b*power(b,e-1);}\nint main(){\n    long long b; int e;\n    scanf("%lld %d",&b,&e);\n    printf("%lld\\n",power(b,e));\n    return 0;\n}'},
   ],
   cpp: [
     {id:'cpp1',title:'Hello, World!',difficulty:'easy',tags:['I/O','Basics'],desc:'Print <code>Hello, World!</code> using C++.',example:{input:'(none)',output:'Hello, World!'},constraints:'Use cout.',tests:[{input:'',expected:'Hello, World!\n'}],starter:'#include <iostream>\nusing namespace std;\nint main(){\n    cout<<"Hello, World!"<<endl;\n    return 0;\n}'},
@@ -1422,19 +1601,97 @@ const PROBLEMS = {
     {id:'j13',title:'Inheritance — Shape Area',difficulty:'hard',tags:['OOP','Inheritance'],desc:'Abstract Shape class with Circle and Rectangle subclasses. Print area to 2dp.',example:{input:'Circle 5',output:'78.54'},constraints:'Positive integer dimensions ≤ 100.',tests:[{input:'Circle 5',expected:'78.54\n'},{input:'Rectangle 4 6',expected:'24.00\n'}],starter:'import java.util.Scanner;\nabstract class Shape{abstract double area();}\nclass Circle extends Shape{double r;Circle(double r){this.r=r;}double area(){return Math.PI*r*r;}}\nclass Rectangle extends Shape{double w,h;Rectangle(double w,double h){this.w=w;this.h=h;}double area(){return w*h;}}\npublic class Main{\n    public static void main(String[] args){\n        Scanner sc=new Scanner(System.in);\n        String t=sc.next();\n        Shape s=t.equals("Circle")?new Circle(sc.nextDouble()):new Rectangle(sc.nextDouble(),sc.nextDouble());\n        System.out.printf("%.2f%n",s.area());\n    }\n}'},
   ],
   python: [
-    {id:'py1',title:'Hello, World!',difficulty:'easy',tags:['I/O','Basics'],desc:'Print <code>Hello, World!</code>',example:{input:'(none)',output:'Hello, World!'},constraints:'Single print statement.',tests:[{input:'',expected:'Hello, World!\n'}],starter:'print("Hello, World!")\n'},
-    {id:'py2',title:'FizzBuzz',difficulty:'easy',tags:['Loops','Conditionals'],desc:'Print numbers 1 to N. Mult of 3→Fizz, 5→Buzz, 15→FizzBuzz.',example:{input:'5',output:'1\n2\nFizz\n4\nBuzz'},constraints:'1 ≤ N ≤ 100.',tests:[{input:'5',expected:'1\n2\nFizz\n4\nBuzz\n'}],starter:'n=int(input())\nfor i in range(1,n+1):\n    if i%15==0: print("FizzBuzz")\n    elif i%3==0: print("Fizz")\n    elif i%5==0: print("Buzz")\n    else: print(i)\n'},
-    {id:'py3',title:'Palindrome Check',difficulty:'medium',tags:['Strings'],desc:'Print YES if the string is a palindrome, NO otherwise.',example:{input:'racecar',output:'YES'},constraints:'Lowercase, length ≤ 1000.',tests:[{input:'racecar',expected:'YES\n'},{input:'hello',expected:'NO\n'}],starter:'s=input()\nprint("YES" if s==s[::-1] else "NO")\n'},
-    {id:'py4',title:'Sum of List',difficulty:'easy',tags:['Lists','Math'],desc:'Read space-separated integers and print their sum.',example:{input:'1 2 3 4 5',output:'15'},constraints:'1 ≤ N ≤ 1000.',tests:[{input:'1 2 3 4 5',expected:'15\n'},{input:'10 -3 7',expected:'14\n'}],starter:'print(sum(map(int,input().split())))\n'},
-    {id:'py5',title:'Word Frequency',difficulty:'medium',tags:['Dictionary','Strings'],desc:'Read words. Print each unique word and count, sorted alphabetically.',example:{input:'apple banana apple cherry banana apple',output:'apple 3\nbanana 2\ncherry 1'},constraints:'Lowercase. ≤ 200 words.',tests:[{input:'apple banana apple cherry banana apple',expected:'apple 3\nbanana 2\ncherry 1\n'}],starter:'words=input().split()\nfreq={}\nfor w in words: freq[w]=freq.get(w,0)+1\nfor k in sorted(freq): print(k,freq[k])\n'},
-    {id:'py6',title:'Caesar Cipher',difficulty:'medium',tags:['Strings','Encryption'],desc:'Given lowercase string S and shift K, print the Caesar cipher.',example:{input:'hello 3',output:'khoor'},constraints:'0 ≤ K ≤ 25.',tests:[{input:'hello 3',expected:'khoor\n'},{input:'xyz 2',expected:'zab\n'}],starter:'p=input().split(); s,k=p[0],int(p[1])\nprint("".join(chr((ord(c)-97+k)%26+97) for c in s))\n'},
-    {id:'py7',title:'Binary Search',difficulty:'hard',tags:['Search','Algorithms'],desc:'Given sorted list and target T, print index using binary search, or -1.',example:{input:'5\n1 3 5 7 9\n5',output:'2'},constraints:'1 ≤ N ≤ 10^5.',tests:[{input:'5\n1 3 5 7 9\n5',expected:'2\n'},{input:'4\n2 4 6 8\n5',expected:'-1\n'}],starter:'n=int(input()); arr=list(map(int,input().split())); t=int(input())\nlo,hi,res=0,n-1,-1\nwhile lo<=hi:\n    mid=(lo+hi)//2\n    if arr[mid]==t: res=mid; break\n    elif arr[mid]<t: lo=mid+1\n    else: hi=mid-1\nprint(res)\n'},
-    {id:'py8',title:'Stack Simulation',difficulty:'hard',tags:['Stack','Data Structures'],desc:'Simulate a stack: PUSH x, POP, TOP. Print POP/TOP result or "EMPTY".',example:{input:'4\nPUSH 5\nPUSH 3\nTOP\nPOP',output:'3\n3'},constraints:'1 ≤ Q ≤ 1000.',tests:[{input:'4\nPUSH 5\nPUSH 3\nTOP\nPOP',expected:'3\n3\n'},{input:'2\nPOP\nTOP',expected:'EMPTY\nEMPTY\n'}],starter:'q=int(input()); stack=[]\nfor _ in range(q):\n    op=input().split()\n    if op[0]=="PUSH": stack.append(int(op[1]))\n    elif op[0]=="POP": print(stack.pop() if stack else "EMPTY")\n    elif op[0]=="TOP": print(stack[-1] if stack else "EMPTY")\n'},
-    {id:'py9',title:'Anagram Check',difficulty:'medium',tags:['Strings','Sorting'],desc:'Print YES if two strings are anagrams, NO otherwise.',example:{input:'listen\nsilent',output:'YES'},constraints:'Lowercase. Lengths ≤ 1000.',tests:[{input:'listen\nsilent',expected:'YES\n'},{input:'hello\nworld',expected:'NO\n'}],starter:'a=input(); b=input()\nprint("YES" if sorted(a)==sorted(b) else "NO")\n'},
-    {id:'py10',title:'Prime Sieve',difficulty:'hard',tags:['Math','Sieve'],desc:'Given N, print count of primes up to N.',example:{input:'10',output:'4'},constraints:'1 ≤ N ≤ 10^6.',tests:[{input:'10',expected:'4\n'},{input:'1',expected:'0\n'},{input:'20',expected:'8\n'}],starter:'n=int(input())\nif n<2: print(0)\nelse:\n    s=[True]*(n+1); s[0]=s[1]=False\n    for i in range(2,int(n**0.5)+1):\n        if s[i]:\n            for j in range(i*i,n+1,i): s[j]=False\n    print(sum(s))\n'},
-    {id:'py11',title:'Recursive Fibonacci',difficulty:'medium',tags:['Recursion','Math'],desc:'Print the Nth Fibonacci number (0-indexed).',example:{input:'7',output:'13'},constraints:'0 ≤ N ≤ 30.',tests:[{input:'7',expected:'13\n'},{input:'0',expected:'0\n'},{input:'10',expected:'55\n'}],starter:'def fib(n): return n if n<=1 else fib(n-1)+fib(n-2)\nprint(fib(int(input())))\n'},
-    {id:'py12',title:'List Comprehension Squares',difficulty:'medium',tags:['Comprehension','Functional'],desc:'Read N integers. Print squares of numbers > 10, sorted descending.',example:{input:'6\n3 15 7 20 12 5',output:'400 225 144'},constraints:'1 ≤ N ≤ 1000.',tests:[{input:'6\n3 15 7 20 12 5',expected:'400 225 144\n'},{input:'3\n1 2 3',expected:'\n'}],starter:'int(input())\nnums=list(map(int,input().split()))\nprint(" ".join(str(x*x) for x in sorted((n for n in nums if n>10),reverse=True)))\n'},
-    {id:'py13',title:'Matrix Multiplication',difficulty:'hard',tags:['2D Arrays','Math'],desc:'Read two N×N matrices A and B, print their product.',example:{input:'2\n1 2\n3 4\n5 6\n7 8',output:'19 22\n43 50'},constraints:'1 ≤ N ≤ 10.',tests:[{input:'2\n1 2\n3 4\n5 6\n7 8',expected:'19 22\n43 50\n'}],starter:'n=int(input())\nA=[list(map(int,input().split())) for _ in range(n)]\nB=[list(map(int,input().split())) for _ in range(n)]\nC=[[sum(A[i][k]*B[k][j] for k in range(n)) for j in range(n)] for i in range(n)]\nfor row in C: print(" ".join(map(str,row)))\n'},
+    {id:'py1',title:'Hello, World!',difficulty:'easy',tags:['I/O','Basics'],
+     desc:'Write a Python program that prints `Hello, World!` to standard output.\n\nThis is the entry point for learning any language.',
+     examples:[{input:'(none)',output:'Hello, World!'}],
+     constraints:['Output must match exactly, including the exclamation mark.','Use a single `print()` statement.'],
+     tests:[{input:'',expected:'Hello, World!\n'}],
+     starter:'print("Hello, World!")\n'},
+
+    {id:'py2',title:'FizzBuzz',difficulty:'easy',tags:['Loops','Conditionals'],
+     desc:'Print all integers from **1 to N**, one per line, with the following substitutions:\n\n- If the number is divisible by **15**, print `FizzBuzz`\n- If divisible by **3** (but not 15), print `Fizz`\n- If divisible by **5** (but not 15), print `Buzz`\n- Otherwise, print the number itself',
+     examples:[{input:'5',output:'1\n2\nFizz\n4\nBuzz'}],
+     constraints:['`1 <= N <= 100`'],
+     tests:[{input:'5',expected:'1\n2\nFizz\n4\nBuzz\n'}],
+     starter:'n=int(input())\nfor i in range(1,n+1):\n    if i%15==0: print("FizzBuzz")\n    elif i%3==0: print("Fizz")\n    elif i%5==0: print("Buzz")\n    else: print(i)\n'},
+
+    {id:'py3',title:'Palindrome Check',difficulty:'medium',tags:['Strings'],
+     desc:'Read a lowercase string and determine whether it is a **palindrome** — a word that reads the same forwards and backwards.\n\nPrint `YES` if it is a palindrome, `NO` otherwise.',
+     examples:[{input:'racecar',output:'YES',explanation:'"racecar" reversed is still "racecar".'},{input:'hello',output:'NO',explanation:'"hello" reversed is "olleh".'}],
+     constraints:['The string contains only lowercase English letters.','`1 <= length <= 1000`'],
+     tests:[{input:'racecar',expected:'YES\n'},{input:'hello',expected:'NO\n'}],
+     starter:'s=input()\nprint("YES" if s==s[::-1] else "NO")\n'},
+
+    {id:'py4',title:'Sum of List',difficulty:'easy',tags:['Lists','Math'],
+     desc:'Read a line of **space-separated integers** and print their **sum**.\n\nPython\'s built-in `sum()` and `map()` make this a one-liner.',
+     examples:[{input:'1 2 3 4 5',output:'15'},{input:'10 -3 7',output:'14'}],
+     constraints:['All values fit in a 64-bit integer.','There will be at least one integer on the line.'],
+     tests:[{input:'1 2 3 4 5',expected:'15\n'},{input:'10 -3 7',expected:'14\n'}],
+     starter:'print(sum(map(int,input().split())))\n'},
+
+    {id:'py5',title:'Word Frequency',difficulty:'medium',tags:['Dictionary','Strings'],
+     desc:'Read a line of **space-separated words** and count how many times each word appears.\n\nPrint each unique word and its count on a separate line, **sorted alphabetically**.',
+     examples:[{input:'apple banana apple cherry banana apple',output:'apple 3\nbanana 2\ncherry 1'}],
+     constraints:['All words are lowercase.','At most `200` words on the line.','Words are separated by single spaces.'],
+     tests:[{input:'apple banana apple cherry banana apple',expected:'apple 3\nbanana 2\ncherry 1\n'}],
+     starter:'words=input().split()\nfreq={}\nfor w in words: freq[w]=freq.get(w,0)+1\nfor k in sorted(freq): print(k,freq[k])\n'},
+
+    {id:'py6',title:'Caesar Cipher',difficulty:'medium',tags:['Strings','Encryption'],
+     desc:'The **Caesar cipher** is a substitution cipher that shifts each letter of the alphabet by a fixed amount **K**.\n\nGiven a lowercase string **S** and a shift **K**, print the encrypted string.',
+     examples:[{input:'hello 3',output:'khoor',explanation:'h→k, e→h, l→o, l→o, o→r'},{input:'xyz 2',output:'zab',explanation:'Wraps around: x→z, y→a, z→b'}],
+     constraints:['`S` contains only lowercase English letters.','`0 <= K <= 25`'],
+     tests:[{input:'hello 3',expected:'khoor\n'},{input:'xyz 2',expected:'zab\n'}],
+     starter:'p=input().split(); s,k=p[0],int(p[1])\nprint("".join(chr((ord(c)-97+k)%26+97) for c in s))\n'},
+
+    {id:'py7',title:'Binary Search',difficulty:'hard',tags:['Search','Algorithms'],
+     desc:'Given a **sorted** array of N integers and a target value **T**, find the **0-based index** of T using **binary search**.\n\nIf T is not in the array, print `-1`.\n\nBinary search works by repeatedly halving the search range.',
+     examples:[{input:'5\n1 3 5 7 9\n5',output:'2',explanation:'5 is at index 2.'},{input:'4\n2 4 6 8\n5',output:'-1'}],
+     constraints:['`1 <= N <= 10^5`','The array is sorted in ascending order.','`T` fits in a 32-bit integer.'],
+     tests:[{input:'5\n1 3 5 7 9\n5',expected:'2\n'},{input:'4\n2 4 6 8\n5',expected:'-1\n'}],
+     hints:['Set `lo=0`, `hi=n-1`. Compute `mid=(lo+hi)//2`.','If `arr[mid] == T`, return mid. If less, search right half. If greater, search left half.'],
+     starter:'n=int(input()); arr=list(map(int,input().split())); t=int(input())\nlo,hi,res=0,n-1,-1\nwhile lo<=hi:\n    mid=(lo+hi)//2\n    if arr[mid]==t: res=mid; break\n    elif arr[mid]<t: lo=mid+1\n    else: hi=mid-1\nprint(res)\n'},
+
+    {id:'py8',title:'Stack Simulation',difficulty:'hard',tags:['Stack','Data Structures'],
+     desc:'Simulate a **stack** data structure supporting three operations:\n\n- `PUSH x` — push integer x onto the stack\n- `POP` — remove and print the top element\n- `TOP` — print the top element without removing it\n\nFor `POP` and `TOP`, if the stack is empty, print `EMPTY`.',
+     examples:[{input:'4\nPUSH 5\nPUSH 3\nTOP\nPOP',output:'3\n3',explanation:'Stack becomes [5, 3]. TOP returns 3. POP removes and returns 3.'}],
+     constraints:['`1 <= Q <= 1000`','Pushed values fit in a 32-bit integer.'],
+     tests:[{input:'4\nPUSH 5\nPUSH 3\nTOP\nPOP',expected:'3\n3\n'},{input:'2\nPOP\nTOP',expected:'EMPTY\nEMPTY\n'}],
+     starter:'q=int(input()); stack=[]\nfor _ in range(q):\n    op=input().split()\n    if op[0]=="PUSH": stack.append(int(op[1]))\n    elif op[0]=="POP": print(stack.pop() if stack else "EMPTY")\n    elif op[0]=="TOP": print(stack[-1] if stack else "EMPTY")\n'},
+
+    {id:'py9',title:'Anagram Check',difficulty:'medium',tags:['Strings','Sorting'],
+     desc:'Two strings are **anagrams** if one can be rearranged to form the other — they contain the same characters with the same frequencies.\n\nRead two strings and print `YES` if they are anagrams, `NO` otherwise.',
+     examples:[{input:'listen\nsilent',output:'YES',explanation:'Both contain l,i,s,t,e,n exactly once.'},{input:'hello\nworld',output:'NO'}],
+     constraints:['Both strings contain only lowercase English letters.','`1 <= length <= 1000`'],
+     tests:[{input:'listen\nsilent',expected:'YES\n'},{input:'hello\nworld',expected:'NO\n'}],
+     starter:'a=input(); b=input()\nprint("YES" if sorted(a)==sorted(b) else "NO")\n'},
+
+    {id:'py10',title:'Prime Sieve',difficulty:'hard',tags:['Math','Sieve'],
+     desc:'Given **N**, count the number of **prime numbers** in the range **[2, N]** using the **Sieve of Eratosthenes**.\n\nThe sieve works by iteratively marking multiples of each prime as composite.',
+     examples:[{input:'10',output:'4',explanation:'Primes ≤ 10: 2, 3, 5, 7 → count = 4'},{input:'1',output:'0'},{input:'20',output:'8',explanation:'Primes: 2, 3, 5, 7, 11, 13, 17, 19'}],
+     constraints:['`1 <= N <= 10^6`'],
+     tests:[{input:'10',expected:'4\n'},{input:'1',expected:'0\n'},{input:'20',expected:'8\n'}],
+     starter:'n=int(input())\nif n<2: print(0)\nelse:\n    s=[True]*(n+1); s[0]=s[1]=False\n    for i in range(2,int(n**0.5)+1):\n        if s[i]:\n            for j in range(i*i,n+1,i): s[j]=False\n    print(sum(s))\n'},
+
+    {id:'py11',title:'Recursive Fibonacci',difficulty:'medium',tags:['Recursion','Math'],
+     desc:'Write a **recursive** function to return the **Nth Fibonacci number** (0-indexed).\n\nThe Fibonacci sequence: `F(0)=0, F(1)=1, F(n)=F(n-1)+F(n-2)`',
+     examples:[{input:'7',output:'13',explanation:'F(7) = 13: 0,1,1,2,3,5,8,13'},{input:'0',output:'0'},{input:'10',output:'55'}],
+     constraints:['`0 <= N <= 30`'],
+     tests:[{input:'7',expected:'13\n'},{input:'0',expected:'0\n'},{input:'10',expected:'55\n'}],
+     starter:'def fib(n): return n if n<=1 else fib(n-1)+fib(n-2)\nprint(fib(int(input())))\n'},
+
+    {id:'py12',title:'List Comprehension Squares',difficulty:'medium',tags:['Comprehension','Functional'],
+     desc:'Read **N** integers. Using a **list comprehension**, print the **squares** of all numbers **greater than 10**, sorted in **descending** order, space-separated.\n\nIf no numbers qualify, print an empty line.',
+     examples:[{input:'6\n3 15 7 20 12 5',output:'400 225 144',explanation:'Numbers > 10: 15, 20, 12. Squares: 225, 400, 144. Descending: 400, 225, 144.'},{input:'3\n1 2 3',output:''}],
+     constraints:['`1 <= N <= 1000`','All values fit in a 32-bit integer.'],
+     tests:[{input:'6\n3 15 7 20 12 5',expected:'400 225 144\n'},{input:'3\n1 2 3',expected:'\n'}],
+     starter:'int(input())\nnums=list(map(int,input().split()))\nprint(" ".join(str(x*x) for x in sorted((n for n in nums if n>10),reverse=True)))\n'},
+
+    {id:'py13',title:'Matrix Multiplication',difficulty:'hard',tags:['2D Arrays','Math'],
+     desc:'Read two **N × N** matrices **A** and **B** and print their **matrix product** C = A × B.\n\nElement `C[i][j]` is the dot product of row `i` of A with column `j` of B:\n`C[i][j] = sum(A[i][k] * B[k][j] for k in range(N))`',
+     examples:[{input:'2\n1 2\n3 4\n5 6\n7 8',output:'19 22\n43 50',explanation:'C[0][0] = 1×5 + 2×7 = 19, C[0][1] = 1×6 + 2×8 = 22, etc.'}],
+     constraints:['`1 <= N <= 10`','All values fit in a 32-bit integer.'],
+     tests:[{input:'2\n1 2\n3 4\n5 6\n7 8',expected:'19 22\n43 50\n'}],
+     starter:'n=int(input())\nA=[list(map(int,input().split())) for _ in range(n)]\nB=[list(map(int,input().split())) for _ in range(n)]\nC=[[sum(A[i][k]*B[k][j] for k in range(n)) for j in range(n)] for i in range(n)]\nfor row in C: print(" ".join(map(str,row)))\n'},
   ],
   r: [
     {id:'r1',title:'Hello, World!',difficulty:'easy',tags:['I/O','Basics'],desc:'Print <code>Hello, World!</code> using R. Use cat(), not print().',example:{input:'(none)',output:'Hello, World!'},constraints:'Use cat() with \\n.',tests:[{input:'',expected:'Hello, World!\n'}],hints:['cat("Hello, World!\\n") — print() adds [1] prefix which fails tests.'],starter:'cat("Hello, World!\\n")\n'},
@@ -1736,6 +1993,115 @@ function loadRandomProblem() {
   showToast('🎲 Random problem selected!');
 }
 
+/* ─── Mini markdown → HTML renderer ─── */
+function mdToHtml(text) {
+  if (!text) return '';
+  // escape HTML first (only in non-code contexts — we handle code blocks manually)
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // split into blocks: fenced code blocks vs normal text
+  const parts = text.split(/(```[\s\S]*?```)/g);
+  let html = '';
+  parts.forEach(part => {
+    if (part.startsWith('```')) {
+      // fenced code block
+      const inner = part.replace(/^```[^\n]*\n?/, '').replace(/```$/, '');
+      html += `<pre><code>${esc(inner)}</code></pre>`;
+    } else {
+      // normal text: process line by line
+      let block = '';
+      const lines = part.split('\n');
+      let inUL = false;
+      lines.forEach(line => {
+        // bullet list
+        if (/^\s*[*\-]\s+/.test(line)) {
+          if (!inUL) { block += '<ul>'; inUL = true; }
+          const item = line.replace(/^\s*[*\-]\s+/, '');
+          block += `<li>${inlineMarkdown(item, esc)}</li>`;
+        } else {
+          if (inUL) { block += '</ul>'; inUL = false; }
+          // blank line = paragraph break
+          if (line.trim() === '') {
+            if (block && !block.endsWith('</p>') && !block.endsWith('</ul>') && !block.endsWith('</pre>')) {
+              block += '</p><p>';
+            }
+          } else {
+            if (!block || block.endsWith('</p>') || block.endsWith('</ul>') || block.endsWith('</pre>')) {
+              block += '<p>';
+            } else {
+              block += ' '; // join continuation lines with space
+            }
+            block += inlineMarkdown(line.trim(), esc);
+          }
+        }
+      });
+      if (inUL) block += '</ul>';
+      // wrap trailing open paragraph
+      if (block && !block.endsWith('>')) block += '</p>';
+      // clean up empty <p></p>
+      block = block.replace(/<p>\s*<\/p>/g, '').replace(/<p>(<\/?(ul|pre|h[1-6])[^>]*>)/g, '$1').replace(/(<\/(?:ul|pre|h[1-6])>)<\/p>/g, '$1');
+      html += block;
+    }
+  });
+  return html;
+}
+
+function inlineMarkdown(text, esc) {
+  // inline code: `...`
+  text = text.replace(/`([^`]+)`/g, (_, c) => `<code>${esc(c)}</code>`);
+  // bold: **...**
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // italic: *...*
+  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  // also handle HTML entities in raw text (escape non-code portions)
+  // Note: inline code already escaped, rest of text might have < > &
+  // We do a targeted escape only on text nodes (between tags)
+  return text;
+}
+
+/* ─── Build full rich description HTML like LeetCode ─── */
+function buildDescHTML(p) {
+  let html = '';
+
+  // Main description body (supports markdown)
+  html += `<div class="prob-desc">${mdToHtml(p.desc)}</div>`;
+
+  // Examples — numbered
+  if (p.examples && p.examples.length) {
+    p.examples.forEach((ex, i) => {
+      html += `<div class="ex-label">Example ${i+1}:</div>`;
+      let code = '';
+      if (ex.input  !== undefined) code += `<span class="ex-key">Input:</span>  ${ex.input}\n`;
+      if (ex.output !== undefined) code += `<span class="ex-key">Output:</span> ${ex.output}`;
+      if (ex.explanation) code += `\n<span class="ex-key">Explanation:</span> ${ex.explanation}`;
+      html += `<div class="ex-block">${code}</div>`;
+    });
+  } else if (p.example) {
+    // fallback single example
+    html += `<div class="ex-label">Example:</div>`;
+    let code = '';
+    if (p.example.input && p.example.input !== '(none)') code += `<span class="ex-key">Input:</span>  ${p.example.input}\n`;
+    code += `<span class="ex-key">Output:</span> ${p.example.output}`;
+    html += `<div class="ex-block">${code}</div>`;
+  }
+
+  // Constraints
+  if (p.constraints) {
+    html += `<div class="constraints-wrap">
+      <div class="constraints-head">Constraints:</div>
+      <ul class="constraints-list">`;
+    // support both array and string
+    const items = Array.isArray(p.constraints) ? p.constraints : p.constraints.split('\n').filter(Boolean);
+    items.forEach(item => {
+      const cleaned = item.replace(/^\s*[*\-]\s*/, '');
+      html += `<li>${inlineMarkdown(cleaned, s=>s)}</li>`;
+    });
+    html += `</ul></div>`;
+  }
+
+  return html;
+}
+
 function loadProblem(p, el) {
   currentProblem = p;
   document.querySelectorAll('.problem-item').forEach(x => x.classList.remove('active'));
@@ -1750,9 +2116,9 @@ function loadProblem(p, el) {
   document.getElementById('file-tab-name').textContent = FILE_EXT[currentLang];
   document.getElementById('nav-prob-title').textContent = p.title;
 
-  // Populate description panel
+  // Populate description panel header
   const idx = (PROBLEMS[currentLang] || []).indexOf(p) + 1;
-  document.getElementById('pd-number').textContent = `Problem ${idx}`;
+  document.getElementById('pd-number').textContent = `${idx}.`;
   document.getElementById('pd-title').textContent = p.title;
 
   const dc = p.difficulty === 'medium' ? 'med' : p.difficulty;
@@ -1760,31 +2126,20 @@ function loadProblem(p, el) {
     `<span class="diff-badge diff-${dc}">${p.difficulty.charAt(0).toUpperCase()+p.difficulty.slice(1)}</span>` +
     p.tags.map(t => `<span class="tag">${t}</span>`).join('');
 
-  document.getElementById('pd-desc').innerHTML = p.desc;
-
-  // Examples
-  document.getElementById('pd-example-head').style.display = 'block';
-  document.getElementById('pd-examples').innerHTML = `
-    <div class="example-block">
-      <div class="example-row">
-        <div class="example-label">Input</div>
-        <div class="example-val">${p.example.input||'(none)'}</div>
-      </div>
-      <div class="example-row">
-        <div class="example-label">Output</div>
-        <div class="example-val">${p.example.output}</div>
-      </div>
-    </div>`;
-
-  // Constraints
-  document.getElementById('pd-constraints-head').style.display = 'block';
-  const cb = document.getElementById('pd-constraints');
-  cb.style.display = 'block'; cb.textContent = p.constraints;
+  // Rich content (desc + examples + constraints as one block)
+  document.getElementById('pd-desc').innerHTML = buildDescHTML(p);
+  document.getElementById('pd-example-head').style.display = 'none';
+  document.getElementById('pd-examples').innerHTML = '';
+  document.getElementById('pd-constraints-head').style.display = 'none';
+  document.getElementById('pd-constraints').style.display = 'none';
 
   renderHints(p);
   clearOutput();
   renderTests();
   document.getElementById('exec-time').textContent = '';
+
+  // Auto-switch to description tab
+  document.getElementById('desc-tab-btn').click();
 }
 
 function renderHints(p) {
