@@ -345,20 +345,19 @@ html, body {
 .pane-tab.active { color: var(--txt-hi); border-bottom-color: var(--accent); }
 .pane-tab svg { flex-shrink: 0; }
 
-/* Left content area */
-.left-content {
-  flex: 1;
+/* left content wrapper — handled inline */
+
+.left-panel {
+  display: none;
+  position: absolute;
+  inset: 0;
   overflow-y: auto;
-  min-height: 0;
-  padding: 24px 28px;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
-.left-content::-webkit-scrollbar { width: 6px; }
-.left-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-.left-panel { display: none; }
-.left-panel.active { display: block; }
+.left-panel::-webkit-scrollbar { width: 6px; }
+.left-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.left-panel.active { display: flex; flex-direction: column; }
 
 /* Problem panel */
 .prob-number {
@@ -1179,11 +1178,11 @@ html, body {
         </button>
       </div>
 
-      <!-- Left content panels -->
-      <div class="left-content" style="padding:0; display:flex; flex-direction:column; min-height:0;">
+      <!-- Left content panels — only one visible at a time -->
+      <div style="flex:1; min-height:0; overflow:hidden; position:relative; display:flex; flex-direction:column;">
 
         <!-- PROBLEMS LIST PANEL -->
-        <div class="left-panel active" id="panel-problems" style="display:flex;flex-direction:column;height:100%;min-height:0;">
+        <div class="left-panel active" id="panel-problems" style="display:flex;flex-direction:column;height:100%;min-height:0;overflow:hidden;">
 
           <!-- Language pills -->
           <div class="lang-pill-row">
@@ -1217,30 +1216,32 @@ html, body {
         </div>
 
         <!-- DESCRIPTION PANEL -->
-        <div class="left-panel" id="panel-desc" style="padding:28px 32px 40px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:var(--border) transparent;">
+        <div class="left-panel" id="panel-desc">
+          <div style="padding:28px 32px 48px; min-height:0;">
           <div id="pd-number" class="prob-number"></div>
           <div id="pd-title" class="prob-title" style="margin-top:2px">← Select a problem from the list</div>
           <div id="pd-meta" class="prob-meta"></div>
-          <!-- all content rendered here by buildDescHTML -->
           <div id="pd-desc"></div>
-
-          <!-- hidden legacy placeholders (kept for compatibility) -->
           <div class="section-head" id="pd-example-head" style="display:none"></div>
           <div id="pd-examples"></div>
           <div class="section-head" id="pd-constraints-head" style="display:none"></div>
           <div id="pd-constraints" style="display:none"></div>
-
           <div id="hints-section"></div>
+          </div>
         </div>
 
         <!-- SUBMISSIONS PANEL -->
-        <div class="left-panel" id="panel-history" style="padding:20px;overflow-y:auto;flex:1;">
+        <div class="left-panel" id="panel-history">
+          <div style="padding:20px;">
           <div id="history-list"><div class="sub-empty">No submissions yet.<br><span style="font-size:12px;color:var(--txt-lo)">Run your code to see results here.</span></div></div>
+          </div>
         </div>
 
         <!-- LEADERBOARD PANEL -->
-        <div class="left-panel" id="panel-leaderboard" style="padding:20px;overflow-y:auto;flex:1;">
+        <div class="left-panel" id="panel-leaderboard">
+          <div style="padding:20px;">
           <div id="lb-list"><div style="font-size:13px;color:var(--txt-md)">Loading…</div></div>
+          </div>
         </div>
 
       </div>
@@ -2422,12 +2423,8 @@ function loadProblem(p, el) {
   renderTests();
   document.getElementById('exec-time').textContent = '';
 
-  // Switch to Description tab directly
-  document.querySelectorAll('.pane-tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('desc-tab-btn').classList.add('active');
-  document.querySelectorAll('.left-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-desc').classList.add('active');
-  // Scroll description to top
+  // Switch to Description tab
+  switchLeftTab('desc', document.getElementById('desc-tab-btn'));
   document.getElementById('panel-desc').scrollTop = 0;
 }
 
