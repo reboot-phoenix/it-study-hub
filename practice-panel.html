@@ -348,16 +348,18 @@ html, body {
 /* left content wrapper — handled inline */
 
 .left-panel {
-  display: none;
+  display: none !important;
   position: absolute;
   inset: 0;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
+  background: var(--bg-surface);
 }
 .left-panel::-webkit-scrollbar { width: 6px; }
 .left-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-.left-panel.active { display: flex; flex-direction: column; }
+.left-panel.active { display: block !important; }
+#panel-problems.active { display: flex !important; flex-direction: column; overflow: hidden; }
 
 /* Problem panel */
 .prob-number {
@@ -1179,10 +1181,10 @@ html, body {
       </div>
 
       <!-- Left content panels — only one visible at a time -->
-      <div style="flex:1; min-height:0; overflow:hidden; position:relative; display:flex; flex-direction:column;">
+      <div style="flex:1; min-height:0; overflow:hidden; position:relative;">
 
         <!-- PROBLEMS LIST PANEL -->
-        <div class="left-panel active" id="panel-problems" style="display:flex;flex-direction:column;height:100%;min-height:0;overflow:hidden;">
+        <div class="left-panel active" id="panel-problems">
 
           <!-- Language pills -->
           <div class="lang-pill-row">
