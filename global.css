@@ -103,7 +103,27 @@ body.tier-admin {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  cursor: none !important;
+}
+
+/* Custom cursor only on pointer (non-touch) devices */
+@media (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
+
+/* Keyboard focus — visible outline for all interactive elements */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
 }
 
 html { scroll-behavior: smooth; }
@@ -271,8 +291,20 @@ body.tier-admin   nav::after {
   letter-spacing: 0.05em;
 }
 
-.nav-link:hover  { color: var(--accent); }
-.nav-link.active { color: var(--accent); }
+.nav-link:hover      { color: var(--accent); }
+.nav-link.active     { color: var(--accent); }
+
+/* Active nav item — set by JS on current page */
+.nav-links a.nav-active {
+  color: var(--accent);
+  font-weight: 600;
+}
+/* Mobile tap targets — at least 44px tall */
+.nav-links a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
 
 .nav-right {
   display: flex;
@@ -812,6 +844,53 @@ body.tier-admin .admin-strip {
 .btn-lime:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px var(--accent-glow);
+}
+
+.btn-ghost {
+  display: inline-block;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 13px 28px;
+  border-radius: 6px;
+  text-decoration: none;
+  letter-spacing: 1px;
+  border: 1px solid var(--border2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-gold {
+  display: inline-block;
+  background: var(--gold);
+  color: #000;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 13px 28px;
+  border-radius: 6px;
+  text-decoration: none;
+  letter-spacing: 1px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--gold-dim);
+}
+
+/* Hide custom cursor on touch devices */
+@media (pointer: coarse) {
+  .cursor, .cursor-ring, #cur, #curR { display: none !important; }
 }
 
 /* ── RESPONSIVE ── */

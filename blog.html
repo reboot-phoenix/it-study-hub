@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blog — IT Study Hub</title>
+<meta name="description" content="Articles, tutorials, and career tips for TIU IT students. Covering Java, C, Python, tech trends, and interview prep.">
+<title>Developer Blog — IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="pages.css">
@@ -25,11 +26,12 @@
   <div class="nav-right">
     <div class="nav-search">
       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="#6b6b80" stroke-width="1.2"/><path d="M9.5 9.5L12 12" stroke="#6b6b80" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <input type="text" id="searchInput" placeholder="Search articles..." oninput="filterPosts()">
+      <input type="text" id="searchInput" placeholder="Search articles..." oninput="filterPosts()" aria-label="Search blog articles">
     </div>
+    <a href="blog.html" class="nav-link nav-active" aria-current="page">Blog</a>
     <a href="index.html" class="nav-back">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Back Home
+      Home
     </a>
   </div>
 </nav>
@@ -87,7 +89,7 @@
       <div class="hero-stats">
         <div class="h-stat"><span>9</span> Articles</div>
         <div class="h-stat"><span>4</span> Categories</div>
-        <div class="h-stat">Updated <span>May 2026</span></div>
+        <div class="h-stat">Latest <span id="latestDate">May 2026</span></div>
       </div>
     </header>
 
@@ -141,9 +143,9 @@
   </div>
 </div>
 
-<!-- CURSOR -->
-<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
-<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+<!-- CURSOR (styled via global.css — hidden on touch devices) -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
 
 <script>
 // ══════════════════════════════════════════
@@ -560,17 +562,19 @@ function showToast(icon, title, sub) {
   setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-// ── Cursor ──
+// ── Cursor (pointer devices only) ──
 const cur = document.getElementById('cur');
 const curR = document.getElementById('curR');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
-(function anim() {
-  cur.style.left=(mx-5)+'px'; cur.style.top=(my-5)+'px';
-  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-  curR.style.left=(rx-18)+'px'; curR.style.top=(ry-18)+'px';
-  requestAnimationFrame(anim);
-})();
+if (window.matchMedia('(pointer: fine)').matches) {
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+  (function anim() {
+    cur.style.left=(mx-5)+'px'; cur.style.top=(my-5)+'px';
+    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+    curR.style.left=(rx-18)+'px'; curR.style.top=(ry-18)+'px';
+    requestAnimationFrame(anim);
+  })();
+}
 
 function attachCursorHover() {
   document.querySelectorAll('a,button,.post-card,.featured-wrap,.trending-card').forEach(el => {
@@ -580,6 +584,12 @@ function attachCursorHover() {
 }
 
 // ── Init ──
+// Set latest date from posts
+(function() {
+  const latest = POSTS.map(p => new Date(p.date)).sort((a,b) => b-a)[0];
+  const el = document.getElementById('latestDate');
+  if (el && latest) el.textContent = latest.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+})();
 renderCards(POSTS);
 attachCursorHover();
 

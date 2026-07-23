@@ -3,10 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IT Study Hub — TIU</title>
+<meta name="description" content="Free IT learning platform for Techno India University students. 6 programming courses (C, Java, Python, C++, R, JavaScript), placement quizzes, blog, and a practice IDE — all in one place.">
+<meta name="theme-color" content="#c8f135">
+<title>IT Study Hub — Free Programming Courses for TIU Students</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="index-page.css">
+<style>
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+/* Active nav item */
+nav .nav-links li a.nav-active {
+  color: var(--lime, #c8f135);
+  font-weight: 600;
+}
+</style>
 </head>
 <body>
 
@@ -25,9 +35,14 @@
     <li><a href="courses.html">Courses</a></li>
     <li><a href="blog.html">Blog</a></li>
     <li><a href="fileshare.html">File Share</a></li>
-    <li><a href="team.html">Members</a></li>
+    <li><a href="team.html">Community</a></li>
     <li><a href="premium.html" class="nav-premium-link"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;margin-right:4px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Premium</a></li>
   </ul>
+
+  <!-- HAMBURGER (mobile only) -->
+  <button class="nav-hamburger" id="navHamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 
   <!-- AUTH AREA -->
   <div class="nav-auth">
@@ -43,7 +58,7 @@
     </a>
 
     <!-- Shown when logged in (hidden by default) -->
-    <div class="user-avatar-btn" id="userAvatarBtn" onclick="toggleDropdown()">
+    <div class="user-avatar-btn" id="userAvatarBtn" onclick="toggleDropdown()" style="display:none">
       <div class="avatar-circle" id="avatarInitial">?</div>
       <span class="avatar-name" id="avatarName">Student</span>
       <span class="avatar-chevron">▾</span>
@@ -72,6 +87,17 @@
   </div>
 </nav>
 
+<!-- ═══════ MOBILE NAV DRAWER ═══════ -->
+<div class="nav-mobile-drawer" id="mobileDrawer">
+  <button class="nav-mobile-close" id="drawerClose">✕ Close</button>
+  <a href="index.html" class="nav-active">Home</a>
+  <a href="courses.html">Courses</a>
+  <a href="blog.html">Blog</a>
+  <a href="fileshare.html">File Share</a>
+  <a href="team.html">Community</a>
+  <a href="premium.html" class="nav-premium-link">⚡ Premium</a>
+</div>
+
 <!-- ═══════ HERO ═══════ -->
 <section class="hero">
   <div class="hero-bg">
@@ -93,8 +119,8 @@
   </div>
 
   <div class="hero-left">
-    <div class="hero-eyebrow">TIU · Techno India University · ESD Project</div>
-    <h1 class="hero-title">
+    <div class="hero-eyebrow">Free IT Learning Platform · Techno India University</div>
+    <h1 class="hero-title" aria-label="Master Code. Build. Succeed.">
       MASTER<br>
       <span class="highlight">CODE.</span><br>
       <span class="outline">BUILD.</span><br>
@@ -133,7 +159,7 @@
         <div class="t-output">[<span class="t-blue">5</span>] R Programming</div>
         <div class="t-output">[<span class="t-blue">6</span>] <span class="t-accent">JavaScript</span></div>
         <br>
-        <div><span class="t-prompt">$ </span><span class="t-cursor"></span></div>
+        <div><span class="t-prompt">$ </span><span class="t-cursor" style="display:inline-block;width:8px;height:14px;background:#c8f135;vertical-align:middle;animation:blink 1s step-end infinite;"></span></div>
       </div>
     </div>
   </div>
@@ -818,7 +844,7 @@
         <div class="prem-pill">
           <div class="pp-name">Starter</div>
           <div class="pp-price">₹199</div>
-          <div class="pp-tag">1 course</div>
+          <div class="pp-tag">Any 2 courses</div>
         </div>
         <div class="prem-pill prem-pill-active">
           <div class="pp-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:3px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Popular</div>
@@ -837,6 +863,7 @@
         <button class="btn-gold" onclick="window.openPremiumModal('All Courses')">Unlock Premium →</button>
         <a href="premium.html" class="btn-ghost">See All Plans</a>
       </div>
+      <p style="margin-top:14px;font-size:12px;color:var(--muted2,#666);font-weight:300;">Instant access after checkout · Cancel anytime</p>
     </div>
     <div class="prem-right reveal">
       <div class="prem-feature-list">
@@ -918,7 +945,7 @@
       <a href="index.html">Home</a>
       <a href="blog.html">Blog</a>
       <a href="fileshare.html">File Share</a>
-      <a href="team.html">Members</a>
+      <a href="team.html">Community</a>
       <a href="quiz.html">Placement Quiz</a>
       <a href="premium.html"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:3px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Premium</a>
     </div>
@@ -994,7 +1021,7 @@ function updateAuthUI() {
   const ctaBtn    = document.getElementById('ctaSignupBtn');
   if (session && session.name) {
     loginBtn.style.display = 'none';
-    avatarBtn.classList.add('visible');
+    avatarBtn.style.display = 'flex';
     const initials = session.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
     document.getElementById('avatarInitial').textContent = initials;
     document.getElementById('avatarName').textContent = session.name.split(' ')[0];
@@ -1004,7 +1031,7 @@ function updateAuthUI() {
     if (ctaBtn)  { ctaBtn.textContent  = 'Continue Learning →'; ctaBtn.href = 'courses.html'; }
   } else {
     loginBtn.style.display = 'flex';
-    avatarBtn.classList.remove('visible');
+    avatarBtn.style.display = 'none';
   }
 }
 
@@ -1015,6 +1042,27 @@ function handleLogout() {
 }
 
 updateAuthUI();
+
+/* ── Mobile nav ── */
+const hamburger = document.getElementById('navHamburger');
+const drawer    = document.getElementById('mobileDrawer');
+const drawerClose = document.getElementById('drawerClose');
+function openDrawer()  { drawer.classList.add('open');  hamburger.classList.add('open');  document.body.style.overflow='hidden'; }
+function closeDrawer() { drawer.classList.remove('open'); hamburger.classList.remove('open'); document.body.style.overflow=''; }
+hamburger.addEventListener('click', () => drawer.classList.contains('open') ? closeDrawer() : openDrawer());
+drawerClose.addEventListener('click', closeDrawer);
+drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+
+/* ── Active nav highlight ── */
+(function() {
+  const page = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    const href = a.getAttribute('href');
+    if (href === page || (page === '' && href === 'index.html')) {
+      a.classList.add('nav-active');
+    }
+  });
+})();
 </script>
 <script src="premium-modal.js"></script>
 </body>

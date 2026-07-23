@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Courses — IT Study Hub</title>
+<meta name="description" content="6 programming courses for TIU students — C, Java, Python, C++, R, and JavaScript. Beginner to advanced, with placement quizzes and PDF notes.">
+<title>Courses — IT Study Hub | C, Java, Python, C++, R, JavaScript</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="pages.css">
@@ -14,6 +15,7 @@
 <nav>
   <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
   <div class="nav-links">
+      <a href="courses.html" class="nav-link nav-active" aria-current="page">Courses</a>
       <a href="global.html" class="nav-link">Leaderboard</a>
       <a href="blog.html" class="nav-link">Articles</a>
       <a href="support.html" class="nav-link">Support</a>
@@ -26,7 +28,7 @@
     <!-- REAL PROFILE (populated by Firebase) -->
     <div class="profile-mini" id="sidebarProfile">
       <div id="sidebarAvatarWrap" style="margin:0 auto 12px;">
-        <div class="avatar" id="sidebarAvatarInitial">?</div>
+        <div class="avatar" id="sidebarAvatarInitial" aria-hidden="true"></div>
       </div>
       <div style="font-family:var(--ff-display); font-size:15px; font-weight:700;" id="sidebarName">Loading...</div>
       <div style="font-family:var(--ff-mono); font-size:9px; color:var(--lime); margin-top:2px;" id="sidebarEmail" title=""></div>
@@ -130,25 +132,28 @@
     </div>
   </main>
 </div>
-<!-- Custom Cursor -->
-<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
-<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+<!-- Custom Cursor (styled via global.css — hidden on touch devices) -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
 
 <script>
-const c = document.getElementById('cur');
-const r = document.getElementById('curR');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function anim(){
-  c.style.left=(mx-5)+'px'; c.style.top=(my-5)+'px';
-  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-  r.style.left=(rx-18)+'px'; r.style.top=(ry-18)+'px';
-  requestAnimationFrame(anim);
-})();
-document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');
-  el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');
-});
+// Cursor — pointer devices only
+if (window.matchMedia('(pointer: fine)').matches) {
+  const c = document.getElementById('cur');
+  const r = document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function anim(){
+    c.style.left=(mx-5)+'px'; c.style.top=(my-5)+'px';
+    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+    r.style.left=(rx-18)+'px'; r.style.top=(ry-18)+'px';
+    requestAnimationFrame(anim);
+  })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');
+    el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');
+  });
+}
 </script>
 
 <script type="module">
@@ -224,7 +229,8 @@ onAuthStateChanged(auth, async (user) => {
     if (sidebar) {
       const loginPrompt = document.createElement('a');
       loginPrompt.href = 'Login.html';
-      loginPrompt.style.cssText = 'display:block;margin-top:16px;background:var(--lime);color:#000;font-family:var(--ff-mono);font-size:11px;font-weight:700;padding:10px;border-radius:8px;text-align:center;text-decoration:none;letter-spacing:1px;';
+      loginPrompt.className = 'btn-lime';
+      loginPrompt.style.cssText = 'display:block;margin-top:16px;text-align:center;';
       loginPrompt.textContent = 'Sign In →';
       sidebar.appendChild(loginPrompt);
     }

@@ -28,7 +28,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 /* index uses Bebas Neue for display + fixed nav */
-.index-body { cursor: none; }
+/* cursor:none is handled globally in global.css */
 
 /* Fixed nav override for index */
 nav.index-nav {
@@ -94,7 +94,7 @@ nav.index-nav {
   transition: border-color 0.2s;
 }
 .user-avatar-btn:hover   { border-color: var(--lime); }
-.user-avatar-btn.visible { display: flex; }
+/* .visible class removed — avatar show/hide is handled via inline display style in JS */
 
 .avatar-circle {
   width: 26px; height: 26px;
@@ -461,6 +461,18 @@ body.global-grid-bg::after {
 .post-thumb { width: 100%; height: 170px; display: flex; align-items: center; justify-content: center; font-size: 48px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
 .post-thumb::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at center,rgba(255,255,255,0.03),transparent 70%); }
 
+/* Per-category thumbnail accent colours */
+.post-thumb-trend    { background: linear-gradient(135deg,#05080a,#0d1a10); }
+.post-thumb-tutorial { background: linear-gradient(135deg,#05080f,#0a0f1a); }
+.post-thumb-career   { background: linear-gradient(135deg,#090708,#1a120a); }
+.post-thumb-tips     { background: linear-gradient(135deg,#080510,#110a1a); }
+
+/* Subtle left border accent per category */
+.post-thumb-trend::before    { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--lime); }
+.post-thumb-tutorial::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--blue); }
+.post-thumb-career::before   { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--gold); }
+.post-thumb-tips::before     { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:#a78bfa; }
+
 .post-cat-tag { position: absolute; bottom: 10px; left: 10px; font-family: var(--ff-mono); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border); background: rgba(4,4,10,0.8); backdrop-filter: blur(4px); }
 .post-cat-tag.cat-tutorial { color: #60a5fa; border-color: rgba(96,165,250,0.3); }
 .post-cat-tag.cat-career   { color: var(--gold); border-color: rgba(247,183,49,0.3); }
@@ -821,7 +833,8 @@ body.global-grid-bg::after {
    [LOGIN]  Login.html
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-body.login-body { display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; min-height: 100vh; }
+body.login-body { min-height: 100vh; }
+.login-layout { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; overflow: hidden; }
 
 .left-panel { position: relative; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 48px; overflow: hidden; }
 .left-panel::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(200,241,53,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(200,241,53,0.04) 1px,transparent 1px); background-size: 48px 48px; pointer-events: none; }
@@ -858,16 +871,17 @@ label.login-label { display: block; font-family: var(--ff-mono); font-size: 11px
 .input-wrap  { position: relative; }
 .input-icon  { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; font-size: 15px; }
 
-input[type="email"],
-input[type="password"],
-input[type="text"] {
+/* Login-scoped input styles — only applies inside .auth-box */
+.auth-box input[type="email"],
+.auth-box input[type="password"],
+.auth-box input[type="text"] {
   width: 100%; padding: 13px 14px 13px 40px;
   background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
   color: var(--text); font-family: var(--ff-body); font-size: 14px;
   outline: none; transition: border-color 0.2s, background 0.2s;
 }
-input::placeholder { color: var(--muted); }
-input:focus { border-color: var(--border-active); }
+.auth-box input::placeholder { color: var(--muted); }
+.auth-box input:focus { border-color: var(--border-active); }
 
 /* Drag-to-authenticate slider */
 .drag-thumb { cursor: grab !important; }
@@ -972,8 +986,7 @@ nav.premium-nav { position: fixed; top: 0; left: 0; right: 0; padding: 20px 48px
 .prem-cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px,5vw,64px); line-height: 1; letter-spacing: 2px; margin-bottom: 16px; }
 .prem-cta-sub   { font-size: 15px; color: var(--muted2); margin-bottom: 32px; font-weight: 300; line-height: 1.7; }
 
-.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+/* .reveal / .reveal.visible defined in index-page.css — not repeated here */
 
 @media (max-width: 900px) { .prem-hero,.compare-section,.pricing-section,.perks-section,.faq-section,.prem-cta { padding: 60px 24px; } .pricing-grid,.perks-grid { grid-template-columns: 1fr; } nav.premium-nav { padding: 18px 24px; } }
 
@@ -1015,8 +1028,7 @@ body.profile-bg::after { content: ''; position: fixed; inset: 0; background-imag
 .stat-mini-val   { font-family: var(--ff-display); font-size: 32px; margin-bottom: 4px; }
 .stat-mini-label { font-family: var(--ff-mono); font-size: 10px; color: var(--muted2); letter-spacing: 1px; text-transform: uppercase; }
 
-.btn-ghost  { background: transparent; color: var(--text); border: 1px solid var(--border2); border-radius: 8px; padding: 11px 22px; font-family: var(--ff-mono); font-size: 11px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px; }
-.btn-ghost:hover { border-color: var(--lime); color: var(--lime); }
+/* btn-ghost and btn-gold are defined globally in global.css */
 .btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(255,95,86,0.2); border-radius: 8px; padding: 11px 22px; font-family: var(--ff-mono); font-size: 11px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px; }
 .btn-danger:hover { background: rgba(255,95,86,0.08); }
 
@@ -1140,8 +1152,11 @@ body.admin-bg::after { content: ''; position: fixed; inset: 0; background-image:
    [QUIZ]  quiz.html
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-/* quiz uses Space Mono + Syne (no JetBrains) */
-:root {
+/* quiz level colour tokens — scoped to avoid polluting :root */
+.quiz-container,
+#quizScreen,
+#subjectScreen,
+#resultScreen {
   --beginner:    #43e97b;
   --intermediate:#f7b731;
   --advanced:    #ff6584;
