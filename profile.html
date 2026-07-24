@@ -3,11 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Your IT Study Hub profile — track XP, streaks, quiz scores, badges and premium status.">
 <title>My Profile — IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@media (pointer: fine) { *, *::before, *::after { cursor: none !important; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
 
 :root {
   --lime:  #c8f135;
@@ -84,9 +89,21 @@ nav {
   margin-bottom: 24px;
 }
 .banner-bg {
-  height: 140px;
-  background: linear-gradient(135deg, rgba(200,241,53,0.08) 0%, rgba(96,165,250,0.06) 50%, rgba(167,139,250,0.08) 100%);
+  height: 160px;
+  background: linear-gradient(120deg,
+    rgba(200,241,53,0.12) 0%,
+    rgba(96,165,250,0.10) 30%,
+    rgba(167,139,250,0.12) 60%,
+    rgba(247,183,49,0.08) 100%
+  );
+  background-size: 300% 300%;
+  animation: bannerShift 8s ease infinite;
   position: relative;
+}
+@keyframes bannerShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 .banner-bg::after {
   content: '';
@@ -127,17 +144,26 @@ nav {
 }
 
 .pfp-edit-btn {
-  position: absolute; bottom: 2px; right: 2px;
-  width: 28px; height: 28px;
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 50%; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s; padding: 0;
-  z-index: 1;
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.55);
+  border-radius: 50%;
+  border: 3px solid var(--bg);
+  outline: 2px solid var(--border-lime);
+  cursor: pointer;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity .2s;
+  padding: 0; z-index: 2;
 }
-.pfp-edit-btn svg { stroke: var(--muted2); }
-.pfp-edit-btn:hover { border-color: var(--lime); background: rgba(200,241,53,0.1); }
-.pfp-edit-btn:hover svg { stroke: var(--lime); }
+.pfp-wrap:hover .pfp-edit-btn { opacity: 1; }
+.pfp-edit-btn svg { stroke: #fff; }
+.pfp-edit-label {
+  font-family: var(--ff-mono); font-size: 8px;
+  color: #fff; letter-spacing: .05em; text-align: center;
+  line-height: 1.2; text-transform: uppercase;
+}
 #pfpInput { display: none; }
 
 /* ── Banner Info ── */
@@ -185,6 +211,35 @@ nav {
 }
 .btn-outline:hover { border-color: rgba(200,241,53,0.35); color: var(--lime); }
 .btn-outline svg { stroke: currentColor; }
+
+/* ── XP Level Bar ── */
+.xp-level-bar-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 20px;
+  margin-bottom: 16px; display: flex; align-items: center; gap: 16px;
+}
+.xp-level-label {
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: .1em;
+  color: var(--muted); text-transform: uppercase; white-space: nowrap;
+}
+.xp-level-info {
+  font-family: var(--ff-display); font-size: 14px; font-weight: 700;
+  color: var(--lime); white-space: nowrap;
+}
+.xp-bar-outer {
+  flex: 1; height: 6px; background: rgba(255,255,255,0.06);
+  border-radius: 4px; overflow: hidden;
+}
+.xp-bar-inner {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--lime), #a8d400);
+  transition: width .8s cubic-bezier(.4,0,.2,1);
+  width: 0%;
+}
+.xp-next-label {
+  font-family: var(--ff-mono); font-size: 10px;
+  color: var(--muted); white-space: nowrap;
+}
 
 /* ── Stats Row ── */
 .stats-row {
@@ -519,13 +574,14 @@ nav {
     <div class="banner-content">
       <!-- Avatar -->
       <div class="pfp-wrap">
-        <img id="pfpImg" class="pfp-img" src="" alt="" onerror="this.style.display='none';document.getElementById('pfpInitials').style.display='flex';">
-        <div id="pfpInitials" class="pfp-initials">?</div>
+        <img id="pfpImg" class="pfp-img" src="" alt="Profile photo" onerror="this.style.display='none';document.getElementById('pfpInitials').style.display='flex';">
+        <div id="pfpInitials" class="pfp-initials"></div>
         <div id="pfpAvatarDisplay" class="pfp-avatar-display"></div>
-        <button class="pfp-edit-btn" onclick="openAvatarModal()" title="Change avatar">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <button class="pfp-edit-btn" onclick="document.getElementById('pfpInput').click()" title="Upload profile photo" aria-label="Change profile photo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span class="pfp-edit-label">Change<br>Photo</span>
         </button>
-        <input type="file" id="pfpInput" accept="image/*" onchange="handlePfpChange(event)">
+        <input type="file" id="pfpInput" accept="image/jpeg,image/png,image/webp,image/gif" onchange="handlePfpChange(event)">
       </div>
       <!-- Info -->
       <div class="banner-info">
@@ -575,6 +631,14 @@ nav {
       <div class="stat-val" id="statStreak" style="color:#ff6b35;">0🔥</div>
       <div class="stat-label">Day Streak</div>
     </div>
+  </div>
+
+  <!-- XP LEVEL BAR -->
+  <div class="xp-level-bar-wrap fade-up" style="animation-delay:.07s;" id="xpLevelBar">
+    <div class="xp-level-label">Level</div>
+    <div class="xp-level-info" id="xpLevelName">—</div>
+    <div class="xp-bar-outer"><div class="xp-bar-inner" id="xpBarInner"></div></div>
+    <div class="xp-next-label" id="xpNextLabel">— XP to next</div>
   </div>
 
   <!-- STREAK HEATMAP -->
@@ -674,9 +738,9 @@ nav {
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- CURSOR -->
-<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
-<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+<!-- CURSOR (styled via global.css — hidden on touch devices) -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
 
 <!-- ════════════════════════════════════════════════════════
      AVATAR PICKER MODAL
@@ -1057,10 +1121,31 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   // ── Stats ──
-  document.getElementById('statXP').textContent = (userData.xp||0).toLocaleString();
-  document.getElementById('chipXP').textContent = (userData.xp||0).toLocaleString() + ' XP';
+  const xp = userData.xp || 0;
+  document.getElementById('statXP').textContent = xp.toLocaleString();
+  document.getElementById('chipXP').textContent = xp.toLocaleString() + ' XP';
   document.getElementById('statQuizzes').textContent = userData.quizzesDone || 0;
   document.getElementById('statStreak').textContent = userData.streak || 0;
+
+  // ── XP Level bar ──
+  const XP_LEVELS = [
+    { name:'Newcomer', min:0 }, { name:'Learner',  min:100 },
+    { name:'Explorer', min:300 }, { name:'Coder',  min:600 },
+    { name:'Builder',  min:1000 }, { name:'Hacker', min:1500 },
+    { name:'Guru',     min:2500 }, { name:'Legend', min:5000 },
+  ];
+  const lvlIdx = XP_LEVELS.reduce((acc,l,i) => xp >= l.min ? i : acc, 0);
+  const curLvl = XP_LEVELS[lvlIdx];
+  const nxtLvl = XP_LEVELS[lvlIdx + 1];
+  document.getElementById('xpLevelName').textContent = `#${lvlIdx+1} ${curLvl.name}`;
+  if (nxtLvl) {
+    const pct = Math.min(100, Math.round(((xp - curLvl.min) / (nxtLvl.min - curLvl.min)) * 100));
+    setTimeout(() => { document.getElementById('xpBarInner').style.width = pct + '%'; }, 300);
+    document.getElementById('xpNextLabel').textContent = `${(nxtLvl.min - xp).toLocaleString()} XP to ${nxtLvl.name}`;
+  } else {
+    setTimeout(() => { document.getElementById('xpBarInner').style.width = '100%'; }, 300);
+    document.getElementById('xpNextLabel').textContent = 'Max Level 🏆';
+  }
 
   // ── Chips & Privileges ──
   if (isAdmin) {
@@ -1269,11 +1354,13 @@ window.closeEditModal = window.closeEditModal;
 </script>
 
 <script>
-const c=document.getElementById('cur'),r=document.getElementById('curR');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function anim(){c.style.left=(mx-5)+'px';c.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=(rx-18)+'px';r.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
-document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');});
+if (window.matchMedia('(pointer: fine)').matches) {
+  const c=document.getElementById('cur'),r=document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function anim(){c.style.left=(mx-5)+'px';c.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=(rx-18)+'px';r.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
+  document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');});
+}
 </script>
 </body>
 </html>

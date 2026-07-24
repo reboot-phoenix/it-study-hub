@@ -36,7 +36,7 @@ const PLANS = [
     tag: '',
     color: '#6b6b80',
     features: [
-      'Unlock 1 course of your choice',
+      'Unlock any 2 courses of your choice',
       'Advanced lesson materials',
       'Downloadable PDF notes',
       'Access for 6 months',
@@ -255,20 +255,22 @@ function buildModal(courseName) {
     if (e.target === overlay) window.closePremiumModal();
   });
 
-  // Hook into the site's custom cursor (scale up on hover)
-  const cursor = document.getElementById('cursor');
-  const ring   = document.getElementById('cursorRing');
-  if (cursor && ring) {
-    overlay.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'scale(2)';
-        ring.style.transform   = 'scale(1.5)';
+  // Hook cursor — support both ID conventions, pointer devices only
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const cursor = document.getElementById('cursor') || document.getElementById('cur');
+    const ring   = document.getElementById('cursorRing') || document.getElementById('curR');
+    if (cursor) {
+      overlay.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursor.style.transform = 'scale(2)';
+          if (ring) ring.style.transform = 'scale(1.5)';
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor.style.transform = 'scale(1)';
+          if (ring) ring.style.transform = 'scale(1)';
+        });
       });
-      el.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'scale(1)';
-        ring.style.transform   = 'scale(1)';
-      });
-    });
+    }
   }
 
   return overlay;
@@ -285,13 +287,15 @@ function showAlreadyPremium(plan) {
     <button class="pm-btn pm-btn-lime" style="margin-top:24px;max-width:200px;" onclick="window.closePremiumModal()">Close ✕</button>
   </div>`;
   // Hook cursor into newly-added button
-  const cursor = document.getElementById('cursor') || document.getElementById('cur');
-  const ring   = document.getElementById('cursorRing') || document.getElementById('curR');
-  if (cursor && ring) {
-    document.querySelectorAll('.pm-already button').forEach(el => {
-      el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2)'; if(ring) ring.style.transform='scale(1.5)'; });
-      el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)'; if(ring) ring.style.transform='scale(1)'; });
-    });
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const cursor = document.getElementById('cursor') || document.getElementById('cur');
+    const ring   = document.getElementById('cursorRing') || document.getElementById('curR');
+    if (cursor) {
+      document.querySelectorAll('.pm-already button').forEach(el => {
+        el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2)'; if(ring) ring.style.transform='scale(1.5)'; });
+        el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)'; if(ring) ring.style.transform='scale(1)'; });
+      });
+    }
   }
 }
 
@@ -434,8 +438,21 @@ window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
             <div style="font-size:56px; margin-bottom:20px;">🎉</div>
             <h2 style="font-family:'Bebas Neue','Syne',sans-serif; font-size:36px; color:#c8f135; margin-bottom:12px;">WELCOME TO ${planName.toUpperCase()}!</h2>
             <p style="color:#9090a8; font-size:14px; margin-bottom:28px;">Your premium access is now active. All locked content is unlocked.</p>
-            <button onclick="window.closePremiumModal(); location.reload();" style="background:#c8f135; color:#000; border:none; padding:14px 32px; border-radius:10px; font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; cursor:pointer; letter-spacing:1px;">START LEARNING →</button>
+            <button class="pm-btn pm-btn-lime" style="max-width:240px;margin:0 auto;" onclick="window.closePremiumModal(); location.reload();">START LEARNING →</button>
           </div>`;
+        // Hook cursor into success button
+        if (window.matchMedia('(pointer: fine)').matches) {
+          const cursor = document.getElementById('cursor') || document.getElementById('cur');
+          const ring   = document.getElementById('cursorRing') || document.getElementById('curR');
+          if (cursor) {
+            modal.querySelectorAll('button').forEach(el => {
+              el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2)'; if(ring) ring.style.transform='scale(1.5)'; });
+              el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)'; if(ring) ring.style.transform='scale(1)'; });
+            });
+          }
+        }
+        // Hide all premium CTAs on the page now that user is premium
+        hidePremiumCTAs('pro');
       }
     },
     modal: {
@@ -462,6 +479,72 @@ window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
     alert('Payment gateway error. Please try again.');
   }
 };
+
+// ── Hide all premium CTAs for users who already paid ──
+function hidePremiumCTAs(plan) {
+  // Replace every "unlock premium" / "get premium" button with a "You're Premium" badge
+  const badge = `<span class="pm-active-badge" style="
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(200,241,53,0.1);
+    border:1px solid rgba(200,241,53,0.3);
+    color:#c8f135;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;font-weight:700;
+    letter-spacing:1px;padding:8px 16px;border-radius:8px;
+    text-transform:uppercase;
+  ">✓ ${plan.charAt(0).toUpperCase()+plan.slice(1)} Active</span>`;
+
+  // Target buttons that call openPremiumModal
+  document.querySelectorAll('[onclick*="openPremiumModal"], [onclick*="openPremiumModal"]').forEach(el => {
+    el.outerHTML = badge;
+  });
+
+  // Target links to premium.html with common CTA text
+  document.querySelectorAll('a[href="premium.html"]').forEach(el => {
+    const text = el.textContent.trim().toLowerCase();
+    if (text.includes('unlock') || text.includes('premium') || text.includes('upgrade') || text.includes('get ')) {
+      el.outerHTML = badge;
+    }
+  });
+
+  // Hide the nav "⚡ Premium" link if user is already premium (optional — keep visible so they can see their plan)
+  // We intentionally leave the nav link in place so users can review their plan
+}
+
+// ── Check premium status on every page load and hide CTAs if paid ──
+async function checkAndHidePremiumCTAs() {
+  try {
+    const session = JSON.parse(localStorage.getItem('ish_session') || 'null');
+    if (!session) return; // not logged in — nothing to do
+
+    const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
+    const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
+
+    const auth = window._fbAuth || getAuth(window._fbApp);
+    const user = await getCurrentUser(auth);
+    if (!user) return;
+
+    const db = window._fbDb || getFirestore(window._fbApp);
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+    const isPremium = data.plan === 'pro' || data.plan === 'elite' || data.isAdmin === true;
+    if (isPremium) {
+      hidePremiumCTAs(data.plan || 'pro');
+    }
+  } catch(e) {
+    // Silently fail — don't break the page if Firestore is unreachable
+    console.warn('premium-modal: checkAndHidePremiumCTAs failed:', e);
+  }
+}
+
+// Run the check after DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', checkAndHidePremiumCTAs);
+} else {
+  checkAndHidePremiumCTAs();
+}
 
 // ── ESC key to close ──
 document.addEventListener('keydown', e => {

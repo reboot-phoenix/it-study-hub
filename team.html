@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Our Team — IT Study Hub</title>
+<meta name="description" content="Meet the B.Sc IT students behind IT Study Hub — built at Techno India University for the ESD 2026 project.">
+<title>Community — IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -13,7 +14,14 @@
     --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;
     --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
   }
-  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none!important}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  @media (prefers-reduced-motion: reduce) {
+    *,*::before,*::after { animation-duration:0.01ms!important; transition-duration:0.01ms!important; }
+  }
+  @media (pointer: fine) {
+    *,*::before,*::after { cursor: none !important; }
+  }
+  .member-item { cursor: default !important; }
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;overflow-x:hidden}
 
@@ -233,7 +241,7 @@
   .contact-strip{
     background:var(--surface);border:1px solid var(--border);
     border-radius:16px;padding:0;overflow:hidden;
-    display:grid;grid-template-columns:repeat(4,1fr)
+    display:grid;grid-template-columns:repeat(2,1fr)
   }
   .contact-item{
     padding:24px 20px;border-right:1px solid var(--border);
@@ -249,7 +257,7 @@
   .contact-item:hover::after{transform:scaleX(1)}
   .ci-icon{font-size:18px;margin-bottom:10px;display:block}
   .ci-label{font-family:var(--ff-mono);font-size:9px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:5px}
-  .ci-val{font-size:12.5px;color:var(--text);font-weight:500;line-height:1.4}
+  .ci-val{font-size:12.5px;color:var(--text);font-weight:500;line-height:1.4;word-break:break-word;}
 
   .social-row{display:flex;gap:6px;margin-top:6px}
   .social-btn{
@@ -280,6 +288,8 @@
 
   /* RESPONSIVE */
   @media(max-width:900px){
+    nav{padding:0 20px;}
+    .nav-links{display:none}
     .layout{grid-template-columns:1fr}
     .sidebar{display:none}
     .main{padding:24px}
@@ -301,11 +311,13 @@
 <nav>
   <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
   <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
     <a href="courses.html" class="nav-link">Courses</a>
-    <a href="global.html" class="nav-link">Leaderboard</a>
-    <a href="blog.html" class="nav-link">Articles</a>
-    <a href="about.html" class="nav-link">About</a>
-    <a href="team.html" class="nav-link active">Team</a>
+    <a href="blog.html" class="nav-link">Blog</a>
+    <a href="fileshare.html" class="nav-link">File Share</a>
+    <a href="team.html" class="nav-link active" aria-current="page">Community</a>
+    <a href="premium.html" class="nav-link" style="color:var(--lime);">⚡ Premium</a>
+  </div>
   </div>
 </nav>
 
@@ -473,22 +485,7 @@
         <div class="contact-item">
           <span class="ci-icon">&#9993;</span>
           <div class="ci-label">Email</div>
-          <div class="ci-val">contact@itstudyhub.dpdns.org</div>
-        </div>
-        <div class="contact-item">
-          <span class="ci-icon">&#128222;</span>
-          <div class="ci-label">Phone</div>
-          <div class="ci-val">+91 9062222240</div>
-        </div>
-        <div class="contact-item">
-          <span class="ci-icon">&#128279;</span>
-          <div class="ci-label">Connect</div>
-          <div class="social-row">
-            <a href="#" class="social-btn" title="Facebook">f</a>
-            <a href="#" class="social-btn" title="Twitter">&#120143;</a>
-            <a href="#" class="social-btn" title="LinkedIn">in</a>
-            <a href="#" class="social-btn" title="Instagram">ig</a>
-          </div>
+          <div class="ci-val"><a href="mailto:contact@itstudyhub.dpdns.org" style="color:inherit;text-decoration:none;word-break:break-all;">contact@itstudyhub.dpdns.org</a></div>
         </div>
       </div>
     </section>
@@ -505,11 +502,12 @@
   </main>
 </div>
 
-<!-- CURSOR -->
-<div id="cur" style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;"></div>
-<div id="curR" style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;"></div>
+<!-- CURSOR (styled via global.css — hidden on touch devices) -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
 
 <script>
+if (window.matchMedia('(pointer: fine)').matches) {
   const c=document.getElementById('cur'),r=document.getElementById('curR');
   let mx=0,my=0,rx=0,ry=0;
   document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
@@ -523,6 +521,7 @@
     el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');
     el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');
   });
+}
 
   const observer=new IntersectionObserver(entries=>{
     entries.forEach(e=>{

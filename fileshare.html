@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>File Share — IT Study Hub</title>
+<meta name="description" content="Download free PDF notes for C, Java, Python, C++, C# and Web Development — curated for TIU IT students.">
+<title>File Share — Free Study Materials | IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="pages.css">
@@ -12,9 +13,13 @@
 
 <nav>
   <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
-  <div class="nav-right">
-    <a href="courses.html" class="nav-back">Courses</a>
-    <a href="index.html" class="nav-back">← Home</a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="courses.html" class="nav-link">Courses</a>
+    <a href="blog.html" class="nav-link">Blog</a>
+    <a href="fileshare.html" class="nav-link active" aria-current="page">File Share</a>
+    <a href="team.html" class="nav-link">Community</a>
+    <a href="premium.html" class="nav-link" style="color:var(--gold);">⚡ Premium</a>
   </div>
 </nav>
 
@@ -71,7 +76,7 @@
     <!-- SEARCH -->
     <div class="search-wrap fade-up" style="animation-delay:0.15s;">
       <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Search files..." oninput="searchFiles()">
+      <input type="text" id="searchInput" placeholder="Search files..." oninput="searchFiles()" aria-label="Search study files">
     </div>
 
     <!-- FILE SECTION -->
@@ -85,8 +90,9 @@
 </div>
 
 <div class="toast" id="toast"></div>
-<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
-<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+<!-- CURSOR (styled via global.css — hidden on touch devices) -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
 
 <script>
 // ── REAL FILES DATA ──
@@ -228,12 +234,14 @@ window.onload = init;
 </script>
 
 <script>
-const c=document.getElementById('cur'),r=document.getElementById('curR');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function anim(){c.style.left=(mx-5)+'px';c.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=(rx-18)+'px';r.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
-document.addEventListener('mouseover',e=>{if(e.target.closest('a,button')){c.style.transform='scale(2)';r.style.transform='scale(1.5)';}});
-document.addEventListener('mouseout',e=>{if(e.target.closest('a,button')){c.style.transform='scale(1)';r.style.transform='scale(1)';}});
+if (window.matchMedia('(pointer: fine)').matches) {
+  const c=document.getElementById('cur'),r=document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function anim(){c.style.left=(mx-5)+'px';c.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=(rx-18)+'px';r.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
+  document.addEventListener('mouseover',e=>{if(e.target.closest('a,button')){c.style.transform='scale(2)';r.style.transform='scale(1.5)';}});
+  document.addEventListener('mouseout',e=>{if(e.target.closest('a,button')){c.style.transform='scale(1)';r.style.transform='scale(1)';}});
+}
 </script>
 </body>
 </html>
