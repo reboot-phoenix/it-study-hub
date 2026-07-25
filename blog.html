@@ -42,11 +42,11 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <span class="sidebar-label">Categories</span>
-    <button class="cat-btn active" onclick="filterByCategory('all', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> All Stories <span class="cat-count">9</span></button>
+    <button class="cat-btn active" onclick="filterByCategory('all', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> All Stories <span class="cat-count">15</span></button>
     <button class="cat-btn" onclick="filterByCategory('trend', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.09 12.26A1 1 0 0 0 5 14h6l-2 8 8.91-10.26A1 1 0 0 0 17 10h-6l2-8Z"/></svg> Tech Trends <span class="cat-count">2</span></button>
-    <button class="cat-btn" onclick="filterByCategory('career', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Career Growth <span class="cat-count">1</span></button>
-    <button class="cat-btn" onclick="filterByCategory('tutorial', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Code Tutorials <span class="cat-count">5</span></button>
-    <button class="cat-btn" onclick="filterByCategory('tips', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.62-1.44 4.9-3.56 6.14L15 17H9l.56-1.86A7.001 7.001 0 0 1 5 9a7 7 0 0 1 7-7Z"/><path d="M9 21h6"/></svg> Study Tips <span class="cat-count">1</span></button>
+    <button class="cat-btn" onclick="filterByCategory('career', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Career Growth <span class="cat-count">3</span></button>
+    <button class="cat-btn" onclick="filterByCategory('tutorial', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Code Tutorials <span class="cat-count">10</span></button>
+    <button class="cat-btn" onclick="filterByCategory('tips', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.62-1.44 4.9-3.56 6.14L15 17H9l.56-1.86A7.001 7.001 0 0 1 5 9a7 7 0 0 1 7-7Z"/><path d="M9 21h6"/></svg> Study Tips <span class="cat-count">3</span></button>
 
     <span class="sidebar-label" style="margin-top:28px;">Trending Now</span>
     <div class="trending-card" onclick="openPost(0)">
@@ -89,7 +89,7 @@
       <div class="hero-eyebrow">Insights & Articles</div>
       <h1 class="hero-title">The <em>Developer</em><br>Blog</h1>
       <div class="hero-stats">
-        <div class="h-stat"><span>9</span> Articles</div>
+        <div class="h-stat"><span>15</span> Articles</div>
         <div class="h-stat"><span>4</span> Categories</div>
         <div class="h-stat">Latest <span id="latestDate">May 2026</span></div>
       </div>
@@ -362,7 +362,51 @@ slow_function()  # slow_function took 1.0012s</code></pre>
     date: 'May 18, 2026',
     readTime: '9 min',
     featured: false,
-    content: ``
+    content: `
+      <p>Ask any C student what scares them most, and the answer is almost always the same: pointers. They're the reason C has a reputation for being "hard". But here's the truth — pointers are just variables that store memory addresses. Once that clicks, everything else follows.</p>
+      <h2>Memory is just a giant array</h2>
+      <p>Think of your computer's RAM as one enormous array of boxes. Each box holds one byte, and each box has an address — a number that identifies its position. When you declare a variable in C, the compiler reserves some of those boxes and gives that location a name.</p>
+      <pre><code>int age = 25;</code></pre>
+      <p>The compiler picks, say, address 1004 in memory, stores the value 25 there, and associates the name <code>age</code> with that address. Every time you use <code>age</code>, you're really saying "go to address 1004 and read what's there."</p>
+      <h2>A pointer is just a variable that holds an address</h2>
+      <pre><code>int age = 25;
+int *ptr = &age;   // ptr stores the address of age
+
+printf("%d
+", age);   // 25  — the value
+printf("%p
+", ptr);   // 0x7fff... — the address
+printf("%d
+", *ptr);  // 25  — dereference: go to that address, read the value</code></pre>
+      <p>The <code>&</code> operator gives you the address of a variable. The <code>*</code> operator (when used on a pointer) follows the address and gives you the value stored there. That's it. Two operators, one concept.</p>
+      <h2>Why pointers exist</h2>
+      <p><strong>1. Efficiency.</strong> Passing a large struct to a function copies the whole thing. Passing a pointer copies just 8 bytes (the address). For arrays and strings, this matters enormously.</p>
+      <p><strong>2. Modifying function arguments.</strong> In C, function arguments are passed by value — the function gets a copy. If you want a function to modify the original variable, you pass its address:</p>
+      <pre><code>void increment(int *n) {
+    (*n)++;   // dereference n, then increment the value at that address
+}
+
+int x = 5;
+increment(&x);
+printf("%d
+", x);   // 6</code></pre>
+      <p><strong>3. Dynamic memory.</strong> <code>malloc()</code> allocates memory on the heap and returns its address. Without pointers, you couldn't use dynamically allocated memory at all.</p>
+      <h2>The most common pointer mistakes</h2>
+      <p><strong>Uninitialized pointers</strong> — declaring <code>int *ptr;</code> without initializing it. ptr contains garbage. Dereferencing it is undefined behavior (usually a segfault). Always initialize: <code>int *ptr = NULL;</code></p>
+      <p><strong>Dangling pointers</strong> — freeing memory but keeping the pointer. The pointer now points to memory that might be reused for something else. Set it to NULL after freeing.</p>
+      <p><strong>Forgetting to dereference</strong> — assigning to <code>ptr</code> instead of <code>*ptr</code> changes what the pointer points to, not the value at that location.</p>
+      <h2>Arrays and pointers are deeply connected</h2>
+      <p>In C, an array name is essentially a pointer to its first element:</p>
+      <pre><code>int arr[3] = {10, 20, 30};
+int *ptr = arr;   // ptr points to arr[0]
+
+printf("%d
+", ptr[1]);   // 20 — pointer arithmetic
+printf("%d
+", *(ptr+2)); // 30 — same thing</code></pre>
+      <p>This is why you can pass arrays to functions as pointers, and why string manipulation in C feels the way it does.</p>
+      <p>Pointers aren't magic. They're the mechanism that connects the abstract world of variable names to the concrete world of memory addresses. Once you internalize that, C becomes dramatically less intimidating.</p>
+    `
   },
   {
     id: 6,
@@ -377,7 +421,56 @@ slow_function()  # slow_function took 1.0012s</code></pre>
     date: 'May 12, 2026',
     readTime: '7 min',
     featured: false,
-    content: ``
+    content: `
+      <p>Most CS students use Git the same way: <code>git add .</code>, <code>git commit -m "changes"</code>, <code>git push</code>. It works — until you're collaborating with three other people and someone's push breaks everything.</p>
+      <p>Git is not just a backup tool. It's a collaboration protocol. Here's the workflow that professional teams actually use — and that interviewers expect you to know.</p>
+      <h2>Why the main branch is sacred</h2>
+      <p>In production teams, nobody ever commits directly to <code>main</code> (or <code>master</code>). The main branch represents the working, deployable state of the project. Every change — no matter how small — goes through a separate branch and a review process before merging.</p>
+      <p>This rule exists because bad code pushed directly to main is immediately in production. Branches create a safety net: you can experiment, break things, and throw away a branch without touching the main codebase.</p>
+      <h2>The standard branch workflow</h2>
+      <pre><code># Start from an up-to-date main branch
+git checkout main
+git pull origin main
+
+# Create a feature branch — use a descriptive name
+git checkout -b feature/user-login-page
+
+# Make your changes, commit regularly
+git add .
+git commit -m "Add login form HTML structure"
+git commit -m "Wire up Firebase Auth to login form"
+git commit -m "Add error handling for invalid credentials"
+
+# Push your branch to GitHub
+git push origin feature/user-login-page</code></pre>
+      <p>Then on GitHub, you open a Pull Request — a formal request to merge your branch into main. Teammates review it, suggest changes, and approve it before it merges.</p>
+      <h2>Writing commit messages that actually help</h2>
+      <p>Bad: <code>"fix stuff"</code>, <code>"changes"</code>, <code>"asdf"</code>. These tell you nothing when you're debugging three months later.</p>
+      <p>Good commit messages follow this pattern: start with a verb in the present tense describing what the commit does to the codebase. One line, under 72 characters.</p>
+      <pre><code>Add null check to user authentication handler
+Fix off-by-one error in pagination logic
+Remove deprecated API endpoint
+Update README with deployment instructions</code></pre>
+      <p>Each commit should represent one logical change. If you're writing "and" in your commit message, it should probably be two commits.</p>
+      <h2>Handling merge conflicts</h2>
+      <p>Merge conflicts happen when two branches changed the same lines of code differently. Git doesn't know which version is correct — so it marks the conflict and asks you to decide:</p>
+      <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+  color: #c8f135;
+=======
+  color: #ffffff;
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/redesign</code></pre>
+      <p>The section between <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> and <code>=======</code> is your version. Below <code>=======</code> is the incoming change. Delete the conflict markers, keep the correct code (or merge both), then commit the resolution.</p>
+      <p>The best way to minimize conflicts: pull from main frequently into your branch (<code>git pull origin main</code>), keep branches short-lived, and communicate with teammates about who's working on what files.</p>
+      <h2>The git commands you'll use daily</h2>
+      <pre><code>git status               # What's changed?
+git diff                 # What exactly changed?
+git log --oneline        # History at a glance
+git stash                # Save uncommitted work temporarily
+git stash pop            # Restore stashed work
+git reset --soft HEAD~1  # Undo last commit, keep changes staged
+git blame filename       # Who wrote each line?</code></pre>
+      <p>Git fluency is one of those skills that feels unnecessary until you're working in a team — and then it becomes essential every single day. Start practicing the branch workflow on your personal projects now so it's second nature by the time it counts.</p>
+    `
   },
   {
     id: 7,
@@ -392,7 +485,41 @@ slow_function()  # slow_function took 1.0012s</code></pre>
     date: 'May 8, 2026',
     readTime: '8 min',
     featured: false,
-    content: ``
+    content: `
+      <p>Big-O notation shows up in every technical interview, every algorithms course, and every serious discussion about code quality. But most students memorize the definitions without understanding what they're actually measuring — which means they can't apply it when it matters.</p>
+      <p>Here's a complete, intuitive breakdown of Big-O that will make algorithm questions feel much less abstract.</p>
+      <h2>What Big-O actually measures</h2>
+      <p>Big-O describes how the runtime (or memory usage) of an algorithm grows as the input size grows. It's not about how fast your code runs on your laptop. It's about the shape of the growth curve.</p>
+      <p>Imagine you're searching for a name in a phonebook. If the phonebook has 1,000 names vs 1,000,000 names, how much longer does your search take? That ratio — how runtime scales with input — is what Big-O captures.</p>
+      <h2>The most common complexities</h2>
+      <p><strong>O(1) — Constant time.</strong> Runtime doesn't depend on input size at all. Accessing an array element by index, checking a HashMap — these are O(1). No matter if you have 10 elements or 10 million, the operation takes the same time.</p>
+      <pre><code>int first = arr[0];  // Always one operation, regardless of arr.length</code></pre>
+      <p><strong>O(log n) — Logarithmic.</strong> Runtime grows slowly as input grows. Binary search is the classic example — each step eliminates half the remaining possibilities. Doubling the input only adds one more step.</p>
+      <pre><code>// Binary search — O(log n)
+int low = 0, high = arr.length - 1;
+while (low &lt;= high) {
+    int mid = (low + high) / 2;
+    if (arr[mid] == target) return mid;
+    else if (arr[mid] &lt; target) low = mid + 1;
+    else high = mid - 1;
+}</code></pre>
+      <p><strong>O(n) — Linear.</strong> Runtime grows proportionally with input size. A single loop over an array is O(n). If you double the input, you double the time.</p>
+      <p><strong>O(n log n) — Linearithmic.</strong> This is the complexity of efficient sorting algorithms — Merge Sort, Quick Sort (average case), Heap Sort. Better than O(n²), which is why these replaced bubble sort for large datasets.</p>
+      <p><strong>O(n²) — Quadratic.</strong> A nested loop where both loops iterate over the input. Bubble sort, insertion sort. For 1,000 elements: 1,000,000 operations. For 10,000 elements: 100,000,000 operations. This is why O(n²) becomes painfully slow at scale.</p>
+      <pre><code>// O(n²) — two nested loops over the same array
+for (int i = 0; i &lt; n; i++) {
+    for (int j = 0; j &lt; n; j++) {
+        // This inner block runs n² times total
+    }
+}</code></pre>
+      <h2>How to analyze your own code</h2>
+      <p>Count loops. One loop = O(n). Nested loops = multiply: two nested loops over n = O(n²). Loops that halve the remaining work each iteration = O(log n).</p>
+      <p>Drop constants and lower-order terms. O(2n) is just O(n). O(n² + n) is just O(n²). Big-O describes growth rate, and constants don't change the shape of that curve at scale.</p>
+      <p>Look for hidden loops. String concatenation in a loop is O(n²) in languages that create new string objects (like Java's <code>+</code> operator). Using StringBuilder instead makes it O(n). HashMap lookups inside a loop look like O(n) outer loop × O(1) lookup = O(n) total.</p>
+      <h2>Space complexity matters too</h2>
+      <p>Big-O applies to memory as well. A recursive function that calls itself n times deep uses O(n) stack space. Creating a new array of size n uses O(n) space. In-place sorting algorithms like Heap Sort use O(1) space — a real advantage in memory-constrained environments.</p>
+      <p>When interviewers ask about complexity, always address both time and space. "This solution is O(n) time and O(1) space" signals a deeper understanding than just the runtime.</p>
+    `
   },
   {
     id: 8,
@@ -407,10 +534,562 @@ slow_function()  # slow_function took 1.0012s</code></pre>
     date: 'May 25, 2026',
     readTime: '10 min',
     featured: false,
-    content: ``
+    content: `
+      <p>IT Study Hub started as a submission for our End Semester Development (ESD) project at Techno India University. Four B.Sc IT students, one semester, and a goal: build something that would actually help the students who came after us.</p>
+      <p>This is the behind-the-scenes story of how we built it — the architecture decisions, the things that broke, and what we learned.</p>
+      <h2>The problem we were solving</h2>
+      <p>TIU's IT curriculum covers C, Java, Python, C++, and web technologies. Good courses — but the learning materials were scattered. Notes were on WhatsApp. Video explanations were on random YouTube channels. Practice questions were photocopied from textbooks. There was no single place where a student could go from "I don't understand this concept" to "I've practiced it and tested myself."</p>
+      <p>We wanted to build that place.</p>
+      <h2>The tech stack we chose — and why</h2>
+      <p><strong>Frontend: Pure HTML, CSS, JavaScript.</strong> No React, no Next.js. This was a deliberate choice. We wanted the site to be fast, deployable on GitHub Pages without a build step, and understandable by all four of us regardless of framework experience. Every page is a plain HTML file. The complexity comes from JavaScript modules, not framework abstractions.</p>
+      <p><strong>Backend: Firebase.</strong> Firebase Authentication handles login (magic links — no passwords to manage). Firestore stores user data, XP, quiz scores, and course progress. Firebase Storage handles profile photo uploads. We get a real-time database, authentication, and file storage without managing any servers.</p>
+      <p><strong>Payments: Razorpay.</strong> For our premium tier. Razorpay's test mode made development easy, and the webhook system updates user plan status in Firestore automatically after payment.</p>
+      <p><strong>Hosting: GitHub Pages.</strong> Free, fast, and deploys on every git push. For a static site, it's the obvious choice.</p>
+      <h2>The drag-to-login system</h2>
+      <p>Our favorite feature — and the one that took the longest to get right. Instead of a standard "click to submit" login button, we built a drag slider that users slide across to trigger the login. It's a CAPTCHA-style interaction that prevents bot submissions while feeling genuinely satisfying to use.</p>
+      <p>Under the hood, it's a custom CSS track + thumb element with mouse/touch event listeners tracking the drag distance. When the thumb reaches the right end, it triggers the Firebase auth flow. We integrated Cloudflare Turnstile as an additional bot-protection layer before the actual magic link email gets sent.</p>
+      <h2>The XP system</h2>
+      <p>We built a gamified XP engine (<code>xp-engine.js</code>) that awards points for completing quiz questions, passing code challenges, and finishing course modules. XP is stored in Firestore and feeds into a global leaderboard. The key design constraint: XP actions are idempotent — the same action key can only award XP once per user, enforced both client-side (localStorage cache) and server-side (Firestore earnedXPKeys array).</p>
+      <h2>What broke (and how we fixed it)</h2>
+      <p><strong>The cursor on mobile.</strong> We built a custom cursor with a lime dot that follows the mouse. On touchscreens, there's no mouse — but the cursor JS was still running, consuming CPU with an empty animation loop. Fix: <code>window.matchMedia('(pointer: fine)').matches</code> to detect pointer devices before initializing the cursor.</p>
+      <p><strong>Firestore security rules.</strong> Our initial rules were too permissive — any authenticated user could read any other user's data. We tightened the rules so users can only read and write their own documents: <code>allow read, write: if request.auth.uid == userId;</code></p>
+      <p><strong>The premium modal on paid users.</strong> Paid users were still seeing "Unlock Premium" buttons throughout the site. We built <code>checkAndHidePremiumCTAs()</code> in <code>premium-modal.js</code> — it runs on every page load, checks Firestore for the user's plan, and replaces all upgrade buttons with an "Active" badge.</p>
+      <h2>What we'd do differently</h2>
+      <p>We'd use a proper component system from the start. Our nav HTML is copy-pasted across 20+ files — a change to the nav means editing every file. A simple HTML include system or web components would have saved hours of work.</p>
+      <p>We'd also write the CSS architecture first. Our stylesheets grew organically and ended up with duplicate rules across global.css, pages.css, and inline styles. A CSS custom property system and a clear specificity hierarchy from day one would have kept things cleaner.</p>
+      <p>But the things we got right — Firebase's real-time database, the XP system, the practice IDE with Judge0 code execution, the Razorpay integration — those worked better than we expected. Shipping something real, with real users and real payments, taught us more than any tutorial ever could.</p>
+      <p>The site is live at itstudyhub.dpdns.org. If you're a TIU student reading this — it was built for you.</p>
+    `
+  }
+
+  ,{
+    id: 9,
+    slug: 'c-programming-for-beginners-tiu',
+    title: 'C Programming Complete Beginner Guide for TIU Students',
+    excerpt: 'Starting C from zero? This guide covers everything the TIU B.Sc IT syllabus expects — variables, loops, functions, arrays and pointers.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '⚙️',
+    author: 'Dithsa Dutta',
+    authorEmoji: '👨‍💻',
+    date: 'Jun 2, 2026',
+    readTime: '10 min',
+    featured: false,
+    content: `
+      <p>C is the first real programming language most TIU B.Sc IT students encounter. It has no garbage collector, no fancy standard library, and no hand-holding. That's exactly what makes it the perfect first language — it forces you to understand what a computer actually does.</p>
+      <p>This guide covers everything the TIU syllabus expects, structured the way exams test it.</p>
+      <h2>Why C still matters in 2026</h2>
+      <p>C powers Linux, Windows, macOS, iOS, Android, every major database, and virtually every embedded system on the planet. When you learn C, you're learning the foundation that everything else is built on. Java's JVM is written in C. Python's interpreter is written in C. Understanding C makes you better at every language that came after it.</p>
+      <h2>The structure of a C program</h2>
+      <pre><code>#include &lt;stdio.h&gt;   // Header file for input/output functions
+
+int main() {           // Every C program starts from main()
+    printf("Hello, TIU!\n");  // Print to screen
+    return 0;          // 0 means success
+}</code></pre>
+      <p>Every C program has exactly one <code>main()</code> function. Execution starts there. <code>#include</code> directives tell the compiler to bring in external functionality — <code>stdio.h</code> gives you <code>printf()</code> and <code>scanf()</code>.</p>
+      <h2>Data types you must know</h2>
+      <pre><code>int age = 20;           // Integer: whole numbers
+float gpa = 8.5f;       // Float: decimal (less precise)
+double salary = 50000.0; // Double: decimal (more precise)
+char grade = 'A';       // Single character
+char name[50];          // String: array of characters</code></pre>
+      <h2>Control flow</h2>
+      <pre><code>// If-else
+if (marks >= 60) {
+    printf("Pass\n");
+} else if (marks >= 40) {
+    printf("Compartment\n");
+} else {
+    printf("Fail\n");
+}
+
+// For loop — use when you know the count
+for (int i = 0; i < 10; i++) {
+    printf("%d ", i);
+}
+
+// While loop — use when you don't know the count
+int n;
+scanf("%d", &n);
+while (n > 0) {
+    printf("%d\n", n % 10);  // Print last digit
+    n /= 10;
+}</code></pre>
+      <h2>Functions</h2>
+      <p>Functions are the building blocks of structured C programs. Declaration → Definition → Call:</p>
+      <pre><code>// Declaration (tell compiler it exists)
+int add(int a, int b);
+
+// Definition (what it actually does)
+int add(int a, int b) {
+    return a + b;
+}
+
+// Call
+int result = add(5, 3);  // result = 8</code></pre>
+      <h2>Arrays — the most tested topic in TIU exams</h2>
+      <pre><code>int marks[5] = {85, 90, 78, 92, 88};
+
+// Access: zero-indexed
+printf("%d\n", marks[0]);  // 85
+printf("%d\n", marks[4]);  // 88
+
+// Traverse with a loop
+int sum = 0;
+for (int i = 0; i < 5; i++) {
+    sum += marks[i];
+}
+printf("Average: %.1f\n", (float)sum / 5);</code></pre>
+      <h2>Strings in C</h2>
+      <p>C has no native String type. Strings are arrays of <code>char</code> ending with a null terminator <code>\0</code>:</p>
+      <pre><code>#include &lt;string.h&gt;
+
+char name[20] = "Dithsa";
+printf("Length: %lu\n", strlen(name));  // 6
+strcpy(name, "TIU Student");            // Copy string
+strcat(name, " 2026");                  // Concatenate</code></pre>
+      <h2>Common exam questions and their patterns</h2>
+      <p><strong>Fibonacci series</strong> — loop with two previous values. <strong>Factorial</strong> — loop multiplying from 1 to n (or recursion). <strong>Palindrome check</strong> — compare string from both ends. <strong>Prime number</strong> — check divisibility from 2 to √n. <strong>Sorting</strong> — know Bubble Sort (nested loop, swap adjacent).</p>
+      <p>Practice these until you can write them from memory. They appear in TIU semester exams in one form or another every year.</p>
+    `
+  }
+  ,{
+    id: 10,
+    slug: 'java-oops-concepts-explained',
+    title: 'Java OOP Concepts Explained Simply — Classes, Inheritance, Polymorphism',
+    excerpt: 'Object-Oriented Programming in Java — the four pillars explained with clear examples that match what TIU exams actually test.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '☕',
+    author: 'Mithila Rani Saha',
+    authorEmoji: '🌸',
+    date: 'Jun 5, 2026',
+    readTime: '11 min',
+    featured: false,
+    content: `
+      <p>Object-Oriented Programming is the foundation of Java and most modern software development. TIU's Java syllabus centers on four pillars: Encapsulation, Inheritance, Polymorphism, and Abstraction. Here's each one explained from scratch with real code examples.</p>
+      <h2>Classes and Objects — the building blocks</h2>
+      <p>A class is a blueprint. An object is an instance built from that blueprint.</p>
+      <pre><code>class Student {
+    // Fields (attributes)
+    String name;
+    int rollNo;
+    double gpa;
+
+    // Constructor — called when you create an object
+    Student(String name, int rollNo, double gpa) {
+        this.name = name;
+        this.rollNo = rollNo;
+        this.gpa = gpa;
+    }
+
+    // Method (behaviour)
+    void displayInfo() {
+        System.out.println(name + " | Roll: " + rollNo + " | GPA: " + gpa);
+    }
+}
+
+// Creating objects
+Student s1 = new Student("Dithsa", 101, 9.2);
+Student s2 = new Student("Mithila", 102, 8.8);
+s1.displayInfo();  // Dithsa | Roll: 101 | GPA: 9.2</code></pre>
+      <h2>Pillar 1: Encapsulation</h2>
+      <p>Encapsulation means hiding internal data behind controlled access. Use <code>private</code> fields and <code>public</code> getters/setters:</p>
+      <pre><code>class BankAccount {
+    private double balance;  // Can't be accessed directly
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) balance += amount;  // Controlled modification
+    }
+}</code></pre>
+      <p>Why? You control how data changes. No external code can set balance to -5000 accidentally.</p>
+      <h2>Pillar 2: Inheritance</h2>
+      <p>A child class inherits fields and methods from a parent class using <code>extends</code>:</p>
+      <pre><code>class Animal {
+    String name;
+    void eat() { System.out.println(name + " is eating"); }
+}
+
+class Dog extends Animal {
+    void bark() { System.out.println(name + " says: Woof!"); }
+}
+
+Dog d = new Dog();
+d.name = "Bruno";
+d.eat();   // Inherited from Animal
+d.bark();  // Dog's own method</code></pre>
+      <p><strong>super</strong> keyword calls the parent class constructor or method. Use it when the child needs to initialize the parent's fields.</p>
+      <h2>Pillar 3: Polymorphism</h2>
+      <p>One interface, many behaviors. Two types:</p>
+      <p><strong>Method Overloading</strong> (compile-time) — same method name, different parameters:</p>
+      <pre><code>class Calculator {
+    int add(int a, int b) { return a + b; }
+    double add(double a, double b) { return a + b; }
+    int add(int a, int b, int c) { return a + b + c; }
+}</code></pre>
+      <p><strong>Method Overriding</strong> (runtime) — child redefines a parent's method:</p>
+      <pre><code>class Shape {
+    double area() { return 0; }
+}
+
+class Circle extends Shape {
+    double radius;
+    Circle(double r) { radius = r; }
+
+    @Override
+    double area() { return Math.PI * radius * radius; }
+}
+
+class Rectangle extends Shape {
+    double width, height;
+    Rectangle(double w, double h) { width = w; height = h; }
+
+    @Override
+    double area() { return width * height; }
+}
+
+// Polymorphic usage
+Shape s = new Circle(5);
+System.out.println(s.area());  // 78.53... — Circle's area() runs</code></pre>
+      <h2>Pillar 4: Abstraction</h2>
+      <p>Hiding implementation details, showing only what's necessary. Two mechanisms: abstract classes and interfaces.</p>
+      <pre><code>// Abstract class — can have both abstract and concrete methods
+abstract class Vehicle {
+    abstract void start();  // Must be implemented by subclass
+    void stop() { System.out.println("Vehicle stopped"); }  // Shared
+}
+
+// Interface — pure contract, all methods abstract (before Java 8)
+interface Flyable {
+    void fly();
+    void land();
+}</code></pre>
+      <p>Key difference: a class can <code>implements</code> multiple interfaces but can only <code>extends</code> one abstract class. In exams, if asked "how does Java achieve multiple inheritance?" — the answer is interfaces.</p>
+      <h2>The exam questions to master</h2>
+      <p>Write a program to demonstrate runtime polymorphism using method overriding. Create an abstract class Shape with subclasses Circle, Rectangle, Triangle. Implement an interface Drawable with multiple classes. Show constructor chaining using super(). These four scenarios cover 80% of TIU Java exam questions on OOP.</p>
+    `
+  }
+  ,{
+    id: 11,
+    slug: 'python-placement-preparation-guide',
+    title: 'Python for Placement: Complete Interview Preparation Guide',
+    excerpt: 'Everything TIU students need to crack Python-based placement interviews — from data structures to commonly asked coding questions.',
+    category: 'career',
+    catLabel: 'Career',
+    emoji: '🐍',
+    author: 'Snehanshu Sarkar',
+    authorEmoji: '🐍',
+    date: 'Jun 8, 2026',
+    readTime: '13 min',
+    featured: false,
+    content: `
+      <p>Python has become the most common language in entry-level and fresher placement interviews. It's readable, quick to write, and companies know you can show your thinking clearly without fighting the language. Here's everything you need to go from "I know Python basics" to "I can handle a Python interview."</p>
+      <h2>What companies actually test</h2>
+      <p>Placement interviews at Indian IT companies (TCS, Infosys, Wipro, Accenture, Cognizant) typically test: string manipulation, list operations, basic algorithms, and occasionally OOP. Product companies (startups, mid-size tech) go deeper: data structures, dynamic programming, and system design basics.</p>
+      <h2>Python built-ins every interviewer expects you to know</h2>
+      <pre><code># List comprehensions — elegant and fast
+squares = [x**2 for x in range(10)]
+evens = [x for x in range(20) if x % 2 == 0]
+
+# Dictionary operations
+freq = {}
+for ch in "itstudyhub":
+    freq[ch] = freq.get(ch, 0) + 1
+# Simpler with Counter:
+from collections import Counter
+freq = Counter("itstudyhub")
+
+# Sorting with key
+students = [("Dithsa", 9.2), ("Mithila", 8.8), ("Argha", 9.0)]
+students.sort(key=lambda x: x[1], reverse=True)  # Sort by GPA, descending
+
+# String methods you must know
+s = "  Hello TIU  "
+s.strip()        # "Hello TIU"
+s.lower()        # "  hello tiu  "
+s.split()        # ["Hello", "TIU"]
+"_".join(["IT", "Study", "Hub"])  # "IT_Study_Hub"
+s[::-1]          # Reverse string — the most common interview trick</code></pre>
+      <h2>The 10 most commonly asked Python interview problems</h2>
+      <p><strong>1. Reverse a string</strong> — <code>s[::-1]</code> or loop from end to start.</p>
+      <p><strong>2. Check palindrome</strong> — <code>s == s[::-1]</code>.</p>
+      <p><strong>3. Count vowels</strong> — loop and check <code>if ch in 'aeiouAEIOU'</code>.</p>
+      <p><strong>4. Find duplicates in a list</strong> — use a set to track seen elements.</p>
+      <p><strong>5. Fibonacci series</strong> — loop with two variables, or recursion with memoization.</p>
+      <pre><code>def fibonacci(n):
+    a, b = 0, 1
+    for _ in range(n):
+        print(a, end=" ")
+        a, b = b, a + b</code></pre>
+      <p><strong>6. Anagram check</strong> — <code>sorted(s1) == sorted(s2)</code> or Counter comparison.</p>
+      <p><strong>7. Two Sum</strong> — use a dictionary for O(n) solution instead of nested loops.</p>
+      <pre><code>def two_sum(nums, target):
+    seen = {}
+    for i, num in enumerate(nums):
+        complement = target - num
+        if complement in seen:
+            return [seen[complement], i]
+        seen[num] = i</code></pre>
+      <p><strong>8. Maximum subarray sum</strong> — Kadane's algorithm.</p>
+      <p><strong>9. Binary search</strong> — know both iterative and recursive implementations.</p>
+      <p><strong>10. Remove duplicates from list</strong> — <code>list(dict.fromkeys(lst))</code> to preserve order, <code>list(set(lst))</code> if order doesn't matter.</p>
+      <h2>OOP questions to prepare</h2>
+      <pre><code>class Stack:
+    def __init__(self):
+        self.items = []
+
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        if not self.is_empty():
+            return self.items.pop()
+
+    def peek(self):
+        return self.items[-1] if self.items else None
+
+    def is_empty(self):
+        return len(self.items) == 0
+
+    def size(self):
+        return len(self.items)</code></pre>
+      <p>Implement a Stack, Queue, and Linked Node class. These three appear in almost every OOP-focused interview round.</p>
+      <h2>The interview mindset</h2>
+      <p>Think out loud. Start with brute force. Mention time complexity unprompted — "this is O(n²), but we can improve to O(n) using a hash map." Ask clarifying questions before coding: "Can the list contain duplicates? What if the input is empty?"</p>
+      <p>Python's readability is your advantage. Use it. Write clean, properly named code. An interviewer reading <code>for char in string</code> understands immediately. <code>for x in s</code> makes them work harder.</p>
+    `
+  }
+  ,{
+    id: 12,
+    slug: 'web-development-roadmap-beginners',
+    title: 'Web Development Roadmap for Absolute Beginners — 2026 Edition',
+    excerpt: 'HTML, CSS, JavaScript — what to learn, in what order, and how long it actually takes. A realistic guide for TIU IT students starting from zero.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '🌐',
+    author: 'Mithila Rani Saha',
+    authorEmoji: '🌸',
+    date: 'Jun 10, 2026',
+    readTime: '9 min',
+    featured: false,
+    content: `
+      <p>Every TIU IT student eventually has to learn web development — it's in the syllabus, it's asked in placements, and it's one of the fastest ways to build something real and put it on your resume. But the ecosystem is overwhelming. Frameworks, libraries, tools — where do you even start?</p>
+      <p>Here's an honest, ordered roadmap. Follow it in sequence. Don't skip ahead.</p>
+      <h2>Phase 1: HTML — 2 weeks</h2>
+      <p>HTML is not programming. It's structure. You're describing what content exists on a page and what type of content it is. That's it.</p>
+      <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello World&lt;/h1&gt;
+  &lt;p&gt;This is a paragraph.&lt;/p&gt;
+  &lt;a href="https://itstudyhub.dpdns.org"&gt;Visit IT Study Hub&lt;/a&gt;
+  &lt;img src="photo.jpg" alt="Description of image"&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <p>Learn: headings, paragraphs, links, images, lists, tables, forms, semantic elements (header, nav, main, footer, article, section). Build 3 static pages. Don't touch CSS yet.</p>
+      <h2>Phase 2: CSS — 3 weeks</h2>
+      <p>CSS controls how elements look and where they sit on the page. The two concepts that trip up everyone:</p>
+      <p><strong>The Box Model</strong> — every element is a rectangle. Content → Padding → Border → Margin. Understanding this explains 80% of layout problems.</p>
+      <p><strong>Flexbox</strong> — the modern way to control layout:</p>
+      <pre><code>.container {
+  display: flex;
+  justify-content: space-between;  /* horizontal alignment */
+  align-items: center;             /* vertical alignment */
+  gap: 16px;                       /* space between items */
+}</code></pre>
+      <p>Learn: selectors, box model, flexbox, CSS Grid, responsive design with media queries, CSS variables. Build a portfolio page and a responsive navbar.</p>
+      <h2>Phase 3: JavaScript — 6 weeks</h2>
+      <p>JavaScript makes pages interactive. This is where the actual programming starts.</p>
+      <pre><code>// DOM manipulation — controlling the page from JS
+const btn = document.getElementById('myButton');
+btn.addEventListener('click', () => {
+  document.getElementById('output').textContent = 'Button clicked!';
+});
+
+// Fetch API — getting data from the internet
+fetch('https://api.example.com/data')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error));</code></pre>
+      <p>Learn: variables, functions, arrays, objects, DOM manipulation, events, fetch API, async/await, ES6+ features (arrow functions, destructuring, template literals, modules).</p>
+      <h2>Phase 4: One framework — 4 weeks</h2>
+      <p>After solid JS fundamentals, pick one framework. In 2026, the job market wants:</p>
+      <p><strong>React</strong> — most jobs, largest ecosystem, used by Facebook/Instagram/Airbnb. Steeper learning curve but highest value.</p>
+      <p><strong>Vue</strong> — gentler learning curve, popular in Indian startups.</p>
+      <p>Pick one. Don't try to learn both simultaneously. Build a real project: a todo app, a weather app with a real API, a clone of a simple website you use.</p>
+      <h2>What to build to get hired</h2>
+      <p>Three projects matter more than any certification: a personal portfolio (showcases your CSS and design sense), a CRUD application with a backend (shows you can connect frontend to data), and a clone of a real product (shows you can read existing UIs and replicate them).</p>
+      <p>Put everything on GitHub. Deploy everything — GitHub Pages for static sites, Vercel or Netlify for anything with a framework. A link to a live site in your resume is worth more than a description of what you built.</p>
+    `
+  }
+  ,{
+    id: 13,
+    slug: 'data-structures-tiu-exam-guide',
+    title: 'Data Structures Complete Guide for TIU Semester Exams',
+    excerpt: 'Arrays, linked lists, stacks, queues, trees — everything TIU B.Sc IT students need for data structures exams, with code in C and Java.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '🗂️',
+    author: 'Argha Paul',
+    authorEmoji: '🔷',
+    date: 'Jun 12, 2026',
+    readTime: '12 min',
+    featured: false,
+    content: `
+      <p>Data Structures is one of the most important subjects in the TIU B.Sc IT curriculum — and one of the most heavily tested in both semester exams and placement interviews. This guide covers every structure you need to know, with implementations in both C and Java.</p>
+      <h2>Arrays — the foundation</h2>
+      <p>An array stores elements of the same type in contiguous memory locations. Access by index is O(1). Insertion/deletion in the middle is O(n) because elements must shift.</p>
+      <pre><code>// C
+int arr[5] = {10, 20, 30, 40, 50};
+printf("%d\n", arr[2]);  // 30
+
+// Java
+int[] arr = {10, 20, 30, 40, 50};
+System.out.println(arr[2]);  // 30</code></pre>
+      <h2>Linked Lists</h2>
+      <p>A linked list stores elements as nodes, each containing data and a pointer to the next node. No contiguous memory required. Insertion/deletion is O(1) if you have the node. Access is O(n).</p>
+      <pre><code>// C — Node structure
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+// Insert at beginning
+void insertFront(struct Node **head, int data) {
+    struct Node *newNode = malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = *head;
+    *head = newNode;
+}</code></pre>
+      <p><strong>Types to know:</strong> Singly linked list (next pointer only), Doubly linked list (next and prev pointers), Circular linked list (last node points back to first).</p>
+      <h2>Stacks — LIFO</h2>
+      <p>Last In, First Out. Think of a stack of plates. Operations: push (add to top), pop (remove from top), peek (view top without removing).</p>
+      <pre><code>// Java — Stack using ArrayList
+class Stack {
+    private ArrayList&lt;Integer&gt; items = new ArrayList&lt;&gt;();
+
+    void push(int item) { items.add(item); }
+
+    int pop() {
+        if (isEmpty()) throw new RuntimeException("Stack is empty");
+        return items.remove(items.size() - 1);
+    }
+
+    int peek() { return items.get(items.size() - 1); }
+
+    boolean isEmpty() { return items.isEmpty(); }
+}</code></pre>
+      <p><strong>Applications:</strong> Function call management (call stack), expression evaluation, undo/redo, balanced parentheses checking.</p>
+      <h2>Queues — FIFO</h2>
+      <p>First In, First Out. Think of a queue at a ticket counter. Operations: enqueue (add to rear), dequeue (remove from front).</p>
+      <pre><code>// Circular Queue in C — avoids wasted space
+#define MAX 5
+int queue[MAX], front = -1, rear = -1;
+
+void enqueue(int item) {
+    if ((rear + 1) % MAX == front) { printf("Full\n"); return; }
+    if (front == -1) front = 0;
+    rear = (rear + 1) % MAX;
+    queue[rear] = item;
+}
+
+int dequeue() {
+    if (front == -1) { printf("Empty\n"); return -1; }
+    int item = queue[front];
+    if (front == rear) front = rear = -1;
+    else front = (front + 1) % MAX;
+    return item;
+}</code></pre>
+      <h2>Trees</h2>
+      <p>A tree is a hierarchical data structure. The Binary Search Tree (BST) is the most exam-relevant: left child < parent < right child. Search, insert, delete are all O(log n) for balanced trees.</p>
+      <pre><code>// BST Node in Java
+class Node {
+    int data;
+    Node left, right;
+    Node(int data) { this.data = data; }
+}
+
+class BST {
+    Node root;
+
+    Node insert(Node root, int data) {
+        if (root == null) return new Node(data);
+        if (data < root.data) root.left = insert(root.left, data);
+        else if (data > root.data) root.right = insert(root.right, data);
+        return root;
+    }
+
+    // Inorder traversal — gives sorted output for BST
+    void inorder(Node root) {
+        if (root == null) return;
+        inorder(root.left);
+        System.out.print(root.data + " ");
+        inorder(root.right);
+    }
+}</code></pre>
+      <p><strong>Tree traversals to memorize:</strong> Inorder (Left-Root-Right), Preorder (Root-Left-Right), Postorder (Left-Right-Root). For BST, inorder gives sorted output — a common exam question.</p>
+      <h2>Sorting algorithms — complexity comparison</h2>
+      <p><strong>Bubble Sort:</strong> O(n²) — compare adjacent elements, swap if out of order. Simple but slow. Know it for exams.</p>
+      <p><strong>Selection Sort:</strong> O(n²) — find minimum in unsorted portion, swap to front.</p>
+      <p><strong>Insertion Sort:</strong> O(n²) average, O(n) best case — efficient for nearly sorted arrays.</p>
+      <p><strong>Merge Sort:</strong> O(n log n) — divide and conquer. Stable sort. Extra space needed.</p>
+      <p><strong>Quick Sort:</strong> O(n log n) average, O(n²) worst — in-place, fast in practice.</p>
+      <h2>The exam strategy</h2>
+      <p>TIU data structures exams almost always include: trace a sorting algorithm step by step, draw a BST after insertions, implement a stack or queue, write a linked list insertion/deletion. Master these four question types and you're covered for 80% of the exam.</p>
+    `
+  }
+  ,{
+    id: 14,
+    slug: 'how-to-get-internship-tiu-student',
+    title: 'How to Land Your First Internship as a TIU IT Student',
+    excerpt: 'No experience, no connections, no idea where to start? This step-by-step guide is specifically for Techno India University students trying to land their first tech internship.',
+    category: 'career',
+    catLabel: 'Career',
+    emoji: '💼',
+    author: 'IT Study Hub',
+    authorEmoji: '🌟',
+    date: 'Jun 15, 2026',
+    readTime: '10 min',
+    featured: false,
+    content: `
+      <p>Getting your first internship as a TIU student feels impossible when every listing says "1-2 years experience required." But thousands of students from Indian colleges land internships every semester — without connections, without a 10 CGPA, and without knowing anyone at the company. Here's exactly how.</p>
+      <h2>The timeline that actually works</h2>
+      <p>Start 3 months before you want to intern. One month to build your portfolio and resume. One month to apply and follow up. One month buffer for interview rounds and offers. Most students start two weeks before they want to start — that's too late.</p>
+      <h2>What you need before applying</h2>
+      <p><strong>A GitHub profile with at least 3 repos.</strong> Not forks — your own projects, with READMEs that explain what the project does and how to run it. Interviewers check GitHub. An empty profile says "I don't build things outside of class."</p>
+      <p><strong>A one-page resume.</strong> One page only. Include: education (TIU, branch, CGPA if above 7.5), skills (languages and tools you actually know), projects (2-3 with tech stack and a GitHub link), any certifications. No objective statements. No references. No photos.</p>
+      <p><strong>At least one deployed project.</strong> GitHub Pages, Vercel, Netlify — all free. A live link you can show in an interview is worth more than any description.</p>
+      <h2>Where to find internships</h2>
+      <p><strong>LinkedIn</strong> — set your profile to "Open to Work" for internships. Apply to jobs posted in the last 24 hours for highest response rate. Connect with TIU alumni — search "Techno India University" and filter by "2nd degree connections."</p>
+      <p><strong>Internshala</strong> — the best platform specifically for Indian students. Filter by "Work From Home" to expand your geographic reach. Apply to 10-15 listings per week.</p>
+      <p><strong>AngelList / Wellfound</strong> — Indian startups. Less competition than big companies. Startups hire interns who show initiative and can actually build things.</p>
+      <p><strong>Direct outreach</strong> — find companies whose products you use. Find the engineering team on LinkedIn. Send a short message: "Hi [Name], I'm a 2nd year B.Sc IT student at TIU. I've been using [Product] and built [Similar Thing] — here's the GitHub link. Is your team open to interns?" A 10% response rate is normal. Send 50 messages.</p>
+      <h2>The skills that get interviews</h2>
+      <p>For web internships: HTML/CSS/JavaScript + one framework (React preferred). For backend: Python/Java + basic SQL + REST API understanding. For data: Python + pandas + basic ML (scikit-learn). For mobile: Flutter or React Native basics.</p>
+      <p>Pick one track. Go deep. A student with strong React skills gets interviews. A student who has "done" React, Vue, Angular, and Django — but knows none deeply — gets rejected.</p>
+      <h2>The interview process at Indian companies</h2>
+      <p><strong>Aptitude round</strong> — logical reasoning, quantitative aptitude, basic coding. Prepare with previous TCS/Infosys aptitude papers. Platforms: PrepInsta, IndiaBix.</p>
+      <p><strong>Technical round</strong> — HR or technical interviewer. Questions about your resume, your projects, basic CS concepts (OOP, DBMS basics, OS basics), and 1-2 coding problems. Know your projects inside out — they will ask about implementation details.</p>
+      <p><strong>HR round</strong> — "Tell me about yourself" (prepare a 90-second answer), "Why this company?", "Where do you see yourself in 5 years?", "What's your biggest weakness?" These are not trick questions. They want to know if you're articulate and genuine.</p>
+      <h2>After you get the offer</h2>
+      <p>Show up on time. Ask questions. Take notes. Volunteer for things outside your immediate task. The goal of an internship isn't to complete your assigned task — it's to get a pre-placement offer or a strong reference. Both require being the intern people notice.</p>
+      <p>Build something visible during your internship. Document what you learned. Write about it on LinkedIn. That documentation becomes the proof of experience that makes your next application easier.</p>
+    `
   }
 ];
 
+// Also update category counts and hero stats
+
+];
 
 // ── Per-post thumbnail SVG icons ──
 const POST_ICONS = {
@@ -423,7 +1102,13 @@ const POST_ICONS = {
   6: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(67,233,123,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18" r="3"/><path d="M12 2v10"/><path d="M4.93 4.93l4.24 4.24M19.07 4.93l-4.24 4.24M2 12h3M19 12h3"/></svg>`,
   7: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
   8: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
-  default: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.5)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
+  9:  `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8l2 2-2 2M13 10h3"/></svg>`,
+  10: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 19.34A1 1 0 0 0 5 21h14a1 1 0 0 0 .82-1.57C19.33 19 17 16 15 9"/></svg>`,
+  11: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(67,233,123,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+  12: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  13: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>`,
+  14: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+    default: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.5)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
 };
 
 // ── Per-author SVG avatars (colour-coded) ──

@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin.html
+Disallow: /Login.html
+Disallow: /profile.html
+
+Sitemap: https://itstudyhub.dpdns.org/sitemap.xml
