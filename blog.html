@@ -1250,9 +1250,11 @@ function showToast(icon, title, sub) {
 }
 
 // ── Cursor (pointer devices only) ──
+const _isPointer = window.matchMedia('(pointer: fine)').matches;
 const cur = document.getElementById('cur');
 const curR = document.getElementById('curR');
-if (window.matchMedia('(pointer: fine)').matches) {
+
+if (_isPointer) {
   let mx=0,my=0,rx=0,ry=0;
   document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
   (function anim() {
@@ -1264,6 +1266,7 @@ if (window.matchMedia('(pointer: fine)').matches) {
 }
 
 function attachCursorHover() {
+  if (!_isPointer) return;
   document.querySelectorAll('a,button,.post-card,.featured-wrap,.trending-card').forEach(el => {
     el.addEventListener('mouseenter', () => cur.style.transform='scale(2)');
     el.addEventListener('mouseleave', () => cur.style.transform='scale(1)');
