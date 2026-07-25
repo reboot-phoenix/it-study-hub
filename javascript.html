@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="shortcut icon" href="favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript Mastery — IT Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="course-page.css">
+<base target="_blank">
+</head>
+<body>
+<div class="read-progress" id="readProgress"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
+  <div class="nav-right">
+    <a href="courses.html" class="nav-back">← Courses</a>
+    <a href="index.html" class="nav-back">← Home</a>
+  </div>
+</nav>
+
+<div id="indexPage">
+  <div class="fade-up">
+    <div class="course-eyebrow">Subject 01 · IT Study Hub</div>
+    <h1 class="course-title">JavaScript Mastery <em>(Zero to Hero)</em></h1>
+    <p class="course-desc">The most comprehensive JavaScript course on the internet. From variables and loops to closures, async programming, and production-grade patterns. Build real skills that employers actually want.</p>
+    <div class="course-chips">
+      <span class="chip chip-lime">⚡ JavaScript</span>
+      <span class="chip chip-lime">6 Free Modules</span>
+      <span class="chip chip-gold">6 Premium Modules</span>
+      <span class="chip chip-lime">Real Code Examples</span>
+    </div>
+  </div>
+
+  <div class="progress-card fade-up" style="animation-delay:0.1s;">
+    <div class="prog-pct" id="progPct">0%</div>
+    <div class="prog-bar-wrap">
+      <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
+      <div class="prog-label" id="progLabel">0 of 6 free modules completed</div>
+    </div>
+  </div>
+
+  <div class="fade-up" style="animation-delay:0.15s;">
+    <div class="sec-label">Free Modules</div>
+    <div class="modules-grid" id="freeGrid"></div>
+  </div>
+
+  <div class="fade-up" style="animation-delay:0.2s;">
+    <div class="sec-label">Premium Modules</div>
+    <div class="modules-grid" id="premiumGrid"></div>
+  </div>
+
+  <div class="fade-up" style="animation-delay:0.25s;">
+    <div class="sec-label">Study Materials</div>
+    <div class="mat-grid">
+      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" target="_blank" class="mat-item">
+        <div class="mat-icon">📄</div>
+        <div class="mat-info"><div class="mat-title">MDN JavaScript Guide</div><div class="mat-desc">Official reference & tutorials · Free</div></div>
+        <span class="mat-action">→ Open</span>
+      </a>
+      <a href="https://javascript.info/" target="_blank" class="mat-item">
+        <div class="mat-icon">🎓</div>
+        <div class="mat-info"><div class="mat-title">The Modern JavaScript Tutorial</div><div class="mat-desc">Comprehensive JS from basics to advanced · Free</div></div>
+        <span class="mat-action">→ Open</span>
+      </a>
+      <a href="https://eloquentjavascript.net/" target="_blank" class="mat-item">
+        <div class="mat-icon">📖</div>
+        <div class="mat-info"><div class="mat-title">Eloquent JavaScript (Book)</div><div class="mat-desc">Deep dive into language & programming · Free</div></div>
+        <span class="mat-action">→ Read</span>
+      </a>
+      <a href="https://www.sanfoundry.com/javascript-questions-answers/" target="_blank" class="mat-item">
+        <div class="mat-icon">🎯</div>
+        <div class="mat-info"><div class="mat-title">Placement Quiz — JavaScript</div><div class="mat-desc">1000+ MCQs · Free</div></div>
+        <span class="mat-action">→ Start</span>
+      </a>
+      <a href="premium.html" class="mat-item premium-mat">
+        <div class="mat-icon">⭐</div>
+        <div class="mat-info"><div class="mat-title">JavaScript Design Patterns PDF</div><div class="mat-desc">Module, Factory, Observer, Singleton · Premium</div></div>
+        <span class="mat-action locked">🔒</span>
+      </a>
+      <a href="premium.html" class="mat-item premium-mat">
+        <div class="mat-icon">⭐</div>
+        <div class="mat-info"><div class="mat-title">Advanced Algorithm Cheatsheet</div><div class="mat-desc">Big-O, Recursion, Dynamic Programming · Premium</div></div>
+        <span class="mat-action locked">🔒</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div id="lessonPage">
+  <div class="lesson-topbar">
+    <div class="les-breadcrumb">JavaScript Mastery <span>/</span> <span id="lesCrumb">—</span></div>
+    <div class="les-nav-btns">
+      <button class="lnav-btn" onclick="goBack()">← Back</button>
+      <button class="lnav-btn" id="prevBtn" onclick="prevLesson()">← Prev</button>
+      <button class="lnav-btn" id="markBtn" onclick="markDone()">✓ Mark Done</button>
+      <button class="lnav-btn" id="nextBtn" onclick="nextLesson()">Next →</button>
+    </div>
+  </div>
+  <div class="lesson-layout">
+    <div class="lesson-article" id="lessonContent"></div>
+    <aside class="lesson-sidebar">
+      <div class="sb-card">
+        <div class="sb-label">Progress</div>
+        <div class="prog-bar-track" style="margin-bottom:8px;"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
+        <div class="prog-label" id="sbProgLabel">0 / 6 free</div>
+      </div>
+      <div class="sb-card">
+        <div class="sb-label">All Modules</div>
+        <div id="sbModList"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
+<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+
+<script>
+const ADMIN_EMAIL = 'itstudyhub.tiu@gmail.com';
+function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){return null;}}
+function isPremium(){const s=getSession();return s&&(s.isAdmin||s.email===ADMIN_EMAIL);}
+function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_js_done')||'[]');}catch(e){return[];}}
+function saveCompleted(a){localStorage.setItem('ish_js_done',JSON.stringify(a));}
+
+const MODS = [
+
+  {
+    id: 1, free: true, icon: '🔰', level: 'Beginner', title: 'JavaScript Foundations & Syntax',
+    excerpt: 'Start your journey right. Learn how JS runs in the browser, declare variables with let/const, understand data types, operators, and write your first real programs.',
+    tags: ['Beginner','Variables','Data Types'], visual: '🔰',
+    bg: 'linear-gradient(135deg,#0a1a0a,#0f2010)',
+    concepts: ['Variables (let/const)','Primitive Types','Type Coercion','Operators','Template Literals','Comments & Best Practices'],
+    body: `<p>JavaScript is the <strong>language of the web</strong>. It runs in every browser, on servers (via Node.js), and even on IoT devices. Unlike HTML and CSS, JavaScript is a <em>programming language</em> — it can think, calculate, and make decisions.</p>
+
+<h2>How JavaScript Runs</h2>
+<p>When you load a web page, the browser reads your HTML, finds <code>&lt;script&gt;</code> tags, and executes the JavaScript inside them. JS is <strong>interpreted</strong> (compiled Just-In-Time in modern engines) and <strong>single-threaded</strong> — it does one thing at a time, but does it very fast.</p>
+
+<pre><code>// Inline script (not recommended for production)
+&lt;script&gt;
+  console.log("Hello, World!");
+&lt;/script&gt;
+
+// External script (best practice)
+&lt;script src="app.js"&gt;&lt;/script&gt;</code></pre>
+
+<h2>Variables: let, const, and the forbidden var</h2>
+<p>Variables are containers for storing data. In modern JavaScript, you have two choices:</p>
+<ul>
+  <li><code>const</code> — Use this by default. The value cannot be reassigned. But objects/arrays declared with <code>const</code> can still be mutated!</li>
+  <li><code>let</code> — Use when the value will change (counters, accumulators, loop variables).</li>
+</ul>
+
+<pre><code>const username = "sarah_dev";      // Cannot reassign
+let score = 0;                     // Will change
+score = 100;                       // ✅ Allowed
+// username = "john";              // ❌ TypeError!
+
+const user = { name: "Sarah" };
+user.name = "John";                // ✅ Allowed! Object mutated, not reassigned.</code></pre>
+
+<blockquote><strong>Golden Rule:</strong> Default to <code>const</code>. Switch to <code>let</code> only when the compiler complains. Never use <code>var</code> — it has function scope (not block scope) and allows hoisting bugs.</blockquote>
+
+<h2>Primitive Data Types</h2>
+<p>JavaScript has 7 primitive types. A primitive is a simple, immutable value.</p>
+<pre><code>const name   = "Alice";     // string
+const age    = 25;          // number (JS has no int/float separation)
+const isDev  = true;        // boolean
+const empty  = null;        // null — intentional absence of value
+const notSet = undefined;   // undefined — variable declared but not assigned
+const bigNum = 9007199254740991n; // bigint — for huge integers
+const sym    = Symbol("id");      // symbol — unique identifier</code></pre>
+
+<h2>Type Coercion: The Silent Bug Maker</h2>
+<p>JavaScript is <strong>loosely typed</strong>. It will automatically convert types when operators expect different ones. This is the #1 source of bugs for beginners.</p>
+<pre><code>console.log("5" + 3);   // "53"  (string concatenation)
+console.log("5" - 3);   // 2     (string coerced to number)
+console.log("5" == 5);  // true  (loose equality — coerces!)
+console.log("5" === 5); // false (strict equality — NO coercion)
+
+// Always use === and !==
+// == performs type coercion before comparison — unpredictable!</code></pre>
+
+<h2>Template Literals</h2>
+<p>Backticks (<code>\`</code>) allow multi-line strings and <strong>string interpolation</strong> with <code>\${}</code>.</p>
+<pre><code>const name = "Maya";
+const role = "Frontend Dev";
+
+// Old way (concatenation)
+const oldBio = "Name: " + name + ", Role: " + role;
+
+// Modern way (template literal)
+const bio = \`Name: \${name}, Role: \${role}\`;
+
+// Multi-line without \\n
+const html = \`
+  &lt;div class="card"&gt;
+    &lt;h2&gt;\${name}&lt;/h2&gt;
+    &lt;p&gt;\${role}&lt;/p&gt;
+  &lt;/div&gt;
+\`;</code></pre>`
+  },
+
+  {
+    id: 2, free: true, icon: '🔄', level: 'Beginner', title: 'Control Flow & Logic',
+    excerpt: 'Programs need to make decisions. Master if/else, switch statements, ternary operators, and all loop types to control exactly what your code does and when.',
+    tags: ['Beginner','Conditionals','Loops'], visual: '🔄',
+    bg: 'linear-gradient(135deg,#0a0a1a,#101028)',
+    concepts: ['if / else if / else','switch','Ternary Operator','for / while / do-while','break & continue','Truthy & Falsy Values'],
+    body: `<p>Control flow determines the <strong>order</strong> in which statements are executed. Without it, your program would just run top-to-bottom like a recipe. With it, your program can react, adapt, and repeat.</p>
+
+<h2>if / else if / else</h2>
+<p>The most common decision structure. JavaScript evaluates conditions and executes the first block that is <strong>truthy</strong>.</p>
+<pre><code>const age = 19;
+
+if (age &lt; 13) {
+  console.log("Child");
+} else if (age &lt; 20) {
+  console.log("Teenager");  // ✅ This runs
+} else {
+  console.log("Adult");
+}</code></pre>
+
+<h2>Truthy & Falsy Values</h2>
+<p>In a boolean context (like an <code>if</code> condition), every value is either "truthy" or "falsy". These 6 values are <strong>falsy</strong>:</p>
+<pre><code>if (false)      // falsy
+if (0)          // falsy
+if ("")         // falsy (empty string)
+if (null)       // falsy
+if (undefined)  // falsy
+if (NaN)        // falsy (Not a Number)
+
+// Everything else is truthy — including "0", "false", [], and {}
+if ("0")        // truthy! Non-empty string
+if ([])         // truthy! Empty array is still an object</code></pre>
+
+<h2>The Ternary Operator</h2>
+<p>A compact <code>if/else</code> for simple assignments. Use it for clean, readable code — but don't nest ternaries!</p>
+<pre><code>const isLoggedIn = true;
+
+// Instead of:
+let message;
+if (isLoggedIn) {
+  message = "Welcome back!";
+} else {
+  message = "Please log in.";
+}
+
+// Use:
+const message = isLoggedIn ? "Welcome back!" : "Please log in.";
+
+// Multiple conditions (use sparingly)
+const status = age &lt; 13 ? "child" : age &lt; 20 ? "teen" : "adult";</code></pre>
+
+<h2>switch Statements</h2>
+<p>Use <code>switch</code> when you have many conditions based on the <strong>same variable</strong>. Always include <code>break</code> to prevent fall-through.</p>
+<pre><code>const role = "admin";
+
+switch (role) {
+  case "admin":
+    console.log("Full access granted");
+    break;  // Exit the switch
+  case "editor":
+    console.log("Can edit content");
+    break;
+  case "viewer":
+    console.log("Read-only access");
+    break;
+  default:
+    console.log("Unknown role");
+}</code></pre>
+
+<h2>Loops</h2>
+<p>Loops repeat code. Choose the right one for the job:</p>
+<pre><code>// for loop — when you know how many iterations
+for (let i = 0; i &lt; 5; i++) {
+  console.log(i); // 0, 1, 2, 3, 4
+}
+
+// while loop — when condition is checked BEFORE each iteration
+let countdown = 3;
+while (countdown &gt; 0) {
+  console.log(countdown);
+  countdown--;
+}
+
+// do...while — runs at least ONCE, then checks condition
+let input;
+do {
+  input = prompt("Enter a number greater than 10:");
+} while (input &lt;= 10);
+
+// for...of — iterate over ITERABLES (arrays, strings, Maps, Sets)
+const fruits = ["apple", "banana", "cherry"];
+for (const fruit of fruits) {
+  console.log(fruit);
+}
+
+// for...in — iterate over KEYS of an object (avoid for arrays!)
+const person = { name: "Alex", age: 30 };
+for (const key in person) {
+  console.log(key, person[key]); // "name" "Alex", "age" 30
+}</code></pre>
+
+<h2>break & continue</h2>
+<pre><code>// break — exit the loop entirely
+for (let i = 0; i &lt; 10; i++) {
+  if (i === 5) break;
+  console.log(i); // 0, 1, 2, 3, 4
+}
+
+// continue — skip to next iteration
+for (let i = 0; i &lt; 5; i++) {
+  if (i === 2) continue;
+  console.log(i); // 0, 1, 3, 4
+}</code></pre>`
+  },
+
+  {
+    id: 3, free: true, icon: '⚙️', level: 'Beginner', title: 'Functions Deep Dive',
+    excerpt: 'Functions are the building blocks of JavaScript. Learn declarations vs expressions, arrow functions, scope, hoisting, and why understanding the call stack changes everything.',
+    tags: ['Beginner','Functions','Scope'], visual: '⚙️',
+    bg: 'linear-gradient(135deg,#0f0a0a,#201010)',
+    concepts: ['Function Declarations','Function Expressions','Arrow Functions','Parameters & Arguments','Scope (Global vs Local)','The Call Stack'],
+    body: `<p>A <strong>function</strong> is a reusable block of code designed to perform a specific task. Functions are <em>first-class citizens</em> in JavaScript — they can be assigned to variables, passed as arguments, and returned from other functions.</p>
+
+<h2>Function Declarations</h2>
+<p>Named functions that are <strong>hoisted</strong> — you can call them before they appear in the code.</p>
+<pre><code>// Declaration
+function greet(name) {
+  return \`Hello, \${name}!\`;
+}
+
+console.log(greet("Sarah")); // "Hello, Sarah!"
+
+// Hoisting in action — this WORKS
+greet("Early bird");
+function greet(name) {
+  return \`Hello, \${name}!\`;
+}</code></pre>
+
+<h2>Function Expressions</h2>
+<p>Functions assigned to variables. They are <strong>NOT hoisted</strong> — you must define them before calling.</p>
+<pre><code>const greet = function(name) {
+  return \`Hello, \${name}!\`;
+};
+
+// Anonymous function assigned to 'greet'
+// Must be defined before use!</code></pre>
+
+<h2>Arrow Functions (ES6)</h2>
+<p>Concise syntax. They have <strong>lexical <code>this</code></strong> — they inherit <code>this</code> from the surrounding scope. This makes them perfect for callbacks.</p>
+<pre><code>// Traditional
+const add = function(a, b) {
+  return a + b;
+};
+
+// Arrow function
+const add = (a, b) => {
+  return a + b;
+};
+
+// Implicit return (no curly braces needed for single expressions)
+const add = (a, b) => a + b;
+const square = x => x * x;        // single param needs no parens
+const greet = () => "Hello!";     // no params need empty parens
+
+// Perfect for array methods
+const numbers = [1, 2, 3];
+const doubled = numbers.map(n => n * 2); // [2, 4, 6]</code></pre>
+
+<blockquote><strong>Arrow functions have no <code>this</code> of their own.</strong> Do not use them as object methods if you need to reference the object with <code>this</code>.</blockquote>
+
+<h2>Default Parameters</h2>
+<pre><code>function createUser(name, role = "user", isActive = true) {
+  return { name, role, isActive };
+}
+
+createUser("Alex");                    // { name: "Alex", role: "user", isActive: true }
+createUser("Alex", "admin", false);    // { name: "Alex", role: "admin", isActive: false }</code></pre>
+
+<h2>Rest Parameters (...args)</h2>
+<p>Collect remaining arguments into a real array.</p>
+<pre><code>function sum(...numbers) {
+  return numbers.reduce((total, n) => total + n, 0);
+}
+
+sum(1, 2, 3, 4); // 10
+sum(10, 20);     // 30</code></pre>
+
+<h2>Scope: Where Variables Live</h2>
+<p><strong>Scope</strong> determines where a variable is accessible.</p>
+<pre><code>const globalVar = "I am global";
+
+function outer() {
+  const outerVar = "I am in outer";
+
+  function inner() {
+    const innerVar = "I am in inner";
+    console.log(globalVar);  // ✅ Accessible
+    console.log(outerVar);   // ✅ Accessible (closure!)
+    console.log(innerVar);   // ✅ Accessible
+  }
+
+  inner();
+  // console.log(innerVar);  // ❌ ReferenceError!
+}
+
+outer();</code></pre>
+
+<h2>The Call Stack</h2>
+<p>JavaScript uses a <strong>call stack</strong> to track function execution. When a function is called, it is pushed onto the stack. When it returns, it is popped off.</p>
+<pre><code>function first() {
+  console.log("First");
+  second();
+}
+function second() {
+  console.log("Second");
+  third();
+}
+function third() {
+  console.log("Third");
+}
+
+first();
+// Call Stack: first() → second() → third() → pop → pop → pop</code></pre>`
+  },
+
+  {
+    id: 4, free: true, icon: '📦', level: 'Intermediate', title: 'Arrays & Objects Mastery',
+    excerpt: 'Data is everything. Master arrays, objects, destructuring, spread syntax, and the powerful built-in methods that make JavaScript data manipulation a joy.',
+    tags: ['Intermediate','Arrays','Objects'], visual: '📦',
+    bg: 'linear-gradient(135deg,#0a0f1a,#101828)',
+    concepts: ['Array Methods (map/filter/reduce)','Object Literals','Destructuring','Spread & Rest','Object Methods','Array.from & Set'],
+    body: `<p>Arrays and objects are the two primary <strong>data structures</strong> in JavaScript. Arrays store ordered collections. Objects store keyed collections. Together, they power virtually every application.</p>
+
+<h2>Arrays: Ordered Collections</h2>
+<pre><code>const fruits = ["apple", "banana", "cherry"];
+const mixed = [42, "hello", true, { name: "Alex" }, [1, 2]];
+
+// Access by index (0-based)
+console.log(fruits[0]); // "apple"
+console.log(fruits.length); // 3
+
+// Add/remove
+fruits.push("date");       // Add to end
+fruits.pop();              // Remove from end
+fruits.unshift("avocado"); // Add to start
+fruits.shift();            // Remove from start</code></pre>
+
+<h2>The Big Three: map, filter, reduce</h2>
+<p>These methods transform arrays <strong>declaratively</strong> — no manual loops needed.</p>
+<pre><code>const users = [
+  { name: "Alice", age: 25, role: "admin" },
+  { name: "Bob", age: 30, role: "user" },
+  { name: "Carol", age: 22, role: "user" },
+  { name: "David", age: 35, role: "editor" }
+];
+
+// map — transform every element
+const names = users.map(u => u.name);
+// ["Alice", "Bob", "Carol", "David"]
+
+// filter — keep elements matching a condition
+const adults = users.filter(u => u.age >= 25);
+// [{Alice, 25}, {Bob, 30}, {David, 35}]
+
+// reduce — accumulate to a single value
+const totalAge = users.reduce((sum, u) => sum + u.age, 0);
+// 112
+
+// Chain them together!
+const adminNames = users
+  .filter(u => u.role === "admin")
+  .map(u => u.name.toUpperCase());
+// ["ALICE"]</code></pre>
+
+<h2>Other Essential Array Methods</h2>
+<pre><code>const nums = [3, 1, 4, 1, 5, 9];
+
+nums.find(n => n > 4);        // 5 (first match)
+nums.findIndex(n => n > 4);   // 4 (index of first match)
+nums.some(n => n > 8);        // true (at least one matches)
+nums.every(n => n > 0);       // true (all match)
+nums.includes(5);             // true
+nums.indexOf(1);              // 1 (first occurrence)
+nums.lastIndexOf(1);          // 3 (last occurrence)
+nums.sort((a, b) => a - b);   // [1, 1, 3, 4, 5, 9]
+nums.reverse();               // [9, 5, 4, 3, 1, 1]
+nums.slice(1, 4);             // [5, 4, 3] (non-destructive)
+nums.splice(2, 1);            // Removes 1 element at index 2</code></pre>
+
+<h2>Objects: Keyed Collections</h2>
+<pre><code>const user = {
+  name: "Sarah",
+  age: 28,
+  isAdmin: false,
+  "favorite color": "teal",  // quoted key with space
+  greet() {
+    return \`Hi, I am \${this.name}\`;
+  }
+};
+
+// Access properties
+console.log(user.name);              // dot notation
+console.log(user["favorite color"]); // bracket notation (dynamic keys)
+
+// Add/modify/delete
+user.email = "sarah@example.com";
+user.age = 29;
+delete user.isAdmin;
+
+// Check if property exists
+console.log("name" in user);         // true
+console.log(user.hasOwnProperty("age")); // true</code></pre>
+
+<h2>Destructuring</h2>
+<p>Extract values from arrays and objects into distinct variables.</p>
+<pre><code>// Array destructuring
+const [first, second, ...rest] = [10, 20, 30, 40, 50];
+// first = 10, second = 20, rest = [30, 40, 50]
+
+// Skip elements
+const [a, , c] = [1, 2, 3]; // a = 1, c = 3
+
+// Object destructuring
+const { name, age, role = "guest" } = user;
+// Extracts name and age. If role does not exist, defaults to "guest"
+
+// Rename while destructuring
+const { name: fullName, age: yearsOld } = user;
+
+// Nested destructuring
+const company = {
+  ceo: { name: "Elon", age: 52 },
+  founded: 2003
+};
+const { ceo: { name: ceoName } } = company;
+// ceoName = "Elon"</code></pre>
+
+<h2>Spread Operator (...)</h2>
+<pre><code>// Copy arrays (shallow)
+const original = [1, 2, 3];
+const copy = [...original];
+
+// Merge arrays
+const merged = [...[1, 2], ...[3, 4]]; // [1, 2, 3, 4]
+
+// Copy objects (shallow)
+const userCopy = { ...user, role: "admin" };
+// Copies user, then overwrites role to "admin"
+
+// Spread in function calls
+const nums = [5, 1, 8];
+Math.max(...nums); // 8 (same as Math.max(5, 1, 8))</code></pre>
+
+<h2>Set — Unique Values</h2>
+<pre><code>const ids = [1, 2, 2, 3, 3, 3];
+const uniqueIds = [...new Set(ids)]; // [1, 2, 3]
+
+const tags = new Set();
+tags.add("js");
+tags.add("web");
+tags.add("js"); // ignored — already exists
+tags.has("js"); // true
+tags.delete("web");
+tags.size; // 1</code></pre>`
+  },
+
+  {
+    id: 5, free: true, icon: '🌳', level: 'Intermediate', title: 'The DOM & Event Handling',
+    excerpt: 'Bridge the gap between static HTML and dynamic applications. Learn to select, create, modify elements, handle user events, and build interactive UIs from scratch.',
+    tags: ['Intermediate','DOM','Events'], visual: '🌳',
+    bg: 'linear-gradient(135deg,#10080a,#200f12)',
+    concepts: ['DOM Tree','querySelector & querySelectorAll','createElement & appendChild','Event Listeners','Event Delegation','Event Bubbling & Capturing'],
+    body: `<p>The <strong>DOM (Document Object Model)</strong> is a tree-like representation of your HTML document. JavaScript can read this tree, modify it, and respond to user interactions — turning static pages into living applications.</p>
+
+<h2>The DOM Tree</h2>
+<p>Every HTML element becomes a <strong>node</strong> in the DOM tree. The root is <code>document</code>, which contains <code>&lt;html&gt;</code>, which contains <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code>, and so on.</p>
+<pre><code>&lt;!-- HTML --&gt;
+&lt;div id="app"&gt;
+  &lt;h1 class="title"&gt;Hello&lt;/h1&gt;
+  &lt;button class="btn"&gt;Click me&lt;/button&gt;
+&lt;/div&gt;
+
+// JavaScript — the DOM representation:
+document
+  └── html
+       └── body
+            └── div#app
+                 ├── h1.title ("Hello")
+                 └── button.btn ("Click me")</code></pre>
+
+<h2>Selecting Elements</h2>
+<pre><code>// Modern, flexible selector (returns first match)
+const title = document.querySelector('.title');
+const app = document.querySelector('#app');
+
+// Select all matching elements (returns NodeList)
+const buttons = document.querySelectorAll('.btn');
+buttons.forEach(btn => console.log(btn.textContent));
+
+// Older methods (still valid)
+document.getElementById('app');           // single element by ID
+document.getElementsByClassName('btn');   // HTMLCollection (live!)
+document.getElementsByTagName('div');     // HTMLCollection (live!)</code></pre>
+
+<blockquote><strong>querySelectorAll vs getElementsByClassName:</strong> <code>querySelectorAll</code> returns a static <code>NodeList</code>. <code>getElementsBy*</code> returns a live <code>HTMLCollection</code> that updates automatically when the DOM changes. Prefer <code>querySelectorAll</code> for predictability.</blockquote>
+
+<h2>Modifying the DOM</h2>
+<pre><code>const title = document.querySelector('.title');
+
+// Change text (safe — treats as text, not HTML)
+title.textContent = "Welcome to JS Mastery!";
+
+// Change HTML (be careful — can execute scripts, XSS risk!)
+title.innerHTML = "&lt;em&gt;Welcome&lt;/em&gt; to JS Mastery!";
+
+// Change styles (inline styles — use classes instead for maintainability)
+title.style.color = "#c8f135";
+title.style.fontSize = "2rem";
+title.style.backgroundColor = "#0a0a0a";
+
+// Better: toggle classes
+title.classList.add('highlight');
+title.classList.remove('highlight');
+title.classList.toggle('active');   // add if absent, remove if present
+title.classList.contains('active'); // true/false
+
+// Attributes
+title.setAttribute('data-id', '123');
+console.log(title.getAttribute('data-id')); // "123"
+title.removeAttribute('data-id');</code></pre>
+
+<h2>Creating & Removing Elements</h2>
+<pre><code>// Create element
+const newCard = document.createElement('div');
+newCard.className = 'card';
+newCard.textContent = 'I am new!';
+
+// Add to DOM
+const container = document.querySelector('.container');
+container.appendChild(newCard);        // add as last child
+container.prepend(newCard);            // add as first child
+container.insertBefore(newCard, container.firstChild);
+
+// Modern: insertAdjacentElement
+container.insertAdjacentElement('beforeend', newCard);
+// Options: 'beforebegin', 'afterbegin', 'beforeend', 'afterend'
+
+// Remove element
+newCard.remove(); // Modern way
+// container.removeChild(newCard); // Older way</code></pre>
+
+<h2>Event Listeners</h2>
+<pre><code>const btn = document.querySelector('.btn');
+
+// Add listener
+btn.addEventListener('click', function(event) {
+  console.log('Button clicked!');
+  console.log(event.target);        // the element that was clicked
+  console.log(event.type);          // "click"
+  console.log(event.clientX, event.clientY); // click coordinates
+});
+
+// Named function (easier to remove later)
+function handleClick(e) {
+  console.log('Clicked:', e.target.textContent);
+}
+btn.addEventListener('click', handleClick);
+btn.removeEventListener('click', handleClick); // Clean up!
+
+// Common events
+// 'click', 'dblclick', 'mouseenter', 'mouseleave'
+// 'keydown', 'keyup', 'keypress'
+// 'submit', 'change', 'input', 'focus', 'blur'
+// 'scroll', 'resize', 'load', 'DOMContentLoaded'</code></pre>
+
+<h2>Event Delegation</h2>
+<p>Instead of adding listeners to every child, add ONE listener to the parent. Events <strong>bubble up</strong> from the target to ancestors.</p>
+<pre><code>// ❌ Bad: adding listener to every button
+const buttons = document.querySelectorAll('.todo-btn');
+buttons.forEach(btn => btn.addEventListener('click', deleteTodo));
+
+// ✅ Good: one listener on the parent
+const todoList = document.querySelector('.todo-list');
+todoList.addEventListener('click', function(e) {
+  // Check if the clicked element (or its ancestor) matches
+  if (e.target.closest('.delete-btn')) {
+    const todoItem = e.target.closest('.todo-item');
+    todoItem.remove();
+  }
+});
+
+// This works even for buttons added AFTER the listener is set!</code></pre>
+
+<h2>Event Bubbling vs Capturing</h2>
+<pre><code>// Bubbling (default): child → parent → grandparent
+// Capturing: grandparent → parent → child
+
+// Use capturing by passing true as third argument
+document.body.addEventListener('click', handler, true);
+
+// Stop propagation
+btn.addEventListener('click', function(e) {
+  e.stopPropagation(); // Do not bubble up to parents
+  e.preventDefault();  // Prevent default browser behavior (e.g., form submit)
+});</code></pre>`
+  },
+
+  {
+    id: 6, free: true, icon: '🆕', level: 'Intermediate', title: 'Modern JavaScript (ES6+)',
+    excerpt: 'Level up your syntax. Master let/const, template literals, enhanced object literals, default parameters, modules, and all the features that make modern JS beautiful.',
+    tags: ['Intermediate','ES6','Modern JS'], visual: '🆕',
+    bg: 'linear-gradient(135deg,#1a0a0a,#280f0f)',
+    concepts: ['let & const','Template Literals','Enhanced Object Literals','Default Parameters','Modules (import/export)','Optional Chaining'],
+    body: `<p>ES6 (released in 2015) was a revolution for JavaScript. It introduced syntax that makes code cleaner, safer, and more expressive. Every modern codebase uses these features — mastering them is non-negotiable.</p>
+
+<h2>let & const: Block-Scoped Variables</h2>
+<p>Before ES6, <code>var</code> was the only option. It had <strong>function scope</strong> and was hoisted with an initial value of <code>undefined</code> — a recipe for bugs.</p>
+<pre><code>// var has function scope
+function example() {
+  if (true) {
+    var x = 10;
+  }
+  console.log(x); // 10 — accessible outside the block!
+}
+
+// let has BLOCK scope
+function example() {
+  if (true) {
+    let y = 10;
+    const z = 20;
+  }
+  // console.log(y); // ❌ ReferenceError!
+  // console.log(z); // ❌ ReferenceError!
+}
+
+// const prevents reassignment
+const PI = 3.14159;
+// PI = 3; // ❌ TypeError!
+
+// But objects/arrays can still be mutated
+const user = { name: "Alex" };
+user.name = "Sam"; // ✅ Allowed</code></pre>
+
+<h2>Template Literals</h2>
+<pre><code>const name = "world";
+
+// Multi-line strings
+const poem = \`
+  Roses are red,
+  Violets are blue,
+  JavaScript is awesome,
+  And so are you.
+\`;
+
+// Expression interpolation
+const greeting = \`Hello, \${name}!\`;
+
+// Expression evaluation
+const a = 5, b = 10;
+console.log(\`Fifteen is \${a + b}\`); // "Fifteen is 15"
+
+// Tagged templates (advanced)
+function highlight(strings, ...values) {
+  return strings.reduce((result, str, i) => {
+    return result + str + (values[i] ? \`<b>\${values[i]}</b>\` : '');
+  }, '');
+}
+const name = "Alice", age = 30;
+highlight\`Name: \${name}, Age: \${age}\`;
+// "Name: <b>Alice</b>, Age: <b>30</b>"</code></pre>
+
+<h2>Enhanced Object Literals</h2>
+<pre><code>const name = "Sarah";
+const age = 28;
+
+// ES5
+const user = {
+  name: name,
+  age: age,
+  greet: function() {
+    return "Hello";
+  }
+};
+
+// ES6 — shorthand properties & methods
+const user = {
+  name,        // same as name: name
+  age,         // same as age: age
+  greet() {    // shorthand method
+    return \`Hello, I am \${this.name}\`;
+  },
+  ['user_' + id]: true  // computed property names
+};</code></pre>
+
+<h2>Modules: import / export</h2>
+<p>Modules let you split code into reusable files. Each module has its own scope.</p>
+<pre><code>// math.js — exporting
+export const PI = 3.14159;
+
+export function add(a, b) {
+  return a + b;
+}
+
+export default function multiply(a, b) {
+  return a * b;
+}
+
+// main.js — importing
+import multiply, { add, PI } from './math.js';
+import * as math from './math.js';  // namespace import
+
+console.log(add(2, 3));        // 5
+console.log(multiply(2, 3));   // 6
+console.log(math.PI);          // 3.14159</code></pre>
+
+<h2>Optional Chaining (ES2020)</h2>
+<p>Safely access nested properties without checking each level.</p>
+<pre><code>const user = {
+  profile: {
+    // name is missing!
+  }
+};
+
+// ❌ Old way
+const name = user && user.profile && user.profile.name;
+
+// ✅ Optional chaining
+const name = user?.profile?.name; // undefined (no error!)
+
+// With nullish coalescing (??)
+const displayName = user?.profile?.name ?? "Anonymous";
+// ?? only falls back on null or undefined (not 0, "", or false)</code></pre>
+
+<h2>Nullish Coalescing (??)</h2>
+<pre><code>const count = 0;
+const value1 = count || 10;  // 10 (0 is falsy!)
+const value2 = count ?? 10;  // 0 (0 is not null/undefined!)
+
+const name = null;
+const display = name ?? "Guest"; // "Guest"</code></pre>`
+  },
+
+  {
+    id: 7, free: false, icon: '⏳', level: 'Advanced', title: 'Asynchronous JavaScript',
+    excerpt: 'The browser cannot freeze while waiting for data. Master the Event Loop, Promises, async/await, Fetch API, and understand how JavaScript handles concurrency under the hood.',
+    tags: ['Advanced','Async','Promises'], visual: '⏳',
+    bg: 'linear-gradient(135deg,#080a14,#0f1228)',
+    concepts: ['The Event Loop','Callbacks','Promises','then/catch/finally','async / await','Fetch API','AbortController'],
+    body: `<p>JavaScript is <strong>single-threaded</strong> — it can only do one thing at a time. But thanks to the <strong>Event Loop</strong>, it can handle slow operations (network requests, timers) without freezing the UI. Understanding async programming is what separates junior developers from seniors.</p>
+
+<h2>The Event Loop: How JS Really Works</h2>
+<p>JavaScript has three parts working together:</p>
+<ul>
+  <li><strong>Call Stack:</strong> Where code executes. One frame at a time.</li>
+  <li><strong>Web APIs:</strong> Browser features (setTimeout, fetch, DOM events) that run outside the stack.</li>
+  <li><strong>Task Queue (Macrotask):</strong> Callbacks waiting to execute after the stack is clear.</li>
+  <li><strong>Microtask Queue:</strong> Promise callbacks. These run BEFORE macrotasks.</li>
+</ul>
+
+<pre><code>console.log("1");
+setTimeout(() => console.log("2"), 0);
+Promise.resolve().then(() => console.log("3"));
+console.log("4");
+
+// Output: 1, 4, 3, 2
+// Why? Synchronous code (1, 4) runs first.
+// Then microtasks (Promise .then) run.
+// Then macrotasks (setTimeout) run.</code></pre>
+
+<h2>Callbacks: The Old Way</h2>
+<pre><code>function fetchData(callback) {
+  setTimeout(() => {
+    callback("Data loaded!");
+  }, 1000);
+}
+
+fetchData((result) => {
+  console.log(result); // "Data loaded!"
+});
+
+// Callback hell (nested callbacks)
+getUser(user => {
+  getOrders(user.id, orders => {
+    getProducts(orders[0].id, products => {
+      console.log(products); // Deep nesting = hard to read
+    });
+  });
+});</code></pre>
+
+<h2>Promises: A Better Contract</h2>
+<p>A <strong>Promise</strong> is an object representing the eventual completion (or failure) of an async operation.</p>
+<pre><code>const promise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    const success = true;
+    if (success) {
+      resolve("Operation succeeded!");
+    } else {
+      reject("Operation failed!");
+    }
+  }, 1000);
+});
+
+promise
+  .then(result => console.log(result))   // "Operation succeeded!"
+  .catch(error => console.error(error))
+  .finally(() => console.log("Done"));</code></pre>
+
+<h2>Promise Chaining</h2>
+<pre><code>fetch('https://api.github.com/users/octocat')
+  .then(response => {
+    if (!response.ok) throw new Error(\`HTTP \${response.status}\`);
+    return response.json(); // returns a new Promise
+  })
+  .then(data => {
+    console.log(data.name); // "The Octocat"
+    return data.repos_url;
+  })
+  .then(reposUrl => fetch(reposUrl))
+  .then(response => response.json())
+  .then(repos => console.log(repos.length))
+  .catch(err => console.error("Fetch failed:", err));</code></pre>
+
+<h2>Promise.all & Promise.race</h2>
+<pre><code>// Promise.all — wait for ALL to succeed (fail fast)
+const urls = ['url1', 'url2', 'url3'];
+Promise.all(urls.map(url => fetch(url)))
+  .then(responses => console.log("All loaded!"))
+  .catch(err => console.error("One failed:", err));
+
+// Promise.allSettled — wait for ALL to finish (never rejects)
+Promise.allSettled([promise1, promise2])
+  .then(results => {
+    results.forEach(r => {
+      if (r.status === 'fulfilled') console.log(r.value);
+      else console.error(r.reason);
+    });
+  });
+
+// Promise.race — first to settle wins
+Promise.race([fetch(url), timeout(5000)])
+  .then(result => console.log("Won the race!"));</code></pre>
+
+<h2>async / await: Syntactic Sugar</h2>
+<p>Makes async code look synchronous. Easier to read, easier to debug.</p>
+<pre><code>async function getGitHubUser(username) {
+  try {
+    const response = await fetch(\`https://api.github.com/users/\${username}\`);
+    if (!response.ok) throw new Error(\`HTTP \${response.status}\`);
+
+    const data = await response.json();
+    console.log(data.name);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch user:", error);
+    throw error; // Re-throw if caller needs to handle it
+  }
+}
+
+// async functions ALWAYS return a Promise
+getGitHubUser("octocat").then(user => console.log(user));
+
+// Parallel fetching with await
+async function getUsers(usernames) {
+  const promises = usernames.map(u => getGitHubUser(u));
+  const users = await Promise.all(promises);
+  return users;
+}</code></pre>
+
+<h2>AbortController: Cancel Requests</h2>
+<pre><code>const controller = new AbortController();
+
+fetch('/api/data', { signal: controller.signal })
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(err => {
+    if (err.name === 'AbortError') {
+      console.log('Request was cancelled');
+    }
+  });
+
+// Cancel after 5 seconds
+setTimeout(() => controller.abort(), 5000);</code></pre>`
+  },
+
+  {
+    id: 8, free: false, icon: '🧠', level: 'Advanced', title: 'Advanced Functions & Closures',
+    excerpt: 'Unlock the true power of JavaScript functions. Master closures, higher-order functions, currying, memoization, and generators — the tools that senior developers use daily.',
+    tags: ['Advanced','Closures','Functional'], visual: '🧠',
+    bg: 'linear-gradient(135deg,#0a0f0a,#0f1a0f)',
+    concepts: ['Closures','Higher-Order Functions','Currying','Memoization','IIFE','Generators (function*)'],
+    body: `<p>Functions in JavaScript are <strong>first-class citizens</strong>. They can be passed around like any other value. This enables incredibly powerful patterns: closures that remember their birthplace, functions that create functions, and generators that pause and resume execution.</p>
+
+<h2>Closures: The Heart of JavaScript</h2>
+<p>A <strong>closure</strong> is a function that remembers the variables from its outer scope <em>even after the outer function has finished executing</em>.</p>
+<pre><code>function createCounter() {
+  let count = 0; // "Private" variable
+
+  return {
+    increment() { return ++count; },
+    decrement() { return --count; },
+    getCount() { return count; }
+  };
+}
+
+const counter = createCounter();
+console.log(counter.increment()); // 1
+console.log(counter.increment()); // 2
+console.log(counter.getCount());  // 2
+console.log(counter.count);       // undefined — truly private!</code></pre>
+
+<blockquote><strong>Why closures matter:</strong> They enable <em>data privacy</em> (before classes had private fields), <em>factory functions</em>, and <em>partial application</em>. Every callback in an event listener is a closure.</blockquote>
+
+<h2>Higher-Order Functions</h2>
+<p>A function that takes a function as an argument, or returns a function.</p>
+<pre><code>// Function that returns a function
+function multiplyBy(factor) {
+  return function(number) {
+    return number * factor;
+  };
+}
+
+const double = multiplyBy(2);
+const triple = multiplyBy(3);
+
+console.log(double(5)); // 10
+console.log(triple(5)); // 15
+
+// Function that takes a function (like Array.prototype.map)
+function withLogging(fn) {
+  return function(...args) {
+    console.log(\`Calling \${fn.name} with \`, args);
+    const result = fn(...args);
+    console.log(\`Result: \${result}\`);
+    return result;
+  };
+}
+
+const loggedAdd = withLogging((a, b) => a + b);
+loggedAdd(2, 3);
+// Calling anonymous with [2, 3]
+// Result: 5</code></pre>
+
+<h2>Currying</h2>
+<p>Transform a function with multiple arguments into a sequence of functions, each taking a single argument.</p>
+<pre><code>// Normal function
+const add = (a, b, c) => a + b + c;
+add(1, 2, 3); // 6
+
+// Curried version
+const addCurried = a => b => c => a + b + c;
+addCurried(1)(2)(3); // 6
+
+// Practical use: creating specialized functions
+const addTax = rate => price => price * (1 + rate);
+const addVAT = addTax(0.2);  // 20% VAT
+const addSalesTax = addTax(0.08); // 8% sales tax
+
+console.log(addVAT(100));      // 120
+console.log(addSalesTax(100)); // 108
+
+// Generic curry helper
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn.apply(this, args);
+    }
+    return function(...nextArgs) {
+      return curried.apply(this, args.concat(nextArgs));
+    };
+  };
+}</code></pre>
+
+<h2>Memoization</h2>
+<p>Cache function results to avoid redundant computation. Essential for performance in recursive algorithms.</p>
+<pre><code>function memoize(fn) {
+  const cache = new Map();
+  return function(...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      console.log("Cache hit!");
+      return cache.get(key);
+    }
+    const result = fn.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+// Fibonacci with memoization
+const fib = memoize(function(n) {
+  if (n &lt;= 1) return n;
+  return fib(n - 1) + fib(n - 2);
+});
+
+console.log(fib(40)); // Fast! Without memoization, this would hang.</code></pre>
+
+<h2>IIFE (Immediately Invoked Function Expression)</h2>
+<p>Create a private scope without polluting the global namespace.</p>
+<pre><code>(function() {
+  const secret = "I am private";
+  console.log(secret);
+})();
+
+// Modern alternative: just use a block
+{
+  const secret = "I am also private";
+  console.log(secret);
+}
+
+// IIFE with arrow function
+(() => {
+  console.log("Running immediately!");
+})();</code></pre>
+
+<h2>Generators (function*)</h2>
+<p>Functions that can <strong>pause</strong> execution and <strong>resume</strong> later. Perfect for infinite sequences, lazy evaluation, and async iteration.</p>
+<pre><code>function* idGenerator() {
+  let id = 1;
+  while (true) {
+    yield id++;
+  }
+}
+
+const gen = idGenerator();
+console.log(gen.next().value); // 1
+console.log(gen.next().value); // 2
+console.log(gen.next().value); // 3
+
+// Generator for pagination
+function* paginate(items, pageSize) {
+  for (let i = 0; i &lt; items.length; i += pageSize) {
+    yield items.slice(i, i + pageSize);
+  }
+}
+
+const pages = paginate([1,2,3,4,5,6,7,8], 3);
+for (const page of pages) {
+  console.log(page); // [1,2,3], [4,5,6], [7,8]
+}
+
+// yield* for delegation
+function* combined() {
+  yield* [1, 2, 3];
+  yield* ["a", "b", "c"];
+}
+// 1, 2, 3, "a", "b", "c"</code></pre>`
+  },
+
+  {
+    id: 9, free: false, icon: '🏗️', level: 'Advanced', title: 'OOP in JavaScript',
+    excerpt: 'JavaScript is not class-based — it is prototype-based. Understand prototypes, the this keyword, classes (syntactic sugar), inheritance, and composition over inheritance.',
+    tags: ['Advanced','OOP','Prototypes'], visual: '🏗️',
+    bg: 'linear-gradient(135deg,#0a0a0f,#141420)',
+    concepts: ['Prototypes & __proto__','The this Keyword','Constructor Functions','ES6 Classes','Inheritance & extends','Composition over Inheritance'],
+    body: `<p>JavaScript is often called an "object-oriented" language, but it is more accurately <strong>prototype-based</strong>. Objects inherit directly from other objects. ES6 <code>class</code> syntax is just syntactic sugar over this prototype system.</p>
+
+<h2>The this Keyword</h2>
+<p>The value of <code>this</code> depends on <strong>how a function is called</strong>, not where it is defined. This is the #1 source of confusion in JavaScript.</p>
+<pre><code>const user = {
+  name: "Alice",
+  greet() {
+    console.log(\`Hello, I am \${this.name}\`);
+  }
+};
+
+user.greet(); // "Hello, I am Alice" — this = user
+
+const greetFn = user.greet;
+greetFn(); // "Hello, I am undefined" — this = global/window (strict: undefined)
+
+// Fixing with bind
+const boundGreet = user.greet.bind(user);
+boundGreet(); // "Hello, I am Alice"
+
+// Arrow functions inherit 'this' from outer scope
+const team = {
+  name: "DevSquad",
+  members: ["Alice", "Bob"],
+  showMembers() {
+    this.members.forEach(member => {
+      console.log(\`\${this.name}: \${member}\`);
+      // 'this' is team, because arrow function inherits it
+    });
+  }
+};</code></pre>
+
+<h2>The 4 Rules of this</h2>
+<pre><code>// 1. Default binding (standalone function call)
+function showThis() { console.log(this); }
+showThis(); // window (non-strict) or undefined (strict)
+
+// 2. Implicit binding (method call)
+obj.method(); // this = obj
+
+// 3. Explicit binding (call, apply, bind)
+showThis.call(obj);   // this = obj
+showThis.apply(obj);  // this = obj
+const bound = showThis.bind(obj); // this = obj (permanent)
+
+// 4. new binding
+function Person(name) {
+  this.name = name; // this = the new object
+}
+const p = new Person("Alice");</code></pre>
+
+<h2>Prototypes: The Real Inheritance</h2>
+<p>Every JavaScript object has an internal link to another object called its <strong>prototype</strong>. When you access a property, JS looks up the prototype chain.</p>
+<pre><code>const animal = {
+  eat() {
+    console.log(\`\${this.name} is eating.\`);
+  }
+};
+
+const dog = {
+  name: "Rex",
+  bark() {
+    console.log("Woof!");
+  }
+};
+
+// Set dog's prototype to animal
+Object.setPrototypeOf(dog, animal);
+// dog.__proto__ = animal (deprecated but works)
+
+dog.bark(); // "Woof!" (found on dog)
+dog.eat();  // "Rex is eating." (found on animal via prototype chain)
+
+// Check prototype
+console.log(Object.getPrototypeOf(dog) === animal); // true</code></pre>
+
+<h2>Constructor Functions</h2>
+<pre><code>function User(name, email) {
+  this.name = name;
+  this.email = email;
+}
+
+// Methods go on the prototype (shared, not duplicated per instance)
+User.prototype.greet = function() {
+  return \`Hello, I am \${this.name}\`;
+};
+
+const user1 = new User("Alice", "alice@example.com");
+const user2 = new User("Bob", "bob@example.com");
+
+console.log(user1.greet()); // "Hello, I am Alice"
+console.log(user1.greet === user2.greet); // true (same function!)</code></pre>
+
+<h2>ES6 Classes: Syntactic Sugar</h2>
+<pre><code>class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(\`\${this.name} makes a sound.\`);
+  }
+
+  // Static method — called on the class, not instances
+  static isAnimal(obj) {
+    return obj instanceof Animal;
+  }
+}
+
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name); // Call parent constructor
+    this.breed = breed;
+  }
+
+  speak() {
+    console.log(\`\${this.name} barks!\`);
+  }
+
+  fetch() {
+    console.log(\`\${this.name} is fetching.\`);
+  }
+}
+
+const rex = new Dog("Rex", "German Shepherd");
+rex.speak();  // "Rex barks!" (overridden method)
+rex.fetch();  // "Rex is fetching."
+console.log(Dog.isAnimal(rex)); // true</code></pre>
+
+<h2>Private Fields (ES2022)</h2>
+<pre><code>class BankAccount {
+  #balance = 0; // Private field — truly inaccessible from outside
+
+  constructor(initialBalance) {
+    this.#balance = initialBalance;
+  }
+
+  deposit(amount) {
+    if (amount > 0) this.#balance += amount;
+  }
+
+  getBalance() {
+    return this.#balance;
+  }
+}
+
+const account = new BankAccount(100);
+account.deposit(50);
+console.log(account.getBalance()); // 150
+// console.log(account.#balance);  // ❌ SyntaxError! Truly private.</code></pre>
+
+<h2>Composition over Inheritance</h2>
+<p>Inheritance creates tight coupling. Composition is more flexible.</p>
+<pre><code>// Instead of class Dog extends Animal...
+const canSpeak = (state) => ({
+  speak: () => console.log(\`\${state.name} says hello!\`)
+});
+
+const canFly = (state) => ({
+  fly: () => console.log(\`\${state.name} is flying!\`)
+});
+
+const createBird = (name) => {
+  const state = { name };
+  return {
+    ...canSpeak(state),
+    ...canFly(state)
+  };
+};
+
+const parrot = createBird("Polly");
+parrot.speak(); // "Polly says hello!"
+parrot.fly();   // "Polly is flying!"</code></pre>`
+  },
+
+  {
+    id: 10, free: false, icon: '🐛', level: 'Advanced', title: 'Error Handling & Debugging',
+    excerpt: 'Bugs are inevitable. Learn to catch them gracefully with try/catch/finally, create custom errors, use the debugger, and master console methods that most developers never touch.',
+    tags: ['Advanced','Errors','Debugging'], visual: '🐛',
+    bg: 'linear-gradient(135deg,#0a0f14,#101828)',
+    concepts: ['try / catch / finally','throw','Custom Error Classes','console Methods','Debugger Statement','Error Stack Traces'],
+    body: `<p>Professional developers do not write bug-free code — they write code that <strong>fails gracefully</strong> and is <strong>easy to debug</strong>. Mastering error handling and debugging tools will save you hours of frustration.</p>
+
+<h2>try / catch / finally</h2>
+<p>Wrap risky code in <code>try</code>. If an error occurs, <code>catch</code> handles it. <code>finally</code> always runs — perfect for cleanup.</p>
+<pre><code>function parseJSON(jsonString) {
+  try {
+    const data = JSON.parse(jsonString);
+    return data;
+  } catch (error) {
+    console.error("Invalid JSON:", error.message);
+    return null; // Graceful fallback
+  } finally {
+    console.log("Parsing attempt complete.");
+  }
+}
+
+parseJSON('{"name": "Alice"}'); // ✅ Returns object
+parseJSON("not json");            // ❌ Logs error, returns null</code></pre>
+
+<h2>throw: Creating Errors</h2>
+<pre><code>function divide(a, b) {
+  if (typeof a !== 'number' || typeof b !== 'number') {
+    throw new TypeError("Both arguments must be numbers");
+  }
+  if (b === 0) {
+    throw new Error("Cannot divide by zero");
+  }
+  return a / b;
+}
+
+try {
+  divide(10, 0);
+} catch (err) {
+  console.log(err.name);    // "Error"
+  console.log(err.message); // "Cannot divide by zero"
+}</code></pre>
+
+<h2>Custom Error Classes</h2>
+<pre><code>class ValidationError extends Error {
+  constructor(field, message) {
+    super(message);
+    this.name = "ValidationError";
+    this.field = field;
+  }
+}
+
+class NetworkError extends Error {
+  constructor(statusCode, message) {
+    super(message);
+    this.name = "NetworkError";
+    this.statusCode = statusCode;
+  }
+}
+
+function validateUser(user) {
+  if (!user.email) {
+    throw new ValidationError("email", "Email is required");
+  }
+  if (!user.email.includes("@")) {
+    throw new ValidationError("email", "Invalid email format");
+  }
+}
+
+try {
+  validateUser({ name: "Alice" });
+} catch (err) {
+  if (err instanceof ValidationError) {
+    console.log(\`Field '\${err.field}' failed: \${err.message}\`);
+  } else {
+    console.error("Unexpected error:", err);
+  }
+}</code></pre>
+
+<h2>Error Handling in Async Code</h2>
+<pre><code>// With Promises
+fetch('/api/user')
+  .then(response => {
+    if (!response.ok) {
+      throw new NetworkError(response.status, 'Failed to fetch user');
+    }
+    return response.json();
+  })
+  .catch(err => {
+    if (err instanceof NetworkError) {
+      console.error(\`Network error \${err.statusCode}: \${err.message}\`);
+    }
+  });
+
+// With async/await
+async function fetchUser() {
+  try {
+    const response = await fetch('/api/user');
+    if (!response.ok) throw new NetworkError(response.status, 'Failed');
+    return await response.json();
+  } catch (err) {
+    console.error("Fetch failed:", err.message);
+    return null; // Graceful fallback
+  }
+}</code></pre>
+
+<h2>console Methods You Should Know</h2>
+<pre><code>console.log("Basic log");
+console.warn("Warning!");        // Yellow warning
+console.error("Error!");         // Red error
+console.info("Info message");
+
+console.table([{name:"Alice",age:25},{name:"Bob",age:30}]);
+// Displays as a beautiful table
+
+console.group("User Details");
+console.log("Name: Alice");
+console.log("Role: Admin");
+console.groupEnd();
+
+console.time("loop");
+for (let i = 0; i < 1000000; i++) {}
+console.timeEnd("loop"); // "loop: 2.345ms"
+
+console.assert(1 === 2, "This will print because the assertion failed");
+
+console.trace("Trace here"); // Prints the call stack</code></pre>
+
+<h2>The debugger Statement</h2>
+<pre><code>function calculateTotal(items) {
+  let total = 0;
+  for (const item of items) {
+    debugger; // Execution PAUSES here if DevTools is open!
+    total += item.price * item.quantity;
+  }
+  return total;
+}
+
+// When DevTools is open, the browser pauses at 'debugger'
+// You can inspect variables, step through code, and watch expressions.</code></pre>
+
+<h2>Reading Stack Traces</h2>
+<pre><code>function a() { b(); }
+function b() { c(); }
+function c() { throw new Error("Something broke!"); }
+
+try {
+  a();
+} catch (err) {
+  console.error(err.stack);
+  // Error: Something broke!
+  //     at c (file.js:3)
+  //     at b (file.js:2)
+  //     at a (file.js:1)
+  // Read from BOTTOM to TOP to trace the call path!
+}</code></pre>`
+  },
+
+  {
+    id: 11, free: false, icon: '📦', level: 'Advanced', title: 'Modules, Bundlers & Tooling',
+    excerpt: 'Production code is not just files — it is an ecosystem. Learn ES modules, npm, Webpack, Vite, Babel, and the build pipeline that transforms your code for the real world.',
+    tags: ['Advanced','Tooling','Build'], visual: '📦',
+    bg: 'linear-gradient(135deg,#100a0a,#1e0f0f)',
+    concepts: ['ES Modules (import/export)','npm & package.json','Webpack Basics','Vite (Modern Bundler)','Babel & Transpilation','Tree Shaking'],
+    body: `<p>Modern JavaScript development is not just about writing code — it is about <strong>organizing</strong>, <strong>transforming</strong>, and <strong>optimizing</strong> it. Understanding modules and build tools is essential for any professional developer.</p>
+
+<h2>ES Modules: The Standard</h2>
+<p>Before ES6, JavaScript had no native module system. We used script tags (global pollution) or AMD/CommonJS. ES Modules changed everything.</p>
+<pre><code>// utils.js — named exports
+export const PI = 3.14159;
+export function add(a, b) { return a + b; }
+
+// math.js — default export
+export default function calculateArea(radius) {
+  return PI * radius * radius;
+}
+
+// main.js — importing
+import calculateArea, { add, PI } from './math.js';
+import * as math from './math.js';  // namespace import
+
+// Dynamic import (lazy loading)
+const module = await import('./heavy-module.js');
+module.heavyFunction();</code></pre>
+
+<h2>npm & package.json</h2>
+<p><strong>npm</strong> (Node Package Manager) is the world's largest software registry. <code>package.json</code> defines your project's dependencies and scripts.</p>
+<pre><code>{
+  "name": "my-app",
+  "version": "1.0.0",
+  "type": "module",  // Enable ES modules in Node.js
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "eslint": "^8.0.0"
+  }
+}
+
+// Commands:
+// npm install          — install all dependencies
+// npm install lodash   — install a package
+// npm run dev          — run the "dev" script
+// npm update           — update packages</code></pre>
+
+<h2>Webpack: The Classic Bundler</h2>
+<p>Webpack takes your modules and bundles them into optimized files for the browser.</p>
+<pre><code>// webpack.config.js
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[contenthash].js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  module: {
+    rules: [
+      { test: /\.js$/, use: 'babel-loader' },
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] }
+    ]
+  },
+  optimization: {
+    splitChunks: { chunks: 'all' } // Code splitting
+  }
+};</code></pre>
+
+<h2>Vite: The Modern Choice</h2>
+<p>Vite uses native ES modules in development (no bundling needed!) and Rollup for production builds. It is <strong>significantly faster</strong> than Webpack.</p>
+<pre><code>// vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    outDir: 'dist',
+    minify: 'terser',
+    sourcemap: true
+  }
+});
+
+// Start dev server: npm run dev (instant!)
+// Production build: npm run build</code></pre>
+
+<h2>Babel: Transpilation</h2>
+<p>Babel converts modern JavaScript into code that older browsers can understand.</p>
+<pre><code>// Input (ES6+)
+const greet = (name) => \`Hello, \${name}!\`;
+const user = { name, age };
+
+// Output (ES5 for old browsers)
+var greet = function greet(name) {
+  return "Hello, " + name + "!";
+};
+var user = { name: name, age: age };
+
+// .babelrc
+{
+  "presets": ["@babel/preset-env"]
+}</code></pre>
+
+<h2>Tree Shaking</h2>
+<p>Modern bundlers can <strong>eliminate dead code</strong> — removing exports that are never imported.</p>
+<pre><code>// utils.js
+export function used() { return "I am used"; }
+export function unused() { return "I am dead code"; }
+
+// main.js
+import { used } from './utils.js';
+console.log(used());
+
+// With tree shaking, 'unused' is NOT included in the final bundle!
+// This keeps your app small and fast.</code></pre>`
+  },
+
+  {
+    id: 12, free: false, icon: '🚀', level: 'Advanced', title: 'Testing & Performance',
+    excerpt: 'A great site is fast and reliable. Learn unit testing with Jest, performance optimization, memory management, and how to write code that scales under real-world load.',
+    tags: ['Advanced','Testing','Performance'], visual: '🚀',
+    bg: 'linear-gradient(135deg,#0a0a10,#12121e)',
+    concepts: ['Unit Testing (Jest)','Mocking & Spies','Performance Optimization','Memory Leaks','Debouncing & Throttling','Big-O Notation'],
+    body: `<p>Writing code is only half the battle. Professional developers ensure their code is <strong>tested</strong>, <strong>fast</strong>, and <strong>memory-efficient</strong>. This module covers the practices that separate hobby projects from production systems.</p>
+
+<h2>Unit Testing with Jest</h2>
+<p><strong>Jest</strong> is the most popular JavaScript testing framework. It provides test runners, assertions, mocking, and coverage reports out of the box.</p>
+<pre><code>// math.js
+export function add(a, b) { return a + b; }
+export function divide(a, b) {
+  if (b === 0) throw new Error("Cannot divide by zero");
+  return a / b;
+}
+
+// math.test.js
+import { add, divide } from './math.js';
+
+describe('Math utilities', () => {
+  test('adds two numbers', () => {
+    expect(add(2, 3)).toBe(5);
+    expect(add(-1, 1)).toBe(0);
+  });
+
+  test('divides two numbers', () => {
+    expect(divide(10, 2)).toBe(5);
+  });
+
+  test('throws on division by zero', () => {
+    expect(() => divide(10, 0)).toThrow("Cannot divide by zero");
+  });
+});
+
+// Run: npx jest
+// Coverage: npx jest --coverage</code></pre>
+
+<h2>Mocking & Spies</h2>
+<pre><code>import { fetchUser } from './api.js';
+import { getUserProfile } from './user.js';
+
+// Mock the module
+jest.mock('./api.js');
+
+test('fetches user profile', async () => {
+  fetchUser.mockResolvedValue({ id: 1, name: "Alice" });
+
+  const profile = await getUserProfile(1);
+  expect(profile.name).toBe("Alice");
+  expect(fetchUser).toHaveBeenCalledWith(1);
+  expect(fetchUser).toHaveBeenCalledTimes(1);
+});
+
+// Spy on existing function
+const spy = jest.spyOn(console, 'log');
+myFunction();
+expect(spy).toHaveBeenCalledWith("Expected output");
+spy.mockRestore();</code></pre>
+
+<h2>Performance Optimization</h2>
+<pre><code>// 1. Avoid nested loops when possible
+// O(n²) → O(n) using a Set or Map
+
+// 2. Use requestAnimationFrame for animations
+function animate() {
+  // Update DOM
+  requestAnimationFrame(animate);
+}
+
+// 3. Debounce expensive operations
+function debounce(fn, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+const search = debounce((query) => {
+  fetchResults(query);
+}, 300);
+
+// 4. Throttle for scroll/resize events
+function throttle(fn, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      fn.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
+window.addEventListener('scroll', throttle(handleScroll, 100));</code></pre>
+
+<h2>Memory Leaks: What to Avoid</h2>
+<pre><code>// 1. Remove event listeners when done
+const handler = () => console.log("clicked");
+button.addEventListener('click', handler);
+// Later:
+button.removeEventListener('click', handler);
+
+// 2. Clear intervals/timeouts
+const interval = setInterval(poll, 1000);
+// Later:
+clearInterval(interval);
+
+// 3. Avoid global variables
+// Bad: data = []; // implicit global
+// Good: const data = [];
+
+// 4. Break circular references
+let a = {};
+let b = { ref: a };
+a.ref = b; // Circular!
+// Use WeakMap/WeakSet for caches that should not prevent GC
+const cache = new WeakMap();
+function process(obj) {
+  if (cache.has(obj)) return cache.get(obj);
+  const result = heavyCalculation(obj);
+  cache.set(obj, result);
+  return result;
+}</code></pre>
+
+<h2>Big-O Notation</h2>
+<p>Big-O describes how runtime grows relative to input size. It is the language of algorithm efficiency.</p>
+<pre><code>// O(1) — Constant time
+function getFirst(arr) { return arr[0]; }
+
+// O(n) — Linear time
+function findMax(arr) {
+  let max = arr[0];
+  for (const num of arr) {
+    if (num > max) max = num;
+  }
+  return max;
+}
+
+// O(n²) — Quadratic time (nested loops)
+function hasDuplicate(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[i] === arr[j]) return true;
+    }
+  }
+  return false;
+}
+// Better: O(n) using a Set!
+function hasDuplicateFast(arr) {
+  return new Set(arr).size !== arr.length;
+}
+
+// O(log n) — Logarithmic (binary search)
+// O(n log n) — Efficient sorting (merge sort, quicksort)</code></pre>
+
+<blockquote><strong>Remember:</strong> Premature optimization is the root of all evil. Write clean code first, then profile and optimize the bottlenecks. Use Chrome DevTools Performance tab to find slow functions.</blockquote>`
+  }
+];
+
+let currentId = null;
+let completed = getCompleted();
+
+// RENDER INDEX
+renderIndex();
+
+function renderIndex() {
+  const free = MODS.filter(m => m.free);
+  const prem = MODS.filter(m => !m.free);
+  document.getElementById('freeGrid').innerHTML = free.map(renderCard).join('');
+  document.getElementById('premiumGrid').innerHTML = prem.map(renderCard).join('');
+  updateProgress();
+}
+
+function renderCard(m) {
+  const done = completed.includes(m.id);
+  const locked = !m.free && !isPremium();
+  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}`;
+  const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
+  const click = locked ? `onclick="window.location.href='premium.html'"` : `onclick="openLesson(${m.id})"`;
+  return `<div class="${cls}" ${click}>
+    <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
+    <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
+    <div class="mod-title">${m.title}</div>
+    <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
+    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">→</span></div>
+  </div>`;
+}
+
+function updateProgress() {
+  const freeDone = completed.filter(id => MODS.find(m=>m.id===id&&m.free)).length;
+  const pct = Math.round((freeDone/6)*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  document.getElementById('progLabel').textContent = `${freeDone} of 6 free modules completed`;
+}
+
+function openLesson(id) {
+  const m = MODS.find(x=>x.id===id);
+  if (!m) return;
+  if (!m.free && !isPremium()) { window.location.href='premium.html'; return; }
+  currentId = id;
+  document.getElementById('indexPage').style.display = 'none';
+  document.getElementById('lessonPage').style.display = 'block';
+  window.scrollTo(0,0);
+  document.getElementById('lesCrumb').textContent = m.title;
+
+  const done = completed.includes(id);
+  const mb = document.getElementById('markBtn');
+  mb.textContent = done ? '✓ Completed' : '✓ Mark Done';
+  mb.classList.toggle('done-btn', done);
+  document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
+  document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
+
+  const html = !m.free && !isPremium()
+    ? `<div class="premium-lock"><div style="font-size:48px;margin-bottom:16px;">⭐</div>
+       <div style="font-family:var(--ff-display);font-size:28px;margin-bottom:10px;">Premium Module</div>
+       <div style="font-size:14px;color:var(--muted2);margin-bottom:24px;">Sign in as admin to unlock all advanced content.</div>
+       <button class="lock-btn" onclick="window.location.href='premium.html'">Unlock Premium</button></div>`
+    : `<div class="les-cat ${!m.free?'prem':''}">Module ${String(id).padStart(2,'0')} · ${m.level} · ${m.free?'Free':'Premium'}</div>
+       <h1 class="les-title">${m.title}</h1>
+       <p class="les-excerpt">${m.excerpt}</p>
+       <div class="les-meta">
+         <span class="meta-item">📖 JavaScript</span>
+         <span class="meta-item">⏱ ~10 min read</span>
+         <span class="meta-item">⚡ ${m.level}</span>
+       </div>
+       <div class="les-visual" style="background:${m.bg};">
+         <div class="les-visual-grid"></div>
+         <span style="position:relative;z-index:1;font-size:72px;">${m.visual}</span>
+       </div>
+       <div class="art-body">${m.body}</div>
+       <div class="concepts-box">
+         <div class="concepts-title">Key Concepts Covered</div>
+         <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
+       </div>
+       <div class="les-footer">
+         <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
+         <div class="nav-lessons">
+           ${id>1?`<div class="nlc" onclick="openLesson(${id-1})"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
+           ${id<MODS.length?`<div class="nlc" onclick="openLesson(${id+1})" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
+         </div>
+       </div>`;
+
+  document.getElementById('lessonContent').innerHTML = html;
+  renderSidebar();
+
+  // Scroll progress
+  window.onscroll = () => {
+    const pct = document.body.scrollHeight - window.innerHeight > 0
+      ? (window.scrollY/(document.body.scrollHeight-window.innerHeight))*100 : 0;
+    document.getElementById('readProgress').style.width = pct+'%';
+  };
+}
+
+function renderSidebar() {
+  const freeDone = completed.filter(id=>MODS.find(m=>m.id===id&&m.free)).length;
+  const pct = Math.round((freeDone/6)*100);
+  document.getElementById('sbProgFill').style.width = pct+'%';
+  document.getElementById('sbProgLabel').textContent = `${freeDone} / 6 free`;
+  document.getElementById('sbModList').innerHTML = MODS.map(m=>{
+    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
+    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`window.location.href='premium.html'`:`openLesson(${m.id})`}">
+      <span class="sb-num">${done?'✓':m.id}</span>
+      <span class="sb-btn-title">${m.title}</span>
+      ${locked?'<span style="font-size:10px;opacity:0.5;">🔒</span>':''}
+    </button>`;
+  }).join('');
+}
+
+function goBack(){document.getElementById('lessonPage').style.display='none';document.getElementById('indexPage').style.display='block';renderIndex();window.scrollTo(0,0);}
+function prevLesson(){if(currentId>1)openLesson(currentId-1);}
+function nextLesson(){if(currentId<MODS.length)openLesson(currentId+1);}
+function markDone(){
+  if(!currentId)return;
+  const m=MODS.find(x=>x.id===currentId);
+  if(!m.free&&!isPremium())return;
+  if(!completed.includes(currentId)){completed.push(currentId);saveCompleted(completed);showToast('✓ Module marked complete! ⚡');}
+  openLesson(currentId);
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+// Cursor
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function anim(){cur.style.left=(mx-5)+'px';cur.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=(rx-18)+'px';curR.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
+document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
+document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
+</script>
+</body>
+</html>
