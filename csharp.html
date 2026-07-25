@@ -5,10 +5,11 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C# Programming — IT Study Hub</title>
+<title>R Programming — IT Study Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="course-page.css">
+<base target="_blank">
 </head>
 <body>
 <div class="read-progress" id="readProgress"></div>
@@ -23,11 +24,11 @@
 
 <div id="indexPage">
   <div class="fade-up">
-    <div class="course-eyebrow">Enterprise Development · Subject 05</div>
-    <h1 class="course-title">C# <em>Programming</em></h1>
-    <p class="course-desc">Master Microsoft's flagship language. From the .NET ecosystem and robust Object-Oriented design to advanced LINQ, APIs, and asynchronous programming.</p>
+    <div class="course-eyebrow">Data Science & Statistics · Subject 05</div>
+    <h1 class="course-title">R <em>Programming</em></h1>
+    <p class="course-desc">Master the language of data science. From RStudio basics and statistical computing to advanced dplyr, ggplot2, Shiny dashboards, and reproducible research with R Markdown.</p>
     <div class="course-chips">
-      <span class="chip chip-lime">🟣 C# 11 & .NET 8</span>
+      <span class="chip chip-lime">🔵 R 4.4 & Tidyverse</span>
       <span class="chip chip-lime">6 Free Modules</span>
       <span class="chip chip-gold">6 Premium Modules</span>
       <span class="chip chip-lime">Real PDF Notes</span>
@@ -55,24 +56,24 @@
   <div class="fade-up" style="animation-delay:0.25s;">
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
-      <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%23%20NOTES-1-82.pdf" target="_blank" class="mat-item">
+      <a href="https://cran.r-project.org/doc/contrib/Short-refcard.pdf" target="_blank" class="mat-item">
         <div class="mat-icon">📝</div>
-        <div class="mat-info"><div class="mat-title">C# Syntax Cheat Sheet</div><div class="mat-desc">Core syntax, variables, OOP · Free</div></div>
+        <div class="mat-info"><div class="mat-title">R Syntax Cheat Sheet</div><div class="mat-desc">Core syntax, vectors, data frames · Free</div></div>
         <span class="mat-action">↓ Download</span>
       </a>
-      <a href="https://www.sanfoundry.com/csharp-interview-questions-answers/" target="_blank" class="mat-item">
+      <a href="https://www.datacamp.com/blog/r-interview-questions-and-answers" target="_blank" class="mat-item">
         <div class="mat-icon">🎯</div>
-        <div class="mat-info"><div class="mat-title">Placement Quiz — C#</div><div class="mat-desc">1000+ MCQs · Free</div></div>
+        <div class="mat-info"><div class="mat-title">Placement Quiz — R</div><div class="mat-desc">100+ MCQs on R & Data Science · Free</div></div>
         <span class="mat-action">→ Start</span>
       </a>
       <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
         <div class="mat-icon">⭐</div>
-        <div class="mat-info"><div class="mat-title">Advanced Notes — LINQ & async/await</div><div class="mat-desc">Master modern C# paradigms · Premium</div></div>
+        <div class="mat-info"><div class="mat-title">Advanced Notes — dplyr & ggplot2</div><div class="mat-desc">Master the Tidyverse ecosystem · Premium</div></div>
         <span class="mat-action locked">🔒 Unlock</span>
       </div>
       <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
         <div class="mat-icon">⭐</div>
-        <div class="mat-info"><div class="mat-title">.NET Interview Question Bank</div><div class="mat-desc">100+ architecture questions · Premium</div></div>
+        <div class="mat-info"><div class="mat-title">Data Science Interview Question Bank</div><div class="mat-desc">100+ R & statistics questions · Premium</div></div>
         <span class="mat-action locked">🔒 Unlock</span>
       </div>
     </div>
@@ -81,7 +82,7 @@
 
 <div id="lessonPage">
   <div class="lesson-topbar">
-    <div class="les-breadcrumb">C# Programming <span>/</span> <span id="lesCrumb">—</span></div>
+    <div class="les-breadcrumb">R Programming <span>/</span> <span id="lesCrumb">—</span></div>
     <div class="les-nav-btns">
       <button class="lnav-btn" onclick="goBack()">← Back</button>
       <button class="lnav-btn" id="prevBtn" onclick="prevLesson()">← Prev</button>
@@ -106,223 +107,322 @@
 </div>
 
 <div class="toast" id="toast"></div>
-<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
-<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
+<div style="width:10px;height:10px;background:#276DC3;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
+<div style="width:36px;height:36px;border:1px solid #276DC3;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <script>
 const ADMIN_EMAIL = 'itstudyhub.tiu@gmail.com';
 function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){return null;}}
 function isPremium(){const s=getSession();return s&&(s.isAdmin||s.plan==='pro'||s.plan==='elite'||s.email===ADMIN_EMAIL);}
-function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_csharp_done')||'[]');}catch(e){return[];}}
-function saveCompleted(a){localStorage.setItem('ish_csharp_done',JSON.stringify(a));}
+function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_r_done')||'[]');}catch(e){return[];}}
+function saveCompleted(a){localStorage.setItem('ish_r_done',JSON.stringify(a));}
 
 const MODS = [
-  {id:1,free:true,icon:'🟣',level:'Beginner',title:'Intro to C# & .NET',
-   excerpt:'Created by Microsoft, C# is an elegant, modern, object-oriented language. Understand the difference between C#, .NET, and how compilation works in this ecosystem.',
-   tags:['Beginner','History','.NET'],visual:'🟣',bg:'linear-gradient(135deg,#1a0a1a,#200f20)',
-   concepts:['Anders Hejlsberg','CLR (Common Language Runtime)','IL (Intermediate Language)','Top-Level Statements','Console.WriteLine()'],
-   body:`<p><strong>C#</strong> (pronounced "See Sharp") was developed by Anders Hejlsberg at Microsoft in 2000. It is the primary language used to build applications on the <strong>.NET</strong> framework, ranging from enterprise web APIs to Unity games.</p>
-<h2>How Compilation Works</h2>
-<p>Similar to Java, C# does not compile directly to machine code. It is a two-step process:</p>
-<ol>
-  <li>Your C# code compiles into <strong>Intermediate Language (IL)</strong>.</li>
-  <li>When you run the app, the <strong>Common Language Runtime (CLR)</strong> uses a Just-In-Time (JIT) compiler to turn the IL into native machine code specific to your OS.</li>
-</ol>
-<h2>Your First Program (Modern C#)</h2>
-<p>Historically, C# required a lot of boilerplate (namespaces, a <code>Program</code> class, and a <code>Main</code> method). Since C# 9, <strong>Top-Level Statements</strong> allow you to write simple scripts instantly:</p>
-<pre><code>// Modern C# Hello World
-Console.WriteLine("Hello, IT Study Hub!");
-
-// Taking input
-Console.Write("Enter your name: ");
-string name = Console.ReadLine();
-Console.WriteLine($"Welcome, {name}!"); // String interpolation</code></pre>`},
-
-  {id:2,free:true,icon:'🔤',level:'Beginner',title:'Variables & Types',
-   excerpt:'C# is strongly typed. Learn the crucial distinction between Value Types and Reference Types, the var keyword, and how to cast safely.',
-   tags:['Beginner','Data Types','Memory'],visual:'🔤',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
-   concepts:['Value vs Reference Types','int, string, bool','var keyword','Type Casting','Nullable Types (?)'],
-   body:`<p>C# enforces strict type safety. A variable's type must be known at compile-time. The most important concept to master here is how types are stored in memory.</p>
-<h2>Value Types vs. Reference Types</h2>
+  {id:1,free:true,icon:'🔵',level:'Beginner',title:'Intro to R & RStudio',
+   excerpt:'Created by statisticians for statisticians, R is the gold standard for data analysis. Understand the R ecosystem, RStudio IDE, and how to write your first script.',
+   tags:['Beginner','History','RStudio'],visual:'🔵',bg:'linear-gradient(135deg,#0a1020,#101830)',
+   concepts:['Ross Ihaka & Robert Gentleman','RStudio IDE','CRAN','R Console vs Script','install.packages()'],
+   body:`<p><strong>R</strong> is an open-source programming language and environment for statistical computing and graphics. It was created by <strong>Ross Ihaka</strong> and <strong>Robert Gentleman</strong> at the University of Auckland, New Zealand, in 1993. Today, R is the third-most popular language for data science, behind only Python and SQL.</p>
+<h2>Why Learn R?</h2>
 <ul>
-  <li><strong>Value Types (Stack):</strong> Primitives like <code>int</code>, <code>double</code>, <code>bool</code>, and <code>char</code>. When you assign one value type to another, a <em>copy</em> is made.</li>
-  <li><strong>Reference Types (Heap):</strong> Complex objects like <code>string</code>, arrays, and classes. When you assign one to another, you are copying the <em>memory address</em>, not the actual data.</li>
+  <li><strong>Statistical Power:</strong> R was built by statisticians, for statisticians. It has the most comprehensive collection of statistical packages in the world.</li>
+  <li><strong>Data Visualization:</strong> Libraries like <code>ggplot2</code> produce publication-quality graphics with minimal code.</li>
+  <li><strong>Reproducible Research:</strong> R Markdown allows you to weave narrative text and code together into dynamic reports.</li>
+  <li><strong>Vibrant Community:</strong> CRAN (Comprehensive R Archive Network) hosts over 20,000 packages.</li>
 </ul>
-<h2>The <code>var</code> Keyword</h2>
-<p>C# allows implicit typing using <code>var</code>. The compiler figures out the type based on the assigned value. <strong>Note:</strong> It is still strongly typed! Once compiled, a <code>var</code> is fixed to that type.</p>
-<pre><code>var age = 20;            // Compiles as int
-var gpa = 3.8;           // Compiles as double
-var isStudent = true;    // Compiles as bool
-var name = "Dithsha";    // Compiles as string
+<h2>Your First R Script</h2>
+<p>R can be used interactively in the console or via saved scripts (.R files). RStudio is the recommended IDE. Let's write your first lines:</p>
+<pre><code># This is a comment in R
+# R uses the assignment operator <- (or =)
+message <- "Hello, IT Study Hub!"
+print(message)
 
-// age = "Twenty"; <-- Error: Cannot implicitly convert string to int</code></pre>
-<h2>Nullable Value Types</h2>
-<p>By default, value types cannot hold a <code>null</code> value. You can allow this by appending a <code>?</code>.</p>
-<pre><code>int standardInt = 0;
-int? nullableInt = null;
+# R is also a powerful calculator
+2 + 3
+sqrt(144)
+pi * 4^2
 
-if (nullableInt.HasValue) {
-    Console.WriteLine(nullableInt.Value);
-}</code></pre>`},
+# Getting help
+?sqrt
+help("mean")</code></pre>
+<h2>Installing Packages</h2>
+<p>R's true power comes from its packages. The <code>tidyverse</code> is a collection of essential data science packages maintained by Posit (formerly RStudio).</p>
+<pre><code># Install a package (run once)
+install.packages("tidyverse")
+
+# Load it into your session (run every time)
+library(tidyverse)</code></pre>`},
+
+  {id:2,free:true,icon:'📊',level:'Beginner',title:'Variables & Data Types',
+   excerpt:'R has unique data types designed for statistics. Master vectors, factors, lists, and understand the crucial concept of coercion in R.',
+   tags:['Beginner','Data Types','Vectors'],visual:'📊',bg:'linear-gradient(135deg,#0a1a10,#102818)',
+   concepts:['Atomic Vectors','Factors','Coercion Rules','Lists','Type Checking (class(), typeof())'],
+   body:`<p>R has five basic atomic data types: <strong>character</strong>, <strong>numeric</strong> (double), <strong>integer</strong>, <strong>logical</strong>, and <strong>complex</strong>. Unlike many languages, the most fundamental data structure in R is the <strong>vector</strong> — even a single number is a vector of length 1.</p>
+<h2>Creating Vectors</h2>
+<p>The <code>c()</code> function (combine/concatenate) is used to create vectors. All elements in an atomic vector must be of the same type.</p>
+<pre><code># Numeric vector
+ages <- c(20, 22, 19, 21, 23)
+
+# Character vector
+names <- c("Dithsha", "Mithila", "Rohan")
+
+# Logical vector
+passed <- c(TRUE, FALSE, TRUE, TRUE)
+
+# Integer vector (append L)
+scores <- c(95L, 88L, 92L)
+
+# Sequence generation
+1:10
+seq(0, 100, by = 10)
+rep("A", times = 5)</code></pre>
+<h2>Coercion Hierarchy</h2>
+<p>R automatically converts (coerces) elements to the most flexible type when mixed:</p>
+<pre><code># logical → integer → numeric → character
+c(1, "hello", TRUE)  # All become character
+c(1, TRUE, 5)        # logical becomes numeric: c(1, 1, 5)</code></pre>
+<h2>Factors — R's Statistical Superpower</h2>
+<p>Factors are used to store categorical data. They are internally stored as integers with associated labels (levels), making them memory-efficient and analysis-friendly.</p>
+<pre><code>gender <- factor(c("Male", "Female", "Female", "Male"))
+levels(gender)       # "Female" "Male"
+summary(gender)      # Counts per level
+
+# Ordered factors
+grade <- factor(c("B", "A", "C", "A"), 
+                levels = c("F", "D", "C", "B", "A"),
+                ordered = TRUE)</code></pre>`},
 
   {id:3,free:true,icon:'🔀',level:'Beginner',title:'Control Flow & Logic',
-   excerpt:'Direct your program\'s execution path using if statements, advanced switch expressions, and loops specifically designed for collections.',
+   excerpt:'Direct your data analysis workflow using conditional statements, loops, and R's powerful vectorized operations that eliminate the need for many loops.',
    tags:['Beginner','Logic','Conditionals'],visual:'🔀',bg:'linear-gradient(135deg,#0f0a14,#201028)',
-   concepts:['if / else','switch Expressions','for loop','foreach loop','while loop'],
-   body:`<p>Control flow structures in C# are heavily inspired by C and C++, but modern C# has introduced highly elegant ways to write logic.</p>
-<h2>Loops: <code>for</code> and <code>foreach</code></h2>
-<p>The <code>foreach</code> loop is the preferred way to iterate over arrays and collections in C# because it guarantees you won't get an "index out of bounds" error.</p>
-<pre><code>string[] techStack = { "C#", "SQL", "Azure" };
+   concepts:['if / else','for loop','while loop','Vectorization','apply family (lapply, sapply)'],
+   body:`<p>Control flow in R follows standard programming paradigms, but R's <strong>vectorized</strong> nature means you often don't need explicit loops. Operating on entire vectors at once is both faster and more idiomatic in R.</p>
+<h2>Conditional Statements</h2>
+<pre><code>score <- 85
 
-// Traditional for loop
-for (int i = 0; i < techStack.Length; i++) {
-    Console.WriteLine(techStack[i]);
+if (score >= 90) {
+  grade <- "A"
+} else if (score >= 80) {
+  grade <- "B"
+} else if (score >= 70) {
+  grade <- "C"
+} else {
+  grade <- "F"
 }
 
-// Modern foreach loop (Cleaner & Safer)
-foreach (var tech in techStack) {
-    Console.WriteLine(tech);
-}</code></pre>
-<h2>Modern Switch Expressions (C# 8+)</h2>
-<p>Instead of the clunky, traditional <code>switch/case/break</code> statement, C# now supports switch <em>expressions</em> that return a value directly based on pattern matching.</p>
-<pre><code>int day = 3;
-
-// Elegant switch expression
-string dayName = day switch {
-    1 => "Monday",
-    2 => "Tuesday",
-    3 => "Wednesday",
-    _ => "Unknown Day" // The discard '_' acts as the default case
-};
-
-Console.WriteLine(dayName);</code></pre>`},
-
-  {id:4,free:true,icon:'🛠️',level:'Beginner',title:'Methods & Parameters',
-   excerpt:'Break down logic into reusable methods. Discover C#-specific parameter modifiers like ref, out, and in that control how arguments are passed.',
-   tags:['Beginner','Methods','Modularity'],visual:'🛠️',bg:'linear-gradient(135deg,#14140a,#282810)',
-   concepts:['Method Signatures','ref Keyword','out Keyword','Optional Parameters','Named Arguments'],
-   body:`<p>Methods (functions) encapsulate logic. In C#, methods are always attached to a class or a struct.</p>
-<h2>Passing by Reference (<code>ref</code> and <code>out</code>)</h2>
-<p>By default, value types (like <code>int</code>) are passed to methods by <em>value</em> (a copy is made). You can force them to be passed by reference.</p>
-<ul>
-  <li><code>ref</code>: The variable <strong>must</strong> be initialized before being passed. The method can modify it.</li>
-  <li><code>out</code>: The variable does <strong>not</strong> need to be initialized before passing, but the method <strong>must</strong> assign a value to it before returning.</li>
-</ul>
-<pre><code>// Using out (common in TryParse methods)
-void GetCoordinates(out int x, out int y) {
-    x = 10; // Must assign
-    y = 20; // Must assign
+# Vectorized ifelse (no loop needed!)
+scores <- c(95, 82, 67, 91, 74)
+grades <- ifelse(scores >= 90, "A",
+          ifelse(scores >= 80, "B",
+          ifelse(scores >= 70, "C", "F")))</code></pre>
+<h2>Loops in R</h2>
+<p>While R supports <code>for</code> and <code>while</code> loops, they are generally slower than vectorized operations. Use them when vectorization isn't possible.</p>
+<pre><code># For loop
+for (i in 1:5) {
+  print(paste("Iteration:", i))
 }
 
-int a, b;
-GetCoordinates(out a, out b);
-Console.WriteLine($"X: {a}, Y: {b}");</code></pre>
-<h2>Optional Parameters & Named Arguments</h2>
-<p>You can assign default values to parameters. When calling the method, you can skip them, or use Named Arguments to specify exactly which parameter you are targeting.</p>
-<pre><code>void CreateUser(string name, bool isAdmin = false) {
-    // Logic here
+# Looping over a vector
+tech_stack <- c("R", "dplyr", "ggplot2")
+for (tech in tech_stack) {
+  print(tech)
 }
 
-CreateUser("Dithsha"); // isAdmin defaults to false
-CreateUser(isAdmin: true, name: "Admin"); // Named arguments ignore order</code></pre>`},
-
-  {id:5,free:true,icon:'🏗️',level:'Beginner',title:'Classes & Objects (OOP)',
-   excerpt:'C# is fundamentally Object-Oriented. Master the creation of classes, constructors, and the powerful concept of Properties (getters/setters).',
-   tags:['Beginner','OOP','Classes'],visual:'🏗️',bg:'linear-gradient(135deg,#140a14,#281028)',
-   concepts:['Classes & Objects','Constructors','Fields vs Properties','Auto-Implemented Properties','Encapsulation'],
-   body:`<p>C# is a fully Object-Oriented language. A <strong>Class</strong> is a blueprint, and an <strong>Object</strong> is an instance of that blueprint residing in memory.</p>
-<h2>Properties (<code>get</code> and <code>set</code>)</h2>
-<p>In Java, you have to write explicit <code>getName()</code> and <code>setName()</code> methods to protect your private fields. C# solves this elegantly with <strong>Properties</strong>.</p>
-<pre><code>public class Student {
-    // Auto-implemented property
-    // The compiler automatically creates a hidden private backing field!
-    public string Name { get; set; }
-
-    // Property with custom validation logic
-    private int _gpa;
-    public int GPA {
-        get { return _gpa; }
-        set {
-            if (value >= 0 && value <= 4)
-                _gpa = value;
-            else
-                Console.WriteLine("Invalid GPA.");
-        }
-    }
-
-    // Constructor
-    public Student(string name) {
-        Name = name;
-    }
+# While loop
+count <- 1
+while (count <= 5) {
+  print(count)
+  count <- count + 1
 }</code></pre>
-<p>To use this class:</p>
-<pre><code>Student s = new Student("Mithila");
-s.GPA = 3; // Calls the 'set' block automatically
-Console.WriteLine(s.Name); // Calls the 'get' block automatically</code></pre>`},
+<h2>The apply Family — R's Loop Replacement</h2>
+<p>R provides a family of functions to apply operations across data structures without explicit loops:</p>
+<pre><code>numbers <- list(a = 1:5, b = 6:10, c = 11:15)
 
-  {id:6,free:true,icon:'📦',level:'Beginner',title:'Arrays & Collections',
-   excerpt:'Move beyond static arrays. Discover generic collections like List<T> and Dictionary<TKey, TValue> for dynamic, type-safe data storage.',
-   tags:['Beginner','Data Structures','Generics'],visual:'📦',bg:'linear-gradient(135deg,#0a1414,#102828)',
-   concepts:['1D & 2D Arrays','Generics <T>','List<T>','Dictionary<K,V>','Basic LINQ Integration'],
-   body:`<p>While standard arrays (<code>int[]</code>) are fast, their size is fixed once created. For dynamic data, C# relies on <strong>Generic Collections</strong> found in the <code>System.Collections.Generic</code> namespace.</p>
-<h2>Lists (<code>List&lt;T&gt;</code>)</h2>
-<p>A <code>List</code> automatically resizes itself as you add or remove items. It is the most commonly used collection in C#.</p>
-<pre><code>// Initialize a list of strings
-List&lt;string&gt; frameworks = new List&lt;string&gt; { "ASP.NET", "Entity Framework" };
+# lapply returns a list
+lapply(numbers, mean)
 
-frameworks.Add("Blazor");       // Adds to end
-frameworks.Remove("ASP.NET");   // Removes specific item
-int count = frameworks.Count;   // Gets the size (Not .Length!)
+# sapply simplifies to a vector/matrix
+sapply(numbers, mean)
 
-foreach (var fw in frameworks) {
-    Console.WriteLine(fw);
-}</code></pre>
-<h2>Dictionaries (<code>Dictionary&lt;TKey, TValue&gt;</code>)</h2>
-<p>A Dictionary stores key-value pairs (similar to a HashMap in Java or a dict in Python). Lookups by key are incredibly fast.</p>
-<pre><code>Dictionary&lt;string, int&gt; scores = new Dictionary&lt;string, int&gt;();
+# Apply to rows or columns of a matrix
+mat <- matrix(1:9, nrow = 3)
+apply(mat, 1, sum)   # Row sums (MARGIN = 1)
+apply(mat, 2, mean)  # Column means (MARGIN = 2)</code></pre>`},
 
-scores.Add("Dithsha", 95);
-scores["Mithila"] = 88; // Alternative way to add/update
+  {id:4,free:true,icon:'🛠️',level:'Beginner',title:'Functions & Parameters',
+   excerpt:'Break down analysis into reusable functions. Discover R's flexible argument handling, default values, and the powerful concept of lexical scoping.',
+   tags:['Beginner','Functions','Modularity'],visual:'🛠️',bg:'linear-gradient(135deg,#14140a,#282810)',
+   concepts:['Function Syntax','Default Arguments','... (Ellipsis)','Lexical Scoping','Return Values'],
+   body:`<p>Functions are the building blocks of reusable code in R. They encapsulate logic, accept inputs (arguments), and return outputs. R functions are <strong>first-class objects</strong> — they can be passed as arguments to other functions and returned from functions.</p>
+<h2>Creating Custom Functions</h2>
+<pre><code># Basic function
+square <- function(x) {
+  return(x^2)
+}
+square(5)  # 25
 
-if (scores.ContainsKey("Dithsha")) {
-    Console.WriteLine($"Dithsha's score: {scores["Dithsha"]}");
-}</code></pre>`},
+# Function with default arguments
+greet <- function(name, greeting = "Hello") {
+  paste(greeting, name, "!")
+}
+greet("Dithsha")           # "Hello Dithsha !"
+greet("Mithila", "Hi")     # "Hi Mithila !"
+
+# Multiple return values (as a list)
+stats_summary <- function(x) {
+  list(
+    mean = mean(x),
+    median = median(x),
+    sd = sd(x)
+  )
+}
+result <- stats_summary(c(1, 2, 3, 4, 5))
+result$mean    # 3</code></pre>
+<h2>The Ellipsis (...)</h2>
+<p>The <code>...</code> argument allows a function to accept an arbitrary number of additional arguments, which it can then pass to another function.</p>
+<pre><code>my_plot <- function(x, y, ...) {
+  plot(x, y, col = "blue", pch = 19, ...)
+}
+
+# Additional arguments like 'main' and 'xlab' are passed through
+my_plot(1:10, 1:10, main = "My Chart", xlab = "X Axis")</code></pre>
+<h2>Lexical Scoping</h2>
+<p>R uses <strong>lexical scoping</strong>, meaning functions look for variables first in their own body, then in the environment where they were defined.</p>
+<pre><code>outer_var <- 100
+
+my_func <- function() {
+  inner_var <- 50
+  return(outer_var + inner_var)  # Can access outer_var
+}
+
+my_func()  # 150</code></pre>`},
+
+  {id:5,free:true,icon:'🏗️',level:'Beginner',title:'Data Frames & Tibbles',
+   excerpt:'Data frames are the workhorse of R data analysis. Learn to create, index, filter, and manipulate tabular data — the foundation of all data science in R.',
+   tags:['Beginner','Data Frames','Tibbles'],visual:'🏗️',bg:'linear-gradient(135deg,#140a14,#281028)',
+   concepts:['data.frame()','tibble()','Indexing ($, [], [[]])','Subsetting','str() & summary()'],
+   body:`<p>A <strong>data frame</strong> is R's most important data structure for data analysis. It is a two-dimensional table where each column can be a different data type (numeric, character, factor, etc.), similar to a spreadsheet or SQL table. <strong>Tibbles</strong> are the modern, enhanced version from the tidyverse.</p>
+<h2>Creating Data Frames</h2>
+<pre><code># Traditional data frame
+students <- data.frame(
+  name = c("Dithsha", "Mithila", "Rohan"),
+  age = c(20, 21, 19),
+  gpa = c(3.8, 3.9, 3.5),
+  honors = c(TRUE, TRUE, FALSE)
+)
+
+# Modern tibble (tidyverse)
+library(tibble)
+students_tib <- tibble(
+  name = c("Dithsha", "Mithila", "Rohan"),
+  age = c(20, 21, 19),
+  gpa = c(3.8, 3.9, 3.5)
+)</code></pre>
+<h2>Indexing and Subsetting</h2>
+<p>R provides multiple ways to access data:</p>
+<pre><code># By column name using $
+students$age           # Returns vector: c(20, 21, 19)
+students$gpa[1]       # First student's GPA: 3.8
+
+# By position [row, column]
+students[1, 2]        # Row 1, Column 2: 20
+students[1, ]         # Entire first row
+students[, "name"]    # Entire name column
+
+# Logical subsetting
+students[students$age > 19, ]   # Students older than 19
+students[students$honors == TRUE, "name"]  # Names of honors students</code></pre>
+<h2>Inspecting Data</h2>
+<pre><code>head(students)        # First 6 rows
+str(students)         # Structure of the object
+summary(students)     # Statistical summary per column
+dim(students)         # Dimensions: rows x columns
+nrow(students)        # Number of rows
+ncol(students)        # Number of columns</code></pre>
+<h2>Why Tibbles?</h2>
+<p>Tibbles never convert strings to factors, never create row names, and print more cleanly. They are the default in the tidyverse and highly recommended for modern R workflows.</p>`},
+
+  {id:6,free:true,icon:'📦',level:'Beginner',title:'Vectors, Lists & Matrices',
+   excerpt:'Move beyond basic vectors. Discover matrices, arrays, and nested lists — the complete toolkit of R's core data structures for any analysis task.',
+   tags:['Beginner','Data Structures','Arrays'],visual:'📦',bg:'linear-gradient(135deg,#0a1414,#102828)',
+   concepts:['Atomic Vectors','Lists (recursive)','Matrices','Arrays','rbind() & cbind()'],
+   body:`<p>While data frames handle most tabular data, understanding R's lower-level data structures is essential for advanced programming, linear algebra, and efficient memory usage.</p>
+<h2>Matrices — 2D Numeric Arrays</h2>
+<p>Matrices are two-dimensional structures where <strong>all elements must be the same type</strong> (usually numeric). They are essential for linear algebra and statistical modeling.</p>
+<pre><code># Create a matrix
+m <- matrix(1:9, nrow = 3, ncol = 3, byrow = TRUE)
+print(m)
+
+#      [,1] [,2] [,3]
+# [1,]    1    2    3
+# [2,]    4    5    6
+# [3,]    7    8    9
+
+# Matrix operations
+m * 2           # Scalar multiplication
+t(m)            # Transpose
+diag(m)         # Diagonal elements
+det(m)          # Determinant
+eigen(m)        # Eigenvalues and eigenvectors</code></pre>
+<h2>Lists — R's Most Flexible Structure</h2>
+<p>Unlike vectors, lists can hold elements of <strong>different types and sizes</strong>, including other lists. They are the foundation for complex R objects like model outputs.</p>
+<pre><code>my_list <- list(
+  name = "Dithsha",
+  scores = c(95, 88, 92),
+  matrix = matrix(1:4, nrow = 2),
+  passed = TRUE
+)
+
+# Access elements
+my_list$name        # By name
+my_list[[2]]       # By position (returns the element)
+my_list[2]         # By position (returns a sub-list)
+my_list[["scores"]] # By name with double brackets</code></pre>
+<h2>Combining Data</h2>
+<pre><code>df1 <- data.frame(id = 1:3, score = c(85, 90, 78))
+df2 <- data.frame(id = 1:3, grade = c("B", "A", "C"))
+
+# Column bind
+cbind(df1, df2$grade)
+
+# Row bind
+rbind(df1, data.frame(id = 4, score = 92))</code></pre>`},
 
   // PREMIUM MODULES
-  {id:7,free:false,icon:'🧬',level:'Intermediate',title:'Advanced OOP',
-   excerpt:'Master the pillars of Object-Oriented design. Learn Inheritance, Polymorphism, abstract classes, and how Interfaces drive decoupled architecture.',
-   tags:['Intermediate','Inheritance','Interfaces'],visual:'🧬',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
-   concepts:['Inheritance (:)','base keyword','virtual and override','Abstract Classes','Interfaces (IConvention)'],
+  {id:7,free:false,icon:'🧬',level:'Intermediate',title:'Data Manipulation with dplyr',
+   excerpt:'Master the grammar of data manipulation. Learn filter, select, mutate, arrange, and summarise to transform raw data into insights with elegant, readable code.',
+   tags:['Intermediate','dplyr','Tidyverse'],visual:'🧬',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
+   concepts:['filter() & select()','mutate() & transmute()','arrange() & summarise()','group_by()','%>% Pipe Operator'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:8,free:false,icon:'⚠️',level:'Intermediate',title:'Exception Handling',
-   excerpt:'Build robust applications. Learn how to catch errors elegantly using try/catch/finally blocks and create custom Exception types.',
-   tags:['Intermediate','Exceptions','Robustness'],visual:'⚠️',bg:'linear-gradient(135deg,#10080a,#200f12)',
-   concepts:['try / catch / finally','Exception filters (when)','throw vs throw ex','Custom Exceptions'],
+  {id:8,free:false,icon:'⚠️',level:'Intermediate',title:'Error Handling & Debugging',
+   excerpt:'Build robust R scripts. Learn how to catch errors gracefully using tryCatch, create custom warnings, and use RStudio's powerful debugging tools.',
+   tags:['Intermediate','Debugging','Robustness'],visual:'⚠️',bg:'linear-gradient(135deg,#10080a,#200f12)',
+   concepts:['tryCatch()','stop() & warning()','browser() & debug()','traceback()','Custom Conditions'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:9,free:false,icon:'🔗',level:'Advanced',title:'Delegates & Events',
-   excerpt:'Understand how C# handles callbacks. Master delegates, the Action and Func types, and the event-driven architecture that powers UI development.',
-   tags:['Advanced','Delegates','Events'],visual:'🔗',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
-   concepts:['Delegates (Type-safe function pointers)','Action and Func','Lambda Expressions (=>)','Events & EventHandlers'],
+  {id:9,free:false,icon:'🔗',level:'Advanced',title:'Functional Programming',
+   excerpt:'Unlock R's functional nature. Master the purrr package, anonymous functions, function factories, and higher-order functions for elegant data pipelines.',
+   tags:['Advanced','purrr','Functional'],visual:'🔗',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
+   concepts:['purrr::map()','Anonymous Functions','Function Factories','Closures','Higher-Order Functions'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:10,free:false,icon:'🔎',level:'Advanced',title:'LINQ Mastery',
-   excerpt:'Language Integrated Query (LINQ) is C#\'s superpower. Query databases, XML, and local collections using declarative, SQL-like syntax.',
-   tags:['Advanced','LINQ','Data Queries'],visual:'🔎',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
-   concepts:['Method Syntax vs Query Syntax','Where, Select, OrderBy','Deferred Execution','IQueryable vs IEnumerable'],
+  {id:10,free:false,icon:'🔎',level:'Advanced',title:'Data Visualization with ggplot2',
+   excerpt:'Turn data into compelling stories. Master the Grammar of Graphics with ggplot2 — aesthetics, geoms, facets, themes, and custom annotations.',
+   tags:['Advanced','ggplot2','Visualization'],visual:'🔎',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
+   concepts:['Grammar of Graphics','aes() & geoms','facets','scales & themes','Annotations & Customization'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:11,free:false,icon:'⚡',level:'Advanced',title:'Asynchronous Programming',
-   excerpt:'Keep your apps responsive. Master the async and await keywords to handle I/O bound operations without freezing the main thread.',
-   tags:['Advanced','async/await','Tasks'],visual:'⚡',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
-   concepts:['async and await','Task and Task<T>','Deadlocks','Task.WhenAll','I/O bound vs CPU bound'],
+  {id:11,free:false,icon:'⚡',level:'Advanced',title:'Statistical Analysis & Modeling',
+   excerpt:'Leverage R's statistical roots. Perform regression, hypothesis testing, ANOVA, and probability distributions to extract meaningful insights from data.',
+   tags:['Advanced','Statistics','Modeling'],visual:'⚡',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
+   concepts:['Linear Regression (lm)','Hypothesis Testing','Probability Distributions','ANOVA','Model Diagnostics'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:12,free:false,icon:'🗄️',level:'Advanced',title:'Entity Framework Core',
-   excerpt:'Stop writing raw SQL. Learn how to map C# classes to database tables using Entity Framework Core, Microsoft\'s modern ORM.',
-   tags:['Advanced','EF Core','Databases'],visual:'🗄️',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
-   concepts:['Object-Relational Mapping (ORM)','DbContext','DbSet<T>','Code-First Migrations','CRUD Operations via LINQ'],
+  {id:12,free:false,icon:'🗄️',level:'Advanced',title:'Shiny & R Markdown',
+   excerpt:'Build interactive dashboards and reproducible reports. Learn Shiny for web apps and R Markdown for dynamic documents that update with your data.',
+   tags:['Advanced','Shiny','Reports'],visual:'🗄️',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
+   concepts:['ui & server','Reactive Programming','R Markdown (.Rmd)','Knitr','Interactive Outputs'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`}
 ];
 
@@ -390,7 +490,7 @@ function openLesson(id) {
        <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
-         <span class="meta-item">🔷 C# .NET</span>
+         <span class="meta-item">🔷 R & Tidyverse</span>
          <span class="meta-item">⏱ ~10 min read</span>
          <span class="meta-item">⚙️ ${m.level}</span>
        </div>
@@ -429,10 +529,10 @@ function renderSidebar() {
   document.getElementById('sbProgLabel').textContent = `${freeDone} / ${TOTAL_FREE} free`;
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
     const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
-    
+
     // PREMIUM REDIRECT LOGIC in sidebar
     const click = locked ? `window.location.href='premium.html'` : `openLesson(${m.id})`;
-    
+
     return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${click}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
@@ -468,11 +568,11 @@ function markDone() {
   if(!currentId) return;
   const m = MODS.find(x=>x.id===currentId);
   if(!m.free&&!isPremium()) return;
-  
+
   if(!completed.includes(currentId)){
     completed.push(currentId);
     saveCompleted(completed);
-    showToast('✓ Module marked complete! 🟣');
+    showToast('✓ Module marked complete! 🔵');
   }
   openLesson(currentId);
 }
