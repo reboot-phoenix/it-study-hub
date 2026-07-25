@@ -393,37 +393,576 @@ rbind(df1, data.frame(id = 4, score = 92))</code></pre>`},
    excerpt:'Master the grammar of data manipulation. Learn filter, select, mutate, arrange, and summarise to transform raw data into insights with elegant, readable code.',
    tags:['Intermediate','dplyr','Tidyverse'],visual:'🧬',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
    concepts:['filter() & select()','mutate() & transmute()','arrange() & summarise()','group_by()','%>% Pipe Operator'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+   body:`<p><strong>dplyr</strong> is the cornerstone of data manipulation in the tidyverse. It provides a consistent grammar of five core verbs that cover the vast majority of data transformation tasks. Each verb is a function, and they compose naturally using the pipe operator.</p>
+<h2>The Pipe Operator</h2>
+<p>The pipe <code>%>%</code> (or the native R 4.1+ pipe <code>|></code>) passes the result of one expression as the first argument to the next. It makes code read left-to-right like a sentence.</p>
+<pre><code>library(dplyr)
+
+# Without pipe — nested, hard to read
+arrange(filter(select(mtcars, mpg, cyl, hp), cyl == 6), desc(mpg))
+
+# With pipe — clear, linear flow
+mtcars |>
+  select(mpg, cyl, hp) |>
+  filter(cyl == 6) |>
+  arrange(desc(mpg))</code></pre>
+<h2>filter() — Subset Rows</h2>
+<pre><code>library(nycflights13)
+
+# Single condition
+flights |> filter(month == 1)
+
+# Multiple conditions (AND)
+flights |> filter(month == 1, day == 1, carrier == "UA")
+
+# OR condition
+flights |> filter(carrier == "AA" | carrier == "UA")
+
+# %in% operator
+flights |> filter(carrier %in% c("AA", "UA", "DL"))</code></pre>
+<h2>select() — Choose Columns</h2>
+<pre><code># By name
+flights |> select(year, month, day, dep_delay, arr_delay)
+
+# By range
+flights |> select(year:dep_time)
+
+# Drop columns with -
+flights |> select(-year, -month, -day)
+
+# Helper functions
+flights |> select(starts_with("dep"))
+flights |> select(ends_with("delay"))
+flights |> select(contains("time"))</code></pre>
+<h2>mutate() — Add/Transform Columns</h2>
+<pre><code>flights |>
+  select(dep_delay, arr_delay, air_time) |>
+  mutate(
+    gain = dep_delay - arr_delay,
+    speed_mph = (air_time / 60) * 500,   # rough approximation
+    gain_per_hour = gain / (air_time / 60)
+  )
+
+# transmute() keeps only new columns
+flights |>
+  transmute(
+    gain = dep_delay - arr_delay,
+    hours = air_time / 60
+  )</code></pre>
+<h2>arrange() — Sort Rows</h2>
+<pre><code># Ascending (default)
+flights |> arrange(dep_delay)
+
+# Descending
+flights |> arrange(desc(dep_delay))
+
+# Multiple columns
+flights |> arrange(year, month, day, desc(dep_delay))</code></pre>
+<h2>summarise() + group_by() — Aggregate Data</h2>
+<p>The most powerful dplyr pattern: split data into groups, apply a summary function to each group, and combine the results.</p>
+<pre><code># Overall summary
+flights |>
+  summarise(
+    mean_delay = mean(dep_delay, na.rm = TRUE),
+    median_delay = median(dep_delay, na.rm = TRUE),
+    total_flights = n()
+  )
+
+# Grouped summary
+flights |>
+  group_by(carrier) |>
+  summarise(
+    avg_dep_delay = mean(dep_delay, na.rm = TRUE),
+    avg_arr_delay = mean(arr_delay, na.rm = TRUE),
+    n = n()
+  ) |>
+  arrange(desc(avg_dep_delay))
+
+# Multiple grouping variables
+flights |>
+  group_by(year, month) |>
+  summarise(mean_delay = mean(dep_delay, na.rm = TRUE), .groups = "drop")</code></pre>
+<h2>Joining Data Frames</h2>
+<pre><code># Create sample data
+orders   <- data.frame(id=1:3, product=c("A","B","A"), qty=c(2,1,3))
+products <- data.frame(product=c("A","B"), price=c(100,200))
+
+# inner_join — only matching rows
+inner_join(orders, products, by = "product")
+
+# left_join — all rows from left table
+left_join(orders, products, by = "product")
+
+# anti_join — rows in left with NO match in right
+anti_join(orders, products, by = "product")</code></pre>`},
 
   {id:8,free:false,icon:'⚠️',level:'Intermediate',title:'Error Handling & Debugging',
-   excerpt:'Build robust R scripts. Learn how to catch errors gracefully using tryCatch, create custom warnings, and use RStudio's powerful debugging tools.',
+   excerpt:'Build robust R scripts. Learn how to catch errors gracefully using tryCatch, create custom warnings, and use RStudio\'s powerful debugging tools.',
    tags:['Intermediate','Debugging','Robustness'],visual:'⚠️',bg:'linear-gradient(135deg,#10080a,#200f12)',
    concepts:['tryCatch()','stop() & warning()','browser() & debug()','traceback()','Custom Conditions'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+   body:`<p>Writing R code that works correctly on clean data is only half the job. Real-world data is messy, files go missing, and APIs time out. <strong>Robust R scripts</strong> anticipate failure and handle it gracefully instead of crashing mid-pipeline.</p>
+<h2>The tryCatch() Function</h2>
+<p><code>tryCatch()</code> is R's primary mechanism for catching errors and warnings. It evaluates an expression and, if it throws an error or warning, executes a handler instead of stopping execution.</p>
+<pre><code># Basic tryCatch structure
+result <- tryCatch({
+  log(-1)          # Produces NaN with a warning
+  sqrt("hello")    # Produces an error
+}, warning = function(w) {
+  message("Warning caught: ", conditionMessage(w))
+  return(NA)
+}, error = function(e) {
+  message("Error caught: ", conditionMessage(e))
+  return(NULL)
+}, finally = {
+  message("This always runs, error or not.")
+})
+
+print(result)  # NULL (error was caught)</code></pre>
+<h2>Signalling Conditions</h2>
+<p>You can create your own errors, warnings, and messages using three built-in functions:</p>
+<pre><code>validate_age <- function(age) {
+  if (!is.numeric(age)) stop("age must be numeric")
+  if (age < 0)          stop("age cannot be negative")
+  if (age > 120)        warning("age seems unusually high")
+  message("Age validated: ", age)
+  return(age)
+}
+
+tryCatch(validate_age("twenty"),
+         error = function(e) cat("Caught:", e$message))</code></pre>
+<h2>withCallingHandlers — Non-Exiting Handlers</h2>
+<p>Unlike <code>tryCatch()</code>, <code>withCallingHandlers()</code> allows execution to resume after handling a condition, making it ideal for logging warnings without stopping the pipeline.</p>
+<pre><code>withCallingHandlers({
+  log(-1)       # warning
+  log(10)       # continues normally after handler runs
+}, warning = function(w) {
+  cat("LOG:", conditionMessage(w), "\n")
+  invokeRestart("muffleWarning")   # suppress the warning
+})</code></pre>
+<h2>Debugging Tools in RStudio</h2>
+<pre><code># 1. traceback() — shows the call stack after an error
+f <- function() g()
+g <- function() stop("boom")
+f()
+traceback()
+
+# 2. browser() — pauses execution and opens interactive debugger
+my_func <- function(x) {
+  browser()   # Execution stops here; type ls() to see variables
+  x * 2
+}
+
+# 3. debug() — same as inserting browser() at the start of a function
+debug(my_func)
+my_func(5)
+undebug(my_func)
+
+# 4. debugonce() — debug only the next call
+debugonce(my_func)</code></pre>
+<h2>Safe Wrappers with purrr</h2>
+<p>The <code>purrr</code> package provides <code>safely()</code> and <code>possibly()</code> to create error-safe versions of any function, perfect for iterating over data that may partially fail.</p>
+<pre><code>library(purrr)
+
+safe_log <- safely(log)
+safe_log(10)    # list(result = 2.302585, error = NULL)
+safe_log("x")  # list(result = NULL, error = <error>)
+
+# possibly() returns a default value on error
+possible_log <- possibly(log, otherwise = NA_real_)
+map_dbl(list(10, -1, "x", 100), possible_log)
+# 2.302585  NaN       NA  4.605170</code></pre>`},
 
   {id:9,free:false,icon:'🔗',level:'Advanced',title:'Functional Programming',
-   excerpt:'Unlock R's functional nature. Master the purrr package, anonymous functions, function factories, and higher-order functions for elegant data pipelines.',
+   excerpt:'Unlock R\'s functional nature. Master the purrr package, anonymous functions, function factories, and higher-order functions for elegant data pipelines.',
    tags:['Advanced','purrr','Functional'],visual:'🔗',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
    concepts:['purrr::map()','Anonymous Functions','Function Factories','Closures','Higher-Order Functions'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+   body:`<p>R is, at its heart, a <strong>functional programming language</strong>. Functions are first-class objects — they can be stored in variables, passed as arguments, and returned from other functions. Mastering functional programming unlocks concise, expressive, and bug-resistant pipelines.</p>
+<h2>First-Class Functions & Anonymous Functions</h2>
+<p>In R, you can define a function without naming it, pass it directly as an argument. R 4.1+ introduced the shorthand <code>\\(x)</code> syntax.</p>
+<pre><code># Traditional anonymous function
+sapply(1:5, function(x) x^2)
+
+# R 4.1+ shorthand (backslash lambda)
+sapply(1:5, \(x) x^2)
+
+# Store a function in a variable
+double <- function(x) x * 2
+apply_fn <- function(x, fn) fn(x)
+apply_fn(10, double)   # 20</code></pre>
+<h2>The purrr Package — Functional Toolkit</h2>
+<p><code>purrr</code> provides a consistent, type-safe set of tools for iterating and transforming data. The <code>map()</code> family replaces most loops.</p>
+<pre><code>library(purrr)
+
+# map() always returns a list
+map(1:5, \(x) x^2)
+
+# Type-specific variants for cleaner output
+map_dbl(1:5, \(x) x^2)     # numeric vector
+map_chr(1:3, \(x) paste("Item", x))  # character vector
+map_lgl(1:5, \(x) x > 3)   # logical vector
+
+# map2() iterates over two inputs in parallel
+map2_dbl(c(1,2,3), c(10,20,30), \(x, y) x + y)
+# 11 22 33
+
+# pmap() iterates over a list of inputs
+params <- list(x = 1:3, y = 4:6, z = 7:9)
+pmap_dbl(params, \(x, y, z) x + y + z)</code></pre>
+<h2>reduce() and accumulate()</h2>
+<pre><code># reduce() folds a list into a single value
+reduce(1:5, `+`)       # ((((1+2)+3)+4)+5) = 15
+reduce(1:5, `*`)       # 120 (factorial)
+
+# accumulate() shows intermediate results
+accumulate(1:5, `+`)   # 1 3 6 10 15</code></pre>
+<h2>Function Factories — Functions that Return Functions</h2>
+<p>A function factory is a function that creates and returns another function. This is powerful for parameterizing behaviour without repetition.</p>
+<pre><code># Create a power function factory
+power_fn <- function(exponent) {
+  function(x) x^exponent   # captures 'exponent' in a closure
+}
+
+square <- power_fn(2)
+cube   <- power_fn(3)
+
+square(4)  # 16
+cube(3)    # 27
+
+# Multiplier factory
+make_multiplier <- function(n) \(x) x * n
+triple <- make_multiplier(3)
+triple(7)  # 21</code></pre>
+<h2>Closures — Persistent State</h2>
+<p>A closure is a function that "closes over" variables from its enclosing environment, allowing persistent state without global variables.</p>
+<pre><code># Counter using closure
+make_counter <- function() {
+  count <- 0
+  list(
+    increment = function() { count <<- count + 1; count },
+    reset     = function() { count <<- 0 },
+    get       = function() count
+  )
+}
+
+counter <- make_counter()
+counter$increment()  # 1
+counter$increment()  # 2
+counter$increment()  # 3
+counter$get()        # 3
+counter$reset()
+counter$get()        # 0</code></pre>
+<h2>Function Composition with purrr::compose()</h2>
+<pre><code>library(purrr)
+
+# compose() chains functions right-to-left
+clean_text <- compose(trimws, tolower, as.character)
+clean_text("  Hello World  ")   # "hello world"
+
+# Alternatively use the pipe
+library(magrittr)
+"  Hello World  " |> as.character() |> tolower() |> trimws()</code></pre>`},
 
   {id:10,free:false,icon:'🔎',level:'Advanced',title:'Data Visualization with ggplot2',
    excerpt:'Turn data into compelling stories. Master the Grammar of Graphics with ggplot2 — aesthetics, geoms, facets, themes, and custom annotations.',
    tags:['Advanced','ggplot2','Visualization'],visual:'🔎',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
    concepts:['Grammar of Graphics','aes() & geoms','facets','scales & themes','Annotations & Customization'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+   body:`<p><strong>ggplot2</strong> implements the <em>Grammar of Graphics</em> — a coherent system for describing and building graphs from composable building blocks. Every ggplot2 chart is assembled from the same components: data, aesthetic mappings, geometric objects, scales, facets, and themes.</p>
+<h2>The Grammar of Graphics — Core Concept</h2>
+<pre><code>library(ggplot2)
+
+# Every ggplot2 chart follows this template:
+# ggplot(data, aes(x, y, ...)) + geom_*() + ...
+
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point()</code></pre>
+<h2>Aesthetic Mappings — aes()</h2>
+<p>Aesthetics map variables in your data to visual properties. They can be set globally (in <code>ggplot()</code>) or per-layer (in <code>geom_*()</code>).</p>
+<pre><code># Map colour, size, and shape to variables
+ggplot(mpg, aes(x = displ, y = hwy, colour = class, size = cyl)) +
+  geom_point(alpha = 0.7)    # alpha is a fixed aesthetic (not mapped)
+
+# Setting vs mapping
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(colour = "steelblue", size = 3)   # SET fixed colour</code></pre>
+<h2>Essential Geoms</h2>
+<pre><code># Scatter plot
+ggplot(mpg, aes(displ, hwy)) + geom_point()
+
+# Line plot
+ggplot(economics, aes(date, unemploy)) + geom_line()
+
+# Bar chart (counts)
+ggplot(mpg, aes(x = class)) + geom_bar()
+
+# Histogram
+ggplot(mpg, aes(x = hwy)) + geom_histogram(bins = 20, fill = "steelblue")
+
+# Box plot
+ggplot(mpg, aes(x = class, y = hwy)) + geom_boxplot()
+
+# Violin plot (distribution shape)
+ggplot(mpg, aes(x = class, y = hwy)) + geom_violin(fill = "coral")
+
+# Add a smooth trend line
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = TRUE)   # linear model with CI band</code></pre>
+<h2>Facets — Small Multiples</h2>
+<p>Facets split your data into subsets and produce one chart per subset — a powerful way to compare across groups.</p>
+<pre><code># facet_wrap — wrap panels into rows
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  facet_wrap(~ class, nrow = 2)
+
+# facet_grid — rows and columns from two variables
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  facet_grid(drv ~ cyl)</code></pre>
+<h2>Scales — Control Axes & Legends</h2>
+<pre><code>ggplot(mpg, aes(displ, hwy, colour = class)) +
+  geom_point() +
+  scale_x_continuous(name = "Engine Displacement (L)", limits = c(1, 7)) +
+  scale_y_continuous(name = "Highway MPG") +
+  scale_colour_brewer(palette = "Set2", name = "Vehicle Class")</code></pre>
+<h2>Themes — Styling Your Chart</h2>
+<pre><code># Built-in themes
+p <- ggplot(mpg, aes(displ, hwy)) + geom_point()
+
+p + theme_bw()        # Black & white
+p + theme_minimal()   # Minimal grid lines
+p + theme_classic()   # Classic axis lines, no grid
+p + theme_dark()      # Dark background
+
+# Custom theme elements
+p + theme(
+  plot.title   = element_text(size = 16, face = "bold", hjust = 0.5),
+  axis.title   = element_text(size = 12),
+  panel.grid.minor = element_blank()
+)</code></pre>
+<h2>Labels & Annotations</h2>
+<pre><code>ggplot(mpg, aes(displ, hwy, colour = drv)) +
+  geom_point() +
+  labs(
+    title    = "Engine Size vs. Fuel Efficiency",
+    subtitle = "Data from 234 cars (1999–2008)",
+    x        = "Engine Displacement (L)",
+    y        = "Highway MPG",
+    colour   = "Drive Type",
+    caption  = "Source: ggplot2::mpg"
+  ) +
+  annotate("text", x = 5, y = 40, label = "Outliers here", colour = "red") +
+  theme_minimal()</code></pre>`},
 
   {id:11,free:false,icon:'⚡',level:'Advanced',title:'Statistical Analysis & Modeling',
    excerpt:'Leverage R's statistical roots. Perform regression, hypothesis testing, ANOVA, and probability distributions to extract meaningful insights from data.',
    tags:['Advanced','Statistics','Modeling'],visual:'⚡',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
    concepts:['Linear Regression (lm)','Hypothesis Testing','Probability Distributions','ANOVA','Model Diagnostics'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
+   body:`<p>R was built by statisticians, for statisticians. Its built-in functions and ecosystem of packages make it the most powerful environment for statistical analysis in any programming language. This module covers the core tools you need for data science and academic research.</p>
+<h2>Descriptive Statistics</h2>
+<pre><code>x <- c(12, 15, 11, 18, 14, 22, 9, 16, 13, 17)
+
+mean(x)      # Arithmetic mean
+median(x)    # Median
+var(x)       # Sample variance
+sd(x)        # Standard deviation
+range(x)     # Min and max
+IQR(x)       # Interquartile range
+quantile(x, probs = c(0.25, 0.75))
+summary(x)   # Five-number summary</code></pre>
+<h2>Probability Distributions</h2>
+<p>R provides four functions for every distribution: <code>d</code> (density), <code>p</code> (CDF), <code>q</code> (quantile), <code>r</code> (random sample).</p>
+<pre><code># Normal distribution
+dnorm(0)              # PDF at x=0: 0.3989
+pnorm(1.96)           # P(X <= 1.96): 0.975
+qnorm(0.975)          # Quantile for p=0.975: 1.96
+rnorm(100, mean=50, sd=10)  # 100 random samples
+
+# t-distribution
+pt(2.0, df=29)        # p-value for t=2.0, df=29
+
+# Binomial distribution
+dbinom(3, size=10, prob=0.5)   # P(X=3) if n=10, p=0.5
+pbinom(3, size=10, prob=0.5)   # P(X <= 3)</code></pre>
+<h2>Hypothesis Testing</h2>
+<pre><code># One-sample t-test: is mean different from 50?
+scores <- c(52, 49, 58, 61, 47, 55, 63, 51, 48, 57)
+t.test(scores, mu = 50)
+
+# Two-sample t-test: do two groups differ?
+group_a <- c(85, 88, 92, 79, 90)
+group_b <- c(78, 82, 80, 76, 84)
+t.test(group_a, group_b, var.equal = TRUE)
+
+# Paired t-test: before vs after
+before <- c(200, 215, 198, 220, 205)
+after  <- c(185, 200, 190, 210, 195)
+t.test(before, after, paired = TRUE)
+
+# Chi-square test of independence
+observed <- matrix(c(60, 40, 30, 70), nrow = 2)
+chisq.test(observed)
+
+# Shapiro-Wilk normality test
+shapiro.test(scores)   # p > 0.05 suggests normality</code></pre>
+<h2>Linear Regression with lm()</h2>
+<pre><code>data(mtcars)
+
+# Simple linear regression: mpg ~ wt
+model <- lm(mpg ~ wt, data = mtcars)
+summary(model)      # Coefficients, R², p-values
+
+# Multiple regression
+model2 <- lm(mpg ~ wt + hp + cyl, data = mtcars)
+summary(model2)
+
+# Predictions
+new_data <- data.frame(wt = c(2.5, 3.0, 3.5), hp = c(100, 120, 150), cyl = 6)
+predict(model2, newdata = new_data, interval = "confidence")</code></pre>
+<h2>ANOVA — Comparing Multiple Groups</h2>
+<pre><code># One-way ANOVA
+plant_data <- data.frame(
+  yield = c(45, 48, 42, 52, 55, 49, 38, 41, 44),
+  group = rep(c("Control", "Fertilizer_A", "Fertilizer_B"), each = 3)
+)
+model_aov <- aov(yield ~ group, data = plant_data)
+summary(model_aov)    # F-statistic and p-value
+
+# Post-hoc test (which groups differ?)
+TukeyHSD(model_aov)</code></pre>
+<h2>Model Diagnostics</h2>
+<pre><code># Diagnostic plots for linear model
+par(mfrow = c(2, 2))
+plot(model)           # Residuals vs Fitted, QQ, Scale-Location, Cook's distance
+
+# Variance Inflation Factor (multicollinearity check)
+library(car)
+vif(model2)           # Values > 5-10 indicate multicollinearity
+
+# Extract model info
+coef(model)           # Coefficients
+residuals(model)      # Residuals
+fitted(model)         # Fitted values
+confint(model)        # 95% confidence intervals for coefficients</code></pre>`},
 
   {id:12,free:false,icon:'🗄️',level:'Advanced',title:'Shiny & R Markdown',
    excerpt:'Build interactive dashboards and reproducible reports. Learn Shiny for web apps and R Markdown for dynamic documents that update with your data.',
    tags:['Advanced','Shiny','Reports'],visual:'🗄️',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
    concepts:['ui & server','Reactive Programming','R Markdown (.Rmd)','Knitr','Interactive Outputs'],
-   body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`}
+   body:`<p>R goes beyond analysis — it can produce interactive web applications with <strong>Shiny</strong> and publication-ready dynamic reports with <strong>R Markdown</strong>. Both tools allow your analysis to be reproduced, shared, and explored by non-technical stakeholders.</p>
+<h2>R Markdown — Reproducible Reports</h2>
+<p>An <code>.Rmd</code> file weaves narrative prose (Markdown) with executable R code chunks. When you knit the document, R runs the code and embeds the output (tables, plots, numbers) into the final HTML, PDF, or Word document.</p>
+<pre><code>---
+title: "Sales Analysis Q3"
+author: "Ashtid"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Overview
+
+This report analyses Q3 sales data automatically updated on `r Sys.Date()`.
+
+\`\`\`{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+library(dplyr)
+library(ggplot2)
+\`\`\`
+
+\`\`\`{r load-data}
+data(mtcars)
+head(mtcars)
+\`\`\`
+
+\`\`\`{r plot, fig.width=8, fig.height=4}
+ggplot(mtcars, aes(wt, mpg, colour = factor(cyl))) +
+  geom_point(size = 3) +
+  theme_minimal() +
+  labs(title = "Weight vs. Fuel Efficiency")
+\`\`\`</code></pre>
+<h2>Chunk Options</h2>
+<pre><code># Common knitr chunk options:
+# echo = FALSE      — run code but hide source in output
+# eval = FALSE      — show code but don't run it
+# include = FALSE   — run silently, no output shown
+# fig.width/height  — control plot size in inches
+# cache = TRUE      — cache chunk output to speed re-knitting
+# message = FALSE   — suppress package loading messages</code></pre>
+<h2>Shiny — Interactive Web Apps</h2>
+<p>A Shiny app has two components: <strong>ui</strong> (what the user sees) and <strong>server</strong> (the R logic). They communicate through reactive expressions.</p>
+<pre><code>library(shiny)
+
+# ui.R — User Interface
+ui <- fluidPage(
+  titlePanel("MPG Explorer"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("cylinders",
+                  label = "Number of Cylinders:",
+                  min = 4, max = 8, value = 6, step = 2),
+      selectInput("xvar", "X Axis Variable:",
+                  choices = c("wt", "hp", "disp"),
+                  selected = "wt")
+    ),
+    mainPanel(
+      plotOutput("mpgPlot"),
+      tableOutput("summaryTable")
+    )
+  )
+)
+
+# server.R — Logic
+server <- function(input, output, session) {
+  # Reactive expression — recalculates when inputs change
+  filtered_data <- reactive({
+    mtcars |> filter(cyl == input$cylinders)
+  })
+
+  output$mpgPlot <- renderPlot({
+    ggplot(filtered_data(), aes_string(x = input$xvar, y = "mpg")) +
+      geom_point(size = 3, colour = "steelblue") +
+      geom_smooth(method = "lm") +
+      theme_minimal() +
+      labs(title = paste("MPG vs", input$xvar, "for", input$cylinders, "cylinder cars"))
+  })
+
+  output$summaryTable <- renderTable({
+    filtered_data() |>
+      summarise(n = n(), avg_mpg = round(mean(mpg), 1),
+                avg_wt = round(mean(wt), 2))
+  })
+}
+
+# Launch the app
+shinyApp(ui = ui, server = server)</code></pre>
+<h2>Reactivity — How Shiny Works</h2>
+<p>Shiny is built on <strong>reactive programming</strong>: outputs automatically re-run whenever their inputs change. Understanding the reactive graph prevents redundant computation.</p>
+<pre><code># reactive() — cached expression, recalculates only when inputs change
+data_subset <- reactive({ mtcars[mtcars$cyl == input$cyl, ] })
+
+# observe() — side effects (e.g. writing files), not cached
+observe({ cat("User selected:", input$cyl, "\n") })
+
+# observeEvent() — trigger on specific input change
+observeEvent(input$reset_btn, {
+  updateSliderInput(session, "cylinders", value = 6)
+})
+
+# isolate() — read a reactive value WITHOUT creating a dependency
+output$note <- renderText({
+  isolate(input$cylinders)   # won't re-run when input$cylinders changes
+})</code></pre>
+<h2>Deploying Your Shiny App</h2>
+<pre><code># Deploy to shinyapps.io (free tier available)
+install.packages("rsconnect")
+library(rsconnect)
+
+rsconnect::setAccountInfo(
+  name   = "your-account",
+  token  = "YOUR_TOKEN",
+  secret = "YOUR_SECRET"
+)
+
+rsconnect::deployApp(appDir = "path/to/your/app")</code></pre>`}
 ];
 
 let currentId = null;
