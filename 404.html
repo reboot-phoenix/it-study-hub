@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="shortcut icon" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Page Not Found | IT Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#04040a; --surface:#0a0a14; --border:rgba(255,255,255,0.07);
+  --lime:#c8f135; --text:#eeeef5; --muted:#6b6b80; --muted2:#9494a8;
+  --ff-display:'Bebas Neue',sans-serif;
+  --ff-body:'DM Sans',sans-serif;
+  --ff-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+@media(pointer:fine){*,*::before,*::after{cursor:none!important;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}}
+html,body{height:100%;}
+body{background:var(--bg);color:var(--text);font-family:var(--ff-body);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;overflow:hidden;}
+
+.cursor{width:10px;height:10px;background:var(--lime);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;}
+.cursor-ring{width:36px;height:36px;border:1px solid var(--lime);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.4;transition:all 0.2s ease;}
+@media(pointer:coarse){.cursor,.cursor-ring{display:none!important;}}
+
+/* grid background */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(200,241,53,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(200,241,53,0.03) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 0%,transparent 100%);
+  pointer-events:none;
+}
+
+/* glow */
+body::after{
+  content:'';position:fixed;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(200,241,53,0.05) 0%,transparent 65%);
+  pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%);
+}
+
+.wrap{position:relative;z-index:1;text-align:center;max-width:520px;width:100%;}
+
+/* big 404 */
+.big-num{
+  font-family:var(--ff-display);
+  font-size:clamp(120px,26vw,200px);
+  line-height:0.85;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(200,241,53,0.25);
+  position:relative;
+  user-select:none;
+  letter-spacing:-4px;
+}
+.big-num::after{
+  content:'404';
+  position:absolute;inset:0;
+  font-family:var(--ff-display);
+  font-size:inherit;
+  letter-spacing:inherit;
+  color:transparent;
+  background:linear-gradient(180deg,rgba(200,241,53,0.9) 0%,rgba(200,241,53,0.2) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-stroke:0;
+  animation:shimmer 4s ease-in-out infinite;
+}
+@keyframes shimmer{
+  0%,100%{opacity:0.7;}
+  50%{opacity:1;}
+}
+
+/* status chip */
+.status-chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:24px;padding:6px 14px;
+  font-family:var(--ff-mono);font-size:11px;color:var(--muted2);
+  letter-spacing:.08em;text-transform:uppercase;
+  margin:20px auto 0;
+}
+.status-dot{width:6px;height:6px;border-radius:50%;background:#ff5f56;box-shadow:0 0 8px #ff5f56;animation:pulse-dot 2s ease infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.6;transform:scale(0.8);}}
+
+.subtitle{font-size:15px;color:var(--muted2);line-height:1.7;margin-top:20px;font-weight:300;}
+
+/* terminal block */
+.terminal{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;margin:28px 0;text-align:left;overflow:hidden;
+}
+.terminal-bar{
+  display:flex;align-items:center;gap:6px;
+  padding:10px 14px;border-bottom:1px solid var(--border);
+}
+.t-dot{width:10px;height:10px;border-radius:50%;}
+.terminal-body{padding:16px 18px;font-family:var(--ff-mono);font-size:12px;line-height:2;}
+.t-prompt{color:var(--lime);}
+.t-err{color:#ff5f56;}
+.t-path{color:#60a5fa;}
+.t-cur{display:inline-block;width:7px;height:13px;background:var(--lime);vertical-align:middle;animation:blink 1s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* buttons */
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:4px;}
+.btn-lime{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--lime);color:#000;
+  font-family:var(--ff-mono);font-size:11px;font-weight:700;
+  padding:12px 26px;border-radius:6px;text-decoration:none;
+  letter-spacing:.08em;border:none;transition:all 0.2s;
+}
+.btn-lime:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,241,53,0.3);}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:var(--muted2);
+  font-family:var(--ff-mono);font-size:11px;font-weight:500;
+  padding:12px 26px;border-radius:6px;text-decoration:none;
+  letter-spacing:.08em;border:1px solid var(--border);transition:all 0.2s;
+}
+.btn-ghost:hover{border-color:var(--lime);color:var(--lime);}
+
+@media(max-width:480px){
+  .btn-row{flex-direction:column;align-items:center;}
+  .btn-lime,.btn-ghost{width:100%;max-width:260px;justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<div class="wrap">
+  <div class="big-num">404</div>
+
+  <div class="status-chip">
+    <span class="status-dot"></span>
+    <span>404 · Resource not found</span>
+  </div>
+
+  <p class="subtitle">This page doesn't exist — or it moved.<br>Let's get you back on track.</p>
+
+  <div class="terminal">
+    <div class="terminal-bar">
+      <span class="t-dot" style="background:#ff5f56;"></span>
+      <span class="t-dot" style="background:#ffbd2e;"></span>
+      <span class="t-dot" style="background:#27c93f;"></span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-prompt">$ </span>GET <span class="t-path" id="pagePath">/unknown</span> HTTP/1.1</div>
+      <div><span class="t-err">✕ 404:</span> route not registered on this server</div>
+      <div><span class="t-prompt">$ </span>cd /home &amp;&amp; ls<span class="t-cur"></span></div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <a href="index.html" class="btn-lime">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg>
+      Go Home
+    </a>
+    <a href="courses.html" class="btn-ghost">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Browse Courses
+    </a>
+  </div>
+</div>
+
+<script>
+const path = location.pathname.split('/').pop() || location.pathname;
+document.getElementById('pagePath').textContent = '/' + path;
+
+if(window.matchMedia('(pointer: fine)').matches){
+  const c=document.getElementById('cur'),r=document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function anim(){c.style.left=(mx-5)+'px';c.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=(rx-18)+'px';r.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{c.style.transform='scale(2)';r.style.opacity='0.8';});
+    el.addEventListener('mouseleave',()=>{c.style.transform='scale(1)';r.style.opacity='0.4';});
+  });
+}
+</script>
+</body>
+</html>
