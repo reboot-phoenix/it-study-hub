@@ -119,7 +119,7 @@ function saveCompleted(a){localStorage.setItem('ish_r_done',JSON.stringify(a));}
 
 const MODS = [
   {id:1,free:true,icon:'🔵',level:'Beginner',title:'Intro to R & RStudio',
-   excerpt:'Created by statisticians for statisticians, R is the gold standard for data analysis. Understand the R ecosystem, RStudio IDE, and how to write your first script.',
+      excerpt:`Created by statisticians for statisticians, R is the gold standard for data analysis. Understand the R ecosystem, RStudio IDE, and how to write your first script.`,
    tags:['Beginner','History','RStudio'],visual:'🔵',bg:'linear-gradient(135deg,#0a1020,#101830)',
    concepts:['Ross Ihaka & Robert Gentleman','RStudio IDE','CRAN','R Console vs Script','install.packages()'],
    body:`<p><strong>R</strong> is an open-source programming language and environment for statistical computing and graphics. It was created by <strong>Ross Ihaka</strong> and <strong>Robert Gentleman</strong> at the University of Auckland, New Zealand, in 1993. Today, R is the third-most popular language for data science, behind only Python and SQL.</p>
@@ -154,7 +154,7 @@ install.packages("tidyverse")
 library(tidyverse)</code></pre>`},
 
   {id:2,free:true,icon:'📊',level:'Beginner',title:'Variables & Data Types',
-   excerpt:'R has unique data types designed for statistics. Master vectors, factors, lists, and understand the crucial concept of coercion in R.',
+      excerpt:`R has unique data types designed for statistics. Master vectors, factors, lists, and understand the crucial concept of coercion in R.`,
    tags:['Beginner','Data Types','Vectors'],visual:'📊',bg:'linear-gradient(135deg,#0a1a10,#102818)',
    concepts:['Atomic Vectors','Factors','Coercion Rules','Lists','Type Checking (class(), typeof())'],
    body:`<p>R has five basic atomic data types: <strong>character</strong>, <strong>numeric</strong> (double), <strong>integer</strong>, <strong>logical</strong>, and <strong>complex</strong>. Unlike many languages, the most fundamental data structure in R is the <strong>vector</strong> — even a single number is a vector of length 1.</p>
@@ -193,7 +193,7 @@ grade <- factor(c("B", "A", "C", "A"),
                 ordered = TRUE)</code></pre>`},
 
   {id:3,free:true,icon:'🔀',level:'Beginner',title:'Control Flow & Logic',
-   excerpt:'Direct your data analysis workflow using conditional statements, loops, and R's powerful vectorized operations that eliminate the need for many loops.',
+      excerpt:`Direct your data analysis workflow using conditional statements, loops, and R's powerful vectorized operations that eliminate the need for many loops.`,
    tags:['Beginner','Logic','Conditionals'],visual:'🔀',bg:'linear-gradient(135deg,#0f0a14,#201028)',
    concepts:['if / else','for loop','while loop','Vectorization','apply family (lapply, sapply)'],
    body:`<p>Control flow in R follows standard programming paradigms, but R's <strong>vectorized</strong> nature means you often don't need explicit loops. Operating on entire vectors at once is both faster and more idiomatic in R.</p>
@@ -250,7 +250,7 @@ apply(mat, 1, sum)   # Row sums (MARGIN = 1)
 apply(mat, 2, mean)  # Column means (MARGIN = 2)</code></pre>`},
 
   {id:4,free:true,icon:'🛠️',level:'Beginner',title:'Functions & Parameters',
-   excerpt:'Break down analysis into reusable functions. Discover R's flexible argument handling, default values, and the powerful concept of lexical scoping.',
+      excerpt:`Break down analysis into reusable functions. Discover R's flexible argument handling, default values, and the powerful concept of lexical scoping.`,
    tags:['Beginner','Functions','Modularity'],visual:'🛠️',bg:'linear-gradient(135deg,#14140a,#282810)',
    concepts:['Function Syntax','Default Arguments','... (Ellipsis)','Lexical Scoping','Return Values'],
    body:`<p>Functions are the building blocks of reusable code in R. They encapsulate logic, accept inputs (arguments), and return outputs. R functions are <strong>first-class objects</strong> — they can be passed as arguments to other functions and returned from functions.</p>
@@ -298,7 +298,7 @@ my_func <- function() {
 my_func()  # 150</code></pre>`},
 
   {id:5,free:true,icon:'🏗️',level:'Beginner',title:'Data Frames & Tibbles',
-   excerpt:'Data frames are the workhorse of R data analysis. Learn to create, index, filter, and manipulate tabular data — the foundation of all data science in R.',
+      excerpt:`Data frames are the workhorse of R data analysis. Learn to create, index, filter, and manipulate tabular data — the foundation of all data science in R.`,
    tags:['Beginner','Data Frames','Tibbles'],visual:'🏗️',bg:'linear-gradient(135deg,#140a14,#281028)',
    concepts:['data.frame()','tibble()','Indexing ($, [], [[]])','Subsetting','str() & summary()'],
    body:`<p>A <strong>data frame</strong> is R's most important data structure for data analysis. It is a two-dimensional table where each column can be a different data type (numeric, character, factor, etc.), similar to a spreadsheet or SQL table. <strong>Tibbles</strong> are the modern, enhanced version from the tidyverse.</p>
@@ -343,7 +343,7 @@ ncol(students)        # Number of columns</code></pre>
 <p>Tibbles never convert strings to factors, never create row names, and print more cleanly. They are the default in the tidyverse and highly recommended for modern R workflows.</p>`},
 
   {id:6,free:true,icon:'📦',level:'Beginner',title:'Vectors, Lists & Matrices',
-   excerpt:'Move beyond basic vectors. Discover matrices, arrays, and nested lists — the complete toolkit of R's core data structures for any analysis task.',
+      excerpt:`Move beyond basic vectors. Discover matrices, arrays, and nested lists — the complete toolkit of R's core data structures for any analysis task.`,
    tags:['Beginner','Data Structures','Arrays'],visual:'📦',bg:'linear-gradient(135deg,#0a1414,#102828)',
    concepts:['Atomic Vectors','Lists (recursive)','Matrices','Arrays','rbind() & cbind()'],
    body:`<p>While data frames handle most tabular data, understanding R's lower-level data structures is essential for advanced programming, linear algebra, and efficient memory usage.</p>
@@ -390,7 +390,7 @@ rbind(df1, data.frame(id = 4, score = 92))</code></pre>`},
 
   // PREMIUM MODULES
   {id:7,free:false,icon:'🧬',level:'Intermediate',title:'Data Manipulation with dplyr',
-   excerpt:'Master the grammar of data manipulation. Learn filter, select, mutate, arrange, and summarise to transform raw data into insights with elegant, readable code.',
+      excerpt:`Master the grammar of data manipulation. Learn filter, select, mutate, arrange, and summarise to transform raw data into insights with elegant, readable code.`,
    tags:['Intermediate','dplyr','Tidyverse'],visual:'🧬',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
    concepts:['filter() & select()','mutate() & transmute()','arrange() & summarise()','group_by()','%>% Pipe Operator'],
    body:`<p><strong>dplyr</strong> is the cornerstone of data manipulation in the tidyverse. It provides a consistent grammar of five core verbs that cover the vast majority of data transformation tasks. Each verb is a function, and they compose naturally using the pipe operator.</p>
@@ -497,7 +497,7 @@ left_join(orders, products, by = "product")
 anti_join(orders, products, by = "product")</code></pre>`},
 
   {id:8,free:false,icon:'⚠️',level:'Intermediate',title:'Error Handling & Debugging',
-   excerpt:'Build robust R scripts. Learn how to catch errors gracefully using tryCatch, create custom warnings, and use RStudio\'s powerful debugging tools.',
+      excerpt:`Build robust R scripts. Learn how to catch errors gracefully using tryCatch, create custom warnings, and use RStudio\'s powerful debugging tools.`,
    tags:['Intermediate','Debugging','Robustness'],visual:'⚠️',bg:'linear-gradient(135deg,#10080a,#200f12)',
    concepts:['tryCatch()','stop() & warning()','browser() & debug()','traceback()','Custom Conditions'],
    body:`<p>Writing R code that works correctly on clean data is only half the job. Real-world data is messy, files go missing, and APIs time out. <strong>Robust R scripts</strong> anticipate failure and handle it gracefully instead of crashing mid-pipeline.</p>
@@ -573,7 +573,7 @@ map_dbl(list(10, -1, "x", 100), possible_log)
 # 2.302585  NaN       NA  4.605170</code></pre>`},
 
   {id:9,free:false,icon:'🔗',level:'Advanced',title:'Functional Programming',
-   excerpt:'Unlock R\'s functional nature. Master the purrr package, anonymous functions, function factories, and higher-order functions for elegant data pipelines.',
+      excerpt:`Unlock R\'s functional nature. Master the purrr package, anonymous functions, function factories, and higher-order functions for elegant data pipelines.`,
    tags:['Advanced','purrr','Functional'],visual:'🔗',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
    concepts:['purrr::map()','Anonymous Functions','Function Factories','Closures','Higher-Order Functions'],
    body:`<p>R is, at its heart, a <strong>functional programming language</strong>. Functions are first-class objects — they can be stored in variables, passed as arguments, and returned from other functions. Mastering functional programming unlocks concise, expressive, and bug-resistant pipelines.</p>
@@ -663,7 +663,7 @@ library(magrittr)
 "  Hello World  " |> as.character() |> tolower() |> trimws()</code></pre>`},
 
   {id:10,free:false,icon:'🔎',level:'Advanced',title:'Data Visualization with ggplot2',
-   excerpt:'Turn data into compelling stories. Master the Grammar of Graphics with ggplot2 — aesthetics, geoms, facets, themes, and custom annotations.',
+      excerpt:`Turn data into compelling stories. Master the Grammar of Graphics with ggplot2 — aesthetics, geoms, facets, themes, and custom annotations.`,
    tags:['Advanced','ggplot2','Visualization'],visual:'🔎',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
    concepts:['Grammar of Graphics','aes() & geoms','facets','scales & themes','Annotations & Customization'],
    body:`<p><strong>ggplot2</strong> implements the <em>Grammar of Graphics</em> — a coherent system for describing and building graphs from composable building blocks. Every ggplot2 chart is assembled from the same components: data, aesthetic mappings, geometric objects, scales, facets, and themes.</p>
@@ -754,7 +754,7 @@ p + theme(
   theme_minimal()</code></pre>`},
 
   {id:11,free:false,icon:'⚡',level:'Advanced',title:'Statistical Analysis & Modeling',
-   excerpt:'Leverage R's statistical roots. Perform regression, hypothesis testing, ANOVA, and probability distributions to extract meaningful insights from data.',
+      excerpt:`Leverage R's statistical roots. Perform regression, hypothesis testing, ANOVA, and probability distributions to extract meaningful insights from data.`,
    tags:['Advanced','Statistics','Modeling'],visual:'⚡',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
    concepts:['Linear Regression (lm)','Hypothesis Testing','Probability Distributions','ANOVA','Model Diagnostics'],
    body:`<p>R was built by statisticians, for statisticians. Its built-in functions and ecosystem of packages make it the most powerful environment for statistical analysis in any programming language. This module covers the core tools you need for data science and academic research.</p>
@@ -845,7 +845,7 @@ fitted(model)         # Fitted values
 confint(model)        # 95% confidence intervals for coefficients</code></pre>`},
 
   {id:12,free:false,icon:'🗄️',level:'Advanced',title:'Shiny & R Markdown',
-   excerpt:'Build interactive dashboards and reproducible reports. Learn Shiny for web apps and R Markdown for dynamic documents that update with your data.',
+      excerpt:`Build interactive dashboards and reproducible reports. Learn Shiny for web apps and R Markdown for dynamic documents that update with your data.`,
    tags:['Advanced','Shiny','Reports'],visual:'🗄️',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
    concepts:['ui & server','Reactive Programming','R Markdown (.Rmd)','Knitr','Interactive Outputs'],
    body:`<p>R goes beyond analysis — it can produce interactive web applications with <strong>Shiny</strong> and publication-ready dynamic reports with <strong>R Markdown</strong>. Both tools allow your analysis to be reproduced, shared, and explored by non-technical stakeholders.</p>
@@ -854,13 +854,13 @@ confint(model)        # 95% confidence intervals for coefficients</code></pre>`}
 <pre><code>---
 title: "Sales Analysis Q3"
 author: "Ashtid"
-date: "`r Sys.Date()`"
+date: "\`r Sys.Date()\`"
 output: html_document
 ---
 
 ## Overview
 
-This report analyses Q3 sales data automatically updated on `r Sys.Date()`.
+This report analyses Q3 sales data automatically updated on \`r Sys.Date()\`.
 
 \`\`\`{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
