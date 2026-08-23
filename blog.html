@@ -11,8 +11,51 @@
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="pages.css">
 <style>
-.post-thumb { display:flex; align-items:center; justify-content:center; flex-direction:column; gap:0; background:linear-gradient(135deg,#08081a,#111128); }
-.thumb-icon { display:flex; align-items:center; justify-content:center; }
+/* ── Thumb base ── */
+.post-thumb {
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:0; position:relative; overflow:hidden;
+  background: linear-gradient(135deg,#08081a,#111128);
+}
+/* Grid-line overlay on every thumb */
+.post-thumb::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+/* Radial glow behind icon */
+.post-thumb::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  border-radius:inherit;
+  background: radial-gradient(ellipse 70% 60% at 50% 55%, var(--thumb-glow,rgba(200,241,53,0.08)), transparent 80%);
+}
+/* Category tints */
+.post-thumb-trend   { --thumb-glow: rgba(200,241,53,0.12);
+  background: linear-gradient(135deg,#080d00,#0e1600,#111a04); }
+.post-thumb-tutorial{ --thumb-glow: rgba(96,165,250,0.12);
+  background: linear-gradient(135deg,#020815,#060e1e,#090f22); }
+.post-thumb-career  { --thumb-glow: rgba(247,183,49,0.12);
+  background: linear-gradient(135deg,#0e0900,#160f00,#1a1200); }
+.post-thumb-tips    { --thumb-glow: rgba(167,139,250,0.12);
+  background: linear-gradient(135deg,#080416,#0d071e,#100922); }
+
+.thumb-icon { display:flex; align-items:center; justify-content:center; position:relative; z-index:1; }
+
+/* ── Card hover lift + border glow ── */
+.post-card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease !important;
+}
+.post-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,241,53,0.18) !important;
+}
+.post-thumb-trend   { border-bottom: 2px solid rgba(200,241,53,0.25); }
+.post-thumb-tutorial{ border-bottom: 2px solid rgba(96,165,250,0.25); }
+.post-thumb-career  { border-bottom: 2px solid rgba(247,183,49,0.25); }
+.post-thumb-tips    { border-bottom: 2px solid rgba(167,139,250,0.25); }
+
 .author-dot-svg { display:flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); flex-shrink:0; }
 .read-badge { display:inline-flex; align-items:center; gap:5px; }
 .feat-icon { display:flex; align-items:center; justify-content:center; }
