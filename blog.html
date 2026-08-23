@@ -17,6 +17,23 @@
 .read-badge { display:inline-flex; align-items:center; gap:5px; }
 .feat-icon { display:flex; align-items:center; justify-content:center; }
 .sb-btn { display:inline-flex; align-items:center; gap:8px; justify-content:center; }
+/* Custom cursor — only active on pointer (non-touch) devices */
+@media (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
+.cursor {
+  position: fixed; top: 0; left: 0; width: 10px; height: 10px;
+  background: #c8f135; border-radius: 50%; pointer-events: none;
+  z-index: 99999; transform-origin: center; transition: transform 0.15s ease;
+  mix-blend-mode: difference; opacity: 0;
+}
+.cursor-ring {
+  position: fixed; top: 0; left: 0; width: 36px; height: 36px;
+  border: 1.5px solid rgba(200,241,53,0.5); border-radius: 50%;
+  pointer-events: none; z-index: 99998; transition: transform 0.15s ease;
+  opacity: 0;
+}
+.cursor.visible, .cursor-ring.visible { opacity: 1; }
 </style>
 </head>
 <body>
@@ -42,11 +59,11 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <span class="sidebar-label">Categories</span>
-    <button class="cat-btn active" onclick="filterByCategory('all', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> All Stories <span class="cat-count">15</span></button>
+    <button class="cat-btn active" onclick="filterByCategory('all', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> All Stories <span class="cat-count" id="catCountAll">19</span></button>
     <button class="cat-btn" onclick="filterByCategory('trend', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.09 12.26A1 1 0 0 0 5 14h6l-2 8 8.91-10.26A1 1 0 0 0 17 10h-6l2-8Z"/></svg> Tech Trends <span class="cat-count">2</span></button>
     <button class="cat-btn" onclick="filterByCategory('career', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Career Growth <span class="cat-count">3</span></button>
-    <button class="cat-btn" onclick="filterByCategory('tutorial', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Code Tutorials <span class="cat-count">10</span></button>
-    <button class="cat-btn" onclick="filterByCategory('tips', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.62-1.44 4.9-3.56 6.14L15 17H9l.56-1.86A7.001 7.001 0 0 1 5 9a7 7 0 0 1 7-7Z"/><path d="M9 21h6"/></svg> Study Tips <span class="cat-count">3</span></button>
+    <button class="cat-btn" onclick="filterByCategory('tutorial', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Code Tutorials <span class="cat-count">14</span></button>
+    <button class="cat-btn" onclick="filterByCategory('tips', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.62-1.44 4.9-3.56 6.14L15 17H9l.56-1.86A7.001 7.001 0 0 1 5 9a7 7 0 0 1 7-7Z"/><path d="M9 21h6"/></svg> Study Tips <span class="cat-count">4</span></button>
 
     <span class="sidebar-label" style="margin-top:28px;">Trending Now</span>
     <div class="trending-card" onclick="openPost(0)">
@@ -89,7 +106,7 @@
       <div class="hero-eyebrow">Insights & Articles</div>
       <h1 class="hero-title">The <em>Developer</em><br>Blog</h1>
       <div class="hero-stats">
-        <div class="h-stat"><span>15</span> Articles</div>
+        <div class="h-stat"><span id="heroArticleCount">19</span> Articles</div>
         <div class="h-stat"><span>4</span> Categories</div>
         <div class="h-stat">Latest <span id="latestDate">May 2026</span></div>
       </div>
@@ -1085,10 +1102,116 @@ class BST {
       <p>Build something visible during your internship. Document what you learned. Write about it on LinkedIn. That documentation becomes the proof of experience that makes your next application easier.</p>
     `
   }
-];
-
-// Also update category counts and hero stats
-
+  ,{
+    id: 15,
+    slug: 'gamified-learning-programming',
+    title: 'Level Up Your Programming Skills with Gamified Learning',
+    excerpt: 'Learning programming doesn\'t have to feel like reading endless textbooks. Gamified learning turns coding into a challenge where every problem solved feels like a level completed.',
+    category: 'tips',
+    catLabel: 'Study Tips',
+    author: 'IT Study Hub',
+    date: 'Jun 20, 2026',
+    readTime: '6 min',
+    featured: false,
+    content: `
+      <p>Learning programming doesn't have to feel like reading endless textbooks. Gamified learning turns coding into a challenge where every problem solved feels like a level completed. At IT Study Hub, students can strengthen their programming skills through progressive challenges, practice tasks, and project-based learning.</p>
+      <h2>Why gamification works for programmers</h2>
+      <p>Traditional learning separates theory from practice. Gamified learning collapses that gap. When every challenge has a clear goal, a difficulty rating, and a reward for completion — your brain is wired to stay engaged. You get dopamine from progress, not just from finishing a semester.</p>
+      <p>Instead of simply memorizing syntax, learners build logic, solve problems, earn confidence, and gradually tackle harder concepts. Programming is already a game — every bug is a puzzle, every working feature is a win. Gamified learning just makes that structure explicit.</p>
+      <h2>How to apply this yourself</h2>
+      <p>Whether you're starting with C, Java, JavaScript, or R, think of every coding challenge as another step toward becoming a better programmer.</p>
+      <p><strong>Set daily streaks.</strong> Commit to solving at least one problem per day. LeetCode, HackerRank, and IT Study Hub's practice section all track streaks. The streak itself becomes motivation.</p>
+      <p><strong>Work through difficulty levels.</strong> Don't jump to hard problems when you're still building fundamentals. Easy → Medium → Hard is a progression system. Skipping levels makes the game unwinnable.</p>
+      <p><strong>Celebrate milestones.</strong> Finished your first 50 LeetCode problems? Shipped your first deployed project? Log them on LinkedIn. External acknowledgment reinforces internal motivation.</p>
+      <h2>The IT Study Hub approach</h2>
+      <p>Our XP system awards points for completing quiz questions, passing code challenges, and finishing course modules. The global leaderboard creates accountability and friendly competition. Students who engage with the XP system consistently outperform those who don't, because the structure keeps them returning when motivation fades.</p>
+      <p>The best programmers weren't born that way. They played the game long enough to get good at it.</p>
+    `
+  }
+  ,{
+    id: 16,
+    slug: 'how-a-program-works',
+    title: 'How a Program Actually Works: From Code to Output',
+    excerpt: 'Have you ever wondered what really happens after you click "Run"? A program goes through several fascinating stages before producing any output.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    author: 'Dithsa Dutta',
+    date: 'Jun 22, 2026',
+    readTime: '7 min',
+    featured: false,
+    content: `
+      <p>Have you ever wondered what really happens after you click "Run"? Most beginners see code as a magic incantation — type the right words, get an output. But understanding the actual journey from source code to output transforms how you think about programming.</p>
+      <h2>Stage 1: Source Code</h2>
+      <p>Your source code is plain text. A <code>.c</code> file, a <code>.java</code> file, a <code>.py</code> file — these are text files the computer cannot directly execute. Before anything runs, your code must be transformed.</p>
+      <h2>Stage 2: Compilation or Interpretation</h2>
+      <p><strong>Compiled languages (C, C++, Rust):</strong> A compiler reads your entire source file and translates it into machine code — binary instructions your CPU can execute directly. This translation happens once, before the program runs.</p>
+      <p><strong>Interpreted languages (Python, JavaScript):</strong> An interpreter reads and executes your code line by line at runtime. There's no separate compilation step — this is why Python is slower than C but faster to iterate with.</p>
+      <p><strong>Hybrid (Java):</strong> The Java compiler translates source code to bytecode — an intermediate format. The JVM then interprets or JIT-compiles this bytecode at runtime. This is how Java achieves "write once, run anywhere."</p>
+      <h2>Stage 3: Memory Allocation</h2>
+      <p>When your program starts, the OS allocates memory divided into regions: the stack (function calls and local variables), the heap (dynamic allocation — <code>malloc</code> in C, <code>new</code> in Java), and the code segment (compiled instructions). Variables are stored at specific memory addresses — the variable name is just a human-readable label for that address.</p>
+      <h2>Stage 4: CPU Execution</h2>
+      <p>The CPU executes a fetch-decode-execute cycle — fetch an instruction from memory, decode what it means, execute it, move to the next. This happens billions of times per second. The OS manages scheduling, I/O, and memory protection between processes.</p>
+      <h2>Why this matters</h2>
+      <p>Understanding this journey makes programming much easier because you begin to see what is happening behind your code — not just what appears on the screen. When you get a segmentation fault, you know it means your program tried to access memory it doesn't own. When your program is slow, you can reason about whether it's CPU-bound or I/O-bound. The computer isn't magic. It's a very fast, very literal machine — and the closer your mental model matches that reality, the better programmer you become.</p>
+    `
+  }
+  ,{
+    id: 17,
+    slug: 'data-structures-better-programmer',
+    title: 'Why Understanding Data Structures Makes You a Better Programmer',
+    excerpt: 'Data structures are the foundation behind efficient software. Choosing the right one can make a program dramatically faster and easier to maintain.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    author: 'Snehanshu Sarkar',
+    date: 'Jun 25, 2026',
+    readTime: '8 min',
+    featured: false,
+    content: `
+      <p>Data structures are the foundation behind efficient software. Arrays, linked lists, stacks, queues, trees, and hash tables provide different ways to organize and access information. Choosing the right structure can make a program faster, simpler, and easier to maintain.</p>
+      <p>Even if you're a beginner, learning the basic idea behind data structures early can dramatically improve your problem-solving skills. Instead of asking only "How do I write this code?", you start asking a more important question: "What is the best way to organize and process this data?"</p>
+      <h2>The core structures every programmer must know</h2>
+      <p><strong>Arrays</strong> — Elements stored in contiguous memory, accessed by index in O(1). Best for fast random access when size is known. Weakness: inserting or deleting in the middle is O(n).</p>
+      <p><strong>Linked Lists</strong> — Each node holds data and a pointer to the next node. Inserting at the front is O(1). Weakness: no random access — finding the nth element requires traversing from the beginning.</p>
+      <p><strong>Stacks</strong> — Last In, First Out (LIFO). Used for function call management, undo operations, and expression evaluation.</p>
+      <p><strong>Queues</strong> — First In, First Out (FIFO). Used for task scheduling, BFS graph traversal, and message queues in distributed systems.</p>
+      <p><strong>Hash Tables</strong> — O(1) average lookup by key. This is how Java's HashMap and Python's dict work internally — a hash function maps keys to array indices, making retrieval nearly instant regardless of size.</p>
+      <p><strong>Trees</strong> — Hierarchical structures. Binary Search Trees give O(log n) search. File systems, databases, and the HTML DOM are all trees.</p>
+      <h2>A practical example</h2>
+      <p>Suppose you're building a feature that checks whether a username is already taken. Option A: store usernames in an array and loop through every time — O(n) per check, slow for large user bases. Option B: store them in a HashSet — O(1) per check, regardless of how many users you have.</p>
+      <p>Same problem, same data, dramatically different performance. That's the power of choosing the right structure.</p>
+      <h2>How to practice</h2>
+      <p>Don't just read about data structures — implement them from scratch. Write a linked list in C. Build a stack in Java. Implement a basic hash table in Python. LeetCode's data structures track and IT Study Hub's practice section both offer progressive challenges. Start with arrays, then linked lists, then move to trees and graphs. Every algorithm you encounter builds on these foundations.</p>
+    `
+  }
+  ,{
+    id: 18,
+    slug: 'what-happens-when-you-open-a-website',
+    title: 'What Happens When You Open a Website?',
+    excerpt: 'Typing a URL and pressing Enter seems simple — but a lot happens in milliseconds. Here\'s the hidden journey behind every website you visit.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    author: 'Argha Paul',
+    date: 'Jun 28, 2026',
+    readTime: '9 min',
+    featured: false,
+    content: `
+      <p>Typing a website address and pressing Enter seems simple, but a lot happens in milliseconds. Every time you open a webpage, your browser, your OS, multiple servers, and thousands of kilometers of fiber-optic cable coordinate to deliver a response. Here's the hidden journey behind every website you visit.</p>
+      <h2>Step 1: DNS Resolution</h2>
+      <p>Your browser doesn't know where <code>itstudyhub.dpdns.org</code> is — it only understands IP addresses like <code>185.199.108.153</code>. So the first step is asking the Domain Name System (DNS) to translate the domain name into an IP address.</p>
+      <p>Your computer checks its local DNS cache first. If not cached, it asks your ISP's DNS server. If that doesn't know, the query travels up the DNS hierarchy — to root servers, then top-level domain servers (.org, .com), then the authoritative nameserver for that domain. The whole chain typically resolves in under 100 milliseconds.</p>
+      <h2>Step 2: TCP Connection &amp; TLS Handshake</h2>
+      <p>With the IP address in hand, your browser opens a TCP connection via a three-way handshake: SYN → SYN-ACK → ACK. This establishes a reliable connection before any data transfers. For HTTPS sites, a TLS handshake follows — your browser and server agree on encryption and exchange cryptographic keys. This is what makes the padlock icon appear.</p>
+      <h2>Step 3: HTTP Request</h2>
+      <p>Your browser sends an HTTP request to the server — essentially: "Give me the main page, here's what content types I can handle, here's my browser info." The server reads this and decides what to send back.</p>
+      <h2>Step 4: Server Processing</h2>
+      <p>For a static site (like IT Study Hub on GitHub Pages), the server simply finds the HTML file and sends it. For a dynamic site — a social feed, an e-commerce store — the server runs application code, queries a database for personalized data, constructs an HTML response, and sends it. This is the layer where backend programming, APIs, and databases live.</p>
+      <h2>Step 5: Browser Rendering</h2>
+      <p>Your browser receives HTML and parses it top to bottom. CSS file links trigger new HTTP requests. Script tags fetch and execute JavaScript. Images trigger their own requests. The browser builds a DOM from the HTML and a CSSOM from the stylesheets — these combine into the Render Tree. The browser then calculates layout (where each element goes) and paints pixels to the screen.</p>
+      <h2>Why this matters for developers</h2>
+      <p>Understanding this process gives beginners a foundation for learning web development, APIs, backend programming, databases, and full-stack development. DNS explains why changing a domain takes time to propagate. TCP explains why network latency affects page load. The HTTP cycle is the foundation of every API you'll ever build. The rendering pipeline explains why too many scripts block your page.</p>
+      <p>Every web developer works within this system every day. The ones who understand it deeply can debug faster, optimize better, and build systems that work reliably at scale.</p>
+    `
+  }
 ];
 
 // ── Per-post thumbnail SVG icons ──
@@ -1108,6 +1231,10 @@ const POST_ICONS = {
   12: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
   13: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>`,
   14: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+  15: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.62-1.44 4.9-3.56 6.14L15 17H9l.56-1.86A7.001 7.001 0 0 1 5 9a7 7 0 0 1 7-7Z"/><path d="M9 21h6"/><path d="M7.5 6l1.5 1.5L12 5l3 2.5 1.5-1.5"/></svg>`,
+  16: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="M9 9l1.5 1.5L13 8l2 2"/></svg>`,
+  17: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(67,233,123,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`,
+  18: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
     default: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.5)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
 };
 
@@ -1274,8 +1401,17 @@ function attachCursorHover() {
 }
 
 // ── Init ──
-// Set latest date from posts
 (function() {
+  // Auto-update counts from POSTS array
+  const total = POSTS.length;
+  const byCategory = {};
+  POSTS.forEach(p => { byCategory[p.category] = (byCategory[p.category] || 0) + 1; });
+  const allEl = document.getElementById('catCountAll');
+  const heroEl = document.getElementById('heroArticleCount');
+  if (allEl) allEl.textContent = total;
+  if (heroEl) heroEl.textContent = total;
+
+  // Set latest date from posts
   const latest = POSTS.map(p => new Date(p.date)).sort((a,b) => b-a)[0];
   const el = document.getElementById('latestDate');
   if (el && latest) el.textContent = latest.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
