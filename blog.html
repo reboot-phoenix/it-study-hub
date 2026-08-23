@@ -25,7 +25,7 @@
   position: fixed; top: 0; left: 0; width: 10px; height: 10px;
   background: #c8f135; border-radius: 50%; pointer-events: none;
   z-index: 99999; transform-origin: center; transition: transform 0.15s ease;
-  mix-blend-mode: difference; opacity: 0;
+  opacity: 0;
 }
 .cursor-ring {
   position: fixed; top: 0; left: 0; width: 36px; height: 36px;
@@ -1383,7 +1383,10 @@ const curR = document.getElementById('curR');
 
 if (_isPointer) {
   let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cur.classList.add('visible'); curR.classList.add('visible');
+  });
   (function anim() {
     cur.style.left=(mx-5)+'px'; cur.style.top=(my-5)+'px';
     rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
