@@ -28,9 +28,37 @@
     --ff-body: 'DM Sans', sans-serif;
     --ff-mono: 'JetBrains Mono', monospace;
   }
+  
+/* ── CUSTOM CURSOR ── */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
 
-  /* Custom cursor — pointer devices only */
+  .cursor {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--lime);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    left: 0;
+    top: 0;
+  }
 
+  .cursor-ring {
+    position: fixed;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(200, 241, 53, 0.7);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    left: 0;
+    top: 0;
+  }
+}
 
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
