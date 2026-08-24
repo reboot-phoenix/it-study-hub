@@ -978,9 +978,11 @@ class BST {
     category: 'tips',
     catLabel: 'Study Tips',
     author: 'IT Study Hub',
+    authorRole: 'Editorial Team',
     date: 'Jun 20, 2026',
     readTime: '6 min',
     featured: false,
+    tags: ['Gamification', 'Learning', 'Programming', 'Study Tips'],
     content: `
       <p>Learning programming doesn't have to feel like reading endless textbooks. Gamified learning turns coding into a challenge where every problem solved feels like a level completed. At IT Study Hub, students can strengthen their programming skills through progressive challenges, practice tasks, and project-based learning.</p>
       <h2>Why gamification works for programmers</h2>
@@ -1004,9 +1006,11 @@ class BST {
     category: 'tutorial',
     catLabel: 'Tutorial',
     author: 'Dithsa Dutta',
+    authorRole: 'Founder & Lead Architect',
     date: 'Jun 22, 2026',
     readTime: '7 min',
     featured: false,
+    tags: ['Computer Science', 'Programming Basics', 'How It Works'],
     content: `
       <p>Have you ever wondered what really happens after you click "Run"? Most beginners see code as a magic incantation — type the right words, get an output. But understanding the actual journey from source code to output transforms how you think about programming.</p>
       <h2>Stage 1: Source Code</h2>
@@ -1031,9 +1035,11 @@ class BST {
     category: 'tutorial',
     catLabel: 'Tutorial',
     author: 'Snehanshu Sarkar',
+    authorRole: 'Core Developer',
     date: 'Jun 25, 2026',
     readTime: '8 min',
     featured: false,
+    tags: ['Data Structures', 'Algorithms', 'DSA', 'Problem Solving'],
     content: `
       <p>Data structures are the foundation behind efficient software. Arrays, linked lists, stacks, queues, trees, and hash tables provide different ways to organize and access information. Choosing the right structure can make a program faster, simpler, and easier to maintain.</p>
       <p>Even if you're a beginner, learning the basic idea behind data structures early can dramatically improve your problem-solving skills. Instead of asking only "How do I write this code?", you start asking a more important question: "What is the best way to organize and process this data?"</p>
@@ -1059,9 +1065,11 @@ class BST {
     category: 'tutorial',
     catLabel: 'Tutorial',
     author: 'Argha Paul',
+    authorRole: 'Core Developer',
     date: 'Jun 28, 2026',
     readTime: '9 min',
     featured: false,
+    tags: ['Web Dev', 'Networking', 'DNS', 'HTTP', 'How It Works'],
     content: `
       <p>Typing a website address and pressing Enter seems simple, but a lot happens in milliseconds. Every time you open a webpage, your browser, your OS, multiple servers, and thousands of kilometers of fiber-optic cable coordinate to deliver a response. Here's the hidden journey behind every website you visit.</p>
       <h2>Step 1: DNS Resolution</h2>
@@ -1167,7 +1175,7 @@ if (!post) {
             <div class="meta-avatar" aria-hidden="true">${AUTHOR_ART[post.author] || AUTHOR_ART.default}</div>
             <div>
               <div class="meta-name">${post.author}</div>
-              <div class="meta-role">${post.authorRole}</div>
+              <div class="meta-role">${post.authorRole || ''}</div>
             </div>
           </div>
           <div class="meta-divider"></div>
@@ -1185,7 +1193,7 @@ if (!post) {
 
       <div class="art-footer">
         <div class="art-tags">
-          ${post.tags.map(t => `<span class="art-tag"># ${t}</span>`).join('')}
+          ${(post.tags || []).map(t => `<span class="art-tag"># ${t}</span>`).join('')}
         </div>
         <div class="related-title">More Articles</div>
         <div class="related-grid">
