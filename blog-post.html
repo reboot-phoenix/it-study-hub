@@ -28,7 +28,7 @@
 <div id="appRoot"></div>
 
 <!-- CURSOR -->
-<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
+<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform 0.15s ease;opacity:0;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <!-- TOAST -->
@@ -41,176 +41,125 @@
 const POSTS = [
   {
     id: 0,
+    slug: 'ai-systems-programming',
     title: 'The Rise of AI in Systems Programming',
-    excerpt: 'Will LLMs replace C++ developers, or just make them faster? We explore how AI tools like GitHub Copilot and Claude are changing the landscape of low-level code — and what it means for students learning C and C++ today.',
-    category: 'trend', catLabel: 'Tech Trends',
-    emoji: '🤖', author: 'Dithsa Dutta', authorEmoji: '👨‍💻',
-    authorRole: 'Founder & Lead Architect',
-    date: 'May 15, 2026', readTime: '12 min',
-    tags: ['AI', 'C++', 'Systems', 'Future of Code'],
+    excerpt: 'Will LLMs replace C++ developers, or just make them faster? We explore how AI is changing low-level code.',
+    category: 'trend',
+    catLabel: 'Tech Trends',
+    emoji: '🤖',
+    author: 'Dithsa Dutta',
+    authorEmoji: '👨‍💻',
+    date: 'May 15, 2026',
+    readTime: '12 min',
+    featured: true,
     content: `
       <p>Artificial intelligence has stormed into nearly every layer of the software stack. But there's one domain where most assumed it couldn't reach: low-level systems programming. C, C++, Rust — the languages of operating systems, compilers, and embedded hardware. The land of memory addresses, pointer arithmetic, and undefined behavior.</p>
-      <p>That assumption is now being tested — and the results are more nuanced than either the hype or the skepticism suggests.</p>
-
+      <p>That assumption is now being tested.</p>
       <h2>What AI tools can already do</h2>
       <p>Tools like GitHub Copilot, Claude, and GPT-4 can now generate surprisingly functional C and C++ code. Ask them to implement a linked list, write a memory allocator, or explain a segmentation fault — and they often do it well. For students learning systems programming, this is genuinely useful.</p>
-      <p>But here's what's more interesting: AI doesn't just write code. It <em>explains</em> code. For a student staring at a pointer error at 2AM, having an AI that can walk through the stack frame step by step is transformative. This is the tutoring use case that textbooks have never been able to fill — patient, always available, and infinitely willing to re-explain in a different way.</p>
-      <blockquote>"The best use of AI in learning is not to get the answer — it's to get the question explained ten different ways until one of them clicks."</blockquote>
-      <p>Beyond tutoring, AI tools excel at boilerplate generation — writing Makefiles, setting up build systems, generating test harnesses, and translating code comments into working implementations of well-understood algorithms. These are exactly the tasks that consume time without building fundamental understanding.</p>
-
+      <p>But here's what's more interesting: AI doesn't just write code. It <em>explains</em> code. For a student staring at a pointer error at 2AM, having an AI that can walk through the stack frame step by step is transformative.</p>
       <h2>What AI still gets wrong</h2>
-      <p>AI models hallucinate. In systems programming, a hallucination isn't just wrong — it can be a subtle memory bug that compiles cleanly and crashes in production three weeks later. AI-generated C code often looks correct but has off-by-one errors, missing null checks, or incorrect use of <code>volatile</code>.</p>
-      <p>The deeper issue: AI doesn't understand <em>why</em> certain patterns exist. It doesn't know that you're writing code for a microcontroller with 2KB of RAM, or that your allocator needs to be lock-free, or that a particular memory ordering matters because of hardware cache coherence. Context that an experienced systems programmer carries in their head is invisible to the model.</p>
-      <p>There's also a confidence problem. AI tools present wrong answers with the same fluency as correct ones. A student who doesn't understand the domain has no way to distinguish a hallucinated API from a real one. This is particularly dangerous in systems programming, where mistakes have severe consequences — data corruption, security vulnerabilities, and crashes that are nearly impossible to reproduce.</p>
-      <pre><code>// AI might generate this — looks fine, has a subtle bug
-char *buffer = malloc(strlen(input));
-strcpy(buffer, input);  // Off by one! No room for null terminator.
-// Correct:
-char *buffer = malloc(strlen(input) + 1);
-strcpy(buffer, input);</code></pre>
-
-      <h2>The new skill: verifying AI output</h2>
-      <p>The most important skill for the next generation of systems programmers isn't writing code — it's evaluating code. Knowing what questions to ask: Does this handle the edge cases? Is this safe on a platform where <code>int</code> is 16 bits? What happens if <code>malloc</code> returns NULL here?</p>
-      <p>This is actually a higher-order skill than just writing code from scratch. And it requires deep fundamentals. You can't spot an off-by-one error in a memory allocation if you don't understand how C strings are null-terminated. You can't catch a race condition in AI-generated threading code if you don't understand what a race condition is.</p>
-
+      <p>AI models hallucinate. In systems programming, a hallucination isn't just wrong — it can be a subtle memory bug that compiles cleanly and crashes in production three weeks later. AI-generated C code often looks correct but has off-by-one errors, missing null checks, or incorrect use of volatile.</p>
+      <p>The deeper issue: AI doesn't understand <em>why</em> certain patterns exist. It doesn't know that you're writing code for a microcontroller with 2KB of RAM, or that your allocator needs to be lock-free. Context that an experienced systems programmer carries in their head is invisible to the model.</p>
       <h2>What this means for you as a student</h2>
       <p>Learn the fundamentals anyway. Not despite AI, but because of it. The developers who will thrive are those who can tell when AI is wrong — and fix it. That requires real understanding of pointers, memory layout, and hardware behavior.</p>
-      <p>Use AI as a tutor, not a replacement. Let it explain concepts, generate examples to experiment with, and help you debug. But write the code yourself first. Struggle with it. The struggle is where the learning happens — not because suffering is virtuous, but because the act of struggling is what forces your brain to build the mental models that make expertise possible.</p>
-      <p>The C programmers of 2030 won't be slower than today's — they'll be dramatically faster, with AI handling boilerplate while they focus on architecture, correctness, and optimization. But the baseline knowledge required to use these tools well is exactly what courses like ours teach. The fundamentals haven't become less important. They've become <em>more</em> important, because they're now the differentiator.</p>
+      <p>Use AI as a tutor, not a replacement. Let it explain concepts, generate examples to experiment with, and help you debug. But write the code yourself first. Struggle with it. The struggle is where the learning happens.</p>
+      <p>The C programmers of 2030 won't be slower than today's — they'll be dramatically faster, with AI handling boilerplate while they focus on architecture. But the baseline knowledge required to use these tools well is exactly what courses like ours teach.</p>
     `
   },
   {
     id: 1,
+    slug: 'java-streams-cleaner-code',
     title: 'Mastering Java Streams for Cleaner Code',
-    excerpt: 'Stop writing messy for-loops. Learn how to process data efficiently using the Java Stream API with practical examples that will change how you write Java forever.',
-    category: 'tutorial', catLabel: 'Tutorial',
-    emoji: '☕', author: 'Mithila Rani Saha', authorEmoji: '🌸',
-    authorRole: 'Designer & Content Lead',
-    date: 'May 10, 2026', readTime: '5 min',
-    tags: ['Java', 'Streams', 'OOP', 'Clean Code'],
+    excerpt: 'Stop writing messy for-loops. Learn how to process data efficiently using the Java Stream API with practical examples.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '☕',
+    author: 'Mithila Rani Saha',
+    authorEmoji: '🌸',
+    date: 'May 10, 2026',
+    readTime: '5 min',
+    featured: false,
     content: `
-      <p>Java Streams were introduced in Java 8 and they completely changed how Java developers think about data processing. If you're still writing nested for-loops to filter and transform collections, this article will change how you write Java — permanently.</p>
-
+      <p>Java Streams were introduced in Java 8 and they completely changed how Java developers think about data processing. If you're still writing nested for-loops to filter and transform collections, this article will change your life.</p>
       <h2>What is a Stream?</h2>
       <p>A Stream is not a data structure. It's a pipeline of operations applied to a source of data — a collection, an array, or even an I/O channel. Streams are lazy: nothing executes until you call a terminal operation.</p>
-      <p>Think of it like a conveyor belt in a factory. Raw materials (your data) go in one end, and each station on the belt transforms them. At the very end, you collect the finished product. The belt doesn't move until the last station is ready — that's the laziness.</p>
-
+      <p>Think of it like a conveyor belt in a factory. Raw materials (your data) go in one end, and each station on the belt transforms them. At the very end, you collect the finished product.</p>
       <h2>The three parts of every stream</h2>
-      <p><strong>1. Source</strong> — where the data comes from. Usually a List, Set, or array. You call <code>.stream()</code> on any collection to start.<br>
-      <strong>2. Intermediate operations</strong> — transformations that return another stream. These are lazy — they don't execute until a terminal operation is called. Examples: <code>filter()</code>, <code>map()</code>, <code>sorted()</code>, <code>distinct()</code>, <code>limit()</code>.<br>
-      <strong>3. Terminal operation</strong> — triggers execution and produces a result. Examples: <code>collect()</code>, <code>forEach()</code>, <code>count()</code>, <code>findFirst()</code>, <code>anyMatch()</code>.</p>
-
+      <p><strong>1. Source</strong> — where the data comes from. Usually a List, Set, or array.<br>
+      <strong>2. Intermediate operations</strong> — transformations that return another stream. Examples: <code>filter()</code>, <code>map()</code>, <code>sorted()</code>.<br>
+      <strong>3. Terminal operation</strong> — triggers execution and produces a result. Examples: <code>collect()</code>, <code>forEach()</code>, <code>count()</code>.</p>
       <h2>A real example: filtering students by grade</h2>
-      <p>The old verbose way that's hard to read:</p>
+      <p>Old way — verbose and hard to read:</p>
       <pre><code>List&lt;Student&gt; topStudents = new ArrayList&lt;&gt;();
 for (Student s : students) {
-    if (s.getGrade() &gt;= 80) {
+    if (s.getGrade() >= 80) {
         topStudents.add(s);
     }
 }
-Collections.sort(topStudents,
-    Comparator.comparing(Student::getName));</code></pre>
-      <p>The Stream way — clean, readable, one expression:</p>
+Collections.sort(topStudents, Comparator.comparing(Student::getName));</code></pre>
+      <p>Stream way — clean, readable, one expression:</p>
       <pre><code>List&lt;Student&gt; topStudents = students.stream()
     .filter(s -&gt; s.getGrade() &gt;= 80)
     .sorted(Comparator.comparing(Student::getName))
     .collect(Collectors.toList());</code></pre>
-      <p>Same result, half the lines, and the <em>intent</em> is immediately clear. You can read it like English: "take students, keep those with grade ≥ 80, sort by name, collect into a list."</p>
-
-      <h2>More powerful operations</h2>
-      <p><strong>map()</strong> — transform each element into something else:</p>
-      <pre><code>// Get just the names of all students
-List&lt;String&gt; names = students.stream()
-    .map(Student::getName)
-    .collect(Collectors.toList());</code></pre>
-      <p><strong>reduce()</strong> — collapse a stream into a single value:</p>
-      <pre><code>// Sum all grades
-int totalScore = students.stream()
-    .mapToInt(Student::getGrade)
-    .sum();  // or .average(), .max(), .min()</code></pre>
-      <p><strong>Chaining multiple operations:</strong></p>
-      <pre><code>// Top 5 students by grade, get their names as a comma-separated string
-String topFive = students.stream()
-    .filter(s -&gt; s.getGrade() &gt;= 70)
-    .sorted(Comparator.comparingInt(Student::getGrade).reversed())
-    .limit(5)
-    .map(Student::getName)
-    .collect(Collectors.joining(", "));</code></pre>
-
       <h2>When NOT to use streams</h2>
-      <p>Streams aren't always better. For simple single-element operations, a regular if-statement is more readable. For performance-critical inner loops, streams add overhead due to lambda allocation and boxing. And if you need to modify external state during iteration, streams can cause confusion and bugs.</p>
-      <p>The rule: use streams when they make the <em>intent</em> clearer. If your stream pipeline is longer than 5-6 steps, consider breaking it into named intermediate results. Clarity always beats cleverness.</p>
-      <p>Master streams and your Java code will level up immediately — not just in length, but in how clearly it communicates what it's doing.</p>
+      <p>Streams aren't always better. For simple single-element operations, a regular if-statement is more readable. For performance-critical inner loops, streams add overhead. And if you need to modify external state during iteration, streams can cause confusion. Use them when they make the intent clearer — not just because they're "modern".</p>
+      <p>The goal of good code is communication. Streams communicate data transformation pipelines better than loops. Master them and your Java code will level up immediately.</p>
     `
   },
   {
     id: 2,
+    slug: 'ace-tech-interview',
     title: 'How to Ace Your First Tech Interview',
-    excerpt: 'From whiteboarding logic to behavioral questions — everything you need to know before walking into the room for the first time.',
-    category: 'career', catLabel: 'Career Growth',
-    emoji: '🎯', author: 'Snehanshu Sarkar', authorEmoji: '🐍',
-    authorRole: 'Contributor',
-    date: 'May 5, 2026', readTime: '8 min',
-    tags: ['Interview', 'Career', 'DSA', 'Placement'],
+    excerpt: 'From whiteboarding logic to behavioral questions — everything you need to know before walking into the room.',
+    category: 'career',
+    catLabel: 'Career',
+    emoji: '🎯',
+    author: 'Snehanshu Sarkar',
+    authorEmoji: '🐍',
+    date: 'May 5, 2026',
+    readTime: '8 min',
+    featured: false,
     content: `
       <p>Your first tech interview is terrifying. You're being evaluated on your thinking process, your communication, your problem-solving, and your code — simultaneously, under time pressure, by a stranger. No wonder most students feel underprepared.</p>
-      <p>Here's the truth: preparation is almost entirely the deciding factor. The students who get offers aren't always the most talented — they're the ones who prepared systematically.</p>
-
+      <p>Here's the thing: preparation is almost entirely the deciding factor. The students who get offers aren't always the most talented — they're the ones who prepared systematically.</p>
       <h2>The three things interviewers actually evaluate</h2>
-      <p><strong>1. Can you solve problems?</strong> It's not just about getting the right answer — it's about your approach. Do you jump straight to coding, or do you think out loud, clarify the problem, and consider edge cases first? The process matters as much as the solution. Many interviewers at TCS, Infosys, and Wipro will accept an O(n²) brute force explained clearly over a muddled O(n log n) that the candidate doesn't understand.</p>
-      <p><strong>2. Can you communicate?</strong> Coding in silence is a red flag. Interviewers want to follow your thinking. Talk through your logic: <em>"I'm thinking about using a HashMap here because lookup will be O(1)..."</em> Even if your solution is wrong, articulating your reasoning shows how you'd work on a team.</p>
-      <p><strong>3. Are you someone they want to work with?</strong> Behavioral questions aren't formalities. Have 3-4 specific stories from projects or college ready to go. Use the STAR format: Situation, Task, Action, Result.</p>
-
+      <p><strong>1. Can you solve problems?</strong> This is the obvious one. But it's not just about getting the right answer — it's about your approach. Do you jump straight to coding, or do you think out loud, clarify the problem, and consider edge cases first? The process matters as much as the solution.</p>
+      <p><strong>2. Can you communicate?</strong> Coding in silence is a red flag. Interviewers want to follow your thinking. Talk through your logic: "I'm thinking about using a HashMap here because lookup will be O(1)..." Even if your solution is wrong, articulating your reasoning shows how you'd work on a team.</p>
+      <p><strong>3. Are you someone they want to work with?</strong> Behavioral questions aren't formalities. They're evaluating how you handle conflict, failure, and collaboration. Have 3-4 specific stories from projects or college ready to go.</p>
       <h2>The preparation plan that actually works</h2>
-      <p>Don't try to solve 500 LeetCode problems. That's not the game. Instead: solve 50-75 problems across key patterns:</p>
-      <ul>
-        <li><strong>Arrays & Strings</strong> — two pointers, sliding window, prefix sums</li>
-        <li><strong>Linked Lists</strong> — fast/slow pointers, reversal, cycle detection</li>
-        <li><strong>Trees & Graphs</strong> — BFS, DFS, traversals</li>
-        <li><strong>Dynamic Programming basics</strong> — memoization, 0/1 knapsack, LCS</li>
-        <li><strong>Sorting & Searching</strong> — binary search, merge sort internals</li>
-      </ul>
-      <p>For each problem, understand <em>why</em> the approach works, not just how to implement it. Pattern recognition is the real skill — being able to look at a new problem and say "this is a sliding window problem."</p>
+      <p>Don't try to solve 500 LeetCode problems. That's not the game. Instead: solve 50-75 problems across key patterns — two pointers, sliding window, BFS/DFS, dynamic programming basics, and trees. For each problem, understand <em>why</em> the approach works, not just how to implement it.</p>
       <p>Practice explaining your solutions out loud. Record yourself if needed. Most students can solve problems silently but fall apart when asked to explain. Bridge that gap before the interview.</p>
-
       <h2>The day of the interview</h2>
-      <p>Before writing a single line of code: restate the problem in your own words. Ask about constraints — what's the expected input size? Can the array be empty? Are there duplicates? These questions show maturity and prevent you from solving the wrong problem.</p>
-      <p>Then: think out loud about 2-3 approaches before picking one. Start with the brute force — never say "I know a better way" without first showing you understand the simple solution. The interviewer needs to know you understand the problem before they care about optimization.</p>
-      <p>When you get stuck — and you will — say <em>"I'm not sure of the optimal approach, but I know how I'd start..."</em> Interviewers would rather see you reason under pressure than watch you freeze. Getting stuck and recovering gracefully is itself a signal they're looking for.</p>
-
-      <h2>For placement at TCS, Infosys, Wipro</h2>
-      <p>Mass recruiters have a specific pattern. The coding round typically has 2-3 problems: one easy (array/string manipulation), one medium (logic-heavy but not algorithmic), and sometimes one hard. The coding round is pass/fail — you need both to pass, not to write perfect code.</p>
-      <p>The technical interview that follows focuses on: OOP concepts (inheritance, polymorphism, abstraction), database basics (joins, normalization), your projects (be ready to explain every line), and 1-2 coding problems you solve while talking.</p>
-      <p>The most important preparation for mass recruiters: be able to explain your resume project confidently. They will ask "walk me through this project" and many candidates stumble. Know your tech stack, know why you made the choices you did, and know what you'd do differently.</p>
+      <p>Before you write a single line: restate the problem in your own words. Ask about constraints (what's the expected input size? can the array be empty?). Think out loud about 2-3 approaches before picking one. Start with the brute force — never say "I know a better way" without first showing you understand the simple solution.</p>
+      <p>When you get stuck — and you will — say "I'm not sure of the optimal approach, but I know how I'd start: ..." Interviewers would rather see you reason under pressure than watch you freeze.</p>
+      <p>The interview is also your chance to evaluate them. Ask about the team, the tech stack, what a typical day looks like. Companies want curious, engaged candidates — not people who just want any job.</p>
     `
   },
   {
     id: 3,
+    slug: 'python-decorators-explained',
     title: 'Python Decorators: The Magic Behind the @ Symbol',
-    excerpt: 'They look intimidating but they are incredibly powerful. We break down Python decorators completely from scratch with real code examples.',
-    category: 'tutorial', catLabel: 'Tutorial',
-    emoji: '🐍', author: 'Argha Paul', authorEmoji: '🔷',
-    authorRole: 'Contributor',
-    date: 'Apr 28, 2026', readTime: '6 min',
-    tags: ['Python', 'Decorators', 'Advanced', 'Functions'],
+    excerpt: 'They look intimidating but they are incredibly powerful. We break down Python decorators completely from scratch.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '🐍',
+    author: 'Argha Paul',
+    authorEmoji: '🔷',
+    date: 'Apr 28, 2026',
+    readTime: '6 min',
+    featured: false,
     content: `
-      <p>If you've written Flask routes, used Django's <code>@login_required</code>, or seen <code>@staticmethod</code> in a class, you've used decorators. But most students treat them like magic syntax — they know the @ goes above the function, but not why. This article fixes that completely.</p>
-
+      <p>If you've written Flask routes, used Django's <code>@login_required</code>, or seen <code>@staticmethod</code> in a class, you've used decorators. But most students treat them like magic syntax — they know the @ goes above the function, but not why.</p>
+      <p>Decorators are one of Python's most powerful features. Once you truly understand them, you'll start seeing opportunities to use them everywhere.</p>
       <h2>First: functions are objects</h2>
-      <p>Python functions are first-class objects. You can store them in variables, pass them as arguments, and return them from other functions. This is the foundation decorators are built on — without understanding this, decorators seem like magic. With it, they're obvious.</p>
+      <p>Python functions are first-class objects. You can store them in variables, pass them as arguments, and return them from other functions. This is the foundation decorators are built on.</p>
       <pre><code>def greet():
     return "Hello!"
 
 say_hi = greet   # Not calling it — storing the function itself
-print(say_hi())  # Hello!
-
-# Functions can be passed as arguments
-def call_twice(func):
-    func()
-    func()
-
-call_twice(greet)  # prints "Hello!" twice</code></pre>
-
+print(say_hi())  # Hello!</code></pre>
       <h2>A decorator is just a function that wraps another function</h2>
       <pre><code>def my_decorator(func):
     def wrapper():
@@ -219,359 +168,916 @@ call_twice(greet)  # prints "Hello!" twice</code></pre>
         print("After the function runs")
     return wrapper
 
-@my_decorator
 def say_hello():
     print("Hello!")
 
-# The @ syntax is exactly the same as:
-# say_hello = my_decorator(say_hello)
+say_hello = my_decorator(say_hello)  # Wrapping manually
+say_hello()</code></pre>
+      <p>The <code>@</code> syntax is just syntactic sugar for that last assignment line:</p>
+      <pre><code>@my_decorator
+def say_hello():
+    print("Hello!")
 
-say_hello()
-# Before the function runs
-# Hello!
-# After the function runs</code></pre>
-      <p>That's the entire secret. <code>@my_decorator</code> above a function definition is just syntactic sugar for reassigning the function through the decorator. The function gets wrapped, and the wrapper is what gets called from now on.</p>
-
+# Exactly the same as: say_hello = my_decorator(say_hello)</code></pre>
       <h2>A real use case: timing your functions</h2>
       <pre><code>import time
-import functools
 
 def timer(func):
-    @functools.wraps(func)  # preserves function name/docstring
     def wrapper(*args, **kwargs):
-        start = time.perf_counter()
+        start = time.time()
         result = func(*args, **kwargs)
-        end = time.perf_counter()
+        end = time.time()
         print(f"{func.__name__} took {end - start:.4f}s")
         return result
     return wrapper
 
 @timer
-def find_primes(n):
-    """Find all primes up to n using sieve of Eratosthenes."""
-    sieve = [True] * (n + 1)
-    for i in range(2, int(n**0.5) + 1):
-        if sieve[i]:
-            for j in range(i*i, n+1, i):
-                sieve[j] = False
-    return [i for i in range(2, n+1) if sieve[i]]
+def slow_function():
+    time.sleep(1)
+    return "done"
 
-find_primes(100000)  # find_primes took 0.0234s</code></pre>
-      <p>Notice <code>*args</code> and <code>**kwargs</code> — this makes your decorator work with any function signature. And <code>@functools.wraps(func)</code> preserves the wrapped function's name and docstring — always include it.</p>
-
-      <h2>Decorators with arguments</h2>
-      <pre><code>def repeat(n):
-    def decorator(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            for _ in range(n):
-                result = func(*args, **kwargs)
-            return result
-        return wrapper
-    return decorator
-
-@repeat(3)
-def greet(name):
-    print(f"Hello, {name}!")
-
-greet("World")
-# Hello, World!
-# Hello, World!
-# Hello, World!</code></pre>
-
-      <h2>Where decorators are used in real Python</h2>
-      <p>Once you understand the pattern, you'll see it everywhere:</p>
-      <ul>
-        <li><strong>Flask/FastAPI</strong> — <code>@app.route('/home')</code> registers a URL handler</li>
-        <li><strong>Django</strong> — <code>@login_required</code> gates views behind authentication</li>
-        <li><strong>Python stdlib</strong> — <code>@property</code>, <code>@staticmethod</code>, <code>@classmethod</code></li>
-        <li><strong>pytest</strong> — <code>@pytest.fixture</code> marks setup functions</li>
-        <li><strong>Production code</strong> — rate limiting, retry logic, caching (<code>@lru_cache</code>), logging</li>
-      </ul>
-      <p>Master decorators and a huge chunk of Python frameworks will suddenly make sense. They're not magic — they're just functions returning functions, and now you know exactly how they work.</p>
+slow_function()  # slow_function took 1.0012s</code></pre>
+      <p>Notice <code>*args</code> and <code>**kwargs</code> — this makes your decorator work with any function signature, not just functions with no arguments.</p>
+      <h2>The functools.wraps trick</h2>
+      <p>When you wrap a function, it loses its name and docstring. Fix this with <code>@functools.wraps(func)</code> inside your decorator's wrapper function. It's good practice to always include it in production decorators.</p>
+      <p>Decorators are used everywhere in professional Python: for authentication, caching, rate limiting, logging, retrying failed network calls. Master this pattern and a huge chunk of Python libraries will suddenly make sense.</p>
     `
   },
   {
     id: 4,
+    slug: 'study-smarter-not-harder',
     title: '5 Habits That Separate Top CS Students From the Rest',
-    excerpt: "It's not about studying more hours. The students who land the best opportunities have very specific habits that most people completely overlook.",
-    category: 'tips', catLabel: 'Study Tips',
-    emoji: '🧠', author: 'IT Study Hub', authorEmoji: '🌟',
-    authorRole: 'Editorial Team',
-    date: 'Apr 20, 2026', readTime: '7 min',
-    tags: ['Study Tips', 'Productivity', 'Habits', 'CS Students'],
+    excerpt: 'It\'s not about studying more hours. The students who land the best opportunities have very specific habits that most people overlook.',
+    category: 'tips',
+    catLabel: 'Study Tips',
+    emoji: '🧠',
+    author: 'IT Study Hub',
+    authorEmoji: '🌟',
+    date: 'Apr 20, 2026',
+    readTime: '7 min',
+    featured: false,
     content: `
-      <p>Every semester, some students seem to get more done in less time. They finish assignments faster, retain concepts longer, and somehow still have time for side projects and internship applications. The rest grind through the same material and wonder why it doesn't stick.</p>
-      <p>After observing hundreds of students at TIU over the years, we've identified five habits that consistently separate those who thrive from those who grind endlessly with mediocre results. None of them require more hours. They require different hours.</p>
-
+      <p>Every semester, some students seem to get more done in less time. They finish assignments faster, retain concepts longer, and somehow still have time for projects and internship applications. What's actually different about them?</p>
+      <p>After watching hundreds of students at TIU over the years, we've identified five habits that consistently separate those who thrive from those who grind endlessly with mediocre results.</p>
       <h2>1. They build things, not just read things</h2>
-      <p>Passive learning — reading textbooks, watching lectures, highlighting notes — feels productive but retains poorly. Active learning means building. After every concept you learn, build something that uses it.</p>
-      <p>Learned linked lists? Implement a playlist manager. Learned file I/O? Build a simple note-taking app. Learned recursion? Write a folder size calculator. The act of building forces you to confront every gap in your understanding. A textbook can't tell you why your pointer is null. Debugging your own code can.</p>
-      <p>The bonus: after six months of this, you have a GitHub portfolio that shows what you've built, not just what you've studied.</p>
-
+      <p>Passive learning — reading textbooks, watching lectures, highlighting notes — feels productive but retains poorly. Active learning means building. After every concept you learn, build something that uses it. Learned linked lists? Implement a playlist manager. Learned file I/O? Build a simple note-taking app.</p>
+      <p>The act of building forces you to confront every gap in your understanding. A textbook can't tell you why your pointer is null. Debugging your own code can.</p>
       <h2>2. They practice retrieval, not review</h2>
-      <p>Most students re-read their notes before exams. High performers quiz themselves instead. Close your notes and try to write down everything you remember about a topic. Then check what you got wrong.</p>
-      <p>This process — called <em>retrieval practice</em> — is one of the most well-studied memory enhancement techniques. It's uncomfortable because you realize how much you forgot. That's exactly why it works: the effort of trying to recall strengthens the memory trace far more than passively re-reading.</p>
-      <p>Practical version: after every class, spend 10 minutes writing down everything you can remember without looking at your notes. The next day, check what you missed. Repeat.</p>
-
+      <p>Most students re-read their notes before exams. High performers quiz themselves instead. Close your notes and try to write down everything you remember. This process — called retrieval practice — is one of the most well-studied memory enhancement techniques. It's uncomfortable because you realize how much you forgot. That's exactly why it works.</p>
       <h2>3. They write code every single day</h2>
-      <p>Not big coding sessions once a week. Small, consistent practice every day. Even 30 minutes of deliberate coding compounds dramatically over a semester.</p>
-      <p>Programming is a motor skill as much as an intellectual one. Syntax, debugging patterns, reading error messages fluently — these come from repetition, not understanding. Consistency builds fluency that cramming never can. A student who codes 30 minutes daily for 120 days outperforms one who codes 8-hour sessions on weekends, every time.</p>
-
+      <p>Not big coding sessions once a week. Small, consistent practice every day. Even 30 minutes of deliberate coding — solving one problem, reviewing one concept, extending one project — compounds dramatically over a semester. Programming is a motor skill as much as an intellectual one. Consistency builds fluency that cramming never can.</p>
       <h2>4. They embrace confusion as progress</h2>
       <p>Average students get frustrated when they don't understand something and often give up or skip ahead. High performers have learned to sit with confusion. They treat it as a signal that they're at the edge of their understanding — which is exactly where learning happens.</p>
-      <p>The next time you're confused, instead of reaching for a solution immediately, write down precisely what you don't understand. "I don't understand recursion" is too vague. "I don't understand why the base case needs to return 1 instead of 0 in the factorial function" is specific enough to actually be solved.</p>
-      <p>Making confusion specific often solves half of it — the act of articulating the problem forces you to think more carefully about it.</p>
-
+      <p>The next time you're confused, instead of reaching for a solution immediately, write down precisely what you don't understand. Making the confusion specific often solves half of it.</p>
       <h2>5. They connect concepts across subjects</h2>
-      <p>The students who truly excel don't keep subjects in separate mental boxes. They notice that memory management in C is connected to garbage collection in Java, which is connected to how Python handles reference counting. That recursion in algorithms is the same pattern as the call stack in OS. That database normalization is the same principle as DRY in code.</p>
-      <p>These cross-subject connections are where deep understanding lives — and they're also what interviewers test when they ask "why" questions instead of "how" questions. A recruiter asking "why does Python's GIL exist?" isn't testing whether you memorized the answer. They're testing whether you've built a connected mental model of how things work.</p>
-      <p>Study with the question: <em>"Where have I seen this idea before?"</em> That habit alone will transform how you learn — and how you're perceived in interviews.</p>
+      <p>The students who truly excel don't keep subjects in separate mental boxes. They notice that memory management in C is connected to garbage collection in Java, which is connected to how Python handles reference counting. These cross-subject connections are where deep understanding lives — and they're also what interviewers test when they ask "why" questions instead of "how" questions.</p>
+      <p>Study with the question: "Where have I seen this idea before?" That habit alone will transform how you learn.</p>
     `
-  },
+  }  ,
   {
     id: 5,
+    slug: 'c-pointers-demystified',
     title: 'C Pointers Demystified: The Concept Everyone Gets Wrong',
     excerpt: 'Pointers are the single most feared topic in C programming. Here is a clear, visual explanation that will make them click once and for all.',
-    category: 'tutorial', catLabel: 'Tutorial',
-    emoji: '⚙️', author: 'Dithsa Dutta', authorEmoji: '👨‍💻',
-    authorRole: 'Founder & Lead Architect',
-    date: 'May 18, 2026', readTime: '9 min',
-    tags: ['C Programming', 'Pointers', 'Memory', 'Systems'],
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '⚙️',
+    author: 'Dithsa Dutta',
+    authorEmoji: '👨‍💻',
+    date: 'May 18, 2026',
+    readTime: '9 min',
+    featured: false,
     content: `
-      <p>No concept in programming causes more panic than the C pointer. Students pass their data structures exam without truly understanding pointers, then spend the next two years writing code that occasionally works and occasionally segfaults with no idea why. This article fixes that.</p>
+      <p>Ask any C student what scares them most, and the answer is almost always the same: pointers. They're the reason C has a reputation for being "hard". But here's the truth — pointers are just variables that store memory addresses. Once that clicks, everything else follows.</p>
+      <h2>Memory is just a giant array</h2>
+      <p>Think of your computer's RAM as one enormous array of boxes. Each box holds one byte, and each box has an address — a number that identifies its position. When you declare a variable in C, the compiler reserves some of those boxes and gives that location a name.</p>
+      <pre><code>int age = 25;</code></pre>
+      <p>The compiler picks, say, address 1004 in memory, stores the value 25 there, and associates the name <code>age</code> with that address. Every time you use <code>age</code>, you're really saying "go to address 1004 and read what's there."</p>
+      <h2>A pointer is just a variable that holds an address</h2>
+      <pre><code>int age = 25;
+int *ptr = &age;   // ptr stores the address of age
 
-      <h2>What a pointer actually is</h2>
-      <p>Your computer's RAM is like a massive array of numbered boxes. Each box holds one byte of data. The number on the box is its <em>address</em>. A pointer is simply a variable that stores one of those addresses — it points to a location in memory rather than storing a value directly.</p>
-      <p>When you write <code>int x = 42;</code>, the value 42 is stored at some address, say 1000. When you write <code>int *p = &amp;x;</code>, you're creating a variable <code>p</code> that stores the value 1000 — the address where 42 lives. That's it. A pointer is just an address.</p>
-
-      <h2>The two operators you must understand</h2>
-      <p>There are exactly two pointer operators and they do opposite things:</p>
-      <p><strong>&amp; (address-of)</strong> — takes a variable and gives you its address. <code>&amp;x</code> gives you the address where x is stored in memory.</p>
-      <p><strong>* (dereference)</strong> — takes an address and gives you the value at that address. <code>*p</code> says "go to the address stored in p and give me what's there."</p>
-      <pre><code>int x = 42;
-int *p = &amp;x;   // p stores the address of x
-
-printf("%d", x);    // 42       — the value directly
-printf("%p", p);    // 0x7fff.. — the address stored in p
-printf("%d", *p);   // 42       — value AT the address in p
-
-*p = 100;           // change value at that address
-printf("%d", x);    // 100      — x changed because *p and x are the same location</code></pre>
-
-      <h2>Why pointers exist at all</h2>
-      <p>Two reasons. First, <strong>efficiency</strong>. Passing a large struct to a function copies every byte of it. Passing a pointer copies only 8 bytes (the address) regardless of how big the struct is. Second, <strong>mutation</strong>. In C, function arguments are passed by value — the function gets a copy. If you want a function to modify a variable in the caller, you pass the address of that variable.</p>
-      <pre><code>// Without pointer — doesn't work as intended
-void double_value(int n) {
-    n = n * 2;  // modifies the copy, not the original
-}
-
-// With pointer — works correctly
-void double_value(int *p) {
-    *p = (*p) * 2;  // modifies the value AT the address
+printf("%d
+", age);   // 25  — the value
+printf("%p
+", ptr);   // 0x7fff... — the address
+printf("%d
+", *ptr);  // 25  — dereference: go to that address, read the value</code></pre>
+      <p>The <code>&</code> operator gives you the address of a variable. The <code>*</code> operator (when used on a pointer) follows the address and gives you the value stored there. That's it. Two operators, one concept.</p>
+      <h2>Why pointers exist</h2>
+      <p><strong>1. Efficiency.</strong> Passing a large struct to a function copies the whole thing. Passing a pointer copies just 8 bytes (the address). For arrays and strings, this matters enormously.</p>
+      <p><strong>2. Modifying function arguments.</strong> In C, function arguments are passed by value — the function gets a copy. If you want a function to modify the original variable, you pass its address:</p>
+      <pre><code>void increment(int *n) {
+    (*n)++;   // dereference n, then increment the value at that address
 }
 
 int x = 5;
-double_value(&amp;x);
-printf("%d", x);  // 10</code></pre>
-
+increment(&x);
+printf("%d
+", x);   // 6</code></pre>
+      <p><strong>3. Dynamic memory.</strong> <code>malloc()</code> allocates memory on the heap and returns its address. Without pointers, you couldn't use dynamically allocated memory at all.</p>
       <h2>The most common pointer mistakes</h2>
-      <p><strong>Uninitialized pointer.</strong> If you declare <code>int *p;</code> without initializing it, <code>p</code> contains garbage — some random address. Dereferencing it (<code>*p</code>) reads from a random memory location. The OS kills your program with a segfault. Always initialize: <code>int *p = NULL;</code></p>
-      <p><strong>Not checking for NULL.</strong> <code>malloc</code> returns NULL when allocation fails. Dereferencing a NULL pointer is undefined behavior. Always check:</p>
-      <pre><code>int *p = malloc(sizeof(int));
-if (p == NULL) {
-    fprintf(stderr, "allocation failed\n");
-    exit(1);
-}
-*p = 42;  // safe — we know p is not NULL
-free(p);
-p = NULL;  // good habit: set to NULL after freeing</code></pre>
-      <p><strong>Dangling pointer.</strong> After <code>free(p)</code>, the memory is released but <code>p</code> still holds the old address. Using <code>p</code> after freeing it is undefined behavior. Set <code>p = NULL</code> immediately after every <code>free()</code>.</p>
+      <p><strong>Uninitialized pointers</strong> — declaring <code>int *ptr;</code> without initializing it. ptr contains garbage. Dereferencing it is undefined behavior (usually a segfault). Always initialize: <code>int *ptr = NULL;</code></p>
+      <p><strong>Dangling pointers</strong> — freeing memory but keeping the pointer. The pointer now points to memory that might be reused for something else. Set it to NULL after freeing.</p>
+      <p><strong>Forgetting to dereference</strong> — assigning to <code>ptr</code> instead of <code>*ptr</code> changes what the pointer points to, not the value at that location.</p>
+      <h2>Arrays and pointers are deeply connected</h2>
+      <p>In C, an array name is essentially a pointer to its first element:</p>
+      <pre><code>int arr[3] = {10, 20, 30};
+int *ptr = arr;   // ptr points to arr[0]
 
-      <h2>Pointers and arrays</h2>
-      <p>In C, an array name decays to a pointer to its first element. This means array subscripting and pointer arithmetic are equivalent:</p>
-      <pre><code>int arr[] = {10, 20, 30, 40, 50};
-int *p = arr;   // p points to arr[0]
-
-printf("%d", arr[2]);    // 30
-printf("%d", *(p + 2)); // 30 — exactly the same thing
-printf("%d", p[2]);      // 30 — also the same</code></pre>
-      <p>Once this mental model clicks — a pointer is just an address, <code>*</code> means "go there", <code>&amp;</code> means "give me the address" — every other pointer concept becomes straightforward: pointer arithmetic, function pointers, linked lists, and dynamic memory management. They all follow the same rules.</p>
+printf("%d
+", ptr[1]);   // 20 — pointer arithmetic
+printf("%d
+", *(ptr+2)); // 30 — same thing</code></pre>
+      <p>This is why you can pass arrays to functions as pointers, and why string manipulation in C feels the way it does.</p>
+      <p>Pointers aren't magic. They're the mechanism that connects the abstract world of variable names to the concrete world of memory addresses. Once you internalize that, C becomes dramatically less intimidating.</p>
     `
   },
   {
     id: 6,
+    slug: 'git-github-workflow',
     title: 'Git & GitHub: The Workflow Every CS Student Must Know',
     excerpt: 'Most students use Git only to push code. Here is the professional workflow — branching, pull requests, conflict resolution — that gets you hired.',
-    category: 'tutorial', catLabel: 'Tutorial',
-    emoji: '🌿', author: 'Snehanshu Sarkar', authorEmoji: '🐍',
-    authorRole: 'Contributor',
-    date: 'May 12, 2026', readTime: '7 min',
-    tags: ['Git', 'GitHub', 'Version Control', 'Workflow'],
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '🌿',
+    author: 'Snehanshu Sarkar',
+    authorEmoji: '🐍',
+    date: 'May 12, 2026',
+    readTime: '7 min',
+    featured: false,
     content: `
-      <p>Most students treat Git as a backup tool — they commit everything to main and push when they're done. That works for solo projects but it's an immediate red flag in every internship and job interview. Professional teams use Git very differently, and learning that workflow will set you apart from day one.</p>
-
-      <h2>The three concepts that actually matter</h2>
-      <p><strong>Commits are snapshots, not saves.</strong> Each commit should represent one logical change — a feature, a bug fix, a refactor. The commit message should explain what changed and why, not just "updated code."</p>
-      <pre><code># Bad commit messages
-git commit -m "stuff"
-git commit -m "fix"
-git commit -m "update"
-
-# Good commit messages (follow Conventional Commits)
-git commit -m "feat: add email/password login form"
-git commit -m "fix: handle null pointer in user lookup"
-git commit -m "refactor: extract auth logic into separate module"
-git commit -m "docs: update README with setup instructions"</code></pre>
-      <p><strong>Branches are free.</strong> Creating a branch costs nothing and takes milliseconds. Every new feature or bug fix should live on its own branch. This keeps main always deployable and lets multiple people work simultaneously without stepping on each other.</p>
-      <p><strong>Pull Requests are for review, not just merging.</strong> A PR is how you ask your team to review your code before it goes into the main codebase. Even on a solo project, opening a PR and reviewing your own diff before merging catches bugs that you'd miss while writing.</p>
-
-      <h2>The professional workflow</h2>
-      <pre><code># 1. Always start from an up-to-date main
+      <p>Most CS students use Git the same way: <code>git add .</code>, <code>git commit -m "changes"</code>, <code>git push</code>. It works — until you're collaborating with three other people and someone's push breaks everything.</p>
+      <p>Git is not just a backup tool. It's a collaboration protocol. Here's the workflow that professional teams actually use — and that interviewers expect you to know.</p>
+      <h2>Why the main branch is sacred</h2>
+      <p>In production teams, nobody ever commits directly to <code>main</code> (or <code>master</code>). The main branch represents the working, deployable state of the project. Every change — no matter how small — goes through a separate branch and a review process before merging.</p>
+      <p>This rule exists because bad code pushed directly to main is immediately in production. Branches create a safety net: you can experiment, break things, and throw away a branch without touching the main codebase.</p>
+      <h2>The standard branch workflow</h2>
+      <pre><code># Start from an up-to-date main branch
 git checkout main
 git pull origin main
 
-# 2. Create a branch for your work
-git checkout -b feature/add-login-page
+# Create a feature branch — use a descriptive name
+git checkout -b feature/user-login-page
 
-# 3. Make small, focused commits as you work
+# Make your changes, commit regularly
 git add .
-git commit -m "feat: add email/password login form"
-git commit -m "feat: wire Firebase signInWithEmailAndPassword"
-git commit -m "fix: handle auth error states with user feedback"
+git commit -m "Add login form HTML structure"
+git commit -m "Wire up Firebase Auth to login form"
+git commit -m "Add error handling for invalid credentials"
 
-# 4. Push your branch
-git push origin feature/add-login-page
-
-# 5. Open a Pull Request on GitHub
-# 6. Get review, make changes if needed
-# 7. Merge — delete the branch after merging</code></pre>
-
-      <h2>Resolving merge conflicts</h2>
-      <p>Conflicts happen when two branches modify the same lines of the same file. Git marks the conflict in the file and asks you to resolve it manually:</p>
-      <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD (your branch)
-const PORT = 3000;
+# Push your branch to GitHub
+git push origin feature/user-login-page</code></pre>
+      <p>Then on GitHub, you open a Pull Request — a formal request to merge your branch into main. Teammates review it, suggest changes, and approve it before it merges.</p>
+      <h2>Writing commit messages that actually help</h2>
+      <p>Bad: <code>"fix stuff"</code>, <code>"changes"</code>, <code>"asdf"</code>. These tell you nothing when you're debugging three months later.</p>
+      <p>Good commit messages follow this pattern: start with a verb in the present tense describing what the commit does to the codebase. One line, under 72 characters.</p>
+      <pre><code>Add null check to user authentication handler
+Fix off-by-one error in pagination logic
+Remove deprecated API endpoint
+Update README with deployment instructions</code></pre>
+      <p>Each commit should represent one logical change. If you're writing "and" in your commit message, it should probably be two commits.</p>
+      <h2>Handling merge conflicts</h2>
+      <p>Merge conflicts happen when two branches changed the same lines of code differently. Git doesn't know which version is correct — so it marks the conflict and asks you to decide:</p>
+      <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+  color: #c8f135;
 =======
-const PORT = 8080;
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/config-update (incoming)</code></pre>
-      <p>Delete the markers, choose the correct code (or combine both), then <code>git add</code> and <code>git commit</code>. The best way to minimize conflicts: pull from main frequently, keep branches short-lived (merge within 1-2 days), and communicate with your team about who is touching which files.</p>
-
-      <h2>The .gitignore file</h2>
-      <p>Never commit: <code>node_modules/</code>, <code>.env</code> files, API keys, build outputs, IDE config files (<code>.vscode/</code>, <code>.idea/</code>). Create a <code>.gitignore</code> at your project root. GitHub provides templates — when creating a new repo, select the template for your tech stack.</p>
-      <pre><code># .gitignore for a web project
-node_modules/
-.env
-.env.local
-dist/
-build/
-*.log
-.DS_Store
-.vscode/</code></pre>
-      <p>One thing that immediately impresses interviewers: clean commit history that tells a story. Clear branch names, atomic commits, good messages. It shows you understand software development as a collaborative, professional discipline — not just a solo coding exercise.</p>
+  color: #ffffff;
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/redesign</code></pre>
+      <p>The section between <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> and <code>=======</code> is your version. Below <code>=======</code> is the incoming change. Delete the conflict markers, keep the correct code (or merge both), then commit the resolution.</p>
+      <p>The best way to minimize conflicts: pull from main frequently into your branch (<code>git pull origin main</code>), keep branches short-lived, and communicate with teammates about who's working on what files.</p>
+      <h2>The git commands you'll use daily</h2>
+      <pre><code>git status               # What's changed?
+git diff                 # What exactly changed?
+git log --oneline        # History at a glance
+git stash                # Save uncommitted work temporarily
+git stash pop            # Restore stashed work
+git reset --soft HEAD~1  # Undo last commit, keep changes staged
+git blame filename       # Who wrote each line?</code></pre>
+      <p>Git fluency is one of those skills that feels unnecessary until you're working in a team — and then it becomes essential every single day. Start practicing the branch workflow on your personal projects now so it's second nature by the time it counts.</p>
     `
   },
   {
     id: 7,
+    slug: 'big-o-notation',
     title: 'Understanding Big-O: Why Your Code Slows Down at Scale',
     excerpt: 'Big-O notation is how engineers measure how code behaves as input grows. Master this and algorithm questions in interviews become much less scary.',
-    category: 'tutorial', catLabel: 'Tutorial',
-    emoji: '📈', author: 'Dithsa Dutta', authorEmoji: '👨‍💻',
-    authorRole: 'Founder & Lead Architect',
-    date: 'May 8, 2026', readTime: '8 min',
-    tags: ['Algorithms', 'Big-O', 'DSA', 'Complexity'],
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '📈',
+    author: 'Dithsa Dutta',
+    authorEmoji: '👨‍💻',
+    date: 'May 8, 2026',
+    readTime: '8 min',
+    featured: false,
     content: `
-      <p>Big-O notation appears in every data structures course and every technical interview, but most students memorize the answers without understanding what they mean. This article builds the intuition from scratch so you can derive complexity on your own instead of looking it up.</p>
-
+      <p>Big-O notation shows up in every technical interview, every algorithms course, and every serious discussion about code quality. But most students memorize the definitions without understanding what they're actually measuring — which means they can't apply it when it matters.</p>
+      <p>Here's a complete, intuitive breakdown of Big-O that will make algorithm questions feel much less abstract.</p>
       <h2>What Big-O actually measures</h2>
-      <p>Big-O describes how the <em>number of operations</em> your code performs grows as the input size n grows. It answers: if I double the input, how much longer does this take? It ignores constants and lower-order terms because at large scale, only the dominant term matters.</p>
-      <p>Two important things Big-O is <em>not</em>: it's not the actual runtime in seconds (that depends on hardware, language, and cache), and it's not always the most important consideration (sometimes an O(n²) algorithm is fine if n is always small).</p>
-
-      <h2>The common complexities, explained intuitively</h2>
-      <p><strong>O(1) — Constant time.</strong> The operation takes the same time regardless of input size. Accessing an array by index, looking up a HashMap key, push/pop on a stack. Doesn't matter if n is 10 or 10 million.</p>
-      <p><strong>O(log n) — Logarithmic.</strong> Every step halves the remaining work. Binary search on a sorted array: look at the middle, eliminate half, repeat. To search 1,048,576 elements: only 20 steps. This is why sorted data combined with binary search is so powerful.</p>
-      <p><strong>O(n) — Linear.</strong> You touch every element once. A single for-loop over an array. If n doubles, time doubles. This is usually the best you can do when you must inspect every element.</p>
-      <p><strong>O(n log n) — Linearithmic.</strong> Most efficient comparison-based sorting algorithms: Merge Sort, Heap Sort, Timsort (Python's default). Slightly worse than linear but vastly better than quadratic.</p>
-      <p><strong>O(n²) — Quadratic.</strong> A nested loop where both loops run n times. Bubble sort, selection sort, comparing every pair. If n doubles, time quadruples. Fine for n=100, catastrophic for n=100,000.</p>
-      <p><strong>O(2ⁿ) — Exponential.</strong> Recursive algorithms that branch into two at each step without memoization. The naive Fibonacci. Adding one element to the input doubles the work. Only usable for tiny inputs.</p>
-
-      <h2>How to analyze your own code</h2>
-      <pre><code>// O(1) — no loop, constant operations
-int getFirst(int[] arr) { return arr[0]; }
-
-// O(n) — one loop over n elements
-for (int i = 0; i &lt; n; i++) { process(arr[i]); }
-
-// O(n²) — nested loops, both over n
-for (int i = 0; i &lt; n; i++) {
-    for (int j = 0; j &lt; n; j++) { process(arr[i], arr[j]); }
-}
-
-// O(n) — two sequential loops (not nested!)
-// O(n + n) = O(2n) = O(n) — constants drop out
-for (int i = 0; i &lt; n; i++) { ... }
-for (int j = 0; j &lt; n; j++) { ... }
-
-// O(n * m) — nested loops over different variables
-for (int i = 0; i &lt; n; i++) {
-    for (int j = 0; j &lt; m; j++) { ... }
+      <p>Big-O describes how the runtime (or memory usage) of an algorithm grows as the input size grows. It's not about how fast your code runs on your laptop. It's about the shape of the growth curve.</p>
+      <p>Imagine you're searching for a name in a phonebook. If the phonebook has 1,000 names vs 1,000,000 names, how much longer does your search take? That ratio — how runtime scales with input — is what Big-O captures.</p>
+      <h2>The most common complexities</h2>
+      <p><strong>O(1) — Constant time.</strong> Runtime doesn't depend on input size at all. Accessing an array element by index, checking a HashMap — these are O(1). No matter if you have 10 elements or 10 million, the operation takes the same time.</p>
+      <pre><code>int first = arr[0];  // Always one operation, regardless of arr.length</code></pre>
+      <p><strong>O(log n) — Logarithmic.</strong> Runtime grows slowly as input grows. Binary search is the classic example — each step eliminates half the remaining possibilities. Doubling the input only adds one more step.</p>
+      <pre><code>// Binary search — O(log n)
+int low = 0, high = arr.length - 1;
+while (low &lt;= high) {
+    int mid = (low + high) / 2;
+    if (arr[mid] == target) return mid;
+    else if (arr[mid] &lt; target) low = mid + 1;
+    else high = mid - 1;
 }</code></pre>
-
-      <h2>The HashMap trick: O(n²) → O(n)</h2>
-      <p>The most common interview optimization: if you're using a nested loop to find pairs or check membership, replace the inner loop with a HashMap lookup.</p>
-      <pre><code>// O(n²) — check if any two numbers sum to target
+      <p><strong>O(n) — Linear.</strong> Runtime grows proportionally with input size. A single loop over an array is O(n). If you double the input, you double the time.</p>
+      <p><strong>O(n log n) — Linearithmic.</strong> This is the complexity of efficient sorting algorithms — Merge Sort, Quick Sort (average case), Heap Sort. Better than O(n²), which is why these replaced bubble sort for large datasets.</p>
+      <p><strong>O(n²) — Quadratic.</strong> A nested loop where both loops iterate over the input. Bubble sort, insertion sort. For 1,000 elements: 1,000,000 operations. For 10,000 elements: 100,000,000 operations. This is why O(n²) becomes painfully slow at scale.</p>
+      <pre><code>// O(n²) — two nested loops over the same array
 for (int i = 0; i &lt; n; i++) {
-    for (int j = i+1; j &lt; n; j++) {
-        if (arr[i] + arr[j] == target) return true;
+    for (int j = 0; j &lt; n; j++) {
+        // This inner block runs n² times total
     }
-}
-
-// O(n) — same problem with a HashSet
-Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
-for (int num : arr) {
-    if (seen.contains(target - num)) return true;
-    seen.add(num);
 }</code></pre>
-
-      <h2>Space complexity</h2>
-      <p>Big-O also describes memory usage. An algorithm that creates a new array of size n has O(n) space complexity. One that uses only a few variables regardless of n is O(1) space. Interviewers always ask for both time and space — always mention both.</p>
-      <p>The practical takeaway: before finalizing any solution, ask "what is the Big-O time and space?" If time is O(n²) and input can be large, look for a HashMap or sorting-based approach. That mental habit alone will dramatically improve your solutions in every setting.</p>
+      <h2>How to analyze your own code</h2>
+      <p>Count loops. One loop = O(n). Nested loops = multiply: two nested loops over n = O(n²). Loops that halve the remaining work each iteration = O(log n).</p>
+      <p>Drop constants and lower-order terms. O(2n) is just O(n). O(n² + n) is just O(n²). Big-O describes growth rate, and constants don't change the shape of that curve at scale.</p>
+      <p>Look for hidden loops. String concatenation in a loop is O(n²) in languages that create new string objects (like Java's <code>+</code> operator). Using StringBuilder instead makes it O(n). HashMap lookups inside a loop look like O(n) outer loop × O(1) lookup = O(n) total.</p>
+      <h2>Space complexity matters too</h2>
+      <p>Big-O applies to memory as well. A recursive function that calls itself n times deep uses O(n) stack space. Creating a new array of size n uses O(n) space. In-place sorting algorithms like Heap Sort use O(1) space — a real advantage in memory-constrained environments.</p>
+      <p>When interviewers ask about complexity, always address both time and space. "This solution is O(n) time and O(1) space" signals a deeper understanding than just the runtime.</p>
     `
   },
   {
     id: 8,
+    slug: 'how-we-built-it-study-hub',
     title: 'From Zero to Deployed: How We Built IT Study Hub',
     excerpt: 'Behind the scenes of how four TIU students built a full-stack educational platform with Firebase, Razorpay, and a drag-to-login system — from scratch.',
-    category: 'trend', catLabel: 'Tech Trends',
-    emoji: '🚀', author: 'IT Study Hub', authorEmoji: '🌟',
-    authorRole: 'Editorial Team',
-    date: 'May 25, 2026', readTime: '10 min',
-    tags: ['Behind The Scenes', 'Firebase', 'Web Dev', 'Project'],
+    category: 'trend',
+    catLabel: 'Tech Trends',
+    emoji: '🚀',
+    author: 'IT Study Hub',
+    authorEmoji: '🌟',
+    date: 'May 25, 2026',
+    readTime: '10 min',
+    featured: false,
     content: `
-      <p>When we started building IT Study Hub, we had one rule: no templates, no page builders, no shortcuts. Every line of HTML, CSS, and JavaScript written by hand. Six months later, we have a fully deployed platform with Firebase authentication, a Razorpay payment system, a drag-to-authenticate login, a global leaderboard, and a gamified C programming course with quiz gates. Here's how it actually happened.</p>
+      <p>IT Study Hub started as a submission for our End Semester Development (ESD) project at Techno India University. Four B.Sc IT students, one semester, and a goal: build something that would actually help the students who came after us.</p>
+      <p>This is the behind-the-scenes story of how we built it — the architecture decisions, the things that broke, and what we learned.</p>
+      <h2>The problem we were solving</h2>
+      <p>TIU's IT curriculum covers C, Java, Python, C++, and web technologies. Good courses — but the learning materials were scattered. Notes were on WhatsApp. Video explanations were on random YouTube channels. Practice questions were photocopied from textbooks. There was no single place where a student could go from "I don't understand this concept" to "I've practiced it and tested myself."</p>
+      <p>We wanted to build that place.</p>
+      <h2>The tech stack we chose — and why</h2>
+      <p><strong>Frontend: Pure HTML, CSS, JavaScript.</strong> No React, no Next.js. This was a deliberate choice. We wanted the site to be fast, deployable on GitHub Pages without a build step, and understandable by all four of us regardless of framework experience. Every page is a plain HTML file. The complexity comes from JavaScript modules, not framework abstractions.</p>
+      <p><strong>Backend: Firebase.</strong> Firebase Authentication handles login (magic links — no passwords to manage). Firestore stores user data, XP, quiz scores, and course progress. Firebase Storage handles profile photo uploads. We get a real-time database, authentication, and file storage without managing any servers.</p>
+      <p><strong>Payments: Razorpay.</strong> For our premium tier. Razorpay's test mode made development easy, and the webhook system updates user plan status in Firestore automatically after payment.</p>
+      <p><strong>Hosting: GitHub Pages.</strong> Free, fast, and deploys on every git push. For a static site, it's the obvious choice.</p>
+      <h2>The drag-to-login system</h2>
+      <p>Our favorite feature — and the one that took the longest to get right. Instead of a standard "click to submit" login button, we built a drag slider that users slide across to trigger the login. It's a CAPTCHA-style interaction that prevents bot submissions while feeling genuinely satisfying to use.</p>
+      <p>Under the hood, it's a custom CSS track + thumb element with mouse/touch event listeners tracking the drag distance. When the thumb reaches the right end, it triggers the Firebase auth flow. We integrated Cloudflare Turnstile as an additional bot-protection layer before the actual magic link email gets sent.</p>
+      <h2>The XP system</h2>
+      <p>We built a gamified XP engine (<code>xp-engine.js</code>) that awards points for completing quiz questions, passing code challenges, and finishing course modules. XP is stored in Firestore and feeds into a global leaderboard. The key design constraint: XP actions are idempotent — the same action key can only award XP once per user, enforced both client-side (localStorage cache) and server-side (Firestore earnedXPKeys array).</p>
+      <h2>What broke (and how we fixed it)</h2>
+      <p><strong>The cursor on mobile.</strong> We built a custom cursor with a lime dot that follows the mouse. On touchscreens, there's no mouse — but the cursor JS was still running, consuming CPU with an empty animation loop. Fix: <code>window.matchMedia('(pointer: fine)').matches</code> to detect pointer devices before initializing the cursor.</p>
+      <p><strong>Firestore security rules.</strong> Our initial rules were too permissive — any authenticated user could read any other user's data. We tightened the rules so users can only read and write their own documents: <code>allow read, write: if request.auth.uid == userId;</code></p>
+      <p><strong>The premium modal on paid users.</strong> Paid users were still seeing "Unlock Premium" buttons throughout the site. We built <code>checkAndHidePremiumCTAs()</code> in <code>premium-modal.js</code> — it runs on every page load, checks Firestore for the user's plan, and replaces all upgrade buttons with an "Active" badge.</p>
+      <h2>What we'd do differently</h2>
+      <p>We'd use a proper component system from the start. Our nav HTML is copy-pasted across 20+ files — a change to the nav means editing every file. A simple HTML include system or web components would have saved hours of work.</p>
+      <p>We'd also write the CSS architecture first. Our stylesheets grew organically and ended up with duplicate rules across global.css, pages.css, and inline styles. A CSS custom property system and a clear specificity hierarchy from day one would have kept things cleaner.</p>
+      <p>But the things we got right — Firebase's real-time database, the XP system, the practice IDE with Judge0 code execution, the Razorpay integration — those worked better than we expected. Shipping something real, with real users and real payments, taught us more than any tutorial ever could.</p>
+      <p>The site is live at itstudyhub.dpdns.org. If you're a TIU student reading this — it was built for you.</p>
+    `
+  }
 
-      <h2>The design language first</h2>
-      <p>Before writing a single line of application code, we spent two weeks defining the visual system. The dark aesthetic — near-black backgrounds (<code>#04040a</code>), lime green (<code>#c8f135</code>) as the primary accent, Syne for display text, JetBrains Mono for all metadata and code labels — wasn't arbitrary. It communicates that this is a technical platform built by developers who care about craft, not a generic blue-and-white Udemy clone.</p>
-      <p>We built a CSS variables system (<code>--bg</code>, <code>--surface</code>, <code>--surface2</code>, <code>--border</code>, <code>--border-active</code>, <code>--lime</code>, <code>--lime-dim</code>) before touching any page. This single decision meant every new page was visually consistent from the first line — no fixing colors later, no visual inconsistencies to hunt down.</p>
-      <p>The custom cursor (an interpolated ring that trails behind the mouse using <code>rx += (mx - rx) * 0.12</code>) and the noise texture overlay were added last, but they're what people notice first.</p>
+  ,{
+    id: 9,
+    slug: 'c-programming-for-beginners-tiu',
+    title: 'C Programming Complete Beginner Guide for TIU Students',
+    excerpt: 'Starting C from zero? This guide covers everything the TIU B.Sc IT syllabus expects — variables, loops, functions, arrays and pointers.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '⚙️',
+    author: 'Dithsa Dutta',
+    authorEmoji: '👨‍💻',
+    date: 'Jun 2, 2026',
+    readTime: '10 min',
+    featured: false,
+    content: `
+      <p>C is the first real programming language most TIU B.Sc IT students encounter. It has no garbage collector, no fancy standard library, and no hand-holding. That's exactly what makes it the perfect first language — it forces you to understand what a computer actually does.</p>
+      <p>This guide covers everything the TIU syllabus expects, structured the way exams test it.</p>
+      <h2>Why C still matters in 2026</h2>
+      <p>C powers Linux, Windows, macOS, iOS, Android, every major database, and virtually every embedded system on the planet. When you learn C, you're learning the foundation that everything else is built on. Java's JVM is written in C. Python's interpreter is written in C. Understanding C makes you better at every language that came after it.</p>
+      <h2>The structure of a C program</h2>
+      <pre><code>#include &lt;stdio.h&gt;   // Header file for input/output functions
 
-      <h2>Firebase: the backend we never had to build</h2>
-      <p>The decision to use Firebase meant we could ship a fully functional backend — authentication, database, file storage — without writing a single server. Firebase Auth handles the entire login flow including Google OAuth and GitHub OAuth. Firestore stores user profiles, XP points, module completion status, and premium plan status. Firebase Storage hosts premium PDF materials with auth-gated download URLs.</p>
-      <p>The trickiest part: authentication on GitHub Pages. Because our site lives at a custom domain, we had to carefully configure authorized domains in Firebase Console, and switch from <code>signInWithPopup</code> to <code>signInWithRedirect</code> for OAuth providers on certain browsers. The redirect flow requires persisting state across a page reload — Firebase handles this automatically, but you have to call <code>getRedirectResult()</code> on page load.</p>
+int main() {           // Every C program starts from main()
+    printf("Hello, TIU!\n");  // Print to screen
+    return 0;          // 0 means success
+}</code></pre>
+      <p>Every C program has exactly one <code>main()</code> function. Execution starts there. <code>#include</code> directives tell the compiler to bring in external functionality — <code>stdio.h</code> gives you <code>printf()</code> and <code>scanf()</code>.</p>
+      <h2>Data types you must know</h2>
+      <pre><code>int age = 20;           // Integer: whole numbers
+float gpa = 8.5f;       // Float: decimal (less precise)
+double salary = 50000.0; // Double: decimal (more precise)
+char grade = 'A';       // Single character
+char name[50];          // String: array of characters</code></pre>
+      <h2>Control flow</h2>
+      <pre><code>// If-else
+if (marks >= 60) {
+    printf("Pass\n");
+} else if (marks >= 40) {
+    printf("Compartment\n");
+} else {
+    printf("Fail\n");
+}
 
-      <h2>The drag-to-authenticate login</h2>
-      <p>This started as a late-night experiment. The idea: replace the boring submit button with a slider that users drag to authenticate. If credentials are correct — lime particles burst outward, the panel flashes "ACCESS GRANTED" in green and redirects. If wrong — the entire login panel glitches (a CSS animation that translates and skews the element rapidly), red particles burst, and it resets after two seconds.</p>
-      <p>The implementation is pure JavaScript event handling — <code>mousedown</code>, <code>mousemove</code>, <code>mouseup</code>, and their touch equivalents. The threshold is 88% — drag past that and Firebase auth fires automatically. The particle effect is a canvas-based burst using <code>requestAnimationFrame</code> with physics simulation (each particle has a velocity vector and experiences simulated gravity).</p>
+// For loop — use when you know the count
+for (int i = 0; i < 10; i++) {
+    printf("%d ", i);
+}
 
-      <h2>The gamified C course</h2>
-      <p>The C course has 12 modules split into free (1-6) and premium (7-12). Each module ends with a quiz gate — you must score 75% or higher to unlock the next module. Quiz scores write to Firestore, XP is awarded per correct answer and per module completion, and the leaderboard updates in real-time.</p>
-      <p>The XP system is handled by a shared <code>xp-engine.js</code> that every course page imports. It reads and writes to <code>users/{uid}.xp</code> and <code>users/{uid}.completedModules</code> in Firestore. The leaderboard page subscribes to these with <code>onSnapshot()</code> so it updates live without a page refresh.</p>
+// While loop — use when you don't know the count
+int n;
+scanf("%d", &n);
+while (n > 0) {
+    printf("%d\n", n % 10);  // Print last digit
+    n /= 10;
+}</code></pre>
+      <h2>Functions</h2>
+      <p>Functions are the building blocks of structured C programs. Declaration → Definition → Call:</p>
+      <pre><code>// Declaration (tell compiler it exists)
+int add(int a, int b);
 
-      <h2>The premium system</h2>
-      <p>Razorpay was the obvious choice for India — it supports UPI, all cards, net banking, and wallets with a simple JavaScript SDK. When payment succeeds, the handler callback fires, we update <code>users/{uid}.plan</code> in Firestore, and the UI unlocks immediately. We moved premium status checks from <code>localStorage</code> (easily bypassed) to server-side Firestore reads after a security audit identified it as a vulnerability.</p>
+// Definition (what it actually does)
+int add(int a, int b) {
+    return a + b;
+}
 
-      <h2>What we learned</h2>
-      <p>The biggest lesson: start with the design system. Having clear CSS variables from day one meant every new page was consistent without any extra thought. The second: Firebase is genuinely excellent for student projects — the free Spark plan covers everything you need to launch and get real users.</p>
-      <p>The third, and most important: ship something real. Not a mockup, not a demo with fake data — a real deployed platform that real students can use. The gap between "looks like a website" and "is a website" is where most student projects never go. We crossed it. You can too.</p>
+// Call
+int result = add(5, 3);  // result = 8</code></pre>
+      <h2>Arrays — the most tested topic in TIU exams</h2>
+      <pre><code>int marks[5] = {85, 90, 78, 92, 88};
+
+// Access: zero-indexed
+printf("%d\n", marks[0]);  // 85
+printf("%d\n", marks[4]);  // 88
+
+// Traverse with a loop
+int sum = 0;
+for (int i = 0; i < 5; i++) {
+    sum += marks[i];
+}
+printf("Average: %.1f\n", (float)sum / 5);</code></pre>
+      <h2>Strings in C</h2>
+      <p>C has no native String type. Strings are arrays of <code>char</code> ending with a null terminator <code>\0</code>:</p>
+      <pre><code>#include &lt;string.h&gt;
+
+char name[20] = "Dithsa";
+printf("Length: %lu\n", strlen(name));  // 6
+strcpy(name, "TIU Student");            // Copy string
+strcat(name, " 2026");                  // Concatenate</code></pre>
+      <h2>Common exam questions and their patterns</h2>
+      <p><strong>Fibonacci series</strong> — loop with two previous values. <strong>Factorial</strong> — loop multiplying from 1 to n (or recursion). <strong>Palindrome check</strong> — compare string from both ends. <strong>Prime number</strong> — check divisibility from 2 to √n. <strong>Sorting</strong> — know Bubble Sort (nested loop, swap adjacent).</p>
+      <p>Practice these until you can write them from memory. They appear in TIU semester exams in one form or another every year.</p>
+    `
+  }
+  ,{
+    id: 10,
+    slug: 'java-oops-concepts-explained',
+    title: 'Java OOP Concepts Explained Simply — Classes, Inheritance, Polymorphism',
+    excerpt: 'Object-Oriented Programming in Java — the four pillars explained with clear examples that match what TIU exams actually test.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '☕',
+    author: 'Mithila Rani Saha',
+    authorEmoji: '🌸',
+    date: 'Jun 5, 2026',
+    readTime: '11 min',
+    featured: false,
+    content: `
+      <p>Object-Oriented Programming is the foundation of Java and most modern software development. TIU's Java syllabus centers on four pillars: Encapsulation, Inheritance, Polymorphism, and Abstraction. Here's each one explained from scratch with real code examples.</p>
+      <h2>Classes and Objects — the building blocks</h2>
+      <p>A class is a blueprint. An object is an instance built from that blueprint.</p>
+      <pre><code>class Student {
+    // Fields (attributes)
+    String name;
+    int rollNo;
+    double gpa;
+
+    // Constructor — called when you create an object
+    Student(String name, int rollNo, double gpa) {
+        this.name = name;
+        this.rollNo = rollNo;
+        this.gpa = gpa;
+    }
+
+    // Method (behaviour)
+    void displayInfo() {
+        System.out.println(name + " | Roll: " + rollNo + " | GPA: " + gpa);
+    }
+}
+
+// Creating objects
+Student s1 = new Student("Dithsa", 101, 9.2);
+Student s2 = new Student("Mithila", 102, 8.8);
+s1.displayInfo();  // Dithsa | Roll: 101 | GPA: 9.2</code></pre>
+      <h2>Pillar 1: Encapsulation</h2>
+      <p>Encapsulation means hiding internal data behind controlled access. Use <code>private</code> fields and <code>public</code> getters/setters:</p>
+      <pre><code>class BankAccount {
+    private double balance;  // Can't be accessed directly
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) balance += amount;  // Controlled modification
+    }
+}</code></pre>
+      <p>Why? You control how data changes. No external code can set balance to -5000 accidentally.</p>
+      <h2>Pillar 2: Inheritance</h2>
+      <p>A child class inherits fields and methods from a parent class using <code>extends</code>:</p>
+      <pre><code>class Animal {
+    String name;
+    void eat() { System.out.println(name + " is eating"); }
+}
+
+class Dog extends Animal {
+    void bark() { System.out.println(name + " says: Woof!"); }
+}
+
+Dog d = new Dog();
+d.name = "Bruno";
+d.eat();   // Inherited from Animal
+d.bark();  // Dog's own method</code></pre>
+      <p><strong>super</strong> keyword calls the parent class constructor or method. Use it when the child needs to initialize the parent's fields.</p>
+      <h2>Pillar 3: Polymorphism</h2>
+      <p>One interface, many behaviors. Two types:</p>
+      <p><strong>Method Overloading</strong> (compile-time) — same method name, different parameters:</p>
+      <pre><code>class Calculator {
+    int add(int a, int b) { return a + b; }
+    double add(double a, double b) { return a + b; }
+    int add(int a, int b, int c) { return a + b + c; }
+}</code></pre>
+      <p><strong>Method Overriding</strong> (runtime) — child redefines a parent's method:</p>
+      <pre><code>class Shape {
+    double area() { return 0; }
+}
+
+class Circle extends Shape {
+    double radius;
+    Circle(double r) { radius = r; }
+
+    @Override
+    double area() { return Math.PI * radius * radius; }
+}
+
+class Rectangle extends Shape {
+    double width, height;
+    Rectangle(double w, double h) { width = w; height = h; }
+
+    @Override
+    double area() { return width * height; }
+}
+
+// Polymorphic usage
+Shape s = new Circle(5);
+System.out.println(s.area());  // 78.53... — Circle's area() runs</code></pre>
+      <h2>Pillar 4: Abstraction</h2>
+      <p>Hiding implementation details, showing only what's necessary. Two mechanisms: abstract classes and interfaces.</p>
+      <pre><code>// Abstract class — can have both abstract and concrete methods
+abstract class Vehicle {
+    abstract void start();  // Must be implemented by subclass
+    void stop() { System.out.println("Vehicle stopped"); }  // Shared
+}
+
+// Interface — pure contract, all methods abstract (before Java 8)
+interface Flyable {
+    void fly();
+    void land();
+}</code></pre>
+      <p>Key difference: a class can <code>implements</code> multiple interfaces but can only <code>extends</code> one abstract class. In exams, if asked "how does Java achieve multiple inheritance?" — the answer is interfaces.</p>
+      <h2>The exam questions to master</h2>
+      <p>Write a program to demonstrate runtime polymorphism using method overriding. Create an abstract class Shape with subclasses Circle, Rectangle, Triangle. Implement an interface Drawable with multiple classes. Show constructor chaining using super(). These four scenarios cover 80% of TIU Java exam questions on OOP.</p>
+    `
+  }
+  ,{
+    id: 11,
+    slug: 'python-placement-preparation-guide',
+    title: 'Python for Placement: Complete Interview Preparation Guide',
+    excerpt: 'Everything TIU students need to crack Python-based placement interviews — from data structures to commonly asked coding questions.',
+    category: 'career',
+    catLabel: 'Career',
+    emoji: '🐍',
+    author: 'Snehanshu Sarkar',
+    authorEmoji: '🐍',
+    date: 'Jun 8, 2026',
+    readTime: '13 min',
+    featured: false,
+    content: `
+      <p>Python has become the most common language in entry-level and fresher placement interviews. It's readable, quick to write, and companies know you can show your thinking clearly without fighting the language. Here's everything you need to go from "I know Python basics" to "I can handle a Python interview."</p>
+      <h2>What companies actually test</h2>
+      <p>Placement interviews at Indian IT companies (TCS, Infosys, Wipro, Accenture, Cognizant) typically test: string manipulation, list operations, basic algorithms, and occasionally OOP. Product companies (startups, mid-size tech) go deeper: data structures, dynamic programming, and system design basics.</p>
+      <h2>Python built-ins every interviewer expects you to know</h2>
+      <pre><code># List comprehensions — elegant and fast
+squares = [x**2 for x in range(10)]
+evens = [x for x in range(20) if x % 2 == 0]
+
+# Dictionary operations
+freq = {}
+for ch in "itstudyhub":
+    freq[ch] = freq.get(ch, 0) + 1
+# Simpler with Counter:
+from collections import Counter
+freq = Counter("itstudyhub")
+
+# Sorting with key
+students = [("Dithsa", 9.2), ("Mithila", 8.8), ("Argha", 9.0)]
+students.sort(key=lambda x: x[1], reverse=True)  # Sort by GPA, descending
+
+# String methods you must know
+s = "  Hello TIU  "
+s.strip()        # "Hello TIU"
+s.lower()        # "  hello tiu  "
+s.split()        # ["Hello", "TIU"]
+"_".join(["IT", "Study", "Hub"])  # "IT_Study_Hub"
+s[::-1]          # Reverse string — the most common interview trick</code></pre>
+      <h2>The 10 most commonly asked Python interview problems</h2>
+      <p><strong>1. Reverse a string</strong> — <code>s[::-1]</code> or loop from end to start.</p>
+      <p><strong>2. Check palindrome</strong> — <code>s == s[::-1]</code>.</p>
+      <p><strong>3. Count vowels</strong> — loop and check <code>if ch in 'aeiouAEIOU'</code>.</p>
+      <p><strong>4. Find duplicates in a list</strong> — use a set to track seen elements.</p>
+      <p><strong>5. Fibonacci series</strong> — loop with two variables, or recursion with memoization.</p>
+      <pre><code>def fibonacci(n):
+    a, b = 0, 1
+    for _ in range(n):
+        print(a, end=" ")
+        a, b = b, a + b</code></pre>
+      <p><strong>6. Anagram check</strong> — <code>sorted(s1) == sorted(s2)</code> or Counter comparison.</p>
+      <p><strong>7. Two Sum</strong> — use a dictionary for O(n) solution instead of nested loops.</p>
+      <pre><code>def two_sum(nums, target):
+    seen = {}
+    for i, num in enumerate(nums):
+        complement = target - num
+        if complement in seen:
+            return [seen[complement], i]
+        seen[num] = i</code></pre>
+      <p><strong>8. Maximum subarray sum</strong> — Kadane's algorithm.</p>
+      <p><strong>9. Binary search</strong> — know both iterative and recursive implementations.</p>
+      <p><strong>10. Remove duplicates from list</strong> — <code>list(dict.fromkeys(lst))</code> to preserve order, <code>list(set(lst))</code> if order doesn't matter.</p>
+      <h2>OOP questions to prepare</h2>
+      <pre><code>class Stack:
+    def __init__(self):
+        self.items = []
+
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        if not self.is_empty():
+            return self.items.pop()
+
+    def peek(self):
+        return self.items[-1] if self.items else None
+
+    def is_empty(self):
+        return len(self.items) == 0
+
+    def size(self):
+        return len(self.items)</code></pre>
+      <p>Implement a Stack, Queue, and Linked Node class. These three appear in almost every OOP-focused interview round.</p>
+      <h2>The interview mindset</h2>
+      <p>Think out loud. Start with brute force. Mention time complexity unprompted — "this is O(n²), but we can improve to O(n) using a hash map." Ask clarifying questions before coding: "Can the list contain duplicates? What if the input is empty?"</p>
+      <p>Python's readability is your advantage. Use it. Write clean, properly named code. An interviewer reading <code>for char in string</code> understands immediately. <code>for x in s</code> makes them work harder.</p>
+    `
+  }
+  ,{
+    id: 12,
+    slug: 'web-development-roadmap-beginners',
+    title: 'Web Development Roadmap for Absolute Beginners — 2026 Edition',
+    excerpt: 'HTML, CSS, JavaScript — what to learn, in what order, and how long it actually takes. A realistic guide for TIU IT students starting from zero.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '🌐',
+    author: 'Mithila Rani Saha',
+    authorEmoji: '🌸',
+    date: 'Jun 10, 2026',
+    readTime: '9 min',
+    featured: false,
+    content: `
+      <p>Every TIU IT student eventually has to learn web development — it's in the syllabus, it's asked in placements, and it's one of the fastest ways to build something real and put it on your resume. But the ecosystem is overwhelming. Frameworks, libraries, tools — where do you even start?</p>
+      <p>Here's an honest, ordered roadmap. Follow it in sequence. Don't skip ahead.</p>
+      <h2>Phase 1: HTML — 2 weeks</h2>
+      <p>HTML is not programming. It's structure. You're describing what content exists on a page and what type of content it is. That's it.</p>
+      <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello World&lt;/h1&gt;
+  &lt;p&gt;This is a paragraph.&lt;/p&gt;
+  &lt;a href="https://itstudyhub.dpdns.org"&gt;Visit IT Study Hub&lt;/a&gt;
+  &lt;img src="photo.jpg" alt="Description of image"&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <p>Learn: headings, paragraphs, links, images, lists, tables, forms, semantic elements (header, nav, main, footer, article, section). Build 3 static pages. Don't touch CSS yet.</p>
+      <h2>Phase 2: CSS — 3 weeks</h2>
+      <p>CSS controls how elements look and where they sit on the page. The two concepts that trip up everyone:</p>
+      <p><strong>The Box Model</strong> — every element is a rectangle. Content → Padding → Border → Margin. Understanding this explains 80% of layout problems.</p>
+      <p><strong>Flexbox</strong> — the modern way to control layout:</p>
+      <pre><code>.container {
+  display: flex;
+  justify-content: space-between;  /* horizontal alignment */
+  align-items: center;             /* vertical alignment */
+  gap: 16px;                       /* space between items */
+}</code></pre>
+      <p>Learn: selectors, box model, flexbox, CSS Grid, responsive design with media queries, CSS variables. Build a portfolio page and a responsive navbar.</p>
+      <h2>Phase 3: JavaScript — 6 weeks</h2>
+      <p>JavaScript makes pages interactive. This is where the actual programming starts.</p>
+      <pre><code>// DOM manipulation — controlling the page from JS
+const btn = document.getElementById('myButton');
+btn.addEventListener('click', () => {
+  document.getElementById('output').textContent = 'Button clicked!';
+});
+
+// Fetch API — getting data from the internet
+fetch('https://api.example.com/data')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error));</code></pre>
+      <p>Learn: variables, functions, arrays, objects, DOM manipulation, events, fetch API, async/await, ES6+ features (arrow functions, destructuring, template literals, modules).</p>
+      <h2>Phase 4: One framework — 4 weeks</h2>
+      <p>After solid JS fundamentals, pick one framework. In 2026, the job market wants:</p>
+      <p><strong>React</strong> — most jobs, largest ecosystem, used by Facebook/Instagram/Airbnb. Steeper learning curve but highest value.</p>
+      <p><strong>Vue</strong> — gentler learning curve, popular in Indian startups.</p>
+      <p>Pick one. Don't try to learn both simultaneously. Build a real project: a todo app, a weather app with a real API, a clone of a simple website you use.</p>
+      <h2>What to build to get hired</h2>
+      <p>Three projects matter more than any certification: a personal portfolio (showcases your CSS and design sense), a CRUD application with a backend (shows you can connect frontend to data), and a clone of a real product (shows you can read existing UIs and replicate them).</p>
+      <p>Put everything on GitHub. Deploy everything — GitHub Pages for static sites, Vercel or Netlify for anything with a framework. A link to a live site in your resume is worth more than a description of what you built.</p>
+    `
+  }
+  ,{
+    id: 13,
+    slug: 'data-structures-tiu-exam-guide',
+    title: 'Data Structures Complete Guide for TIU Semester Exams',
+    excerpt: 'Arrays, linked lists, stacks, queues, trees — everything TIU B.Sc IT students need for data structures exams, with code in C and Java.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    emoji: '🗂️',
+    author: 'Argha Paul',
+    authorEmoji: '🔷',
+    date: 'Jun 12, 2026',
+    readTime: '12 min',
+    featured: false,
+    content: `
+      <p>Data Structures is one of the most important subjects in the TIU B.Sc IT curriculum — and one of the most heavily tested in both semester exams and placement interviews. This guide covers every structure you need to know, with implementations in both C and Java.</p>
+      <h2>Arrays — the foundation</h2>
+      <p>An array stores elements of the same type in contiguous memory locations. Access by index is O(1). Insertion/deletion in the middle is O(n) because elements must shift.</p>
+      <pre><code>// C
+int arr[5] = {10, 20, 30, 40, 50};
+printf("%d\n", arr[2]);  // 30
+
+// Java
+int[] arr = {10, 20, 30, 40, 50};
+System.out.println(arr[2]);  // 30</code></pre>
+      <h2>Linked Lists</h2>
+      <p>A linked list stores elements as nodes, each containing data and a pointer to the next node. No contiguous memory required. Insertion/deletion is O(1) if you have the node. Access is O(n).</p>
+      <pre><code>// C — Node structure
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+// Insert at beginning
+void insertFront(struct Node **head, int data) {
+    struct Node *newNode = malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = *head;
+    *head = newNode;
+}</code></pre>
+      <p><strong>Types to know:</strong> Singly linked list (next pointer only), Doubly linked list (next and prev pointers), Circular linked list (last node points back to first).</p>
+      <h2>Stacks — LIFO</h2>
+      <p>Last In, First Out. Think of a stack of plates. Operations: push (add to top), pop (remove from top), peek (view top without removing).</p>
+      <pre><code>// Java — Stack using ArrayList
+class Stack {
+    private ArrayList&lt;Integer&gt; items = new ArrayList&lt;&gt;();
+
+    void push(int item) { items.add(item); }
+
+    int pop() {
+        if (isEmpty()) throw new RuntimeException("Stack is empty");
+        return items.remove(items.size() - 1);
+    }
+
+    int peek() { return items.get(items.size() - 1); }
+
+    boolean isEmpty() { return items.isEmpty(); }
+}</code></pre>
+      <p><strong>Applications:</strong> Function call management (call stack), expression evaluation, undo/redo, balanced parentheses checking.</p>
+      <h2>Queues — FIFO</h2>
+      <p>First In, First Out. Think of a queue at a ticket counter. Operations: enqueue (add to rear), dequeue (remove from front).</p>
+      <pre><code>// Circular Queue in C — avoids wasted space
+#define MAX 5
+int queue[MAX], front = -1, rear = -1;
+
+void enqueue(int item) {
+    if ((rear + 1) % MAX == front) { printf("Full\n"); return; }
+    if (front == -1) front = 0;
+    rear = (rear + 1) % MAX;
+    queue[rear] = item;
+}
+
+int dequeue() {
+    if (front == -1) { printf("Empty\n"); return -1; }
+    int item = queue[front];
+    if (front == rear) front = rear = -1;
+    else front = (front + 1) % MAX;
+    return item;
+}</code></pre>
+      <h2>Trees</h2>
+      <p>A tree is a hierarchical data structure. The Binary Search Tree (BST) is the most exam-relevant: left child < parent < right child. Search, insert, delete are all O(log n) for balanced trees.</p>
+      <pre><code>// BST Node in Java
+class Node {
+    int data;
+    Node left, right;
+    Node(int data) { this.data = data; }
+}
+
+class BST {
+    Node root;
+
+    Node insert(Node root, int data) {
+        if (root == null) return new Node(data);
+        if (data < root.data) root.left = insert(root.left, data);
+        else if (data > root.data) root.right = insert(root.right, data);
+        return root;
+    }
+
+    // Inorder traversal — gives sorted output for BST
+    void inorder(Node root) {
+        if (root == null) return;
+        inorder(root.left);
+        System.out.print(root.data + " ");
+        inorder(root.right);
+    }
+}</code></pre>
+      <p><strong>Tree traversals to memorize:</strong> Inorder (Left-Root-Right), Preorder (Root-Left-Right), Postorder (Left-Right-Root). For BST, inorder gives sorted output — a common exam question.</p>
+      <h2>Sorting algorithms — complexity comparison</h2>
+      <p><strong>Bubble Sort:</strong> O(n²) — compare adjacent elements, swap if out of order. Simple but slow. Know it for exams.</p>
+      <p><strong>Selection Sort:</strong> O(n²) — find minimum in unsorted portion, swap to front.</p>
+      <p><strong>Insertion Sort:</strong> O(n²) average, O(n) best case — efficient for nearly sorted arrays.</p>
+      <p><strong>Merge Sort:</strong> O(n log n) — divide and conquer. Stable sort. Extra space needed.</p>
+      <p><strong>Quick Sort:</strong> O(n log n) average, O(n²) worst — in-place, fast in practice.</p>
+      <h2>The exam strategy</h2>
+      <p>TIU data structures exams almost always include: trace a sorting algorithm step by step, draw a BST after insertions, implement a stack or queue, write a linked list insertion/deletion. Master these four question types and you're covered for 80% of the exam.</p>
+    `
+  }
+  ,{
+    id: 14,
+    slug: 'how-to-get-internship-tiu-student',
+    title: 'How to Land Your First Internship as a TIU IT Student',
+    excerpt: 'No experience, no connections, no idea where to start? This step-by-step guide is specifically for Techno India University students trying to land their first tech internship.',
+    category: 'career',
+    catLabel: 'Career',
+    emoji: '💼',
+    author: 'IT Study Hub',
+    authorEmoji: '🌟',
+    date: 'Jun 15, 2026',
+    readTime: '10 min',
+    featured: false,
+    content: `
+      <p>Getting your first internship as a TIU student feels impossible when every listing says "1-2 years experience required." But thousands of students from Indian colleges land internships every semester — without connections, without a 10 CGPA, and without knowing anyone at the company. Here's exactly how.</p>
+      <h2>The timeline that actually works</h2>
+      <p>Start 3 months before you want to intern. One month to build your portfolio and resume. One month to apply and follow up. One month buffer for interview rounds and offers. Most students start two weeks before they want to start — that's too late.</p>
+      <h2>What you need before applying</h2>
+      <p><strong>A GitHub profile with at least 3 repos.</strong> Not forks — your own projects, with READMEs that explain what the project does and how to run it. Interviewers check GitHub. An empty profile says "I don't build things outside of class."</p>
+      <p><strong>A one-page resume.</strong> One page only. Include: education (TIU, branch, CGPA if above 7.5), skills (languages and tools you actually know), projects (2-3 with tech stack and a GitHub link), any certifications. No objective statements. No references. No photos.</p>
+      <p><strong>At least one deployed project.</strong> GitHub Pages, Vercel, Netlify — all free. A live link you can show in an interview is worth more than any description.</p>
+      <h2>Where to find internships</h2>
+      <p><strong>LinkedIn</strong> — set your profile to "Open to Work" for internships. Apply to jobs posted in the last 24 hours for highest response rate. Connect with TIU alumni — search "Techno India University" and filter by "2nd degree connections."</p>
+      <p><strong>Internshala</strong> — the best platform specifically for Indian students. Filter by "Work From Home" to expand your geographic reach. Apply to 10-15 listings per week.</p>
+      <p><strong>AngelList / Wellfound</strong> — Indian startups. Less competition than big companies. Startups hire interns who show initiative and can actually build things.</p>
+      <p><strong>Direct outreach</strong> — find companies whose products you use. Find the engineering team on LinkedIn. Send a short message: "Hi [Name], I'm a 2nd year B.Sc IT student at TIU. I've been using [Product] and built [Similar Thing] — here's the GitHub link. Is your team open to interns?" A 10% response rate is normal. Send 50 messages.</p>
+      <h2>The skills that get interviews</h2>
+      <p>For web internships: HTML/CSS/JavaScript + one framework (React preferred). For backend: Python/Java + basic SQL + REST API understanding. For data: Python + pandas + basic ML (scikit-learn). For mobile: Flutter or React Native basics.</p>
+      <p>Pick one track. Go deep. A student with strong React skills gets interviews. A student who has "done" React, Vue, Angular, and Django — but knows none deeply — gets rejected.</p>
+      <h2>The interview process at Indian companies</h2>
+      <p><strong>Aptitude round</strong> — logical reasoning, quantitative aptitude, basic coding. Prepare with previous TCS/Infosys aptitude papers. Platforms: PrepInsta, IndiaBix.</p>
+      <p><strong>Technical round</strong> — HR or technical interviewer. Questions about your resume, your projects, basic CS concepts (OOP, DBMS basics, OS basics), and 1-2 coding problems. Know your projects inside out — they will ask about implementation details.</p>
+      <p><strong>HR round</strong> — "Tell me about yourself" (prepare a 90-second answer), "Why this company?", "Where do you see yourself in 5 years?", "What's your biggest weakness?" These are not trick questions. They want to know if you're articulate and genuine.</p>
+      <h2>After you get the offer</h2>
+      <p>Show up on time. Ask questions. Take notes. Volunteer for things outside your immediate task. The goal of an internship isn't to complete your assigned task — it's to get a pre-placement offer or a strong reference. Both require being the intern people notice.</p>
+      <p>Build something visible during your internship. Document what you learned. Write about it on LinkedIn. That documentation becomes the proof of experience that makes your next application easier.</p>
+    `
+  }
+  ,{
+    id: 15,
+    slug: 'gamified-learning-programming',
+    title: 'Level Up Your Programming Skills with Gamified Learning',
+    excerpt: 'Learning programming doesn\'t have to feel like reading endless textbooks. Gamified learning turns coding into a challenge where every problem solved feels like a level completed.',
+    category: 'tips',
+    catLabel: 'Study Tips',
+    author: 'IT Study Hub',
+    date: 'Jun 20, 2026',
+    readTime: '6 min',
+    featured: false,
+    content: `
+      <p>Learning programming doesn't have to feel like reading endless textbooks. Gamified learning turns coding into a challenge where every problem solved feels like a level completed. At IT Study Hub, students can strengthen their programming skills through progressive challenges, practice tasks, and project-based learning.</p>
+      <h2>Why gamification works for programmers</h2>
+      <p>Traditional learning separates theory from practice. Gamified learning collapses that gap. When every challenge has a clear goal, a difficulty rating, and a reward for completion — your brain is wired to stay engaged. You get dopamine from progress, not just from finishing a semester.</p>
+      <p>Instead of simply memorizing syntax, learners build logic, solve problems, earn confidence, and gradually tackle harder concepts. Programming is already a game — every bug is a puzzle, every working feature is a win. Gamified learning just makes that structure explicit.</p>
+      <h2>How to apply this yourself</h2>
+      <p>Whether you're starting with C, Java, JavaScript, or R, think of every coding challenge as another step toward becoming a better programmer.</p>
+      <p><strong>Set daily streaks.</strong> Commit to solving at least one problem per day. LeetCode, HackerRank, and IT Study Hub's practice section all track streaks. The streak itself becomes motivation.</p>
+      <p><strong>Work through difficulty levels.</strong> Don't jump to hard problems when you're still building fundamentals. Easy → Medium → Hard is a progression system. Skipping levels makes the game unwinnable.</p>
+      <p><strong>Celebrate milestones.</strong> Finished your first 50 LeetCode problems? Shipped your first deployed project? Log them on LinkedIn. External acknowledgment reinforces internal motivation.</p>
+      <h2>The IT Study Hub approach</h2>
+      <p>Our XP system awards points for completing quiz questions, passing code challenges, and finishing course modules. The global leaderboard creates accountability and friendly competition. Students who engage with the XP system consistently outperform those who don't, because the structure keeps them returning when motivation fades.</p>
+      <p>The best programmers weren't born that way. They played the game long enough to get good at it.</p>
+    `
+  }
+  ,{
+    id: 16,
+    slug: 'how-a-program-works',
+    title: 'How a Program Actually Works: From Code to Output',
+    excerpt: 'Have you ever wondered what really happens after you click "Run"? A program goes through several fascinating stages before producing any output.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    author: 'Dithsa Dutta',
+    date: 'Jun 22, 2026',
+    readTime: '7 min',
+    featured: false,
+    content: `
+      <p>Have you ever wondered what really happens after you click "Run"? Most beginners see code as a magic incantation — type the right words, get an output. But understanding the actual journey from source code to output transforms how you think about programming.</p>
+      <h2>Stage 1: Source Code</h2>
+      <p>Your source code is plain text. A <code>.c</code> file, a <code>.java</code> file, a <code>.py</code> file — these are text files the computer cannot directly execute. Before anything runs, your code must be transformed.</p>
+      <h2>Stage 2: Compilation or Interpretation</h2>
+      <p><strong>Compiled languages (C, C++, Rust):</strong> A compiler reads your entire source file and translates it into machine code — binary instructions your CPU can execute directly. This translation happens once, before the program runs.</p>
+      <p><strong>Interpreted languages (Python, JavaScript):</strong> An interpreter reads and executes your code line by line at runtime. There's no separate compilation step — this is why Python is slower than C but faster to iterate with.</p>
+      <p><strong>Hybrid (Java):</strong> The Java compiler translates source code to bytecode — an intermediate format. The JVM then interprets or JIT-compiles this bytecode at runtime. This is how Java achieves "write once, run anywhere."</p>
+      <h2>Stage 3: Memory Allocation</h2>
+      <p>When your program starts, the OS allocates memory divided into regions: the stack (function calls and local variables), the heap (dynamic allocation — <code>malloc</code> in C, <code>new</code> in Java), and the code segment (compiled instructions). Variables are stored at specific memory addresses — the variable name is just a human-readable label for that address.</p>
+      <h2>Stage 4: CPU Execution</h2>
+      <p>The CPU executes a fetch-decode-execute cycle — fetch an instruction from memory, decode what it means, execute it, move to the next. This happens billions of times per second. The OS manages scheduling, I/O, and memory protection between processes.</p>
+      <h2>Why this matters</h2>
+      <p>Understanding this journey makes programming much easier because you begin to see what is happening behind your code — not just what appears on the screen. When you get a segmentation fault, you know it means your program tried to access memory it doesn't own. When your program is slow, you can reason about whether it's CPU-bound or I/O-bound. The computer isn't magic. It's a very fast, very literal machine — and the closer your mental model matches that reality, the better programmer you become.</p>
+    `
+  }
+  ,{
+    id: 17,
+    slug: 'data-structures-better-programmer',
+    title: 'Why Understanding Data Structures Makes You a Better Programmer',
+    excerpt: 'Data structures are the foundation behind efficient software. Choosing the right one can make a program dramatically faster and easier to maintain.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    author: 'Snehanshu Sarkar',
+    date: 'Jun 25, 2026',
+    readTime: '8 min',
+    featured: false,
+    content: `
+      <p>Data structures are the foundation behind efficient software. Arrays, linked lists, stacks, queues, trees, and hash tables provide different ways to organize and access information. Choosing the right structure can make a program faster, simpler, and easier to maintain.</p>
+      <p>Even if you're a beginner, learning the basic idea behind data structures early can dramatically improve your problem-solving skills. Instead of asking only "How do I write this code?", you start asking a more important question: "What is the best way to organize and process this data?"</p>
+      <h2>The core structures every programmer must know</h2>
+      <p><strong>Arrays</strong> — Elements stored in contiguous memory, accessed by index in O(1). Best for fast random access when size is known. Weakness: inserting or deleting in the middle is O(n).</p>
+      <p><strong>Linked Lists</strong> — Each node holds data and a pointer to the next node. Inserting at the front is O(1). Weakness: no random access — finding the nth element requires traversing from the beginning.</p>
+      <p><strong>Stacks</strong> — Last In, First Out (LIFO). Used for function call management, undo operations, and expression evaluation.</p>
+      <p><strong>Queues</strong> — First In, First Out (FIFO). Used for task scheduling, BFS graph traversal, and message queues in distributed systems.</p>
+      <p><strong>Hash Tables</strong> — O(1) average lookup by key. This is how Java's HashMap and Python's dict work internally — a hash function maps keys to array indices, making retrieval nearly instant regardless of size.</p>
+      <p><strong>Trees</strong> — Hierarchical structures. Binary Search Trees give O(log n) search. File systems, databases, and the HTML DOM are all trees.</p>
+      <h2>A practical example</h2>
+      <p>Suppose you're building a feature that checks whether a username is already taken. Option A: store usernames in an array and loop through every time — O(n) per check, slow for large user bases. Option B: store them in a HashSet — O(1) per check, regardless of how many users you have.</p>
+      <p>Same problem, same data, dramatically different performance. That's the power of choosing the right structure.</p>
+      <h2>How to practice</h2>
+      <p>Don't just read about data structures — implement them from scratch. Write a linked list in C. Build a stack in Java. Implement a basic hash table in Python. LeetCode's data structures track and IT Study Hub's practice section both offer progressive challenges. Start with arrays, then linked lists, then move to trees and graphs. Every algorithm you encounter builds on these foundations.</p>
+    `
+  }
+  ,{
+    id: 18,
+    slug: 'what-happens-when-you-open-a-website',
+    title: 'What Happens When You Open a Website?',
+    excerpt: 'Typing a URL and pressing Enter seems simple — but a lot happens in milliseconds. Here\'s the hidden journey behind every website you visit.',
+    category: 'tutorial',
+    catLabel: 'Tutorial',
+    author: 'Argha Paul',
+    date: 'Jun 28, 2026',
+    readTime: '9 min',
+    featured: false,
+    content: `
+      <p>Typing a website address and pressing Enter seems simple, but a lot happens in milliseconds. Every time you open a webpage, your browser, your OS, multiple servers, and thousands of kilometers of fiber-optic cable coordinate to deliver a response. Here's the hidden journey behind every website you visit.</p>
+      <h2>Step 1: DNS Resolution</h2>
+      <p>Your browser doesn't know where <code>itstudyhub.dpdns.org</code> is — it only understands IP addresses like <code>185.199.108.153</code>. So the first step is asking the Domain Name System (DNS) to translate the domain name into an IP address.</p>
+      <p>Your computer checks its local DNS cache first. If not cached, it asks your ISP's DNS server. If that doesn't know, the query travels up the DNS hierarchy — to root servers, then top-level domain servers (.org, .com), then the authoritative nameserver for that domain. The whole chain typically resolves in under 100 milliseconds.</p>
+      <h2>Step 2: TCP Connection &amp; TLS Handshake</h2>
+      <p>With the IP address in hand, your browser opens a TCP connection via a three-way handshake: SYN → SYN-ACK → ACK. This establishes a reliable connection before any data transfers. For HTTPS sites, a TLS handshake follows — your browser and server agree on encryption and exchange cryptographic keys. This is what makes the padlock icon appear.</p>
+      <h2>Step 3: HTTP Request</h2>
+      <p>Your browser sends an HTTP request to the server — essentially: "Give me the main page, here's what content types I can handle, here's my browser info." The server reads this and decides what to send back.</p>
+      <h2>Step 4: Server Processing</h2>
+      <p>For a static site (like IT Study Hub on GitHub Pages), the server simply finds the HTML file and sends it. For a dynamic site — a social feed, an e-commerce store — the server runs application code, queries a database for personalized data, constructs an HTML response, and sends it. This is the layer where backend programming, APIs, and databases live.</p>
+      <h2>Step 5: Browser Rendering</h2>
+      <p>Your browser receives HTML and parses it top to bottom. CSS file links trigger new HTTP requests. Script tags fetch and execute JavaScript. Images trigger their own requests. The browser builds a DOM from the HTML and a CSSOM from the stylesheets — these combine into the Render Tree. The browser then calculates layout (where each element goes) and paints pixels to the screen.</p>
+      <h2>Why this matters for developers</h2>
+      <p>Understanding this process gives beginners a foundation for learning web development, APIs, backend programming, databases, and full-stack development. DNS explains why changing a domain takes time to propagate. TCP explains why network latency affects page load. The HTTP cycle is the foundation of every API you'll ever build. The rendering pipeline explains why too many scripts block your page.</p>
+      <p>Every web developer works within this system every day. The ones who understand it deeply can debug faster, optimize better, and build systems that work reliably at scale.</p>
     `
   }
 ];
@@ -588,6 +1094,16 @@ const POST_ART = {
   6: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(67,233,123,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18" r="3"/><path d="M12 2v10"/><path d="M4.93 4.93l4.24 4.24M19.07 4.93l-4.24 4.24M2 12h3M19 12h3"/></svg>`,
   7: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
   8: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+  9:  `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8l2 2-2 2M13 10h3"/></svg>`,
+  10: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.62-1.44 4.9-3.56 6.14L15 17H9l.56-1.86A7 7 0 0 1 5 9a7 7 0 0 1 7-7Z"/><path d="M9 21h6"/></svg>`,
+  11: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2M2 12h20"/></svg>`,
+  12: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(67,233,123,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
+  13: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`,
+  14: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="12" y1="2" x2="12" y2="22"/></svg>`,
+  15: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.62-1.44 4.9-3.56 6.14L15 17H9l.56-1.86A7 7 0 0 1 5 9a7 7 0 0 1 7-7Z"/><path d="M9 21h6"/><path d="M7.5 6l1.5 1.5L12 5l3 2.5 1.5-1.5"/></svg>`,
+  16: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="M9 9l1.5 1.5L13 8l2 2"/></svg>`,
+  17: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(67,233,123,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`,
+  18: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
   default: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.45)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
 };
 
@@ -774,7 +1290,10 @@ function showToast(icon, msg) {
 const cur = document.getElementById('cur');
 const curR = document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.opacity='1'; curR.style.opacity='0.5';
+});
 (function anim() {
   cur.style.left=(mx-5)+'px'; cur.style.top=(my-5)+'px';
   rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
