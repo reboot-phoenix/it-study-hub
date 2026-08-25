@@ -5,7 +5,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>IT Study Hub — Practice</title>
+<title>IT Study Hub — Practice Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 /* ─────────────────────────────────────────
@@ -26,9 +26,9 @@
   --border-hi:  #484f58;
 
   /* Brand / accent */
-  --accent:     #f97316;
-  --accent-dim: rgba(249,115,22,0.15);
-  --accent-glow:rgba(249,115,22,0.3);
+  --accent:     #c8f135;
+  --accent-dim: rgba(200,241,53,0.15);
+  --accent-glow:rgba(200,241,53,0.3);
 
   /* Text */
   --txt-hi:     #e6edf3;
@@ -111,7 +111,7 @@ html, body {
 .gate-btn {
   display: inline-block;
   background: var(--accent);
-  color: #fff;
+  color: #0d1117;
   font-weight: 600; font-size: 14px;
   padding: 10px 28px;
   border-radius: var(--r-md);
@@ -276,7 +276,7 @@ html, body {
 .btn-submit {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: #0d1117;
 }
 .btn-submit:hover { opacity: .88; }
 .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
@@ -572,7 +572,7 @@ html, body {
 .hint-reveal-text { font-size: 12px; color: var(--txt-md); }
 .hint-content {
   display: none;
-  background: rgba(249,115,22,.06);
+  background: rgba(200,241,53,.06);
   border: 1px solid var(--accent-dim);
   border-top: none;
   border-radius: 0 0 var(--r-md) var(--r-md);
@@ -1079,9 +1079,8 @@ html, body {
 <!-- Auth loader -->
 <div id="authLoader">
   <svg class="nav-logo-icon" viewBox="0 0 32 32" fill="none">
-    <rect width="32" height="32" rx="8" fill="#f97316"/>
-    <path d="M8 22L16 10L24 22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M11 18H21" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    <rect width="32" height="32" rx="8" fill="#c8f135"/>
+    <text x="16" y="22" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="800" fill="#0d1117" text-anchor="middle" letter-spacing="-0.5">ISH</text>
   </svg>
   <div class="loader-spinner"></div>
   <div class="loader-text">Loading practice arena…</div>
@@ -1091,9 +1090,8 @@ html, body {
 <div id="gateScreen">
   <div class="gate-card">
     <svg class="gate-logo" viewBox="0 0 48 48" fill="none">
-      <rect width="48" height="48" rx="12" fill="#f97316"/>
-      <path d="M12 33L24 15L36 33" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M17 27H31" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+      <rect width="48" height="48" rx="12" fill="#c8f135"/>
+      <text x="24" y="32" font-family="Inter,system-ui,sans-serif" font-size="17" font-weight="800" fill="#0d1117" text-anchor="middle" letter-spacing="-0.5">ISH</text>
     </svg>
     <h2>IT Study Hub</h2>
     <p>Sign in to unlock the practice arena, track your progress, and compete on the leaderboard.</p>
@@ -1109,9 +1107,8 @@ html, body {
     <!-- Logo -->
     <a href="/index.html" class="nav-logo">
       <svg class="nav-logo-icon" viewBox="0 0 32 32" fill="none">
-        <rect width="32" height="32" rx="8" fill="#f97316"/>
-        <path d="M8 22L16 10L24 22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M11 18H21" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <rect width="32" height="32" rx="8" fill="#c8f135"/>
+        <text x="16" y="22" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="800" fill="#0d1117" text-anchor="middle" letter-spacing="-0.5">ISH</text>
       </svg>
       <span class="nav-logo-text">IT Study<span>Hub</span></span>
     </a>
@@ -2058,7 +2055,7 @@ window._appReady = function() {
         'editorLineNumber.activeForeground': '#e6edf3',
         'editor.selectionBackground':     '#264f7855',
         'editor.lineHighlightBackground': '#161b22',
-        'editorCursor.foreground':        '#f97316',
+        'editorCursor.foreground':        '#c8f135',
         'editorIndentGuide.background1':  '#21262d',
         'editorBracketMatch.background':  '#3d444d55',
         'editorBracketMatch.border':      '#484f58',
@@ -2169,7 +2166,7 @@ function setLang(lang, label, btn) {
   document.querySelectorAll('.lang-menu-item').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   const dot = document.getElementById('lang-dot');
-  const color = LANG_DOT[lang] || '#f97316';
+  const color = LANG_DOT[lang] || '#c8f135';
   dot.style.background = color;
   dot.style.boxShadow = `0 0 6px ${color}88`;
   document.getElementById('lang-label-display').textContent = label;
@@ -2182,7 +2179,7 @@ function selectLang(lang, label, btn) {
   currentLang = lang; activeTagFilter = null;
   document.querySelectorAll('.lang-pill').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const color = LANG_DOT[lang] || '#f97316';
+  const color = LANG_DOT[lang] || '#c8f135';
   const dot = document.getElementById('lang-dot');
   dot.style.background = color;
   dot.style.boxShadow = `0 0 6px ${color}88`;
@@ -2267,7 +2264,7 @@ function loadProblems(lang) {
   renderProblemList(probs);
   if (editor) {
     const dot = document.getElementById('lang-dot');
-    const color = LANG_DOT[lang] || '#f97316';
+    const color = LANG_DOT[lang] || '#c8f135';
     dot.style.background = color;
     dot.style.boxShadow = `0 0 6px ${color}88`;
   }
@@ -2607,7 +2604,7 @@ function fireConfetti() {
   canvas.style.display = 'block';
   canvas.width = window.innerWidth; canvas.height = window.innerHeight;
   const ctx = canvas.getContext('2d');
-  const colors = ['#f97316','#3fb950','#58a6ff','#e3b341','#a371f7'];
+  const colors = ['#c8f135','#3fb950','#58a6ff','#e3b341','#a371f7'];
   const p = Array.from({length: 100}, () => ({
     x: Math.random() * canvas.width, y: -20,
     r: Math.random() * 5 + 3,
