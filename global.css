@@ -87,6 +87,13 @@
   font-display: swap;
   font-family: 'Cinzel';
   font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/cinzel-v26-latin-regular.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Cinzel';
+  font-style: normal;
   font-weight: 700;
   src: url('./fonts/cinzel-v26-latin-700.woff2') format('woff2');
 }
@@ -123,7 +130,7 @@
   --green:         #43e97b;
   --red:           #ff5f56;
   --blue:          #60a5fa;
-  --ff-display:    'Syne', sans-serif;
+  --ff-display:    'Bebas Neue', sans-serif;
   --ff-body:       'DM Sans', sans-serif;
   --ff-mono:       'JetBrains Mono', monospace;
   --ff-crown:      'Cinzel', serif;
