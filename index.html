@@ -52,7 +52,7 @@ nav .nav-links li a.nav-active {
     <li><a href="blog.html">Blog</a></li>
     <li><a href="fileshare.html">File Share</a></li>
     <li><a href="team.html">Community</a></li>
-    <li><a href="premium.html" class="nav-premium-link"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;margin-right:4px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Pricing</a></li>
+    <li><a href="premium.html" class="nav-premium-link"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="nav-premium-svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Pricing</a></li>
   </ul>
 
   <!-- HAMBURGER (mobile only) -->
@@ -163,17 +163,17 @@ nav .nav-links li a.nav-active {
       <div class="terminal-body">
         <div><span class="t-prompt">$ </span><span class="t-cmd">welcome --student</span></div>
         <div class="t-output">Loading IT Study Hub...</div>
-        <div class="t-output" style="color:#43e97b;">✓ 6 Courses loaded</div>
-        <div class="t-output" style="color:#43e97b;">✓ Blog posts available</div>
-        <div class="t-output" style="color:#43e97b;">✓ Resources ready</div>
+        <div class="t-output t-output-green">✓ 6 Courses loaded</div>
+        <div class="t-output t-output-green">✓ Blog posts available</div>
+        <div class="t-output t-output-green">✓ Resources ready</div>
         <br>
         <div><span class="t-prompt">$ </span><span class="t-cmd">status --global-sync</span></div>
-        <div class="t-output" style="color:#43e97b;">✓ 6 courses loaded</div>
-        <div class="t-output" style="color:#43e97b;">✓ Skill quizzes: active</div>
-        <div class="t-output" style="color:#43e97b;">✓ Practice IDE: ready</div>
-        <div class="t-output" style="color:#c8f135;">→ Open to all CS students worldwide</div>
+        <div class="t-output t-output-green">✓ 6 courses loaded</div>
+        <div class="t-output t-output-green">✓ Skill quizzes: active</div>
+        <div class="t-output t-output-green">✓ Practice IDE: ready</div>
+        <div class="t-output t-output-lime">→ Open to all CS students worldwide</div>
         <br>
-        <div><span class="t-prompt">$ </span><span class="t-cursor" style="display:inline-block;width:8px;height:14px;background:#c8f135;vertical-align:middle;animation:blink 1s step-end infinite;"></span></div>
+        <div><span class="t-prompt">$ </span><span class="t-cursor"></span></div>
       </div>
     </div>
   </div>
@@ -217,7 +217,7 @@ nav .nav-links li a.nav-active {
       <div class="course-tag">Subject 01</div>
       <div class="course-name">C PROGRAMMING</div>
       <div class="course-desc">Pointers, memory management, data structures. The foundation every programmer needs.</div>
-      <div style="font-size:10px;font-family:var(--ff-mono);color:var(--lime);opacity:0.7;margin-top:6px;">Depth: Syntax → Pointers → File I/O → Data Structures</div>
+      <div class="course-depth">Depth: Syntax → Pointers → File I/O → Data Structures</div>
       <div class="course-meta">
         <div class="course-levels">
           <span class="level-pip lp-b">BEG</span>
@@ -239,7 +239,7 @@ nav .nav-links li a.nav-active {
       <div class="course-tag">Subject 02</div>
       <div class="course-name">OOPS JAVA</div>
       <div class="course-desc">Classes, inheritance, polymorphism, interfaces. Master object-oriented design.</div>
-      <div style="font-size:10px;font-family:var(--ff-mono);color:var(--lime);opacity:0.7;margin-top:6px;">Depth: OOP Basics → Inheritance → Interfaces → Design Patterns</div>
+      <div class="course-depth">Depth: OOP Basics → Inheritance → Interfaces → Design Patterns</div>
       <div class="course-meta">
         <div class="course-levels">
           <span class="level-pip lp-b">BEG</span>
@@ -261,7 +261,7 @@ nav .nav-links li a.nav-active {
       <div class="course-tag">Subject 03</div>
       <div class="course-name">PYTHON</div>
       <div class="course-desc">From scripting to data science. Python's clean syntax makes concepts click fast.</div>
-      <div style="font-size:10px;font-family:var(--ff-mono);color:var(--lime);opacity:0.7;margin-top:6px;">Depth: Scripting → OOP → File Handling → Data Viz with Matplotlib</div>
+      <div class="course-depth">Depth: Scripting → OOP → File Handling → Data Viz with Matplotlib</div>
       <div class="course-meta">
         <div class="course-levels">
           <span class="level-pip lp-b">BEG</span>
@@ -283,7 +283,7 @@ nav .nav-links li a.nav-active {
       <div class="course-tag">Subject 04</div>
       <div class="course-name">C++</div>
       <div class="course-desc">Templates, STL, virtual functions, operator overloading. C with superpowers.</div>
-      <div style="font-size:10px;font-family:var(--ff-mono);color:var(--lime);opacity:0.7;margin-top:6px;">Depth: OOP → STL → Templates → Virtual Functions</div>
+      <div class="course-depth">Depth: OOP → STL → Templates → Virtual Functions</div>
       <div class="course-meta">
         <div class="course-levels">
           <span class="level-pip lp-b">BEG</span>
@@ -305,7 +305,7 @@ nav .nav-links li a.nav-active {
       <div class="course-tag">Subject 05</div>
       <div class="course-name">R PROGRAMMING</div>
       <div class="course-desc">Statistical computing and data visualization. The language of data science and research.</div>
-      <div style="font-size:10px;font-family:var(--ff-mono);color:var(--lime);opacity:0.7;margin-top:6px;">Depth: R Basics → Data Frames → ggplot2 → Statistical Analysis</div>
+      <div class="course-depth">Depth: R Basics → Data Frames → ggplot2 → Statistical Analysis</div>
       <div class="course-meta">
         <div class="course-levels">
           <span class="level-pip lp-b">BEG</span>
@@ -327,7 +327,7 @@ nav .nav-links li a.nav-active {
       <div class="course-tag">Subject 06</div>
       <div class="course-name">JAVASCRIPT</div>
       <div class="course-desc">From DOM manipulation to async programming. The language that powers the modern web.</div>
-      <div style="font-size:10px;font-family:var(--ff-mono);color:var(--lime);opacity:0.7;margin-top:6px;">Depth: JS Basics → DOM → ES6+ → Async/Await → Mini Projects</div>
+      <div class="course-depth">Depth: JS Basics → DOM → ES6+ → Async/Await → Mini Projects</div>
       <div class="course-meta">
         <div class="course-levels">
           <span class="level-pip lp-b">BEG</span>
@@ -380,7 +380,7 @@ nav .nav-links li a.nav-active {
       </div>
     </div>
     <div class="how-visual reveal">
-      <div class="section-label" style="margin-bottom:24px;">What You Get</div>
+      <div class="section-label how-label-spaced">What You Get</div>
       <div class="platform-facts">
         <div class="pf-item">
           <div class="pf-icon">
@@ -444,12 +444,12 @@ nav .nav-links li a.nav-active {
   <div class="blog-grid reveal">
     <!-- FEATURED — Post 0: AI in Systems Programming -->
     <a href="blog-post.html?id=0" class="blog-card featured">
-      <div class="blog-thumb" style="background:linear-gradient(135deg,#0a0a1a 0%,#0d0d2e 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:32px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;color:#c8f135;opacity:0.15;position:absolute;bottom:12px;right:20px;letter-spacing:2px;">AI</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#4444cc;letter-spacing:3px;text-transform:uppercase;">TREND · AI · PROGRAMMING</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#fff;line-height:1;text-align:center;letter-spacing:1px;">RISE OF AI</div>
-        <div style="width:40px;height:2px;background:#c8f135;opacity:0.6;"></div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#6666aa;letter-spacing:1px;">Systems Programming</div>
+      <div class="blog-thumb" class="blog-thumb-featured">
+        <div class="blog-thumb-watermark">AI</div>
+        <div class="blog-thumb-tag-ai">TREND · AI · PROGRAMMING</div>
+        <div class="blog-thumb-title-ai">RISE OF AI</div>
+        <div class="blog-thumb-divider-ai"></div>
+        <div class="blog-thumb-sub-ai">Systems Programming</div>
       </div>
       <div class="blog-body">
         <div class="blog-category">Trend · AI · Programming</div>
@@ -460,11 +460,11 @@ nav .nav-links li a.nav-active {
     </a>
     <!-- Post 1: Java Streams -->
     <a href="blog-post.html?id=1" class="blog-card">
-      <div class="blog-thumb" style="height:140px;background:linear-gradient(135deg,#0a0f08 0%,#0d1a0a 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:24px;position:relative;overflow:hidden;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;line-height:1;color:#E76F00;opacity:0.1;position:absolute;bottom:8px;right:14px;letter-spacing:2px;">JAVA</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#E76F00;letter-spacing:2px;opacity:0.8;">TUTORIAL · JAVA · OOP</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#fff;line-height:1;text-align:center;">.stream()</div>
-        <div style="width:30px;height:2px;background:#E76F00;opacity:0.5;"></div>
+      <div class="blog-thumb" class="blog-thumb-java">
+        <div class="blog-thumb-watermark-java">JAVA</div>
+        <div class="blog-thumb-tag-java">TUTORIAL · JAVA · OOP</div>
+        <div class="blog-thumb-title-java">.stream()</div>
+        <div class="blog-thumb-divider-java"></div>
       </div>
       <div class="blog-body">
         <div class="blog-category">Tutorial · Java · OOP</div>
@@ -475,11 +475,11 @@ nav .nav-links li a.nav-active {
     </a>
     <!-- Post 2: Tech Interview -->
     <a href="blog-post.html?id=2" class="blog-card">
-      <div class="blog-thumb" style="height:140px;background:linear-gradient(135deg,#0f0a08 0%,#1a0d08 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:24px;position:relative;overflow:hidden;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;color:#ff6b35;opacity:0.1;position:absolute;bottom:8px;right:14px;letter-spacing:1px;">CAREER</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#ff6b35;letter-spacing:2px;opacity:0.8;">CAREER · INTERVIEW · TIPS</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#fff;line-height:1;text-align:center;">ACE THE INTERVIEW</div>
-        <div style="width:30px;height:2px;background:#ff6b35;opacity:0.5;"></div>
+      <div class="blog-thumb" class="blog-thumb-career">
+        <div class="blog-thumb-watermark-career">CAREER</div>
+        <div class="blog-thumb-tag-career">CAREER · INTERVIEW · TIPS</div>
+        <div class="blog-thumb-title-java">ACE THE INTERVIEW</div>
+        <div class="blog-thumb-divider-career"></div>
       </div>
       <div class="blog-body">
         <div class="blog-category">Career · Interview · Tips</div>
@@ -497,10 +497,10 @@ nav .nav-links li a.nav-active {
     <div>
       <div class="section-label reveal">Why Choose Us</div>
       <h2 class="section-title reveal">BUILT FOR EVERY STUDENT</h2>
-      <ul class="section-sub reveal" style="margin-top:16px; list-style:none; padding:0; display:flex; flex-direction:column; gap:10px;">
-        <li style="display:flex;align-items:flex-start;gap:10px;"><span style="color:var(--lime);font-size:16px;line-height:1.4;">✓</span> Topics follow real-world industry standards — no fluff, just what actually matters</li>
-        <li style="display:flex;align-items:flex-start;gap:10px;"><span style="color:var(--lime);font-size:16px;line-height:1.4;">✓</span> Skill-level routing so you start exactly where you should — not from scratch every time</li>
-        <li style="display:flex;align-items:flex-start;gap:10px;"><span style="color:var(--lime);font-size:16px;line-height:1.4;">✓</span> Free for every CS student, anywhere in the world — no institution required</li>
+      <ul class="section-sub reveal why-list">
+        <li class="why-item"><span class="why-check">✓</span> Topics follow real-world industry standards — no fluff, just what actually matters</li>
+        <li class="why-item"><span class="why-check">✓</span> Skill-level routing so you start exactly where you should — not from scratch every time</li>
+        <li class="why-item"><span class="why-check">✓</span> Free for every CS student, anywhere in the world — no institution required</li>
       </ul>
     </div>
     <div class="features-grid reveal">
@@ -526,8 +526,8 @@ nav .nav-links li a.nav-active {
     <!-- LEFT: text -->
     <div class="practice-left">
       <div class="section-label">Live Practice Panel</div>
-      <h2 class="section-title">Code. Run. <span style="color:var(--lime)">Learn.</span></h2>
-      <p class="section-sub" style="margin-bottom:32px;">A full in-browser IDE — Monaco editor, real code execution across 6 languages, AI mentor hints, and 70+ problems sorted by difficulty. No installs. No signups. Just code.</p>
+      <h2 class="section-title">Code. Run. <span class="practice-learn-span">Learn.</span></h2>
+      <p class="section-sub practice-sub">A full in-browser IDE — Monaco editor, real code execution across 6 languages, AI mentor hints, and 70+ problems sorted by difficulty. No installs. No signups. Just code.</p>
 
       <div class="practice-langs">
         <span class="plang">C</span>
@@ -552,14 +552,14 @@ nav .nav-links li a.nav-active {
           <div class="pstat-lab">Mentor Built-in</div>
         </div>
         <div class="pstat">
-          <div class="pstat-val" style="font-size:18px;line-height:1.2;">FREE</div>
+          <div class="pstat-val pstat-val-free">FREE</div>
           <div class="pstat-lab">No Account Required</div>
         </div>
       </div>
 
-      <a href="practice-panel.html" class="btn-lime" style="margin-top:36px; display:inline-flex;">
+      <a href="practice-panel.html" class="btn-lime practice-btn">
         Launch Practice Panel
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-left:4px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="practice-btn-icon"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
     </div>
 
@@ -570,9 +570,9 @@ nav .nav-links li a.nav-active {
         <!-- topbar -->
         <div class="pp-topbar">
           <div class="pp-dots">
-            <span style="background:#ff5f56"></span>
-            <span style="background:#ffbd2e"></span>
-            <span style="background:#27c93f"></span>
+            <span class="td-red-dot"></span>
+            <span class="td-amber-dot"></span>
+            <span class="td-green-dot"></span>
           </div>
           <span class="pp-title">practice-panel.html — IT Study Hub</span>
           <a href="practice-panel.html" class="pp-launch">Open ↗</a>
@@ -608,322 +608,70 @@ nav .nav-links li a.nav-active {
   </div>
 </section>
 
-<!-- practice section styles — add to index-page.css OR inline here -->
-<style>
-.practice-section {
-  padding: 100px 48px;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
 
-.practice-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-}
-
-.practice-langs {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 32px;
-}
-
-.plang {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-family: var(--ff-mono);
-  font-size: 12px;
-  color: var(--muted2);
-  transition: all 0.2s;
-}
-
-.plang:hover {
-  border-color: var(--lime);
-  color: var(--lime);
-}
-
-.practice-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.pstat {
-  background: var(--bg);
-  padding: 16px 12px;
-  text-align: center;
-}
-
-.pstat-val {
-  font-family: var(--ff-display);
-  font-size: 28px;
-  color: var(--lime);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.pstat-lab {
-  font-family: var(--ff-mono);
-  font-size: 9px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* Preview card */
-.practice-preview {
-  background: #0a0a0f;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-}
-
-.pp-topbar {
-  background: #111118;
-  border-bottom: 1px solid #1e1e2e;
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.pp-dots {
-  display: flex;
-  gap: 6px;
-}
-
-.pp-dots span {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: block;
-}
-
-.pp-title {
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  color: #6b6b80;
-  flex: 1;
-  text-align: center;
-}
-
-.pp-launch {
-  font-family: var(--ff-mono);
-  font-size: 10px;
-  color: var(--lime);
-  text-decoration: none;
-  border: 1px solid rgba(200,241,53,0.3);
-  padding: 3px 10px;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.pp-launch:hover {
-  background: var(--lime);
-  color: #000;
-}
-
-.pp-body {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  height: 280px;
-}
-
-.pp-sidebar {
-  background: #111118;
-  border-right: 1px solid #1e1e2e;
-  padding: 8px 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.pp-prob {
-  font-family: var(--ff-mono);
-  font-size: 10px;
-  color: #6b6b80;
-  padding: 6px 8px;
-  border-radius: 5px;
-  cursor: default;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.pp-prob.active {
-  background: #001a0d;
-  color: #c8f135;
-  border: 1px solid #00ff8820;
-}
-
-.pp-prob.solved { color: #43e97b; }
-
-.pp-editor {
-  background: #0a0a0a;
-  padding: 16px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  line-height: 2;
-  display: flex;
-  flex-direction: column;
-}
-
-.pp-line { color: #e8e8e8; }
-.pp-kw   { color: #c8f135; }
-.pp-fn   { color: #ffdd88; }
-.pp-str  { color: #88ddff; }
-.pp-num  { color: #ffaa55; }
-
-.pp-output {
-  margin-top: auto;
-  background: #050505;
-  border-top: 1px solid #1e1e2e;
-  padding: 8px 12px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: auto -16px -16px;
-}
-
-.pp-out-label {
-  font-family: var(--ff-mono);
-  font-size: 10px;
-  color: #6b6b80;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.pp-out-ok {
-  font-family: var(--ff-mono);
-  font-size: 11px;
-  color: #43e97b;
-}
-
-/* Platform facts panel (replaces fake skill bars) */
-.platform-facts {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.pf-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--border);
-  transition: all 0.2s;
-}
-
-.pf-item:last-child { border-bottom: none; padding-bottom: 0; }
-.pf-item:first-child { padding-top: 0; }
-
-.pf-icon {
-  width: 36px; height: 36px; min-width: 36px;
-  background: var(--lime-dim);
-  border: 1px solid rgba(200,241,53,0.2);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-
-.pf-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-
-.pf-sub {
-  font-size: 12px;
-  color: var(--muted2);
-  line-height: 1.6;
-  font-weight: 300;
-}
-
-/* Course icon SVG sizing */
-.course-icon svg { display: block; }
-
-@media (max-width: 900px) {
-  .practice-section { padding: 70px 24px; }
-  .practice-inner { grid-template-columns: 1fr; gap: 40px; }
-  .practice-right { display: none; }
-  .practice-stats { grid-template-columns: repeat(2, 1fr); }
-}
-</style>
 <!-- ═══════ PREMIUM TEASER ═══════ -->
 <section class="premium-section" id="premium">
   <div class="prem-bg-glow"></div>
   <div class="prem-inner">
     <div class="prem-left reveal">
       <div class="section-label">Unlock More</div>
-      <h2 class="section-title">GO <span style="color:var(--gold)">PREMIUM.</span><br>LEVEL UP FAST.</h2>
-      <p class="section-sub" style="margin-bottom:32px;">Free gets you started. Premium takes you deeper. Unlock advanced lessons, downloadable PDFs, and mentor access — from just ₹199.</p>
+      <h2 class="section-title">GO <span class="prem-gold-span">PREMIUM.</span><br>LEVEL UP FAST.</h2>
+      <p class="section-sub prem-sub">Free gets you started. Premium takes you deeper. Unlock advanced lessons, downloadable PDFs, and mentor access — from just ₹199.</p>
       <div class="prem-plan-pills">
         <div class="prem-pill">
           <div class="pp-name">Starter</div>
           <div class="pp-price">₹199</div>
           <div class="pp-tag">Any 2 courses</div>
-          <div style="margin-top:8px;font-size:10px;color:#555;font-family:var(--ff-mono);line-height:1.8;">
+          <div class="prem-starter-features">
             ❌ No mentor access<br>
             ❌ 2 courses only<br>
             ❌ No PDF cheat sheets
           </div>
         </div>
         <div class="prem-pill prem-pill-active">
-          <div class="pp-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:3px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Popular</div>
+          <div class="pp-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" class="prem-badge-svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Popular</div>
           <div class="pp-name">Pro</div>
-          <div class="pp-price" style="color:var(--lime)">₹499</div>
+          <div class="pp-price prem-price-lime">₹499</div>
           <div class="pp-tag">All 6 courses</div>
         </div>
         <div class="prem-pill prem-pill-gold">
-          <div class="pp-badge pp-badge-gold"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:3px"><path d="M2 19l2-10 5 5 3-8 3 8 5-5 2 10H2zm0 2h20v2H2v-2z"/></svg>Best</div>
+          <div class="pp-badge pp-badge-gold"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="prem-badge-svg"><path d="M2 19l2-10 5 5 3-8 3 8 5-5 2 10H2zm0 2h20v2H2v-2z"/></svg>Best</div>
           <div class="pp-name">Elite</div>
-          <div class="pp-price" style="color:var(--gold)">₹999</div>
+          <div class="pp-price prem-price-gold">₹999</div>
           <div class="pp-tag">Lifetime access</div>
         </div>
       </div>
-      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:32px;">
+      <div class="prem-actions">
         <button class="btn-gold" onclick="window.openPremiumModal('All Courses')">Unlock Premium →</button>
         <a href="premium.html" class="btn-ghost">See All Plans</a>
       </div>
-      <p style="margin-top:14px;font-size:12px;color:var(--muted2,#666);font-weight:300;">Instant access after checkout · One-time payment, no subscription</p>
+      <p class="prem-footer-note">Instant access after checkout · One-time payment, no subscription</p>
     </div>
     <div class="prem-right reveal">
       <div class="prem-feature-list">
         <div class="pfl-item">
-          <div class="pfl-icon" style="background:rgba(200,241,53,0.12);color:var(--lime)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg></div>
+          <div class="pfl-icon pfl-icon-lime"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg></div>
           <div>
             <div class="pfl-name">Advanced Lessons</div>
             <div class="pfl-sub">Go beyond the basics into real-world systems code</div>
           </div>
         </div>
         <div class="pfl-item">
-          <div class="pfl-icon" style="background:rgba(200,241,53,0.12);color:var(--lime)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>
+          <div class="pfl-icon pfl-icon-lime"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>
           <div>
             <div class="pfl-name">PDF Notes & Cheat Sheets</div>
             <div class="pfl-sub">Download and study offline, anytime</div>
           </div>
         </div>
         <div class="pfl-item">
-          <div class="pfl-icon" style="background:rgba(200,241,53,0.12);color:var(--lime)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="13" y2="14"/></svg></div>
+          <div class="pfl-icon pfl-icon-lime"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="13" y2="14"/></svg></div>
           <div>
             <div class="pfl-name">Mentor Q&A Sessions</div>
             <div class="pfl-sub">Elite only — direct doubt clearing with mentors</div>
           </div>
         </div>
         <div class="pfl-item">
-          <div class="pfl-icon" style="background:rgba(247,183,49,0.12);color:var(--gold)"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div class="pfl-icon pfl-icon-gold"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
           <div>
             <div class="pfl-name">Instant Access</div>
             <div class="pfl-sub">Account upgrades immediately after Razorpay checkout</div>
@@ -935,21 +683,21 @@ nav .nav-links li a.nav-active {
 </section>
 
 <!-- ═══════ BUILT BY STUDENTS ═══════ -->
-<section style="padding:80px 48px;background:var(--bg);border-top:1px solid var(--border);">
-  <div style="max-width:900px;margin:0 auto;">
-    <div class="section-label reveal" style="margin-bottom:12px;">The People Behind It</div>
-    <h2 class="section-title reveal" style="margin-bottom:40px;">BUILT BY STUDENTS.<br>FOR STUDENTS.</h2>
-    <div class="reveal" style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px 40px;">
-      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px;">
-        <div style="font-family:var(--ff-display);font-size:30px;color:var(--lime);letter-spacing:1px;">Dithsa Dutta</div>
-        <span style="font-size:11px;font-family:var(--ff-mono);color:#000;background:var(--lime);padding:4px 12px;border-radius:20px;font-weight:700;letter-spacing:0.5px;">Lead Developer & Founder</span>
+<section class="about-section">
+  <div class="about-inner">
+    <div class="section-label reveal about-label">The People Behind It</div>
+    <h2 class="section-title reveal about-title">BUILT BY STUDENTS.<br>FOR STUDENTS.</h2>
+    <div class="reveal about-card">
+      <div class="about-name-row">
+        <div class="about-name">Dithsa Dutta</div>
+        <span class="about-role-badge">Lead Developer & Founder</span>
       </div>
-      <div style="font-size:13px;color:var(--muted2);font-family:var(--ff-mono);margin-bottom:18px;">Techno India University · IT Study Hub 2026</div>
-      <p style="font-size:14px;color:var(--muted2);line-height:1.8;margin:0;max-width:620px;">Built this because learning to code shouldn't depend on where you study, what you can afford, or who you know. Every course and resource here is free — no gates, no fluff, just solid learning for any CS student who wants it.</p>
-      <div style="display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;">
-        <span style="font-size:12px;color:var(--lime);font-family:var(--ff-mono);background:var(--surface2);border:1px solid rgba(200,241,53,0.3);padding:4px 14px;border-radius:20px;">🛠️ Web Developer</span>
-        <span style="font-size:12px;color:var(--muted);font-family:var(--ff-mono);background:var(--surface2);border:1px solid var(--border);padding:4px 14px;border-radius:20px;">🎨 UI Designer</span>
-        <span style="font-size:12px;color:var(--muted);font-family:var(--ff-mono);background:var(--surface2);border:1px solid var(--border);padding:4px 14px;border-radius:20px;">📚 BSc IT · 3rd Year</span>
+      <div class="about-uni">Techno India University · IT Study Hub 2026</div>
+      <p class="about-bio">Built this because learning to code shouldn't depend on where you study, what you can afford, or who you know. Every course and resource here is free — no gates, no fluff, just solid learning for any CS student who wants it.</p>
+      <div class="about-tags">
+        <span class="about-tag about-tag-lime">🛠️ Web Developer</span>
+        <span class="about-tag about-tag-muted">🎨 UI Designer</span>
+        <span class="about-tag about-tag-muted">📚 BSc IT · 3rd Year</span>
       </div>
     </div>
   </div>
@@ -966,17 +714,17 @@ nav .nav-links li a.nav-active {
       <a href="Login.html" class="btn-lime" id="ctaSignupBtn">Create Free Account →</a>
       <a href="courses.html" class="btn-ghost">Browse Courses</a>
     </div>
-    <p style="margin-top:16px;font-size:12px;color:var(--muted,#555);">
-      Don't want an account? <a href="courses.html" style="color:var(--lime);text-decoration:underline;text-underline-offset:3px;">Skip signup and browse freely →</a>
+    <p class="cta-note">
+      Don't want an account? <a href="courses.html" class="cta-link">Skip signup and browse freely →</a>
     </p>
   </div>
 </section>
 
 <!-- ═══════ FOOTER ═══════ -->
 <footer>
-  <div class="footer-top" style="grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;">
+  <div class="footer-top footer-top-grid">
     <div class="footer-brand">
-      <a href="index.html" class="nav-logo" style="margin-bottom:14px;display:inline-flex;">
+      <a href="index.html" class="nav-logo footer-logo">
         <div class="dot"></div>
         IT STUDY HUB
       </a>
@@ -998,7 +746,7 @@ nav .nav-links li a.nav-active {
       <a href="fileshare.html">File Share</a>
       <a href="team.html">Community</a>
       <a href="quiz.html">Skill Quiz</a>
-      <a href="premium.html"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:3px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Premium</a>
+      <a href="premium.html"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" class="footer-premium-svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Premium</a>
     </div>
     <div class="footer-col">
       <h5>Account</h5>
@@ -1013,7 +761,7 @@ nav .nav-links li a.nav-active {
       <h5>Contact</h5>
       <a href="mailto:contact@itstudyhub.dpdns.org">contact@itstudyhub.dpdns.org</a>
       <a href="mailto:admin@itstudyhub.dpdns.org">admin@itstudyhub.dpdns.org</a>
-      <a href="support.html" style="margin-top:8px;">Support Center</a>
+      <a href="support.html" class="footer-support-link">Support Center</a>
     </div>
   </div>
   <div class="footer-bottom">
