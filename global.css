@@ -8,6 +8,34 @@
 /* ── SELF-HOSTED FONTS ── */
 @font-face {
   font-display: swap;
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/syne-v22-latin-regular.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 600;
+  src: url('./fonts/syne-v22-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./fonts/syne-v22-latin-700.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 800;
+  src: url('./fonts/syne-v22-latin-800.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
   font-family: 'Bebas Neue';
   font-style: normal;
   font-weight: 400;
@@ -130,7 +158,7 @@
   --green:         #43e97b;
   --red:           #ff5f56;
   --blue:          #60a5fa;
-  --ff-display:    'Bebas Neue', sans-serif;
+  --ff-display:    'Syne', 'Bebas Neue', sans-serif;
   --ff-body:       'DM Sans', sans-serif;
   --ff-mono:       'JetBrains Mono', monospace;
   --ff-crown:      'Cinzel', serif;
