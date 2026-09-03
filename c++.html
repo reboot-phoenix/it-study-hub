@@ -33,7 +33,7 @@
     </div>
   </div>
 
-  <div class="progress-card fade-up" style="animation-delay:0.1s;">
+  <div class="progress-card fade-up" class="anim-delay-1">
     <div class="prog-pct" id="progPct">0%</div>
     <div class="prog-bar-wrap">
       <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
@@ -41,17 +41,17 @@
     </div>
   </div>
 
-  <div class="fade-up" style="animation-delay:0.15s;">
+  <div class="fade-up" class="anim-delay-15">
     <div class="sec-label">Free Modules</div>
     <div class="modules-grid" id="freeGrid"></div>
   </div>
 
-  <div class="fade-up" style="animation-delay:0.2s;">
+  <div class="fade-up" class="anim-delay-2">
     <div class="sec-label">Premium Modules</div>
     <div class="modules-grid" id="premiumGrid"></div>
   </div>
 
-  <div class="fade-up" style="animation-delay:0.25s;">
+  <div class="fade-up" class="anim-delay-25">
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
       <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%2B%2B%20lecture%20notes%20Complete-1-18.pdf" target="_blank" class="mat-item">
@@ -103,7 +103,7 @@
     <aside class="lesson-sidebar">
       <div class="sb-card">
         <div class="sb-label">Progress</div>
-        <div class="prog-bar-track" style="margin-bottom:8px;"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
+        <div class="prog-bar-track" class="mb-8"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
         <div class="prog-label" id="sbProgLabel">0 / 6 free</div>
       </div>
       <div class="sb-card">
@@ -599,9 +599,9 @@ function openLesson(id) {
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
 
   const html = !m.free && !isPremium()
-    ? `<div class="premium-lock"><div style="font-size:48px;margin-bottom:16px;">⭐</div>
-       <div style="font-family:var(--ff-display);font-size:28px;margin-bottom:10px;">Premium Module</div>
-       <div style="font-size:14px;color:var(--muted2);margin-bottom:24px;">Sign in as admin to unlock all advanced content.</div>
+    ? `<div class="premium-lock"><div class="section-emoji">⭐</div>
+       <div class="section-heading-display">Premium Module</div>
+       <div class="section-sub-muted">Sign in as admin to unlock all advanced content.</div>
        <button class="lock-btn" onclick="window.location.href='premium.html'">Unlock Premium</button></div>`
     : `<div class="les-cat ${!m.free?'prem':''}">Module ${String(id).padStart(2,'0')} · ${m.level} · ${m.free?'Free':'Premium'}</div>
        <h1 class="les-title">${m.title}</h1>
@@ -613,7 +613,7 @@ function openLesson(id) {
        </div>
        <div class="les-visual" style="background:${m.bg};">
          <div class="les-visual-grid"></div>
-         <span style="position:relative;z-index:1;font-size:72px;">${m.visual}</span>
+         <span class="hero-emoji">${m.visual}</span>
        </div>
        <div class="art-body">${m.body}</div>
        <div class="concepts-box">
@@ -624,7 +624,7 @@ function openLesson(id) {
          <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
          <div class="nav-lessons">
            ${id>1?`<div class="nlc" onclick="openLesson(${id-1})"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
-           ${id<MODS.length?`<div class="nlc" onclick="openLesson(${id+1})" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
+           ${id<MODS.length?`<div class="nlc" onclick="openLesson(${id+1})" class="text-right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
          </div>
        </div>`;
 

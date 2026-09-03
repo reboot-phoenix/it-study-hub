@@ -20,7 +20,7 @@
     <a href="blog.html" class="nav-link">Blog</a>
     <a href="fileshare.html" class="nav-link active" aria-current="page">File Share</a>
     <a href="team.html" class="nav-link">Community</a>
-    <a href="premium.html" class="nav-link" style="color:var(--gold);">⚡ Premium</a>
+    <a href="premium.html" class="nav-link" class="color-gold">⚡ Premium</a>
   </div>
 </nav>
 
@@ -55,7 +55,7 @@
     </div>
 
     <!-- STATS -->
-    <div class="stats-row fade-up" style="animation-delay:0.1s;">
+    <div class="stats-row fade-up" class="anim-delay-1">
       <div class="stat-pill">
         <div class="stat-pill-val" id="totalFiles">0</div>
         <div class="stat-pill-label">Total Files</div>
@@ -75,13 +75,13 @@
     </div>
 
     <!-- SEARCH -->
-    <div class="search-wrap fade-up" style="animation-delay:0.15s;">
+    <div class="search-wrap fade-up" class="anim-delay-15">
       <span class="search-icon">🔍</span>
       <input type="text" id="searchInput" placeholder="Search files..." oninput="searchFiles()" aria-label="Search study files">
     </div>
 
     <!-- FILE SECTION -->
-    <section class="fade-up" style="animation-delay:0.2s;">
+    <section class="fade-up" class="anim-delay-2">
       <div class="sec-label"><span id="secTitle">All Files</span></div>
       <div class="file-grid" id="fileGrid"></div>
       <div class="empty-state" id="emptyState" style="display:none;">No files found matching your search.</div>

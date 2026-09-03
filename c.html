@@ -111,7 +111,7 @@
     </div>
   </div>
 
-  <div class="progress-card fade-up" style="animation-delay:0.1s;">
+  <div class="progress-card fade-up" class="anim-delay-1">
     <div class="xp-bar-wrap">
       <div class="xp-label">⚡ TOTAL XP EARNED</div>
       <div class="xp-track"><div class="xp-fill" id="totalXpFill" style="width:0%"></div></div>
@@ -124,17 +124,17 @@
     </div>
   </div>
 
-  <div class="fade-up" style="animation-delay:0.15s;">
+  <div class="fade-up" class="anim-delay-15">
     <div class="sec-label">Free Modules</div>
     <div class="modules-grid" id="freeGrid"></div>
   </div>
 
-  <div class="fade-up" style="animation-delay:0.2s;">
+  <div class="fade-up" class="anim-delay-2">
     <div class="sec-label">Premium Modules</div>
     <div class="modules-grid" id="premiumGrid"></div>
   </div>
 
-  <div class="fade-up" style="animation-delay:0.25s;">
+  <div class="fade-up" class="anim-delay-25">
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
       <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C_Basics_Notes.pdf" target="_blank" class="mat-item">
@@ -191,7 +191,7 @@
           <div class="sb-xp-val" id="sbXp">0</div>
         </div>
         <div class="sb-label">Progress</div>
-        <div class="prog-bar-track" style="margin-bottom:8px;"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
+        <div class="prog-bar-track" class="mb-8"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
         <div class="prog-label" id="sbProgLabel">0 / 6 free</div>
       </div>
       <div class="sb-card">
@@ -245,7 +245,7 @@ int main() {
 
 <!-- Terminal Toggle Button -->
 <button onclick="toggleTerminal()" id="termToggleBtn" title="Open C Practice Terminal" style="position:fixed;bottom:24px;right:24px;z-index:6999;background:#0a0c10;border:1px solid rgba(200,241,53,0.4);border-radius:12px;padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#c8f135;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 24px rgba(0,0,0,0.5);transition:all 0.2s;" onmouseover="this.style.background='rgba(200,241,53,0.1)'" onmouseout="this.style.background='#0a0c10'">
-  <span style="font-size:15px;">⚙️</span> C Terminal
+  <span class="fs-15">⚙️</span> C Terminal
 </button>
 
 <!-- Firebase init for c.html (needed by resolvePremiumStatus + openPremiumModal) -->
@@ -2813,7 +2813,7 @@ async function openLesson(id) {
           <h2 style="font-family:var(--ff-display,'Syne'),sans-serif;font-size:28px;font-weight:800;color:#c8f135;margin-bottom:12px;">Premium Module</h2>
           <p style="font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:28px;">"${m.title}" is part of the premium curriculum. Unlock all 6 advanced modules with a Pro or Elite plan.</p>
           <button onclick="window.openPremiumModal('C Programming')" style="background:#c8f135;color:#000;border:none;padding:14px 32px;border-radius:10px;font-family:var(--ff-mono,monospace);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px;">⚡ UNLOCK PREMIUM →</button>
-          <div style="margin-top:16px;"><button onclick="goBack()" style="background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1);padding:10px 20px;border-radius:8px;font-size:12px;cursor:pointer;">← Back to Course</button></div>
+          <div class="mt-16"><button onclick="goBack()" style="background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1);padding:10px 20px;border-radius:8px;font-size:12px;cursor:pointer;">← Back to Course</button></div>
         </div>`;
       renderSidebar();
       return;
@@ -2843,7 +2843,7 @@ async function openLesson(id) {
     </div>
     <div class="les-visual" style="background:${m.bg};">
       <div class="les-visual-grid"></div>
-      <span style="position:relative;z-index:1;font-size:72px;">${m.visual}</span>
+      <span class="hero-emoji">${m.visual}</span>
     </div>
     <div class="art-body">${m.body}</div>
     <div class="concepts-box">
@@ -2855,7 +2855,7 @@ async function openLesson(id) {
       <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
       <div class="nav-lessons">
         ${id>1?`<div class="nlc" onclick="openLesson(${id-1})"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
-        ${id<MODS.length?`<div class="nlc" onclick="${canGoNext(id)?`openLesson(${id+1})`:`alert('Complete the module quiz with 75%+ to unlock the next module!')`}" style="text-align:right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
+        ${id<MODS.length?`<div class="nlc" onclick="${canGoNext(id)?`openLesson(${id+1})`:`alert('Complete the module quiz with 75%+ to unlock the next module!')`}" class="text-right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
       </div>
     </div>`;
   document.getElementById('lessonContent').innerHTML = html;
@@ -3049,14 +3049,14 @@ function openTerminal() {
   requestAnimationFrame(() => { p.style.transform = 'translateY(0)'; });
   document.getElementById('termToggleBtn').style.borderColor = '#c8f135';
   document.getElementById('termToggleBtn').style.color = '#c8f135';
-  document.getElementById('termToggleBtn').innerHTML = '<span style="font-size:15px;">⚙️</span> Close Terminal';
+  document.getElementById('termToggleBtn').innerHTML = '<span class="fs-15">⚙️</span> Close Terminal';
 }
 function closeTerminal() {
   termOpen = false;
   const p = document.getElementById('terminalPanel');
   p.style.transform = 'translateY(100%)';
   setTimeout(() => { p.style.display = 'none'; }, 310);
-  document.getElementById('termToggleBtn').innerHTML = '<span style="font-size:15px;">⚙️</span> C Terminal';
+  document.getElementById('termToggleBtn').innerHTML = '<span class="fs-15">⚙️</span> C Terminal';
 }
 function clearTerminal() {
   document.getElementById('termOutput').textContent = '// Output cleared. Write code and click RUN.';

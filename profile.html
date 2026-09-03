@@ -606,7 +606,7 @@ nav {
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           Edit Profile
         </button>
-        <button class="btn-outline" onclick="handleLogout()" style="color:rgba(255,95,86,0.7);border-color:rgba(255,95,86,0.12);">
+        <button class="btn-outline btn-danger-outline" onclick="handleLogout()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Sign Out
         </button>
@@ -615,7 +615,7 @@ nav {
   </div>
 
   <!-- STATS ROW -->
-  <div class="stats-row fade-up" style="animation-delay:.06s;">
+  <div class="stats-row fade-up anim-06">
     <div class="stat-card lime">
       <div class="stat-val" id="statRank">#—</div>
       <div class="stat-label">Global Rank</div>
@@ -629,13 +629,13 @@ nav {
       <div class="stat-label">Quizzes Done</div>
     </div>
     <div class="stat-card blue">
-      <div class="stat-val" id="statStreak" style="color:#ff6b35;">0🔥</div>
+      <div class="stat-val" id="statStreak" class="color-streak">0🔥</div>
       <div class="stat-label">Day Streak</div>
     </div>
   </div>
 
   <!-- XP LEVEL BAR -->
-  <div class="xp-level-bar-wrap fade-up" style="animation-delay:.07s;" id="xpLevelBar">
+  <div class="xp-level-bar-wrap fade-up anim-07" id="xpLevelBar">
     <div class="xp-level-label">Level</div>
     <div class="xp-level-info" id="xpLevelName">—</div>
     <div class="xp-bar-outer"><div class="xp-bar-inner" id="xpBarInner"></div></div>
@@ -643,10 +643,10 @@ nav {
   </div>
 
   <!-- STREAK HEATMAP -->
-  <div class="streak-card fade-up" style="animation-delay:.09s;" id="streakCard">
+  <div class="streak-card fade-up anim-09" id="streakCard">
     <div class="streak-top">
       <div>
-        <div class="card-title" style="margin-bottom:4px;">Study Streak 🔥</div>
+        <div class="card-title mb-4">Study Streak 🔥</div>
         <div class="card-sub">Every day you study lights up. Keep the grid alive.</div>
       </div>
       <div class="streak-stats">
@@ -671,11 +671,11 @@ nav {
       <div class="heatmap-grid" id="heatmapGrid"></div>
       <div class="heatmap-legend">
         Less
-        <div class="legend-box" style="background:var(--surface2);border:1px solid rgba(255,255,255,0.06);"></div>
-        <div class="legend-box" style="background:rgba(200,241,53,0.18);"></div>
-        <div class="legend-box" style="background:rgba(200,241,53,0.40);"></div>
-        <div class="legend-box" style="background:rgba(200,241,53,0.65);"></div>
-        <div class="legend-box" style="background:#c8f135;"></div>
+        <div class="legend-box" class="legend-box-0"></div>
+        <div class="legend-box" class="legend-box-1"></div>
+        <div class="legend-box" class="legend-box-2"></div>
+        <div class="legend-box" class="legend-box-3"></div>
+        <div class="legend-box" class="legend-box-4"></div>
         More
       </div>
     </div>
@@ -686,15 +686,15 @@ nav {
 
   <!-- PRIVILEGES (role-specific, shown based on role) -->
   <div id="privilegesSection" style="display:none;" class="fade-up" style="animation-delay:.1s;">
-    <div class="section-label" style="margin-top:0;">Your Privileges</div>
+    <div class="section-label" class="mt-0">Your Privileges</div>
     <div class="card" style="margin-bottom:20px; padding:20px 24px;">
       <div id="privilegeList"></div>
     </div>
   </div>
 
   <!-- PERFORMANCE + BADGES side by side -->
-  <div class="grid-2 fade-up" style="animation-delay:.12s;">
-    <div class="card" style="margin-bottom:0;">
+  <div class="grid-2 fade-up anim-12">
+    <div class="card" class="mb-0">
       <div class="card-header">
         <div>
           <div class="card-title">Quiz Performance</div>
@@ -705,7 +705,7 @@ nav {
       <div id="scoresContainer"><div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);padding:12px 0;"><span class="spinner"></span> Loading...</div></div>
     </div>
 
-    <div class="card" style="margin-bottom:0;">
+    <div class="card" class="mb-0">
       <div class="card-header">
         <div>
           <div class="card-title">Achievements</div>
@@ -718,14 +718,14 @@ nav {
   </div>
 
   <!-- DANGER ZONE -->
-  <div class="section-label fade-up" style="animation-delay:.18s; color:rgba(255,95,86,0.5);">Danger Zone</div>
-  <div class="danger-card fade-up" style="animation-delay:.2s;">
-    <div class="card-header" style="margin-bottom:0;">
+  <div class="section-label fade-up anim-18 color-danger-muted">Danger Zone</div>
+  <div class="danger-card fade-up anim-2">
+    <div class="card-header" class="mb-0">
       <div>
-        <div class="card-title" style="color:var(--red);">Irreversible Actions</div>
+        <div class="card-title color-red">Irreversible Actions</div>
         <div class="card-sub">These actions are permanent and cannot be undone.</div>
       </div>
-      <div class="card-icon" style="background:rgba(255,95,86,0.07);border-color:rgba(255,95,86,0.2);">
+      <div class="card-icon card-icon-danger">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       </div>
     </div>
@@ -1288,7 +1288,7 @@ function renderScores(scores) {
   const container = document.getElementById('scoresContainer');
   const filled = SUBJECTS.filter(s => scores[s.key]);
   if (filled.length === 0) {
-    container.innerHTML = `<div style="padding:14px 0;font-family:var(--ff-mono);font-size:11px;color:var(--muted);">No quizzes taken yet. <a href="ESD.html" style="color:var(--lime);">Take your first →</a></div>`;
+    container.innerHTML = `<div style="padding:14px 0;font-family:var(--ff-mono);font-size:11px;color:var(--muted);">No quizzes taken yet. <a href="ESD.html" class="color-lime">Take your first →</a></div>`;
     return;
   }
   container.innerHTML = filled.map(sub => {

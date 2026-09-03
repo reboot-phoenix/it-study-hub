@@ -34,7 +34,7 @@
     </div>
   </div>
 
-  <div class="progress-card fade-up" style="animation-delay:0.1s;">
+  <div class="progress-card fade-up" class="anim-delay-1">
     <div class="prog-pct" id="progPct">0%</div>
     <div class="prog-bar-wrap">
       <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
@@ -42,17 +42,17 @@
     </div>
   </div>
 
-  <div class="fade-up" style="animation-delay:0.15s;">
+  <div class="fade-up" class="anim-delay-15">
     <div class="sec-label">Free Modules</div>
     <div class="modules-grid" id="freeGrid"></div>
   </div>
 
-  <div class="fade-up" style="animation-delay:0.2s;">
+  <div class="fade-up" class="anim-delay-2">
     <div class="sec-label">Premium Modules</div>
     <div class="modules-grid" id="premiumGrid"></div>
   </div>
 
-  <div class="fade-up" style="animation-delay:0.25s;">
+  <div class="fade-up" class="anim-delay-25">
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
       <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/BCA-421%20JAVA-1-28.pdf" target="_blank" class="mat-item">
@@ -104,7 +104,7 @@
     <aside class="lesson-sidebar">
       <div class="sb-card">
         <div class="sb-label">Progress</div>
-        <div class="prog-bar-track" style="margin-bottom:8px;"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
+        <div class="prog-bar-track" class="mb-8"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
         <div class="prog-label" id="sbProgLabel">0 / 6 free</div>
       </div>
       <div class="sb-card">
@@ -2433,12 +2433,12 @@ function openLesson(id) {
 
   let html;
   if (!m.free && !isPremium()) {
-    html = '<div class="premium-lock"><div style="font-size:48px;margin-bottom:16px;"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><div style="font-family:var(--ff-display);font-size:28px;margin-bottom:10px;">Premium Module</div><div style="font-size:14px;color:var(--muted2);margin-bottom:24px;">Sign in as admin to unlock all advanced content.</div><button class="lock-btn" onclick="window.location.href=\'premium.html\'">Unlock Premium</button></div>';
+    html = '<div class="premium-lock"><div class="section-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><div class="section-heading-display">Premium Module</div><div class="section-sub-muted">Sign in as admin to unlock all advanced content.</div><button class="lock-btn" onclick="window.location.href=\'premium.html\'">Unlock Premium</button></div>';
   } else {
     const prevMod = MODS.find(x=>x.id===id-1);
     const nextMod = MODS.find(x=>x.id===id+1);
     const prevNav = id > 1 ? '<div class="nlc" onclick="openLesson(' + (id-1) + ')"><div class="nlc-dir"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Previous</div><div class="nlc-title">' + (prevMod ? prevMod.title : '') + '</div></div>' : '<div></div>';
-    const nextNav = id < MODS.length ? '<div class="nlc" onclick="openLesson(' + (id+1) + ')" style="text-align:right"><div class="nlc-dir">Next <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div><div class="nlc-title">' + (nextMod ? nextMod.title : '') + '</div></div>' : '<div></div>';
+    const nextNav = id < MODS.length ? '<div class="nlc" onclick="openLesson(' + (id+1) + ')" class="text-right"><div class="nlc-dir">Next <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div><div class="nlc-title">' + (nextMod ? nextMod.title : '') + '</div></div>' : '<div></div>';
 
     html = '<div class="les-cat ' + (!m.free?'prem':'') + '">Module ' + String(id).padStart(2,'0') + ' · ' + m.level + ' · ' + (m.free?'Free':'Premium') + '</div>'
       + '<h1 class="les-title">' + m.title + '</h1>'
@@ -2448,7 +2448,7 @@ function openLesson(id) {
       + '<span class="meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~10 min read</span>'
       + '<span class="meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> ' + m.level + '</span>'
       + '</div>'
-      + '<div class="les-visual" style="background:' + m.bg + ';"><div class="les-visual-grid"></div><span style="position:relative;z-index:1;">' + m.visual + '</span></div>'
+      + '<div class="les-visual" style="background:' + m.bg + ';"><div class="les-visual-grid"></div><span class="pos-rel-z1">' + m.visual + '</span></div>'
       + '<div class="art-body">' + m.body + '</div>'
       + '<div class="concepts-box"><div class="concepts-title">Key Concepts Covered</div><div class="concepts-list">' + m.concepts.map(c=>'<span class="concept-tag">' + c + '</span>').join('') + '</div></div>'
       + '<div class="les-footer"><div class="les-tags">' + m.tags.map(t=>'<span class="les-tag">' + t + '</span>').join('') + '</div>'
