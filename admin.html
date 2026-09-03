@@ -69,7 +69,7 @@
   </div>
 
   <!-- USERS + LEADERBOARD -->
-  <div class="grid-2 fade-up" class="anim-delay-1">
+  <div class="grid-2 fade-up" style="animation-delay:0.1s;">
 
     <!-- ALL USERS -->
     <div class="card">
@@ -109,7 +109,7 @@
   </div>
 
   <!-- SUBJECT STATS + ACTIVITY -->
-  <div class="grid-2 fade-up" class="anim-delay-15">
+  <div class="grid-2 fade-up" style="animation-delay:0.15s;">
 
     <!-- SUBJECT POPULARITY -->
     <div class="card">
@@ -157,7 +157,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
@@ -168,7 +168,6 @@ const firebaseConfig = {
   appId: "1:566661039167:web:122691d263631e404ea48a"
 };
 
-const ADMIN_EMAIL = "itstudyhub.tiu@gmail.com";
 const SUBJECTS = [
   {key:'c',      label:'C Programming', icon:'⚙️', color:'#60a5fa'},
   {key:'java',   label:'OOPs Java',     icon:'☕', color:'#f7b731'},
@@ -184,7 +183,15 @@ const db = getFirestore(app);
 
 // ── AUTH GATE ──
 onAuthStateChanged(auth, async (user) => {
-  if (!user || user.email !== ADMIN_EMAIL) {
+  if (!user) {
+    document.getElementById('gateScreen').style.display = 'flex';
+    document.getElementById('adminPage').style.display = 'none';
+    return;
+  }
+  // Check role from Firestore — can't be faked client-side
+  const snap = await getDoc(doc(db, 'users', user.uid));
+  const role = snap.exists() ? snap.data().role : null;
+  if (role !== 'admin') {
     document.getElementById('gateScreen').style.display = 'flex';
     document.getElementById('adminPage').style.display = 'none';
     return;
@@ -257,7 +264,7 @@ function renderUsersTable(users) {
   tbody.innerHTML = sorted.map(u => {
     const name = u.name || u.email?.split('@')[0] || 'Unknown';
     const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    const isAdmin = u.email === ADMIN_EMAIL;
+    const isAdmin = u.role === 'admin';
     const quizzes = u.quizzesDone || 0;
     const joinDate = u.joinedAt ? new Date(u.joinedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : '—';
 
@@ -292,7 +299,7 @@ function renderLeaderboard(users) {
         const name = u.name || u.email?.split('@')[0] || 'Unknown';
         return `<div class="lb-mini-row">
           <div class="lb-mini-rank ${rankClass}">${medal||rank}</div>
-          <div class="lb-mini-name">${name}${u.email===ADMIN_EMAIL?' ⭐':''}</div>
+          <div class="lb-mini-name">${name}${u.role==='admin'?' ⭐':''}</div>
           <div class="lb-mini-xp">${(u.xp||0).toLocaleString()} XP</div>
         </div>`;
       }).join('');
@@ -336,7 +343,7 @@ function renderRecentActivity(users) {
   document.getElementById('recentCount').textContent = `${sorted.length} recent`;
 
   document.getElementById('recentActivityBody').innerHTML = sorted.length === 0
-    ? '<div class="mono-muted-center">No recent activity</div>'
+    ? '<div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);text-align:center;padding:20px;">No recent activity</div>'
     : sorted.map(u => {
         const name = u.name || u.email?.split('@')[0] || 'Unknown';
         const date = new Date(u.joinedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
