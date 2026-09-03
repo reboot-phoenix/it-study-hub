@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Sign in or sign up to IT Study Hub — no password needed, just your email.">
 <title>Sign In — IT Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
   :root {
@@ -28,37 +29,13 @@
     --ff-body: 'DM Sans', sans-serif;
     --ff-mono: 'JetBrains Mono', monospace;
   }
-  
-/* ── CUSTOM CURSOR ── */
-@media (pointer: fine) {
-  *, *::before, *::after {
-    cursor: none !important;
-  }
 
-  .cursor {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    background: var(--lime);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99999;
-    left: 0;
-    top: 0;
+  /* Custom cursor — pointer devices only */
+  @media (pointer: fine) {
+    *, *::before, *::after { cursor: none !important; }
   }
-
-  .cursor-ring {
-    position: fixed;
-    width: 36px;
-    height: 36px;
-    border: 1px solid rgba(200, 241, 53, 0.7);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99998;
-    left: 0;
-    top: 0;
-  }
-}
+  .drag-thumb { cursor: grab !important; }
+  .drag-thumb:active { cursor: grabbing !important; }
 
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -307,6 +284,8 @@
 </style>
 </head>
 <body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 <!-- Custom cursor (pointer devices only — hidden on touch via global.css) -->
 <div class="cursor" id="cur"></div>
 <div class="cursor-ring" id="curR"></div>
@@ -346,7 +325,7 @@
         <div class="form-group">
           <label>Email Address</label>
           <div class="input-wrap">
-            <span class="input-icon"><i class="ti ti-mail" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>
+            <span class="input-icon">✉</span>
             <input type="email" id="loginEmail" placeholder="you@college.edu" autocomplete="email">
           </div>
         </div>
@@ -383,7 +362,7 @@
       </div>
 
       <div class="sent-state" id="loginSent">
-        <div class="sent-icon"><i class="ti ti-mail" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
+        <div class="sent-icon">📬</div>
         <div class="sent-title">Check your inbox!</div>
         <div class="sent-sub">We sent a magic sign-in link to:</div>
         <div class="sent-email-chip" id="loginSentEmail">—</div>
@@ -402,7 +381,7 @@
         <div class="form-group">
           <label>Full Name</label>
           <div class="input-wrap">
-            <span class="input-icon"><i class="ti ti-user" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>
+            <span class="input-icon">👤</span>
             <input type="text" id="signupName" placeholder="Your Name" autocomplete="name">
           </div>
         </div>
@@ -410,12 +389,12 @@
         <div class="form-group">
           <label>Email Address</label>
           <div class="input-wrap">
-            <span class="input-icon"><i class="ti ti-mail" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>
+            <span class="input-icon">✉</span>
             <input type="email" id="signupEmail" placeholder="you@college.edu" autocomplete="email">
           </div>
         </div>
 
-        <div class="social-divider" class="mt-16">or sign up with</div>
+        <div class="social-divider" style="margin-top:16px;">or sign up with</div>
         <div class="social-btns">
           <button class="btn-social" onclick="window.handleGoogleLogin()">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -434,7 +413,7 @@
           </button>
         </div>
 
-        <div class="drag-wrap" class="mt-8">
+        <div class="drag-wrap" style="margin-top:8px;">
           <div class="drag-track" id="signupTrack">
             <div class="drag-fill" id="signupFill"></div>
             <div class="drag-hint" id="signupHint">slide to send magic link →</div>
@@ -450,7 +429,7 @@
       </div>
 
       <div class="sent-state" id="signupSent">
-        <div class="sent-icon"><i class="ti ti-rocket" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
+        <div class="sent-icon">🚀</div>
         <div class="sent-title">Almost there!</div>
         <div class="sent-sub">We sent your account activation link to:</div>
         <div class="sent-email-chip" id="signupSentEmail">—</div>
@@ -466,7 +445,7 @@
 
 <div class="ts-overlay" id="tsOverlay">
   <div class="ts-modal">
-    <div class="ts-modal-title">Quick Human Check <i class="ti ti-cloud" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️</div>
+    <div class="ts-modal-title">Quick Human Check ☁️</div>
     <div class="ts-modal-sub">Verify below to continue</div>
     <div id="tsModalWidget"></div>
     <button class="ts-modal-cancel" onclick="window.closeTsOverlay()">✕ Cancel</button>
@@ -865,6 +844,22 @@ if (window.matchMedia('(pointer: fine)').matches) {
   });
 }
 
+</script>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function loop() {
+  cursor.style.left = (mx-5)+'px'; cursor.style.top = (my-5)+'px';
+  ring.style.left   = (mx-18)+'px'; ring.style.top  = (my-18)+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,.drag-track').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2)'; ring.style.transform='scale(1.5)'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)'; ring.style.transform='scale(1)'; });
+});
 </script>
 </body>
 </html>
