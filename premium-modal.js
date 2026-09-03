@@ -73,7 +73,7 @@ const PLANS = [
       'Early access to new courses',
       'Direct mentor Q&A sessions',
       'Exclusive Discord community',
-      'Profile Elite badge 🏆',
+      'Profile Elite badge <i class="ti ti-trophy" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',
     ],
     cta: 'Go Elite'
   }
@@ -237,7 +237,7 @@ function buildModal(courseName) {
     <div class="pm-modal">
       <button class="pm-close" onclick="window.closePremiumModal()">✕</button>
       <div class="pm-header">
-        <div class="pm-eyebrow">⚡ Unlock Premium Access</div>
+        <div class="pm-eyebrow"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Unlock Premium Access</div>
         <h2 class="pm-title">LEVEL UP YOUR<br><span style="color:#c8f135">LEARNING</span></h2>
         <p class="pm-sub">
           ${courseName ? `Get full access to <strong style="color:#f0f0f8">${courseName}</strong> and beyond.` : 'Get full access to all courses, advanced materials, and exclusive resources.'}
@@ -245,7 +245,7 @@ function buildModal(courseName) {
       </div>
       <div class="pm-grid" id="pm-plans-grid">${plansHTML}</div>
       <div class="pm-footer">
-        🔒 Secure payment via Razorpay &nbsp;·&nbsp;
+        <i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Secure payment via Razorpay &nbsp;·&nbsp;
         <span>UPI · Cards · Net Banking · Wallets</span> &nbsp;·&nbsp;
         Instant access after payment
       </div>
@@ -281,7 +281,7 @@ function showAlreadyPremium(plan) {
   const grid = document.getElementById('pm-plans-grid');
   if (!grid) return;
   grid.outerHTML = `<div class="pm-already">
-    <div class="pm-crown">👑</div>
+    <div class="pm-crown"><i class="ti ti-crown" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
     <h3>You're already on ${plan} plan!</h3>
     <p>All premium content is unlocked. Enjoy learning.</p>
     <button class="pm-btn pm-btn-lime" style="margin-top:24px;max-width:200px;" onclick="window.closePremiumModal()">Close ✕</button>
@@ -435,7 +435,7 @@ window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
       if (modal) {
         modal.innerHTML = `
           <div style="text-align:center; padding:60px 20px;">
-            <div style="font-size:56px; margin-bottom:20px;">🎉</div>
+            <div style="font-size:56px; margin-bottom:20px;"><i class="ti ti-confetti" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
             <h2 style="font-family:'Bebas Neue','Syne',sans-serif; font-size:36px; color:#c8f135; margin-bottom:12px;">WELCOME TO ${planName.toUpperCase()}!</h2>
             <p style="color:#9090a8; font-size:14px; margin-bottom:28px;">Your premium access is now active. All locked content is unlocked.</p>
             <button class="pm-btn pm-btn-lime" style="max-width:240px;margin:0 auto;" onclick="window.closePremiumModal(); location.reload();">START LEARNING →</button>
@@ -507,7 +507,7 @@ function hidePremiumCTAs(plan) {
     }
   });
 
-  // Hide the nav "⚡ Premium" link if user is already premium (optional — keep visible so they can see their plan)
+  // Hide the nav "<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Premium" link if user is already premium (optional — keep visible so they can see their plan)
   // We intentionally leave the nav link in place so users can review their plan
 }
 

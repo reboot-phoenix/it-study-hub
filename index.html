@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -111,7 +112,7 @@ nav .nav-links li a.nav-active {
   <a href="blog.html">Blog</a>
   <a href="fileshare.html">File Share</a>
   <a href="team.html">Community</a>
-  <a href="premium.html" class="nav-premium-link">⚡ Pricing</a>
+  <a href="premium.html" class="nav-premium-link"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Pricing</a>
 </div>
 
 <!-- ═══════ HERO ═══════ -->
@@ -188,9 +189,9 @@ nav .nav-links li a.nav-active {
     <div class="ticker-item"><strong>100%</strong> Free Resources</div>
     <div class="ticker-item"><strong>Global</strong> Student Community</div>
     <div class="ticker-item"><strong>C · Java · Python · C++ · R · JavaScript</strong></div>
-    <div class="ticker-item">⚡ <strong>Instant</strong> Access After Checkout</div>
-    <div class="ticker-item">🧠 <strong>Skill-Level</strong> Routing</div>
-    <div class="ticker-item">📄 <strong>Industry-Aligned</strong> Content</div>
+    <div class="ticker-item"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> <strong>Instant</strong> Access After Checkout</div>
+    <div class="ticker-item"><i class="ti ti-brain" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> <strong>Skill-Level</strong> Routing</div>
+    <div class="ticker-item"><i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> <strong>Industry-Aligned</strong> Content</div>
     <div class="ticker-item"><strong>Skill</strong> Quiz System</div>
     <div class="ticker-item"><strong>Latest</strong> Tech Blog</div>
   </div>
@@ -695,9 +696,9 @@ nav .nav-links li a.nav-active {
       <div class="about-uni">Techno India University · IT Study Hub 2026</div>
       <p class="about-bio">Built this because learning to code shouldn't depend on where you study, what you can afford, or who you know. Every course and resource here is free — no gates, no fluff, just solid learning for any CS student who wants it.</p>
       <div class="about-tags">
-        <span class="about-tag about-tag-lime">🛠️ Web Developer</span>
-        <span class="about-tag about-tag-muted">🎨 UI Designer</span>
-        <span class="about-tag about-tag-muted">📚 BSc IT · 3rd Year</span>
+        <span class="about-tag about-tag-lime"><i class="ti ti-tools" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️ Web Developer</span>
+        <span class="about-tag about-tag-muted"><i class="ti ti-palette" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> UI Designer</span>
+        <span class="about-tag about-tag-muted"><i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> BSc IT · 3rd Year</span>
       </div>
     </div>
   </div>
@@ -824,7 +825,7 @@ function updateAuthUI() {
     const initials = session.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
     document.getElementById('avatarInitial').textContent = initials;
     document.getElementById('avatarName').textContent = session.name.split(' ')[0];
-    document.getElementById('ddName').textContent = session.name + (session.isAdmin ? ' ⭐' : '');
+    document.getElementById('ddName').textContent = session.name + (session.isAdmin ? ' <i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>' : '');
     document.getElementById('ddEmail').textContent = session.email || '';
     if (heroBtn) { heroBtn.textContent = 'Go to My Courses →'; heroBtn.href = 'courses.html'; }
     if (ctaBtn)  { ctaBtn.textContent  = 'Continue Learning →'; ctaBtn.href = 'courses.html'; }

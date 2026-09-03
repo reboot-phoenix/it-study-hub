@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8"/>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -1450,7 +1451,7 @@ window._loadLeaderboard = async function() {
       const ini = safeName.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
       const sp = u.photo && (u.photo.startsWith('https://firebasestorage') || u.photo.startsWith('https://lh3.googleusercontent'));
       const av = sp ? `<img src="${esc(u.photo)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : ini;
-      return `<div class="lb-entry${isMe?' me':''}"><div class="lb-rank${rc?' '+rc:''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div><div class="lb-avatar">${av}</div><div class="lb-name">${safeName}${isMe?' (you)':''}</div><div class="lb-xp">${u.xp.toLocaleString()} XP</div><div class="lb-solved">${u.solved}✓</div></div>`;
+      return `<div class="lb-entry${isMe?' me':''}"><div class="lb-rank${rc?' '+rc:''}">${i===0?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#FFD700;"></i>':i===1?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#C0C0C0;"></i>':i===2?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#CD7F32;"></i>':'#'+(i+1)}</div><div class="lb-avatar">${av}</div><div class="lb-name">${safeName}${isMe?' (you)':''}</div><div class="lb-xp">${u.xp.toLocaleString()} XP</div><div class="lb-solved">${u.solved}✓</div></div>`;
     }).join('');
   } catch(e) {
     el.innerHTML = '<div style="font-size:13px;color:var(--txt-md)">Could not load leaderboard.</div>';
@@ -2275,7 +2276,7 @@ function loadRandomProblem() {
   const pool = unsolved.length ? unsolved : probs;
   const p = pool[Math.floor(Math.random() * pool.length)];
   document.querySelectorAll('.problem-item').forEach(el => { if (el.dataset.id === p.id) el.click(); });
-  showToast('🎲 Random problem selected!');
+  showToast('<i class="ti ti-dice" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Random problem selected!');
 }
 
 /* ─── Mini markdown → HTML renderer ─── */
@@ -2538,7 +2539,7 @@ async function runTests() {
     if (window._saveSolve) window._saveSolve(currentProblem.id, currentLang, timeMs);
     addToHistory(currentProblem, currentLang, true, timeMs);
     fireConfetti();
-    showToast('🎉 All tests passed! +10 XP', 'success');
+    showToast('<i class="ti ti-confetti" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> All tests passed! +10 XP', 'success');
   } else if (allPassed) {
     addToHistory(currentProblem, currentLang, true, timeMs);
     showToast('✓ All tests passed!', 'success');
@@ -2560,7 +2561,7 @@ function renderHistory() {
     el.innerHTML = '<div class="sub-empty">No submissions yet.<br><span style="font-size:12px;color:var(--txt-lo)">Run your code to see results here.</span></div>';
     return;
   }
-  const icons = {c:'C',cpp:'C++',java:'☕',python:'🐍',r:'📊',javascript:'JS'};
+  const icons = {c:'C',cpp:'C++',java:'<i class="ti ti-coffee" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>',python:'<i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>',r:'<i class="ti ti-chart-bar" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',javascript:'JS'};
   el.innerHTML = submissionHistory.slice(0, 30).map(e => {
     const date = new Date(e.ts).toLocaleDateString('en-IN', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
     const dc = e.difficulty === 'medium' ? 'med' : e.difficulty;

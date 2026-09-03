@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +27,7 @@
     <h1 class="course-title">Python <em>Programming</em></h1>
     <p class="course-desc">Master the most versatile programming language in the world. From basic scripting and automation to object-oriented design and file handling.</p>
     <div class="course-chips">
-      <span class="chip chip-lime">🐍 Python 3.10+</span>
+      <span class="chip chip-lime"><i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> Python 3.10+</span>
       <span class="chip chip-lime">6 Free Modules</span>
       <span class="chip chip-gold">6 Premium Modules</span>
       <span class="chip chip-lime">Real PDF Notes</span>
@@ -55,24 +56,24 @@
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
       <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/python.pdf" target="_blank" class="mat-item">
-        <div class="mat-icon">📝</div>
+        <div class="mat-icon"><i class="ti ti-file-text" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Python Basics Cheat Sheet</div><div class="mat-desc">Variables, Loops, Functions · Free</div></div>
         <span class="mat-action">↓ Download</span>
       </a>
       <a href="https://www.sanfoundry.com/python-questions-answers/" target="_blank" class="mat-item">
-        <div class="mat-icon">🎯</div>
+        <div class="mat-icon"><i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Placement Quiz — Python</div><div class="mat-desc">1000+ MCQs · Free</div></div>
         <span class="mat-action">→ Start</span>
       </a>
       <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
-        <div class="mat-icon">⭐</div>
+        <div class="mat-icon"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Advanced Notes — OOP & APIs</div><div class="mat-desc">Deep dive into advanced concepts · Premium</div></div>
-        <span class="mat-action locked">🔒 Unlock</span>
+        <span class="mat-action locked"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Unlock</span>
       </div>
       <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
-        <div class="mat-icon">⭐</div>
+        <div class="mat-icon"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Python Interview Question Bank</div><div class="mat-desc">100+ interview-level questions · Premium</div></div>
-        <span class="mat-action locked">🔒 Unlock</span>
+        <span class="mat-action locked"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Unlock</span>
       </div>
     </div>
   </div>
@@ -116,9 +117,9 @@ function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_python_d
 function saveCompleted(a){localStorage.setItem('ish_python_done',JSON.stringify(a));}
 
 const MODS = [
-  {id:1,free:true,icon:'🐍',level:'Beginner',title:'Intro to Python',
+  {id:1,free:true,icon:'<i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>',level:'Beginner',title:'Intro to Python',
    excerpt:'Python is a high-level, interpreted programming language known for its readability. Learn about its philosophy, the REPL, and write your first script.',
-   tags:['Beginner','History','Setup'],visual:'🐍',bg:'linear-gradient(135deg,#0a1a1a,#0f2020)',
+   tags:['Beginner','History','Setup'],visual:'<i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a1a1a,#0f2020)',
    concepts:['Interpreted Language','PEP 8','The Zen of Python','Indentation','print()','Comments'],
    body:`<p>Created by Guido van Rossum and released in 1991, <strong>Python</strong> was designed with a philosophy that emphasizes code readability. It is an <em>interpreted</em> language, meaning you don't need to compile it before running—the Python interpreter reads and executes code line by line.</p>
 <h2>The Importance of Indentation</h2>
@@ -141,9 +142,9 @@ It is often used as a multi-line comment or a docstring.
   <li>Readability counts.</li>
 </ul>`},
 
-  {id:2,free:true,icon:'🔤',level:'Beginner',title:'Variables & Data Types',
+  {id:2,free:true,icon:'<i class="ti ti-letter-case" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Beginner',title:'Variables & Data Types',
    excerpt:'Python uses dynamic typing. Learn how variables work, the core primitive types, and how to cast between them without explicit declarations.',
-   tags:['Beginner','Dynamic Typing','Data Types'],visual:'🔤',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
+   tags:['Beginner','Dynamic Typing','Data Types'],visual:'<i class="ti ti-letter-case" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
    concepts:['Dynamic Typing','int, float, str, bool','type()','Type Casting','NoneType','Garbage Collection'],
    body:`<p>In Python, you do not need to declare a variable's type before assigning a value to it. This is known as <strong>dynamic typing</strong>. The interpreter infers the type based on the value.</p>
 <h2>Core Primitive Types</h2>
@@ -173,9 +174,9 @@ print("I am " + str(age) + " years old.")
 # Or casting a string to a float:
 price = float("19.99")</code></pre>`},
 
-  {id:3,free:true,icon:'🔀',level:'Beginner',title:'Operators & Control Flow',
+  {id:3,free:true,icon:'<i class="ti ti-arrows-shuffle" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Beginner',title:'Operators & Control Flow',
    excerpt:'Control the flow of your program using if, elif, and else statements. Master logical operators, truthiness, and chained comparisons.',
-   tags:['Beginner','Logic','Conditionals'],visual:'🔀',bg:'linear-gradient(135deg,#0f0a14,#201028)',
+   tags:['Beginner','Logic','Conditionals'],visual:'<i class="ti ti-arrows-shuffle" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0f0a14,#201028)',
    concepts:['if / elif / else','Logical Operators (and, or, not)','Truthiness','Chained Comparisons','Ternary Operator'],
    body:`<p>Control flow allows your Python script to make decisions. Python uses <code>if</code>, <code>elif</code> (else if), and <code>else</code> blocks, structured by indentation.</p>
 <h2>Conditionals</h2>
@@ -204,9 +205,9 @@ if 18 <= age <= 65:
     print("Eligible to work.")</code></pre>
 <blockquote><strong>Truthiness:</strong> In Python, empty sequences (like <code>""</code>, <code>[]</code>, <code>{}</code>), the number <code>0</code>, and <code>None</code> evaluate to <code>False</code> in an if-statement. Everything else is generally <code>True</code>.</blockquote>`},
 
-  {id:4,free:true,icon:'🔁',level:'Beginner',title:'Loops & Iteration',
+  {id:4,free:true,icon:'<i class="ti ti-repeat" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Beginner',title:'Loops & Iteration',
    excerpt:'Execute code repeatedly using while and for loops. Discover the power of the range() function, break, and continue statements.',
-   tags:['Beginner','Loops','Iteration'],visual:'🔁',bg:'linear-gradient(135deg,#14140a,#282810)',
+   tags:['Beginner','Loops','Iteration'],visual:'<i class="ti ti-repeat" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#14140a,#282810)',
    concepts:['for...in loop','while loop','range() function','break & continue','Infinite Loops'],
    body:`<p>Loops in Python are incredibly powerful, especially the <code>for</code> loop, which is designed to iterate directly over sequences (like lists or strings) rather than relying on index counters.</p>
 <h2>The <code>for</code> Loop & <code>range()</code></h2>
@@ -237,9 +238,9 @@ print("Liftoff!")</code></pre>
         continue  # Skips printing even numbers
     print(num)    # Output: 1, 3</code></pre>`},
 
-  {id:5,free:true,icon:'🛠️',level:'Beginner',title:'Functions & Scope',
+  {id:5,free:true,icon:'<i class="ti ti-tools" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',level:'Beginner',title:'Functions & Scope',
    excerpt:'Write reusable blocks of code using the def keyword. Learn about parameters, return values, default arguments, and variable scope.',
-   tags:['Beginner','Functions','Modularity'],visual:'🛠️',bg:'linear-gradient(135deg,#0a1414,#102828)',
+   tags:['Beginner','Functions','Modularity'],visual:'<i class="ti ti-tools" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',bg:'linear-gradient(135deg,#0a1414,#102828)',
    concepts:['def keyword','Return values','Default arguments','*args and **kwargs','Local vs Global Scope'],
    body:`<p>Functions allow you to encapsulate logic into reusable blocks. In Python, functions are defined using the <code>def</code> keyword.</p>
 <h2>Defining and Calling Functions</h2>
@@ -268,9 +269,9 @@ test_scope()     # Output: Inside: local
 print("Outside:", x) # Output: Outside: global</code></pre>
 <blockquote><strong>Advanced Tip:</strong> Functions in Python are "first-class citizens", meaning they can be passed as arguments to other functions, returned from functions, and assigned to variables!</blockquote>`},
 
-  {id:6,free:true,icon:'📚',level:'Beginner',title:'Lists & Tuples',
+  {id:6,free:true,icon:'<i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Beginner',title:'Lists & Tuples',
    excerpt:'Store collections of data. Understand the critical differences between mutable Lists and immutable Tuples, and master list slicing.',
-   tags:['Beginner','Data Structures','Arrays'],visual:'📚',bg:'linear-gradient(135deg,#140a14,#281028)',
+   tags:['Beginner','Data Structures','Arrays'],visual:'<i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#140a14,#281028)',
    concepts:['Lists (Mutable)','Tuples (Immutable)','List Methods','Indexing & Slicing','Tuple Unpacking'],
    body:`<p>Python doesn't have built-in "arrays" like C or Java; instead, it uses highly versatile <strong>Lists</strong> and <strong>Tuples</strong> to store ordered collections of items.</p>
 <h2>Lists (Mutable)</h2>
@@ -297,27 +298,27 @@ x, y = coordinates
 print(f"X: {x}, Y: {y}")</code></pre>`},
 
   // PREMIUM MODULES
-  {id:7,free:false,icon:'🗂️',level:'Intermediate',title:'Dictionaries & Sets',
+  {id:7,free:false,icon:'<i class="ti ti-folders" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',level:'Intermediate',title:'Dictionaries & Sets',
    excerpt:'Master Python\'s hash maps. Learn how to store key-value pairs in Dictionaries and manage unique items with Sets.',
-   tags:['Intermediate','Hash Maps','Data Structures'],visual:'🗂️',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
+   tags:['Intermediate','Hash Maps','Data Structures'],visual:'<i class="ti ti-folders" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
    concepts:['Key-Value Pairs','Dict Methods (.keys, .values)','Set Operations (Union, Intersection)','Dictionary Comprehensions'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:8,free:false,icon:'✂️',level:'Intermediate',title:'Strings & RegEx',
+  {id:8,free:false,icon:'<i class="ti ti-cut" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',level:'Intermediate',title:'Strings & RegEx',
    excerpt:'Strings are objects in Python. Learn advanced formatting (f-strings), built-in methods, and pattern matching using the re module.',
-   tags:['Intermediate','Strings','Regex'],visual:'✂️',bg:'linear-gradient(135deg,#10080a,#200f12)',
+   tags:['Intermediate','Strings','Regex'],visual:'<i class="ti ti-cut" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',bg:'linear-gradient(135deg,#10080a,#200f12)',
    concepts:['f-strings','String Methods (.split, .join, .replace)','Regular Expressions (re module)','Raw Strings'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:9,free:false,icon:'🏗️',level:'Advanced',title:'Object-Oriented Programming',
+  {id:9,free:false,icon:'<i class="ti ti-building" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',level:'Advanced',title:'Object-Oriented Programming',
    excerpt:'Move beyond scripts to application design. Learn classes, objects, inheritance, and Python\'s special dunder methods.',
-   tags:['Advanced','OOP','Classes'],visual:'🏗️',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
+   tags:['Advanced','OOP','Classes'],visual:'<i class="ti ti-building" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
    concepts:['Classes & Objects','__init__ method','self keyword','Inheritance','Polymorphism','Dunder (Magic) Methods'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:10,free:false,icon:'📂',level:'Advanced',title:'File Handling & I/O',
+  {id:10,free:false,icon:'<i class="ti ti-folder-open" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'File Handling & I/O',
    excerpt:'Learn how to safely read, write, and append to external text and CSV files using context managers (the "with" statement).',
-   tags:['Advanced','I/O','Files'],visual:'📂',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
+   tags:['Advanced','I/O','Files'],visual:'<i class="ti ti-folder-open" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
    concepts:['open(), read(), write()','Context Managers (with statement)','File Modes (r, w, a)','Working with CSVs'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
@@ -327,9 +328,9 @@ print(f"X: {x}, Y: {y}")</code></pre>`},
    concepts:['try / except','catching specific exceptions','finally block','raising Exceptions','Custom Exceptions'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`},
 
-  {id:12,free:false,icon:'📦',level:'Advanced',title:'Modules & Environments',
+  {id:12,free:false,icon:'<i class="ti ti-package" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'Modules & Environments',
    excerpt:'The true power of Python lies in its ecosystem. Learn how to import modules, install external packages using pip, and manage virtual environments.',
-   tags:['Advanced','pip','venv'],visual:'📦',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
+   tags:['Advanced','pip','venv'],visual:'<i class="ti ti-package" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
    concepts:['import statements','Standard Library','pip package manager','Virtual Environments (venv)','requirements.txt'],
    body:`<p>Premium Content Placeholder. Redirecting to Premium.</p>`}
 ];
@@ -390,7 +391,7 @@ function openLesson(id) {
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
 
   const html = !m.free && !isPremium()
-    ? `<div class="premium-lock"><div class="section-emoji">⭐</div>
+    ? `<div class="premium-lock"><div class="section-emoji"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
        <div class="section-heading-display">Premium Module</div>
        <div class="section-sub-muted">Upgrade your plan to unlock all advanced content.</div>
        <button class="lock-btn" onclick="window.location.href='premium.html'">Unlock Premium</button></div>`
@@ -398,9 +399,9 @@ function openLesson(id) {
        <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
-         <span class="meta-item">🐍 Python</span>
+         <span class="meta-item"><i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> Python</span>
          <span class="meta-item">⏱ ~10 min read</span>
-         <span class="meta-item">⚙️ ${m.level}</span>
+         <span class="meta-item"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> ${m.level}</span>
        </div>
        <div class="les-visual" style="background:${m.bg};">
          <div class="les-visual-grid"></div>
@@ -444,7 +445,7 @@ function renderSidebar() {
     return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${click}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
-      ${locked?'<span style="font-size:10px;opacity:0.5;color:var(--gold);">🔒</span>':''}
+      ${locked?'<span style="font-size:10px;opacity:0.5;color:var(--gold);"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
     </button>`;
   }).join('');
 }
@@ -480,7 +481,7 @@ function markDone() {
   if(!completed.includes(currentId)){
     completed.push(currentId);
     saveCompleted(completed);
-    showToast('✓ Module marked complete! 🐍');
+    showToast('✓ Module marked complete! <i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>');
   }
   openLesson(currentId);
 }

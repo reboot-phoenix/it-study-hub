@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +28,7 @@
     <h1 class="course-title">R <em>Programming</em></h1>
     <p class="course-desc">Master the language of data science. From RStudio basics and statistical computing to advanced dplyr, ggplot2, Shiny dashboards, and reproducible research with R Markdown.</p>
     <div class="course-chips">
-      <span class="chip chip-lime">🔵 R 4.4 & Tidyverse</span>
+      <span class="chip chip-lime"><i class="ti ti-circle-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> R 4.4 & Tidyverse</span>
       <span class="chip chip-lime">6 Free Modules</span>
       <span class="chip chip-gold">6 Premium Modules</span>
       <span class="chip chip-lime">Real PDF Notes</span>
@@ -56,24 +57,24 @@
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
       <a href="https://cran.r-project.org/doc/contrib/Short-refcard.pdf" target="_blank" class="mat-item">
-        <div class="mat-icon">📝</div>
+        <div class="mat-icon"><i class="ti ti-file-text" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">R Syntax Cheat Sheet</div><div class="mat-desc">Core syntax, vectors, data frames · Free</div></div>
         <span class="mat-action">↓ Download</span>
       </a>
       <a href="https://www.datacamp.com/blog/r-interview-questions-and-answers" target="_blank" class="mat-item">
-        <div class="mat-icon">🎯</div>
+        <div class="mat-icon"><i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Placement Quiz — R</div><div class="mat-desc">100+ MCQs on R & Data Science · Free</div></div>
         <span class="mat-action">→ Start</span>
       </a>
       <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
-        <div class="mat-icon">⭐</div>
+        <div class="mat-icon"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Advanced Notes — dplyr & ggplot2</div><div class="mat-desc">Master the Tidyverse ecosystem · Premium</div></div>
-        <span class="mat-action locked">🔒 Unlock</span>
+        <span class="mat-action locked"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Unlock</span>
       </div>
       <div class="mat-item premium-mat" onclick="window.location.href='premium.html'">
-        <div class="mat-icon">⭐</div>
+        <div class="mat-icon"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Data Science Interview Question Bank</div><div class="mat-desc">100+ R & statistics questions · Premium</div></div>
-        <span class="mat-action locked">🔒 Unlock</span>
+        <span class="mat-action locked"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Unlock</span>
       </div>
     </div>
   </div>
@@ -117,9 +118,9 @@ function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_r_done')
 function saveCompleted(a){localStorage.setItem('ish_r_done',JSON.stringify(a));}
 
 const MODS = [
-  {id:1,free:true,icon:'🔵',level:'Beginner',title:'Intro to R & RStudio',
+  {id:1,free:true,icon:'<i class="ti ti-circle-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Beginner',title:'Intro to R & RStudio',
       excerpt:`Created by statisticians for statisticians, R is the gold standard for data analysis. Understand the R ecosystem, RStudio IDE, and how to write your first script.`,
-   tags:['Beginner','History','RStudio'],visual:'🔵',bg:'linear-gradient(135deg,#0a1020,#101830)',
+   tags:['Beginner','History','RStudio'],visual:'<i class="ti ti-circle-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a1020,#101830)',
    concepts:['Ross Ihaka & Robert Gentleman','RStudio IDE','CRAN','R Console vs Script','install.packages()'],
    body:`<p><strong>R</strong> is an open-source programming language and environment for statistical computing and graphics. It was created by <strong>Ross Ihaka</strong> and <strong>Robert Gentleman</strong> at the University of Auckland, New Zealand, in 1993. Today, R is the third-most popular language for data science, behind only Python and SQL.</p>
 <h2>Why Learn R?</h2>
@@ -152,9 +153,9 @@ install.packages("tidyverse")
 # Load it into your session (run every time)
 library(tidyverse)</code></pre>`},
 
-  {id:2,free:true,icon:'📊',level:'Beginner',title:'Variables & Data Types',
+  {id:2,free:true,icon:'<i class="ti ti-chart-bar" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Beginner',title:'Variables & Data Types',
       excerpt:`R has unique data types designed for statistics. Master vectors, factors, lists, and understand the crucial concept of coercion in R.`,
-   tags:['Beginner','Data Types','Vectors'],visual:'📊',bg:'linear-gradient(135deg,#0a1a10,#102818)',
+   tags:['Beginner','Data Types','Vectors'],visual:'<i class="ti ti-chart-bar" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a1a10,#102818)',
    concepts:['Atomic Vectors','Factors','Coercion Rules','Lists','Type Checking (class(), typeof())'],
    body:`<p>R has five basic atomic data types: <strong>character</strong>, <strong>numeric</strong> (double), <strong>integer</strong>, <strong>logical</strong>, and <strong>complex</strong>. Unlike many languages, the most fundamental data structure in R is the <strong>vector</strong> — even a single number is a vector of length 1.</p>
 <h2>Creating Vectors</h2>
@@ -191,9 +192,9 @@ grade <- factor(c("B", "A", "C", "A"),
                 levels = c("F", "D", "C", "B", "A"),
                 ordered = TRUE)</code></pre>`},
 
-  {id:3,free:true,icon:'🔀',level:'Beginner',title:'Control Flow & Logic',
+  {id:3,free:true,icon:'<i class="ti ti-arrows-shuffle" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Beginner',title:'Control Flow & Logic',
       excerpt:`Direct your data analysis workflow using conditional statements, loops, and R's powerful vectorized operations that eliminate the need for many loops.`,
-   tags:['Beginner','Logic','Conditionals'],visual:'🔀',bg:'linear-gradient(135deg,#0f0a14,#201028)',
+   tags:['Beginner','Logic','Conditionals'],visual:'<i class="ti ti-arrows-shuffle" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0f0a14,#201028)',
    concepts:['if / else','for loop','while loop','Vectorization','apply family (lapply, sapply)'],
    body:`<p>Control flow in R follows standard programming paradigms, but R's <strong>vectorized</strong> nature means you often don't need explicit loops. Operating on entire vectors at once is both faster and more idiomatic in R.</p>
 <h2>Conditional Statements</h2>
@@ -248,9 +249,9 @@ mat <- matrix(1:9, nrow = 3)
 apply(mat, 1, sum)   # Row sums (MARGIN = 1)
 apply(mat, 2, mean)  # Column means (MARGIN = 2)</code></pre>`},
 
-  {id:4,free:true,icon:'🛠️',level:'Beginner',title:'Functions & Parameters',
+  {id:4,free:true,icon:'<i class="ti ti-tools" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',level:'Beginner',title:'Functions & Parameters',
       excerpt:`Break down analysis into reusable functions. Discover R's flexible argument handling, default values, and the powerful concept of lexical scoping.`,
-   tags:['Beginner','Functions','Modularity'],visual:'🛠️',bg:'linear-gradient(135deg,#14140a,#282810)',
+   tags:['Beginner','Functions','Modularity'],visual:'<i class="ti ti-tools" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',bg:'linear-gradient(135deg,#14140a,#282810)',
    concepts:['Function Syntax','Default Arguments','... (Ellipsis)','Lexical Scoping','Return Values'],
    body:`<p>Functions are the building blocks of reusable code in R. They encapsulate logic, accept inputs (arguments), and return outputs. R functions are <strong>first-class objects</strong> — they can be passed as arguments to other functions and returned from functions.</p>
 <h2>Creating Custom Functions</h2>
@@ -296,9 +297,9 @@ my_func <- function() {
 
 my_func()  # 150</code></pre>`},
 
-  {id:5,free:true,icon:'🏗️',level:'Beginner',title:'Data Frames & Tibbles',
+  {id:5,free:true,icon:'<i class="ti ti-building" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',level:'Beginner',title:'Data Frames & Tibbles',
       excerpt:`Data frames are the workhorse of R data analysis. Learn to create, index, filter, and manipulate tabular data — the foundation of all data science in R.`,
-   tags:['Beginner','Data Frames','Tibbles'],visual:'🏗️',bg:'linear-gradient(135deg,#140a14,#281028)',
+   tags:['Beginner','Data Frames','Tibbles'],visual:'<i class="ti ti-building" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',bg:'linear-gradient(135deg,#140a14,#281028)',
    concepts:['data.frame()','tibble()','Indexing ($, [], [[]])','Subsetting','str() & summary()'],
    body:`<p>A <strong>data frame</strong> is R's most important data structure for data analysis. It is a two-dimensional table where each column can be a different data type (numeric, character, factor, etc.), similar to a spreadsheet or SQL table. <strong>Tibbles</strong> are the modern, enhanced version from the tidyverse.</p>
 <h2>Creating Data Frames</h2>
@@ -341,9 +342,9 @@ ncol(students)        # Number of columns</code></pre>
 <h2>Why Tibbles?</h2>
 <p>Tibbles never convert strings to factors, never create row names, and print more cleanly. They are the default in the tidyverse and highly recommended for modern R workflows.</p>`},
 
-  {id:6,free:true,icon:'📦',level:'Beginner',title:'Vectors, Lists & Matrices',
+  {id:6,free:true,icon:'<i class="ti ti-package" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Beginner',title:'Vectors, Lists & Matrices',
       excerpt:`Move beyond basic vectors. Discover matrices, arrays, and nested lists — the complete toolkit of R's core data structures for any analysis task.`,
-   tags:['Beginner','Data Structures','Arrays'],visual:'📦',bg:'linear-gradient(135deg,#0a1414,#102828)',
+   tags:['Beginner','Data Structures','Arrays'],visual:'<i class="ti ti-package" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a1414,#102828)',
    concepts:['Atomic Vectors','Lists (recursive)','Matrices','Arrays','rbind() & cbind()'],
    body:`<p>While data frames handle most tabular data, understanding R's lower-level data structures is essential for advanced programming, linear algebra, and efficient memory usage.</p>
 <h2>Matrices — 2D Numeric Arrays</h2>
@@ -388,9 +389,9 @@ cbind(df1, df2$grade)
 rbind(df1, data.frame(id = 4, score = 92))</code></pre>`},
 
   // PREMIUM MODULES
-  {id:7,free:false,icon:'🧬',level:'Intermediate',title:'Data Manipulation with dplyr',
+  {id:7,free:false,icon:'<i class="ti ti-dna" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Intermediate',title:'Data Manipulation with dplyr',
       excerpt:`Master the grammar of data manipulation. Learn filter, select, mutate, arrange, and summarise to transform raw data into insights with elegant, readable code.`,
-   tags:['Intermediate','dplyr','Tidyverse'],visual:'🧬',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
+   tags:['Intermediate','dplyr','Tidyverse'],visual:'<i class="ti ti-dna" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
    concepts:['filter() & select()','mutate() & transmute()','arrange() & summarise()','group_by()','%>% Pipe Operator'],
    body:`<p><strong>dplyr</strong> is the cornerstone of data manipulation in the tidyverse. It provides a consistent grammar of five core verbs that cover the vast majority of data transformation tasks. Each verb is a function, and they compose naturally using the pipe operator.</p>
 <h2>The Pipe Operator</h2>
@@ -571,9 +572,9 @@ possible_log <- possibly(log, otherwise = NA_real_)
 map_dbl(list(10, -1, "x", 100), possible_log)
 # 2.302585  NaN       NA  4.605170</code></pre>`},
 
-  {id:9,free:false,icon:'🔗',level:'Advanced',title:'Functional Programming',
+  {id:9,free:false,icon:'<i class="ti ti-link" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'Functional Programming',
       excerpt:`Unlock R\'s functional nature. Master the purrr package, anonymous functions, function factories, and higher-order functions for elegant data pipelines.`,
-   tags:['Advanced','purrr','Functional'],visual:'🔗',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
+   tags:['Advanced','purrr','Functional'],visual:'<i class="ti ti-link" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#1a0a0a,#280f0f)',
    concepts:['purrr::map()','Anonymous Functions','Function Factories','Closures','Higher-Order Functions'],
    body:`<p>R is, at its heart, a <strong>functional programming language</strong>. Functions are first-class objects — they can be stored in variables, passed as arguments, and returned from other functions. Mastering functional programming unlocks concise, expressive, and bug-resistant pipelines.</p>
 <h2>First-Class Functions & Anonymous Functions</h2>
@@ -661,9 +662,9 @@ clean_text("  Hello World  ")   # "hello world"
 library(magrittr)
 "  Hello World  " |> as.character() |> tolower() |> trimws()</code></pre>`},
 
-  {id:10,free:false,icon:'🔎',level:'Advanced',title:'Data Visualization with ggplot2',
+  {id:10,free:false,icon:'<i class="ti ti-zoom-in" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'Data Visualization with ggplot2',
       excerpt:`Turn data into compelling stories. Master the Grammar of Graphics with ggplot2 — aesthetics, geoms, facets, themes, and custom annotations.`,
-   tags:['Advanced','ggplot2','Visualization'],visual:'🔎',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
+   tags:['Advanced','ggplot2','Visualization'],visual:'<i class="ti ti-zoom-in" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#1a1a0a,#28280f)',
    concepts:['Grammar of Graphics','aes() & geoms','facets','scales & themes','Annotations & Customization'],
    body:`<p><strong>ggplot2</strong> implements the <em>Grammar of Graphics</em> — a coherent system for describing and building graphs from composable building blocks. Every ggplot2 chart is assembled from the same components: data, aesthetic mappings, geometric objects, scales, facets, and themes.</p>
 <h2>The Grammar of Graphics — Core Concept</h2>
@@ -752,9 +753,9 @@ p + theme(
   annotate("text", x = 5, y = 40, label = "Outliers here", colour = "red") +
   theme_minimal()</code></pre>`},
 
-  {id:11,free:false,icon:'⚡',level:'Advanced',title:'Statistical Analysis & Modeling',
+  {id:11,free:false,icon:'<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'Statistical Analysis & Modeling',
       excerpt:`Leverage R's statistical roots. Perform regression, hypothesis testing, ANOVA, and probability distributions to extract meaningful insights from data.`,
-   tags:['Advanced','Statistics','Modeling'],visual:'⚡',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
+   tags:['Advanced','Statistics','Modeling'],visual:'<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a1a1a,#0f2828)',
    concepts:['Linear Regression (lm)','Hypothesis Testing','Probability Distributions','ANOVA','Model Diagnostics'],
    body:`<p>R was built by statisticians, for statisticians. Its built-in functions and ecosystem of packages make it the most powerful environment for statistical analysis in any programming language. This module covers the core tools you need for data science and academic research.</p>
 <h2>Descriptive Statistics</h2>
@@ -843,9 +844,9 @@ residuals(model)      # Residuals
 fitted(model)         # Fitted values
 confint(model)        # 95% confidence intervals for coefficients</code></pre>`},
 
-  {id:12,free:false,icon:'🗄️',level:'Advanced',title:'Shiny & R Markdown',
+  {id:12,free:false,icon:'<i class="ti ti-database" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',level:'Advanced',title:'Shiny & R Markdown',
       excerpt:`Build interactive dashboards and reproducible reports. Learn Shiny for web apps and R Markdown for dynamic documents that update with your data.`,
-   tags:['Advanced','Shiny','Reports'],visual:'🗄️',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
+   tags:['Advanced','Shiny','Reports'],visual:'<i class="ti ti-database" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',bg:'linear-gradient(135deg,#1a0a1a,#280f28)',
    concepts:['ui & server','Reactive Programming','R Markdown (.Rmd)','Knitr','Interactive Outputs'],
    body:`<p>R goes beyond analysis — it can produce interactive web applications with <strong>Shiny</strong> and publication-ready dynamic reports with <strong>R Markdown</strong>. Both tools allow your analysis to be reproduced, shared, and explored by non-technical stakeholders.</p>
 <h2>R Markdown — Reproducible Reports</h2>
@@ -1020,7 +1021,7 @@ function openLesson(id) {
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
 
   const html = !m.free && !isPremium()
-    ? `<div class="premium-lock"><div class="section-emoji">⭐</div>
+    ? `<div class="premium-lock"><div class="section-emoji"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
        <div class="section-heading-display">Premium Module</div>
        <div class="section-sub-muted">Upgrade your plan to unlock all advanced content.</div>
        <button class="lock-btn" onclick="window.location.href='premium.html'">Unlock Premium</button></div>`
@@ -1028,9 +1029,9 @@ function openLesson(id) {
        <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
-         <span class="meta-item">🔷 R & Tidyverse</span>
+         <span class="meta-item"><i class="ti ti-diamond" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> R & Tidyverse</span>
          <span class="meta-item">⏱ ~10 min read</span>
-         <span class="meta-item">⚙️ ${m.level}</span>
+         <span class="meta-item"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> ${m.level}</span>
        </div>
        <div class="les-visual" style="background:${m.bg};">
          <div class="les-visual-grid"></div>
@@ -1074,7 +1075,7 @@ function renderSidebar() {
     return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${click}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
-      ${locked?'<span style="font-size:10px;opacity:0.5;color:var(--gold);">🔒</span>':''}
+      ${locked?'<span style="font-size:10px;opacity:0.5;color:var(--gold);"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
     </button>`;
   }).join('');
 }
@@ -1110,7 +1111,7 @@ function markDone() {
   if(!completed.includes(currentId)){
     completed.push(currentId);
     saveCompleted(completed);
-    showToast('✓ Module marked complete! 🔵');
+    showToast('✓ Module marked complete! <i class="ti ti-circle-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>');
   }
   openLesson(currentId);
 }

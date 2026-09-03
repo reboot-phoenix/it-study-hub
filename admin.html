@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,7 @@
 <nav>
   <a href="index.html" class="nav-logo">
     IT <span>STUDY</span> HUB
-    <span class="admin-badge-nav">⭐ ADMIN</span>
+    <span class="admin-badge-nav"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> ADMIN</span>
   </a>
   <div class="nav-right">
     <a href="global.html" class="nav-back">← Leaderboard</a>
@@ -26,7 +27,7 @@
 <!-- GATE — shown to non-admins -->
 <div id="gateScreen">
   <div class="gate-card">
-    <div style="font-size:48px;margin-bottom:20px;">🚫</div>
+    <div style="font-size:48px;margin-bottom:20px;"><i class="ti ti-ban" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
     <div style="font-family:var(--ff-display);font-size:32px;font-weight:800;margin-bottom:10px;color:var(--red);">Access Denied</div>
     <div style="font-size:14px;color:var(--muted2);line-height:1.7;margin-bottom:28px;">This page is only accessible to platform administrators. Please sign in with your admin account.</div>
     <a href="Login.html" style="display:inline-block;background:var(--lime);color:#000;font-family:var(--ff-mono);font-size:12px;font-weight:700;padding:13px 28px;border-radius:6px;text-decoration:none;letter-spacing:1px;">Sign In as Admin →</a>
@@ -46,23 +47,23 @@
   <!-- STATS -->
   <div class="stats-grid fade-up" style="animation-delay:0.05s;">
     <div class="stat-card lime">
-      <div class="stat-icon">👥</div>
+      <div class="stat-icon"><i class="ti ti-users" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
       <div class="stat-val lime" id="statTotalUsers"><span class="spinner"></span></div>
       <div class="stat-label">Total Users</div>
       <div class="stat-change" id="statNewUsers"></div>
     </div>
     <div class="stat-card gold">
-      <div class="stat-icon">🎯</div>
+      <div class="stat-icon"><i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
       <div class="stat-val gold" id="statTotalQuizzes"><span class="spinner"></span></div>
       <div class="stat-label">Quizzes Taken</div>
     </div>
     <div class="stat-card green">
-      <div class="stat-icon">⚡</div>
+      <div class="stat-icon"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
       <div class="stat-val green" id="statTotalXP"><span class="spinner"></span></div>
       <div class="stat-label">Total XP Earned</div>
     </div>
     <div class="stat-card blue">
-      <div class="stat-icon">📚</div>
+      <div class="stat-icon"><i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
       <div class="stat-val blue" id="statPopularCourse"><span class="spinner"></span></div>
       <div class="stat-label">Most Popular Course</div>
     </div>
@@ -169,12 +170,12 @@ const firebaseConfig = {
 };
 
 const SUBJECTS = [
-  {key:'c',      label:'C Programming', icon:'⚙️', color:'#60a5fa'},
-  {key:'java',   label:'OOPs Java',     icon:'☕', color:'#f7b731'},
-  {key:'python', label:'Python',        icon:'🐍', color:'#43e97b'},
-  {key:'cpp',    label:'C++',           icon:'➕', color:'#a78bfa'},
-  {key:'csharp', label:'C#',            icon:'🔷', color:'#38bdf8'},
-  {key:'web',    label:'HTML+CSS+JS',   icon:'🌐', color:'#c8f135'},
+  {key:'c',      label:'C Programming', icon:'<i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#60a5fa'},
+  {key:'java',   label:'OOPs Java',     icon:'<i class="ti ti-coffee" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#f7b731'},
+  {key:'python', label:'Python',        icon:'<i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#43e97b'},
+  {key:'cpp',    label:'C++',           icon:'<i class="ti ti-plus" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color:'#a78bfa'},
+  {key:'csharp', label:'C#',            icon:'<i class="ti ti-diamond" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#38bdf8'},
+  {key:'web',    label:'HTML+CSS+JS',   icon:'<i class="ti ti-world" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#c8f135'},
 ];
 
 const app = initializeApp(firebaseConfig);
@@ -277,7 +278,7 @@ function renderUsersTable(users) {
         ${name}
         ${isNew ? '<span class="tag tag-new" style="margin-left:6px;">NEW</span>' : ''}
       </td>
-      <td><span class="tag ${isAdmin?'tag-admin':'tag-student'}">${isAdmin?'⭐ Admin':'Student'}</span></td>
+      <td><span class="tag ${isAdmin?'tag-admin':'tag-student'}">${isAdmin?'<i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Admin':'Student'}</span></td>
       <td style="font-family:var(--ff-mono);font-size:12px;color:var(--lime);">${(u.xp||0).toLocaleString()}</td>
       <td style="font-family:var(--ff-mono);font-size:12px;color:var(--muted2);">${quizzes}</td>
       <td style="font-family:var(--ff-mono);font-size:11px;color:var(--muted);">${joinDate}</td>
@@ -294,12 +295,12 @@ function renderLeaderboard(users) {
     ? '<div class="loading-row">No users yet</div>'
     : sorted.map((u,i) => {
         const rank = i+1;
-        const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+        const medal = rank===1?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#FFD700;"></i>':rank===2?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#C0C0C0;"></i>':rank===3?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#CD7F32;"></i>':'';
         const rankClass = rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
         const name = u.name || u.email?.split('@')[0] || 'Unknown';
         return `<div class="lb-mini-row">
           <div class="lb-mini-rank ${rankClass}">${medal||rank}</div>
-          <div class="lb-mini-name">${name}${u.role==='admin'?' ⭐':''}</div>
+          <div class="lb-mini-name">${name}${u.role==='admin'?' <i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>':''}</div>
           <div class="lb-mini-xp">${(u.xp||0).toLocaleString()} XP</div>
         </div>`;
       }).join('');

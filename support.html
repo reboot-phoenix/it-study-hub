@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,13 +33,13 @@
     <div class="sidebar-sticky">
       <span class="sidebar-label">Navigate</span>
       <a href="#faq" class="tab-btn active" onclick="setTab(this)">
-        <span class="tab-icon">❓</span> FAQ
+        <span class="tab-icon"><i class="ti ti-help-circle" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span> FAQ
       </a>
       <a href="#contact" class="tab-btn" onclick="setTab(this)">
-        <span class="tab-icon">✉️</span> Contact Us
+        <span class="tab-icon"><i class="ti ti-mail" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️</span> Contact Us
       </a>
       <a href="#channels" class="tab-btn" onclick="setTab(this)">
-        <span class="tab-icon">💬</span> Channels
+        <span class="tab-icon"><i class="ti ti-message" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span> Channels
       </a>
 
       <span class="sidebar-label">System Status</span>
@@ -150,7 +151,7 @@
       <div class="channels-grid">
         <div class="channel-card">
           <div class="ch-top">
-            <div class="ch-icon">✉️</div>
+            <div class="ch-icon"><i class="ti ti-mail" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️</div>
             <div>
               <div class="ch-name">Email</div>
               <div class="ch-handle">contact@itstudyhub.dpdns.org</div>
@@ -162,38 +163,38 @@
 
         <div class="channel-card">
           <div class="ch-top">
-            <div class="ch-icon">💬</div>
+            <div class="ch-icon"><i class="ti ti-message" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
             <div>
               <div class="ch-name">Discord</div>
               <div class="ch-handle">hub_devs_88</div>
             </div>
           </div>
           <div class="ch-desc">For quick questions, course discussions, and connecting with other students.</div>
-          <span class="ch-badge">⚡ Fastest response</span>
+          <span class="ch-badge"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Fastest response</span>
         </div>
 
         <div class="channel-card">
           <div class="ch-top">
-            <div class="ch-icon">🐦</div>
+            <div class="ch-icon"><i class="ti ti-brand-twitter" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
             <div>
               <div class="ch-name">Twitter / X</div>
               <div class="ch-handle">@itstudyhub_legal</div>
             </div>
           </div>
           <div class="ch-desc">Platform updates, outage notices, and announcements.</div>
-          <span class="ch-badge">📢 Announcements only</span>
+          <span class="ch-badge"><i class="ti ti-volume" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Announcements only</span>
         </div>
 
         <div class="channel-card">
           <div class="ch-top">
-            <div class="ch-icon">📍</div>
+            <div class="ch-icon"><i class="ti ti-map-pin" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
             <div>
               <div class="ch-name">Location</div>
               <div class="ch-handle">Kolkata, West Bengal</div>
             </div>
           </div>
           <div class="ch-desc">Built by students at Techno India University, for students everywhere.</div>
-          <span class="ch-badge">🇮🇳 India</span>
+          <span class="ch-badge"><i class="ti ti-map-pin" aria-hidden="true" style="font-size:14px;vertical-align:-2px;"></i> India</span>
         </div>
       </div>
     </section>
@@ -218,14 +219,14 @@
             <label class="form-label">Issue Type</label>
             <select class="form-select form-input">
               <option value="">Select a category...</option>
-              <option>🔐 Login / Account Issue</option>
-              <option>📊 Quiz Score Not Saving</option>
-              <option>💎 Premium / Payment Issue</option>
-              <option>📚 Course Content Question</option>
-              <option>🏆 Leaderboard Issue</option>
-              <option>🐛 Bug Report</option>
-              <option>💡 Feature Suggestion</option>
-              <option>📄 General Inquiry</option>
+              <option><i class="ti ti-lock-password" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Login / Account Issue</option>
+              <option><i class="ti ti-chart-bar" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Quiz Score Not Saving</option>
+              <option><i class="ti ti-diamond" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Premium / Payment Issue</option>
+              <option><i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Course Content Question</option>
+              <option><i class="ti ti-trophy" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Leaderboard Issue</option>
+              <option><i class="ti ti-bug" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Bug Report</option>
+              <option><i class="ti ti-bulb" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Feature Suggestion</option>
+              <option><i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> General Inquiry</option>
             </select>
           </div>
 
@@ -261,7 +262,7 @@
 
 <!-- TOAST -->
 <div class="toast" id="toast">
-  <span class="toast-icon">🚀</span>
+  <span class="toast-icon"><i class="ti ti-rocket" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>
   <div>
     <div class="toast-title">Message Sent!</div>
     <div class="toast-sub">We'll reply to your email within ~2 hours.</div>

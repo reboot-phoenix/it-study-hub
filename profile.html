@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -596,8 +597,8 @@ nav {
           <span id="adminChip"   style="display:none;" class="chip chip-lime">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ADMIN
           </span>
-          <span id="chipPremium" style="display:none;" class="chip chip-gold">⭐ PREMIUM</span>
-          <span id="chipElite"   style="display:none;" class="chip chip-purple">💎 ELITE</span>
+          <span id="chipPremium" style="display:none;" class="chip chip-gold"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> PREMIUM</span>
+          <span id="chipElite"   style="display:none;" class="chip chip-purple"><i class="ti ti-diamond" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> ELITE</span>
         </div>
       </div>
       <!-- Actions -->
@@ -629,7 +630,7 @@ nav {
       <div class="stat-label">Quizzes Done</div>
     </div>
     <div class="stat-card blue">
-      <div class="stat-val" id="statStreak" class="color-streak">0🔥</div>
+      <div class="stat-val" id="statStreak" class="color-streak">0<i class="ti ti-flame" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
       <div class="stat-label">Day Streak</div>
     </div>
   </div>
@@ -646,7 +647,7 @@ nav {
   <div class="streak-card fade-up anim-09" id="streakCard">
     <div class="streak-top">
       <div>
-        <div class="card-title mb-4">Study Streak 🔥</div>
+        <div class="card-title mb-4">Study Streak <i class="ti ti-flame" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="card-sub">Every day you study lights up. Keep the grid alive.</div>
       </div>
       <div class="streak-stats">
@@ -755,19 +756,19 @@ nav {
       </button>
     </div>
 
-    <div class="avatar-section-title">🐾 Cute Animals</div>
+    <div class="avatar-section-title"><i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Cute Animals</div>
     <div class="avatar-grid" id="avatarGridAnimals"></div>
 
-    <div class="avatar-section-title">🐉 Legendary</div>
+    <div class="avatar-section-title"><i class="ti ti-dragon" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Legendary</div>
     <div class="avatar-grid" id="avatarGridLegendary"></div>
 
-    <div class="avatar-section-title">🌿 Nature & Cosmic</div>
+    <div class="avatar-section-title"><i class="ti ti-leaf" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Nature & Cosmic</div>
     <div class="avatar-grid" id="avatarGridNature"></div>
 
-    <div class="avatar-section-title">🤖 Tech & Sci-fi</div>
+    <div class="avatar-section-title"><i class="ti ti-robot" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Tech & Sci-fi</div>
     <div class="avatar-grid" id="avatarGridTech"></div>
 
-    <div class="avatar-section-title">📸 Upload your own photo</div>
+    <div class="avatar-section-title"><i class="ti ti-camera" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Upload your own photo</div>
     <label class="avatar-upload-btn" for="pfpInput" onclick="closeAvatarModal()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       Upload photo (max 2MB)
@@ -883,10 +884,10 @@ const SUBJECT_ABBR = {c:'C', java:'J', python:'Py', cpp:'C+', r:'R', javascript:
 
 // ── AVATARS ──────────────────────────────────────────────
 const AVATARS = {
-  animals:  ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐧','🦋'],
-  legendary:['🐉','🦄','🦅','🦚','🐲','🦋','🦁','🦊','🐺','🦝','🦇','🦉'],
-  nature:   ['🌊','🔥','⚡','🌙','⭐','🌈','🍀','🌸','🌻','💎','🪐','✨'],
-  tech:     ['🤖','👾','🎮','💻','🛸','⚙️','🔬','🧬','🛡️','⚔️','🎯','🧠'],
+  animals:  ['<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-penguin" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-butterfly" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>'],
+  legendary:['<i class="ti ti-dragon" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-feather" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-feather" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-dragon" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-butterfly" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>'],
+  nature:   ['<i class="ti ti-waves" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-flame" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-moon" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-rainbow" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-clover" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-flower" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-sun" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-diamond" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-planet" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-sparkles" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>'],
+  tech:     ['<i class="ti ti-robot" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-alien" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-device-gamepad-2" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-device-laptop" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-rocket" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>','<i class="ti ti-microscope" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-dna" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-shield" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️','<i class="ti ti-sword" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️','<i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>','<i class="ti ti-brain" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>'],
 };
 
 const getSvgBadge = (path, color = "var(--lime)") =>
@@ -916,25 +917,25 @@ const ALL_BADGES = [
 // ── PRIVILEGES ────────────────────────────────────────────
 const PRIVILEGE_DEFS = {
   admin: [
-    { icon: '🛡️', color: 'rgba(200,241,53,0.08)', title: 'Admin Dashboard', desc: 'Access the full admin panel, manage users and content.' },
-    { icon: '📊', color: 'rgba(200,241,53,0.08)', title: 'Analytics Access', desc: 'View platform-wide usage stats, quiz completions, and XP charts.' },
-    { icon: '✏️', color: 'rgba(200,241,53,0.08)', title: 'Content Editor', desc: 'Create, edit, and publish quiz questions and study modules.' },
-    { icon: '📣', color: 'rgba(200,241,53,0.08)', title: 'Announcements', desc: 'Post site-wide announcements visible to all students.' },
-    { icon: '🎖️', color: 'rgba(200,241,53,0.08)', title: 'Badge Granter', desc: 'Manually award special badges to standout community members.' },
-    { icon: '🚫', color: 'rgba(255,95,86,0.06)', title: 'Moderation', desc: 'Remove inappropriate profiles or flag abusive accounts.' },
+    { icon: '<i class="ti ti-shield" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️', color: 'rgba(200,241,53,0.08)', title: 'Admin Dashboard', desc: 'Access the full admin panel, manage users and content.' },
+    { icon: '<i class="ti ti-chart-bar" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(200,241,53,0.08)', title: 'Analytics Access', desc: 'View platform-wide usage stats, quiz completions, and XP charts.' },
+    { icon: '<i class="ti ti-pencil" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️', color: 'rgba(200,241,53,0.08)', title: 'Content Editor', desc: 'Create, edit, and publish quiz questions and study modules.' },
+    { icon: '<i class="ti ti-speakerphone" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(200,241,53,0.08)', title: 'Announcements', desc: 'Post site-wide announcements visible to all students.' },
+    { icon: '<i class="ti ti-award" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️', color: 'rgba(200,241,53,0.08)', title: 'Badge Granter', desc: 'Manually award special badges to standout community members.' },
+    { icon: '<i class="ti ti-ban" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(255,95,86,0.06)', title: 'Moderation', desc: 'Remove inappropriate profiles or flag abusive accounts.' },
   ],
   elite: [
-    { icon: '💎', color: 'rgba(167,139,250,0.08)', title: 'All Premium Content', desc: 'Full access to every premium module, lecture, and resource.' },
-    { icon: '⚡', color: 'rgba(167,139,250,0.08)', title: 'XP Boost ×2', desc: 'Earn double XP on every quiz and activity automatically.' },
-    { icon: '🏆', color: 'rgba(167,139,250,0.08)', title: 'Elite Leaderboard', desc: 'Appear on the exclusive Elite-only leaderboard.' },
-    { icon: '🤖', color: 'rgba(167,139,250,0.08)', title: 'AI Tutor (Beta)', desc: 'Early access to the AI-powered study assistant.' },
-    { icon: '📅', color: 'rgba(167,139,250,0.08)', title: 'Priority Support', desc: '24h guaranteed response from the IT Study Hub team.' },
+    { icon: '<i class="ti ti-diamond" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(167,139,250,0.08)', title: 'All Premium Content', desc: 'Full access to every premium module, lecture, and resource.' },
+    { icon: '<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(167,139,250,0.08)', title: 'XP Boost ×2', desc: 'Earn double XP on every quiz and activity automatically.' },
+    { icon: '<i class="ti ti-trophy" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(167,139,250,0.08)', title: 'Elite Leaderboard', desc: 'Appear on the exclusive Elite-only leaderboard.' },
+    { icon: '<i class="ti ti-robot" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(167,139,250,0.08)', title: 'AI Tutor (Beta)', desc: 'Early access to the AI-powered study assistant.' },
+    { icon: '<i class="ti ti-calendar" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(167,139,250,0.08)', title: 'Priority Support', desc: '24h guaranteed response from the IT Study Hub team.' },
   ],
   premium: [
-    { icon: '⭐', color: 'rgba(247,183,49,0.08)', title: 'Premium Modules', desc: 'Unlock advanced lectures and in-depth study materials.' },
-    { icon: '📈', color: 'rgba(247,183,49,0.08)', title: 'XP Boost ×1.5', desc: 'Earn 50% more XP on all completed activities.' },
-    { icon: '🎯', color: 'rgba(247,183,49,0.08)', title: 'Practice Mode', desc: 'Access unlimited practice quizzes with instant feedback.' },
-    { icon: '🔖', color: 'rgba(247,183,49,0.08)', title: 'Save Progress', desc: 'Bookmark lessons and resume exactly where you left off.' },
+    { icon: '<i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(247,183,49,0.08)', title: 'Premium Modules', desc: 'Unlock advanced lectures and in-depth study materials.' },
+    { icon: '<i class="ti ti-trending-up" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(247,183,49,0.08)', title: 'XP Boost ×1.5', desc: 'Earn 50% more XP on all completed activities.' },
+    { icon: '<i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(247,183,49,0.08)', title: 'Practice Mode', desc: 'Access unlimited practice quizzes with instant feedback.' },
+    { icon: '<i class="ti ti-bookmark" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color: 'rgba(247,183,49,0.08)', title: 'Save Progress', desc: 'Bookmark lessons and resume exactly where you left off.' },
   ],
 };
 
@@ -1145,7 +1146,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('xpNextLabel').textContent = `${(nxtLvl.min - xp).toLocaleString()} XP to ${nxtLvl.name}`;
   } else {
     setTimeout(() => { document.getElementById('xpBarInner').style.width = '100%'; }, 300);
-    document.getElementById('xpNextLabel').textContent = 'Max Level 🏆';
+    document.getElementById('xpNextLabel').textContent = 'Max Level <i class="ti ti-trophy" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>';
   }
 
   // ── Chips & Privileges ──
@@ -1264,12 +1265,12 @@ function renderStreakHeatmap(studyDays, currentStreak, longestStreak) {
 
   // Streak milestone badges
   const MILESTONES = [
-    { days:3,   icon:'🔥', title:'3-Day Streak',   desc:'3 days in a row' },
-    { days:7,   icon:'⚡', title:'Week Warrior',   desc:'7-day streak' },
-    { days:15,  icon:'💫', title:'Fortnight Fire',  desc:'15 days straight' },
-    { days:30,  icon:'🌙', title:'Monthly Grind',   desc:'30 days straight' },
-    { days:60,  icon:'💎', title:'Diamond Habit',   desc:'60 days straight' },
-    { days:100, icon:'🚀', title:'Century Streak',  desc:'100 days — legendary' },
+    { days:3,   icon:'<i class="ti ti-flame" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', title:'3-Day Streak',   desc:'3 days in a row' },
+    { days:7,   icon:'<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', title:'Week Warrior',   desc:'7-day streak' },
+    { days:15,  icon:'<i class="ti ti-sparkles" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', title:'Fortnight Fire',  desc:'15 days straight' },
+    { days:30,  icon:'<i class="ti ti-moon" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', title:'Monthly Grind',   desc:'30 days straight' },
+    { days:60,  icon:'<i class="ti ti-diamond" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', title:'Diamond Habit',   desc:'60 days straight' },
+    { days:100, icon:'<i class="ti ti-rocket" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', title:'Century Streak',  desc:'100 days — legendary' },
   ];
   const ms = document.getElementById('streakMilestones');
   ms.innerHTML = MILESTONES.map(m => {

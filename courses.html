@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +21,7 @@
       <a href="global.html" class="nav-link">Leaderboard</a>
       <a href="blog.html" class="nav-link">Articles</a>
       <a href="support.html" class="nav-link">Support</a>
-      <a href="premium.html" class="nav-link" class="color-gold">⚡ Premium</a>
+      <a href="premium.html" class="nav-link" class="color-gold"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Premium</a>
   </div>
 </nav>
 
@@ -52,9 +53,9 @@
     </div>
 
     <span class="sidebar-label" class="mt-8">Quick Links</span>
-    <a href="profile.html" class="nav-link" style="padding:10px 12px; display:block;">👤 My Profile</a>
-    <a href="fileshare.html" class="nav-link" style="padding:10px 12px; display:block;">📁 File Share</a>
-    <a href="premium.html" class="nav-link" style="padding:10px 12px; display:block; color:var(--gold);">⚡ Go Premium</a>
+    <a href="profile.html" class="nav-link" style="padding:10px 12px; display:block;"><i class="ti ti-user" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> My Profile</a>
+    <a href="fileshare.html" class="nav-link" style="padding:10px 12px; display:block;"><i class="ti ti-folder" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> File Share</a>
+    <a href="premium.html" class="nav-link" style="padding:10px 12px; display:block; color:var(--gold);"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Go Premium</a>
   </aside>
 
   <main class="main">
@@ -182,13 +183,13 @@ function setPlanBadge(plan, isAdmin) {
   if (!badge) return;
   if (isAdmin) {
     badge.className = 'plan-badge plan-admin';
-    badge.textContent = '🛡 Admin';
+    badge.textContent = '<i class="ti ti-shield" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Admin';
   } else if (plan === 'elite') {
     badge.className = 'plan-badge plan-elite';
-    badge.textContent = '👑 Elite';
+    badge.textContent = '<i class="ti ti-crown" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Elite';
   } else if (plan === 'pro') {
     badge.className = 'plan-badge plan-pro';
-    badge.textContent = '⚡ Pro';
+    badge.textContent = '<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Pro';
   } else {
     badge.className = 'plan-badge plan-free';
     badge.textContent = 'Free';

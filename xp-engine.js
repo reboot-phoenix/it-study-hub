@@ -147,8 +147,8 @@ function showXPToast(amount, leveledUp, newLevel) {
     document.body.appendChild(toast);
   }
   toast.innerHTML = leveledUp
-    ? `🎉 +${amount} XP — Level Up! Now Lv ${newLevel}`
-    : `⚡ +${amount} XP`;
+    ? `<i class="ti ti-confetti" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> +${amount} XP — Level Up! Now Lv ${newLevel}`
+    : `<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> +${amount} XP`;
   requestAnimationFrame(() => {
     toast.style.transform = 'translateY(0)';
     toast.style.opacity = '1';

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +27,7 @@
     <h1 class="course-title">OOPs in <em>C++</em></h1>
     <p class="course-desc">Master the foundation of high-performance software. From pointers and memory management to the STL and the 4 pillars of OOP — everything you need.</p>
     <div class="course-chips">
-      <span class="chip chip-lime">⚙️ C++</span>
+      <span class="chip chip-lime"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> C++</span>
       <span class="chip chip-lime">6 Free Modules</span>
       <span class="chip chip-gold">6 Premium Modules</span>
       <span class="chip chip-lime">Real PDF Notes</span>
@@ -55,34 +56,34 @@
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
       <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%2B%2B%20lecture%20notes%20Complete-1-18.pdf" target="_blank" class="mat-item">
-        <div class="mat-icon">📄</div>
+        <div class="mat-icon"><i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">C++ Basics — Pages 1–28</div><div class="mat-desc">Introduction, I/O Streams · Free</div></div>
         <span class="mat-action">↓ PDF</span>
       </a>
       <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%2B%2B%20lecture%20notes%20Complete-19-35.pdf" target="_blank" class="mat-item">
-        <div class="mat-icon">📄</div>
+        <div class="mat-icon"><i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Classes & Objects — Pages 29–72</div><div class="mat-desc">Constructors, Access Control · Free</div></div>
         <span class="mat-action">↓ PDF</span>
       </a>
       <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/C%2B%2B%20lecture%20notes%20Complete-36-64.pdf" target="_blank" class="mat-item">
-        <div class="mat-icon">📄</div>
+        <div class="mat-icon"><i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Pointers & Inheritance — Pages 56–96</div><div class="mat-desc">Memory, OOP Principles · Free</div></div>
         <span class="mat-action">↓ PDF</span>
       </a>
       <a href="https://www.sanfoundry.com/cpp-programming-questions-answers/" target="_blank" class="mat-item">
-        <div class="mat-icon">🎯</div>
+        <div class="mat-icon"><i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Placement Quiz — C++ OOP</div><div class="mat-desc">1000+ MCQs · Free</div></div>
         <span class="mat-action">→ Start</span>
       </a>
       <a href="premium.html" class="mat-item premium-mat">
-        <div class="mat-icon">⭐</div>
+        <div class="mat-icon"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">STL & Templates — Pages 97–188</div><div class="mat-desc">Vectors, Maps, Generic Code · Premium</div></div>
-        <span class="mat-action locked">🔒</span>
+        <span class="mat-action locked"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>
       </a>
       <a href="premium.html" class="mat-item premium-mat">
-        <div class="mat-icon">⭐</div>
+        <div class="mat-icon"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Modern C++ (Smart Pointers) — Pages 189–260</div><div class="mat-desc">C++11 Features, RAII · Premium</div></div>
-        <span class="mat-action locked">🔒</span>
+        <span class="mat-action locked"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>
       </a>
     </div>
   </div>
@@ -126,9 +127,9 @@ function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_cpp_done
 function saveCompleted(a){localStorage.setItem('ish_cpp_done',JSON.stringify(a));}
 
 const MODS = [
-  {id:1,free:true,icon:'⚙️',level:'Beginner',title:'Introduction to C++',
+  {id:1,free:true,icon:'<i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>',level:'Beginner',title:'Introduction to C++',
    excerpt:'Discover how Bjarne Stroustrup added Object-Oriented features to C. Learn about compilation, the standard namespace, and fundamental I/O streams.',
-   tags:['Beginner','History','I/O Streams'],visual:'⚙️',bg:'linear-gradient(135deg,#0a1a0a,#0f2010)',
+   tags:['Beginner','History','I/O Streams'],visual:'<i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a1a0a,#0f2010)',
    concepts:['C vs C++','Compilation Process','iostream','namespace std','cin & cout','Basic Data Types'],
    body:`<p>C++ was developed by <strong>Bjarne Stroustrup</strong> at Bell Labs in 1979 as an extension of the C programming language, initially named <em>"C with Classes"</em>.</p>
 <h2>C vs C++</h2>
@@ -157,9 +158,9 @@ int main() {
 }</code></pre>
 <p>Save as <code>main.cpp</code> → compile with <code>g++ main.cpp -o app</code> → run with <code>./app</code>.</p>`},
 
-  {id:2,free:true,icon:'🔀',level:'Beginner',title:'Control Statements',
+  {id:2,free:true,icon:'<i class="ti ti-arrows-shuffle" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Beginner',title:'Control Statements',
    excerpt:'The if, switch, while, for and do-while statements are the decision-making backbone of every C++ program. Master these to control execution flow.',
-   tags:['Beginner','Loops','Conditions'],visual:'🔀',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
+   tags:['Beginner','Loops','Conditions'],visual:'<i class="ti ti-arrows-shuffle" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a0a1a,#101028)',
    concepts:['if & if-else','Nested if','switch Statement','while Loop','do-while Loop','for Loop','break & continue','return'],
    body:`<p>Control statements divide into three categories: <strong>Selection</strong> (choose a path), <strong>Iteration</strong> (repeat steps), and <strong>Jump</strong> (exit or skip). They are the building blocks of all program logic.</p>
 <h2>Selection: if and switch</h2>
@@ -190,9 +191,9 @@ do { std::cout &lt;&lt; "Runs once!"; } while (false);
 // for — best when iteration count is known
 for (int j = 0; j < 5; j++) { std::cout &lt;&lt; j; }</code></pre>`},
 
-  {id:3,free:true,icon:'🏗️',level:'Beginner',title:'Classes & Objects',
+  {id:3,free:true,icon:'<i class="ti ti-building" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',level:'Beginner',title:'Classes & Objects',
    excerpt:'Transition from procedural C to object-oriented C++. Learn to define classes, instantiate objects, and use constructors and access specifiers properly.',
-   tags:['Beginner','OOP','Classes'],visual:'🏗️',bg:'linear-gradient(135deg,#0f0a0a,#201010)',
+   tags:['Beginner','OOP','Classes'],visual:'<i class="ti ti-building" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',bg:'linear-gradient(135deg,#0f0a0a,#201010)',
    concepts:['Class Definition','Object Instantiation','public vs private','Constructors','Destructors','this Pointer','Scope Resolution ::'],
    body:`<p>A <strong>class</strong> is a blueprint — it defines what data (attributes) and behaviors (methods) objects will have. An <strong>object</strong> is an instance of that blueprint.</p>
 <h2>Defining a Class</h2>
@@ -233,9 +234,9 @@ int main() {
     return 0;  // Prints "Destroyed" as p1 goes out of scope
 }</code></pre>`},
 
-  {id:4,free:true,icon:'🎯',level:'Intermediate',title:'Pointers & Memory Management',
+  {id:4,free:true,icon:'<i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Intermediate',title:'Pointers & Memory Management',
    excerpt:'C++ gives you direct access to memory. Master pointers, references, and dynamic memory allocation using new and delete to prevent memory leaks.',
-   tags:['Intermediate','Pointers','Memory'],visual:'🎯',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
+   tags:['Intermediate','Pointers','Memory'],visual:'<i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a0f1a,#101828)',
    concepts:['Address-of Operator &','Dereference Operator *','Pointers vs References','new Keyword','delete Keyword','Memory Leaks','Null Pointers'],
    body:`<p>A <strong>pointer</strong> is a variable that stores the memory address of another variable. They are powerful but require careful management.</p>
 <h2>Basics of Pointers and References</h2>
@@ -264,9 +265,9 @@ dPtr = nullptr;      // Prevent dangling pointer</code></pre>
 arr[0] = 5;
 delete[] arr;           // Use delete[] for arrays!</code></pre>`},
 
-  {id:5,free:true,icon:'🧬',level:'Intermediate',title:'Inheritance & Polymorphism',
+  {id:5,free:true,icon:'<i class="ti ti-dna" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Intermediate',title:'Inheritance & Polymorphism',
    excerpt:'Inheritance builds relationships between classes. Virtual functions and polymorphism allow one interface to take many forms, enabling dynamic dispatch.',
-   tags:['Intermediate','Inheritance','Virtual Functions'],visual:'🧬',bg:'linear-gradient(135deg,#10080a,#200f12)',
+   tags:['Intermediate','Inheritance','Virtual Functions'],visual:'<i class="ti ti-dna" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#10080a,#200f12)',
    concepts:['Base & Derived Classes','Access Modifiers in Inheritance','Multiple Inheritance','Method Overriding','virtual Keyword','Pure Virtual Functions','Abstract Classes'],
    body:`<p><strong>Inheritance</strong> promotes code reusability. C++ allows single, multiple, and hierarchical inheritance.</p>
 <h2>Basic Inheritance</h2>
@@ -347,9 +348,9 @@ try {
 }</code></pre>`},
 
   // PREMIUM
-  {id:7,free:false,icon:'🧩',level:'Advanced',title:'Templates & Generic Programming',
+  {id:7,free:false,icon:'<i class="ti ti-puzzle" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'Templates & Generic Programming',
    excerpt:'Write code once that works for any data type. Templates are the foundation of generic programming and the driving force behind the Standard Template Library.',
-   tags:['Advanced','Templates','Generics'],visual:'🧩',bg:'linear-gradient(135deg,#0a0f0a,#0f1a0f)',
+   tags:['Advanced','Templates','Generics'],visual:'<i class="ti ti-puzzle" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a0f0a,#0f1a0f)',
    concepts:['Function Templates','Class Templates','Template Instantiation','template <typename T>','Multiple Template Parameters'],
    body:`<p><strong>Templates</strong> allow you to write functions and classes that operate on generic types. The compiler generates the specific type versions for you.</p>
 <h2>Function Templates</h2>
@@ -379,9 +380,9 @@ stringBox.setContent("Secret Password");
 Box&lt;int&gt; intBox;
 intBox.setContent(42);</code></pre>`},
 
-  {id:8,free:false,icon:'📚',level:'Advanced',title:'Standard Template Library (STL)',
+  {id:8,free:false,icon:'<i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'Standard Template Library (STL)',
    excerpt:'Do not reinvent the wheel. The STL provides highly optimized containers, algorithms, and iterators. Vectors and Maps will become your best friends.',
-   tags:['Advanced','STL','Containers'],visual:'📚',bg:'linear-gradient(135deg,#080a14,#0f1228)',
+   tags:['Advanced','STL','Containers'],visual:'<i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#080a14,#0f1228)',
    concepts:['Containers','std::vector','std::map','std::unordered_map','Iterators','Algorithms','std::sort'],
    body:`<p>The <strong>STL</strong> provides three core components: <em>Containers</em> (data structures), <em>Iterators</em> (pointers to navigate them), and <em>Algorithms</em> (sorting, searching).</p>
 <h2>Vectors (Dynamic Arrays)</h2>
@@ -411,9 +412,9 @@ std::cout &lt;&lt; "Alice's grade: " &lt;&lt; grades["Alice"];</code></pre>
 std::vector&lt;int&gt; v = {5, 2, 9, 1};
 std::sort(v.begin(), v.end()); // v is now {1, 2, 5, 9}</code></pre>`},
 
-  {id:9,free:false,icon:'🧠',level:'Advanced',title:'Modern C++ & Smart Pointers',
+  {id:9,free:false,icon:'<i class="ti ti-brain" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'Modern C++ & Smart Pointers',
    excerpt:'Forget manual memory management. C++11 introduced Smart Pointers that automatically clean up memory, drastically reducing memory leaks and segfaults.',
-   tags:['Advanced','C++11','Smart Pointers'],visual:'🧠',bg:'linear-gradient(135deg,#0a0a0f,#141420)',
+   tags:['Advanced','C++11','Smart Pointers'],visual:'<i class="ti ti-brain" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a0a0f,#141420)',
    concepts:['<memory> library','std::unique_ptr','std::shared_ptr','std::make_unique','Move Semantics','auto Keyword'],
    body:`<p>Modern C++ (C++11 and later) encourages the use of <strong>Smart Pointers</strong> to automate memory management via RAII (Resource Acquisition Is Initialization).</p>
 <h2>unique_ptr</h2>
@@ -440,9 +441,9 @@ int main() {
 <pre><code>std::shared_ptr&lt;Entity&gt; e1 = std::make_shared&lt;Entity&gt;();
 std::shared_ptr&lt;Entity&gt; e2 = e1; // Reference count is now 2</code></pre>`},
 
-  {id:10,free:false,icon:'📂',level:'Advanced',title:'File Handling & Streams',
+  {id:10,free:false,icon:'<i class="ti ti-folder-open" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'File Handling & Streams',
    excerpt:'Persist your data. Learn how to read from and write to text and binary files using fstream, ifstream, and ofstream.',
-   tags:['Advanced','File I/O','fstream'],visual:'📂',bg:'linear-gradient(135deg,#0a0f14,#101828)',
+   tags:['Advanced','File I/O','fstream'],visual:'<i class="ti ti-folder-open" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a0f14,#101828)',
    concepts:['<fstream>','ofstream (Writing)','ifstream (Reading)','File Open Modes','Checking if open()','getline'],
    body:`<p>File handling in C++ is managed through the <code>&lt;fstream&gt;</code> library, which provides <code>ifstream</code> (input/read) and <code>ofstream</code> (output/write).</p>
 <h2>Writing to a File</h2>
@@ -475,9 +476,9 @@ if (inFile.is_open()) {
     inFile.close();
 }</code></pre>`},
 
-  {id:11,free:false,icon:'⚡',level:'Advanced',title:'Multithreading (C++11)',
+  {id:11,free:false,icon:'<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'Multithreading (C++11)',
    excerpt:'Harness the full power of modern multi-core processors. Learn to spawn threads, synchronize them with mutexes, and avoid race conditions.',
-   tags:['Advanced','Concurrency','Threads'],visual:'⚡',bg:'linear-gradient(135deg,#100a0a,#1e0f0f)',
+   tags:['Advanced','Concurrency','Threads'],visual:'<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#100a0a,#1e0f0f)',
    concepts:['<thread> library','std::thread','join() vs detach()','Race Conditions','<mutex>','std::lock_guard'],
    body:`<p>Since C++11, multithreading is part of the standard library, allowing you to run multiple functions concurrently.</p>
 <h2>Creating Threads</h2>
@@ -509,9 +510,9 @@ void increment() {
     sharedData++;
 }</code></pre>`},
 
-  {id:12,free:false,icon:'🛡️',level:'Advanced',title:'RAII & Rule of Three',
+  {id:12,free:false,icon:'<i class="ti ti-shield" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',level:'Advanced',title:'RAII & Rule of Three',
    excerpt:'Write professional, leak-proof C++. Understand RAII principles and know exactly when you need to define custom copy constructors and assignment operators.',
-   tags:['Advanced','Best Practices','Memory'],visual:'🛡️',bg:'linear-gradient(135deg,#0a0a10,#12121e)',
+   tags:['Advanced','Best Practices','Memory'],visual:'<i class="ti ti-shield" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',bg:'linear-gradient(135deg,#0a0a10,#12121e)',
    concepts:['RAII','Rule of Three','Copy Constructor','Copy Assignment Operator','Deep vs Shallow Copy','Rule of Five (C++11)'],
    body:`<p><strong>RAII</strong> (Resource Acquisition Is Initialization) is the core idiom of C++. It dictates that resource management (memory, file handles, network sockets) should be tied to object lifespan.</p>
 <h2>The Rule of Three</h2>
@@ -599,7 +600,7 @@ function openLesson(id) {
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
 
   const html = !m.free && !isPremium()
-    ? `<div class="premium-lock"><div class="section-emoji">⭐</div>
+    ? `<div class="premium-lock"><div class="section-emoji"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
        <div class="section-heading-display">Premium Module</div>
        <div class="section-sub-muted">Sign in as admin to unlock all advanced content.</div>
        <button class="lock-btn" onclick="window.location.href='premium.html'">Unlock Premium</button></div>`
@@ -607,9 +608,9 @@ function openLesson(id) {
        <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
-         <span class="meta-item">📖 C++ OOP</span>
+         <span class="meta-item"><i class="ti ti-book" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> C++ OOP</span>
          <span class="meta-item">⏱ ~10 min read</span>
-         <span class="meta-item">⚙️ ${m.level}</span>
+         <span class="meta-item"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> ${m.level}</span>
        </div>
        <div class="les-visual" style="background:${m.bg};">
          <div class="les-visual-grid"></div>
@@ -649,7 +650,7 @@ function renderSidebar() {
     return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`window.location.href='premium.html'`:`openLesson(${m.id})`}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
-      ${locked?'<span style="font-size:10px;opacity:0.5;">🔒</span>':''}
+      ${locked?'<span style="font-size:10px;opacity:0.5;"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
     </button>`;
   }).join('');
 }
@@ -661,7 +662,7 @@ function markDone(){
   if(!currentId)return;
   const m=MODS.find(x=>x.id===currentId);
   if(!m.free&&!isPremium())return;
-  if(!completed.includes(currentId)){completed.push(currentId);saveCompleted(completed);showToast('✓ Module marked complete! ⚙️');}
+  if(!completed.includes(currentId)){completed.push(currentId);saveCompleted(completed);showToast('✓ Module marked complete! <i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>');}
   openLesson(currentId);
 }
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}

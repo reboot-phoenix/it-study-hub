@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,7 @@
 <nav class="site-nav">
   <a href="index.html" class="site-nav-logo">IT <span>STUDY</span> HUB</a>
   <div class="site-nav-right">
-    <a href="courses.html" class="nav-courses-btn">📚 Courses</a>
+    <a href="courses.html" class="nav-courses-btn"><i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Courses</a>
     <a href="index.html" class="nav-back-btn">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6L8 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Home
@@ -34,22 +35,22 @@
     <div class="section-title">Choose a Subject</div>
     <div class="subject-grid">
       <div class="subject-card" onclick="startQuiz('c')">
-        <span class="icon">⚙️</span>
+        <span class="icon"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i></span>
         <h3>C Programming</h3>
         <p>25 Questions · ~10 min</p>
       </div>
       <div class="subject-card" onclick="startQuiz('java')">
-        <span class="icon">☕</span>
+        <span class="icon"><i class="ti ti-coffee" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i></span>
         <h3>OOPs Using Java</h3>
         <p>25 Questions · ~10 min</p>
       </div>
       <div class="subject-card" onclick="startQuiz('python')">
-        <span class="icon">🐍</span>
+        <span class="icon"><i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i></span>
         <h3>Python Programming</h3>
         <p>25 Questions · ~10 min</p>
       </div>
       <div class="subject-card" onclick="startQuiz('cpp')">
-        <span class="icon">➕</span>
+        <span class="icon"><i class="ti ti-plus" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>
         <h3>C++ Programming</h3>
         <p>25 Questions · ~10 min</p>
       </div>
@@ -122,12 +123,12 @@
       </div>
       <div class="result-description" id="resultDesc"></div>
       <div class="action-row">
-        <button class="btn-primary" onclick="retryQuiz()">🔁 Retry This Quiz</button>
+        <button class="btn-primary" onclick="retryQuiz()"><i class="ti ti-repeat" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Retry This Quiz</button>
         <button class="btn-secondary" onclick="backToSubjects()">← Choose Another Subject</button>
       </div>
       <!-- Login note -->
       <div id="loginSaveNote" style="display:none;margin-top:16px;background:rgba(200,241,53,0.08);border:1px solid rgba(200,241,53,0.2);border-radius:10px;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#c8f135;align-items:center;gap:8px;justify-content:center;text-align:center;">
-        💾 <a href="Login.html" style="color:#c8f135;font-weight:700;">Sign in</a> to save your score, earn XP and appear on the leaderboard!
+        <i class="ti ti-device-floppy" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> <a href="Login.html" style="color:#c8f135;font-weight:700;">Sign in</a> to save your score, earn XP and appear on the leaderboard!
       </div>
     </div>
   </div>
@@ -467,15 +468,15 @@ function showResult() {
 
   if (aPct >= 0.5 && iPct >= 0.5) {
     level = 'advanced';
-    emoji = '🚀';
+    emoji = '<i class="ti ti-rocket" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>';
     desc = "You clearly know your stuff! You're ready for the Advanced course — skip the basics and dive straight into complex topics, projects, and real-world challenges.";
   } else if (iPct >= 0.5 || (bPct >= 0.67 && iPct >= 0.33)) {
     level = 'intermediate';
-    emoji = '⚡';
+    emoji = '<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>';
     desc = "You have a solid foundation! The Intermediate course is perfect for you — it'll reinforce what you know and push you into more challenging concepts.";
   } else {
     level = 'beginner';
-    emoji = '🌱';
+    emoji = '<i class="ti ti-plant" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>';
     desc = "No worries — everyone starts somewhere! The Beginner course will give you a strong foundation with step-by-step guidance from the ground up.";
   }
 
@@ -635,7 +636,7 @@ function showXPToast(xp, isPerfect) {
     `;
     document.body.appendChild(toast);
   }
-  toast.innerHTML = `⚡ +${xp} XP earned!${isPerfect ? ' 🏆 Perfect score!' : ''}`;
+  toast.innerHTML = `<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> +${xp} XP earned!${isPerfect ? ' <i class="ti ti-trophy" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Perfect score!' : ''}`;
   toast.style.transform = 'translateY(0)';
   toast.style.opacity = '1';
   setTimeout(() => {

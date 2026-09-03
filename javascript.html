@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +28,7 @@
     <h1 class="course-title">JavaScript Mastery <em>(Zero to Hero)</em></h1>
     <p class="course-desc">The most comprehensive JavaScript course on the internet. From variables and loops to closures, async programming, and production-grade patterns. Build real skills that employers actually want.</p>
     <div class="course-chips">
-      <span class="chip chip-lime">⚡ JavaScript</span>
+      <span class="chip chip-lime"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> JavaScript</span>
       <span class="chip chip-lime">6 Free Modules</span>
       <span class="chip chip-gold">6 Premium Modules</span>
       <span class="chip chip-lime">Real Code Examples</span>
@@ -56,34 +57,34 @@
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
       <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" target="_blank" class="mat-item">
-        <div class="mat-icon">📄</div>
+        <div class="mat-icon"><i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">MDN JavaScript Guide</div><div class="mat-desc">Official reference & tutorials · Free</div></div>
         <span class="mat-action">→ Open</span>
       </a>
       <a href="https://javascript.info/" target="_blank" class="mat-item">
-        <div class="mat-icon">🎓</div>
+        <div class="mat-icon"><i class="ti ti-school" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">The Modern JavaScript Tutorial</div><div class="mat-desc">Comprehensive JS from basics to advanced · Free</div></div>
         <span class="mat-action">→ Open</span>
       </a>
       <a href="https://eloquentjavascript.net/" target="_blank" class="mat-item">
-        <div class="mat-icon">📖</div>
+        <div class="mat-icon"><i class="ti ti-book" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Eloquent JavaScript (Book)</div><div class="mat-desc">Deep dive into language & programming · Free</div></div>
         <span class="mat-action">→ Read</span>
       </a>
       <a href="https://www.sanfoundry.com/javascript-questions-answers/" target="_blank" class="mat-item">
-        <div class="mat-icon">🎯</div>
+        <div class="mat-icon"><i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Placement Quiz — JavaScript</div><div class="mat-desc">1000+ MCQs · Free</div></div>
         <span class="mat-action">→ Start</span>
       </a>
       <a href="premium.html" class="mat-item premium-mat">
-        <div class="mat-icon">⭐</div>
+        <div class="mat-icon"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">JavaScript Design Patterns PDF</div><div class="mat-desc">Module, Factory, Observer, Singleton · Premium</div></div>
-        <span class="mat-action locked">🔒</span>
+        <span class="mat-action locked"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>
       </a>
       <a href="premium.html" class="mat-item premium-mat">
-        <div class="mat-icon">⭐</div>
+        <div class="mat-icon"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Advanced Algorithm Cheatsheet</div><div class="mat-desc">Big-O, Recursion, Dynamic Programming · Premium</div></div>
-        <span class="mat-action locked">🔒</span>
+        <span class="mat-action locked"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>
       </a>
     </div>
   </div>
@@ -129,9 +130,9 @@ function saveCompleted(a){localStorage.setItem('ish_js_done',JSON.stringify(a));
 const MODS = [
 
   {
-    id: 1, free: true, icon: '🔰', level: 'Beginner', title: 'JavaScript Foundations & Syntax',
+    id: 1, free: true, icon: '<i class="ti ti-shield-check" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', level: 'Beginner', title: 'JavaScript Foundations & Syntax',
     excerpt: 'Start your journey right. Learn how JS runs in the browser, declare variables with let/const, understand data types, operators, and write your first real programs.',
-    tags: ['Beginner','Variables','Data Types'], visual: '🔰',
+    tags: ['Beginner','Variables','Data Types'], visual: '<i class="ti ti-shield-check" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',
     bg: 'linear-gradient(135deg,#0a1a0a,#0f2010)',
     concepts: ['Variables (let/const)','Primitive Types','Type Coercion','Operators','Template Literals','Comments & Best Practices'],
     body: `<p>JavaScript is the <strong>language of the web</strong>. It runs in every browser, on servers (via Node.js), and even on IoT devices. Unlike HTML and CSS, JavaScript is a <em>programming language</em> — it can think, calculate, and make decisions.</p>
@@ -205,9 +206,9 @@ const html = \`
   },
 
   {
-    id: 2, free: true, icon: '🔄', level: 'Beginner', title: 'Control Flow & Logic',
+    id: 2, free: true, icon: '<i class="ti ti-refresh" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', level: 'Beginner', title: 'Control Flow & Logic',
     excerpt: 'Programs need to make decisions. Master if/else, switch statements, ternary operators, and all loop types to control exactly what your code does and when.',
-    tags: ['Beginner','Conditionals','Loops'], visual: '🔄',
+    tags: ['Beginner','Conditionals','Loops'], visual: '<i class="ti ti-refresh" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',
     bg: 'linear-gradient(135deg,#0a0a1a,#101028)',
     concepts: ['if / else if / else','switch','Ternary Operator','for / while / do-while','break & continue','Truthy & Falsy Values'],
     body: `<p>Control flow determines the <strong>order</strong> in which statements are executed. Without it, your program would just run top-to-bottom like a recipe. With it, your program can react, adapt, and repeat.</p>
@@ -320,9 +321,9 @@ for (let i = 0; i &lt; 5; i++) {
   },
 
   {
-    id: 3, free: true, icon: '⚙️', level: 'Beginner', title: 'Functions Deep Dive',
+    id: 3, free: true, icon: '<i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', level: 'Beginner', title: 'Functions Deep Dive',
     excerpt: 'Functions are the building blocks of JavaScript. Learn declarations vs expressions, arrow functions, scope, hoisting, and why understanding the call stack changes everything.',
-    tags: ['Beginner','Functions','Scope'], visual: '⚙️',
+    tags: ['Beginner','Functions','Scope'], visual: '<i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>',
     bg: 'linear-gradient(135deg,#0f0a0a,#201010)',
     concepts: ['Function Declarations','Function Expressions','Arrow Functions','Parameters & Arguments','Scope (Global vs Local)','The Call Stack'],
     body: `<p>A <strong>function</strong> is a reusable block of code designed to perform a specific task. Functions are <em>first-class citizens</em> in JavaScript — they can be assigned to variables, passed as arguments, and returned from other functions.</p>
@@ -430,9 +431,9 @@ first();
   },
 
   {
-    id: 4, free: true, icon: '📦', level: 'Intermediate', title: 'Arrays & Objects Mastery',
+    id: 4, free: true, icon: '<i class="ti ti-package" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', level: 'Intermediate', title: 'Arrays & Objects Mastery',
     excerpt: 'Data is everything. Master arrays, objects, destructuring, spread syntax, and the powerful built-in methods that make JavaScript data manipulation a joy.',
-    tags: ['Intermediate','Arrays','Objects'], visual: '📦',
+    tags: ['Intermediate','Arrays','Objects'], visual: '<i class="ti ti-package" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',
     bg: 'linear-gradient(135deg,#0a0f1a,#101828)',
     concepts: ['Array Methods (map/filter/reduce)','Object Literals','Destructuring','Spread & Rest','Object Methods','Array.from & Set'],
     body: `<p>Arrays and objects are the two primary <strong>data structures</strong> in JavaScript. Arrays store ordered collections. Objects store keyed collections. Together, they power virtually every application.</p>
@@ -571,9 +572,9 @@ tags.size; // 1</code></pre>`
   },
 
   {
-    id: 5, free: true, icon: '🌳', level: 'Intermediate', title: 'The DOM & Event Handling',
+    id: 5, free: true, icon: '<i class="ti ti-tree" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', level: 'Intermediate', title: 'The DOM & Event Handling',
     excerpt: 'Bridge the gap between static HTML and dynamic applications. Learn to select, create, modify elements, handle user events, and build interactive UIs from scratch.',
-    tags: ['Intermediate','DOM','Events'], visual: '🌳',
+    tags: ['Intermediate','DOM','Events'], visual: '<i class="ti ti-tree" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',
     bg: 'linear-gradient(135deg,#10080a,#200f12)',
     concepts: ['DOM Tree','querySelector & querySelectorAll','createElement & appendChild','Event Listeners','Event Delegation','Event Bubbling & Capturing'],
     body: `<p>The <strong>DOM (Document Object Model)</strong> is a tree-like representation of your HTML document. JavaScript can read this tree, modify it, and respond to user interactions — turning static pages into living applications.</p>
@@ -712,9 +713,9 @@ btn.addEventListener('click', function(e) {
   },
 
   {
-    id: 6, free: true, icon: '🆕', level: 'Intermediate', title: 'Modern JavaScript (ES6+)',
+    id: 6, free: true, icon: '<i class="ti ti-new-section" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', level: 'Intermediate', title: 'Modern JavaScript (ES6+)',
     excerpt: 'Level up your syntax. Master let/const, template literals, enhanced object literals, default parameters, modules, and all the features that make modern JS beautiful.',
-    tags: ['Intermediate','ES6','Modern JS'], visual: '🆕',
+    tags: ['Intermediate','ES6','Modern JS'], visual: '<i class="ti ti-new-section" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',
     bg: 'linear-gradient(135deg,#1a0a0a,#280f0f)',
     concepts: ['let & const','Template Literals','Enhanced Object Literals','Default Parameters','Modules (import/export)','Optional Chaining'],
     body: `<p>ES6 (released in 2015) was a revolution for JavaScript. It introduced syntax that makes code cleaner, safer, and more expressive. Every modern codebase uses these features — mastering them is non-negotiable.</p>
@@ -989,9 +990,9 @@ setTimeout(() => controller.abort(), 5000);</code></pre>`
   },
 
   {
-    id: 8, free: false, icon: '🧠', level: 'Advanced', title: 'Advanced Functions & Closures',
+    id: 8, free: false, icon: '<i class="ti ti-brain" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', level: 'Advanced', title: 'Advanced Functions & Closures',
     excerpt: 'Unlock the true power of JavaScript functions. Master closures, higher-order functions, currying, memoization, and generators — the tools that senior developers use daily.',
-    tags: ['Advanced','Closures','Functional'], visual: '🧠',
+    tags: ['Advanced','Closures','Functional'], visual: '<i class="ti ti-brain" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',
     bg: 'linear-gradient(135deg,#0a0f0a,#0f1a0f)',
     concepts: ['Closures','Higher-Order Functions','Currying','Memoization','IIFE','Generators (function*)'],
     body: `<p>Functions in JavaScript are <strong>first-class citizens</strong>. They can be passed around like any other value. This enables incredibly powerful patterns: closures that remember their birthplace, functions that create functions, and generators that pause and resume execution.</p>
@@ -1153,9 +1154,9 @@ function* combined() {
   },
 
   {
-    id: 9, free: false, icon: '🏗️', level: 'Advanced', title: 'OOP in JavaScript',
+    id: 9, free: false, icon: '<i class="ti ti-building" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️', level: 'Advanced', title: 'OOP in JavaScript',
     excerpt: 'JavaScript is not class-based — it is prototype-based. Understand prototypes, the this keyword, classes (syntactic sugar), inheritance, and composition over inheritance.',
-    tags: ['Advanced','OOP','Prototypes'], visual: '🏗️',
+    tags: ['Advanced','OOP','Prototypes'], visual: '<i class="ti ti-building" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',
     bg: 'linear-gradient(135deg,#0a0a0f,#141420)',
     concepts: ['Prototypes & __proto__','The this Keyword','Constructor Functions','ES6 Classes','Inheritance & extends','Composition over Inheritance'],
     body: `<p>JavaScript is often called an "object-oriented" language, but it is more accurately <strong>prototype-based</strong>. Objects inherit directly from other objects. ES6 <code>class</code> syntax is just syntactic sugar over this prototype system.</p>
@@ -1334,9 +1335,9 @@ parrot.fly();   // "Polly is flying!"</code></pre>`
   },
 
   {
-    id: 10, free: false, icon: '🐛', level: 'Advanced', title: 'Error Handling & Debugging',
+    id: 10, free: false, icon: '<i class="ti ti-bug" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', level: 'Advanced', title: 'Error Handling & Debugging',
     excerpt: 'Bugs are inevitable. Learn to catch them gracefully with try/catch/finally, create custom errors, use the debugger, and master console methods that most developers never touch.',
-    tags: ['Advanced','Errors','Debugging'], visual: '🐛',
+    tags: ['Advanced','Errors','Debugging'], visual: '<i class="ti ti-bug" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',
     bg: 'linear-gradient(135deg,#0a0f14,#101828)',
     concepts: ['try / catch / finally','throw','Custom Error Classes','console Methods','Debugger Statement','Error Stack Traces'],
     body: `<p>Professional developers do not write bug-free code — they write code that <strong>fails gracefully</strong> and is <strong>easy to debug</strong>. Mastering error handling and debugging tools will save you hours of frustration.</p>
@@ -1492,9 +1493,9 @@ try {
   },
 
   {
-    id: 11, free: false, icon: '📦', level: 'Advanced', title: 'Modules, Bundlers & Tooling',
+    id: 11, free: false, icon: '<i class="ti ti-package" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', level: 'Advanced', title: 'Modules, Bundlers & Tooling',
     excerpt: 'Production code is not just files — it is an ecosystem. Learn ES modules, npm, Webpack, Vite, Babel, and the build pipeline that transforms your code for the real world.',
-    tags: ['Advanced','Tooling','Build'], visual: '📦',
+    tags: ['Advanced','Tooling','Build'], visual: '<i class="ti ti-package" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',
     bg: 'linear-gradient(135deg,#100a0a,#1e0f0f)',
     concepts: ['ES Modules (import/export)','npm & package.json','Webpack Basics','Vite (Modern Bundler)','Babel & Transpilation','Tree Shaking'],
     body: `<p>Modern JavaScript development is not just about writing code — it is about <strong>organizing</strong>, <strong>transforming</strong>, and <strong>optimizing</strong> it. Understanding modules and build tools is essential for any professional developer.</p>
@@ -1615,9 +1616,9 @@ console.log(used());
   },
 
   {
-    id: 12, free: false, icon: '🚀', level: 'Advanced', title: 'Testing & Performance',
+    id: 12, free: false, icon: '<i class="ti ti-rocket" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', level: 'Advanced', title: 'Testing & Performance',
     excerpt: 'A great site is fast and reliable. Learn unit testing with Jest, performance optimization, memory management, and how to write code that scales under real-world load.',
-    tags: ['Advanced','Testing','Performance'], visual: '🚀',
+    tags: ['Advanced','Testing','Performance'], visual: '<i class="ti ti-rocket" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',
     bg: 'linear-gradient(135deg,#0a0a10,#12121e)',
     concepts: ['Unit Testing (Jest)','Mocking & Spies','Performance Optimization','Memory Leaks','Debouncing & Throttling','Big-O Notation'],
     body: `<p>Writing code is only half the battle. Professional developers ensure their code is <strong>tested</strong>, <strong>fast</strong>, and <strong>memory-efficient</strong>. This module covers the practices that separate hobby projects from production systems.</p>
@@ -1830,7 +1831,7 @@ function openLesson(id) {
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
 
   const html = !m.free && !isPremium()
-    ? `<div class="premium-lock"><div class="section-emoji">⭐</div>
+    ? `<div class="premium-lock"><div class="section-emoji"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
        <div class="section-heading-display">Premium Module</div>
        <div class="section-sub-muted">Sign in as admin to unlock all advanced content.</div>
        <button class="lock-btn" onclick="window.location.href='premium.html'">Unlock Premium</button></div>`
@@ -1838,9 +1839,9 @@ function openLesson(id) {
        <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
-         <span class="meta-item">📖 JavaScript</span>
+         <span class="meta-item"><i class="ti ti-book" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> JavaScript</span>
          <span class="meta-item">⏱ ~10 min read</span>
-         <span class="meta-item">⚡ ${m.level}</span>
+         <span class="meta-item"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> ${m.level}</span>
        </div>
        <div class="les-visual" style="background:${m.bg};">
          <div class="les-visual-grid"></div>
@@ -1880,7 +1881,7 @@ function renderSidebar() {
     return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`window.location.href='premium.html'`:`openLesson(${m.id})`}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
-      ${locked?'<span style="font-size:10px;opacity:0.5;">🔒</span>':''}
+      ${locked?'<span style="font-size:10px;opacity:0.5;"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
     </button>`;
   }).join('');
 }
@@ -1892,7 +1893,7 @@ function markDone(){
   if(!currentId)return;
   const m=MODS.find(x=>x.id===currentId);
   if(!m.free&&!isPremium())return;
-  if(!completed.includes(currentId)){completed.push(currentId);saveCompleted(completed);showToast('✓ Module marked complete! ⚡');}
+  if(!completed.includes(currentId)){completed.push(currentId);saveCompleted(completed);showToast('✓ Module marked complete! <i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>');}
   openLesson(currentId);
 }
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}

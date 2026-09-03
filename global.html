@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+  <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +33,7 @@
 <!-- NOT LOGGED IN -->
 <div id="gateScreen">
   <div class="gate-card">
-    <div class="gate-icon">🔐</div>
+    <div class="gate-icon"><i class="ti ti-lock-password" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
     <div class="gate-title">Members Only</div>
     <div class="gate-sub">Create a free account or sign in to see your personal dashboard, leaderboard rank, quiz scores and badges.</div>
     <a href="Login.html" class="btn-lime">Sign In / Create Account →</a>
@@ -70,7 +71,7 @@
             <polygon points="14,1 17.5,10.5 27,10.5 19.5,16.5 22.5,26 14,20.5 5.5,26 8.5,16.5 1,10.5 10.5,10.5" fill="rgba(247,201,72,0.15)" stroke="#f7c948" stroke-width="1.2" stroke-linejoin="round"/>
             <path d="M14 6 L10 18 L13 18 L10 23 L19 13 L15 13 Z" fill="#f7c948"/>
           </svg>
-          <span class="badge-label-text">Premium<br><span style="font-size:9px;opacity:0.7;letter-spacing:0.08em;">⚡ Active</span></span>
+          <span class="badge-label-text">Premium<br><span style="font-size:9px;opacity:0.7;letter-spacing:0.08em;"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Active</span></span>
         </div>
 
         <!-- ELITE SVG badge -->
@@ -84,7 +85,7 @@
             <circle cx="2" cy="14" r="1.2" fill="#e8b4ff" opacity="0.7"/>
             <circle cx="26" cy="14" r="1.2" fill="#e8b4ff" opacity="0.7"/>
           </svg>
-          <span class="badge-label-text">Elite<br><span style="font-size:9px;opacity:0.7;letter-spacing:0.08em;">✦ Member</span></span>
+          <span class="badge-label-text">Elite<br><span style="font-size:9px;opacity:0.7;letter-spacing:0.08em;"><span style="font-size:10px;opacity:0.6;">◆</span> Member</span></span>
         </div>
       </div>
 
@@ -152,13 +153,13 @@
       <!-- WELCOME -->
       <div class="welcome-hero fade-up">
         <div class="welcome-eyebrow">Student Dashboard</div>
-        <h1 class="welcome-title">Hey, <em id="welcomeName">there</em>! 👋</h1>
+        <h1 class="welcome-title">Hey, <em id="welcomeName">there</em>! <i class="ti ti-hand-stop" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></h1>
         <p class="welcome-sub" id="welcomeSub">Loading your personalized dashboard...</p>
         <div class="welcome-row">
-          <div class="rank-chip">🏆 Global Rank <span id="wRank">#—</span></div>
-          <div class="rank-chip">⚡ Total XP <span id="wXP">0</span></div>
-          <div class="rank-chip" id="adminChip" style="display:none;">⭐ <span>Admin Access</span></div>
-          <div class="rank-chip" id="premiumChip" style="display:none;background:linear-gradient(135deg,rgba(200,241,53,0.12),rgba(200,241,53,0.04));border-color:rgba(200,241,53,0.3);">⚡ <span id="premiumChipLabel">Premium</span></div>
+          <div class="rank-chip"><i class="ti ti-trophy" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Global Rank <span id="wRank">#—</span></div>
+          <div class="rank-chip"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Total XP <span id="wXP">0</span></div>
+          <div class="rank-chip" id="adminChip" style="display:none;"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> <span>Admin Access</span></div>
+          <div class="rank-chip" id="premiumChip" style="display:none;background:linear-gradient(135deg,rgba(200,241,53,0.12),rgba(200,241,53,0.04));border-color:rgba(200,241,53,0.3);"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> <span id="premiumChipLabel">Premium</span></div>
         </div>
       </div>
 
@@ -256,23 +257,23 @@ const firebaseConfig = {
 
 const ADMIN_EMAIL = "itstudyhub.tiu@gmail.com";
 const SUBJECTS = [
-  { key:'c',      label:'C Programming',   icon:'⚙️', color:'#60a5fa' },
-  { key:'java',   label:'OOPs Java',        icon:'☕', color:'#f7b731' },
-  { key:'python', label:'Python',           icon:'🐍', color:'#43e97b' },
-  { key:'cpp',    label:'C++',              icon:'➕', color:'#a78bfa' },
-  { key:'csharp', label:'C#',              icon:'🔷', color:'#38bdf8' },
-  { key:'web',    label:'HTML+CSS+JS',      icon:'🌐', color:'#c8f135' },
+  { key:'c',      label:'C Programming',   icon:'<i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#60a5fa' },
+  { key:'java',   label:'OOPs Java',        icon:'<i class="ti ti-coffee" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#f7b731' },
+  { key:'python', label:'Python',           icon:'<i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#43e97b' },
+  { key:'cpp',    label:'C++',              icon:'<i class="ti ti-plus" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', color:'#a78bfa' },
+  { key:'csharp', label:'C#',              icon:'<i class="ti ti-diamond" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#38bdf8' },
+  { key:'web',    label:'HTML+CSS+JS',      icon:'<i class="ti ti-world" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#c8f135' },
 ];
 
 const ALL_BADGES = [
-  { id:'hello_world', icon:'🌟', label:'Hello World', desc:'Signed up & joined' },
-  { id:'first_quiz',  icon:'🎯', label:'First Quiz',  desc:'Completed first quiz' },
-  { id:'c_master',    icon:'⚙️', label:'C Master',    desc:'Scored 100% in C' },
-  { id:'java_hero',   icon:'☕', label:'Java Hero',   desc:'Scored 100% in Java' },
-  { id:'python_pro',  icon:'🐍', label:'Python Pro',  desc:'Scored 100% in Python' },
-  { id:'bug_hunter',  icon:'🐞', label:'Bug Hunter',  desc:'Got all advanced Qs right' },
-  { id:'night_owl',   icon:'🦉', label:'Night Owl',   desc:'Signed in after midnight' },
-  { id:'admin_star',  icon:'⭐', label:'Admin',       desc:'Platform admin' },
+  { id:'hello_world', icon:'<i class="ti ti-star" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', label:'Hello World', desc:'Signed up & joined' },
+  { id:'first_quiz',  icon:'<i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', label:'First Quiz',  desc:'Completed first quiz' },
+  { id:'c_master',    icon:'<i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', label:'C Master',    desc:'Scored 100% in C' },
+  { id:'java_hero',   icon:'<i class="ti ti-coffee" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', label:'Java Hero',   desc:'Scored 100% in Java' },
+  { id:'python_pro',  icon:'<i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', label:'Python Pro',  desc:'Scored 100% in Python' },
+  { id:'bug_hunter',  icon:'<i class="ti ti-bug" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', label:'Bug Hunter',  desc:'Got all advanced Qs right' },
+  { id:'night_owl',   icon:'<i class="ti ti-paw" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', label:'Night Owl',   desc:'Signed in after midnight' },
+  { id:'admin_star',  icon:'<i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', label:'Admin',       desc:'Platform admin' },
 ];
 
 const app = initializeApp(firebaseConfig);
@@ -449,8 +450,8 @@ function renderStats(data, isAdmin) {
     pc.style.display = 'flex';
     pc.style.background = 'linear-gradient(135deg,rgba(247,183,49,0.12),rgba(247,183,49,0.04))';
     pc.style.borderColor = 'rgba(247,183,49,0.35)';
-    document.getElementById('premiumChipLabel').textContent = 'Elite Member 🏆';
-    pc.querySelector('span:first-child') && (pc.childNodes[0].textContent = '🏆 ');
+    document.getElementById('premiumChipLabel').textContent = 'Elite Member <i class="ti ti-trophy" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>';
+    pc.querySelector('span:first-child') && (pc.childNodes[0].textContent = '<i class="ti ti-trophy" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> ');
   } else if (isPro) {
     document.getElementById('sbPremiumBadge').style.display = 'block';
     document.getElementById('premiumChip').style.display = 'flex';
@@ -491,7 +492,7 @@ async function renderLeaderboard(myUid, myXP) {
       const isMe = u.uid === myUid;
       const rankClass = rank===1?'r1':rank===2?'r2':rank===3?'r3':isMe?'rme':'';
       const rowClass = isMe?'lb-row is-me':rank<=3?'lb-row top-3':'lb-row';
-      const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+      const medal = rank===1?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#FFD700;"></i>':rank===2?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#C0C0C0;"></i>':rank===3?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#CD7F32;"></i>':'';
       const displayName = esc(u.name || u.email?.split('@')[0] || 'Student');
       html += `
         <div class="${rowClass}">
