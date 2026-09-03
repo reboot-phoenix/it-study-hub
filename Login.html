@@ -846,20 +846,5 @@ if (window.matchMedia('(pointer: fine)').matches) {
 
 </script>
 
-<script>
-const cursor = document.getElementById('cursor');
-const ring   = document.getElementById('cursorRing');
-let mx = 0, my = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-(function loop() {
-  cursor.style.left = (mx-5)+'px'; cursor.style.top = (my-5)+'px';
-  ring.style.left   = (mx-18)+'px'; ring.style.top  = (my-18)+'px';
-  requestAnimationFrame(loop);
-})();
-document.querySelectorAll('a,button,.drag-track').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2)'; ring.style.transform='scale(1.5)'; });
-  el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)'; ring.style.transform='scale(1)'; });
-});
-</script>
 </body>
 </html>
