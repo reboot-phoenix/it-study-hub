@@ -133,1147 +133,312 @@ const MODS = [
   free: true,
   icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>`,
   level: 'Beginner',
-  title: 'Introduction to Java',
-  excerpt: 'Understand why Java was built, how the JVM works, and what makes Java the "Write Once, Run Anywhere" language trusted by millions of developers worldwide.',
-  tags: ['Beginner', 'JVM', 'History'],
+  title: 'The Java Engine & Syntax Basics',
+  excerpt: 'Master the genesis and architecture of Java, JVM internals, memory management (Stack vs. Heap), primitive types, type casting, and build your first CLI utility[cite: 2].',
+  tags: ['Beginner', 'JVM', 'Architecture', 'Syntax'],
   visual: `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>`,
   bg: 'linear-gradient(135deg, #0a1a0a, #0f2010)',
-  concepts: ['JVM Architecture', 'JDK vs JRE', 'WORA Principle', 'Java Buzzwords', 'Bytecode', 'Applications vs Applets'],
-  body: `<p>Java was conceived by <strong>James Gosling</strong> at Sun Microsystems in 1991, initially called <em>Oak</em>, renamed <em>Java</em> in 1995. The driving goal: a platform-independent language for networked devices that could run on everything from smart appliances to supercomputers.</p>
+  concepts: ['WORA Principle', 'JVM, JRE, JDK', 'Stack vs. Heap', 'Primitive Types', 'Type Casting', 'Operator Precedence'],
+  body: `<blockquote>"Any fool can write code that a computer can understand. Good programmers write code that humans can understand." — Martin Fowler[cite: 2]</blockquote>
 
-<h2>The WORA Principle</h2>
-<p>Java's most famous promise is <strong>"Write Once, Run Anywhere" (WORA)</strong>. Instead of compiling to machine code, Java compiles to <strong>bytecode</strong> — a platform-neutral format that any JVM can run regardless of the underlying hardware architecture.</p>
-<blockquote>Think of bytecode as a universal language every JVM in the world understands. Write your code once, compile it once, and it runs on Windows, Linux, macOS, Android, and even embedded devices without any changes.</blockquote>
+<h2>1.1 The Genesis and Architecture of Java</h2>
+<p>To master Java, you must first understand the philosophy that drove its creation in the early 1990s by James Gosling and his team at Sun Microsystems[cite: 2]. At the time, software development was plagued by hardware dependencies. C and C++ required developers to recompile and sometimes completely rewrite code depending on whether the target machine was an x86 PC, a Sun SPARC workstation, or a Motorola-powered Apple computer[cite: 2]. The industry needed a language that could span across disparate hardware architectures safely and reliably[cite: 2].</p>
+<p>Java’s answer to this was a radical paradigm shift: a two-stage compilation and execution model powered by a virtual machine[cite: 2].</p>
 
-<h2>JDK vs JRE vs JVM — The Three Layers</h2>
+<h3>Write Once, Run Anywhere (WORA)</h3>
+<p>When you write a Java program, you are targeting a universal abstract computer rather than your physical CPU[cite: 2]. The source code (<code>.java</code>) is compiled by the Java Compiler (<code>javac</code>) not into machine-specific assembly language, but into an intermediate, highly optimized format known as <strong>Bytecode</strong> (<code>.class</code>)[cite: 2].</p>
+<p>Bytecode is an instruction set for the <strong>Java Virtual Machine (JVM)</strong>[cite: 2]. Because every major operating system (Windows, macOS, Linux, and specialized enterprise environments) has its own native implementation of the JVM, the same compiled bytecode file can be executed anywhere without modification[cite: 2].</p>
+<pre><code>[ Your Code (.java) ] 
+       │
+       ▼ (javac)
+[ Bytecode (.class) ] 
+       │
+       ▼ (JVM Interpreter / JIT Compiler)
+[ Native Machine Code (x86, ARM, etc.) ]</code></pre>
+
+<h3>Deconstructing the Trio: JVM, JRE, and JDK</h3>
+<p>Many beginners confuse these three foundational acronyms[cite: 2]. Let's define them with absolute precision:</p>
 <ul>
-  <li><strong>JVM (Java Virtual Machine)</strong> — The engine that executes bytecode. It makes WORA possible by translating bytecode into native machine instructions for whatever platform it's running on. Every OS has its own JVM implementation.</li>
-  <li><strong>JRE (Java Runtime Environment)</strong> — JVM + core libraries + runtime files needed to <em>run</em> Java programs. If you only need to run Java apps, install JRE.</li>
-  <li><strong>JDK (Java Development Kit)</strong> — JRE + compiler (javac) + debugger + tools needed to <em>write</em> Java programs. Install JDK if you're developing software.</li>
+  <li><strong>The Java Virtual Machine (JVM):</strong> The execution engine[cite: 2]. It is an abstract computing machine that loads bytecode, verifies its structural integrity via the Bytecode Verifier, and executes it[cite: 2]. The JVM translates bytecode into native machine instructions on the fly using a combination of interpretation and <strong>Just-In-Time (JIT) compilation</strong>[cite: 2]. The JIT compiler profiles running code, identifies hot spots (frequently executed loops or methods), and compiles them directly into native machine code for blistering execution speeds that rival statically compiled languages like C++[cite: 2].</li>
+  <li><strong>The Java Runtime Environment (JRE):</strong> The execution bundle[cite: 2]. It contains the JVM, core class libraries (<code>java.lang</code>, <code>java.util</code>, etc.), and supporting support files necessary to run pre-compiled Java applications[cite: 2]. If you only want to <em>run</em> a Java application on your server or desktop, you only need the JRE[cite: 2].</li>
+  <li><strong>The Java Development Kit (JDK):</strong> The complete software toolkit for <em>creating</em> Java applications[cite: 2]. It encompasses the entire JRE, plus development tools such as the compiler (<code>javac</code>), the archiver (<code>jar</code>), the debugger (<code>jdb</code>), and diagnostic tools[cite: 2]. When writing code, you are always interacting with the JDK[cite: 2].</li>
 </ul>
 
-<h2>Java Buzzwords — Why Java Became #1</h2>
+<h2>1.2 Setting Up the Engineering Environment</h2>
+<p>Before writing production-grade code, you must establish a reliable development workflow[cite: 2]. While modern Integrated Development Environments (IDEs) like IntelliJ IDEA, Eclipse, or VS Code abstract away the compilation process, relying entirely on them can leave you helpless when build pipelines fail in CI/CD environments[cite: 2].</p>
+
+<h3>The Role of Environment Variables (<code>JAVA_HOME</code> and <code>PATH</code>)</h3>
 <ul>
-  <li><strong>Simple</strong> — Removes complex C++ features like pointers, operator overloading, and multiple class inheritance. Easier to learn and debug.</li>
-  <li><strong>Object-Oriented</strong> — Everything is an object (except primitives). Code is organized into classes that model real-world entities.</li>
-  <li><strong>Platform Independent</strong> — Compile once, run anywhere via bytecode. No recompilation needed for different OS.</li>
-  <li><strong>Secure</strong> — No direct memory access, bytecode verifier checks for malicious code, sandbox model restricts untrusted code.</li>
-  <li><strong>Robust</strong> — Strong type checking, exception handling, automatic garbage collection, no pointer arithmetic.</li>
-  <li><strong>Multithreaded</strong> — Built-in support for concurrent programming. Multiple threads run simultaneously within a single program.</li>
-  <li><strong>High Performance</strong> — JIT (Just-In-Time) compiler converts bytecode to native machine code at runtime for speed.</li>
-  <li><strong>Distributed</strong> — Built-in networking libraries. Java was designed for the internet age.</li>
+  <li><strong><code>JAVA_HOME</code></strong>: A system environment variable pointing directly to the root installation directory of your JDK[cite: 2]. Build tools like Maven, Gradle, and enterprise servers depend on <code>JAVA_HOME</code> to locate the compiler and runtime[cite: 2].</li>
+  <li><strong><code>PATH</code></strong>: An environmental path variable that tells your shell where to look for executable binaries[cite: 2]. By appending <code>%JAVA_HOME%\\bin</code> (Windows) or <code>$JAVA_HOME/bin</code> (Unix/Linux) to your <code>PATH</code>, you allow the shell to resolve commands like <code>javac</code> and <code>java</code> from any directory[cite: 2].</li>
 </ul>
 
-<h2>Applications vs Applets</h2>
-<ul>
-  <li><strong>Applications</strong> — Standalone programs with a main() method. Run directly on JVM. Can access system resources.</li>
-  <li><strong>Applets</strong> — Small programs embedded in web pages. Run inside a browser with security restrictions. Less common today due to modern web technologies.</li>
-</ul>
-
-<h2>Your First Java Program</h2>
+<h3>Manual Compilation and Execution via Terminal</h3>
+<p>Create a file named <code>HelloWorld.java</code>[cite: 2]:</p>
 <pre><code>public class HelloWorld {
     public static void main(String[] args) {
-        System.out.println("Hello, IT Study Hub!");
+        System.out.println("Initializing Java Runtime Environment...");
+        System.out.println("Hello, Enterprise Engineer.");
     }
 }</code></pre>
-<p>Save as <code>HelloWorld.java</code> → compile with <code>javac HelloWorld.java</code> → run with <code>java HelloWorld</code>. The compiler creates <code>HelloWorld.class</code> — your bytecode file that the JVM executes.</p>
+<p>Open your terminal, navigate to the directory containing the file, and compile it[cite: 2]:</p>
+<pre><code>javac HelloWorld.java</code></pre>
+<p>This command invokes the compiler[cite: 2]. If your code is syntactically correct, it generates a file named <code>HelloWorld.class</code> in the same directory[cite: 2]. Now, execute the bytecode using the Java launcher[cite: 2]:</p>
+<pre><code>java HelloWorld</code></pre>
 
-<h2>Java Version History</h2>
+<h2>1.3 Anatomy of a Java Program</h2>
+<p>Java is a strictly object-oriented, strongly-typed language[cite: 2]. In Java, <strong>every single line of code must reside inside a class</strong>[cite: 2]. There are no standalone functions or global variables outside of a class definition[cite: 2].</p>
+<pre><code>public class SystemDiagnostics {
+    public static void main(String[] args) {
+        int coreCount = Runtime.getRuntime().availableProcessors();
+        System.out.println("Available CPU Cores: " + coreCount);
+    }
+}</code></pre>
 <ul>
-  <li><strong>Java 1.0 (1996)</strong> — First public release</li>
-  <li><strong>Java 5 (2004)</strong> — Generics, enhanced for-loop, annotations</li>
-  <li><strong>Java 8 (2014)</strong> — Lambda expressions, Stream API, new Date API</li>
-  <li><strong>Java 11 (2018)</strong> — LTS, HTTP Client, var keyword</li>
-  <li><strong>Java 17 (2021)</strong> — LTS, sealed classes, pattern matching</li>
-  <li><strong>Java 21 (2023)</strong> — Virtual threads, record patterns, string templates</li>
-</ul>`
+  <li><strong><code>public</code></strong>: An access modifier that dictates visibility[cite: 2]. Making the class <code>public</code> means it is accessible from other classes and packages[cite: 2].</li>
+  <li><strong><code>class</code></strong>: The keyword used to declare a user-defined blueprint representing state and behavior[cite: 2].</li>
+  <li><strong><code>public static void main(String[] args)</code></strong>: The mandatory entry point for any standalone Java application[cite: 2].</li>
+</ul>
+
+<h2>1.4 Data Types, Memory, and the Stack vs. Heap</h2>
+<p>Memory management is where junior developers often stumble[cite: 2]. Java uses a managed runtime with automatic garbage collection, but understanding <em>how</em> data is stored in physical RAM is vital for writing high-performance code[cite: 2].</p>
+
+<h3>Primitive Data Types</h3>
+<p>Java provides 8 primitive data types built directly into the language core[cite: 2]. Unlike objects, primitives store raw binary values directly in memory rather than references[cite: 2].</p>
+<table>
+<tr><th>Data Type</th><th>Bit Width</th><th>Size in Bytes</th><th>Minimum Value</th><th>Maximum Value</th><th>Default Value (Fields)</th></tr>
+<tr><td><code>byte</code></td><td>8 bits</td><td>1 byte</td><td><code>-128</code></td><td><code>127</code></td><td><code>0</code></td></tr>
+<tr><td><code>short</code></td><td>16 bits</td><td>2 bytes</td><td><code>-32,768</code></td><td><code>32,767</code></td><td><code>0</code></td></tr>
+<tr><td><code>int</code></td><td>32 bits</td><td>4 bytes</td><td><code>-2,147,483,648</code></td><td><code>2,147,483,647</code></td><td><code>0</code></td></tr>
+<tr><td><code>long</code></td><td>64 bits</td><td>8 bytes</td><td><code>-9,223,372,036,854,775,808</code></td><td><code>9,223,372,036,854,775,807</code></td><td><code>0L</code></td></tr>
+<tr><td><code>float</code></td><td>32 bits</td><td>4 bytes</td><td>IEEE 754 Single</td><td>IEEE 754 Single</td><td><code>0.0f</code></td></tr>
+<tr><td><code>double</code></td><td>64 bits</td><td>8 bytes</td><td>IEEE 754 Double</td><td>IEEE 754 Double</td><td><code>0.0d</code></td></tr>
+<tr><td><code>char</code></td><td>16 bits</td><td>2 bytes</td><td><code>\u0000</code> (0)</td><td><code>\uffff</code> (65,535)</td><td><code>\u0000</code></td></tr>
+<tr><td><code>boolean</code></td><td>1 bit (virtual)</td><td>JVM Dependent</td><td><code>false</code></td><td><code>true</code></td><td><code>false</code></td></tr>
+</table>
+
+<h3>The Stack vs. The Heap</h3>
+<ol>
+  <li><strong>The Call Stack (Stack Memory):</strong> Operates on a Last-In, First-Out (LIFO) data structure[cite: 2]. Every time a method is invoked, a new stack frame is pushed, holding local primitives and references[cite: 2]. Allocation and deallocation are extremely fast[cite: 2].</li>
+  <li><strong>The Heap (Heap Memory):</strong> A shared pool used to dynamically allocate objects and arrays at runtime[cite: 2]. Local variables hold references pointing to these heap locations, which are eventually cleaned up by the Garbage Collector[cite: 2].</li>
+</ol>
+
+<h2>1.5 Variables, Scope, and Initialization</h2>
+<p>A variable is a named container for a value stored in memory[cite: 2]. Java is a <strong>Statically Typed Language</strong>, meaning every variable's type must be explicitly declared at compile time[cite: 2].</p>
+<ul>
+  <li><strong>Local Variables:</strong> Declared inside methods or blocks; have no default value and <strong>must be explicitly initialized</strong> before reading[cite: 2].</li>
+  <li><strong>Instance Variables (Fields):</strong> Declared inside a class but outside methods; initialized to default values automatically[cite: 2].</li>
+  <li><strong>Class Variables (<code>static</code>):</strong> Shared across all instances of a class[cite: 2].</li>
+</ul>
+
+<h2>1.6 Type Casting and Numerical Precision</h2>
+<ul>
+  <li><strong>Implicit Widening:</strong> Automatic conversion from a smaller type to a larger type (e.g., <code>int</code> to <code>long</code>)[cite: 2].</li>
+  <li><strong>Explicit Narrowing:</strong> Manual casting required when converting a larger type to a smaller type (e.g., <code>(int) doubleVal</code>), risking truncation[cite: 2].</li>
+</ul>
+
+<h2>1.7 Operators and Evaluation Precedence</h2>
+<p>Features arithmetic, relational, logical (with **Short-Circuit Evaluation**), and bitwise operators[cite: 2]. When writing complex expressions without parentheses, Java evaluates operators based on a strict precedence hierarchy[cite: 2].</p>
+
+<h2>1.8 Chapter Project: The Dynamic Command-Line Calculator and Interactive "Mad Libs" Generator</h2>
+<p>Build an enterprise-grade console utility handling user input, safe numerical parsing, and control logic[cite: 2].</p>`
 },
 
-  {
+{
   id: 2,
   free: true,
   icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>`,
   level: 'Beginner',
-  title: 'Control Statements',
-  excerpt: 'The if, switch, while, for and do-while statements are the decision-making backbone of every Java program. Master these and you control the flow of all logic.',
-  tags: ['Beginner', 'Loops', 'Conditions'],
+  title: 'Control Flow & Memory Management for Arrays',
+  excerpt: 'Master conditional architecture, guard clauses, modern switch expressions, loop performance optimization, heap memory layouts for arrays, and build Tic-Tac-Toe[cite: 2].',
+  tags: ['Beginner', 'Control Flow', 'Arrays', 'Memory'],
   visual: `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>`,
   bg: 'linear-gradient(135deg, #0a0a1a, #101028)',
-  concepts: ['if & if-else', 'Nested if', 'switch Statement', 'while Loop', 'do-while Loop', 'for Loop', 'break & continue', 'return'],
-  body: `<p>Control statements divide into three categories: <strong>Selection</strong> (choose a path), <strong>Iteration</strong> (repeat steps), and <strong>Jump</strong> (exit or skip). They are the building blocks of all program logic and the first thing every programmer must master.</p>
+  concepts: ['Branch Prediction', 'Switch Expressions', 'String Concatenation Traps', 'Contiguous Arrays', 'Jagged Arrays'],
+  body: `<blockquote>"Control flow structures are the architecture of decision-making, but how you manage memory in your loops and arrays separates the amateur scriptwriter from the systems architect." — Enterprise Java Guidelines[cite: 2]</blockquote>
 
-<h2>Selection: if and if-else</h2>
-<p>The <code>if</code> statement executes a block of code only if a condition is true. <code>else</code> provides an alternative path when the condition is false.</p>
-<pre><code>int marks = 75;
-if (marks >= 90) {
-    System.out.println("Grade: A");
-} else if (marks >= 70) {
-    System.out.println("Grade: B");  // This runs
-} else if (marks >= 60) {
-    System.out.println("Grade: C");
-} else {
-    System.out.println("Grade: F");
-}</code></pre>
-<p><strong>Nested if</strong> — an if statement inside another if statement. Use when multiple conditions must be checked in sequence.</p>
-<pre><code>int age = 20;
-boolean hasID = true;
-if (age >= 18) {
-    if (hasID) {
-        System.out.println("Entry allowed");
-    } else {
-        System.out.println("ID required");
-    }
-} else {
-    System.out.println("Too young");
-}</code></pre>
+<h2>2.1 The Mechanics of Execution: From High-Level Control Flow to JVM Bytecode</h2>
+<p>When the Java compiler translates your source code, control statements are compiled into JVM bytecode instructions like <code>ifeq</code>, <code>if_icmpeq</code>, <code>goto</code>, and optimized <code>tableswitch</code> or <code>lookupswitch</code> jump tables[cite: 2]. Understanding this ensures optimal structuring of decision trees[cite: 2].</p>
 
-<h2>Selection: switch Statement</h2>
-<p>Use <code>switch</code> when matching one variable against many specific discrete values. It's cleaner than a long chain of if-else when checking the same variable.</p>
-<pre><code>int day = 3;
-switch (day) {
-    case 1:
-        System.out.println("Monday");
-        break;
-    case 2:
-        System.out.println("Tuesday");
-        break;
-    case 3:
-        System.out.println("Wednesday");  // Runs
-        break;
-    case 4:
-        System.out.println("Thursday");
-        break;
-    default:
-        System.out.println("Weekend");
-}</code></pre>
-<blockquote>Always use <code>break</code> in switch cases. Without it, execution "falls through" to the next case — a very common and dangerous bug that causes unexpected behavior!</blockquote>
-
-<h2>Iteration: while Loop</h2>
-<p>The <code>while</code> loop checks the condition <em>before</em> each iteration. If the condition is false from the start, the loop body never executes.</p>
-<pre><code>int i = 0;
-while (i < 5) {
-    System.out.println("Count: " + i);
-    i++;  // Don't forget to update, or it's an infinite loop!
-}</code></pre>
-
-<h2>Iteration: do-while Loop</h2>
-<p>The <code>do-while</code> loop checks the condition <em>after</em> each iteration. The body always executes at least once — perfect for menu-driven programs.</p>
-<pre><code>int choice;
-Scanner sc = new Scanner(System.in);
-do {
-    System.out.println("1. Add  2. Subtract  3. Exit");
-    choice = sc.nextInt();
-    switch (choice) {
-        case 1: System.out.println("Adding..."); break;
-        case 2: System.out.println("Subtracting..."); break;
-        case 3: System.out.println("Goodbye!"); break;
-        default: System.out.println("Invalid!");
-    }
-} while (choice != 3);</code></pre>
-
-<h2>Iteration: for Loop</h2>
-<p>The <code>for</code> loop is best when you know the number of iterations in advance. It combines initialization, condition, and increment in one line.</p>
-<pre><code>// Print 1 to 10
-for (int j = 1; j <= 10; j++) {
-    System.out.println(j);
-}
-
-// Print even numbers only
-for (int j = 2; j <= 20; j += 2) {
-    System.out.println(j);
-}
-
-// Nested for loop (multiplication table)
-for (int i = 1; i <= 10; i++) {
-    for (int j = 1; j <= 10; j++) {
-        System.out.printf("%d x %d = %d%n", i, j, i * j);
+<h2>2.2 Conditional Logic: Mastering if-else Chains and Guard Clauses</h2>
+<p>Modern CPUs utilize branch prediction pipelines to pre-fetch instructions[cite: 2]. Utilizing guard clauses (early returns) minimizes branch mispredictions, reduces indentation depth ("Arrow Anti-Pattern"), and speeds up execution[cite: 2]:</p>
+<pre><code>public class AuthenticationEngine {
+    public String authenticateUser(String username, String password, boolean isAccountLocked) {
+        if (isAccountLocked) {
+            return "ACCESS_DENIED: Account is locked.";
+        }
+        if (username == null || password == null) {
+            return "ACCESS_DENIED: Invalid format.";
+        }
+        return "ACCESS_GRANTED";
     }
 }</code></pre>
 
-<h2>Jump: break, continue, return</h2>
-<pre><code>for (int i = 0; i < 10; i++) {
-    if (i == 3) continue;  // Skip 3, continue with next iteration
-    if (i == 7) break;     // Stop the loop entirely at 7
-    System.out.println(i); // Prints: 0 1 2 4 5 6
-}
+<h2>2.3 Modern Switch Expressions: Pattern Matching and yield</h2>
+<p>Standardized in Java 14+, modern switch expressions use arrow syntax (<code>-&gt;</code>) to eliminate fall-through risks and support multi-statement blocks via the <code>yield</code> keyword[cite: 2].</p>
 
-// return exits the current method
-public int max(int a, int b) {
-    if (a > b) return a;  // Exit immediately
-    return b;
-}</code></pre>
+<h2>2.4 Iteration Structures and Performance Optimization</h2>
+<p>Avoid the classic string concatenation trap inside loops (<code>queryLog = queryLog + ...</code>), which incurs $O(n^2)$ time complexity and thrashes heap memory due to string immutability[cite: 2]. Always use <strong><code>StringBuilder</code></strong> with pre-allocated buffer capacity for high-performance text accumulation[cite: 2].</p>
 
-<h2>Enhanced for Loop (for-each)</h2>
-<p>Java's for-each loop makes iterating over arrays and collections cleaner and less error-prone.</p>
-<pre><code>int[] numbers = {10, 20, 30, 40, 50};
-for (int num : numbers) {
-    System.out.println(num);  // 10, 20, 30, 40, 50
-}
+<h2>2.5 Arrays: Contiguous Allocation and Cache Locality</h2>
+<p>Arrays are full-fledged objects on the heap holding an explicit length field and a contiguous payload[cite: 2]. This contiguous memory layout provides exceptional CPU cache locality (spatial locality), making array traversals significantly faster than pointer-scattered structures[cite: 2].</p>
 
-String[] names = {"Dithsha", "Mithila", "Argha"};
-for (String name : names) {
-    System.out.println("Hello, " + name);
-}</code></pre>`
+<h2>2.6 Multidimensional & Jagged Arrays</h2>
+<p>In Java, 2D arrays (e.g., <code>int[][] matrix = new int[3][4];</code>) are technically arrays of references to independent 1D arrays on the heap[cite: 2], allowing for native jagged array configurations[cite: 2].</p>
+
+<h2>2.7 Chapter Project: Production-Grade Console Tic-Tac-Toe</h2>
+<p>Synthesizes conditional branching, switch logic, loop safety, array indexing, and $O(1)$ win/draw detection algorithms in a complete console game[cite: 2].</p>`
 },
 
-  {
+{
   id: 3,
   free: true,
   icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><line x1="9" y1="12" x2="9" y2="12.01"></line><line x1="12" y1="12" x2="12" y2="12.01"></line><line x1="15" y1="12" x2="15" y2="12.01"></line><line x1="9" y1="16" x2="9" y2="16.01"></line><line x1="12" y1="16" x2="12" y2="16.01"></line><line x1="15" y1="16" x2="15" y2="16.01"></line><line x1="9" y1="8" x2="9" y2="8.01"></line><line x1="12" y1="8" x2="12" y2="8.01"></line><line x1="15" y1="8" x2="15" y2="8.01"></line></svg>`,
   level: 'Beginner',
-  title: 'Classes, Objects & Methods',
-  excerpt: 'Everything in Java is built from classes and objects. Learn to define your own data types, create instances, control access, and understand static and final keywords.',
-  tags: ['Beginner', 'OOP', 'Classes'],
+  title: 'Mastering Strings & Essential Utility Classes',
+  excerpt: 'Dive deep into string immutability, the String Pool memory model, reference vs. content comparisons, StringBuilder, wrapper classes, and autoboxing[cite: 2].',
+  tags: ['Beginner', 'Strings', 'String Pool', 'Wrappers'],
   visual: `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><line x1="9" y1="12" x2="9" y2="12.01"></line><line x1="12" y1="12" x2="12" y2="12.01"></line><line x1="15" y1="12" x2="15" y2="12.01"></line><line x1="9" y1="16" x2="9" y2="16.01"></line><line x1="12" y1="16" x2="12" y2="16.01"></line><line x1="15" y1="16" x2="15" y2="16.01"></line><line x1="9" y1="8" x2="9" y2="8.01"></line><line x1="12" y1="8" x2="12" y2="8.01"></line><line x1="15" y1="8" x2="15" y2="8.01"></line></svg>`,
   bg: 'linear-gradient(135deg, #0f0a0a, #201010)',
-  concepts: ['Class Declaration', 'Object Creation', 'Constructors', 'Access Specifiers', 'static', 'final', 'Inner Classes', 'Arrays'],
-  body: `<p>A <strong>class</strong> is a blueprint — it defines what data (fields) and behaviors (methods) objects will have. An <strong>object</strong> is a living instance of that blueprint in memory. This is the foundation of Object-Oriented Programming in Java.</p>
+  concepts: ['String Immutability', 'String Pool', '.equals vs ==', 'StringBuilder vs StringBuffer', 'Integer Cache Trap'],
+  body: `<blockquote>"Strings are immutable by design, but your mastery of them must be absolute. Misunderstanding text handling, the String Pool, and memory overhead is the silent killer of enterprise application performance." — Enterprise Architecture Standards[cite: 2]</blockquote>
 
-<h2>Defining a Class & Creating Objects</h2>
-<pre><code>class Student {
-    // Fields (instance variables)
-    String name;
-    int age;
-    float marks;
+<h2>3.1 The Immutable Foundation: Inside Java Strings</h2>
+<p>Once a <code>String</code> object is created on the heap, its internal character sequence can never be altered[cite: 2]. Any apparent modification creates a brand-new string object[cite: 2]. Immutability guarantees security (preventing tampering with file paths or URLs), thread safety, cached hash codes, and efficient string interning[cite: 2].</p>
 
-    // Method (behavior)
-    void display() {
-        System.out.println("Name: " + name + ", Age: " + age + ", Marks: " + marks);
-    }
-}
-
-// In main():
-Student s1 = new Student();  // Create object
-s1.name = "Dithsha";
-s1.age = 20;
-s1.marks = 85.5f;
-s1.display();  // Output: Name: Dithsha, Age: 20, Marks: 85.5</code></pre>
-<p>When you write <code>new Student()</code>, Java allocates memory for a new object, calls the constructor, and returns a reference (address) to that object.</p>
-
-<h2>Constructors — Automatic Initialization</h2>
-<p>A constructor is called automatically when an object is created. It has the same name as the class, no return type, and is used to initialize fields.</p>
-<pre><code>class Student {
-    String name;
-    int age;
-
-    // Default constructor (no parameters)
-    Student() {
-        name = "Unknown";
-        age = 0;
-    }
-
-    // Parameterized constructor
-    Student(String n, int a) {
-        name = n;
-        age = a;
-    }
-}
-
-// Usage
-Student s1 = new Student();              // Uses default constructor
-Student s2 = new Student("Mithila", 21); // Uses parameterized constructor
-System.out.println(s2.name);             // Mithila</code></pre>
-<blockquote>Every class has a default constructor automatically if you don't write one. But once you define any constructor, Java won't provide the default one — you must write it yourself if needed.</blockquote>
-
-<h2>Access Specifiers — Controlling Visibility</h2>
+<h2>3.2 The String Pool and Heap Allocation Mechanics</h2>
 <ul>
-  <li><code>public</code> — Accessible from anywhere, any class, any package. Use for methods and classes that form the public API.</li>
-  <li><code>private</code> — Only accessible within the same class. Best for sensitive data fields that should not be modified directly.</li>
-  <li><code>protected</code> — Accessible within the same class, same package, and subclasses (even in different packages).</li>
-  <li><em>default (no modifier)</em> — Package-private. Accessible only within the same package.</li>
+  <li><strong>String Literals (<code>String s1 = "Enterprise";</code>):</strong> Checked against the shared String Pool to reuse cached instances[cite: 2].</li>
+  <li><strong>Explicit <code>new</code> (<code>String s3 = new String("Enterprise");</code>):</strong> Bypasses the pool and forces a distinct object allocation on the general heap[cite: 2]. Use <code>.intern()</code> to push heap strings into the pool[cite: 2].</li>
 </ul>
 
-<h2>static Keyword — Class-Level Members</h2>
-<p><code>static</code> means the member belongs to the class itself, not to any specific object. You can access static members without creating an object.</p>
-<pre><code>class MathHelper {
-    static final double PI = 3.14159;  // Constant, same for all objects
-    static int count = 0;                // Shared across all instances
+<h2>3.3 String Comparison: The <code>.equals()</code> vs. <code>==</code> Trap</h2>
+<p>Never use <code>==</code> to compare text content; <code>==</code> compares memory reference addresses[cite: 2]. Always use <code>.equals()</code>, placing string literals on the left side to prevent <code>NullPointerException</code> (e.g., <code>"ADMIN".equals(inputId)</code>)[cite: 2].</p>
 
-    static double circleArea(double r) { // No 'new' needed to call
-        return PI * r * r;
-    }
+<h2>3.4 Wrapper Classes & Autoboxing Mechanics</h2>
+<p>Java provides object wrapper classes (<code>Integer</code>, <code>Double</code>, <code>Boolean</code>, etc.) for primitive types[cite: 2]. <strong>Autoboxing</strong> and <strong>unboxing</strong> automate conversions between primitives and objects[cite: 2]. Note the <strong>Integer Caching Trap</strong>: small integers between -128 and 127 are cached by the JVM, making <code>==</code> behave unexpectedly for numbers outside this range[cite: 2].</p>
 
-    MathHelper() {
-        count++;  // Track how many objects were created
-    }
-}
-
-// Usage — no object needed!
-double area = MathHelper.circleArea(5.0);
-System.out.println(MathHelper.count);</code></pre>
-
-<h2>final Keyword — Immutability & Constants</h2>
-<ul>
-  <li><code>final variable</code> — Cannot be reassigned after initialization. Makes it a constant.</li>
-  <li><code>final method</code> — Cannot be overridden by subclasses.</li>
-  <li><code>final class</code> — Cannot be extended (inherited). String class is final.</li>
-</ul>
-<pre><code>final double PI = 3.14159;
-// PI = 3.14;  // ERROR! Cannot reassign final variable
-
-final class SecurityManager { }  // Cannot be extended
-// class MySecurity extends SecurityManager { } // ERROR!</code></pre>
-
-<h2>Arrays in Java</h2>
-<p>Arrays are objects in Java. They have a fixed size and store elements of the same type.</p>
-<pre><code>// Declaration and initialization
-int[] marks = {85, 90, 78, 92, 88};
-int[] nums = new int[5];  // All elements default to 0
-
-// Accessing elements
-System.out.println(marks[0]);  // 85
-System.out.println(marks.length); // 5
-
-// 2D Array (matrix)
-int[][] matrix = {
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9}
-};
-System.out.println(matrix[1][2]);  // 6
-
-// Enhanced for loop with arrays
-for (int mark : marks) {
-    System.out.println(mark);
-}</code></pre>
-
-<h2>Inner Classes — Classes Inside Classes</h2>
-<p>An inner class is defined inside another class. It can access all members (including private) of the outer class.</p>
-<pre><code>class Outer {
-    private int x = 10;
-
-    class Inner {
-        void display() {
-            System.out.println("Outer x = " + x);  // Accesses private field!
-        }
-    }
-}
-
-// Usage
-Outer.Inner inner = new Outer().new Inner();
-inner.display();  // Outer x = 10</code></pre>`
+<h2>3.5 Chapter Project: The Automated Enterprise Text Analyzer</h2>
+<p>Build a robust utility featuring a Word Frequency Counter, Palindrome Verification Engine, and Sensitive Data Obfuscator[cite: 2].</p>`
 },
 
-  {
+{
   id: 4,
   free: true,
   icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c6.667-6 13.333 0 20-6"></path><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"></path><path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"></path><path d="M17 6l-2.5-2.5"></path><path d="M14 8l-1-1"></path><path d="M7 18l2.5 2.5"></path><path d="M3.5 14.5l.5.5"></path><path d="M20 9l.5.5"></path><path d="M6.5 12.5l1 1"></path><path d="M16.5 10.5l1 1"></path><path d="M10 16l-2 2"></path><path d="M2 9c6.667 6 13.333 0 20 6"></path></svg>`,
   level: 'Intermediate',
-  title: 'Inheritance & Interfaces',
-  excerpt: 'Inheritance lets one class acquire the properties of another, promoting reuse. Interfaces define contracts — the key to flexible, maintainable Java design.',
-  tags: ['Intermediate', 'Inheritance', 'Interfaces'],
+  title: 'OOP Principles — Classes, Objects & Constructors',
+  excerpt: 'Transition from procedural code to OOP. Master class blueprints, instantiation lifecycles, constructor chaining, method overloading, and encapsulation[cite: 2].',
+  tags: ['Intermediate', 'OOP', 'Classes', 'Constructors'],
   visual: `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c6.667-6 13.333 0 20-6"></path><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"></path><path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"></path><path d="M17 6l-2.5-2.5"></path><path d="M14 8l-1-1"></path><path d="M7 18l2.5 2.5"></path><path d="M3.5 14.5l.5.5"></path><path d="M20 9l.5.5"></path><path d="M6.5 12.5l1 1"></path><path d="M16.5 10.5l1 1"></path><path d="M10 16l-2 2"></path><path d="M2 9c6.667 6 13.333 0 20 6"></path></svg>`,
   bg: 'linear-gradient(135deg, #0a0f1a, #101828)',
-  concepts: ['extends Keyword', 'super Keyword', 'Method Overriding', 'Abstract Classes', 'Interfaces', 'implements', 'Multiple Interfaces'],
-  body: `<p><strong>Inheritance</strong> allows a child class to inherit all fields and methods of a parent class using the <code>extends</code> keyword. It promotes <strong>code reusability</strong> and establishes an "is-a" relationship between classes.</p>
+  concepts: ['Class Blueprints', 'Heap Allocation', 'Constructor Chaining', 'Method Overloading', 'Encapsulation'],
+  body: `<blockquote>"Procedural programming tells the computer what to do step-by-step; object-oriented programming models reality, bounding state and behavior together to build systems that can scale infinitely." — Enterprise Engineering Principles[cite: 2]</blockquote>
 
-<h2>Basic Inheritance with extends</h2>
-<pre><code>class Animal {
-    String name;
-    int age;
+<h2>4.1 The Paradigm Shift: From Procedural Spaghetti to OOP</h2>
+<p>Object-Oriented Programming solves the maintainability crisis of global state by introducing encapsulation, inheritance, polymorphism, and abstraction[cite: 2].</p>
 
-    void eat() {
-        System.out.println(name + " is eating");
-    }
+<h2>4.2 Anatomy of a Class & Object Instantiation</h2>
+<p>A class is a static blueprint; an object is a living instance allocated on the heap[cite: 2]. When executing <code>new BankAccount(...)</code>, the JVM allocates heap memory, performs default and explicit initialization, executes constructors, and returns a reference pointer to the stack[cite: 2].</p>
 
-    void sleep() {
-        System.out.println(name + " is sleeping");
-    }
-}
+<h2>4.3 Constructors and Constructor Chaining (<code>this()</code>)</h2>
+<p>Constructors have no return type and execute automatically during instantiation[cite: 2]. Using <code>this(...)</code> allows one constructor to delegate initialization to another, eliminating code duplication[cite: 2].</p>
 
-class Dog extends Animal {
-    String breed;
+<h2>4.4 Method Overloading (Compile-Time Polymorphism)</h2>
+<p>Methods sharing the exact same name can be overloaded as long as their parameter signatures (number, type, or order) differ[cite: 2]. Resolution happens at compile-time[cite: 2].</p>
 
-    void bark() {
-        System.out.println(name + " says: Woof!");
-    }
+<h2>4.5 Access Modifiers and Encapsulation</h2>
+<p>Enforce data hiding by marking all fields <code>private</code> and exposing controlled read/write access via public getters and setters[cite: 2].</p>
 
-    void fetch() {
-        System.out.println(name + " is fetching the ball");
-    }
-}
-
-// Usage
-Dog d = new Dog();
-d.name = "Bruno";      // Inherited from Animal
-d.age = 3;             // Inherited from Animal
-d.breed = "Golden Retriever";
-d.eat();               // Inherited method!
-d.bark();              // Dog's own method</code></pre>
-<p>Java supports <strong>single inheritance</strong> — a class can extend only one parent class. This prevents the ambiguity problems of multiple inheritance.</p>
-
-<h2>The super Keyword</h2>
-<p><code>super</code> is used to access parent class members from the child class. It's essential when the child class has methods or fields with the same name as the parent.</p>
-<pre><code>class Animal {
-    String name;
-
-    Animal(String name) {
-        this.name = name;
-        System.out.println("Animal created: " + name);
-    }
-
-    void makeSound() {
-        System.out.println("Some generic sound");
-    }
-}
-
-class Dog extends Animal {
-    String breed;
-
-    Dog(String name, String breed) {
-        super(name);  // Must be FIRST statement in constructor
-        this.breed = breed;
-        System.out.println("Dog created: " + breed);
-    }
-
-    void makeSound() {
-        super.makeSound();  // Call parent's version
-        System.out.println("Woof! Woof!");
-    }
-}</code></pre>
-<blockquote>When a child class constructor is called, Java automatically calls the parent's no-argument constructor first. If the parent has only parameterized constructors, you MUST call super(...) explicitly.</blockquote>
-
-<h2>Method Overriding</h2>
-<p>When a child class provides its own implementation of a method already defined in the parent, it's called <strong>method overriding</strong>. Use the <code>@Override</code> annotation to tell the compiler you're intentionally overriding.</p>
-<pre><code>class Animal {
-    void makeSound() {
-        System.out.println("Animal sound");
-    }
-}
-
-class Cat extends Animal {
-    @Override
-    void makeSound() {
-        System.out.println("Meow!");
-    }
-}
-
-class Cow extends Animal {
-    @Override
-    void makeSound() {
-        System.out.println("Moo!");
-    }
-}
-
-// Polymorphism in action!
-Animal a1 = new Cat();   // Upcasting
-Animal a2 = new Cow();
-a1.makeSound();  // "Meow!" — JVM decides at runtime
-a2.makeSound();  // "Moo!" — based on actual object type</code></pre>
-
-<h2>Abstract Classes</h2>
-<p>An <strong>abstract class</strong> cannot be instantiated directly. It serves as a template for subclasses. Abstract methods have no body and MUST be implemented by subclasses.</p>
-<pre><code>abstract class Shape {
-    String color;
-
-    // Abstract method — no body!
-    abstract double calculateArea();
-    abstract double calculatePerimeter();
-
-    // Concrete method — can be used directly or overridden
-    void displayInfo() {
-        System.out.println("Color: " + color);
-        System.out.println("Area: " + calculateArea());
-    }
-}
-
-class Circle extends Shape {
-    double radius;
-
-    Circle(double radius, String color) {
-        this.radius = radius;
-        this.color = color;
-    }
-
-    @Override
-    double calculateArea() {
-        return Math.PI * radius * radius;
-    }
-
-    @Override
-    double calculatePerimeter() {
-        return 2 * Math.PI * radius;
-    }
-}
-
-class Rectangle extends Shape {
-    double width, height;
-
-    Rectangle(double w, double h, String color) {
-        this.width = w;
-        this.height = h;
-        this.color = color;
-    }
-
-    @Override
-    double calculateArea() { return width * height; }
-
-    @Override
-    double calculatePerimeter() { return 2 * (width + height); }
-}</code></pre>
-
-<h2>Interfaces — Defining Contracts</h2>
-<p>An <strong>interface</strong> is a completely abstract class that defines a contract — what methods a class must implement, without specifying how. A class <code>implements</code> an interface.</p>
-<pre><code>interface Flyable {
-    void fly();       // All methods are implicitly public and abstract
-    void land();
-}
-
-interface Swimmable {
-    void swim();
-    void dive();
-}
-
-// Multiple interfaces — Java's solution to multiple inheritance!
-class Duck implements Flyable, Swimmable {
-    @Override
-    public void fly() {
-        System.out.println("Duck flies with wings!");
-    }
-
-    @Override
-    public void land() {
-        System.out.println("Duck lands on water!");
-    }
-
-    @Override
-    public void swim() {
-        System.out.println("Duck swims gracefully!");
-    }
-
-    @Override
-    public void dive() {
-        System.out.println("Duck dives for fish!");
-    }
-}</code></pre>
-
-<h2>Interface vs Abstract Class</h2>
-<table>
-<tr><th>Interface</th><th>Abstract Class</th></tr>
-<tr><td>All methods are abstract (before Java 8)</td><td>Can have both abstract and concrete methods</td></tr>
-<tr><td>Multiple interfaces can be implemented</td><td>Only one abstract class can be extended</td></tr>
-<tr><td>No instance variables (only constants)</td><td>Can have instance variables</td></tr>
-<tr><td>Defines "can-do" capability</td><td>Defines "is-a" relationship</td></tr>
-<tr><td>100% abstraction</td><td>0-100% abstraction</td></tr>
-</table>
-
-<h2>Default Methods in Interfaces (Java 8+)</h2>
-<p>Java 8 introduced <code>default</code> methods in interfaces, allowing you to add new methods to interfaces without breaking existing implementations.</p>
-<pre><code>interface Vehicle {
-    void start();
-    void stop();
-
-    default void honk() {  // Default method with body
-        System.out.println("Beep beep!");
-    }
-}
-
-class Car implements Vehicle {
-    public void start() { System.out.println("Car starting..."); }
-    public void stop() { System.out.println("Car stopping..."); }
-    // honk() is inherited automatically!
-}</code></pre>`
+<h2>4.6 Chapter Project: The Enterprise Library Management System</h2>
+<p>Build a comprehensive CLI application featuring domain models (Book, Member), inventory tracking, and overloaded search operations[cite: 2].</p>`
 },
 
-  {
+{
   id: 5,
   free: true,
   icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c0 5.5 4.5 10 10 10s10-4.5 10-10S17.5 2 12 2 2 6.5 2 12z"></path><path d="M12 2c-2.5 0-5 2-5 5s2.5 5 5 5 5-2 5-5-2.5-5-5-5z"></path><path d="M12 12c-2.5 0-5 2-5 5s2.5 5 5 5 5-2 5-5-2.5-5-5-5z"></path></svg>`,
   level: 'Intermediate',
-  title: 'Encapsulation & Polymorphism',
-  excerpt: 'Encapsulation protects your data. Polymorphism lets one interface take many forms. Together they separate Java beginners from Java developers.',
-  tags: ['Intermediate', 'OOP', 'Polymorphism'],
+  title: 'Advanced OOP — Inheritance, Polymorphism & Abstraction',
+  excerpt: 'Master inheritance hierarchies, super constructor chaining, runtime polymorphism via vtables, abstract classes, default methods in interfaces, and composition[cite: 2].',
+  tags: ['Intermediate', 'Inheritance', 'Polymorphism', 'Abstraction'],
   visual: `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c0 5.5 4.5 10 10 10s10-4.5 10-10S17.5 2 12 2 2 6.5 2 12z"></path><path d="M12 2c-2.5 0-5 2-5 5s2.5 5 5 5 5-2 5-5-2.5-5-5-5z"></path><path d="M12 12c-2.5 0-5 2-5 5s2.5 5 5 5 5-2 5-5-2.5-5-5-5z"></path></svg>`,
   bg: 'linear-gradient(135deg, #10080a, #200f12)',
-  concepts: ['Getters & Setters', 'POJO Classes', 'Method Overloading', 'Method Overriding', '@Override', 'Dynamic Dispatch', 'Upcasting', 'instanceof'],
-  body: `<p><strong>Encapsulation</strong> and <strong>Polymorphism</strong> are two of the four pillars of OOP. They separate good Java code from great Java code. Master these and you write professional, maintainable, enterprise-grade software.</p>
+  concepts: ['Super Chaining', 'vtables & Dynamic Dispatch', 'Abstract Classes', 'Default Interface Methods', 'Composition over Inheritance'],
+  body: `<blockquote>"Inheritance is not merely a mechanism for code reuse; it is an architectural contract. Break that contract, and your entire class hierarchy collapses." — Enterprise Architecture Standards[cite: 2]</blockquote>
 
-<h2>Encapsulation — Protecting Data with Access Control</h2>
-<p>Encapsulation means bundling data (fields) and the methods that operate on that data into a single unit (class), and controlling access to that data. The core idea: <strong>make fields private, provide public methods to access them</strong>.</p>
-<pre><code>class BankAccount {
-    private double balance;      // Hidden from outside!
-    private String accountNumber;
-    private String ownerName;
+<h2>5.1 Inheritance Mechanics & The <code>super</code> Keyword</h2>
+<p>Subclasses inherit state and behavior using the <code>extends</code> keyword[cite: 2]. Parent constructors are invoked via <code>super(...)</code> as the absolute first statement in subclass constructors[cite: 2].</p>
 
-    // Constructor
-    public BankAccount(String owner, String accNum, double initialBalance) {
-        this.ownerName = owner;
-        this.accountNumber = accNum;
-        this.balance = initialBalance;
-    }
+<h2>5.2 Runtime Polymorphism & Virtual Method Tables (vtables)</h2>
+<p>Dynamic dispatch allows superclass reference variables to execute overridden child methods at runtime[cite: 2]. Under the hood, the JVM utilizes Virtual Method Tables (vtables) to resolve method addresses in constant time $O(1)$[cite: 2].</p>
 
-    // Getter methods — read-only access
-    public double getBalance() {
-        return balance;
-    }
+<h2>5.3 Abstraction, Abstract Classes, and Interfaces</h2>
+<p>Abstract classes provide incomplete templates with concrete states, while interfaces define pure behavioral contracts[cite: 2]. Java 8+ interfaces support modern default and static methods without breaking backward compatibility[cite: 2].</p>
 
-    public String getOwnerName() {
-        return ownerName;
-    }
+<h2>5.4 Composition Over Inheritance</h2>
+<p>Avoid the fragile base class problem by favoring composition—embedding dependency instances as private fields rather than deep inheritance trees[cite: 2].</p>
 
-    // Setter with validation
-    public void setOwnerName(String name) {
-        if (name != null && !name.trim().isEmpty()) {
-            this.ownerName = name;
-        }
-    }
-
-    // Business methods — controlled modification
-    public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-            System.out.println("Deposited ₹" + amount);
-        } else {
-            System.out.println("Invalid amount!");
-        }
-    }
-
-    public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
-            System.out.println("Withdrawn ₹" + amount);
-        } else {
-            System.out.println("Insufficient funds or invalid amount!");
-        }
-    }
-}
-
-// Usage
-BankAccount acc = new BankAccount("Dithsha", "ACC12345", 5000);
-acc.deposit(2000);
-acc.withdraw(1000);
-System.out.println("Balance: ₹" + acc.getBalance());  // ₹6000
-// acc.balance = -99999;  // ERROR! Can't access private field</code></pre>
-<blockquote>This POJO (Plain Old Java Object) pattern with getters and setters is used in every Java framework — Spring, Hibernate, Android, Jakarta EE. Master it early and you'll write code that integrates seamlessly with enterprise tools.</blockquote>
-
-<h2>Benefits of Encapsulation</h2>
-<ul>
-  <li><strong>Data Hiding</strong> — Internal state is protected from external modification</li>
-  <li><strong>Validation</strong> — Setters can validate data before accepting it</li>
-  <li><strong>Flexibility</strong> — Internal implementation can change without affecting external code</li>
-  <li><strong>Read-Only Fields</strong> — Provide getter but no setter for immutable data</li>
-  <li><strong>Computed Properties</strong> — Getters can calculate values on the fly</li>
-</ul>
-
-<h2>Method Overloading — Compile-Time Polymorphism</h2>
-<p>Method overloading means having multiple methods with the same name but different parameter lists in the same class. The compiler decides which method to call based on the arguments provided.</p>
-<pre><code>class Calculator {
-    // Same name, different parameters — compiler picks the right one
-    int add(int a, int b) {
-        return a + b;
-    }
-
-    double add(double a, double b) {
-        return a + b;
-    }
-
-    int add(int a, int b, int c) {
-        return a + b + c;
-    }
-
-    String add(String a, String b) {
-        return a + b;
-    }
-}
-
-// Usage
-Calculator calc = new Calculator();
-System.out.println(calc.add(5, 3));           // 8 (int version)
-System.out.println(calc.add(5.5, 3.5));       // 9.0 (double version)
-System.out.println(calc.add(1, 2, 3));       // 6 (3-parameter version)
-System.out.println(calc.add("Hello, ", "World")); // "Hello, World" (String version)</code></pre>
-<p><strong>Rules for overloading:</strong> Methods must differ in number of parameters, type of parameters, or order of parameters. Return type alone does NOT distinguish overloaded methods.</p>
-
-<h2>Method Overriding — Runtime Polymorphism</h2>
-<p>Method overriding occurs when a subclass provides a specific implementation of a method already defined in its parent class. The JVM decides which method to call at runtime based on the actual object's class — this is <strong>dynamic dispatch</strong>.</p>
-<pre><code>class Animal {
-    void sound() {
-        System.out.println("Animal makes a sound");
-    }
-
-    void move() {
-        System.out.println("Animal moves");
-    }
-}
-
-class Dog extends Animal {
-    @Override
-    void sound() {
-        System.out.println("Dog barks: Woof!");
-    }
-
-    @Override
-    void move() {
-        System.out.println("Dog runs on four legs");
-    }
-}
-
-class Cat extends Animal {
-    @Override
-    void sound() {
-        System.out.println("Cat meows: Meow!");
-    }
-
-    @Override
-    void move() {
-        System.out.println("Cat sneaks silently");
-    }
-}
-
-// Runtime polymorphism in action!
-Animal myAnimal;  // Reference type is Animal
-
-myAnimal = new Dog();    // Actual object is Dog
-myAnimal.sound();        // "Dog barks: Woof!" — JVM calls Dog's version
-myAnimal.move();         // "Dog runs on four legs"
-
-myAnimal = new Cat();    // Actual object is Cat
-myAnimal.sound();        // "Cat meows: Meow!" — JVM calls Cat's version
-myAnimal.move();         // "Cat sneaks silently"
-
-// Same reference, different behavior — that's polymorphism!</code></pre>
-
-<h2>Upcasting and instanceof</h2>
-<p><strong>Upcasting</strong> is assigning a subclass object to a superclass reference. It's always safe and happens automatically.</p>
-<pre><code>Animal a = new Dog();  // Upcasting — Dog is an Animal
-
-// To call Dog-specific methods, you need to downcast
-if (a instanceof Dog) {  // Check before casting to avoid ClassCastException
-    Dog d = (Dog) a;     // Downcasting
-    d.fetch();           // Dog-specific method
-}
-
-// instanceof pattern matching (Java 16+)
-if (a instanceof Dog d) {  // d is automatically declared and assigned
-    d.fetch();
-}</code></pre>
-
-<h2>The Four Pillars of OOP — Complete Picture</h2>
-<table>
-<tr><th>Pillar</th><th>What It Means</th><th>Java Implementation</th></tr>
-<tr><td>Encapsulation</td><td>Hide internal data, expose controlled access</td><td>private fields, public getters/setters</td></tr>
-<tr><td>Inheritance</td><td>Acquire properties from parent class</td><td>extends keyword</td></tr>
-<tr><td>Polymorphism</td><td>One interface, many implementations</td><td>Overloading, overriding, interfaces</td></tr>
-<tr><td>Abstraction</td><td>Hide complexity, show only essentials</td><td>abstract classes, interfaces</td></tr>
-</table>`
+<h2>5.5 Chapter Project: The E-Commerce Product Catalog & Pricing Engine</h2>
+<p>Build a polymorphic pricing system calculating custom tariffs and discounts across heterogeneous product hierarchies[cite: 2].</p>`
 },
 
-  {
+{
   id: 6,
   free: true,
   icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`,
   level: 'Intermediate',
-  title: 'Exception Handling',
-  excerpt: 'Every real program encounters errors. Java gives you powerful tools to catch, handle and recover from them — keeping your programs robust and crash-free.',
-  tags: ['Intermediate', 'Exceptions', 'try-catch'],
+  title: 'Defensive Programming (Exception Handling & File I/O)',
+  excerpt: 'Master checked vs. unchecked exceptions, try-catch-finally bytecode tables, try-with-resources syntax, custom domain exceptions, and buffered text file I/O[cite: 2].',
+  tags: ['Intermediate', 'Exceptions', 'File I/O', 'Defensive Programming'],
   visual: `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`,
   bg: 'linear-gradient(135deg, #1a0a0a, #280f0f)',
-  concepts: ['try-catch-finally', 'Checked vs Unchecked', 'Common Exceptions', 'throw & throws', 'Custom Exceptions', 'Multi-catch'],
-  body: `<p>An <strong>exception</strong> is an event that disrupts the normal flow of a program. Java's exception handling mechanism lets you catch errors gracefully, recover from them, and keep your program running instead of crashing.</p>
+  concepts: ['Checked vs Unchecked', 'Bytecode Exception Tables', 'Try-with-Resources', 'Custom Exceptions', 'Buffered Streams'],
+  body: `<blockquote>"In an ideal world, networks never drop packets and disks never fail. In the real world, production systems fail. Defensive programming is the discipline of anticipating those failures." — Enterprise Engineering Principles[cite: 2]</blockquote>
 
-<h2>The try-catch-finally Block</h2>
-<p>The <code>try</code> block contains code that might throw an exception. The <code>catch</code> block handles the exception. The <code>finally</code> block always executes — perfect for cleanup operations.</p>
-<pre><code>try {
-    int result = 10 / 0;  // Throws ArithmeticException
-    System.out.println("This never prints!");
-} catch (ArithmeticException e) {
-    System.out.println("Error: Cannot divide by zero!");
-    System.out.println("Message: " + e.getMessage());
-} finally {
-    System.out.println("This ALWAYS runs — use for closing files, connections, etc.");
-}</code></pre>
-
-<h2>Multiple catch Blocks</h2>
-<p>Catch different types of exceptions with different responses. Always catch the most specific exception first, then the more general ones.</p>
-<pre><code>try {
-    String text = null;
-    System.out.println(text.length());  // NullPointerException
-    int result = 10 / 0;               // ArithmeticException
-} catch (NullPointerException e) {
-    System.out.println("Null reference detected!");
-} catch (ArithmeticException e) {
-    System.out.println("Math error!");
-} catch (Exception e) {
-    System.out.println("Some other error: " + e.getClass().getName());
-}</code></pre>
-
-<h2>Checked vs Unchecked Exceptions</h2>
-<table>
-<tr><th>Checked Exceptions</th><th>Unchecked Exceptions</th></tr>
-<tr><td>Compiler forces you to handle them</td><td>Compiler does NOT force handling</td></tr>
-<tr><td>Extend <code>Exception</code> (not RuntimeException)</td><td>Extend <code>RuntimeException</code></td></tr>
-<tr><td>Represent predictable, recoverable conditions</td><td>Represent programming bugs</td></tr>
-<tr><td>Examples: IOException, SQLException, FileNotFoundException</td><td>Examples: NullPointerException, ArrayIndexOutOfBoundsException, ArithmeticException</td></tr>
-<tr><td>Must use try-catch or declare with throws</td><td>Optional to handle</td></tr>
-</table>
-
-<h2>throw and throws Keywords</h2>
-<p><code>throw</code> manually creates and throws an exception. <code>throws</code> declares that a method might throw a checked exception, passing the responsibility to the caller.</p>
-<pre><code>// throws — declares method might throw checked exception
-public void readFile(String filename) throws IOException, FileNotFoundException {
-    FileReader reader = new FileReader(filename);  // Can throw FileNotFoundException
-    // ... read file ...
-}
-
-// throw — manually raises an exception
-public void setAge(int age) {
-    if (age < 0) {
-        throw new IllegalArgumentException("Age cannot be negative!");
-    }
-    if (age > 150) {
-        throw new IllegalArgumentException("Age seems unrealistic!");
-    }
-    this.age = age;
-}
-
-// Caller must handle or declare
-public void processFile(String filename) {
-    try {
-        readFile(filename);
-    } catch (IOException e) {
-        System.out.println("Failed to read: " + e.getMessage());
-    }
-}</code></pre>
-
-<h2>Creating Custom Exceptions</h2>
-<p>For application-specific errors, create your own exception classes by extending Exception (checked) or RuntimeException (unchecked).</p>
-<pre><code>// Custom checked exception
-class InsufficientFundsException extends Exception {
-    private double shortfall;
-
-    public InsufficientFundsException(double amount, double balance) {
-        super("Need ₹" + (amount - balance) + " more. Current balance: ₹" + balance);
-        this.shortfall = amount - balance;
-    }
-
-    public double getShortfall() {
-        return shortfall;
-    }
-}
-
-// Usage in a bank system
-class BankAccount {
-    private double balance;
-
-    public void withdraw(double amount) throws InsufficientFundsException {
-        if (amount > balance) {
-            throw new InsufficientFundsException(amount, balance);
-        }
-        balance -= amount;
-    }
-}
-
-// Handling custom exception
-try {
-    account.withdraw(10000);  // Only ₹5000 available
-} catch (InsufficientFundsException e) {
-    System.out.println(e.getMessage());
-    System.out.println("Shortfall: ₹" + e.getShortfall());
-}</code></pre>
-
-<h2>Try-with-Resources (Java 7+)</h2>
-<p>Automatically closes resources (files, connections, streams) without needing a finally block. The resource must implement <code>AutoCloseable</code>.</p>
-<pre><code>// Old way — verbose and error-prone
-BufferedReader reader = null;
-try {
-    reader = new BufferedReader(new FileReader("data.txt"));
-    String line = reader.readLine();
-} catch (IOException e) {
-    e.printStackTrace();
-} finally {
-    if (reader != null) {
-        try { reader.close(); } catch (IOException e) { }
-    }
-}
-
-// Modern way — clean and safe
-try (BufferedReader reader = new BufferedReader(new FileReader("data.txt"))) {
-    String line = reader.readLine();
-    System.out.println(line);
-} catch (IOException e) {
-    System.out.println("Error: " + e.getMessage());
-}
-// reader is automatically closed here!</code></pre>
-
-<h2>Common Exceptions Every Developer Encounters</h2>
+<h2>6.1 The Exception Hierarchy: Checked vs. Unchecked</h2>
 <ul>
-  <li><code>NullPointerException</code> — Accessing a method/field on a null reference</li>
-  <li><code>ArrayIndexOutOfBoundsException</code> — Accessing array index outside valid range</li>
-  <li><code>ArithmeticException</code> — Dividing by zero, illegal math operations</li>
-  <li><code>NumberFormatException</code> — Parsing invalid string to number</li>
-  <li><code>ClassCastException</code> — Invalid type casting</li>
-  <li><code>IllegalArgumentException</code> — Invalid argument passed to method</li>
-  <li><code>IOException</code> — File/network operation failed</li>
-  <li><code>FileNotFoundException</code> — File doesn't exist</li>
+  <li><strong>Checked Exceptions:</strong> Represent recoverable external failures (e.g., <code>IOException</code>); enforced by the compiler via catch-or-declare rules[cite: 2].</li>
+  <li><strong>Unchecked Exceptions (<code>RuntimeException</code>):</strong> Represent programming bugs (e.g., <code>NullPointerException</code>)[cite: 2].</li>
 </ul>
 
-<h2>Best Practices for Exception Handling</h2>
-<ul>
-  <li>Catch the most specific exception first, general ones last</li>
-  <li>Never catch <code>Exception</code> or <code>Throwable</code> unless you have a very good reason</li>
-  <li>Don't swallow exceptions — always log or handle them meaningfully</li>
-  <li>Use finally or try-with-resources for cleanup</li>
-  <li>Create custom exceptions for domain-specific errors</li>
-  <li>Don't use exceptions for normal control flow — they're expensive</li>
-</ul>`
+<h2>6.2 Bytecode Exception Tables & Interception</h2>
+<p>The compiler generates an Exception Table in bytecode mapping try-block ranges to catch handler offsets[cite: 2]. Modern Java utilizes <strong>try-with-resources</strong> statements to automatically close <code>AutoCloseable</code> resources safely and prevent file descriptor leaks[cite: 2].</p>
+
+<h2>6.3 Custom Domain Exceptions & File I/O</h2>
+<p>Craft custom checked/unchecked exceptions carrying rich diagnostic data[cite: 2]. Leverage buffered character streams (<code>BufferedReader</code>, <code>BufferedWriter</code>) for high-performance disk I/O[cite: 2].</p>
+
+<h2>6.4 Chapter Project: File-Based Expense Tracker with Persistent Storage</h2>
+<p>Build a robust persistent expense tracker featuring custom validation exceptions, disk serialization, and automated audit logging[cite: 2].</p>`
 },
 
-  {
+{
   id: 7,
-  free: false,
-  icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
-  level: 'Advanced',
-  title: 'Multithreaded Programming',
-  excerpt: 'Java has built-in multithreading support. Learn to create concurrent programs, manage thread lifecycle, and use synchronization to prevent race conditions.',
-  tags: ['Advanced', 'Threads', 'Concurrency'],
-  visual: `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
-  bg: 'linear-gradient(135deg, #0a0f0a, #0f1a0f)',
-  concepts: ['Thread Class', 'Runnable Interface', 'Thread Lifecycle', 'sleep() & join()', 'Thread Priority', 'synchronization', 'wait() notify()'],
-  body: `<p>Java has <strong>built-in support for multithreading</strong> — running two or more parts of a program concurrently. Each independent execution path is called a <strong>thread</strong>. Multithreading is essential for responsive GUIs, high-performance servers, and real-time systems.</p>
+  free: true,
+  icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>`,
+  level: 'Intermediate',
+  title: 'The Java Collections Framework (JCF)',
+  excerpt: 'Master ArrayList memory growth algorithms, LinkedList pointer chains, HashSet and HashMap hashing internals, collision resolution, and custom sorting[cite: 2].',
+  tags: ['Intermediate', 'Collections', 'ArrayList', 'HashMap'],
+  visual: `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>`,
+  bg: 'linear-gradient(135deg, #0a0a0f, #141420)',
+  concepts: ['ArrayList Growth Factor', 'HashMap Bucket Treeification', 'Comparable vs Comparator', 'Time Complexity Analysis'],
+  body: `<blockquote>"Raw arrays are rigid monuments to fixed sizing. The Java Collections Framework is a dynamic, polymorphic ecosystem engineered to store, retrieve, and process data at scale." — Enterprise Architecture Standards[cite: 2]</blockquote>
 
-<h2>Why Multithreading Matters</h2>
+<h2>7.1 ArrayList vs. LinkedList Internals</h2>
 <ul>
-  <li><strong>Responsiveness</strong> — GUI remains responsive while background tasks run</li>
-  <li><strong>Performance</strong> — Utilize multiple CPU cores for parallel processing</li>
-  <li><strong>Resource Sharing</strong> — Threads share the same memory space, making data exchange efficient</li>
-  <li><strong>Scalability</strong> — Handle thousands of concurrent connections in servers</li>
+  <li><strong>ArrayList:</strong> Wraps a dynamic backing array that expands by 50% (1.5x) when capacity is exceeded[cite: 2]. Provides $O(1)$ random index access[cite: 2].</li>
+  <li><strong>LinkedList:</strong> Implements a doubly-linked list of heap nodes[cite: 2]. Offers $O(1)$ head/tail manipulations but suffers from CPU cache misses due to scattered memory allocations[cite: 2].</li>
 </ul>
 
-<h2>Creating Threads — Two Ways</h2>
+<h2>7.2 HashMap Hashing & Collision Resolution</h2>
+<p><code>HashMap</code> computes key hash codes, applies perturbation mixing, and indexes into bucket arrays[cite: 2]. When hash collisions exceed a threshold (typically 8), linked list buckets are dynamically treeified into Self-Balancing Red-Black Trees to guarantee $O(\log n)$ worst-case lookups[cite: 2].</p>
 
-<h3>Method 1: Extending Thread Class</h3>
-<pre><code>class MyThread extends Thread {
-    @Override
-    public void run() {
-        for (int i = 1; i <= 5; i++) {
-            System.out.println(getName() + ": Count " + i);
-            try {
-                Thread.sleep(1000);  // Pause for 1 second
-            } catch (InterruptedException e) {
-                System.out.println("Thread interrupted!");
-            }
-        }
-    }
-}
+<h2>7.3 Sorting via Comparable and Comparator</h2>
+<p>Use <code>Comparable</code> for natural ordering within domain models and <code>Comparator</code> lambdas for external sorting strategies[cite: 2].</p>
 
-// Usage
-MyThread t1 = new MyThread();
-t1.setName("Worker-1");
-t1.start();  // NEVER call run() directly — always use start()!
-
-MyThread t2 = new MyThread();
-t2.setName("Worker-2");
-t2.start();</code></pre>
-
-<h3>Method 2: Implementing Runnable (Preferred)</h3>
-<pre><code>class MyTask implements Runnable {
-    private String taskName;
-
-    MyTask(String name) { this.taskName = name; }
-
-    @Override
-    public void run() {
-        System.out.println(taskName + " is running in " + 
-                          Thread.currentThread().getName());
-    }
-}
-
-// Usage
-Thread t1 = new Thread(new MyTask("Download Task"), "Downloader");
-Thread t2 = new Thread(new MyTask("Upload Task"), "Uploader");
-t1.start();
-t2.start();</code></pre>
-<blockquote>Implementing Runnable is preferred because Java doesn't support multiple inheritance. If you extend Thread, you can't extend any other class. Runnable is an interface, so you can implement it while extending another class.</blockquote>
-
-<h2>Thread Lifecycle States</h2>
-<pre><code>NEW → RUNNABLE → RUNNING → BLOCKED/WAITING/TIMED_WAITING → TERMINATED
-  ↑___________________________________________________________|</code></pre>
-<ul>
-  <li><strong>NEW</strong> — Thread created but not started yet</li>
-  <li><strong>RUNNABLE</strong> — Ready to run, waiting for CPU time</li>
-  <li><strong>RUNNING</strong> — Currently executing on CPU</li>
-  <li><strong>BLOCKED</strong> — Waiting for a monitor lock</li>
-  <li><strong>WAITING</strong> — Waiting indefinitely (wait() called)</li>
-  <li><strong>TIMED_WAITING</strong> — Waiting for a specified time (sleep, join with timeout)</li>
-  <li><strong>TERMINATED</strong> — Thread has completed execution</li>
-</ul>
-
-<h2>Essential Thread Methods</h2>
-<pre><code>Thread t = new Thread(new MyTask());
-
-// Control methods
-t.start();        // Begin execution (calls run() in new thread)
-t.sleep(1000);    // Pause current thread for 1000ms
-t.join();         // Wait for this thread to finish
-t.join(5000);     // Wait max 5 seconds, then continue
-t.interrupt();    // Request thread to stop (cooperative)
-t.isAlive();      // Check if thread is still running
-t.setDaemon(true); // Daemon thread dies when main exits
-
-// Priority (1-10, default 5)
-t.setPriority(Thread.MAX_PRIORITY);  // 10
-t.setPriority(Thread.MIN_PRIORITY);  // 1
-t.setPriority(Thread.NORM_PRIORITY); // 5</code></pre>
-
-<h2>The Race Condition Problem</h2>
-<p>When multiple threads access shared data simultaneously without coordination, the result depends on the unpredictable timing of thread execution — this is a <strong>race condition</strong>.</p>
-<pre><code>class Counter {
-    private int count = 0;
-
-    // WITHOUT synchronization — race condition!
-    public void increment() {
-        count++;  // Not atomic! Read → Modify → Write
-    }
-
-    // WITH synchronization — thread-safe
-    public synchronized void incrementSafe() {
-        count++;  // Only one thread can execute at a time
-    }
-
-    public int getCount() { return count; }
-}
-
-// Problem: Two threads incrementing simultaneously
-// Thread A reads count=5, Thread B reads count=5
-// Both increment to 6, both write 6
-// Expected: 7, Actual: 6 — DATA CORRUPTION!</code></pre>
-
-<h2>Synchronization — Preventing Race Conditions</h2>
-
-<h3>Synchronized Methods</h3>
-<pre><code>class BankAccount {
-    private double balance = 0;
-
-    public synchronized void deposit(double amount) {
-        balance += amount;
-        System.out.println("Deposited ₹" + amount + ", Balance: ₹" + balance);
-    }
-
-    public synchronized void withdraw(double amount) {
-        if (balance >= amount) {
-            balance -= amount;
-            System.out.println("Withdrawn ₹" + amount + ", Balance: ₹" + balance);
-        }
-    }
-
-    public synchronized double getBalance() {
-        return balance;
-    }
-}</code></pre>
-
-<h3>Synchronized Blocks (More Granular)</h3>
-<pre><code>class SharedResource {
-    private Object lock = new Object();
-    private int data = 0;
-
-    public void updateData(int value) {
-        // Non-critical code can run in parallel
-        System.out.println("Preparing update...");
-
-        synchronized (lock) {
-            // Only one thread at a time
-            data = value;
-            System.out.println("Data updated to: " + data);
-        }
-
-        // Non-critical code can run in parallel
-        System.out.println("Update complete!");
-    }
-}</code></pre>
-
-<h2>Inter-Thread Communication: wait() and notify()</h2>
-<p>Threads can communicate with each other using <code>wait()</code>, <code>notify()</code>, and <code>notifyAll()</code>. These must be called from a synchronized context.</p>
-<pre><code>class MessageQueue {
-    private String message;
-    private boolean empty = true;
-
-    public synchronized String read() {
-        while (empty) {
-            try {
-                wait();  // Release lock and wait for producer
-            } catch (InterruptedException e) { }
-        }
-        empty = true;
-        notifyAll();  // Wake up waiting producers
-        return message;
-    }
-
-    public synchronized void write(String msg) {
-        while (!empty) {
-            try {
-                wait();  // Release lock and wait for consumer
-            } catch (InterruptedException e) { }
-        }
-        empty = false;
-        message = msg;
-        notifyAll();  // Wake up waiting consumers
-    }
-}
-
-// Producer thread
-class Producer implements Runnable {
-    private MessageQueue queue;
-    Producer(MessageQueue q) { this.queue = q; }
-
-    public void run() {
-        String[] messages = {"Hello", "World", "From", "Producer"};
-        for (String msg : messages) {
-            queue.write(msg);
-            System.out.println("Produced: " + msg);
-        }
-    }
-}
-
-// Consumer thread
-class Consumer implements Runnable {
-    private MessageQueue queue;
-    Consumer(MessageQueue q) { this.queue = q; }
-
-    public void run() {
-        for (int i = 0; i < 4; i++) {
-            String msg = queue.read();
-            System.out.println("Consumed: " + msg);
-        }
-    }
-}</code></pre>
-
-<h2>Modern Approach: ExecutorService</h2>
-<p>Since Java 5, use <code>ExecutorService</code> instead of manually creating threads. It manages a pool of threads efficiently.</p>
-<pre><code>import java.util.concurrent.*;
-
-// Create a thread pool with 5 threads
-ExecutorService executor = Executors.newFixedThreadPool(5);
-
-// Submit tasks
-Future<Integer> future1 = executor.submit(() -> {
-    Thread.sleep(1000);
-    return 42;
-});
-
-Future<String> future2 = executor.submit(() -> {
-    return "Hello from thread pool!";
-});
-
-// Get results
-Integer result1 = future1.get();  // Blocks until done
-String result2 = future2.get();
-
-System.out.println(result1);  // 42
-System.out.println(result2);  // Hello from thread pool!
-
-// Always shutdown!
-executor.shutdown();
-executor.awaitTermination(60, TimeUnit.SECONDS);</code></pre>
-
-<h2>Thread Safety Best Practices</h2>
-<ul>
-  <li>Make shared data immutable (final) when possible</li>
-  <li>Use synchronized methods or blocks for shared mutable data</li>
-  <li>Prefer higher-level concurrency utilities (ConcurrentHashMap, AtomicInteger)</li>
-  <li>Avoid calling wait() without a while loop (spurious wakeups)</li>
-  <li>Always use notifyAll() instead of notify() to prevent missed signals</li>
-  <li>Keep synchronized blocks as small as possible to maximize parallelism</li>
-</ul>`
+<h2>7.4 Chapter Project: Student Portal Gradebook</h2>
+<p>Build a robust gradebook application utilizing HashMap registries, HashSet department filters, and custom Comparator analytics[cite: 2].</p>`
 },
 
   {
@@ -1409,8 +574,8 @@ String result = sb.toString();</code></pre>
 
 // Building a complex string efficiently
 sb.append("Student: ").append("Dithsha")
-  .append("\nMarks: ").append(85.5)
-  .append("\nGrade: ").append('A');
+  .append("\\nMarks: ").append(85.5)
+  .append("\\nGrade: ").append('A');
 
 String report = sb.toString();
 // Much faster than String concatenation in a loop!</code></pre>
@@ -1663,14 +828,14 @@ Map (key-value pairs)
 <p>Recursion is a method calling itself to solve a problem by breaking it into smaller subproblems.</p>
 <pre><code>// Factorial: n! = n × (n-1)!
 public static int factorial(int n) {
-    if (n <= 1) return 1;  // Base case
+    if (n &lt;= 1) return 1;  // Base case
     return n * factorial(n - 1);  // Recursive call
 }
 // factorial(5) = 5 × 4 × 3 × 2 × 1 = 120
 
 // Fibonacci: F(n) = F(n-1) + F(n-2)
 public static int fibonacci(int n) {
-    if (n <= 1) return n;
+    if (n &lt;= 1) return n;
     return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
@@ -1683,10 +848,10 @@ public static int sumOfDigits(int n) {
 
 // Binary search (recursive)
 public static int binarySearch(int[] arr, int left, int right, int target) {
-    if (left > right) return -1;  // Not found
+    if (left &gt; right) return -1;  // Not found
     int mid = left + (right - left) / 2;
     if (arr[mid] == target) return mid;
-    if (arr[mid] > target) return binarySearch(arr, left, mid - 1, target);
+    if (arr[mid] &gt; target) return binarySearch(arr, left, mid - 1, target);
     return binarySearch(arr, mid + 1, right, target);
 }</code></pre>
 
@@ -1991,11 +1156,8 @@ String input = txt.getText();
 
 // TextArea — multi-line text input
 TextArea area = new TextArea(5, 30);  // 5 rows, 30 columns
-area.setText("Line 1
-Line 2
-Line 3");
-area.append("Additional text
-");
+area.setText("Line 1\\nLine 2\\nLine 3");
+area.append("Additional text\\n");
 
 // Checkbox — on/off toggle
 Checkbox cb = new Checkbox("Subscribe to newsletter");
@@ -2501,8 +1663,8 @@ const cur=document.getElementById('cur'),curR=document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 (function anim(){cur.style.left=(mx-5)+'px';cur.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=(rx-18)+'px';curR.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
-document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
-document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
+document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5);'}});
+document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1);'}});
 </script>
 </body>
 </html>
