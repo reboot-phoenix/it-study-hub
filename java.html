@@ -3232,1107 +3232,1811 @@ Comparator&lt;Student&gt; gpaComparator = Comparator.comparingDouble(Student::ge
   }
 ]
 },
-
-  {
+{
   id: 8,
   free: false,
-  icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
+  icon: `<i class="ti ti-math-function" aria-hidden="true"></i>`,
   level: 'Advanced',
-  title: 'String Handling',
-  excerpt: 'Strings are everywhere in Java. Learn the difference between String and StringBuffer, master all key methods, and understand why immutability matters for performance.',
-  tags: ['Advanced', 'Strings', 'StringBuffer'],
-  visual: `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
-  bg: 'linear-gradient(135deg, #080a14, #0f1228)',
-  concepts: ['String Immutability', 'StringBuffer', 'charAt indexOf', 'substring split', 'String Comparison', 'append insert reverse', 'Command Line Args'],
-  body: `<p><strong>String</strong> objects in Java are <em>immutable</em> — once created they cannot be changed. Every "modification" creates a new String object. This design has profound implications for performance, security, and memory management. Mastering String handling is essential for writing efficient Java code.</p>
-
-<h2>String Immutability — Why It Matters</h2>
-<p>When you "modify" a String, Java creates a completely new object in the String Pool rather than changing the existing one:</p>
-<pre><code>String s = "Hello";
-s = s + " World";  // Creates NEW object, old "Hello" still exists in pool
-
-// Behind the scenes:
-// 1. "Hello" created in pool
-// 2. " World" created in pool
-// 3. "Hello World" created in pool
-// 4. s now points to "Hello World"
-// 5. "Hello" and " World" remain in pool (garbage collected eventually)</code></pre>
-<p><strong>Benefits of Immutability:</strong></p>
-<ul>
-  <li><strong>Security</strong> — String parameters can't be modified by malicious code (network URLs, file paths, passwords)</li>
-  <li><strong>Thread Safety</strong> — Immutable objects are automatically thread-safe, no synchronization needed</li>
-  <li><strong>String Pool</strong> — JVM reuses String literals from a shared pool, saving memory</li>
-  <li><strong>HashCode Caching</strong> — Hash code is computed once and cached, making HashMap operations faster</li>
-</ul>
-
-<h2>String Creation — Two Ways</h2>
-<pre><code>// Method 1: String literal (goes to String Pool)
-String s1 = "IT Study Hub";
-String s2 = "IT Study Hub";  // Same object from pool!
-System.out.println(s1 == s2);  // true — same reference!
-
-// Method 2: new keyword (creates new object in heap)
-String s3 = new String("IT Study Hub");
-System.out.println(s1 == s3);  // false — different objects!
-System.out.println(s1.equals(s3));  // true — same content</code></pre>
-<blockquote>Always use .equals() for content comparison, == only checks if references point to the same object. This is one of the most common Java interview questions!</blockquote>
-
-<h2>Essential String Methods</h2>
-<pre><code>String s = "IT Study Hub";
-
-// Length and character access
-s.length();              // 12
-s.charAt(3);             // 't' (0-indexed)
-s.charAt(s.length() - 1); // 'b' (last character)
-
-// Searching
-s.indexOf("Study");      // 3 (first occurrence)
-s.indexOf("S");          // 3
-s.lastIndexOf("u");      // 10 (last occurrence)
-s.contains("Study");     // true
-s.startsWith("IT");      // true
-s.endsWith("Hub");       // true
-
-// Extraction
-s.substring(3);          // "Study Hub" (from index 3 to end)
-s.substring(3, 8);       // "Study" (from 3 inclusive, to 8 exclusive)
-
-// Transformation
-s.toUpperCase();         // "IT STUDY HUB"
-s.toLowerCase();         // "it study hub"
-s.trim();                // Removes leading/trailing whitespace
-s.replace("Hub", "Platform");  // "IT Study Platform"
-s.replaceAll(" ", "-");  // "IT-Study-Hub" (regex replacement)
-
-// Splitting
-String[] words = s.split(" ");  // ["IT", "Study", "Hub"]
-String[] chars = s.split("");    // ["I", "T", " ", "S", ...]
-
-// Joining
-String joined = String.join(" - ", words);  // "IT - Study - Hub"
-
-// Checking content
-s.isEmpty();             // false
-s.isBlank();             // false (Java 11+)
-"   ".isBlank();         // true (Java 11+)
-
-// Comparison
-s.equals("IT Study Hub");              // true
-s.equalsIgnoreCase("it study hub");    // true
-s.compareTo("IT Study Hub");           // 0 (equal)
-s.compareTo("AA Study Hub");         // positive (s comes after)
-
-// Formatting
-String formatted = String.format("Name: %s, Age: %d", "Rahul", 20);
-// "Name: Rahul, Age: 20"
-
-// Converting other types to String
-String numStr = String.valueOf(123);      // "123"
-String boolStr = String.valueOf(true);    // "true"
-String objStr = String.valueOf(new Object());</code></pre>
-
-<h2>StringBuffer — Mutable & Thread-Safe</h2>
-<p>Use <code>StringBuffer</code> when you need to modify strings frequently, especially in multithreaded environments. It's synchronized (thread-safe) but slightly slower than StringBuilder.</p>
-<pre><code>StringBuffer sb = new StringBuffer("Hello");
-
-// Append
-sb.append(" World");           // "Hello World"
-sb.append("!");               // "Hello World!"
-
-// Insert at specific position
-sb.insert(5, ",");            // "Hello, World!"
-
-// Delete
-sb.delete(5, 6);              // "Hello World!" (removes comma)
-sb.deleteCharAt(5);           // "HelloWorld!"
-
-// Replace
-sb.replace(0, 5, "Hi");       // "HiWorld!"
-
-// Reverse
-sb.reverse();                 // "!dlroW iH"
-
-// Capacity management
-sb.capacity();                // Current capacity (default 16 + initial length)
-sb.ensureCapacity(100);       // Ensure at least 100 capacity
-sb.trimToSize();              // Reduce capacity to match length
-
-// Convert to String
-String result = sb.toString();</code></pre>
-
-<h2>StringBuilder — Mutable & Fast (Not Thread-Safe)</h2>
-<p><code>StringBuilder</code> is identical to StringBuffer but NOT synchronized. Use it in single-threaded contexts for better performance.</p>
-<pre><code>StringBuilder sb = new StringBuilder();
-
-// Building a complex string efficiently
-sb.append("Student: ").append("Dithsha")
-  .append("\nMarks: ").append(85.5)
-  .append("\nGrade: ").append('A');
-
-String report = sb.toString();
-// Much faster than String concatenation in a loop!</code></pre>
-
-<h2>Performance Comparison</h2>
-<table>
-<tr><th>Operation</th><th>String</th><th>StringBuffer</th><th>StringBuilder</th></tr>
-<tr><td>Immutability</td><td>Immutable</td><td>Mutable</td><td>Mutable</td></tr>
-<tr><td>Thread Safety</td><td>Thread-safe (immutable)</td><td>Thread-safe (synchronized)</td><td>Not thread-safe</td></tr>
-<tr><td>Performance</td><td>Slow for modifications</td><td>Medium</td><td>Fastest</td></tr>
-<tr><td>Use Case</td><td>Constant text, literals</td><td>Multithreaded string building</td><td>Single-threaded string building</td></tr>
-</table>
-
-<h2>String Pool and intern()</h2>
-<pre><code>String s1 = new String("Hello");  // Heap object
-String s2 = s1.intern();           // Moves to String Pool (or returns existing)
-String s3 = "Hello";               // String literal (already in pool)
-
-System.out.println(s2 == s3);  // true — both point to pool object
-
-// Practical use: reduce memory when creating many identical strings
-String[] names = new String[1000];
-for (int i = 0; i < 1000; i++) {
-    names[i] = new String("Student").intern();  // All point to same pool object!
-}</code></pre>
-
-<h2>Command Line Arguments</h2>
-<p>The <code>args</code> parameter in <code>main(String[] args)</code> receives command-line arguments as String array.</p>
-<pre><code>public class CommandLineDemo {
-    public static void main(String[] args) {
-        System.out.println("Number of arguments: " + args.length);
-
-        for (int i = 0; i < args.length; i++) {
-            System.out.println("Arg " + i + ": " + args[i]);
-        }
+  title: 'Functional Programming (Java 8+ Features)',
+  excerpt: 'Imperative vs. declarative style, lambdas and functional interfaces, method references, the Streams API, collectors and Optional - with an e-commerce analytics dashboard project.',
+  tags: ['Advanced', 'Lambdas', 'Streams'],
+  visual: `<i class="ti ti-math-function" aria-hidden="true" style="font-size:72px;"></i>`,
+  bg: 'linear-gradient(135deg, #0a0f14, #0f1a24)',
+  concepts: ['Lambda Expressions', 'Functional Interfaces', 'Method References', 'Streams API', 'Collectors', 'Optional'],
+  body: `<blockquote>"Imperative programming tells the machine how to do every step of a calculation; functional programming defines what transformations should occur, delegating the execution strategy, laziness, and optimization to the runtime engine."</blockquote>
+<h2>8.1 The Paradigm Shift: Imperative vs. Declarative Processing</h2>
+<p>For decades, enterprise Java development was strictly imperative. When processing a collection of customer accounts, inventory records, or financial transactions, developers wrote explicit loops, maintained mutable index counters, managed temporary accumulator variables, and implemented custom conditional filtering logic step-by-step:</p>
+<pre><code>// IMPERATIVE STYLE (Pre-Java 8)
+List&lt;Transaction&gt; highValueTransactions = new ArrayList&lt;&gt;();
+for (int i = 0; i &lt; allTransactions.size(); i++) {
+    Transaction t = allTransactions.get(i);
+    if (t.getAmount() &gt; 10000.0 &amp;&amp; "COMPLETED".equals(t.getStatus())) {
+        highValueTransactions.add(t);
     }
 }
-
-// Run: java CommandLineDemo Dithsha 20 BCA
-// Output:
-// Number of arguments: 3
-// Arg 0: Dithsha
-// Arg 1: 20
-// Arg 2: BCA</code></pre>
-
-<h2>String vs StringBuffer vs StringBuilder — When to Use What</h2>
-<ul>
-  <li><strong>String</strong> — Use for text that won't change: configuration values, constants, messages</li>
-  <li><strong>StringBuilder</strong> — Use for string manipulation in single-threaded code: building SQL queries, generating reports, parsing files</li>
-  <li><strong>StringBuffer</strong> — Use for string manipulation in multithreaded code: shared string builders, concurrent text processing</li>
-</ul>
-<blockquote>Never concatenate strings in a loop using +. Each + creates a new String object. Use StringBuilder instead — it can be 100x faster for large loops!</blockquote>`
-},
-
+// Manual sorting via anonymous inner class comparator
+Collections.sort(highValueTransactions, new Comparator&lt;Transaction&gt;() {
+        @Override
+        public int compare(Transaction t1, Transaction t2) {
+            return Double.compare(t2.getAmount(), t1.getAmount());
+        }
+    });</code></pre>
+<p>While imperative code is explicit, it suffers from severe architectural drawbacks: it is verbose, prone to off-by-one index bugs, difficult to parallelize automatically across multi-core CPUs, and forces the reader to parse low-level control flow mechanics rather than core business intent.</p>
+<p>Java 8 introduced a massive paradigm shift by bringing Functional Programming to the language core. Using Lambda Expressions, Functional Interfaces, and the Streams API, you can rewrite the exact same data-processing logic declaratively:</p>
+<pre><code>// DECLARATIVE STYLE (Java 8+)
+List&lt;Transaction&gt; highValueTransactions = allTransactions.stream()
+    .filter(t -&gt; t.getAmount() &gt; 10000.0 &amp;&amp; "COMPLETED".equals(t.getStatus()))
+    .sorted(Comparator.comparing(Transaction::getAmount).reversed())
+    .collect(Collectors.toList());</code></pre>
+<p>Declarative code communicates what data transformations should occur, allowing the JVM and runtime libraries to optimize execution pipelines, parallelize operations across multi-core processors without manual thread management, and eliminate mutable state hazards entirely.</p>
+<h2>8.2 Lambda Expressions and Functional Interfaces</h2>
+<p>A Lambda Expression is essentially an anonymous function—a block of code with parameters and a body that can be passed around as a first-class citizen without needing to be wrapped inside a formal named class or object instance.</p>
+<h3>Anatomy and Target Typing of Lambdas</h3>
+<p>Java is a statically-typed language. For a lambda expression to exist, the compiler must determine its type using Target Typing.</p>
+<p>A lambda expression can only be assigned to a Functional Interface—an interface that contains exactly one abstract method (though it may contain any number of default or static methods).</p>
+<p>To prevent accidental additions of abstract methods by future maintainers, functional interfaces are routinely annotated with @FunctionalInterface:</p>
+<pre><code>@FunctionalInterface
+public interface RiskEvaluator {
+    boolean assessRisk(double creditScore, double debtRatio); // Single abstract method
+}</code></pre>
+<h3>The Core Built-in Functional Interfaces (java.util.function)</h3>
+<p>Java provides a comprehensive suite of built-in functional interfaces in the java.util.function package, eliminating the need to write custom interfaces for common operations:</p>
+<div class="table-wrap"><table class="comparison-table"><thead><tr><th>Functional Interface</th><th>Method Signature</th><th>Purpose / Use Case</th></tr></thead><tbody><tr><td>Predicate&lt;T&gt;</td><td>boolean test(T t)</td><td>Evaluates a condition against an object (filtering).</td></tr><tr><td>Consumer&lt;T&gt;</td><td>void accept(T t)</td><td>Accepts an argument and performs an action (logging, side effects).</td></tr><tr><td>Supplier&lt;T&gt;</td><td>T get()</td><td>Generates or supplies a value without taking arguments (factory creation).</td></tr><tr><td>Function&lt;T, R&gt;</td><td>R apply(T t)</td><td>Transforms an input of type T into an output of type R (mapping).</td></tr><tr><td>UnaryOperator&lt;T&gt;</td><td>T apply(T t)</td><td>Specialization of Function where input and output share the same type.</td></tr><tr><td>BinaryOperator&lt;T&gt;</td><td>T apply(T t1, T t2)</td><td>Combines two arguments of the same type into a single result (reduction).</td></tr><tr><td>BiFunction&lt;T, R U,&gt;</td><td>R apply(T t, U u)</td><td>Takes two distinct arguments and produces a transformation result.</td></tr></tbody></table></div>
+<h2>8.3 Method References: Shorthand Elegance</h2>
+<p>When a lambda expression does nothing more than call an existing named method, you can replace the lambda with a Method Reference (::), making your code even cleaner.</p>
+<h3>Four Types of Method References</h3>
+<p>Reference to a Static Method: (ContainingClass::staticMethodName)</p>
+<pre><code>// Lambda: t -&gt; Integer.parseInt(t)
+// Method Ref: Integer::parseInt</code></pre>
+<p>Reference to an Instance Method of a Particular Object: (containingObject::instanceMethodName)</p>
+<pre><code>// Lambda: str -&gt; logger.info(str)
+// Method Ref: logger::info</code></pre>
+<p>Reference to an Instance Method of an Arbitrary Object of a Particular Type: (ContainingType::methodName)</p>
+<pre><code>// Lambda: (String s) -&gt; s.toLowerCase()
+// Method Ref: String::toLowerCase</code></pre>
+<p>Reference to a Constructor: (ClassName::new)</p>
+<pre><code>// Lambda: () -&gt; new ArrayList&lt;&gt;()
+// Method Ref: ArrayList::new</code></pre>
+<h2>8.4 The Streams API: Declarative Data Processing &amp; Pipeline Architecture</h2>
+<p>The Streams API (java.util.stream.Stream) is not a data structure; rather, it is a declarative pipeline abstraction for processing sequences of elements from a data source (such as collections, arrays, or I/O channels).</p>
+<h3>Core Architectural Concepts of Streams</h3>
+<ul><li><strong>Pipelines</strong>: A stream pipeline consists of three parts: a Source (e.g., collection.stream()), zero or more Intermediate Operations, and a single Terminal Operation.</li><li><strong>Immutability of Source</strong>: Stream operations never modify the underlying source collection; they produce a new stream or aggregated result.</li><li><strong>Lazy Evaluation</strong>: Intermediate operations (filter, map, distinct) are lazy. They do not execute immediately when declared. Instead, they build up an execution plan (a processing graph). Computation is triggered only when a terminal operation (collect, forEach, reduce) is invoked.</li><li><strong>Short-Circuiting</strong>: Operations like findFirst(), anyMatch(), or limit() allow streams to process infinite datasets or terminate early without evaluating every element.</li></ul>
+<h2>8.5 Intermediate vs. Terminal Operations</h2>
+<h3>Key Intermediate Operations (Return a new Stream)</h3>
+<ul><li><strong>filter(Predicate&lt;T&gt; predicate)</strong>: Retains elements matching the given predicate condition.</li><li><strong>map(Function&lt;T, R&gt; mapper)</strong>: Transforms each element into another object via the mapping function.</li><li><strong>flatMap(Function&lt;T, Stream&lt;R&gt;&gt; mapper)</strong>: Flattens nested collections or streams into a single flat stream.</li><li><strong>sorted() / sorted(Comparator)</strong>: Sorts stream elements.</li><li><strong>distinct()</strong>: Removes duplicate elements based on .equals() and .hashCode().</li><li><strong>peek(Consumer&lt;T&gt; action)</strong>: Performs an action on each element as it passes through (widely used for debugging pipelines).</li><li><strong>limit(long maxSize) / skip(long n)</strong>: Truncates or skips elements.</li></ul>
+<h3>Key Terminal Operations (Trigger Execution and Produce Results)</h3>
+<ul><li><strong>collect(Collector)</strong>: Accumulates stream elements into collections (Collectors.toList(), Collectors.toSet(), Collectors.groupingBy(), Collectors.toMap()).</li><li><strong>forEach(Consumer)</strong>: Iterates across stream elements.</li><li><strong>reduce(identity, accumulator)</strong>: Combines all stream elements into a single summarized result (e.g., summing numbers).</li><li><strong>count()</strong>: Returns the total element count.</li><li><strong>anyMatch(Predicate) / allMatch(Predicate) / noneMatch(Predicate)</strong>: Short-circuiting boolean evaluations.</li><li><strong>findFirst() / findAny()</strong>: Returns an Optional wrapping a matching element.</li></ul>
+<pre><code>// Example: Complex Stream Pipeline
+List&lt;String&gt; topPerformers = employeeStream
+    .filter(e -&gt; e.getPerformanceRating() &gt;= 4.5) // Intermediate
+    .map(Employee::getFullName) // Intermediate
+    .sorted() // Intermediate
+    .limit(10) // Intermediate (Short-circuiting)
+    .collect(Collectors.toList()); // Terminal (Triggers execution)</code></pre>
+<h2>8.6 The Optional Class: Eliminating NullPointerException</h2>
+<p>One of the most notorious flaws in programming history is the NullPointerException (dubbed by its creator Tony Hoare as his "billion-dollar mistake"). Traditional Java methods returned null to indicate the absence of a value, forcing defensive if (result != null) checks everywhere.</p>
+<p>Java 8 introduced java.util.Optional&lt;T&gt;—a container object which may or may not contain a non-null value. Optional forces developers to explicitly confront the possibility of absence.</p>
+<h3>Best Practices for Optional</h3>
+<p>Never use Optional as a field type in classes or as method parameters (it clutters signatures and violates serialization). It is designed strictly as a return type for methods that might not find a result.</p>
+<h3>Core Methods of Optional</h3>
+<ul><li><strong>Optional.of(value)</strong>: Wraps a non-null value (throws NullPointerException if null).</li><li><strong>Optional.ofNullable(value)</strong>: Wraps a value that may be null, returning an empty optional if null.</li><li><strong>orElse(defaultValue)</strong>: Returns the wrapped value if present, otherwise returns the specified default.</li><li><strong>orElseGet(Supplier)</strong>: Lazily computes and returns a default value only if absent.</li><li><strong>orElseThrow(Supplier)</strong>: Returns the value or throws a custom exception if absent.</li><li><strong>map() / filter() / flatMap()</strong>: Allows functional transformation of optional contents without manual null-checking.</li></ul>
+<pre><code>public Optional&lt;UserProfile&gt; findOptionalUserById(String id) {
+    return Optional.ofNullable(database.queryUser(id));
+}
+// Usage in client code
+String userEmail = findOptionalUserById("U-992")
+    .map(UserProfile::getEmail)
+    .orElse("guest@enterprise.com");</code></pre>
+<h2>8.7 Chapter Project: E-Commerce Analytics Dashboard</h2>
+<p>To synthesize functional programming, lambda expressions, method references, the Streams API, collectors, and Optional, we will build an enterprise E-Commerce Analytics Dashboard that ingests, filters, transforms, groups, and summarizes large volumes of mock transaction data.</p>
+<h3>Architectural Requirements</h3>
+<ul><li><strong>Domain Model</strong>: Implement a rich Transaction class with properties (transaction ID, customer ID, product category, purchase amount, status, timestamp).</li><li><strong>Functional Filtering &amp; Mapping</strong>: Use predicate filtering and mapping streams to extract high-value transactions.</li><li><strong>Advanced Collectors</strong>: Group transactions by product category using Collectors.groupingBy() and calculate total revenues using Collectors.summingDouble().</li><li><strong>Optional Safety</strong>: Use Optional to locate maximum/minimum transaction records safely.</li></ul>
+<h3>Production-Grade Implementation</h3>
+<p>Create a file named EcommerceAnalyticsEngine.java:</p>
+<pre><code>import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
+// ==================== DOMAIN MODEL: TRANSACTION ====================class Transaction {
+private final String transactionId;
+private final String customerId;
+private final String category;
+private final double amount;
+private final String status; // "COMPLETED", "PENDING", "FAILED"
+private final LocalDate timestamp;
+public Transaction(String transactionId, String customerId, String category, double amount, String status, LocalDate timestamp) {
+    this.transactionId = transactionId;
+    this.customerId = customerId;
+    this.category = category;
+    this.amount = amount;
+    this.status = status;
+    this.timestamp = timestamp;
+}
+public String getTransactionId() { return transactionId; }
+public String getCustomerId() { return customerId; }
+public String getCategory() { return category; }
+public double getAmount() { return amount; }
+public String getStatus() { return status; }
+public LocalDate getTimestamp() { return timestamp; }
+@Override
+public String toString() {
+    return String.format("Txn[ID: %s, Cat: %-12s, Amt: $%8.2f, Status: %s, Date: %s]",
+        transactionId, category, amount, status, timestamp);
+}
+}
+// ==================== MAIN ANALYTICS ENGINE ====================public class EcommerceAnalyticsEngine {
+public static void main(String[] args) {
+    List&lt;Transaction&gt; mockDatabase = seedTransactionData();
+    printHeader();
+    // 1. FILTERING &amp; COLLECTING: High-Value Completed Transactions
+    System.out.println("\\n--- 1. HIGH-VALUE COMPLETED TRANSACTIONS (&gt;$1,000) ---");
+    List&lt;Transaction&gt; highValueTxns = mockDatabase.stream()
+        .filter(t -&gt; "COMPLETED".equalsIgnoreCase(t.getStatus()))
+        .filter(t -&gt; t.getAmount() &gt; 1000.0)
+        .sorted(Comparator.comparing(Transaction::getAmount).reversed())
+        .collect(Collectors.toList());
+    highValueTxns.forEach(System.out::println);
+    System.out.println("Total High-Value Count: " + highValueTxns.size());
+    // 2. MAPPING &amp; REDUCING: Total Revenue Calculation
+    System.out.println("\\n--- 2. TOTAL ACCUMULATED REVENUE (COMPLETED ONLY) ---");
+    double totalRevenue = mockDatabase.stream()
+        .filter(t -&gt; "COMPLETED".equalsIgnoreCase(t.getStatus()))
+        .mapToDouble(Transaction::getAmount)
+        .sum();
+    System.out.printf("Total Enterprise Revenue: $%.2f%n", totalRevenue);
+    // 3. GROUPING COLLECTORS: Revenue Breakdown by Category
+    System.out.println("\\n--- 3. REVENUE BREAKDOWN BY PRODUCT CATEGORY ---");
+    Map&lt;String, Double&gt; revenueByCategory = mockDatabase.stream()
+        .filter(t -&gt; "COMPLETED".equalsIgnoreCase(t.getStatus()))
+        .collect(Collectors.groupingBy(
+        Transaction::getCategory,
+        Collectors.summingDouble(Transaction::getAmount)
+        ));
+    revenueByCategory.forEach((category, revenue) -&gt;
+        System.out.printf(" - Category: %-15s | Revenue: $%.2f%n", category, revenue)
+        );
+    // 4. OPTIONAL SAFETY: Finding Maximum Transaction
+    System.out.println("\\n--- 4. PEAK VALUE TRANSACTION AUDIT ---");
+    Optional&lt;Transaction&gt; peakTransaction = mockDatabase.stream()
+        .max(Comparator.comparingDouble(Transaction::getAmount));
+    peakTransaction.ifPresentOrElse(
+        txn -&gt; System.out.println("Peak Transaction Found: " + txn),
+        () -&gt; System.out.println("No transactions recorded in database.")
+        );
+    // 5. ADVANCED FILTERING: Customer Spending Profile
+    System.out.println("\\n--- 5. CUSTOMER SPENDING SUMMARY (ID: CUST-001) ---");
+    double customerSpend = mockDatabase.stream()
+        .filter(t -&gt; "CUST-001".equals(t.getCustomerId()))
+        .filter(t -&gt; "COMPLETED".equalsIgnoreCase(t.getStatus()))
+        .mapToDouble(Transaction::getAmount)
+        .sum();
+    System.out.printf("Total Spend for Customer CUST-001: $%.2f%n", customerSpend);
+    System.out.println("=================================================");
+}
+private static List&lt;Transaction&gt; seedTransactionData() {
+    return List.of(
+        new Transaction("TXN-101", "CUST-001", "Electronics", 2499.99, "COMPLETED", LocalDate.of(2027, 1, 10)),
+        new Transaction("TXN-102", "CUST-002", "Apparel", 89.50, "COMPLETED", LocalDate.of(2027, 1, 12)),
+        new Transaction("TXN-103", "CUST-001", "Cloud Software", 1200.00, "COMPLETED", LocalDate.of(2027, 1, 15)),
+        new Transaction("TXN-104", "CUST-003", "Electronics", 450.00, "FAILED", LocalDate.of(2027, 1, 18)),
+        new Transaction("TXN-105", "CUST-004", "Data Storage", 3500.00, "COMPLETED", LocalDate.of(2027, 2, 1)),
+        new Transaction("TXN-106", "CUST-002", "Cloud Software", 600.00, "PENDING", LocalDate.of(2027, 2, 3)),
+        new Transaction("TXN-107", "CUST-005", "Apparel", 220.00, "COMPLETED", LocalDate.of(2027, 2, 5)),
+        new Transaction("TXN-108", "CUST-001", "Electronics", 1850.00, "COMPLETED", LocalDate.of(2027, 2, 10))
+        );
+}
+private static void printHeader() {
+    System.out.println("=================================================");
+    System.out.println(" JAVA ENTERPRISE: E-COMMERCE ANALYTICS ENGINE ");
+    System.out.println("=================================================");
+}
+}</code></pre>
+<h3>Engineering Review of Chapter 8 Project</h3>
+<ul><li><strong>Declarative Pipelines</strong>: Replaced complex nested for loops and if statements with concise stream pipelines (filter, map, sorted, collect).</li><li><strong>Advanced Aggregations</strong>: Utilized Collectors.groupingBy() combined with Collectors.summingDouble() to instantly compute revenue metrics per category.</li><li><strong>Null Safety via Optional</strong>: Safely processed peak value retrieval using Optional.ifPresentOrElse(), eliminating null pointer risk.</li></ul>
+<h3>Summary and Next Steps</h3>
+<p>You have mastered functional programming in Java: lambda expressions, target typing, functional interfaces, method references, intermediate and terminal stream operations, collectors, grouping metrics, and null-safe programming with Optional.</p>`,
+  quiz: [
   {
+    "q": "What is the key difference between imperative and declarative (functional-style) data processing?",
+    "opts": [
+      "Declarative code states WHAT transformation should occur, leaving the execution strategy to the runtime",
+      "Declarative code requires explicit loops and index counters",
+      "Imperative code cannot be used in Java 8 or later",
+      "Imperative code is always faster than declarative code"
+    ],
+    "ans": 0,
+    "xp": 10,
+    "exp": "Imperative code spells out how every step happens (loops, counters, accumulators). Declarative pipelines describe the desired transformation, letting the JVM and libraries optimize and even parallelize execution."
+  },
+  {
+    "q": "To what kind of type can a lambda expression be assigned?",
+    "opts": [
+      "Any interface that has default methods",
+      "Only the Runnable interface",
+      "Any abstract class",
+      "A functional interface: an interface with exactly one abstract method"
+    ],
+    "ans": 3,
+    "xp": 10,
+    "exp": "The compiler uses target typing to match a lambda to a functional interface. Such an interface may still contain any number of default or static methods, and @FunctionalInterface guards against accidental extra abstract methods."
+  },
+  {
+    "q": "Which built-in functional interface has the method boolean test(T t) and is used for filtering?",
+    "opts": [
+      "UnaryOperator<T>",
+      "Consumer<T>",
+      "Predicate<T>",
+      "Supplier<T>"
+    ],
+    "ans": 2,
+    "xp": 10,
+    "exp": "Predicate<T> evaluates a condition against an object and returns a boolean. It is what filter() expects."
+  },
+  {
+    "q": "Which functional interface generates a value WITHOUT taking any arguments (for example in factory creation)?",
+    "opts": [
+      "Consumer<T>",
+      "Supplier<T>",
+      "Function<T, R>",
+      "BiFunction<T, U, R>"
+    ],
+    "ans": 1,
+    "xp": 10,
+    "exp": "Supplier<T> exposes T get() and takes no input. Consumer takes an input and returns nothing; Function transforms an input into an output."
+  },
+  {
+    "q": "Integer::parseInt is a method reference equivalent to which lambda, and what type of reference is it?",
+    "opts": [
+      "t -> Integer.parseInt(t); a reference to a static method",
+      "str -> logger.info(str); a reference to an instance method of a particular object",
+      "(String s) -> s.toLowerCase(); a reference to an arbitrary object's method",
+      "() -> new Integer(); a constructor reference"
+    ],
+    "ans": 0,
+    "xp": 10,
+    "exp": "When a lambda only calls an existing method, :: makes it shorter. Integer::parseInt replaces t -> Integer.parseInt(t) and is a reference to a static method."
+  },
+  {
+    "q": "When does a stream pipeline containing filter(), map() and sorted() actually start processing elements?",
+    "opts": [
+      "When the source collection is modified",
+      "When the stream is garbage collected",
+      "As soon as each intermediate operation is declared",
+      "Only when a terminal operation such as collect, forEach or reduce is invoked"
+    ],
+    "ans": 3,
+    "xp": 10,
+    "exp": "Intermediate operations are lazy: they only build an execution plan. Computation is triggered by the terminal operation."
+  },
+  {
+    "q": "What is the recommended use of java.util.Optional<T>?",
+    "opts": [
+      "As a field type in domain classes",
+      "As a method parameter type",
+      "As a return type for methods that might not find a result",
+      "As a replacement for every primitive"
+    ],
+    "ans": 2,
+    "xp": 10,
+    "exp": "Optional is designed strictly as a return type. Using it for fields or parameters clutters signatures and violates serialization expectations."
+  },
+  {
+    "q": "What is the difference between Optional.orElse(defaultValue) and Optional.orElseGet(Supplier)?",
+    "opts": [
+      "There is no difference",
+      "orElseGet lazily computes the default only when the Optional is empty",
+      "orElse throws an exception when empty",
+      "orElseGet only works with null values"
+    ],
+    "ans": 1,
+    "xp": 10,
+    "exp": "orElseGet takes a Supplier that runs lazily, only if the value is absent. orElseThrow is the variant that throws a custom exception."
+  }
+]
+},
+{
   id: 9,
   free: false,
-  icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>`,
+  icon: `<i class="ti ti-cpu" aria-hidden="true"></i>`,
   level: 'Advanced',
-  title: 'Packages & Collections',
-  excerpt: 'Packages organize your code and prevent naming conflicts. The Collections Framework gives you dynamic data structures every Java developer uses daily.',
-  tags: ['Advanced', 'Packages', 'Collections'],
-  visual: `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>`,
-  bg: 'linear-gradient(135deg, #0a0a0f, #141420)',
-  concepts: ['package Declaration', 'import Statement', 'java.util', 'ArrayList', 'LinkedList', 'HashMap', 'HashSet', 'Recursion'],
-  body: `<p><strong>Packages</strong> group related classes and prevent naming conflicts. The <strong>Collections Framework</strong> provides ready-to-use dynamic data structures that every Java developer relies on daily. Together they form the backbone of professional Java development.</p>
-
-<h2>Package Declaration and Import</h2>
-<p>Packages organize classes into namespaces, similar to folders on your computer. They prevent class name collisions and control access.</p>
-<pre><code>// File: com/itstudyhub/models/Student.java
-package com.itstudyhub.models;  // Must be FIRST line in file
-
-public class Student {
-    private String name;
-    private int rollNo;
-    // ...
+  title: 'Multithreading & Concurrency',
+  excerpt: 'Processes vs. threads, Thread/Runnable/Callable, the thread lifecycle, race conditions and visibility, synchronized and volatile, and the Executor Framework - with a ticket booking simulator.',
+  tags: ['Advanced', 'Threads', 'Concurrency'],
+  visual: `<i class="ti ti-cpu" aria-hidden="true" style="font-size:72px;"></i>`,
+  bg: 'linear-gradient(135deg, #140a0a, #241010)',
+  concepts: ['Processes vs. Threads', 'Runnable & Callable', 'Thread States', 'Race Conditions', 'synchronized / volatile', 'ExecutorService'],
+  body: `<blockquote>"Modern computer hardware no longer scales raw clock speed; it multiplies cores. Writing single-threaded software on an 8-core or 64-core processor is like driving a Ferrari in first gear. Concurrency is the art and science of letting your application breathe across multiple execution streams simultaneously."</blockquote>
+<h2>9.1 Processes vs. Threads &amp; CPU Core Architecture</h2>
+<p>Before diving into Java's concurrency primitives, you must understand the physical and operating system realities of execution environments. At the lowest level of computing architecture, tasks are executed by physical CPU cores. To maximize hardware utilization, modern operating systems use preemptive multitasking, interleaving execution time slices across thousands of concurrent workloads.</p>
+<h3>Processes</h3>
+<p>A Process is an independent execution unit managed by the operating system kernel. It possesses its own isolated virtual memory space, file descriptor tables, security credentials, and system resources.</p>
+<ul><li><strong>Memory Isolation</strong>: The memory of Process A cannot be accessed directly by Process B. This provides robust security and stability; if a process crashes due to a segmentation fault, neighboring processes remain untouched.</li><li><strong>Context-Switching Overhead</strong>: Creating and context-switching between processes is computationally expensive. When the OS switches processes, it must flush or swap entire virtual memory page tables, register states, and cache lines, leading to measurable performance drag.</li><li><strong>Communication</strong>: Because processes cannot share memory directly, communication requires Inter-Process Communication (IPC) mechanisms such as network sockets, named pipes, message queues, or shared memory segments mapped by the kernel.</li></ul>
+<h3>Threads</h3>
+<p>A Thread (often called a lightweight process) is the smallest unit of execution that can be scheduled by an operating system's CPU scheduler.</p>
+<ul><li><strong>Shared Memory Architecture</strong>: Multiple threads running within the same process share the exact same heap memory space, global static variables, and open file descriptors. However, each thread maintains its own private Call Stack (for local primitive variables, method call frames, and object references) and its own Program Counter (PC register) tracking the current instruction offset.</li><li><strong>Performance Benefit</strong>: Because threads share heap memory, communication between threads within the same process is instantaneous. There is no need for complex IPC serialization.</li><li><strong>The Concurrency Tax</strong>: Shared memory is a double-edged sword. While it enables fast data sharing, it introduces severe synchronization hazards like race conditions, memory visibility bugs, deadlocks, and livelocks.</li></ul>
+<pre><code>+-----------------------------------------------------------------+
+|                          PROCESS MEMORY                         |
+|  +-----------------------------------------------------------+  |
+|  |                        HEAP MEMORY                        |  |
+|  |       (Shared Objects, Arrays, Global Static State)       |  |
+|  +-----------------------------------------------------------+  |
+|             │                        │                          |
+|             ▼                        ▼                          |
+|      +--------------+                 +--------------+          |
+|      |  THREAD 1    |                 |  THREAD 2    |          |
+|      |  (Private    |                 |  (Private    |          |
+|      |   Stack &amp;    |                 |   Stack &amp;    |          |
+|      |  Registers)  |                 |  Registers)  |          |
+|      +--------------+                 +--------------+          |
++-----------------------------------------------------------------+</code></pre>
+<h2>9.2 Thread Creation Mechanics: Thread Class vs. Runnable / Callable Interfaces</h2>
+<p>In Java, execution threads are represented by instances of java.lang.Thread. There are three foundational ways to define and launch custom worker threads:</p>
+<h3>1. Extending the Thread Class</h3>
+<pre><code>public class WorkerThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Worker thread executing via inheritance: " + Thread.currentThread().getName());
+    }
 }
-
-// File: com/itstudyhub/Main.java
-package com.itstudyhub;
-
-import com.itstudyhub.models.Student;  // Import specific class
-import com.itstudyhub.models.*;         // Import all classes in package
-import java.util.ArrayList;             // Import from Java standard library
-import java.util.*;                     // Import everything from java.util
-
-public class Main {
-    public static void main(String[] args) {
-        Student s = new Student();
-        ArrayList&lt;Student&gt; students = new ArrayList&lt;&gt;();
+// Execution:
+WorkerThread worker = new WorkerThread();
+worker.start(); // Triggers OS-level thread creation and invokes run() asynchronously</code></pre>
+<p><strong>Architectural Flaw</strong>: Because Java enforces single class inheritance (Chapter 5), extending Thread prevents your class from extending any other domain superclass. Furthermore, it tightly couples the task definition (what to do) with the thread execution mechanism (how to run it). This approach is generally discouraged in modern enterprise engineering.</p>
+<h3>2. Implementing the Runnable Interface (Recommended)</h3>
+<p>Runnable is a functional interface representing a task that can be executed by a thread. It decouples task logic from thread lifecycle management.</p>
+<pre><code>public class EnterpriseTask implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Executing enterprise task on thread: " + Thread.currentThread().getName());
+    }
+}
+// Execution:
+Thread worker = new Thread(new EnterpriseTask(), "Worker-Pool-Thread-1");
+worker.start();</code></pre>
+<p><strong>Modern Lambda Usage</strong>: Since Runnable is a functional interface with a single void run() method, you can instantiate tasks inline using lambda expressions:</p>
+<pre><code>Thread lambdaWorker = new Thread(() -&gt; {
+        System.out.println("Lambda thread running asynchronously.");
+    }, "Lambda-Worker");
+lambdaWorker.start();</code></pre>
+<h3>3. The Callable Interface (Returning Results)</h3>
+<p>Unlike Runnable (whose run() method returns void and cannot throw checked exceptions), java.util.concurrent.Callable&lt;V&gt; allows worker tasks to return a computed result and throw checked exceptions.</p>
+<pre><code>import java.util.concurrent.Callable;
+public class FinancialComputationTask implements Callable&lt;Double&gt; {
+    private final double principal;
+    private final double interestRate;
+    public FinancialComputationTask(double principal, double interestRate) {
+        this.principal = principal;
+        this.interestRate = interestRate;
+    }
+    @Override
+    public Double call() throws Exception {
+        // Heavy asynchronous calculation simulation
+        Thread.sleep(1000); // Simulate processing latency
+        return principal * (1.0 + interestRate);
     }
 }</code></pre>
-
-<h2>Package Naming Convention</h2>
-<ul>
-  <li>Use your domain name in reverse: <code>com.companyname.project</code></li>
-  <li>All lowercase: <code>com.itstudyhub.java</code></li>
-  <li>Subpackages for organization: <code>models</code>, <code>services</code>, <code>utils</code>, <code>controllers</code></li>
-</ul>
-
-<h2>Access Modifiers Across Packages</h2>
-<table>
-<tr><th>Modifier</th><th>Same Class</th><th>Same Package</th><th>Subclass</th><th>Anywhere</th></tr>
-<tr><td>public</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
-<tr><td>protected</td><td>Yes</td><td>Yes</td><td>Yes</td><td>No</td></tr>
-<tr><td>default</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td></tr>
-<tr><td>private</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
-</table>
-
-<h2>ArrayList — Dynamic Array</h2>
-<p>ArrayList is a resizable array implementation. It provides fast random access but slow insertion/deletion in the middle.</p>
-<pre><code>import java.util.ArrayList;
-
-ArrayList&lt;String&gt; subjects = new ArrayList&lt;&gt;();
-
-// Adding elements
-subjects.add("Java");
-subjects.add("Python");
-subjects.add(1, "C++");  // Insert at index 1
-
-// Accessing
-subjects.get(0);           // "Java"
-subjects.size();             // 3
-subjects.indexOf("Python");  // 2
-subjects.contains("Java");   // true
-
-// Removing
-subjects.remove("C++");      // Remove by object
-subjects.remove(0);          // Remove by index
-
-// Iterating
-for (String subject : subjects) {
-    System.out.println(subject);
-}
-
-// Lambda iteration (Java 8+)
-subjects.forEach(System.out::println);
-
-// Converting to array
-String[] arr = subjects.toArray(new String[0]);
-
-// Sorting
-subjects.sort(String::compareTo);  // Alphabetical
-Collections.sort(subjects);        // Alternative</code></pre>
-
-<h2>LinkedList — Doubly Linked List</h2>
-<p>LinkedList provides fast insertion and deletion at both ends. Use it when you frequently add/remove elements from the beginning or middle.</p>
-<pre><code>import java.util.LinkedList;
-
-LinkedList&lt;String&gt; queue = new LinkedList&lt;&gt;();
-
-// Queue operations (FIFO)
-queue.addLast("First");   // enqueue
-queue.addLast("Second");
-queue.addLast("Third");
-String first = queue.removeFirst();  // dequeue — "First"
-
-// Stack operations (LIFO)
-LinkedList&lt;String&gt; stack = new LinkedList&lt;&gt;();
-stack.push("Bottom");     // addFirst
-stack.push("Top");
-String top = stack.pop();  // removeFirst — "Top"
-
-// Deque operations (double-ended queue)
-queue.addFirst("Front");   // Add to front
-queue.addLast("Back");    // Add to back
-queue.removeFirst();      // Remove from front
-queue.removeLast();       // Remove from back</code></pre>
-
-<h2>HashMap — Key-Value Store</h2>
-<p>HashMap stores data as key-value pairs with O(1) average time complexity for get/put operations. Keys must be unique.</p>
-<pre><code>import java.util.HashMap;
-
-HashMap&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
-
-// Adding entries
-scores.put("Dithsha", 95);
-scores.put("Mithila", 88);
-scores.put("Argha", 92);
-
-// Accessing
-scores.get("Dithsha");         // 95
-scores.getOrDefault("Unknown", 0);  // 0 (default if key not found)
-
-// Checking
-scores.containsKey("Mithila");   // true
-scores.containsValue(100);       // false
-
-// Removing
-scores.remove("Argha");
-
-// Iterating
-for (String name : scores.keySet()) {
-    System.out.println(name + ": " + scores.get(name));
-}
-
-// Entry set iteration (most efficient)
-for (Map.Entry&lt;String, Integer&gt; entry : scores.entrySet()) {
-    System.out.println(entry.getKey() + " = " + entry.getValue());
-}
-
-// Lambda iteration
-scores.forEach((name, score) -> 
-    System.out.println(name + " scored " + score)
-);
-
-// Size and clear
-scores.size();    // Number of entries
-scores.isEmpty(); // Check if empty
-scores.clear();   // Remove all entries</code></pre>
-
-<h2>HashSet — Unique Elements</h2>
-<p>HashSet stores unique elements only. It's backed by a HashMap, so it provides O(1) add/remove/contains operations.</p>
-<pre><code>import java.util.HashSet;
-
-HashSet&lt;String&gt; uniqueNames = new HashSet&lt;&gt;();
-uniqueNames.add("Dithsha");
-uniqueNames.add("Mithila");
-uniqueNames.add("Dithsha");  // Ignored — duplicate!
-
-System.out.println(uniqueNames.size());  // 2
-System.out.println(uniqueNames.contains("Mithila"));  // true
-
-// Remove duplicates from a list
-ArrayList&lt;Integer&gt; numbers = new ArrayList&lt;&gt;(Arrays.asList(1, 2, 2, 3, 3, 3));
-HashSet&lt;Integer&gt; unique = new HashSet&lt;&gt;(numbers);
-System.out.println(unique);  // [1, 2, 3]</code></pre>
-
-<h2>Collections Framework Hierarchy</h2>
-<pre><code>Iterable
-  └── Collection
-        ├── List (ordered, allows duplicates)
-        │     ├── ArrayList (dynamic array)
-        │     ├── LinkedList (doubly linked)
-        │     └── Vector (thread-safe, legacy)
-        ├── Set (no duplicates)
-        │     ├── HashSet (hash table)
-        │     ├── LinkedHashSet (preserves insertion order)
-        │     └── TreeSet (sorted, red-black tree)
-        └── Queue (FIFO)
-              ├── PriorityQueue (heap-based)
-              └── LinkedList (also implements Queue)
-
-Map (key-value pairs)
-  ├── HashMap (hash table)
-  ├── LinkedHashMap (preserves insertion order)
-  └── TreeMap (sorted by key)</code></pre>
-
-<h2>Recursion in Java</h2>
-<p>Recursion is a method calling itself to solve a problem by breaking it into smaller subproblems.</p>
-<pre><code>// Factorial: n! = n × (n-1)!
-public static int factorial(int n) {
-    if (n <= 1) return 1;  // Base case
-    return n * factorial(n - 1);  // Recursive call
-}
-// factorial(5) = 5 × 4 × 3 × 2 × 1 = 120
-
-// Fibonacci: F(n) = F(n-1) + F(n-2)
-public static int fibonacci(int n) {
-    if (n <= 1) return n;
-    return fibonacci(n - 1) + fibonacci(n - 2);
-}
-
-// Sum of digits
-public static int sumOfDigits(int n) {
-    if (n == 0) return 0;
-    return (n % 10) + sumOfDigits(n / 10);
-}
-// sumOfDigits(1234) = 4 + 3 + 2 + 1 = 10
-
-// Binary search (recursive)
-public static int binarySearch(int[] arr, int left, int right, int target) {
-    if (left > right) return -1;  // Not found
-    int mid = left + (right - left) / 2;
-    if (arr[mid] == target) return mid;
-    if (arr[mid] > target) return binarySearch(arr, left, mid - 1, target);
-    return binarySearch(arr, mid + 1, right, target);
+<h2>9.3 The Thread Lifecycle and State Machine</h2>
+<p>A Java thread goes through distinct lifecycle states managed by the JVM and underlying OS scheduler. These states are enumerated in Thread.State:</p>
+<ul><li><strong>NEW</strong>: A thread has been created (new Thread(...)), but .start() has not yet been invoked. The underlying OS thread has not yet been allocated.</li><li><strong>RUNNABLE</strong>: The thread is actively executing on the CPU or is sitting in the operating system's processor ready queue waiting for CPU time slices.</li><li><strong>BLOCKED</strong>: The thread is alive and active, but is temporarily suspended because it is waiting to acquire an intrinsic monitor lock (synchronized) held by another thread.</li><li><strong>WAITING</strong>: The thread is indefinitely suspended, waiting for another thread to perform a specific action (e.g., via Object.wait(), Thread.join(), or LockSupport.park()).</li><li><strong>TIMED_WAITING</strong>: Similar to WAITING, but with a specified timeout limit (e.g., Thread.sleep(long millis), Object.wait(long timeout), or Thread.join(long millis)). If the timeout expires without notification, the thread returns to RUNNABLE.</li><li><strong>TERMINATED</strong>: The thread has completed execution of its run() method normally or has terminated abruptly due to an uncaught exception.</li></ul>
+<pre><code>[ NEW ] ──(.start())──► [ RUNNABLE ] ──(Yield/Schedule)──► [ RUNNING ]
+▲ │ │
+(Lock Acquired) │ │ (I/O, sleep, wait) ▼
+│ ▼ [ BLOCKED / ]
+[ WAITING / TIMED_WAITING ] [ WAITING ]
+│ │
+└───────────(Task Complete)──────┘
+│
+▼
+[ TERMINATED ]</code></pre>
+<h2>9.4 Thread Safety Hazards: Race Conditions, Visibility, and the Java Memory Model</h2>
+<p>When multiple threads access shared heap memory concurrently without proper coordination, catastrophic bugs emerge.</p>
+<h3>1. Race Conditions</h3>
+<p>A race condition occurs when two or more threads attempt to read and write shared mutable state simultaneously, and the final outcome depends on the unpredictable timing (race) of thread scheduling by the OS kernel.</p>
+<p>Consider a simple shared counter increment operation:</p>
+<pre><code>public class SharedCounter {
+    private int count = 0;
+    public void increment() {
+        count++; // NOT ATOMIC!
+    }
 }</code></pre>
-
-<h2>Generics with Collections</h2>
-<pre><code>// Generic class
-class Box&lt;T&gt; {
-    private T content;
-    public void set(T content) { this.content = content; }
-    public T get() { return content; }
+<p>Under the hood, count++ is not a single atomic operation; it consists of three distinct CPU instructions:</p>
+<ul><li>Read the current value of count from memory into a CPU register.</li><li>Increment the register value by 1.</li><li>Write the new register value back to memory.</li></ul>
+<p>If Thread A and Thread B execute increment() concurrently, both might read count = 0 into their respective registers, increment their local registers to 1, and write 1 back to main memory. One increment is completely lost, resulting in incorrect data corruption.</p>
+<h3>2. Visibility and the Java Memory Model (JMM)</h3>
+<p>Modern multi-core processors do not constantly read and write directly to main RAM because memory bus access is slow relative to CPU speeds. Instead, each CPU core maintains its own high-speed L1/L2/L3 cache.</p>
+<p>If Thread A modifies a shared variable on Core 1, the new value may sit in Core 1's local cache and not be flushed immediately to main RAM, meaning Thread B running on Core 2 cannot see the update. This is known as a visibility failure.</p>
+<p>The Java Memory Model (JMM) defines formal rules around happens-before relationships. To guarantee that writes made by one thread are immediately visible to another thread, developers must enforce synchronization or memory barriers.</p>
+<h2>9.5 Synchronization, Intrinsic Locks (synchronized), and volatile</h2>
+<h3>1. The synchronized Keyword</h3>
+<p>Java provides built-in mutual exclusion via intrinsic locks (also known as monitor locks). Every Java object has an associated monitor lock.</p>
+<ul><li><strong>Synchronized Methods</strong>: Locking on the current object instance (this).</li><li><strong>Synchronized Blocks</strong>: Locking on a specific monitor object, minimizing critical section scope for maximum performance.</li></ul>
+<pre><code>public class ThreadSafeCounter {
+    private int count = 0;
+    private final Object lockObject = new Object(); // Dedicated lock monitor
+    public void increment() {
+        // Critical Section bounded by monitor lock
+        synchronized (lockObject) {
+            count++;
+        }
+    }
+    public int getCount() {
+        synchronized (lockObject) {
+            return count;
+        }
+    }
+}</code></pre>
+<p><strong>How it works</strong>: When a thread enters a synchronized block, it acquires the monitor lock. Any other thread attempting to enter a synchronized block guarded by the same monitor is automatically suspended and placed in the monitor's entry queue (entering the BLOCKED state) until the lock is released.</p>
+<h3>2. The volatile Keyword</h3>
+<p>When a variable is declared volatile, you instruct the JVM and CPU cores that reads and writes to this variable must bypass local CPU caches and go directly to main RAM.</p>
+<p>volatile guarantees visibility, ensuring that any write by one thread is instantly visible to all other threads.</p>
+<p>However, volatile does not guarantee atomicity for compound actions like count++. For atomic compound operations, you must use synchronization or atomic classes (java.util.concurrent.atomic.AtomicInteger).</p>
+<h2>9.6 Advanced Concurrency: The Executor Framework &amp; Thread Pools</h2>
+<p>Manually instantiating and starting a new Thread for every incoming task (new Thread(r).start()) is an anti-pattern in enterprise systems. Creating threads incurs high OS memory allocation overhead, and unmanaged thread creation can easily exhaust system resources, crashing the JVM with an OutOfMemoryError.</p>
+<p>Introduced in Java 5, the Executor Framework decouples task submission from thread execution.</p>
+<h3>The ExecutorService Hierarchy</h3>
+<p>java.util.concurrent.ExecutorService manages a pool of worker threads. Instead of spawning threads manually, you submit tasks to an executor service, which assigns them to available worker threads from its pool.</p>
+<h3>Common Thread Pool Factories (Executors)</h3>
+<ul><li><strong>Executors.newFixedThreadPool(int n)</strong>: Creates a fixed-size thread pool. If all threads are busy, submitted tasks wait in an unbounded queue until a thread becomes available.</li><li><strong>Executors.newCachedThreadPool()</strong>: Creates a dynamic pool that spawns new threads as needed for incoming tasks, but reuses previously constructed threads when they become available. Idle threads are terminated after 60 seconds.</li><li><strong>Executors.newSingleThreadExecutor()</strong>: Creates a single worker thread executing tasks sequentially in exact submission order.</li></ul>
+<h3>Using Callable and Future</h3>
+<p>When submitting a Callable task to an ExecutorService, the execution returns a Future&lt;V&gt; object—a handle representing the asynchronous result of the computation.</p>
+<pre><code>import java.util.concurrent.*;
+public class ExecutorDemonstration {
+    public static void runDemo() throws Exception {
+        ExecutorService executor = Executors.newFixedThreadPool(4);
+        // Submit Callable task
+        Future&lt;Double&gt; futureResult = executor.submit(new FinancialComputationTask(5000.0, 0.05));
+        System.out.println("Main thread continuing other work while calculation runs asynchronously...");
+        // Block and retrieve result when needed
+        Double finalBalance = futureResult.get(3, TimeUnit.SECONDS); // Blocks up to 3 seconds
+        System.out.println("Computed Final Balance: $" + finalBalance);
+        // Graceful shutdown of executor service
+        executor.shutdown();
+        if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+            executor.shutdownNow(); // Force shutdown if tasks fail to terminate
+        }
+    }
+}</code></pre>
+<h2>9.7 Chapter Project: Concurrent Ticket Booking Simulator</h2>
+<p>To synthesize multithreading, thread safety, intrinsic locks, race condition mitigation, and the Executor Framework, we will build a production-grade Concurrent Ticket Booking Simulator.</p>
+<h3>Architectural Requirements</h3>
+<ul><li><strong>Shared Event Inventory</strong>: A shared ConcertEvent class tracking available ticket inventory across concurrent booking requests.</li><li><strong>Concurrent Booking Workers</strong>: Multiple client threads attempting to book tickets simultaneously using thread-safe synchronization.</li><li><strong>Executor Service Pipeline</strong>: Managing concurrency via a fixed thread pool and auditing inventory consistency upon simulation completion.</li></ul>
+<h3>Production-Grade Implementation</h3>
+<p>Create a file named TicketBookingSimulator.java:</p>
+<pre><code>import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+// ==================== SHARED DOMAIN MODEL ====================class ConcertEvent {
+private final String eventName;
+private final int totalCapacity;
+private final AtomicInteger availableTickets;
+public ConcertEvent(String eventName, int totalCapacity) {
+    this.eventName = eventName;
+    this.totalCapacity = totalCapacity;
+    this.availableTickets = new AtomicInteger(totalCapacity);
 }
-
-// Generic method
-public &lt;T&gt; void printArray(T[] array) {
-    for (T element : array) System.out.println(element);
+public String getEventName() { return eventName; }
+public int getTotalCapacity() { return totalCapacity; }
+public int getAvailableTickets() { return availableTickets.get(); }
+// Thread-safe booking transaction using atomic primitives
+public boolean bookTickets(String clientId, int requestedQuantity) {
+    if (requestedQuantity &lt;= 0) {
+        return false;
+    }
+    while (true) {
+        int currentAvailable = availableTickets.get();
+        if (currentAvailable &lt; requestedQuantity) {
+            return false; // Insufficient tickets remaining
+        }
+        // Attempt atomic Compare-And-Swap (CAS) update
+        if (availableTickets.compareAndSet(currentAvailable, currentAvailable - requestedQuantity)) {
+            System.out.printf("[SUCCESS] Client [%-10s] successfully booked %d ticket(s) for '%s'. Remaining: %d%n",
+                clientId, requestedQuantity, eventName, (currentAvailable - requestedQuantity));
+            return true;
+        }
+        // If CAS failed due to concurrent contention, loop and retry automatically
+    }
 }
-
-// Bounded type parameter
-public &lt;T extends Number&gt; double sum(List&lt;T&gt; numbers) {
-    double total = 0;
-    for (T num : numbers) total += num.doubleValue();
-    return total;
 }
-
-// Usage
-List&lt;Integer&gt; ints = Arrays.asList(1, 2, 3);
-List&lt;Double&gt; doubles = Arrays.asList(1.5, 2.5, 3.5);
-System.out.println(sum(ints));     // 6.0
-System.out.println(sum(doubles));  // 7.5</code></pre>`
-},
-
+// ==================== CLIENT BOOKING TASK ====================class BookingTask implements Runnable {
+private final ConcertEvent event;
+private final String clientId;
+private final int requestedQuantity;
+public BookingTask(ConcertEvent event, String clientId, int requestedQuantity) {
+    this.event = event;
+    this.clientId = clientId;
+    this.requestedQuantity = requestedQuantity;
+}
+@Override
+public void run() {
+    // Simulate slight network latency variance
+    try {
+        Thread.sleep(ThreadLocalRandom.current().nextInt(10, 50));
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+    boolean success = event.bookTickets(clientId, requestedQuantity);
+    if (!success) {
+        System.out.printf("[SOLD OUT / FAILED] Client [%-10s] failed to book %d ticket(s).%n",
+            clientId, requestedQuantity);
+    }
+}
+}
+// ==================== MAIN SIMULATION ENGINE ====================public class TicketBookingSimulator {
+public static void main(String[] args) throws InterruptedException {
+    printHeader();
+    // Concert with exactly 100 available tickets
+    ConcertEvent concert = new ConcertEvent("Java World Tour 2027", 100);
+    // Create an ExecutorService with a fixed thread pool of 10 concurrent worker threads
+    ExecutorService threadPool = Executors.newFixedThreadPool(10);
+    System.out.println("\\n[SIMULATION START]: 30 concurrent clients attempting ticket bookings...");
+    // Simulate 30 clients rushing to book tickets simultaneously
+    for (int i = 1; i &lt;= 30; i++) {
+        String clientId = "CLIENT-" + String.format("%03d", i);
+        int requestedQuantity = ThreadLocalRandom.current().nextInt(1, 6); // Request 1 to 5 tickets
+        threadPool.submit(new BookingTask(concert, clientId, requestedQuantity));
+    }
+    // Initiate graceful shutdown and wait for all tasks to complete execution
+    threadPool.shutdown();
+    boolean finishedInTime = threadPool.awaitTermination(10, TimeUnit.SECONDS);
+    if (!finishedInTime) {
+        threadPool.shutdownNow();
+        System.err.println("WARNING: Simulation timed out before all threads terminated.");
+    }
+    // Final Audit Summary
+    printAuditSummary(concert);
+}
+private static void printHeader() {
+    System.out.println("=================================================");
+    System.out.println(" JAVA ENTERPRISE: CONCURRENT TICKET BOOKING ");
+    System.out.println("=================================================");
+}
+private static void printAuditSummary(ConcertEvent concert) {
+    System.out.println("\\n=================================================");
+    System.out.println(" SIMULATION AUDIT SUMMARY REPORT ");
+    System.out.println("=================================================");
+    System.out.println("Concert Event Name : " + concert.getEventName());
+    System.out.println("Initial Ticket Capacity : " + concert.getTotalCapacity());
+    System.out.println("Remaining Unsold Tickets: " + concert.getAvailableTickets());
+    System.out.println("System Concurrency Status: AUDIT PASSED (Zero Race Conditions)");
+    System.out.println("=================================================");
+}
+}</code></pre>
+<h3>Engineering Review of Chapter 9 Project</h3>
+<ul><li><strong>Lock-Free Thread Safety</strong>: Utilizes AtomicInteger and its lock-free Compare-And-Swap (compareAndSet) algorithm to manage concurrent ticket bookings without heavy thread blocking overhead.</li><li><strong>Executor Thread Pooling</strong>: Leverages a fixed thread pool (Executors.newFixedThreadPool(10)) to process 30 concurrent client requests efficiently without exhausting system resources.</li><li><strong>Graceful Termination</strong>: Implements ExecutorService.awaitTermination() to ensure proper synchronization and reporting upon simulation completion.</li></ul>
+<h3>Summary and Next Steps</h3>
+<p>You have mastered multithreading and concurrency in Java: understanding process vs. thread architecture, task creation via Runnable and Callable, the thread lifecycle state machine, memory visibility hazards, synchronization, atomic operations, and enterprise thread management using the Executor Framework.</p>`,
+  quiz: [
   {
+    "q": "Which statement correctly describes threads inside a single process?",
+    "opts": [
+      "Each thread has its own private heap",
+      "Threads share the process heap, but each has its own call stack and program counter",
+      "Threads cannot share any memory",
+      "Threads share their call stacks"
+    ],
+    "ans": 1,
+    "xp": 10,
+    "exp": "Threads in one process share heap memory, static variables and file descriptors. Each keeps a private call stack and PC register. That sharing is fast, but it is also the source of the concurrency tax: races, visibility bugs and deadlocks."
+  },
+  {
+    "q": "Why is extending the Thread class generally discouraged in modern code?",
+    "opts": [
+      "Java's single class inheritance blocks other superclasses, and it couples the task with the thread mechanism",
+      "It cannot call run()",
+      "It runs slower than Runnable on every JVM",
+      "Thread is a final class"
+    ],
+    "ans": 0,
+    "xp": 10,
+    "exp": "Implementing Runnable decouples what to do from how to run it and keeps your class free to extend a domain superclass."
+  },
+  {
+    "q": "What can a Callable<V> do that a Runnable cannot?",
+    "opts": [
+      "Be written as a lambda",
+      "Be submitted to a Thread constructor",
+      "Run on a separate thread",
+      "Return a computed result and throw checked exceptions"
+    ],
+    "ans": 3,
+    "xp": 10,
+    "exp": "Runnable's run() returns void and cannot throw checked exceptions. Callable's call() returns a value of type V and may throw checked exceptions."
+  },
+  {
+    "q": "A thread is in the BLOCKED state. What is it doing?",
+    "opts": [
+      "It has finished its run() method",
+      "Sleeping for a fixed time",
+      "Waiting to acquire an intrinsic monitor lock held by another thread",
+      "Waiting indefinitely for notify()"
+    ],
+    "ans": 2,
+    "xp": 10,
+    "exp": "BLOCKED means alive but suspended while waiting for a synchronized monitor lock. WAITING and TIMED_WAITING are for join(), wait() and sleep() style suspension."
+  },
+  {
+    "q": "What happens to a thread in TIMED_WAITING (for example after Thread.sleep(500)) once the timeout expires?",
+    "opts": [
+      "It goes to TERMINATED",
+      "It returns to RUNNABLE",
+      "It goes to NEW",
+      "It throws a TimeoutError"
+    ],
+    "ans": 1,
+    "xp": 10,
+    "exp": "TIMED_WAITING works like WAITING but with a timeout. When the time elapses without notification, the thread returns to RUNNABLE."
+  },
+  {
+    "q": "Why is count++ on a shared variable a race condition?",
+    "opts": [
+      "It is really three steps (read, increment, write), so concurrent threads can overwrite each other's updates",
+      "Integers are immutable",
+      "The JVM forbids it",
+      "It is compiled to one atomic instruction"
+    ],
+    "ans": 0,
+    "xp": 10,
+    "exp": "If two threads both read 0, both write 1, one increment is lost. Fix it with synchronization or an atomic class such as AtomicInteger."
+  },
+  {
+    "q": "What does the volatile keyword guarantee?",
+    "opts": [
+      "That a method can only be executed by one thread",
+      "That the variable is stored on the stack",
+      "Atomicity of compound actions such as count++",
+      "Visibility: writes by one thread are immediately visible to other threads, but not atomicity of compound actions"
+    ],
+    "ans": 3,
+    "xp": 10,
+    "exp": "volatile forces reads and writes to go to main memory, which guarantees visibility. For atomic compound operations use synchronization or java.util.concurrent.atomic classes."
+  },
+  {
+    "q": "Why is creating a new Thread for every incoming task considered an anti-pattern, and what replaces it?",
+    "opts": [
+      "It violates the JMM; use volatile arrays",
+      "Threads cannot be created at runtime; use Process instead",
+      "Thread creation has high OS overhead and can exhaust resources; use an ExecutorService thread pool",
+      "Threads always deadlock; use recursion instead"
+    ],
+    "ans": 2,
+    "xp": 10,
+    "exp": "The Executor Framework (Java 5) decouples task submission from execution. For example, newFixedThreadPool(n) queues tasks when all threads are busy."
+  }
+]
+},
+{
   id: 10,
   free: false,
-  icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`,
+  icon: `<i class="ti ti-database" aria-hidden="true"></i>`,
   level: 'Advanced',
-  title: 'Abstract Window Toolkit',
-  excerpt: 'AWT is Java\'s original GUI toolkit. Build real graphical windows, draw shapes, manage fonts and colors — the foundation of all Java desktop applications.',
-  tags: ['Advanced', 'AWT', 'GUI'],
-  visual: `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`,
-  bg: 'linear-gradient(135deg, #0a0f14, #101828)',
-  concepts: ['AWT Hierarchy', 'Frame Class', 'Graphics', 'drawLine drawRect', 'Font', 'Color', 'WindowListener', 'Canvas'],
-  body: `<p>AWT (Abstract Window Toolkit) is Java's original GUI framework. It provides classes to create windows, draw shapes, display text, and handle user input. While modern Java uses Swing and JavaFX, AWT is still important for understanding GUI fundamentals and is part of the TIU BCA syllabus.</p>
-
-<h2>AWT Component Hierarchy</h2>
-<pre><code>Component (base class for all GUI elements)
-  ├── Container (can hold other components)
-  │     ├── Window (top-level window, no border)
-  │     │     ├── Frame (main window with title bar, border, menu bar)
-  │     │     └── Dialog (popup window)
-  │     └── Panel (container for grouping components)
-  │           └── Applet (embedded in web pages)
-  ├── Button
-  ├── Label
-  ├── TextField
-  ├── TextArea
-  ├── Checkbox
-  ├── Choice (dropdown)
-  ├── List
-  ├── Scrollbar
-  └── Canvas (custom drawing area)</code></pre>
-
-<h2>Creating a Frame Window</h2>
-<pre><code>import java.awt.*;
-import java.awt.event.*;
-
-class MyWindow extends Frame {
-    MyWindow() {
-        super("IT Study Hub — AWT Demo");  // Window title
-
-        setSize(600, 400);     // Width x Height in pixels
-        setLocation(100, 100);  // Position on screen
-        setBackground(Color.BLACK);
-        setForeground(Color.WHITE);
-        setVisible(true);      // Make window visible!
-
-        // Handle window close event
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                dispose();  // Close window and free resources
-                System.exit(0);  // Exit application
+  title: 'Relational Databases & JDBC',
+  excerpt: 'From volatile heap to durable storage: SQL DDL/DML, the JDBC architecture, SQL injection and PreparedStatement, and ACID transactions - with a database-backed bank CLI app.',
+  tags: ['Advanced', 'SQL', 'JDBC'],
+  visual: `<i class="ti ti-database" aria-hidden="true" style="font-size:72px;"></i>`,
+  bg: 'linear-gradient(135deg, #0a1410, #0f2418)',
+  concepts: ['DDL & DML', 'JDBC Architecture', 'SQL Injection', 'PreparedStatement', 'ACID', 'Commit & Rollback'],
+  body: `<blockquote>"In-memory data structures are volatile, vanishing the moment the JVM process terminates. Relational databases provide durable, structured, ACID-compliant persistence. JDBC is the foundational pipe connecting your Java application to the world's enterprise data stores."</blockquote>
+<h2>10.1 The Persistence Challenge: From Volatile Heap to Relational Storage</h2>
+<p>In Chapters 1 through 9, you built sophisticated enterprise applications—managing bank accounts, library catalogs, expense trackers, and student gradebooks. However, every single one of those applications shared a fatal architectural limitation: all data lived exclusively in volatile heap memory or simple text files. The moment the application closed or the server rebooted, all state vanished.</p>
+<p>Enterprise software requires persistent storage—the ability to store data reliably across system reboots, hardware crashes, and power failures. While object serialization (covered in Chapter 6) offers basic file-based persistence, it falls short when dealing with concurrent multi-user read/write requests, complex querying, relational integrity, and transactional safety.</p>
+<p>Enter Relational Database Management Systems (RDBMS) (such as PostgreSQL, MySQL, Oracle, and SQL Server). Relational databases store data in structured tables consisting of rows (records) and columns (attributes), enforcing rigid relational integrity via primary keys, foreign keys, and constraints.</p>
+<h2>10.2 SQL Fundamentals for Java Engineers</h2>
+<p>Before interacting with a database from Java code, you must master the fundamental Structured Query Language (SQL) operations: CRUD (Create, Read, Update, Delete) and transactional controls.</p>
+<h3>1. Data Definition Language (DDL) — Schema Construction</h3>
+<p>DDL commands define the database schema, creating tables, columns, constraints, and indexes.</p>
+<pre><code>CREATE TABLE accounts (
+    account_id VARCHAR(50) PRIMARY KEY,
+    account_holder VARCHAR(100) NOT NULL,
+    balance DECIMAL(15, 2) NOT NULL CHECK (balance &gt;= 0.00),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+<h3>2. Data Manipulation Language (DML) — Record Operations</h3>
+<p>Insert (Create):</p>
+<pre><code>INSERT INTO accounts (account_id, account_holder, balance) VALUES ('ACC-9001', 'Elena Vance', 5000.00);</code></pre>
+<p>Select (Read):</p>
+<pre><code>SELECT account_id, account_holder, balance FROM accounts WHERE balance &gt; 1000.00;</code></pre>
+<p>Update:</p>
+<pre><code>UPDATE accounts SET balance = balance + 500.00 WHERE account_id = 'ACC-9001';</code></pre>
+<p>Delete:</p>
+<pre><code>DELETE FROM accounts WHERE account_id = 'ACC-9001';</code></pre>
+<h2>10.3 The JDBC Architecture: Drivers, Connections, and Statements</h2>
+<p>JDBC (Java Database Connectivity) is the standard Java API that defines how client applications can connect to and execute queries against relational databases. JDBC acts as a universal abstraction layer, allowing your Java code to interact with MySQL, PostgreSQL, or Oracle interchangeably without rewriting core business logic.</p>
+<h3>The JDBC Architecture Stack</h3>
+<pre><code>[ Java Application ] ──► [ JDBC API (java.sql.*) ] ──► [ JDBC Driver Manager ] ──► [ Database-Specific Driver (MySQL/PostgreSQL) ] ──► [ Database Server ]</code></pre>
+<h3>Establishing a Database Connection</h3>
+<p>To connect to a database via JDBC, you need four components:</p>
+<ul><li><strong>JDBC Driver URL</strong>: A specialized connection string identifying the database protocol, host, port, and database name (e.g., jdbc:mysql://localhost:3306/enterprise_db).</li><li>Database Username &amp; Password.</li><li><strong>Driver Registration</strong>: Ensuring the database vendor's driver is loaded into the JVM classpath.</li></ul>
+<pre><code>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+public class DatabaseConnectionManager {
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/bank_db?useSSL=false&amp;serverTimezone=UTC";
+    private static final String USER = "root";
+    private static final String PASSWORD = "SecurePassword2027!";
+    public static Connection getConnection() throws SQLException {
+        // DriverManager establishes connection using JDBC URL and credentials
+        return DriverManager.getConnection(DB_URL, USER, PASSWORD);
+    }
+}</code></pre>
+<h2>10.4 Executing Queries &amp; The Danger of SQL Injection</h2>
+<p>Once a connection is established, you execute SQL statements using Statement, PreparedStatement, or CallableStatement.</p>
+<h3>The Fatal Flaw of Plain Statement (SQL Injection)</h3>
+<p>Using raw Statement objects where user input is concatenated directly into SQL strings creates a catastrophic security vulnerability known as SQL Injection:</p>
+<pre><code>// VULNERABLE CODE: DO NOT DO THIS!
+String query = "SELECT * FROM users WHERE username = '" + userInput + "' AND password = '" + userPass + "'";
+Statement stmt = connection.createStatement();
+ResultSet rs = stmt.executeQuery(query);</code></pre>
+<p>If a malicious user enters ' OR '1'='1 into the username field, the SQL statement becomes:</p>
+<pre><code>SELECT * FROM users WHERE username = '' OR '1'='1' AND password = '...'</code></pre>
+<p>This bypasses authentication entirely, granting unauthorized access to the database.</p>
+<p>The Enterprise Solution: PreparedStatement</p>
+<p>To eliminate SQL injection permanently, always use PreparedStatement. PreparedStatement compiles the SQL query structure on the database server before inserting user parameters. Parameters are passed securely via question mark (?) placeholders, ensuring user input is treated strictly as literal data, never as executable SQL code.</p>
+<pre><code>import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+public class SecureUserRepository {
+    public boolean authenticateUser(Connection conn, String username, String password) {
+        String sql = "SELECT account_id FROM users WHERE username = ? AND password_hash = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // Bind parameters safely by index
+            pstmt.setString(1, username);
+            pstmt.setString(2, password); // Hashed password in production
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next(); // Returns true if a matching record exists
             }
-        });
+        } catch (SQLException e) {
+            System.err.println("Database authentication error: " + e.getMessage());
+            return false;
+        }
     }
-
-    // paint() is called automatically when window needs redrawing
-    @Override
-    public void paint(Graphics g) {
-        // Set color and draw shapes
-        g.setColor(Color.CYAN);
-        g.drawRect(50, 80, 200, 100);  // x, y, width, height
-
-        g.setColor(Color.RED);
-        g.fillOval(300, 80, 100, 80);  // Filled oval
-
-        g.setColor(Color.GREEN);
-        g.drawLine(50, 250, 550, 250);  // Line from (50,250) to (550,250)
-
-        // Draw text with custom font
-        g.setFont(new Font("Arial", Font.BOLD, 24));
-        g.setColor(Color.YELLOW);
-        g.drawString("Welcome to IT Study Hub!", 120, 320);
+}</code></pre>
+<h2>10.5 Managing Database Transactions and ACID Compliance</h2>
+<p>In financial and enterprise applications, operations often span multiple database updates. For instance, transferring funds from Account A to Account B requires two operations:</p>
+<ul><li>Deduct funds from Account A.</li><li>Add funds to Account B.</li></ul>
+<p>If the application crashes or an exception occurs after step 1 but before step 2, money vanishes into the ether. To prevent this, databases enforce ACID properties:</p>
+<ul><li><strong>Atomicity</strong>: All operations in a transaction succeed together, or all fail together.</li><li><strong>Consistency</strong>: The database transitions from one valid state to another.</li><li><strong>Isolation</strong>: Concurrent transactions do not interfere with each other.</li><li><strong>Durability</strong>: Once committed, changes are permanently saved even if power fails.</li></ul>
+<h3>Managing Transactions in JDBC</h3>
+<p>By default, JDBC connections operate in Auto-Commit mode, where every individual SQL statement is treated as an independent, immediately committed transaction. To execute multi-step atomic operations, you must disable auto-commit explicitly:</p>
+<pre><code>import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+public class BankTransactionService {
+    public void transferFunds(Connection conn, String senderId, String receiverId, double amount) throws SQLException {
+        String debitSql = "UPDATE accounts SET balance = balance - ? WHERE account_id = ?";
+        String creditSql = "UPDATE accounts SET balance = balance + ? WHERE account_id = ?";
+        // 1. Disable Auto-Commit to start manual transaction block
+        conn.setAutoCommit(false);
+        try (PreparedStatement debitStmt = conn.prepareStatement(debitSql);
+            PreparedStatement creditStmt = conn.prepareStatement(creditSql)) {
+            // Execute Debit Step
+            debitStmt.setDouble(1, amount);
+            debitStmt.setString(2, senderId);
+            int rowsAffectedDebit = debitStmt.executeUpdate();
+            // Execute Credit Step
+            creditStmt.setDouble(1, amount);
+            creditStmt.setString(2, receiverId);
+            int rowsAffectedCredit = creditStmt.executeUpdate();
+            if (rowsAffectedDebit == 1 &amp;&amp; rowsAffectedCredit == 1) {
+                // 2. Commit transaction if both operations succeeded
+                conn.commit();
+                System.out.println("TRANSACTION SUCCESS: Funds transferred successfully.");
+            } else {
+                // 3. Rollback if validation fails
+                conn.rollback();
+                System.err.println("TRANSACTION ABORTED: Invalid account identifiers. Rolled back.");
+            }
+        } catch (SQLException e) {
+            // 4. Rollback transaction on unexpected database exceptions
+            conn.rollback();
+            System.err.println("CRITICAL TRANSACTION FAILURE: Rolled back changes. Error: " + e.getMessage());
+            throw e;
+        } finally {
+            // 5. Restore default auto-commit state
+            conn.setAutoCommit(true);
+        }
     }
-}
-
-public class Main {
+}</code></pre>
+<h2>10.6 Chapter Project: Bank Account Management CLI App with Persistent Database</h2>
+<p>To synthesize JDBC connection management, PreparedStatement security, DDL/DML execution, and ACID transaction rollbacks, we will build a production-grade Bank Account Management CLI application backed by a persistent relational database.</p>
+<h3>Architectural Requirements</h3>
+<ul><li><strong>Database Schema Setup</strong>: Automatically initialize the bank_accounts table upon startup.</li><li><strong>Account Operations</strong>: Support account creation, balance inquiry, cash deposits, and secure fund transfers with ACID transaction rollbacks.</li><li><strong>Defensive Error Logging</strong>: Capture SQL exceptions and log them cleanly without crashing the console loop.</li></ul>
+<h3>Production-Grade Implementation</h3>
+<p>Create a file named BankManagementCliApp.java:</p>
+<pre><code>import java.sql.*;
+import java.util.Scanner;
+public class BankManagementCliApp {
+    // Using H2 Embedded In-Memory Database for frictionless standalone execution
+    private static final String JDBC_URL = "jdbc:h2:mem:bank_enterprise_db;DB_CLOSE_DELAY=-1";
+    private static final String DB_USER = "sa";
+    private static final String DB_PASSWORD = "";
     public static void main(String[] args) {
-        new MyWindow();
+        initializeDatabaseSchema();
+        Scanner scanner = new Scanner(System.in);
+        boolean running = true;
+        printHeader();
+        while (running) {
+            printMenu();
+            if (!scanner.hasNextInt()) {
+                System.out.println("[ERROR]: Expected integer menu choice token.");
+                scanner.next();
+                continue;
+            }
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Clear buffer
+            try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASSWORD)) {
+                switch (choice) {
+                    case 1:
+                    executeCreateAccount(conn, scanner);
+                    break;
+                    case 2:
+                    executeCheckBalance(conn, scanner);
+                    break;
+                    case 3:
+                    executeDeposit(conn, scanner);
+                    break;
+                    case 4:
+                    executeFundTransfer(conn, scanner);
+                    break;
+                    case 5:
+                    executeListAllAccounts(conn);
+                    break;
+                    case 6:
+                    running = false;
+                    System.out.println("\\nShutting down Bank Management Engine. Goodbye.");
+                    break;
+                    default:
+                    System.out.println("WARNING: Selection out of bounds. Choose 1 through 6.");
+                }
+            } catch (SQLException e) {
+                System.err.println("[CRITICAL DATABASE ERROR]: " + e.getMessage());
+            }
+        }
+        scanner.close();
+    }
+    private static void initializeDatabaseSchema() {
+        String ddl = "CREATE TABLE IF NOT EXISTS bank_accounts (" +
+        " account_id VARCHAR(50) PRIMARY KEY, " +
+        " account_holder VARCHAR(100) NOT NULL, " +
+        " balance DECIMAL(15,2) NOT NULL CHECK (balance &gt;= 0.00), " +
+        " created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+        ")";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASSWORD);
+            Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(ddl);
+            System.out.println("[SYSTEM]: Database schema initialized successfully.");
+        } catch (SQLException e) {
+            System.err.println("[FATAL]: Failed to initialize database schema: " + e.getMessage());
+        }
+    }
+    private static void printHeader() {
+        System.out.println("=================================================");
+        System.out.println(" JAVA ENTERPRISE: BANK MANAGEMENT CLI APP ");
+        System.out.println("=================================================");
+    }
+    private static void printMenu() {
+        System.out.println("\\nBanking Operations Menu:");
+        System.out.println("1. Create New Bank Account");
+        System.out.println("2. Check Account Balance");
+        System.out.println("3. Deposit Funds");
+        System.out.println("4. Transfer Funds (ACID Transaction)");
+        System.out.println("5. List All Accounts");
+        System.out.println("6. Exit System");
+        System.out.print("Enter choice (1-6): ");
+    }
+    private static void executeCreateAccount(Connection conn, Scanner scanner) throws SQLException {
+        System.out.println("\\n--- MODULE 1: CREATE BANK ACCOUNT ---");
+        System.out.print("Enter Account ID (e.g., ACC-101): ");
+        String accId = scanner.nextLine().trim();
+        System.out.print("Enter Account Holder Full Name: ");
+        String holderName = scanner.nextLine().trim();
+        System.out.print("Enter Initial Deposit ($): ");
+        if (!scanner.hasNextDouble()) {
+            System.out.println("[ERROR]: Invalid numerical deposit amount.");
+            scanner.next();
+            return;
+        }
+        double initialDeposit = scanner.nextDouble();
+        scanner.nextLine();
+        String sql = "INSERT INTO bank_accounts (account_id, account_holder, balance) VALUES (?, ?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, accId);
+            pstmt.setString(2, holderName);
+            pstmt.setDouble(3, initialDeposit);
+            pstmt.executeUpdate();
+            System.out.println("SUCCESS: Account '" + accId + "' successfully created in database.");
+        }
+    }
+    private static void executeCheckBalance(Connection conn, Scanner scanner) throws SQLException {
+        System.out.println("\\n--- MODULE 2: BALANCE INQUIRY ---");
+        System.out.print("Enter Account ID: ");
+        String accId = scanner.nextLine().trim();
+        String sql = "SELECT account_holder, balance FROM bank_accounts WHERE account_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, accId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    System.out.printf(" [Account: %s] Holder: %s | Balance: $%.2f%n",
+                        accId, rs.getString("account_holder"), rs.getDouble("balance"));
+                } else {
+                    System.out.println("ERROR: Account ID '" + accId + "' not found.");
+                }
+            }
+        }
+    }
+    private static void executeDeposit(Connection conn, Scanner scanner) throws SQLException {
+        System.out.println("\\n--- MODULE 3: CASH DEPOSIT ---");
+        System.out.print("Enter Account ID: ");
+        String accId = scanner.nextLine().trim();
+        System.out.print("Enter Deposit Amount ($): ");
+        if (!scanner.hasNextDouble()) {
+            System.out.println("[ERROR]: Invalid amount format.");
+            scanner.next();
+            return;
+        }
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+        String sql = "UPDATE bank_accounts SET balance = balance + ? WHERE account_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDouble(1, amount);
+            pstmt.setString(2, accId);
+            int rows = pstmt.executeUpdate();
+            if (rows &gt; 0) {
+                System.out.println("SUCCESS: Deposit completed successfully.");
+            } else {
+                System.out.println("ERROR: Account ID '" + accId + "' not found.");
+            }
+        }
+    }
+    private static void executeFundTransfer(Connection conn, Scanner scanner) throws SQLException {
+        System.out.println("\\n--- MODULE 4: SECURE FUND TRANSFER (ACID) ---");
+        System.out.print("Enter Sender Account ID: ");
+        String senderId = scanner.nextLine().trim();
+        System.out.print("Enter Receiver Account ID: ");
+        String receiverId = scanner.nextLine().trim();
+        System.out.print("Enter Transfer Amount ($): ");
+        if (!scanner.hasNextDouble()) {
+            System.out.println("[ERROR]: Invalid amount format.");
+            scanner.next();
+            return;
+        }
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+        String debitSql = "UPDATE bank_accounts SET balance = balance - ? WHERE account_id = ?";
+        String creditSql = "UPDATE bank_accounts SET balance = balance + ? WHERE account_id = ?";
+        conn.setAutoCommit(false);
+        try (PreparedStatement debitStmt = conn.prepareStatement(debitSql);
+            PreparedStatement creditStmt = conn.prepareStatement(creditSql)) {
+            debitStmt.setDouble(1, amount);
+            debitStmt.setString(2, senderId);
+            int dRows = debitStmt.executeUpdate();
+            creditStmt.setDouble(1, amount);
+            creditStmt.setString(2, receiverId);
+            int cRows = creditStmt.executeUpdate();
+            if (dRows == 1 &amp;&amp; cRows == 1) {
+                conn.commit();
+                System.out.println("TRANSACTION SUCCESS: Funds transferred atomically between accounts.");
+            } else {
+                conn.rollback();
+                System.err.println("TRANSACTION FAILED: One or both account IDs invalid. Rolled back.");
+            }
+        } catch (SQLException e) {
+            conn.rollback();
+            System.err.println("TRANSACTION ERROR: Exception encountered. Rolled back changes: " + e.getMessage());
+        } finally {
+            conn.setAutoCommit(true);
+        }
+    }
+    private static void executeListAllAccounts(Connection conn) throws SQLException {
+        System.out.println("\\n--- MODULE 5: ALL REGISTERED ACCOUNTS ---");
+        String sql = "SELECT account_id, account_holder, balance, created_at FROM bank_accounts";
+        try (Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+            int count = 0;
+            while (rs.next()) {
+                System.out.printf(" [%d] ID: %-8s | Holder: %-15s | Balance: $%10.2f | Created: %s%n",
+                    ++count, rs.getString("account_id"), rs.getString("account_holder"),
+                    rs.getDouble("balance"), rs.getTimestamp("created_at"));
+            }
+            if (count == 0) {
+                System.out.println("No accounts registered in database.");
+            }
+        }
     }
 }</code></pre>
-
-<h2>Graphics Class — Drawing Methods</h2>
-<pre><code>Graphics g = ...;  // Obtained from paint() method
-
-// Lines and shapes
-g.drawLine(x1, y1, x2, y2);      // Draw a line
-g.drawRect(x, y, w, h);          // Draw rectangle outline
-g.fillRect(x, y, w, h);          // Draw filled rectangle
-g.drawOval(x, y, w, h);          // Draw oval/circle outline
-g.fillOval(x, y, w, h);          // Draw filled oval/circle
-g.drawArc(x, y, w, h, start, arc); // Draw arc
-g.fillArc(x, y, w, h, start, arc); // Draw filled arc (pie chart!)
-g.drawPolygon(xPoints, yPoints, n); // Draw polygon
-g.fillPolygon(xPoints, yPoints, n); // Draw filled polygon
-
-// Text
-g.drawString("Hello", x, y);      // Draw text at (x, y)
-g.setFont(new Font("Serif", Font.ITALIC, 18));
-
-// Colors
-g.setColor(Color.RED);
-g.setColor(new Color(255, 100, 50));  // RGB values 0-255
-g.setColor(new Color(200, 200, 200, 128));  // RGBA with transparency
-
-// Clipping (restrict drawing to a region)
-g.setClip(x, y, w, h);</code></pre>
-
-<h2>Font Class</h2>
-<pre><code>// Font constructor: Font(String name, int style, int size)
-// Styles: Font.PLAIN, Font.BOLD, Font.ITALIC, Font.BOLD + Font.ITALIC
-
-Font titleFont = new Font("Arial", Font.BOLD, 24);
-Font bodyFont = new Font("Times New Roman", Font.ITALIC, 14);
-Font codeFont = new Font("Courier New", Font.PLAIN, 12);
-
-g.setFont(titleFont);
-g.drawString("Title", 50, 50);
-
-// Get font metrics for precise positioning
-FontMetrics fm = g.getFontMetrics();
-int textWidth = fm.stringWidth("Hello World");
-int textHeight = fm.getHeight();
-int ascent = fm.getAscent();   // Height above baseline
-int descent = fm.getDescent(); // Height below baseline</code></pre>
-
-<h2>Color Class</h2>
-<pre><code>// Predefined colors
-Color.BLACK, Color.WHITE, Color.RED, Color.GREEN, Color.BLUE
-Color.CYAN, Color.MAGENTA, Color.YELLOW, Color.ORANGE, Color.PINK
-Color.GRAY, Color.DARK_GRAY, Color.LIGHT_GRAY
-
-// Custom colors
-Color custom = new Color(128, 64, 255);        // RGB
-Color transparent = new Color(255, 0, 0, 128); // RGBA (alpha 0-255)
-Color fromHex = Color.decode("#FF5733");       // From hex string
-
-// Get RGB components
-int red = custom.getRed();
-int green = custom.getGreen();
-int blue = custom.getBlue();
-int alpha = custom.getAlpha();</code></pre>
-
-<h2>Canvas — Custom Drawing Component</h2>
-<p>Canvas is a blank component for custom graphics. Extend it to create reusable drawing components.</p>
-<pre><code>class DrawingCanvas extends Canvas {
-    @Override
-    public void paint(Graphics g) {
-        // Draw a simple house
-        g.setColor(Color.BLUE);
-        g.fillRect(100, 150, 200, 150);  // House body
-
-        g.setColor(Color.RED);
-        int[] roofX = {80, 200, 320};
-        int[] roofY = {150, 50, 150};
-        g.fillPolygon(roofX, roofY, 3);  // Roof
-
-        g.setColor(Color.YELLOW);
-        g.fillRect(180, 200, 40, 60);    // Door
-
-        g.setColor(Color.CYAN);
-        g.fillRect(120, 170, 50, 50);    // Window left
-        g.fillRect(230, 170, 50, 50);    // Window right
+<h3>Engineering Review of Chapter 10 Project</h3>
+<ul><li><strong>SQL Injection Prevention</strong>: Uses PreparedStatement exclusively across all database operations, insulating inputs against malicious injection vectors.</li><li><strong>ACID Transaction Safety</strong>: Demonstrates manual transaction control (conn.setAutoCommit(false), commit(), rollback()) to guarantee atomicity during inter-account fund transfers.</li><li><strong>Standalone Execution</strong>: Leverages an embedded H2 database engine for instant execution without requiring external database installation overhead.</li></ul>
+<h3>Summary and Next Steps</h3>
+<p>You have mastered relational database persistence and JDBC: understanding SQL DDL/DML, setting up driver connections, preventing SQL injection via PreparedStatement, managing result sets, and executing ACID-compliant transactions with manual commit and rollback controls.</p>`,
+  quiz: [
+  {
+    "q": "Why do enterprise applications need a relational database instead of keeping everything in heap memory?",
+    "opts": [
+      "Heap memory cannot store objects",
+      "Heap memory is slower than disk",
+      "Heap data vanishes when the JVM ends; databases give durable, structured, ACID-compliant persistence",
+      "Databases are required to compile Java"
+    ],
+    "ans": 2,
+    "xp": 10,
+    "exp": "Persistence must survive reboots, crashes and power failures, and handle concurrent multi-user access and complex queries, which object serialization cannot do well."
+  },
+  {
+    "q": "Which of these is a DDL (Data Definition Language) statement?",
+    "opts": [
+      "SELECT * FROM accounts",
+      "CREATE TABLE accounts (...)",
+      "UPDATE accounts SET ...",
+      "INSERT INTO accounts ..."
+    ],
+    "ans": 1,
+    "xp": 10,
+    "exp": "DDL defines the schema (tables, columns, constraints, indexes). INSERT, SELECT, UPDATE and DELETE are DML, the record operations."
+  },
+  {
+    "q": "What role does JDBC play for a Java application?",
+    "opts": [
+      "It is a universal abstraction API so the same Java code can work with MySQL, PostgreSQL or Oracle through different drivers",
+      "It replaces SQL",
+      "It only works with H2",
+      "It is a database engine"
+    ],
+    "ans": 0,
+    "xp": 10,
+    "exp": "JDBC is the standard API for connecting to and querying relational databases. Vendor-specific drivers plug in beneath it."
+  },
+  {
+    "q": "In a JDBC connection setup, which component is the string that identifies the database protocol, host, port and database name?",
+    "opts": [
+      "The Username",
+      "The ResultSet",
+      "Driver Registration",
+      "The JDBC Driver URL"
+    ],
+    "ans": 3,
+    "xp": 10,
+    "exp": "An example from the chapter is jdbc:mysql://localhost:3306/enterprise_db. You also need credentials and the vendor's driver on the classpath."
+  },
+  {
+    "q": "How does SQL injection work against code that builds queries by concatenating user input into a Statement?",
+    "opts": [
+      "The JVM executes the input as Java",
+      "The attacker overflows the heap",
+      "Malicious input such as ' OR '1'='1 changes the structure of the SQL, for example bypassing authentication",
+      "The database driver is replaced"
+    ],
+    "ans": 2,
+    "xp": 10,
+    "exp": "Concatenation lets input become part of the SQL code itself. The condition '1'='1' is always true, so the WHERE clause matches users it should not."
+  },
+  {
+    "q": "Why does PreparedStatement eliminate SQL injection?",
+    "opts": [
+      "It encrypts the database",
+      "The query structure is compiled first and parameters (? placeholders) are bound as literal data, never as executable SQL",
+      "It only allows SELECT statements",
+      "It disables auto-commit"
+    ],
+    "ans": 1,
+    "xp": 10,
+    "exp": "User input bound to ? placeholders can never change the structure of the query."
+  },
+  {
+    "q": "A funds transfer debits Account A, then the application crashes before crediting Account B. Which ACID property ensures the debit is undone?",
+    "opts": [
+      "Atomicity",
+      "Consistency",
+      "Isolation",
+      "Durability"
+    ],
+    "ans": 0,
+    "xp": 10,
+    "exp": "Atomicity means all operations in a transaction succeed together or all fail together, so the partial debit is rolled back."
+  },
+  {
+    "q": "JDBC connections are in auto-commit mode by default. What must you do to run a multi-step atomic transaction?",
+    "opts": [
+      "Use a plain Statement instead",
+      "Close the connection after every statement",
+      "Nothing; it is atomic by default",
+      "Call conn.setAutoCommit(false), then commit() on success or rollback() on failure"
+    ],
+    "ans": 3,
+    "xp": 10,
+    "exp": "In auto-commit mode every individual statement is its own committed transaction. Disabling it lets you group steps and control commit and rollback yourself."
+  }
+]
+},
+{
+  id: 11,
+  free: false,
+  icon: `<i class="ti ti-leaf" aria-hidden="true"></i>`,
+  level: 'Advanced',
+  title: 'Enterprise Backend with Spring Boot',
+  excerpt: 'Inversion of Control and dependency injection, the bean lifecycle, REST APIs with Spring MVC and the DispatcherServlet, and JPA/Hibernate - with a task management REST API.',
+  tags: ['Advanced', 'Spring Boot', 'REST'],
+  visual: `<i class="ti ti-leaf" aria-hidden="true" style="font-size:72px;"></i>`,
+  bg: 'linear-gradient(135deg, #0f140a, #1a240f)',
+  concepts: ['IoC & DI', 'Bean Lifecycle', 'DispatcherServlet', 'REST Controllers', 'JPA & Hibernate', 'Spring Data'],
+  body: `<blockquote>"Writing raw JDBC code, managing connection strings, parsing result sets manually, and handling boilerplate database connection loops is fine for scripts, but enterprise production backends demand automation, modularity, and inversion of control. Welcome to Spring Boot."</blockquote>
+<h2>11.1 The Enterprise Paradigm: Moving Beyond Raw JDBC and EJB Bloat</h2>
+<p>In Chapter 10, you mastered JDBC—connecting Java applications directly to relational databases using DriverManager, PreparedStatement, and manual transaction blocks. While JDBC gives you absolute, low-level control over database interactions, building a large-scale enterprise application using raw JDBC introduces significant friction and technical debt:</p>
+<ul><li><strong>Boilerplate Fatigue</strong>: Every database operation requires repetitive try-catch-finally blocks, opening connections, creating statements, mapping result set rows to domain objects manually, and closing resources.</li><li><strong>Tight Coupling</strong>: Your business logic becomes tightly bound to specific SQL queries, database drivers, and vendor-specific syntax.</li><li><strong>Infrastructure Management</strong>: Handling connection pooling, transaction propagation, and cross-cutting security concerns manually consumes vast engineering bandwidth.</li></ul>
+<p>Historically, enterprise Java attempted to solve this via Enterprise JavaBeans (EJB) in the early 2000s. However, early EJB specifications were plagued by heavy, overly complex XML configurations, tightly coupled container dependencies, and slow deployment cycles, earning a reputation for notorious bloat.</p>
+<p>Enter the Spring Framework and Spring Boot. Created by Rod Johnson in 2003, Spring revolutionized enterprise Java by introducing Inversion of Control (IoC) and Dependency Injection (DI), shifting the responsibility of object creation and wiring from hardcoded instantiation to a lightweight framework container. Spring Boot builds upon Spring by providing auto-configuration, embedded web servers (Tomcat, Jetty, or Undertow), and opinionated starter dependencies, allowing you to launch production-grade RESTful APIs with zero XML and minimal boilerplate.</p>
+<h2>11.2 Inversion of Control (IoC) and Dependency Injection Internals</h2>
+<p>At the heart of the Spring Framework lies the IoC Container (specifically implemented via BeanFactory and ApplicationContext). In traditional programming, your application code controls the lifecycle and instantiation of its own dependencies (e.g., DatabaseService service = new DatabaseService();).</p>
+<p>In Spring, Inversion of Control inverts this relationship: the container creates, manages, and injects dependencies into your classes automatically.</p>
+<h3>The Spring Bean Lifecycle</h3>
+<p>A Spring Bean is any object managed by the Spring IoC container. Understanding the lifecycle phases of a bean is vital for enterprise architecture:</p>
+<ul><li><strong>Instantiation</strong>: The container finds bean definitions and instantiates the object (typically via reflection).</li><li><strong>Populating Properties</strong>: Spring injects dependencies and configuration values into the bean's fields or setter methods.</li><li><strong>Awareness Interfaces</strong>: If the bean implements interfaces like BeanNameAware or BeanFactoryAware, Spring passes container metadata into the bean.</li><li><strong>Post-Initialization (BeanPostProcessor)</strong>: Before initialization methods run, custom processors can inspect or wrap proxies around the bean (this is how AOP transactions and security proxies are applied).</li><li><strong>Initialization</strong>: Custom initialization methods (such as methods annotated with @PostConstruct or configured via init-method) are executed.</li><li><strong>Ready for Use</strong>: The bean resides in the singleton container pool ready to serve application requests.</li><li><strong>Destruction</strong>: When the application context shuts down, destruction callbacks (@PreDestroy) execute to release external resources safely.</li></ul>
+<h3>Dependency Injection Best Practices</h3>
+<p>Spring supports three forms of dependency injection: Field Injection (@Autowired directly on fields), Setter Injection, and Constructor Injection.</p>
+<p><strong>Engineering Rule</strong>: Always favor Constructor Injection. Field injection makes unit testing difficult (requiring reflection to inject mocks) and hides mutable dependencies. Constructor injection guarantees immutability (final fields) and ensures that a bean can never be instantiated in an invalid, partially initialized state.</p>
+<pre><code>import org.springframework.stereotype.Service;
+@Service // Registers this class as a Spring Bean managed container service
+public class PaymentProcessingService {
+    private final FraudDetectionGateway fraudGateway;
+    private final TransactionLedgerRepository ledgerRepository;
+    // Constructor Injection (Industry Best Practice)
+    public PaymentProcessingService(FraudDetectionGateway fraudGateway, TransactionLedgerRepository ledgerRepository) {
+        this.fraudGateway = fraudGateway;
+        this.ledgerRepository = ledgerRepository;
+    }
+    public boolean processOrderPayment(String orderId, double amount) {
+        if (fraudGateway.isTransactionSuspicious(orderId, amount)) {
+            throw new SecurityException("Transaction flagged as fraudulent by gateway.");
+        }
+        ledgerRepository.recordLedgerEntry(orderId, amount);
+        System.out.println("Payment successfully processed for order: " + orderId);
+        return true;
+    }
+}</code></pre>
+<h2>11.3 Building RESTful APIs with Spring MVC &amp; The DispatcherServlet</h2>
+<p>Spring Boot makes building web services and RESTful APIs straightforward using Spring MVC annotations. A REST (Representational State Transfer) API exposes endpoints over HTTP, accepting JSON payloads and returning JSON responses.</p>
+<h3>The DispatcherServlet Request Lifecycle</h3>
+<p>When an HTTP request hits a Spring Boot application, it is intercepted by the DispatcherServlet—the front controller of Spring MVC. The request flows through a sophisticated internal pipeline:</p>
+<ul><li><strong>Mapping</strong>: The DispatcherServlet consults HandlerMapping strategies to locate the exact @RestController method matching the incoming URI and HTTP verb.</li><li><strong>Adapter Execution</strong>: The HandlerAdapter invokes the controller method, automatically deserializing incoming JSON request bodies into Java domain objects using Jackson (MappingJackson2HttpMessageConverter).</li><li><strong>Business Processing</strong>: The controller delegates execution to service and repository tiers.</li><li><strong>Serialization &amp; Response</strong>: The controller returns a response object (or ResponseEntity), which Jackson serializes into an HTTP JSON response body with appropriate HTTP status codes.</li></ul>
+<h3>Key Web Annotations</h3>
+<ul><li><strong>@RestController</strong>: Combines @Controller and @ResponseBody, indicating that the class serves REST endpoints where return values are automatically serialized into JSON.</li><li><strong>@RequestMapping("/api/v1")</strong>: Maps HTTP requests to specific base URL paths.</li><li><strong>@GetMapping / @PostMapping / @PutMapping / @DeleteMapping</strong>: Shortcuts for mapping HTTP GET, POST, PUT, and DELETE methods.</li><li><strong>@RequestBody</strong>: Deserializes incoming JSON payloads into Java objects.</li><li><strong>@PathVariable / @RequestParam</strong>: Extracts parameters from URL path segments or query strings.</li></ul>
+<pre><code>import org.springframework.web.bind.annotation.*;
+import java.util.List;
+@RestController
+@RequestMapping("/api/v1/tasks")
+public class TaskController {
+    private final TaskService taskService;
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
+    @GetMapping
+    public List&lt;Task&gt; getAllTasks() {
+        return taskService.fetchAllTasks(); // Automatically serialized to JSON array
+    }
+    @PostMapping
+    public Task createNewTask(@RequestBody Task newTask) {
+        return taskService.saveTask(newTask); // Automatically deserialized from JSON
+    }
+}</code></pre>
+<h2>11.4 ORM, Persistence, and the Hibernate Persistence Context</h2>
+<p>Writing manual SQL queries and mapping ResultSet rows field-by-field is tedious. Object-Relational Mapping (ORM) bridges the gap between object-oriented domain models and relational database tables.</p>
+<p>Hibernate is the most popular JPA (Java Persistence API) implementation in the enterprise world, and Spring Data JPA wraps Hibernate to eliminate boilerplate database repository code entirely.</p>
+<h3>The Hibernate Persistence Context (First-Level Cache)</h3>
+<p>When working with JPA, the EntityManager manages a Persistence Context (a first-level cache holding managed entity instances).</p>
+<ul><li><strong>Dirty Checking</strong>: Hibernate automatically tracks changes made to managed entities within a transaction. When the transaction commits, Hibernate detects modifications ("dirty checking") and automatically issues SQL UPDATE statements without requiring you to write manual update queries.</li><li><strong>Entity States</strong>: An entity in JPA exists in one of four states: Transient (newly created, not associated with persistence context), Persistent/Managed (attached to persistence context), Detached (persistence context closed), or Removed (marked for deletion).</li></ul>
+<h3>Defining an Entity and Spring Data Repository</h3>
+<pre><code>import jakarta.persistence.*;
+import java.time.LocalDateTime;
+@Entity
+@Table(name = "enterprise_tasks")
+public class TaskEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false, length = 150)
+    private String title;
+    @Column(nullable = false)
+    private boolean isCompleted;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    public TaskEntity() {}
+    public TaskEntity(String title, boolean isCompleted) {
+        this.title = title;
+        this.isCompleted = isCompleted;
+    }
+    public Long getId() { return id; }
+    public String getTitle() { return title; }
+    public boolean isCompleted() { return isCompleted; }
+    public void setCompleted(boolean completed) { this.completed = completed; }
+}</code></pre>
+<p>By simply extending JpaRepository&lt;T, ID&gt;, Spring Data JPA automatically generates full CRUD operations, pagination, sorting, and query derivation at runtime:</p>
+<pre><code>import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+@Repository
+public interface TaskRepository extends JpaRepository&lt;TaskEntity, Long&gt; {
+    // Spring Data JPA derives custom SQL queries automatically from method names!
+    List&lt;TaskEntity&gt; findByIsCompleted(boolean isCompleted);
+}</code></pre>
+<h2>11.5 Chapter Project: Production-Ready Spring Boot REST API (Task Management System)</h2>
+<p>To synthesize Spring Boot architecture, dependency injection, REST controllers, JPA entities, and repository interfaces, we will build a complete, production-ready Spring Boot Task Management API.</p>
+<h3>Architectural Requirements</h3>
+<ul><li><strong>Domain Entity &amp; Repository</strong>: A JPA TaskEntity backed by Spring Data JPA.</li><li><strong>Service Layer</strong>: Business logic handling task creation, retrieval, and status updates with transaction management.</li><li><strong>REST Controller</strong>: Exposed endpoints (GET /api/tasks, POST /api/tasks, PUT /api/tasks/{id}/complete) returning JSON responses with proper HTTP status codes.</li></ul>
+<h3>Production-Grade Implementation</h3>
+<p>Create a file named TaskManagementApplication.java:</p>
+<pre><code>import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+// ==================== 1. JPA ENTITY ====================
+@Entity
+@Table(name = "enterprise_tasks")
+class TaskEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotBlank(message = "Task title cannot be blank")
+    @Column(nullable = false, length = 200)
+    private String title;
+    @Column(nullable = false)
+    private String priority; // "HIGH", "MEDIUM", "LOW"
+    private boolean completed;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    public TaskEntity() {}
+    public TaskEntity(String title, String priority) {
+        this.title = title;
+        this.priority = priority;
+        this.completed = false;
+    }
+    public Long getId() { return id; }
+    public String getTitle() { return title; }
+    public String getPriority() { return priority; }
+    public boolean isCompleted() { return completed; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCompleted(boolean completed) { this.completed = completed; }
+}
+// ==================== 2. SPRING DATA REPOSITORY ====================interface TaskRepository extends JpaRepository&lt;TaskEntity, Long&gt; {
+List&lt;TaskEntity&gt; findByCompleted(boolean completed);
+List&lt;TaskEntity&gt; findByPriority(String priority);
+}
+// ==================== 3. BUSINESS SERVICE LAYER ====================
+@Service
+class TaskService {
+    private final TaskRepository taskRepository;
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+    public List&lt;TaskEntity&gt; getAllTasks() {
+        return taskRepository.findAll();
+    }
+    public TaskEntity createNewTask(TaskEntity task) {
+        return taskRepository.save(task);
+    }
+    public Optional&lt;TaskEntity&gt; markTaskComplete(Long id) {
+        Optional&lt;TaskEntity&gt; taskOpt = taskRepository.findById(id);
+        if (taskOpt.isPresent()) {
+            TaskEntity task = taskOpt.get();
+            task.setCompleted(true);
+            return Optional.of(taskRepository.save(task)); // Hibernate dirty checking in action
+        }
+        return Optional.empty();
     }
 }
-
-// Add canvas to frame
-Frame frame = new Frame("My Drawing");
-frame.setSize(400, 400);
-frame.add(new DrawingCanvas());
-frame.setVisible(true);</code></pre>
-
-<h2>WindowListener — Handling Window Events</h2>
-<pre><code>// WindowListener interface has 7 methods:
-// windowOpened, windowClosing, windowClosed, windowIconified, 
-// windowDeiconified, windowActivated, windowDeactivated
-
-// Use WindowAdapter to avoid implementing all 7 methods
-frame.addWindowListener(new WindowAdapter() {
-    @Override
-    public void windowClosing(WindowEvent e) {
-        System.out.println("Window closing...");
-        frame.dispose();
-        System.exit(0);
+// ==================== 4. REST CONTROLLER ====================
+@RestController
+@RequestMapping("/api/v1/tasks")
+@Validated
+class TaskController {
+    private final TaskService taskService;
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
     }
-
-    @Override
-    public void windowOpened(WindowEvent e) {
-        System.out.println("Window opened!");
+    @GetMapping
+    public ResponseEntity&lt;List&lt;TaskEntity&gt;&gt; getAllTasks() {
+        return ResponseEntity.ok(taskService.getAllTasks());
     }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-        System.out.println("Window minimized!");
+    @PostMapping
+    public ResponseEntity&lt;TaskEntity&gt; createTask(@RequestBody @Validated TaskEntity task) {
+        TaskEntity created = taskService.createNewTask(task);
+        return ResponseEntity.status(201).body(created);
     }
-});
-
-// Lambda approach (Java 8+) for single-method listeners
-// Not applicable for WindowListener (multiple methods)</code></pre>
-
-<h2>Complete Drawing Example — Pie Chart</h2>
-<pre><code>class PieChart extends Frame {
-    PieChart() {
-        super("Student Marks Distribution");
-        setSize(500, 500);
-        setBackground(Color.WHITE);
-        setVisible(true);
-
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) { System.exit(0); }
-        });
+    @PutMapping("/{id}/complete")
+    public ResponseEntity&lt;TaskEntity&gt; completeTask(@PathVariable Long id) {
+        return taskService.markTaskComplete(id)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
-
-    @Override
-    public void paint(Graphics g) {
-        // Data: subject marks
-        int[] marks = {85, 72, 90, 68, 95};
-        String[] subjects = {"Java", "Python", "C++", "R", "JS"};
-        Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.MAGENTA};
-
-        int total = 0;
-        for (int m : marks) total += m;
-
-        int startAngle = 0;
-        int x = 100, y = 100, w = 300, h = 300;
-
-        for (int i = 0; i < marks.length; i++) {
-            int arcAngle = (marks[i] * 360) / total;
-
-            g.setColor(colors[i]);
-            g.fillArc(x, y, w, h, startAngle, arcAngle);
-
-            // Draw legend
-            g.setColor(colors[i]);
-            g.fillRect(50, 420 + i * 20, 15, 15);
-            g.setColor(Color.BLACK);
-            g.drawString(subjects[i] + ": " + marks[i], 70, 432 + i * 20);
-
-            startAngle += arcAngle;
-        }
-
-        g.setFont(new Font("Arial", Font.BOLD, 18));
-        g.drawString("Marks Distribution", 160, 80);
+}
+// ==================== 5. SPRING BOOT BOOTSTRAP CLASS ====================
+@SpringBootApplication
+public class TaskManagementApplication {
+    public static void main(String[] args) {
+        System.out.println("=================================================");
+        System.out.println(" INITIALIZING SPRING BOOT BACKEND ENGINE... ");
+        System.out.println("=================================================");
+        SpringApplication.run(TaskManagementApplication.class, args);
     }
 }</code></pre>
-
-<h2>AWT vs Swing vs JavaFX</h2>
-<table>
-<tr><th>Feature</th><th>AWT</th><th>Swing</th><th>JavaFX</th></tr>
-<tr><td>Released</td><td>1995 (JDK 1.0)</td><td>1998 (JDK 1.2)</td><td>2008 (Java 8)</td></tr>
-<tr><td>Components</td><td>Heavyweight (native OS)</td><td>Lightweight (pure Java)</td><td>Lightweight (modern)</td></tr>
-<tr><td>Look & Feel</td><td>OS-dependent</td><td>Pluggable (Metal, Nimbus)</td><td>CSS-styled</td></tr>
-<tr><td>Graphics</td><td>2D only</td><td>2D with some 3D</td><td>Full 2D/3D, animations</td></tr>
-<tr><td>Modern</td><td>Legacy</td><td>Mature</td><td>Current standard</td></tr>
-<tr><td>Status</td><td>Still supported</td><td>Still supported</td><td>Recommended for new apps</td></tr>
-</table>
-<blockquote>AWT is lightweight and fast because it uses native OS components. Swing is more flexible and consistent across platforms. JavaFX is the modern choice for new desktop applications with rich graphics and animations.</blockquote>`
+<h3>Engineering Review of Chapter 11 Project</h3>
+<ul><li><strong>Inversion of Control</strong>: Demonstrates clean constructor dependency injection across the controller and service tiers.</li><li><strong>Declarative ORM &amp; Dirty Checking</strong>: Leverages Spring Data JPA (JpaRepository) and Hibernate to manage entity persistence and automatic state synchronization.</li><li><strong>RESTful Compliance</strong>: Exposes standard HTTP methods returning proper status codes (200 OK, 201 Created, 404 Not Found) and JSON representations.</li></ul>
+<h3>Summary and Next Steps</h3>
+<p>You have mastered enterprise backend development with Spring Boot: understanding inversion of control, bean lifecycles, DispatcherServlet routing, REST controllers, JPA entity mapping, Hibernate persistence contexts, and automated repository query generation.</p>`,
+  quiz: [
+  {
+    "q": "What does Inversion of Control (IoC) mean in Spring?",
+    "opts": [
+      "Classes are inverted into interfaces",
+      "Threads control the application context",
+      "Your code creates and wires all of its own dependencies",
+      "The container creates, manages and injects dependencies into your classes"
+    ],
+    "ans": 3,
+    "xp": 10,
+    "exp": "Instead of writing DatabaseService service = new DatabaseService(), the IoC container (BeanFactory/ApplicationContext) instantiates objects and wires them for you."
+  },
+  {
+    "q": "In the Spring bean lifecycle, what happens right after the container instantiates the bean?",
+    "opts": [
+      "@PreDestroy executes",
+      "Destruction callbacks run",
+      "Spring populates properties (injects dependencies and configuration values)",
+      "The bean is placed in the singleton pool"
+    ],
+    "ans": 2,
+    "xp": 10,
+    "exp": "Order: instantiation, populating properties, awareness interfaces, post-processing, initialization, ready for use, destruction."
+  },
+  {
+    "q": "Why should you prefer Constructor Injection over Field Injection?",
+    "opts": [
+      "It is the only form Spring supports",
+      "It allows final fields, prevents partially initialized beans and makes unit testing easier",
+      "It makes beans slower",
+      "It removes the need for @Service"
+    ],
+    "ans": 1,
+    "xp": 10,
+    "exp": "Field injection hides mutable dependencies and requires reflection to inject mocks in tests. Constructor injection guarantees immutability and a valid object state."
+  },
+  {
+    "q": "What is the role of the DispatcherServlet in Spring MVC?",
+    "opts": [
+      "It is the front controller that intercepts requests and uses HandlerMapping to locate the matching controller method",
+      "It serializes entities to SQL",
+      "It compiles controllers at build time",
+      "It is the database connection pool"
+    ],
+    "ans": 0,
+    "xp": 10,
+    "exp": "The request flows through mapping, adapter execution (Jackson deserialization), business processing and finally serialization of the response."
+  },
+  {
+    "q": "What does @RestController combine?",
+    "opts": [
+      "@Entity and @Table",
+      "@GetMapping and @PostMapping",
+      "@Service and @Repository",
+      "@Controller and @ResponseBody"
+    ],
+    "ans": 3,
+    "xp": 10,
+    "exp": "@RestController marks a class that serves REST endpoints whose return values are automatically serialized, typically to JSON."
+  },
+  {
+    "q": "Which annotation deserializes an incoming JSON payload into a Java object in a controller method?",
+    "opts": [
+      "@PathVariable",
+      "@RequestParam",
+      "@RequestBody",
+      "@RequestMapping"
+    ],
+    "ans": 2,
+    "xp": 10,
+    "exp": "@RequestBody converts the HTTP body to a Java object. @PathVariable and @RequestParam extract values from URL path segments or query strings."
+  },
+  {
+    "q": "What does Hibernate's dirty checking do?",
+    "opts": [
+      "Deletes entities that have errors",
+      "Detects changes to managed entities in a transaction and automatically issues SQL UPDATE statements at commit",
+      "Cleans the database cache",
+      "Validates SQL syntax"
+    ],
+    "ans": 1,
+    "xp": 10,
+    "exp": "Within a transaction, Hibernate tracks modifications of managed entities, so you don't have to write manual update queries."
+  },
+  {
+    "q": "Which of these is NOT one of the four JPA entity states described in the chapter?",
+    "opts": [
+      "Suspended",
+      "Detached",
+      "Transient",
+      "Persistent / Managed"
+    ],
+    "ans": 0,
+    "xp": 10,
+    "exp": "The four states are Transient, Persistent/Managed, Detached and Removed. By extending JpaRepository<T, ID>, Spring Data JPA generates the CRUD operations for you."
+  }
+]
 },
-
-  {id:11,free:false,icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="6" ry="6"></rect><line x1="12" y1="7" x2="12" y2="7.01"></line></svg>`,level:'Advanced',title:'AWT Controls & Applets',excerpt:'Add interactive controls — buttons, text fields, checkboxes — to your GUI. Handle events and learn the Applet lifecycle for browser-based Java programs.',tags:['Advanced','Controls','Events','Applets'],visual:`<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="6" ry="6"></rect><line x1="12" y1="7" x2="12" y2="7.01"></line></svg>`,bg:'linear-gradient(135deg, #100a0a, #1e0f0f)',concepts:['Button Label','TextField','Checkbox Choice','ActionListener','MouseListener','Event Delegation','Applet Lifecycle','init start stop destroy'],body:`<p>AWT controls are interactive components that respond to user actions. The <strong>event delegation model</strong> in Java separates the event source (like a button) from the event listener (the code that handles the action). Applets are Java programs that run inside web browsers, though they are largely obsolete today due to security concerns.</p>
-
-<h2>Common AWT Controls</h2>
-<pre><code>// Button — triggers an action when clicked
-Button btn = new Button("Click Me!");
-btn.addActionListener(this);
-
-// Label — displays text (non-editable)
-Label lbl = new Label("Enter your name:");
-
-// TextField — single-line text input
-TextField txt = new TextField(20);  // 20 columns wide
-txt.setText("Default text");
-String input = txt.getText();
-
-// TextArea — multi-line text input
-TextArea area = new TextArea(5, 30);  // 5 rows, 30 columns
-area.setText("Line 1
-Line 2
-Line 3");
-area.append("Additional text
-");
-
-// Checkbox — on/off toggle
-Checkbox cb = new Checkbox("Subscribe to newsletter");
-boolean isChecked = cb.getState();
-
-// CheckboxGroup — radio buttons
-CheckboxGroup group = new CheckboxGroup();
-Checkbox male = new Checkbox("Male", group, false);
-Checkbox female = new Checkbox("Female", group, false);
-
-// Choice — dropdown menu
-Choice dropdown = new Choice();
-dropdown.add("Java");
-dropdown.add("Python");
-dropdown.add("C++");
-dropdown.select(0);  // Select first item
-String selected = dropdown.getSelectedItem();
-
-// List — scrollable selection list
-List lst = new List(5, true);  // 5 visible rows, multi-select
-lst.add("Item 1");
-lst.add("Item 2");
-lst.add("Item 3");
-String[] selected = lst.getSelectedItems();</code></pre>
-
-<h2>Event Handling with ActionListener</h2>
-<pre><code>import java.awt.*;
-import java.awt.event.*;
-
-class CalculatorApp extends Frame implements ActionListener {
-    TextField display = new TextField(20);
-    Button btn7 = new Button("7");
-    Button btn8 = new Button("8");
-    Button btnAdd = new Button("+");
-    Button btnEquals = new Button("=");
-
-    CalculatorApp() {
-        super("Simple Calculator");
-        setLayout(new BorderLayout());
-
-        // Display at top
-        add(display, BorderLayout.NORTH);
-
-        // Buttons in grid
-        Panel btnPanel = new Panel();
-        btnPanel.setLayout(new GridLayout(4, 4));
-        btnPanel.add(btn7);
-        btnPanel.add(btn8);
-        btnPanel.add(btnAdd);
-        btnPanel.add(btnEquals);
-
-        add(btnPanel, BorderLayout.CENTER);
-
-        // Register listeners
-        btn7.addActionListener(this);
-        btn8.addActionListener(this);
-        btnAdd.addActionListener(this);
-        btnEquals.addActionListener(this);
-
-        setSize(300, 400);
-        setVisible(true);
-
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) { System.exit(0); }
-        });
+{
+  id: 12,
+  free: false,
+  icon: `<i class="ti ti-rocket" aria-hidden="true"></i>`,
+  level: 'Advanced',
+  title: 'Testing, Debugging & Production Deployment',
+  excerpt: 'The testing pyramid, JUnit 5 and Mockito, MockMvc integration tests, debugging and JVM diagnostics, Maven/Gradle builds, Docker and CI/CD - capped with an enterprise capstone.',
+  tags: ['Advanced', 'Testing', 'DevOps'],
+  visual: `<i class="ti ti-rocket" aria-hidden="true" style="font-size:72px;"></i>`,
+  bg: 'linear-gradient(135deg, #14100a, #241a0f)',
+  concepts: ['JUnit 5 & Mockito', 'MockMvc', 'JVM Diagnostics', 'Maven & Gradle', 'Docker', 'CI/CD'],
+  body: `<blockquote>"Writing code that compiles is only half the battle. Writing code that is thoroughly tested, rigorously debugged under pressure, containerized, and safely deployed to production separates the hobbyist from the elite software engineer."</blockquote>
+<h2>12.1 The Philosophy of Enterprise Software Quality &amp; Testing</h2>
+<p>In Chapters 1 through 11, you built a robust, encyclopedic foundation in Java: mastering syntax, memory management, object-oriented architecture, functional streams, concurrency, relational databases with JDBC, and enterprise backends with Spring Boot. However, writing code without automated verification is like building a skyscraper without structural testing—it might stand on a calm day, but it will collapse under real-world scale and load.</p>
+<p>In professional software engineering, testing is not an afterthought; it is a first-class engineering discipline. Automated tests protect your codebase against regressions, document expected behavior, enable fearless refactoring, and provide the safety net required for continuous delivery.</p>
+<h3>The Testing Pyramid</h3>
+<p>Software testing is structured hierarchically into three core tiers, balancing execution speed, cost, and confidence:</p>
+<ul><li><strong>Unit Tests (Base of the Pyramid)</strong>: Fast, isolated tests targeting individual methods or classes. External dependencies are mocked out using frameworks like Mockito. Thousands of unit tests should execute in mere seconds, providing immediate feedback during development.</li><li><strong>Integration Tests (Middle of the Pyramid)</strong>: Tests verifying how multiple components interact together—such as testing your Spring Data JPA repositories against an embedded database or verifying REST controllers through MockMvc and Spring application context wiring.</li><li><strong>End-to-End (E2E) / Acceptance Tests (Apex of the Pyramid)</strong>: Slow, comprehensive tests simulating real user behavior across the entire running system, from frontend HTTP requests down to database transaction persistence.</li></ul>
+<h2>12.2 Unit Testing with JUnit 5 &amp; Mocking with Mockito</h2>
+<p>JUnit 5 (JUnit Jupiter) is the industry-standard unit testing framework for Java, while Mockito is the premier mocking framework used to simulate complex or external dependencies.</p>
+<h3>Key JUnit 5 Annotations &amp; Architecture</h3>
+<ul><li><strong>@Test</strong>: Denotes a test method.</li><li><strong>@BeforeEach / @AfterEach</strong>: Executes setup or teardown logic before/after every individual test method.</li><li><strong>@DisplayName("Description")</strong>: Provides human-readable test names in test runner reports, improving documentation clarity.</li><li><strong>@ParameterizedTest</strong>: Runs the same test method multiple times with different input datasets, avoiding test code duplication.</li><li><strong>@Nested</strong>: Allows hierarchical grouping of test classes, structuring tests cleanly by method or scenario.</li></ul>
+<h3>Mocking Dependencies with Mockito</h3>
+<p>When unit-testing a service class that relies on a database repository or a third-party payment gateway, you do not want to hit a real database or make live network calls. You use Mockito to create mock objects and stub their behavior precisely.</p>
+<pre><code>import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+class OrderProcessingServiceTest {
+    private InventoryRepository inventoryRepositoryMock;
+    private PaymentGateway paymentGatewayMock;
+    private OrderProcessingService orderProcessingService;
+    @BeforeEach
+    void setUp() {
+        inventoryRepositoryMock = mock(InventoryRepository.class);
+        paymentGatewayMock = mock(PaymentGateway.class);
+        orderProcessingService = new OrderProcessingService(inventoryRepositoryMock, paymentGatewayMock);
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String cmd = e.getActionCommand();
-
-        if (cmd.equals("7") || cmd.equals("8")) {
-            display.setText(display.getText() + cmd);
-        } else if (cmd.equals("+")) {
-            display.setText("");
-        } else if (cmd.equals("=")) {
-            // Calculate and display result
+    @Test
+    @DisplayName("Should successfully process order when inventory is available and payment clears")
+    void testSuccessfulOrderProcessing() {
+        when(inventoryRepositoryMock.checkStock("ITEM-99")).thenReturn(10);
+        when(paymentGatewayMock.chargeCard(anyString(), eq(150.00))).thenReturn(true);
+        boolean result = orderProcessingService.placeOrder("ITEM-99", 2, 150.00, "CARD-1234");
+        assertTrue(result, "Order processing should return true on success");
+        verify(inventoryRepositoryMock, times(1)).deductStock("ITEM-99", 2);
+        verify(paymentGatewayMock, times(1)).chargeCard("CARD-1234", 150.00);
+    }
+    @Test
+    @DisplayName("Should throw exception and abort when insufficient inventory exists")
+    void testInsufficientInventoryAbortion() {
+        when(inventoryRepositoryMock.checkStock("ITEM-55")).thenReturn(1);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -&gt; {
+                orderProcessingService.placeOrder("ITEM-55", 5, 500.00, "CARD-1234");
+            });
+        assertEquals("Insufficient stock available for item.", exception.getMessage());
+        verify(paymentGatewayMock, never()).chargeCard(anyString(), anyDouble());
+    }
+}</code></pre>
+<h2>12.3 Integration Testing with Spring Boot Test &amp; MockMvc</h2>
+<p>While unit tests isolate classes using mocks, Integration Tests verify that your Spring application context initializes correctly, controllers route HTTP requests properly, and database queries execute against an actual database instance (such as an embedded H2 or Testcontainers instance).</p>
+<h3>Testing REST Controllers with MockMvc</h3>
+<p>Spring Boot provides MockMvc, allowing you to test Spring MVC controllers without starting a full HTTP servlet container.</p>
+<pre><code>import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+@SpringBootTest
+@AutoConfigureMockMvc
+class OrderControllerIntegrationTest {
+    @Autowired
+    private MockMvc mockMvc;
+    @Test
+    @DisplayName("Should create order successfully via HTTP POST endpoint")
+    void testCreateOrderEndpoint() throws Exception {
+        String jsonPayload = """
+        {
+            "customerId": "CUST-901",
+            "productSku": "SKU-PROD-1",
+            "totalAmount": 299.99
         }
+        """;
+        mockMvc.perform(post("/api/v1/orders")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonPayload))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.customerId").value("CUST-901"))
+            .andExpect(jsonPath("$.orderStatus").value("PENDING"));
     }
 }</code></pre>
-
-<h2>MouseListener — Handling Mouse Events</h2>
-<pre><code>class MouseDemo extends Frame implements MouseListener {
-    Label status = new Label("Move or click the mouse");
-
-    MouseDemo() {
-        super("Mouse Events");
-        add(status, BorderLayout.SOUTH);
-        addMouseListener(this);
-        setSize(400, 300);
-        setVisible(true);
+<h2>12.4 Advanced Debugging Strategies &amp; JVM Diagnostics</h2>
+<p>When enterprise applications fail in staging or production, writing more unit tests is not enough—you must master advanced debugging and diagnostic tools.</p>
+<h3>1. IDE Debugger Mastery</h3>
+<p>Modern IDEs like IntelliJ IDEA provide sophisticated debugging capabilities far beyond simple System.out.println() statements:</p>
+<ul><li><strong>Conditional Breakpoints</strong>: Setting breakpoints that pause execution only when a specific condition is met (e.g., totalAmount &gt; 100000.0), preventing unnecessary pauses in high-frequency loops.</li><li><strong>Exception Breakpoints</strong>: Configuring the JVM to pause execution the exact millisecond any specific exception (NullPointerException, SQLException) is thrown, before it is even caught.</li><li><strong>Evaluate Expression</strong>: Running arbitrary code inside the stack frame while paused at a breakpoint to inspect state or mutate variables on the fly.</li></ul>
+<h3>2. JVM Diagnostic &amp; Profiling Tools</h3>
+<p>When debugging production memory leaks, thread deadlocks, or high CPU spikes without an IDE attached, engineers rely on built-in JDK command-line and profiling utilities:</p>
+<ul><li><strong>jps (Java Virtual Machine Process Status Tool)</strong>: Lists active Java process IDs and their main class names on the host machine.</li><li><strong>jstack (Stack Trace for Java)</strong>: Dumps all thread stack traces for a given JVM process, vital for diagnosing Thread Deadlocks or infinite worker loops.</li><li><strong>jmap (Memory Map for Java)</strong>: Generates heap memory maps and core dumps to analyze object allocations and identify memory leaks.</li><li><strong>Java Flight Recorder (JFR) &amp; Mission Control</strong>: Low-overhead profiling framework built directly into the JVM that records runtime events, memory allocations, garbage collection pauses, and CPU hotspots for deep performance tuning.</li></ul>
+<h2>12.5 Build Automation with Maven &amp; Gradle</h2>
+<p>Compiling complex enterprise projects containing hundreds of external dependencies (Spring Boot, Hibernate, JUnit, MySQL drivers) manually via terminal commands is impossible. Build automation tools manage dependencies, compilation lifecycles, testing, and packaging.</p>
+<h3>Apache Maven</h3>
+<p>Maven uses an XML-based configuration file (pom.xml - Project Object Model) and enforces standard directory layouts.</p>
+<p>The Maven Build Lifecycle:</p>
+<ul><li><strong>mvn clean</strong>: Deletes the target/ build directory, wiping previous build artifacts.</li><li><strong>mvn compile</strong>: Compiles source code into bytecode.</li><li><strong>mvn test</strong>: Executes all automated unit and integration tests.</li><li><strong>mvn package</strong>: Bundles compiled classes and resources into a distributable archive (.jar).</li><li><strong>mvn install</strong>: Installs the packaged artifact into your local .m2 repository.</li></ul>
+<pre><code>&lt;!-- Example pom.xml snippet --&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;com.enterprise.java&lt;/groupId&gt;
+    &lt;artifactId&gt;masterclass-api&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;parent&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+        &lt;version&gt;3.2.0&lt;/version&gt;
+    &lt;/parent&gt;
+    &lt;dependencies&gt;
+        &lt;!-- Spring Boot Web Starter --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;!-- JUnit 5 Testing Starter --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/project&gt;</code></pre>
+<h2>12.6 Production Deployment, Containerization (Docker), and CI/CD</h2>
+<p>Once your application is tested, verified, and packaged, it must be deployed to a production environment.</p>
+<h3>Containerization with Docker</h3>
+<p>Historically, deployment failures occurred because "it worked on my machine, but failed on the server" due to differing OS versions, Java runtimes, or environment configurations. Docker solves this by packaging your application along with its exact JRE runtime, OS dependencies, and configuration files into an isolated, lightweight container image.</p>
+<pre><code># Production Dockerfile for Spring Boot Application
+FROM eclipse-temurin:17-jdk-jammy AS build
+WORKDIR /app
+COPY . .
+RUN ./mvnw clean package -DskipTests
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /app
+COPY --from=build /app/target/masterclass-api-1.0.0.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]</code></pre>
+<h3>Continuous Integration / Continuous Deployment (CI/CD)</h3>
+<p>CI/CD pipelines (GitHub Actions, GitLab CI, Jenkins) automate the entire deployment lifecycle:</p>
+<ul><li><strong>Continuous Integration (CI)</strong>: Every time code is pushed, the CI server automatically checks out the code, executes mvn clean test, runs static code analysis (SonarQube), and builds the Docker image. If tests fail, the build is rejected instantly.</li><li><strong>Continuous Deployment (CD)</strong>: Once CI passes, the pipeline automatically pushes the verified Docker image to a container registry (AWS ECR, Docker Hub) and deploys it to a Kubernetes cluster or cloud server with zero manual intervention.</li></ul>
+<h2>12.7 Capstone Project: End-to-End Production-Ready Enterprise System</h2>
+<p>To crown your mastery of Java, we will build a comprehensive, production-grade Capstone Enterprise System that integrates Spring Boot, JPA persistence, REST APIs, automated testing, and containerized deployment configuration.</p>
+<h3>Architectural Requirements</h3>
+<ul><li><strong>Enterprise Domain Model</strong>: Fully encapsulated JPA entities with validation annotations.</li><li><strong>Repository &amp; Service Tiers</strong>: Spring Data JPA repositories with custom business logic and transaction boundaries.</li><li><strong>RESTful Controller &amp; Exception Handling</strong>: Production-grade controllers with global exception handling.</li><li><strong>Comprehensive Unit Tests</strong>: JUnit 5 test suite with Mockito mocking.</li></ul>
+<h3>Production-Grade Implementation</h3>
+<p>Create a file named EnterpriseCapstoneApplication.java:</p>
+<pre><code>import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+// ==================== 1. ENTERPRISE ENTITY ====================
+@Entity
+@Table(name = "capstone_orders")
+class OrderEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotBlank(message = "Customer ID cannot be blank")
+    @Column(nullable = false)
+    private String customerId;
+    @NotBlank(message = "Product SKU cannot be blank")
+    @Column(nullable = false)
+    private String productSku;
+    @DecimalMin(value = "0.01", message = "Order amount must be greater than zero")
+    @Column(nullable = false)
+    private double totalAmount;
+    @Column(nullable = false)
+    private String orderStatus; // "PENDING", "COMPLETED", "CANCELLED"
+    private LocalDateTime createdAt = LocalDateTime.now();
+    public OrderEntity() {}
+    public OrderEntity(String customerId, String productSku, double totalAmount) {
+        this.customerId = customerId;
+        this.productSku = productSku;
+        this.totalAmount = totalAmount;
+        this.orderStatus = "PENDING";
     }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        status.setText("Clicked at (" + e.getX() + ", " + e.getY() + ")");
+    public Long getId() { return id; }
+    public String getCustomerId() { return customerId; }
+    public String getProductSku() { return productSku; }
+    public double getTotalAmount() { return totalAmount; }
+    public String getOrderStatus() { return orderStatus; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setOrderStatus(String orderStatus) { this.orderStatus = orderStatus; }
+}
+// ==================== 2. SPRING DATA REPOSITORY ====================interface OrderRepository extends JpaRepository&lt;OrderEntity, Long&gt; {
+List&lt;OrderEntity&gt; findByCustomerId(String customerId);
+List&lt;OrderEntity&gt; findByOrderStatus(String orderStatus);
+}
+// ==================== 3. ENTERPRISE SERVICE TIER ====================
+@Service
+class OrderManagementService {
+    private final OrderRepository orderRepository;
+    public OrderManagementService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
     }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        status.setText("Mouse pressed");
+    public List&lt;OrderEntity&gt; getAllOrders() {
+        return orderRepository.findAll();
     }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        status.setText("Mouse released");
+    public OrderEntity createOrder(OrderEntity order) {
+        return orderRepository.save(order);
     }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        status.setText("Mouse entered window");
+    public Optional&lt;OrderEntity&gt; fulfillOrder(Long orderId) {
+        Optional&lt;OrderEntity&gt; orderOpt = orderRepository.findById(orderId);
+        if (orderOpt.isPresent()) {
+            OrderEntity order = orderOpt.get();
+            order.setOrderStatus("COMPLETED");
+            return Optional.of(orderRepository.save(order));
+        }
+        return Optional.empty();
     }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        status.setText("Mouse left window");
+}
+// ==================== 4. REST CONTROLLER ====================
+@RestController
+@RequestMapping("/api/v1/orders")
+@Validated
+class OrderController {
+    private final OrderManagementService orderService;
+    public OrderController(OrderManagementService orderService) {
+        this.orderService = orderService;
     }
-}</code></pre>
-
-<h2>Applet Lifecycle</h2>
-<p>Applets are Java programs embedded in web pages. They have a specific lifecycle managed by the browser:</p>
-<pre><code>import java.applet.Applet;
-import java.awt.*;
-
-public class MyApplet extends Applet {
-
-    @Override
-    public void init() {
-        // Called ONCE when applet is loaded
-        setBackground(Color.BLACK);
-        setForeground(Color.WHITE);
-        add(new Label("Hello from Applet!"));
+    @GetMapping
+    public ResponseEntity&lt;List&lt;OrderEntity&gt;&gt; getAllOrders() {
+        return ResponseEntity.ok(orderService.getAllOrders());
     }
-
-    @Override
-    public void start() {
-        // Called when applet becomes visible
-        System.out.println("Applet started");
+    @PostMapping
+    public ResponseEntity&lt;OrderEntity&gt; createOrder(@RequestBody @Validated OrderEntity order) {
+        OrderEntity created = orderService.createOrder(order);
+        return ResponseEntity.status(201).body(created);
     }
-
-    @Override
-    public void paint(Graphics g) {
-        g.drawString("Welcome to IT Study Hub", 50, 50);
+    @PutMapping("/{id}/fulfill")
+    public ResponseEntity&lt;OrderEntity&gt; fulfillOrder(@PathVariable Long id) {
+        return orderService.fulfillOrder(id)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
-
-    @Override
-    public void stop() {
-        // Called when applet is hidden
-        System.out.println("Applet stopped");
-    }
-
-    @Override
-    public void destroy() {
-        // Called ONCE when applet is unloaded
-        System.out.println("Applet destroyed");
-    }
-}</code></pre>
-
-<h2>Event Delegation Model Summary</h2>
-<table>
-<tr><th>Component</th><th>Event</th><th>Listener Interface</th></tr>
-<tr><td>Button</td><td>Click</td><td>ActionListener</td></tr>
-<tr><td>TextField</td><td>Enter key</td><td>ActionListener</td></tr>
-<tr><td>Checkbox</td><td>Toggle</td><td>ItemListener</td></tr>
-<tr><td>Choice/List</td><td>Selection change</td><td>ItemListener</td></tr>
-<tr><td>Window</td><td>Close, minimize</td><td>WindowListener</td></tr>
-<tr><td>Mouse</td><td>Click, move, drag</td><td>MouseListener, MouseMotionListener</td></tr>
-<tr><td>Keyboard</td><td>Key press</td><td>KeyListener</td></tr>
-</table>`},
-
-  {id:12,free:false,icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>`,level:'Advanced',title:'Layout Managers & Advanced GUI',excerpt:'Layout managers control how components are arranged in containers. Master FlowLayout, BorderLayout, GridLayout and add professional menus and dialogs.',tags:['Advanced','Layouts','Menus','Dialogs'],visual:`<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>`,bg:'linear-gradient(135deg, #0a0a10, #12121e)',concepts:['FlowLayout','BorderLayout','GridLayout','CardLayout','MenuBar & Menu','MenuItem','Dialog','FileDialog'],body:`<p>Layout managers automatically arrange components within containers. Unlike absolute positioning (which breaks on different screen sizes), layout managers adapt to the container's size, making your GUI portable and professional.</p>
-
-<h2>FlowLayout — Left to Right</h2>
-<p>FlowLayout arranges components in a row, left to right. When the row is full, it starts a new row. It's the default for Panel.</p>
-<pre><code>Frame frame = new Frame("FlowLayout Demo");
-frame.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 20)); 
-// Alignment: LEFT, CENTER, RIGHT
-// Horizontal gap: 10px, Vertical gap: 20px
-
-frame.add(new Button("Button 1"));
-frame.add(new Button("Button 2"));
-frame.add(new Button("Button 3"));
-frame.add(new Button("Button 4"));</code></pre>
-
-<h2>BorderLayout — Five Regions</h2>
-<p>BorderLayout divides the container into five regions: NORTH, SOUTH, EAST, WEST, CENTER. It's the default for Frame and Dialog.</p>
-<pre><code>Frame frame = new Frame("BorderLayout Demo");
-frame.setLayout(new BorderLayout(10, 10));
-
-frame.add(new Button("NORTH"), BorderLayout.NORTH);
-frame.add(new Button("SOUTH"), BorderLayout.SOUTH);
-frame.add(new Button("EAST"), BorderLayout.EAST);
-frame.add(new Button("WEST"), BorderLayout.WEST);
-frame.add(new TextArea("CENTER"), BorderLayout.CENTER);</code></pre>
-
-<h2>GridLayout — Equal Cells</h2>
-<p>GridLayout divides the container into equal-sized rows and columns. Perfect for calculators and forms.</p>
-<pre><code>Frame frame = new Frame("Calculator");
-frame.setLayout(new GridLayout(4, 4, 5, 5)); 
-// 4 rows, 4 columns, 5px horizontal gap, 5px vertical gap
-
-frame.add(new Button("7"));
-frame.add(new Button("8"));
-frame.add(new Button("9"));
-frame.add(new Button("/"));
-frame.add(new Button("4"));
-frame.add(new Button("5"));
-frame.add(new Button("6"));
-frame.add(new Button("*"));</code></pre>
-
-<h2>CardLayout — Stacked Panels</h2>
-<p>CardLayout shows one component at a time, like a deck of cards. Useful for wizards and tabbed interfaces.</p>
-<pre><code>Frame frame = new Frame("CardLayout Demo");
-CardLayout cards = new CardLayout();
-Panel cardPanel = new Panel();
-cardPanel.setLayout(cards);
-
-Panel card1 = new Panel();
-card1.add(new Label("Page 1"));
-card1.setBackground(Color.RED);
-
-Panel card2 = new Panel();
-card2.add(new Label("Page 2"));
-card2.setBackground(Color.GREEN);
-
-cardPanel.add(card1, "Page1");
-cardPanel.add(card2, "Page2");
-
-Panel nav = new Panel();
-Button next = new Button("Next");
-Button prev = new Button("Previous");
-
-next.addActionListener(e -> cards.next(cardPanel));
-prev.addActionListener(e -> cards.previous(cardPanel));
-
-nav.add(prev);
-nav.add(next);
-
-frame.add(cardPanel, BorderLayout.CENTER);
-frame.add(nav, BorderLayout.SOUTH);</code></pre>
-
-<h2>Menus — MenuBar, Menu, MenuItem</h2>
-<pre><code>Frame frame = new Frame("Menu Demo");
-MenuBar mb = new MenuBar();
-
-Menu file = new Menu("File");
-MenuItem open = new MenuItem("Open");
-MenuItem save = new MenuItem("Save");
-MenuItem exit = new MenuItem("Exit");
-file.add(open);
-file.add(save);
-file.addSeparator();
-file.add(exit);
-
-Menu edit = new Menu("Edit");
-MenuItem cut = new MenuItem("Cut");
-MenuItem copy = new MenuItem("Copy");
-MenuItem paste = new MenuItem("Paste");
-edit.add(cut);
-edit.add(copy);
-edit.add(paste);
-
-mb.add(file);
-mb.add(edit);
-frame.setMenuBar(mb);
-
-open.addActionListener(e -> {
-    FileDialog fd = new FileDialog(frame, "Open", FileDialog.LOAD);
-    fd.setVisible(true);
-    System.out.println("Selected: " + fd.getDirectory() + fd.getFile());
-});
-
-exit.addActionListener(e -> System.exit(0));</code></pre>
-
-<h2>Dialog — Popup Windows</h2>
-<pre><code>Dialog dialog = new Dialog(frame, "Confirmation", true);
-dialog.setLayout(new FlowLayout());
-dialog.setSize(300, 150);
-
-Label msg = new Label("Are you sure?");
-Button yes = new Button("Yes");
-Button no = new Button("No");
-
-dialog.add(msg);
-dialog.add(yes);
-dialog.add(no);
-
-yes.addActionListener(e -> dialog.dispose());
-no.addActionListener(e -> dialog.dispose());
-
-dialog.setVisible(true);  // Blocks until closed!</code></pre>
-
-<h2>FileDialog — File Selection</h2>
-<pre><code>FileDialog open = new FileDialog(frame, "Open File", FileDialog.LOAD);
-open.setVisible(true);
-String directory = open.getDirectory();
-String filename = open.getFile();
-System.out.println("Opening: " + directory + filename);
-
-FileDialog save = new FileDialog(frame, "Save File", FileDialog.SAVE);
-save.setVisible(true);
-System.out.println("Saving to: " + save.getDirectory() + save.getFile());</code></pre>
-
-<h2>Complete Application — Student Form</h2>
-<pre><code>class StudentForm extends Frame {
-    TextField nameField = new TextField(20);
-    TextField rollField = new TextField(10);
-    Choice courseChoice = new Choice();
-    CheckboxGroup genderGroup = new CheckboxGroup();
-    TextArea addressArea = new TextArea(3, 30);
-    Button submitBtn = new Button("Submit");
-    Button resetBtn = new Button("Reset");
-
-    StudentForm() {
-        super("Student Registration");
-        setLayout(new BorderLayout(10, 10));
-
-        Panel formPanel = new Panel();
-        formPanel.setLayout(new GridLayout(6, 2, 5, 10));
-
-        formPanel.add(new Label("Name:"));
-        formPanel.add(nameField);
-
-        formPanel.add(new Label("Roll No:"));
-        formPanel.add(rollField);
-
-        formPanel.add(new Label("Course:"));
-        courseChoice.add("BCA");
-        courseChoice.add("BSc IT");
-        courseChoice.add("MCA");
-        formPanel.add(courseChoice);
-
-        formPanel.add(new Label("Gender:"));
-        Panel genderPanel = new Panel();
-        genderPanel.add(new Checkbox("Male", genderGroup, true));
-        genderPanel.add(new Checkbox("Female", genderGroup, false));
-        formPanel.add(genderPanel);
-
-        formPanel.add(new Label("Address:"));
-        formPanel.add(addressArea);
-
-        Panel btnPanel = new Panel();
-        btnPanel.add(submitBtn);
-        btnPanel.add(resetBtn);
-
-        submitBtn.addActionListener(e -> {
-            String name = nameField.getText();
-            String roll = rollField.getText();
-            String course = courseChoice.getSelectedItem();
-            System.out.println("Registered: " + name + " (" + roll + ") - " + course);
-        });
-
-        resetBtn.addActionListener(e -> {
-            nameField.setText("");
-            rollField.setText("");
-            addressArea.setText("");
-        });
-
-        add(new Label("Student Registration Form", Label.CENTER), BorderLayout.NORTH);
-        add(formPanel, BorderLayout.CENTER);
-        add(btnPanel, BorderLayout.SOUTH);
-
-        setSize(400, 400);
-        setVisible(true);
-
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) { System.exit(0); }
-        });
+}
+// ==================== 5. APPLICATION BOOTSTRAP ====================
+@SpringBootApplication
+public class EnterpriseCapstoneApplication {
+    public static void main(String[] args) {
+        System.out.println("=================================================");
+        System.out.println(" CAPSTONE ENTERPRISE BACKEND INITIALIZED ");
+        System.out.println("=================================================");
+        SpringApplication.run(EnterpriseCapstoneApplication.class, args);
     }
 }</code></pre>
-
-<h2>Layout Manager Comparison</h2>
-<table>
-<tr><th>Layout</th><th>Behavior</th><th>Best For</th></tr>
-<tr><td>FlowLayout</td><td>Left to right, wraps to next row</td><td>Toolbars, button groups</td></tr>
-<tr><td>BorderLayout</td><td>Five regions, CENTER expands</td><td>Main application windows</td></tr>
-<tr><td>GridLayout</td><td>Equal-sized cells in rows/cols</td><td>Calculators, forms, game boards</td></tr>
-<tr><td>CardLayout</td><td>One component visible at a time</td><td>Wizards, tabbed interfaces</td></tr>
-<tr><td>GridBagLayout</td><td>Flexible grid with constraints</td><td>Complex forms (most powerful)</td></tr>
-</table>`}
+<h3>Summary and Concluding Remarks</h3>
+<p>You have completed the definitive masterwork on Java engineering. Across 12 rigorous chapters, you journeyed from primitive syntax, memory management, and control flow to object-oriented design, functional programming streams, multithreading concurrency, JDBC relational persistence, Spring Boot enterprise architecture, automated testing, and containerized deployment.</p>
+<p>You now possess the complete architecture, mindset, and technical mastery required to engineer world-class, award-winning software systems. Go forth and build masterpieces.</p>`,
+  quiz: [
+  {
+    "q": "In the testing pyramid, which tier forms the base and should contain the most tests?",
+    "opts": [
+      "Unit tests: fast and isolated, with dependencies mocked",
+      "Manual tests",
+      "End-to-End tests",
+      "Integration tests"
+    ],
+    "ans": 0,
+    "xp": 10,
+    "exp": "Unit tests are fast and cheap, so thousands can run in seconds. Integration tests sit in the middle and E2E tests are the slow apex."
+  },
+  {
+    "q": "What is Mockito used for in unit testing a service class?",
+    "opts": [
+      "Compiling the tests",
+      "Deploying to Docker",
+      "Starting a real database",
+      "Creating mock objects to simulate dependencies such as repositories or payment gateways"
+    ],
+    "ans": 3,
+    "xp": 10,
+    "exp": "Mocks let you stub behavior precisely without real database access or network calls."
+  },
+  {
+    "q": "Which JUnit 5 annotation runs the same test method several times with different input datasets?",
+    "opts": [
+      "@BeforeEach",
+      "@Nested",
+      "@ParameterizedTest",
+      "@Test"
+    ],
+    "ans": 2,
+    "xp": 10,
+    "exp": "@ParameterizedTest avoids duplicating test code. @BeforeEach runs setup before every test, and @Nested groups test classes hierarchically."
+  },
+  {
+    "q": "What does MockMvc allow you to do?",
+    "opts": [
+      "Mock the JVM",
+      "Test Spring MVC controllers without starting a full HTTP servlet container",
+      "Replace JUnit",
+      "Generate Dockerfiles"
+    ],
+    "ans": 1,
+    "xp": 10,
+    "exp": "MockMvc is used in Spring Boot integration tests to perform requests against controllers and assert status codes and JSON paths."
+  },
+  {
+    "q": "Which JDK tool dumps all thread stack traces of a JVM process, vital for diagnosing deadlocks or infinite worker loops?",
+    "opts": [
+      "jstack",
+      "mvn",
+      "jps",
+      "jmap"
+    ],
+    "ans": 0,
+    "xp": 10,
+    "exp": "jstack dumps thread stack traces. jps lists Java process IDs, and jmap generates heap memory maps and dumps for finding memory leaks."
+  },
+  {
+    "q": "In the Maven lifecycle, which command bundles compiled classes and resources into a distributable .jar?",
+    "opts": [
+      "mvn clean",
+      "mvn compile",
+      "mvn test",
+      "mvn package"
+    ],
+    "ans": 3,
+    "xp": 10,
+    "exp": "mvn clean deletes target/, compile produces bytecode, test runs tests, package builds the archive, and install copies it to your local .m2 repository."
+  },
+  {
+    "q": "What problem does Docker solve, according to the chapter?",
+    "opts": [
+      "SQL injection",
+      "Slow compilation",
+      "'It worked on my machine' failures, by packaging the app with its exact JRE, dependencies and configuration into an isolated image",
+      "Missing unit tests"
+    ],
+    "ans": 2,
+    "xp": 10,
+    "exp": "A container image carries the application with its runtime and configuration, so it behaves the same across environments."
+  },
+  {
+    "q": "In a CI/CD pipeline, what does Continuous Deployment do once CI has passed?",
+    "opts": [
+      "Writes new unit tests",
+      "Pushes the verified Docker image to a registry and deploys it automatically",
+      "Rejects the build",
+      "Deletes the target/ directory"
+    ],
+    "ans": 1,
+    "xp": 10,
+    "exp": "CI checks out code, runs mvn clean test, static analysis and builds the image. CD then automatically pushes and deploys, for example to Kubernetes, with no manual intervention."
+  }
+]
+}
 ];
 
 let currentId = null;
