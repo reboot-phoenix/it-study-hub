@@ -825,7 +825,7 @@ function updateAuthUI() {
     const initials = session.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
     document.getElementById('avatarInitial').textContent = initials;
     document.getElementById('avatarName').textContent = session.name.split(' ')[0];
-    document.getElementById('ddName').textContent = session.name + (session.isAdmin ? ' <i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>' : '');
+    document.getElementById('ddName').textContent = session.name + (session.isAdmin ? ' ★' : '');
     document.getElementById('ddEmail').textContent = session.email || '';
     if (heroBtn) { heroBtn.textContent = 'Go to My Courses →'; heroBtn.href = 'courses.html'; }
     if (ctaBtn)  { ctaBtn.textContent  = 'Continue Learning →'; ctaBtn.href = 'courses.html'; }

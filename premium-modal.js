@@ -326,7 +326,7 @@ window.openPremiumModal = async function(courseName) {
   const data = snap.exists() ? snap.data() : {};
 
   // FIX 3: isPremiumUser check uses Firestore data, not localStorage
-  const isPremiumUser = data.plan === 'pro' || data.plan === 'elite' || data.isAdmin === true;
+  const isPremiumUser = data.plan === 'pro' || data.plan === 'elite' || data.role === 'admin';
 
   if (isPremiumUser) {
     const overlay = buildModal(courseName);
@@ -516,7 +516,7 @@ async function checkAndHidePremiumCTAs() {
     if (!snap.exists()) return;
 
     const data = snap.data();
-    const isPremium = data.plan === 'pro' || data.plan === 'elite' || data.isAdmin === true;
+    const isPremium = data.plan === 'pro' || data.plan === 'elite' || data.role === 'admin';
     if (isPremium) {
       hidePremiumCTAs(data.plan || 'pro');
     }
