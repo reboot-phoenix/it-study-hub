@@ -191,6 +191,10 @@ if (!document.getElementById('pm-styles')) {
 }
 
 // ── Build modal HTML ──
+function pmEsc(s) {
+  return String(s).replace(/[&<>"'`]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
+}
+
 function buildModal(courseName) {
   const overlay = document.createElement('div');
   overlay.className = 'pm-overlay';
@@ -229,7 +233,7 @@ function buildModal(courseName) {
         <div class="pm-eyebrow"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Unlock Premium Access</div>
         <h2 class="pm-title">LEVEL UP YOUR<br><span style="color:#c8f135">LEARNING</span></h2>
         <p class="pm-sub">
-          ${courseName ? `Get full access to <strong style="color:#f0f0f8">${courseName}</strong> and beyond.` : 'Get full access to all courses, advanced materials, and exclusive resources.'}
+          ${courseName ? `Get full access to <strong style="color:#f0f0f8">${pmEsc(courseName)}</strong> and beyond.` : 'Get full access to all courses, advanced materials, and exclusive resources.'}
         </p>
       </div>
       <div class="pm-grid" id="pm-plans-grid">${plansHTML}</div>

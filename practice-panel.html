@@ -1349,6 +1349,7 @@ html, body {
 <div class="toast" id="toast"></div>
 
 <!-- Monaco loader -->
+<script src="ish-safe.js"></script>
 <script>var require = {paths:{vs:'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs'}};</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
 
@@ -1390,7 +1391,14 @@ function setNavUser(u) {
   document.getElementById('nav-name').textContent = (u.displayName || u.email?.split('@')[0] || 'User').split(' ')[0];
   const av = document.getElementById('nav-avatar');
   if (u.photoURL) {
-    av.innerHTML = `<img src="${u.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    const photo = window.safeImgUrl ? window.safeImgUrl(u.photoURL) : '';
+    if (photo) {
+      const img = document.createElement('img');
+      img.src = photo; img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%';
+      av.replaceChildren(img);
+    } else {
+      av.textContent = (u.displayName || u.email || 'U')[0].toUpperCase();
+    }
   } else {
     av.textContent = (u.displayName || u.email || 'U')[0].toUpperCase();
   }
@@ -1452,14 +1460,13 @@ window._loadLeaderboard = async function() {
       users.push({uid:d.id, name:data.name||'Anonymous', xp:data.xp||0, solved:data.solved||0, photo:data.photoURL||null});
     });
     const myUid = window._currentUser?.uid;
-    const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     el.innerHTML = users.slice(0,20).map((u,i) => {
       const rc = i===0?'gold':i===1?'silver':i===2?'bronze':'';
       const isMe = u.uid===myUid;
       const safeName = esc(u.name||'?');
       const ini = safeName.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
-      const sp = u.photo && (u.photo.startsWith('https://firebasestorage') || u.photo.startsWith('https://lh3.googleusercontent'));
-      const av = sp ? `<img src="${esc(u.photo)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : ini;
+      const safePhoto = window.safeImgUrl(u.photo);
+      const av = safePhoto ? `<img src="${esc(safePhoto)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : ini;
       return `<div class="lb-entry${isMe?' me':''}"><div class="lb-rank${rc?' '+rc:''}">${i===0?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#FFD700;"></i>':i===1?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#C0C0C0;"></i>':i===2?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#CD7F32;"></i>':'#'+(i+1)}</div><div class="lb-avatar">${av}</div><div class="lb-name">${safeName}${isMe?' (you)':''}</div><div class="lb-xp">${u.xp.toLocaleString()} XP</div><div class="lb-solved">${u.solved}✓</div></div>`;
     }).join('');
   } catch(e) {
