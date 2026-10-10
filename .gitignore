@@ -1,0 +1,7 @@
+# Premium content staged for upload to Cloudflare KV. Never commit.
+premium-export/
+# Secrets
+.dev.vars
+service-account*.json
+*.pem
+node_modules/

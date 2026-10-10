@@ -4,6 +4,9 @@
 //   POST /api/create-order      signed-in user asks to buy a plan; we create the Razorpay order
 //   POST /api/verify-payment    browser reports a finished payment; we verify it and activate the plan
 //   POST /api/razorpay-webhook  Razorpay tells us a payment was captured (backup if the browser closes)
+//   GET  /api/access            does the signed-in user currently have premium access?
+//   GET  /api/lesson?course=&id=  premium lesson text (only for users with an active plan)
+//   GET  /api/pdf?f=<file>      premium PDF (only for users with an active plan)
 //   /admin*                     existing IP gate (see note below)
 //   everything else             static files
 //
@@ -13,6 +16,8 @@
 //   FIREBASE_SERVICE_ACCOUNT  full JSON of a service account key with Cloud Datastore User role
 // Plain var (in wrangler.toml or dashboard):
 //   RAZORPAY_KEY_ID           rzp_test_... or rzp_live_...  (public key id)
+// KV namespace binding:
+//   PREMIUM                   holds premium lesson text ("lesson:<course>:<id>") and PDFs ("pdf:<file>")
 
 const PROJECT_ID = "it-study-hub";
 
@@ -256,6 +261,79 @@ export async function settlePayment(env, orderId, paymentId, source, expectUid) 
   return { uid, planId };
 }
 
+/* ───────────────── Premium access and content ───────────────── */
+
+const COURSES = new Set(["java", "c", "cpp", "r", "javascript", "python"]);
+
+function bearerToken(request) {
+  const h = request.headers.get("Authorization") || "";
+  return h.startsWith("Bearer ") ? h.slice(7) : "";
+}
+
+// Reads the caller's own profile with THEIR token, so Firestore security rules still apply.
+// Premium = an active (not expired) paid plan, or an admin.
+export async function getAccess(request) {
+  const uid = await requireUser(request);
+  const res = await fetch(`${FS_BASE}/users/${encodeURIComponent(uid)}`, {
+    headers: { Authorization: `Bearer ${bearerToken(request)}` },
+  });
+  if (res.status === 404 || res.status === 403) return { uid, plan: "", premium: false, admin: false };
+  if (!res.ok) throw new Error("Firestore read failed: " + res.status);
+  const f = (await res.json()).fields || {};
+  const plan = f.plan?.stringValue || "";
+  const expiresMs = f.planExpiresAt?.timestampValue ? Date.parse(f.planExpiresAt.timestampValue) : null;
+  const planActive = !!PLANS[plan] && (expiresMs === null || expiresMs > Date.now());
+  const admin = f.role?.stringValue === "admin" || f.isAdmin?.booleanValue === true;
+  return { uid, plan, admin, premium: planActive || admin };
+}
+
+function requireStore(env) {
+  if (!env.PREMIUM) throw new HttpError(503, "Premium content storage is not set up yet");
+  return env.PREMIUM;
+}
+
+async function accessRoute(request) {
+  const a = await getAccess(request);
+  return json({ premium: a.premium, plan: a.plan });
+}
+
+async function lessonRoute(request, env) {
+  const store = requireStore(env);
+  const url = new URL(request.url);
+  const course = url.searchParams.get("course") || "";
+  const id = url.searchParams.get("id") || "";
+  if (!COURSES.has(course) || !/^\d{1,3}$/.test(id)) throw new HttpError(400, "Bad lesson request");
+
+  const a = await getAccess(request);
+  if (!a.premium) throw new HttpError(403, "Premium plan required");
+
+  const body = await store.get(`lesson:${course}:${Number(id)}`, "text");
+  if (body === null) throw new HttpError(404, "Lesson not found");
+  return new Response(body, {
+    headers: { "Content-Type": "application/json", "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" },
+  });
+}
+
+async function pdfRoute(request, env) {
+  const store = requireStore(env);
+  const file = new URL(request.url).searchParams.get("f") || "";
+  if (!/^[\w #()+.\-]{1,100}\.pdf$/.test(file) || file.includes("..")) throw new HttpError(400, "Bad file name");
+
+  const a = await getAccess(request);
+  if (!a.premium) throw new HttpError(403, "Premium plan required");
+
+  const data = await store.get(`pdf:${file}`, { type: "arrayBuffer" });
+  if (data === null) throw new HttpError(404, "File not found");
+  return new Response(data, {
+    headers: {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `inline; filename*=UTF-8''${encodeURIComponent(file)}`,
+      "Cache-Control": "private, no-store",
+      "X-Content-Type-Options": "nosniff",
+    },
+  });
+}
+
 /* ─────────────────────────── API routes ─────────────────────────── */
 
 async function createOrder(request, env) {
@@ -318,6 +396,9 @@ async function razorpayWebhook(request, env) {
 }
 
 const ROUTES = {
+  "GET /api/access": accessRoute,
+  "GET /api/lesson": lessonRoute,
+  "GET /api/pdf": pdfRoute,
   "POST /api/create-order": createOrder,
   "POST /api/verify-payment": verifyPayment,
   "POST /api/razorpay-webhook": razorpayWebhook,
