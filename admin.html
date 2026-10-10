@@ -156,6 +156,7 @@
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <script src="ish-safe.js"></script>
+<script src="ish-config.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
@@ -180,6 +181,8 @@ const SUBJECTS = [
 ];
 
 const app = initializeApp(firebaseConfig);
+
+await window.ishInitAppCheck?.(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 

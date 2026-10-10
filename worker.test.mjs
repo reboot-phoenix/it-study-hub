@@ -44,6 +44,7 @@ const env = {
 env.PREMIUM.store.set("lesson:java:7", JSON.stringify({ body: "SECRET JAVA 7" }));
 env.PREMIUM.store.set("pdf:BCA-421 JAVA-97-131.pdf", "%PDF-secret");
 let users, payments, orders, ledger, orderSeq, lastFsAuth, lb, listPageSize = 300;
+let judge0Calls = [];
 // ── typed-value helpers for the Firestore mock ──
 let beforePatch = null;
 function toTyped(key, v) {
@@ -67,7 +68,7 @@ function fromTyped(tv) {
 
 function reset() {
   users = { alice: { plan: "" }, bob: { plan: "" }, carol: { plan: "elite" } };
-  payments = {}; orders = {}; ledger = {}; orderSeq = 0; lb = {}; listPageSize = 300;
+  payments = {}; orders = {}; ledger = {}; orderSeq = 0; lb = {}; listPageSize = 300; judge0Calls = [];
 }
 reset();
 
@@ -76,6 +77,19 @@ globalThis.fetch = async (input, init = {}) => {
   const method = (init.method || "GET").toUpperCase();
   const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s });
 
+  if (/^https:\/\/(ce\.judge0\.com|judge0\.example\.org)\/submissions/.test(url)) {
+    judge0Calls.push({ url, init });
+    const body = JSON.parse(init.body);
+    const src = Buffer.from(body.source_code, "base64").toString("utf8");
+    const b64 = (s) => Buffer.from(s, "utf8").toString("base64").replace(/(.{60})/g, "$1\n");   // Judge0 wraps lines
+    if (src.includes("TIMEOUT")) { const e = new Error("aborted"); e.name = "TimeoutError"; throw e; }
+    if (src.includes("QUOTA")) return J({ error: "limit" }, 429);
+    if (src.includes("BROKEN")) return J({ error: "boom" }, 500);
+    if (src.includes("COMPILE_ERROR")) return J({ compile_output: b64("main.c:1: error: expected ';'"), status: { description: "Compilation Error" } });
+    if (src.includes("EMOJI")) return J({ stdout: b64("héllo 🌍\n"), status: { description: "Accepted" }, time: "0.01", memory: 1024 });
+    const stdin = Buffer.from(body.stdin || "", "base64").toString("utf8");
+    return J({ stdout: b64("ran lang " + body.language_id + " stdin=" + stdin), status: { description: "Accepted" }, time: "0.02", memory: 2048 });
+  }
   if (url.includes("securetoken@system.gserviceaccount.com")) return J({ keys: [fbJwk] });
   if (url === "https://oauth2.googleapis.com/token") return J({ access_token: "tok", expires_in: 3600 });
 
@@ -296,9 +310,9 @@ await test("/api/access: active plan and admins are premium, expired plans are n
   users.bob = { plan: "gold" };                          // made-up plan names grant nothing
   assert.equal((await (await get("/api/access", "bob")).json()).premium, false);
 });
-await test("/api/access reads the profile with the user's own token, not the service account", async () => {
+await test("/api/access reads the profile with the service account, so Firestore App Check enforcement cannot break it", async () => {
   await get("/api/access", "alice");
-  assert.notEqual(lastFsAuth, "Bearer tok");
+  assert.equal(lastFsAuth, "Bearer tok");
 });
 await test("/api/lesson: locked for signed-out and free users, no content leaks", async () => {
   assert.equal((await get("/api/lesson?course=java&id=7")).status, 401);
@@ -529,6 +543,68 @@ await test("the Worker no longer carries an IP allowlist, and /admin is just a s
   assert.ok(!/CF-Connecting-IP/.test(src) && !/["']\d{1,3}\.\d{1,3}\.\d{1,3}\.["']/.test(src), "no IP allowlist in worker.js");
   const res = await worker.fetch(new Request("https://x.test/admin.html"), env);
   assert.equal(await res.text(), "asset");
+});
+
+console.log("run code");
+import { RUN_LIMIT } from "./worker.js";
+const run = async (uid, body, extra) =>
+  worker.fetch(new Request("https://x.test/api/run", { method: "POST", headers: { "Content-Type": "application/json", ...(uid ? await authed(uid, extra) : {}) }, body: typeof body === "string" ? body : JSON.stringify(body) }), env);
+
+await test("run: signed-out callers cannot use the code runner", async () => {
+  assert.equal((await run(null, { language: "c", code: "int main(){}" })).status, 401);
+  assert.equal(judge0Calls.length, 0, "nothing was sent to Judge0");
+});
+await test("run: maps the language, sends source and input as base64, and returns decoded output", async () => {
+  const res = await run("alice", { language: "python", code: "print(input())", stdin: "héllo" });
+  const data = await res.json();
+  assert.equal(res.status, 200);
+  assert.equal(data.stdout, "ran lang 71 stdin=héllo"); assert.equal(data.status, "Accepted");
+  assert.match(judge0Calls[0].url, /base64_encoded=true&wait=true/);
+  for (const [lang, id] of Object.entries({ c: 50, cpp: 54, java: 62, python: 71, r: 80, javascript: 63 })) {
+    judge0Calls.length = 0;
+    assert.match((await (await run("alice" + lang, { language: lang, code: "x" })).json()).stdout, new RegExp("lang " + id));
+  }
+});
+await test("run: never forwards the student's token, and uses the RapidAPI key only when one is configured", async () => {
+  await run("alice", { language: "c", code: "x" });
+  const h = judge0Calls[0].init.headers;
+  assert.ok(!h.Authorization && !h["X-RapidAPI-Key"], "no credentials on the free public runner");
+  judge0Calls.length = 0;
+  const saved = { ...env }; env.JUDGE0_KEY = "secret-key"; env.JUDGE0_URL = "https://judge0.example.org/";
+  await run("alice2", { language: "c", code: "x" });
+  assert.equal(judge0Calls[0].init.headers["X-RapidAPI-Key"], "secret-key");
+  assert.equal(judge0Calls[0].init.headers["X-RapidAPI-Host"], "judge0.example.org");
+  assert.ok(judge0Calls[0].url.startsWith("https://judge0.example.org/submissions"));
+  delete env.JUDGE0_KEY; delete env.JUDGE0_URL;
+});
+await test("run: UTF-8 output and compile errors come through intact", async () => {
+  assert.equal((await (await run("alice", { language: "c", code: "EMOJI" })).json()).stdout, "héllo 🌍\n");
+  const ce = await (await run("alice", { language: "c", code: "COMPILE_ERROR" })).json();
+  assert.match(ce.compile_output, /expected ';'/); assert.equal(ce.status, "Compilation Error");
+});
+await test("run: rejects unsupported languages, empty code, and oversized code or input before calling Judge0", async () => {
+  assert.equal((await run("alice", { language: "ruby", code: "x" })).status, 400);
+  assert.equal((await run("alice", { language: "c", code: "   " })).status, 400);
+  assert.equal((await run("alice", { language: "c" })).status, 400);
+  assert.equal((await run("alice", { language: "c", code: "x".repeat(70 * 1024) })).status, 413);
+  assert.equal((await run("alice", { language: "c", code: "x", stdin: "y".repeat(20 * 1024) })).status, 413);
+  assert.equal((await run("alice", { language: "c", code: "x", stdin: 5 })).status, 400);
+  assert.equal((await run("alice", "{not json")).status, 400);
+  assert.equal(judge0Calls.length, 0);
+});
+await test("run: each student is limited per minute, and one student cannot use up another's allowance", async () => {
+  for (let i = 0; i < RUN_LIMIT.perMinute; i++) assert.equal((await run("spammer", { language: "c", code: "x" })).status, 200);
+  const blocked = await run("spammer", { language: "c", code: "x" });
+  assert.equal(blocked.status, 429); assert.match((await blocked.json()).error, /too quickly/);
+  assert.equal((await run("someone-else", { language: "c", code: "x" })).status, 200);
+});
+await test("run: runner timeouts, quota errors and failures become clear, safe messages", async () => {
+  const t1 = await run("t1", { language: "c", code: "TIMEOUT" });
+  assert.equal(t1.status, 504);
+  const t2 = await run("t2", { language: "c", code: "QUOTA" });
+  assert.equal(t2.status, 503); assert.match((await t2.json()).error, /busy/);
+  const t3 = await run("t3", { language: "c", code: "BROKEN" });
+  assert.equal(t3.status, 502); assert.ok(!JSON.stringify(await t3.json()).includes("boom"), "upstream details are not leaked");
 });
 
 console.log("routing");
