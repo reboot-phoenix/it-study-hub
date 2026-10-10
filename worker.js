@@ -136,7 +136,7 @@ export async function requireUser(request) {
 
 let tokenCache = { token: null, exp: 0 };
 
-async function getAccessToken(env) {
+export async function getAccessToken(env) {
   if (tokenCache.token && Date.now() < tokenCache.exp) return tokenCache.token;
   if (!env.FIREBASE_SERVICE_ACCOUNT) throw new Error("FIREBASE_SERVICE_ACCOUNT is not set");
   const sa = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT);
@@ -467,7 +467,7 @@ export async function getAccess(request) {
   const plan = f.plan?.stringValue || "";
   const expiresMs = f.planExpiresAt?.timestampValue ? Date.parse(f.planExpiresAt.timestampValue) : null;
   const planActive = !!PLANS[plan] && (expiresMs === null || expiresMs > Date.now());
-  const admin = f.role?.stringValue === "admin" || f.isAdmin?.booleanValue === true;
+  const admin = f.role?.stringValue === "admin";   // the one and only admin switch; set in the Firebase console or with scripts/grant-admin.mjs
   return { uid, plan, admin, premium: planActive || admin };
 }
 

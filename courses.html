@@ -172,7 +172,6 @@ const firebaseConfig = {
   appId: "1:566661039167:web:122691d263631e404ea48a"
 };
 
-const ADMIN_EMAIL = "itstudyhub.tiu@gmail.com";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
@@ -237,7 +236,7 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  const isAdmin = user.email === ADMIN_EMAIL;
+  let isAdmin = false;   // from users/{uid}.role below
   const name    = user.displayName || user.email.split('@')[0];
   const initials = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
 
@@ -270,6 +269,7 @@ onAuthStateChanged(auth, async (user) => {
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     if (userDoc.exists()) {
       const data = userDoc.data();
+      isAdmin        = data.role === 'admin';
       plan           = data.plan           || 'free';
       xp             = data.xp             || 0;
       coursesStarted = data.coursesStarted || 0;

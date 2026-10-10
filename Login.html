@@ -502,7 +502,6 @@ const firebaseConfig = {
   appId: "1:566661039167:web:122691d263631e404ea48a"
 };
 
-const ADMIN_EMAIL = "itstudyhub.tiu@gmail.com";
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -535,8 +534,7 @@ if (isSignInWithEmailLink(auth, window.location.href)) {
         const session = {
           name: result.user.displayName || email.split('@')[0],
           email: result.user.email,
-          uid: result.user.uid,
-          isAdmin: result.user.email === ADMIN_EMAIL
+          uid: result.user.uid
         };
         localStorage.setItem('ish_session', JSON.stringify(session));
         // Clean the URL then redirect
@@ -726,8 +724,7 @@ async function handleSocialLogin(provider, providerName) {
     const session = {
       name: user.displayName || user.email.split('@')[0],
       email: user.email,
-      uid: user.uid,
-      isAdmin: user.email === ADMIN_EMAIL
+      uid: user.uid
     };
     localStorage.setItem('ish_session', JSON.stringify(session));
     showSuccess(`Signed in with ${providerName}! Redirecting…`);

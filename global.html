@@ -255,7 +255,6 @@ const firebaseConfig = {
   appId: "1:566661039167:web:122691d263631e404ea48a"
 };
 
-const ADMIN_EMAIL = "itstudyhub.tiu@gmail.com";
 const SUBJECTS = [
   { key:'c',      label:'C Programming',   icon:'<i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#60a5fa' },
   { key:'java',   label:'OOPs Java',        icon:'<i class="ti ti-coffee" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#f7b731' },
@@ -315,7 +314,7 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById('gateScreen').style.display = 'none';
   document.getElementById('dashScreen').style.display = 'block';
 
-  const isAdmin = user.email === ADMIN_EMAIL;
+  let isAdmin = false;   // decided by users/{uid}.role below; that field is set only in the Firebase console
   const name = user.displayName || user.email.split('@')[0];
   const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
 
@@ -328,8 +327,6 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById('sbAvatar').textContent = initials;
   document.getElementById('sbName').textContent = name;
   document.getElementById('sbEmail').textContent = user.email;
-  if (isAdmin) document.getElementById('sbAdminBadge').style.display = 'inline-block';
-  if (isAdmin) document.getElementById('adminChip').style.display = 'flex';
 
   // Welcome
   document.getElementById('welcomeName').textContent = name.split(' ')[0];
@@ -349,7 +346,6 @@ onAuthStateChanged(auth, async (user) => {
       if (now.getHours() >= 0 && now.getHours() < 5) earnedBadges.push('night_owl');
       userData = {
         name, email: user.email,
-        isAdmin: false,   // set by hand in the Firebase console; rules reject self-promotion
         xp: 100,          // welcome XP; Firestore rules reject anything higher
         quizzesDone: 0,
         scores: {},
@@ -360,8 +356,20 @@ onAuthStateChanged(auth, async (user) => {
     }
   } catch(e) {
     console.log('Firestore error:', e);
-    userData = { name, email: user.email, isAdmin, xp: isAdmin?9999:100, quizzesDone:0, scores:{}, badges:['hello_world'] };
+    userData = { name, email: user.email, xp: 100, quizzesDone:0, scores:{}, badges:['hello_world'] };
   }
+
+  // Admin = the "role" field on my profile (set only in the Firebase console). This only drives what the
+  // page shows; Firestore rules and the Worker are what actually grant admin powers.
+  isAdmin = userData.role === 'admin';
+  if (isAdmin) {
+    document.getElementById('sbAdminBadge').style.display = 'inline-block';
+    document.getElementById('adminChip').style.display = 'flex';
+  }
+  try {   // remembered for the nav dropdown on other pages (cosmetic)
+    const sess = JSON.parse(localStorage.getItem('ish_session') || '{}');
+    localStorage.setItem('ish_session', JSON.stringify({ ...sess, isAdmin }));
+  } catch(e) {}
 
   // Keep my public leaderboard entry fresh (name, XP, photo). Once per session.
   if (window.ishSyncProfile) window.ishSyncProfile(user);

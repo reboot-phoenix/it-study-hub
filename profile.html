@@ -869,7 +869,6 @@ const firebaseConfig = {
   appId: "1:566661039167:web:122691d263631e404ea48a"
 };
 
-const ADMIN_EMAIL = "bscit.tiu2012@gmail.com";
 
 const SUBJECTS = [
   {key:'c',          label:'C Programming', color:'#60a5fa'},
@@ -1096,7 +1095,7 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById('gateScreen').style.display = 'none';
   document.getElementById('profilePage').style.display = 'block';
 
-  const isAdmin = user.email === ADMIN_EMAIL;
+  let isAdmin = false;   // from users/{uid}.role below
   const name = user.displayName || user.email.split('@')[0];
   const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
 
@@ -1150,6 +1149,8 @@ onAuthStateChanged(auth, async (user) => {
     setTimeout(() => { document.getElementById('xpBarInner').style.width = '100%'; }, 300);
     document.getElementById('xpNextLabel').textContent = 'Max Level <i class="ti ti-trophy" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>';
   }
+
+  isAdmin = userData.role === 'admin';
 
   // ── Chips & Privileges ──
   if (isAdmin) {

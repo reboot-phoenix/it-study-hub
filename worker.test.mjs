@@ -95,6 +95,12 @@ globalThis.fetch = async (input, init = {}) => {
   if (url.startsWith("https://firestore.googleapis.com")) {
     const u = new URL(url);
     lastFsAuth = init.headers.Authorization;
+    if (u.pathname.endsWith("/documents:runQuery")) {
+      assert.equal(init.headers.Authorization, "Bearer tok", "queries must use the service account");
+      const want = JSON.parse(init.body).structuredQuery.where.fieldFilter.value.stringValue;
+      return J(Object.entries(users).filter(([, d]) => d.email === want).map(([uid, d]) => ({
+        document: { name: `projects/it-study-hub/databases/(default)/documents/users/${uid}`, fields: Object.fromEntries(Object.entries(d).filter(([k]) => !k.startsWith("__")).map(([k, v]) => [k, toTyped(k, v)])) } })));
+    }
     if (u.pathname.endsWith("/documents:commit")) {
       assert.equal(init.headers.Authorization, "Bearer tok", "commits must use the service account");
       for (const w of JSON.parse(init.body).writes) lb[w.update.name.split("/").pop()] = fromTyped({ mapValue: { fields: w.update.fields } });
@@ -283,8 +289,10 @@ await test("/api/access: active plan and admins are premium, expired plans are n
   assert.equal((await (await get("/api/access", "alice")).json()).premium, true);
   users.bob = { plan: "", role: "admin" };
   assert.equal((await (await get("/api/access", "bob")).json()).premium, true);
-  users.bob = { plan: "", isAdmin: true };
-  assert.equal((await (await get("/api/access", "bob")).json()).premium, true);
+  users.bob = { plan: "", isAdmin: true };                // the old boolean flag no longer grants anything
+  assert.equal((await (await get("/api/access", "bob")).json()).premium, false);
+  users.bob = { plan: "", role: "student" };
+  assert.equal((await (await get("/api/access", "bob")).json()).premium, false);
   users.bob = { plan: "gold" };                          // made-up plan names grant nothing
   assert.equal((await (await get("/api/access", "bob")).json()).premium, false);
 });
@@ -468,6 +476,34 @@ await test("rebuild: only admins, and it pages through every user", async () => 
   assert.equal(res.status, 200); assert.equal((await res.json()).users, 6);
   assert.deepEqual(Object.keys(lb).sort(), ["boss", "u1", "u2", "u3", "u4", "u5"]);
   assert.equal(lb.u3.xp, 30); assert.equal(lb.u3.name, "Three");
+});
+
+console.log("grant-admin script");
+import { setRole } from "./scripts/grant-admin.mjs";
+await test("grants role=admin, clears the old isAdmin flag, and the Worker then treats them as admin", async () => {
+  users.sam = { email: "sam@tiu.edu", isAdmin: true, xp: 5 };
+  const out = await setRole({ email: "sam@tiu.edu", token: "tok" });
+  assert.deepEqual(out, { uid: "sam", role: "admin" });
+  assert.equal(users.sam.role, "admin"); assert.equal(users.sam.isAdmin, undefined);
+  assert.equal((await (await get("/api/access", "sam")).json()).premium, true);
+  assert.equal((await post("/api/admin/rebuild-leaderboard", "sam")).status, 200);
+});
+await test("matches the email regardless of capitalisation", async () => {
+  users.sam = { email: "sam@tiu.edu" };
+  assert.equal((await setRole({ email: "Sam@TIU.edu", token: "tok" })).uid, "sam");
+});
+await test("revoke removes the role, and removes the powers", async () => {
+  users.sam = { email: "sam@tiu.edu", role: "admin" };
+  await setRole({ email: "sam@tiu.edu", revoke: true, token: "tok" });
+  assert.equal(users.sam.role, undefined);
+  assert.equal((await post("/api/admin/rebuild-leaderboard", "sam")).status, 403);
+});
+await test("refuses unknown emails and duplicate profiles instead of guessing", async () => {
+  await assert.rejects(setRole({ email: "ghost@tiu.edu", token: "tok" }), /No profile found/);
+  users.a1 = { email: "dup@tiu.edu" }; users.a2 = { email: "dup@tiu.edu" };
+  await assert.rejects(setRole({ email: "dup@tiu.edu", token: "tok" }), /More than one profile/);
+  assert.equal(users.a1.role, undefined); assert.equal(users.a2.role, undefined);
+  await assert.rejects(setRole({ email: "not-an-email", token: "tok" }), /full email/);
 });
 
 console.log("routing");
