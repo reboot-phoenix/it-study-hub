@@ -8,6 +8,8 @@
 //   GET  /api/lesson?course=&id=  premium lesson text (only for users with an active plan)
 //   GET  /api/pdf?f=<file>      premium PDF (only for users with an active plan)
 //   POST /api/award-xp          the only way XP changes: quiz results and practice solves
+//   POST /api/sync-profile      copies the public bits of a profile (name, xp, photo, solved) to leaderboard/{uid}
+//   POST /api/admin/rebuild-leaderboard   admins only: rebuilds leaderboard/ from users/ (run once after deploying)
 //   /admin*                     existing IP gate (see note below)
 //   everything else             static files
 //
@@ -295,7 +297,11 @@ async function awardXp(env, uid, compute) {
     const mask = ["xp", ...plan.mask].map((m) => `updateMask.fieldPaths=${m}`).join("&");
     const patch = await fsFetch(env, `users/${encodeURIComponent(uid)}`, { method: "PATCH", body: JSON.stringify(body) },
       `?${mask}&currentDocument.updateTime=${encodeURIComponent(doc.updateTime)}`);
-    if (patch.ok) return { awarded: plan.delta, xp: xpNow + plan.delta, breakdown: plan.breakdown };
+    if (patch.ok) {
+      try { await writeLeaderboard(env, uid, { ...fields, xp: intVal(xpNow + plan.delta) }); }
+      catch (e) { console.error("Leaderboard sync failed", e.message); }   // never fail an award over this
+      return { awarded: plan.delta, xp: xpNow + plan.delta, breakdown: plan.breakdown };
+    }
 
     const text = await patch.text();
     if (!/FAILED_PRECONDITION|ABORTED/.test(text)) throw new Error("Firestore xp update failed: " + patch.status + " " + text);
@@ -366,6 +372,77 @@ async function awardXpRoute(request, env) {
     return json(await awardXp(env, uid, planPractice(body.problemId)));
   }
   throw new HttpError(400, "Unknown award type");
+}
+
+/* ───────────────── Leaderboard (public copy of a profile) ───────────────── */
+// users/{uid} holds private data (email, date of birth, ...) and is readable only by its owner and admins.
+// leaderboard/{uid} holds just what other students may see. Only this Worker writes it.
+
+function cleanName(raw) {
+  return String(raw || "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 60) || "Student";
+}
+
+function leaderboardFields(f) {
+  const solvedMap = f.practice?.mapValue?.fields?.solved?.mapValue?.fields;
+  const photo = f.photoURL?.stringValue;
+  const out = {
+    name: { stringValue: cleanName(f.name?.stringValue) },   // never falls back to the email address
+    xp: intVal(numOf(f.xp) || 0),
+    solved: intVal(solvedMap ? Object.keys(solvedMap).length : 0),
+    updatedAt: { timestampValue: new Date().toISOString() },
+  };
+  if (photo && photo.length <= 500 && photo.startsWith("https://")) out.photoURL = { stringValue: photo };
+  return out;
+}
+
+const LB_MASK = ["name", "xp", "solved", "updatedAt", "photoURL"];   // photoURL in the mask but absent = cleared
+
+async function writeLeaderboard(env, uid, userFields) {
+  const res = await fsFetch(env, `leaderboard/${encodeURIComponent(uid)}`,
+    { method: "PATCH", body: JSON.stringify({ fields: leaderboardFields(userFields) }) },
+    "?" + LB_MASK.map((k) => `updateMask.fieldPaths=${k}`).join("&"));
+  if (!res.ok) console.error("Leaderboard write failed", res.status);
+}
+
+async function syncProfileRoute(request, env) {
+  const uid = await requireUser(request);
+  const res = await fsFetch(env, `users/${encodeURIComponent(uid)}`);
+  if (res.status === 404) throw new HttpError(404, "Open your profile once first");
+  if (!res.ok) throw new Error("Firestore read failed: " + res.status);
+  await writeLeaderboard(env, uid, (await res.json()).fields || {});
+  return json({ ok: true });
+}
+
+async function rebuildLeaderboardRoute(request, env) {
+  const a = await getAccess(request);
+  if (!a.admin) throw new HttpError(403, "Admins only");
+  const token = await getAccessToken(env);
+  let pageToken = "", users = 0, pages = 0;
+  do {
+    const qs = "?pageSize=300&mask.fieldPaths=name&mask.fieldPaths=xp&mask.fieldPaths=photoURL&mask.fieldPaths=practice" +
+      (pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : "");
+    const res = await fsFetch(env, "users", {}, qs);
+    if (!res.ok) throw new Error("Firestore list failed: " + res.status);
+    const page = await res.json();
+    const docs = page.documents || [];
+    users += docs.length;
+    const writes = docs.map((d) => ({
+      update: {
+        name: `projects/${PROJECT_ID}/databases/(default)/documents/leaderboard/${d.name.split("/").pop()}`,
+        fields: leaderboardFields(d.fields || {}),
+      },
+    }));
+    for (let i = 0; i < writes.length; i += 400) {
+      const commit = await fetch(`${FS_BASE}:commit`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ writes: writes.slice(i, i + 400) }),
+      });
+      if (!commit.ok) throw new Error("Firestore commit failed: " + commit.status + " " + (await commit.text()));
+    }
+    pageToken = page.nextPageToken || "";
+  } while (pageToken && ++pages < 20);
+  return json({ ok: true, users });
 }
 
 /* ───────────────── Premium access and content ───────────────── */
@@ -507,6 +584,8 @@ const ROUTES = {
   "GET /api/lesson": lessonRoute,
   "GET /api/pdf": pdfRoute,
   "POST /api/award-xp": awardXpRoute,
+  "POST /api/sync-profile": syncProfileRoute,
+  "POST /api/admin/rebuild-leaderboard": rebuildLeaderboardRoute,
   "POST /api/create-order": createOrder,
   "POST /api/verify-payment": verifyPayment,
   "POST /api/razorpay-webhook": razorpayWebhook,

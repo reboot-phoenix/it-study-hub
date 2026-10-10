@@ -244,7 +244,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs, orderBy, query, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, orderBy, query, limit, where, getCountFromServer, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
@@ -363,6 +363,9 @@ onAuthStateChanged(auth, async (user) => {
     userData = { name, email: user.email, isAdmin, xp: isAdmin?9999:100, quizzesDone:0, scores:{}, badges:['hello_world'] };
   }
 
+  // Keep my public leaderboard entry fresh (name, XP, photo). Once per session.
+  if (window.ishSyncProfile) window.ishSyncProfile(user);
+
   // ── TIER THEMING ──
   const plan = userData.plan || '';
   const isElite = plan === 'elite';
@@ -463,26 +466,22 @@ function renderStats(data, isAdmin) {
 // ── LEADERBOARD ──
 async function renderLeaderboard(myUid, myXP) {
   try {
-    const q = query(collection(db, 'users'), orderBy('xp','desc'), limit(10));
+    const q = query(collection(db, 'leaderboard'), orderBy('xp','desc'), limit(10));
     const snap = await getDocs(q);
     const users = [];
     snap.forEach(d => users.push({ uid: d.id, ...d.data() }));
 
-    // Find my rank
-    const allQ = query(collection(db, 'users'), orderBy('xp','desc'));
-    const allSnap = await getDocs(allQ);
-    let myRank = 1;
-    allSnap.forEach((d, i) => { if (d.id === myUid) myRank = i+1; });
-    // Since forEach doesn't give index easily, count manually
-    myRank = 1;
-    allSnap.forEach(d => { if (d.data().xp > myXP) myRank++; });
+    // My rank = students with more XP than me, plus one. Counted on the server; nothing is downloaded.
+    const higher = await getCountFromServer(query(collection(db, 'leaderboard'), where('xp', '>', myXP)));
+    const everyone = await getCountFromServer(collection(db, 'leaderboard'));
+    const myRank = higher.data().count + 1;
 
     document.getElementById('sbRank').textContent = '#' + myRank;
     document.getElementById('wRank').textContent = '#' + myRank;
     // Sanitize helper — prevents XSS by escaping HTML special chars
     const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-    document.getElementById('lbStatus').textContent = users.length + ' students ranked';
+    document.getElementById('lbStatus').textContent = everyone.data().count + ' students ranked';
 
     // Check if I'm in top 10
     const myInTop = users.find(u => u.uid === myUid);
@@ -607,5 +606,6 @@ document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 (function anim(){c.style.left=(mx-5)+'px';c.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=(rx-18)+'px';r.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
 document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');});
 </script>
+<script src="ish-sync.js"></script>
 </body>
 </html>

@@ -857,7 +857,7 @@ nav {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, orderBy, query, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-storage.js";
 
 const firebaseConfig = {
@@ -990,6 +990,7 @@ window.selectAvatar = async function(emoji) {
   // Save to Firestore
   try {
     await setDoc(doc(db, 'users', currentUser.uid), { avatarEmoji: emoji, photoURL: null }, { merge: true });
+    if (window.ishSyncProfile) window.ishSyncProfile(currentUser, true);   // refresh my public leaderboard entry
     await updateProfile(currentUser, { photoURL: '' });
     showToast('Avatar updated', 'success');
   } catch(e) { showToast('Could not save avatar', 'error'); }
@@ -1036,6 +1037,7 @@ window.saveProfile = async function() {
       bio:         document.getElementById('bioInput').value.trim(),
     };
     await setDoc(doc(db, 'users', currentUser.uid), fields, { merge: true });
+    if (window.ishSyncProfile) window.ishSyncProfile(currentUser, true);   // refresh my public leaderboard entry
     Object.assign(userData, fields);
     document.getElementById('heroName').textContent = name;
     renderMetaRow();
@@ -1171,6 +1173,7 @@ onAuthStateChanged(auth, async (user) => {
   renderMetaRow();
 
   // ── Rank ──
+  if (window.ishSyncProfile) window.ishSyncProfile(user);
   await loadRank(user.uid, userData.xp||0);
 
   // ── Scores & Badges ──
@@ -1181,10 +1184,9 @@ onAuthStateChanged(auth, async (user) => {
 
 async function loadRank(uid, myXP) {
   try {
-    const q = query(collection(db,'users'), orderBy('xp','desc'));
-    const snap = await getDocs(q);
-    let rank = 1;
-    snap.forEach(d => { if (d.data().xp > myXP) rank++; });
+    // Students with more XP than me, plus one. Counted on the server; nothing is downloaded.
+    const higher = await getCountFromServer(query(collection(db,'leaderboard'), where('xp','>',myXP)));
+    const rank = higher.data().count + 1;
     document.getElementById('statRank').textContent = '#' + rank;
     document.getElementById('chipRank').textContent = '#' + rank + ' GLOBAL';
   } catch(e) {
@@ -1203,6 +1205,7 @@ window.handlePfpChange = async function(e) {
     const url = await getDownloadURL(storageRef);
     await updateProfile(currentUser, { photoURL: url });
     await setDoc(doc(db, 'users', currentUser.uid), { photoURL: url, avatarEmoji: null }, { merge: true });
+    if (window.ishSyncProfile) window.ishSyncProfile(currentUser, true);   // refresh my public leaderboard entry
     userData.avatarEmoji = null;
     const img = document.getElementById('pfpImg');
     img.src = url; img.style.display = 'block';
@@ -1364,5 +1367,6 @@ if (window.matchMedia('(pointer: fine)').matches) {
   document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');});
 }
 </script>
+<script src="ish-sync.js"></script>
 </body>
 </html>

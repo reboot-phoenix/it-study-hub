@@ -53,15 +53,18 @@ service cloud.firestore {
       );
     }
 
+    // Private profile: only its owner and admins can read it. Other students only ever see
+    // the public copy in leaderboard/ (name, xp, photo, solved count), which the Worker writes.
     match /users/{uid} {
-      // NOTE: the leaderboard currently reads every user doc, so any signed-in
-      // user can read all profile fields. Replace with a public leaderboard
-      // projection (see task list) and then tighten this to owner or admin.
-      allow read: if signedIn();
-
+      allow read: if isOwner(uid) || isAdmin();
       allow create: if isOwner(uid) && validCreate();
       allow update: if isOwner(uid) && validUpdate();
       allow delete: if false;
+    }
+
+    match /leaderboard/{uid} {
+      allow read: if signedIn();     // lists and count() queries
+      allow write: if false;         // only the Worker (service account) writes here
     }
 
     // Everything else is closed.

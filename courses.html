@@ -161,7 +161,7 @@ if (window.matchMedia('(pointer: fine)').matches) {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, getDocs, query, orderBy, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
@@ -199,13 +199,10 @@ function setPlanBadge(plan, isAdmin) {
 // ── Compute rank from leaderboard ──
 async function computeRank(uid, userXP) {
   try {
-    const snapshot = await getDocs(query(collection(db, 'users'), orderBy('xp', 'desc')));
-    let rank = 1;
-    for (const docSnap of snapshot.docs) {
-      if (docSnap.id === uid) break;
-      rank++;
-    }
-    return { rank, total: snapshot.size };
+    // Counted on the server from the public leaderboard; no user profiles are downloaded.
+    const higher = await getCountFromServer(query(collection(db, 'leaderboard'), where('xp', '>', userXP)));
+    const everyone = await getCountFromServer(collection(db, 'leaderboard'));
+    return { rank: higher.data().count + 1, total: everyone.data().count };
   } catch {
     return null;
   }
