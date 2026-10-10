@@ -11,6 +11,9 @@ run_worker_first = ["/api/*"]
 [vars]
 # Public key id (safe to commit). Swap for rzp_live_... when you go live.
 RAZORPAY_KEY_ID = "rzp_test_TCbxQ8kFJk4J53"
+# Code runner for the practice panel and the C terminal. The free public instance needs no key;
+# for more headroom use a hosted Judge0 and `npx wrangler secret put JUDGE0_KEY` (RapidAPI key).
+JUDGE0_URL = "https://ce.judge0.com"
 
 # Secrets are NOT stored here. Set them with:
 #   npx wrangler secret put RAZORPAY_KEY_SECRET
@@ -24,3 +27,10 @@ RAZORPAY_KEY_ID = "rzp_test_TCbxQ8kFJk4J53"
 # [[kv_namespaces]]
 # binding = "PREMIUM"
 # id = "PASTE_ID_HERE"
+
+# Optional: Cloudflare's own rate limiter for /api/run (otherwise the Worker uses a simple built-in one).
+# [[unsafe.bindings]]
+# name = "RUN_LIMITER"
+# type = "ratelimit"
+# namespace_id = "1001"
+# simple = { limit = 60, period = 60 }

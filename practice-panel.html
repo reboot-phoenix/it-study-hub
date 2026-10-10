@@ -1354,6 +1354,7 @@ html, body {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
 
 <!-- Firebase -->
+<script src="ish-config.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
@@ -1368,10 +1369,16 @@ const firebaseConfig = {
   appId:"1:566661039167:web:122691d263631e404ea48a"
 };
 const app = initializeApp(firebaseConfig);
+await window.ishInitAppCheck?.(app);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 window._db = db;
 window._fs = { doc, getDoc, updateDoc, increment, collection, getDocs, orderBy, query, limit, arrayUnion };
+// A fresh ID token for calls to our Worker (the cached login object used for the fast first paint has none).
+window._getIdToken = async () => {
+  try { await auth.authStateReady(); return auth.currentUser ? await auth.currentUser.getIdToken() : null; }
+  catch (e) { return null; }
+};
 
 try { await setPersistence(auth, browserLocalPersistence); } catch(e) {}
 
@@ -1439,7 +1446,8 @@ window._saveSolve = async function(probId, lang, timeMs) {
   } catch(e) {}
   // 2) XP comes from the server, which pays each problem once
   try {
-    const token = await window._currentUser.getIdToken();
+    const token = await window._getIdToken();
+    if (!token) return;
     await fetch('/api/award-xp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
@@ -2025,7 +2033,6 @@ const PROBLEMS = {
   ],
 };
 
-const JUDGE0_URL = 'https://ce.judge0.com';
 const LANG_ID    = {c:50,cpp:54,java:62,python:71,r:80,javascript:63};
 const FILE_EXT   = {c:'main.c',cpp:'main.cpp',java:'Main.java',python:'main.py',r:'main.R',javascript:'main.js'};
 const MONO_LANG  = {c:'c',cpp:'cpp',java:'java',python:'python',r:'r',javascript:'javascript'};
@@ -2460,21 +2467,33 @@ async function runCode(stdinOverride) {
   document.querySelectorAll('#nav-run-btn, #nav-submit-btn').forEach(b => b.disabled = true);
   const t0 = Date.now();
   try {
-    const res = await fetch(`${JUDGE0_URL}/submissions?base64_encoded=false&wait=true`, {
+    // Code runs on our Worker (it holds the runner's keys and limits abuse); sign-in is required.
+    const token = await window._getIdToken();
+    if (!token) {
+      const msg = 'Please sign in to run code.';
+      setStatus('err', 'Sign in'); setOutput(msg, true);
+      return {stdout: '', stderr: msg};
+    }
+    const res = await fetch('/api/run', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({source_code: code, language_id: LANG_ID[currentLang], stdin})
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
+      body: JSON.stringify({language: currentLang, code, stdin})
     });
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
     document.getElementById('exec-time').textContent = `${Date.now()-t0}ms`;
+    if (!res.ok) {
+      const msg = data.error || 'Could not run your code. Please try again.';
+      setStatus('err', res.status === 429 ? 'Slow down' : 'Error'); setOutput(msg, true);
+      return {stdout: '', stderr: msg};
+    }
     const stdout = data.stdout || '';
     const stderr = data.stderr || data.compile_output || '';
     if (stderr && !stdout) { setStatus('err', 'Error'); setOutput(stderr, true); }
-    else { setStatus('ok', 'Done'); setOutput(stdout || '(no output)', false); }
+    else { setStatus('ok', 'Done'); setOutput(stdout ? esc(stdout) : '(no output)', false); }
     return {stdout, stderr};
   } catch(e) {
     setStatus('err', 'Network Error');
-    setOutput('⚠ Network error — Judge0 CE may be down. Please try again.', true);
+    setOutput('⚠ Network error. Check your connection and try again.', true);
   } finally {
     document.querySelectorAll('#nav-run-btn, #nav-submit-btn').forEach(b => b.disabled = false);
   }

@@ -31,6 +31,7 @@
         const { getApps, getApp, initializeApp } = await import(FIREBASE + 'firebase-app.js');
         const { getAuth } = await import(FIREBASE + 'firebase-auth.js');
         const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+        await window.ishInitAppCheck?.(app);
         const auth = getAuth(app);
         return new Promise((resolve) => {
           const off = auth.onAuthStateChanged((u) => { off(); resolve(u); });

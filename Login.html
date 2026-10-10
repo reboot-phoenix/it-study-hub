@@ -480,6 +480,7 @@
 })();
 </script>
 
+<script src="ish-config.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import {
@@ -503,6 +504,8 @@ const firebaseConfig = {
 };
 
 const app  = initializeApp(firebaseConfig);
+
+await window.ishInitAppCheck?.(app);
 const auth = getAuth(app);
 
 // ── ACTION CODE SETTINGS ──

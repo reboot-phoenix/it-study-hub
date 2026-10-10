@@ -8,6 +8,7 @@
 //   GET  /api/lesson?course=&id=  premium lesson text (only for users with an active plan)
 //   GET  /api/pdf?f=<file>      premium PDF (only for users with an active plan)
 //   POST /api/award-xp          the only way XP changes: quiz results and practice solves
+//   POST /api/run               runs student code on Judge0 (signed-in users only, size- and rate-limited)
 //   POST /api/sync-profile      copies the public bits of a profile (name, xp, photo, solved) to leaderboard/{uid}
 //   POST /api/admin/rebuild-leaderboard   admins only: rebuilds leaderboard/ from users/ (run once after deploying)
 //   everything else             static files
@@ -18,6 +19,11 @@
 //   FIREBASE_SERVICE_ACCOUNT  full JSON of a service account key with Cloud Datastore User role
 // Plain var (in wrangler.toml or dashboard):
 //   RAZORPAY_KEY_ID           rzp_test_... or rzp_live_...  (public key id)
+//   JUDGE0_URL                code runner base URL (default https://ce.judge0.com)
+// Optional secret:
+//   JUDGE0_KEY                RapidAPI key, if you use a paid/hosted Judge0 instead of the free public one
+// Optional binding:
+//   RUN_LIMITER               a Cloudflare Rate Limiting binding for /api/run (see wrangler.toml)
 // KV namespace binding:
 //   PREMIUM                   holds premium lesson text ("lesson:<course>:<id>") and PDFs ("pdf:<file>")
 
@@ -373,6 +379,74 @@ async function awardXpRoute(request, env) {
   throw new HttpError(400, "Unknown award type");
 }
 
+/* ───────────────────────── Run student code ───────────────────────── */
+// The browser never talks to the code runner directly: keys stay here, only signed-in students can
+// use it, and size and rate limits protect the (free) quota.
+
+const RUN_LANGS = { c: 50, cpp: 54, java: 62, python: 71, r: 80, javascript: 63 };   // Judge0 language ids
+export const RUN_LIMIT = { perMinute: 60 };   // a Submit runs every test case, one call each
+const MAX_CODE = 64 * 1024, MAX_STDIN = 16 * 1024;
+const runHits = new Map();   // per-isolate fallback limiter: uid -> recent timestamps
+
+function utf8ToB64(str) {
+  let bin = "";
+  for (const b of enc.encode(str)) bin += String.fromCharCode(b);
+  return btoa(bin);
+}
+function b64ToUtf8(b64) {
+  if (!b64) return "";
+  const bin = atob(b64);   // atob ignores the newlines Judge0 adds
+  return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0)));
+}
+
+async function allowRun(env, uid) {
+  if (env.RUN_LIMITER?.limit) return (await env.RUN_LIMITER.limit({ key: uid })).success;
+  const now = Date.now();
+  const recent = (runHits.get(uid) || []).filter((t) => now - t < 60000);
+  if (recent.length >= RUN_LIMIT.perMinute) { runHits.set(uid, recent); return false; }
+  recent.push(now); runHits.set(uid, recent);
+  if (runHits.size > 5000) for (const [k, v] of runHits) if (!v.some((t) => now - t < 60000)) runHits.delete(k);
+  return true;
+}
+
+async function runRoute(request, env) {
+  const uid = await requireUser(request);
+  const { language, code, stdin } = await readJson(request, MAX_CODE + MAX_STDIN + 1024);
+  const languageId = RUN_LANGS[language];
+  if (!languageId) throw new HttpError(400, "Unsupported language");
+  if (typeof code !== "string" || !code.trim()) throw new HttpError(400, "Write some code first");
+  if (code.length > MAX_CODE) throw new HttpError(413, "Your code is too long to run (64 KB max)");
+  if (stdin !== undefined && typeof stdin !== "string") throw new HttpError(400, "Input must be text");
+  if (stdin && stdin.length > MAX_STDIN) throw new HttpError(413, "Your input is too long (16 KB max)");
+  if (!(await allowRun(env, uid))) throw new HttpError(429, "You are running code too quickly. Wait a few seconds and try again.");
+
+  const base = (env.JUDGE0_URL || "https://ce.judge0.com").replace(/\/+$/, "");
+  const headers = { "Content-Type": "application/json" };
+  if (env.JUDGE0_KEY) { headers["X-RapidAPI-Key"] = env.JUDGE0_KEY; headers["X-RapidAPI-Host"] = new URL(base).host; }
+
+  let res;
+  try {
+    res = await fetch(`${base}/submissions?base64_encoded=true&wait=true`, {
+      method: "POST", headers, signal: AbortSignal.timeout(25000),
+      body: JSON.stringify({ source_code: utf8ToB64(code), language_id: languageId, stdin: utf8ToB64(stdin || "") }),
+    });
+  } catch (e) {
+    throw new HttpError(504, "The code runner took too long or could not be reached. Please try again.");
+  }
+  if (res.status === 429) throw new HttpError(503, "The code runner is busy right now. Please try again in a minute.");
+  if (!res.ok) { console.error("Judge0 error", res.status); throw new HttpError(502, "The code runner returned an error. Please try again."); }
+
+  const r = await res.json();
+  return json({
+    stdout: b64ToUtf8(r.stdout),
+    stderr: b64ToUtf8(r.stderr),
+    compile_output: b64ToUtf8(r.compile_output),
+    status: r.status?.description || "",
+    time: r.time ?? null,
+    memory: r.memory ?? null,
+  });
+}
+
 /* ───────────────── Leaderboard (public copy of a profile) ───────────────── */
 // users/{uid} holds private data (email, date of birth, ...) and is readable only by its owner and admins.
 // leaderboard/{uid} holds just what other students may see. Only this Worker writes it.
@@ -426,7 +500,7 @@ async function syncProfileRoute(request, env) {
 }
 
 async function rebuildLeaderboardRoute(request, env) {
-  const a = await getAccess(request);
+  const a = await getAccess(request, env);
   if (!a.admin) throw new HttpError(403, "Admins only");
   const token = await getAccessToken(env);
   let pageToken = "", users = 0, pages = 0;
@@ -461,19 +535,14 @@ async function rebuildLeaderboardRoute(request, env) {
 
 const COURSES = new Set(["java", "c", "cpp", "r", "javascript", "python"]);
 
-function bearerToken(request) {
-  const h = request.headers.get("Authorization") || "";
-  return h.startsWith("Bearer ") ? h.slice(7) : "";
-}
-
-// Reads the caller's own profile with THEIR token, so Firestore security rules still apply.
+// Who is asking is proven by their Firebase ID token (verified above). What plan they have is read with
+// the Worker's own service account, so this keeps working even if Firestore App Check enforcement is on
+// (a request made with only the user's token would carry no App Check token and be refused).
 // Premium = an active (not expired) paid plan, or an admin.
-export async function getAccess(request) {
+export async function getAccess(request, env) {
   const uid = await requireUser(request);
-  const res = await fetch(`${FS_BASE}/users/${encodeURIComponent(uid)}`, {
-    headers: { Authorization: `Bearer ${bearerToken(request)}` },
-  });
-  if (res.status === 404 || res.status === 403) return { uid, plan: "", premium: false, admin: false };
+  const res = await fsFetch(env, `users/${encodeURIComponent(uid)}`);
+  if (res.status === 404) return { uid, plan: "", premium: false, admin: false };
   if (!res.ok) throw new Error("Firestore read failed: " + res.status);
   const f = (await res.json()).fields || {};
   const plan = f.plan?.stringValue || "";
@@ -488,8 +557,8 @@ function requireStore(env) {
   return env.PREMIUM;
 }
 
-async function accessRoute(request) {
-  const a = await getAccess(request);
+async function accessRoute(request, env) {
+  const a = await getAccess(request, env);
   return json({ premium: a.premium, plan: a.plan });
 }
 
@@ -500,7 +569,7 @@ async function lessonRoute(request, env) {
   const id = url.searchParams.get("id") || "";
   if (!COURSES.has(course) || !/^\d{1,3}$/.test(id)) throw new HttpError(400, "Bad lesson request");
 
-  const a = await getAccess(request);
+  const a = await getAccess(request, env);
   if (!a.premium) throw new HttpError(403, "Premium plan required");
 
   const body = await store.get(`lesson:${course}:${Number(id)}`, "text");
@@ -515,7 +584,7 @@ async function pdfRoute(request, env) {
   const file = new URL(request.url).searchParams.get("f") || "";
   if (!/^[\w #()+.\-]{1,100}\.pdf$/.test(file) || file.includes("..")) throw new HttpError(400, "Bad file name");
 
-  const a = await getAccess(request);
+  const a = await getAccess(request, env);
   if (!a.premium) throw new HttpError(403, "Premium plan required");
 
   const data = await store.get(`pdf:${file}`, { type: "arrayBuffer" });
@@ -596,6 +665,7 @@ const ROUTES = {
   "GET /api/lesson": lessonRoute,
   "GET /api/pdf": pdfRoute,
   "POST /api/award-xp": awardXpRoute,
+  "POST /api/run": runRoute,
   "POST /api/sync-profile": syncProfileRoute,
   "POST /api/admin/rebuild-leaderboard": rebuildLeaderboardRoute,
   "POST /api/create-order": createOrder,
