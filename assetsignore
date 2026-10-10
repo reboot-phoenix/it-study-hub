@@ -1,0 +1,11 @@
+# Files Cloudflare should NOT publish as part of the website
+worker.js
+worker.test.mjs
+wrangler.toml
+package.json
+.dev.vars
+firestore.rules
+storage.rules
+firebase.json
+LICENSE
+README.md
