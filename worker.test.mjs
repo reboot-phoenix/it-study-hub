@@ -44,6 +44,27 @@ const env = {
 env.PREMIUM.store.set("lesson:java:7", JSON.stringify({ body: "SECRET JAVA 7" }));
 env.PREMIUM.store.set("pdf:BCA-421 JAVA-97-131.pdf", "%PDF-secret");
 let users, payments, orders, ledger, orderSeq, lastFsAuth;
+// ── typed-value helpers for the Firestore mock ──
+let beforePatch = null;
+function toTyped(key, v) {
+  if (["planExpiresAt", "planActivatedAt"].includes(key) && typeof v === "string") return { timestampValue: v };
+  if (typeof v === "boolean") return { booleanValue: v };
+  if (typeof v === "number") return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
+  if (typeof v === "string") return { stringValue: v };
+  if (Array.isArray(v)) return { arrayValue: { values: v.map((x) => toTyped("", x)) } };
+  return { mapValue: { fields: Object.fromEntries(Object.entries(v).map(([k, x]) => [k, toTyped(k, x)])) } };
+}
+function fromTyped(tv) {
+  if ("stringValue" in tv) return tv.stringValue;
+  if ("timestampValue" in tv) return tv.timestampValue;
+  if ("integerValue" in tv) return Number(tv.integerValue);
+  if ("doubleValue" in tv) return tv.doubleValue;
+  if ("booleanValue" in tv) return tv.booleanValue;
+  if ("arrayValue" in tv) return (tv.arrayValue.values || []).map(fromTyped);
+  if ("mapValue" in tv) return Object.fromEntries(Object.entries(tv.mapValue.fields || {}).map(([k, x]) => [k, fromTyped(x)]));
+  return null;
+}
+
 function reset() {
   users = { alice: { plan: "" }, bob: { plan: "" }, carol: { plan: "elite" } };
   payments = {}; orders = {}; ledger = {}; orderSeq = 0;
@@ -79,18 +100,30 @@ globalThis.fetch = async (input, init = {}) => {
     if (col === "users") {
       if (method === "GET") {
         if (!users[id]) return J({}, 404);
-        const f = { plan: { stringValue: users[id].plan || "" } };
-        if (users[id].planExpiresAt) f.planExpiresAt = { timestampValue: users[id].planExpiresAt };
-        if (users[id].role) f.role = { stringValue: users[id].role };
-        if (users[id].isAdmin) f.isAdmin = { booleanValue: true };
-        return J({ fields: f });
+        const fields = {};
+        for (const [k, v] of Object.entries(users[id])) if (!k.startsWith("__") && v !== undefined) fields[k] = toTyped(k, v);
+        return J({ fields, updateTime: String(users[id].__v || 1) });
       }
       if (method === "PATCH") {
         if (u.searchParams.get("currentDocument.exists") === "true" && !users[id]) return J({}, 404);
-        const f = JSON.parse(init.body).fields;
-        for (const k of u.searchParams.getAll("updateMask.fieldPaths")) {
-          if (f[k]) users[id][k] = Object.values(f[k])[0]; else delete users[id][k];
+        if (beforePatch) { const hook = beforePatch; beforePatch = null; hook(users[id]); }
+        const pre = u.searchParams.get("currentDocument.updateTime");
+        if (pre !== null && pre !== String(users[id].__v || 1)) {
+          return J({ error: { code: 400, status: "FAILED_PRECONDITION", message: "update time mismatch" } }, 400);
         }
+        const f = JSON.parse(init.body).fields;
+        for (const path of u.searchParams.getAll("updateMask.fieldPaths")) {
+          const parts = path.split(".");
+          // find the typed value at this path in the request
+          let tv = { mapValue: { fields: f } };
+          for (const p of parts) tv = tv?.mapValue?.fields?.[p];
+          // walk/create the target object in the store
+          let target = users[id];
+          for (const p of parts.slice(0, -1)) { target[p] = target[p] || {}; target = target[p]; }
+          const last = parts[parts.length - 1];
+          if (tv) target[last] = fromTyped(tv); else delete target[last];
+        }
+        users[id].__v = (users[id].__v || 1) + 1;
         return J({});
       }
     }
@@ -278,6 +311,93 @@ await test("premium routes fail clearly (503) when the KV store is not bound yet
   users.alice = { plan: "pro" };
   assert.equal((await get("/api/lesson?course=java&id=7", "alice")).status, 503);
   env.PREMIUM = saved;
+});
+
+
+console.log("award-xp");
+import fs from "node:fs";
+import { PRACTICE_IDS } from "./worker.js";
+const award = async (uid, body, extra) =>
+  worker.fetch(new Request("https://x.test/api/award-xp", { method: "POST", headers: { "Content-Type": "application/json", ...(uid ? await authed(uid, extra) : {}) }, body: JSON.stringify(body) }), env);
+const quiz = (uid, subject, score, total = 10) => award(uid, { type: "quiz", subject, score, total });
+
+await test("rejects signed-out callers and malformed requests", async () => {
+  assert.equal((await quiz(null, "c", 5)).status, 401);
+  assert.equal((await award("alice", { type: "bonus" })).status, 400);
+  assert.equal((await quiz("alice", "ruby", 5)).status, 400);
+  assert.equal((await quiz("alice", "c", 11)).status, 400);
+  assert.equal((await quiz("alice", "c", -1)).status, 400);
+  assert.equal((await quiz("alice", "c", 5, 0)).status, 400);
+  assert.equal((await quiz("alice", "c", 5.5)).status, 400);
+  assert.equal((await award("alice", { type: "quiz", subject: "c", score: "10", total: 10 })).status, 400);
+  assert.equal((await award("nobody", { type: "practice", problemId: "c1" })).status, 404);
+});
+await test("quiz: first attempt pays 100, and the server writes xp with the service account", async () => {
+  users.alice = { xp: 100, earnedXPKeys: [] };
+  const res = await quiz("alice", "c", 6);
+  const data = await res.json();
+  assert.equal(res.status, 200); assert.equal(data.awarded, 100); assert.equal(data.xp, 200);
+  assert.equal(users.alice.xp, 200); assert.equal(users.alice.quizBest.c, 60);
+});
+await test("quiz: retaking the same score pays nothing", async () => {
+  users.alice = { xp: 100 };
+  await quiz("alice", "c", 6);
+  const again = await (await quiz("alice", "c", 6)).json();
+  assert.equal(again.awarded, 0); assert.equal(users.alice.xp, 200);
+});
+await test("quiz: the perfect-score bonus is paid once per subject, not on every retake", async () => {
+  users.alice = { xp: 100 };
+  assert.equal((await (await quiz("alice", "java", 10)).json()).awarded, 150);   // 100 + 50
+  assert.equal((await (await quiz("alice", "java", 10)).json()).awarded, 0);     // retake: nothing
+  assert.equal((await (await quiz("alice", "java", 10)).json()).awarded, 0);
+  assert.equal(users.alice.xp, 250);
+});
+await test("quiz: improvement bonus needs a real new best and stops after 3", async () => {
+  users.alice = { xp: 0 };
+  await quiz("alice", "r", 3);                                                    // first: 100
+  assert.equal((await (await quiz("alice", "r", 2)).json()).awarded, 0);          // worse: nothing
+  assert.equal(users.alice.quizBest.r, 30, "best must not go down");
+  assert.equal((await (await quiz("alice", "r", 4)).json()).awarded, 25);         // better
+  assert.equal((await (await quiz("alice", "r", 3)).json()).awarded, 0);          // dipping then returning pays nothing
+  assert.equal((await (await quiz("alice", "r", 5)).json()).awarded, 25);
+  assert.equal((await (await quiz("alice", "r", 6)).json()).awarded, 25);
+  assert.equal((await (await quiz("alice", "r", 7)).json()).awarded, 0);          // allowance used up
+  assert.equal(users.alice.quizBest.r, 70, "a new best is still recorded");
+  assert.equal(users.alice.xp, 175);
+});
+await test("quiz: browser-written scores never decide XP; old users get one catch-up per subject", async () => {
+  users.alice = { xp: 500, scores: { python: { pct: 100 } } };               // saved by the browser, even a forged 100
+  const first = await (await quiz("alice", "python", 8)).json();
+  assert.equal(first.awarded, 100, "paid once as a first attempt");
+  assert.equal((await (await quiz("alice", "python", 8)).json()).awarded, 0, "and not again");
+  assert.equal(users.alice.quizBest.python, 80, "best comes from the server's own record");
+});
+await test("quiz: if the award call failed earlier, the next attempt still pays the first-attempt XP", async () => {
+  users.alice = { xp: 100, scores: { c: { pct: 70 } } };                      // score saved, no quizBest yet
+  assert.equal((await (await quiz("alice", "c", 7)).json()).awarded, 100);
+});
+await test("practice: each real problem pays 10 once; unknown problems and repeats pay nothing", async () => {
+  users.alice = { xp: 100, earnedXPKeys: ["practice:c1"] };
+  assert.equal((await (await award("alice", { type: "practice", problemId: "c1" })).json()).awarded, 0);
+  assert.equal((await (await award("alice", { type: "practice", problemId: "c2" })).json()).awarded, 10);
+  assert.equal((await (await award("alice", { type: "practice", problemId: "c2" })).json()).awarded, 0);
+  assert.deepEqual(users.alice.earnedXPKeys, ["practice:c1", "practice:c2"]);
+  assert.equal(users.alice.xp, 110);
+  assert.equal((await award("alice", { type: "practice", problemId: "c999" })).status, 400);
+  assert.equal((await award("alice", { type: "practice", problemId: "../users" })).status, 400);
+});
+await test("a concurrent write between read and write is retried, never double-paid or lost", async () => {
+  users.alice = { xp: 100, earnedXPKeys: [] };
+  beforePatch = (doc) => { doc.xp += 7; doc.__v = (doc.__v || 1) + 1; };      // someone else's write lands first
+  const data = await (await award("alice", { type: "practice", problemId: "j1" })).json();
+  assert.equal(data.awarded, 10);
+  assert.equal(users.alice.xp, 117, "their +7 and our +10 both survive");
+});
+await test("the practice id list matches practice-panel.html exactly", async () => {
+  const html = fs.readFileSync(new URL("./practice-panel.html", import.meta.url), "utf8");
+  const region = html.slice(html.indexOf("const PROBLEMS = {"));
+  const ids = [...region.matchAll(/\n\s*\{\s*id\s*:\s*['"]([a-z0-9_\-]+)['"]\s*,/gi)].map((m) => m[1]);
+  assert.deepEqual([...PRACTICE_IDS].sort(), [...ids].sort(), "update PRACTICE_IDS in worker.js to match the page");
 });
 
 console.log("routing");

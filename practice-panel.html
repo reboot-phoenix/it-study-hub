@@ -1422,11 +1422,20 @@ onAuthStateChanged(auth, async user => {
 
 window._saveSolve = async function(probId, lang, timeMs) {
   if (!window._currentUser) return;
+  // 1) remember the solve on the profile (display only)
   try {
-    const {doc:d, updateDoc:u, increment:inc, arrayUnion:au} = window._fs;
+    const {doc:d, updateDoc:u} = window._fs;
     await u(d(db,'users',window._currentUser.uid), {
-      xp: inc(10),
       [`practice.solved.${probId}`]: {lang, timeMs, ts: Date.now()},
+    });
+  } catch(e) {}
+  // 2) XP comes from the server, which pays each problem once
+  try {
+    const token = await window._currentUser.getIdToken();
+    await fetch('/api/award-xp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ type: 'practice', problemId: probId })
     });
   } catch(e) {}
 };

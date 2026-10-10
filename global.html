@@ -348,8 +348,9 @@ onAuthStateChanged(auth, async (user) => {
       if (isAdmin) earnedBadges.push('admin_star');
       if (now.getHours() >= 0 && now.getHours() < 5) earnedBadges.push('night_owl');
       userData = {
-        name, email: user.email, isAdmin,
-        xp: isAdmin ? 9999 : 100,
+        name, email: user.email,
+        isAdmin: false,   // set by hand in the Firebase console; rules reject self-promotion
+        xp: 100,          // welcome XP; Firestore rules reject anything higher
         quizzesDone: 0,
         scores: {},
         badges: earnedBadges,

@@ -1,4 +1,7 @@
 /* ══════════════════════════════════════════════════
+   NOT USED BY ANY PAGE, and it writes xp from the browser, which Firestore now rejects.
+   XP is awarded by the Worker (POST /api/award-xp). Extend that endpoint before reviving this.
+
    IT Study Hub — xp-engine.js
    Shared XP / leveling engine used by all course pages.
    Wires into the existing Firestore users/{uid}.xp field
