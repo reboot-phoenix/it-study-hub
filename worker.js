@@ -7,6 +7,7 @@
 //   GET  /api/access            does the signed-in user currently have premium access?
 //   GET  /api/lesson?course=&id=  premium lesson text (only for users with an active plan)
 //   GET  /api/pdf?f=<file>      premium PDF (only for users with an active plan)
+//   POST /api/award-xp          the only way XP changes: quiz results and practice solves
 //   /admin*                     existing IP gate (see note below)
 //   everything else             static files
 //
@@ -261,6 +262,112 @@ export async function settlePayment(env, orderId, paymentId, source, expectUid) 
   return { uid, planId };
 }
 
+/* ───────────────────────── XP (server-owned) ───────────────────────── */
+// Firestore rules forbid browsers from writing `xp`, so every point comes through here.
+// The server decides what each action is worth and pays each one at most once.
+
+const QUIZ_SUBJECTS = new Set(["c", "java", "python", "cpp", "r", "js"]);
+const XP_RULES = { quizFirst: 100, quizPerfect: 50, quizImprove: 25, quizImproveMax: 3, practiceSolve: 10 };
+
+// Every real practice problem id (from practice-panel.html). worker.test.mjs fails if this list
+// drifts from the page, so adding a problem without adding it here is caught.
+export const PRACTICE_IDS = new Set(["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "cpp1", "cpp2", "cpp3", "cpp4", "cpp5", "cpp6", "cpp7", "cpp8", "cpp9", "cpp10", "cpp11", "cpp12", "j1", "j2", "j3", "j4", "j5", "j6", "j7", "j8", "j9", "j10", "j11", "j12", "j13", "py1", "py2", "py3", "py4", "py5", "py6", "py7", "py8", "py9", "py10", "py11", "py12", "py13", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11", "r12", "js1", "js2", "js3", "js4", "js5", "js6", "js7", "js8", "js9", "js10", "js11", "js12"]);
+
+const numOf = (v) => (v && (v.integerValue !== undefined ? Number(v.integerValue) : v.doubleValue !== undefined ? Number(v.doubleValue) : undefined));
+const intVal = (n) => ({ integerValue: String(n) });
+const mapEntry = (fields, mapName, key) => fields[mapName]?.mapValue?.fields?.[key];
+
+// Reads the user doc, lets `compute` decide what to award, and writes it back only if nobody
+// else changed the doc in between (updateTime precondition), retrying a few times if they did.
+async function awardXp(env, uid, compute) {
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const res = await fsFetch(env, `users/${encodeURIComponent(uid)}`);
+    if (res.status === 404) throw new HttpError(404, "Open your profile once first");
+    if (!res.ok) throw new Error("Firestore read failed: " + res.status);
+    const doc = await res.json();
+    const fields = doc.fields || {};
+    const xpNow = numOf(fields.xp) || 0;
+
+    const plan = compute(fields);
+    if (!plan.delta && !(plan.mask && plan.mask.length)) return { awarded: 0, xp: xpNow, breakdown: [] };
+
+    const body = { fields: { xp: intVal(xpNow + plan.delta), ...plan.fields } };
+    const mask = ["xp", ...plan.mask].map((m) => `updateMask.fieldPaths=${m}`).join("&");
+    const patch = await fsFetch(env, `users/${encodeURIComponent(uid)}`, { method: "PATCH", body: JSON.stringify(body) },
+      `?${mask}&currentDocument.updateTime=${encodeURIComponent(doc.updateTime)}`);
+    if (patch.ok) return { awarded: plan.delta, xp: xpNow + plan.delta, breakdown: plan.breakdown };
+
+    const text = await patch.text();
+    if (!/FAILED_PRECONDITION|ABORTED/.test(text)) throw new Error("Firestore xp update failed: " + patch.status + " " + text);
+    // someone else wrote the doc a moment ago: read it again and recompute
+  }
+  throw new HttpError(409, "Busy, please try again");
+}
+
+function planQuiz(subject, score, total) {
+  const pct = Math.round((score / total) * 100);
+  return (f) => {
+    // Only the server's own records count. Scores saved by the browser are never used to decide XP,
+    // so people who took quizzes before this change get one catch-up payment per subject, and a
+    // failed request is simply paid on the next attempt.
+    const best = numOf(mapEntry(f, "quizBest", subject));
+    const perfectPaid = mapEntry(f, "quizPerfect", subject)?.booleanValue === true;
+    const improves = numOf(mapEntry(f, "quizImprove", subject)) || 0;
+
+    const out = { delta: 0, fields: {}, mask: [], breakdown: [] };
+    const add = (reason, amount) => { out.delta += amount; out.breakdown.push({ reason, amount }); };
+
+    if (best === undefined) add("First attempt", XP_RULES.quizFirst);
+    if (pct === 100 && !perfectPaid) {
+      add("Perfect score", XP_RULES.quizPerfect);
+      out.fields.quizPerfect = { mapValue: { fields: { [subject]: { booleanValue: true } } } };
+      out.mask.push(`quizPerfect.${subject}`);
+    }
+    if (best !== undefined && pct > best && improves < XP_RULES.quizImproveMax) {
+      add("Improved score", XP_RULES.quizImprove);
+      out.fields.quizImprove = { mapValue: { fields: { [subject]: intVal(improves + 1) } } };
+      out.mask.push(`quizImprove.${subject}`);
+    }
+    if (best === undefined || pct > best) {
+      out.fields.quizBest = { mapValue: { fields: { [subject]: intVal(pct) } } };
+      out.mask.push(`quizBest.${subject}`);
+    }
+    return out;   // a new best is still saved when no XP is due (e.g. the improvement allowance is used up)
+  };
+}
+
+function planPractice(problemId) {
+  const key = `practice:${problemId}`;
+  return (f) => {
+    const keys = (f.earnedXPKeys?.arrayValue?.values || []).map((v) => v.stringValue);
+    if (keys.includes(key)) return { delta: 0 };
+    return {
+      delta: XP_RULES.practiceSolve,
+      mask: ["earnedXPKeys"],
+      fields: { earnedXPKeys: { arrayValue: { values: [...keys, key].map((k) => ({ stringValue: k })) } } },
+      breakdown: [{ reason: "Practice problem solved", amount: XP_RULES.practiceSolve }],
+    };
+  };
+}
+
+async function awardXpRoute(request, env) {
+  const uid = await requireUser(request);
+  const body = await readJson(request);
+
+  if (body.type === "quiz") {
+    const { subject, score, total } = body;
+    if (!QUIZ_SUBJECTS.has(subject) || !Number.isInteger(score) || !Number.isInteger(total) || total < 1 || total > 100 || score < 0 || score > total) {
+      throw new HttpError(400, "Bad quiz result");
+    }
+    return json(await awardXp(env, uid, planQuiz(subject, score, total)));
+  }
+  if (body.type === "practice") {
+    if (typeof body.problemId !== "string" || !PRACTICE_IDS.has(body.problemId)) throw new HttpError(400, "Unknown problem");
+    return json(await awardXp(env, uid, planPractice(body.problemId)));
+  }
+  throw new HttpError(400, "Unknown award type");
+}
+
 /* ───────────────── Premium access and content ───────────────── */
 
 const COURSES = new Set(["java", "c", "cpp", "r", "javascript", "python"]);
@@ -399,6 +506,7 @@ const ROUTES = {
   "GET /api/access": accessRoute,
   "GET /api/lesson": lessonRoute,
   "GET /api/pdf": pdfRoute,
+  "POST /api/award-xp": awardXpRoute,
   "POST /api/create-order": createOrder,
   "POST /api/verify-payment": verifyPayment,
   "POST /api/razorpay-webhook": razorpayWebhook,

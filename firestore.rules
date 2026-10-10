@@ -11,24 +11,27 @@ service cloud.firestore {
     }
 
     // Fields the browser may never change. They are set by the server
-    // (payment webhook, admin console) and never by client code.
-    //   plan, planActivatedAt, razorpayPaymentId, role, isAdmin, email, joinedAt
+    // (payment webhook, XP endpoint) or by an admin in the console.
+    //   plan, planActivatedAt, planExpiresAt, razorpayPaymentId, razorpayOrderId,
+    //   role, isAdmin, email, joinedAt,
+    //   xp, earnedXPKeys, quizBest, quizPerfect, quizImprove
 
     // Fields a user may write on their own document.
     function clientFields() {
       return ['name', 'username', 'college', 'dob', 'degree', 'yearOfStudy',
               'linkedin', 'github', 'bio', 'avatarEmoji', 'photoURL',
-              'scores', 'badges', 'quizzesDone', 'practice', 'xp', 'earnedXPKeys'];
+              'scores', 'badges', 'quizzesDone', 'practice'];
     }
 
     function validCreate() {
       let d = request.resource.data;
-      return d.keys().hasOnly(clientFields().concat(['email', 'isAdmin', 'joinedAt']))
+      return d.keys().hasOnly(clientFields().concat(['email', 'isAdmin', 'joinedAt', 'xp', 'earnedXPKeys']))
         && d.get('isAdmin', false) == false          // nobody self-promotes
         && d.get('email', request.auth.token.email) == request.auth.token.email
-        && d.get('xp', 0) is number
-        && d.get('xp', 0) >= 0
-        && d.get('xp', 0) <= 250;                    // first quiz: 100 + 50 + 100 welcome
+        && d.get('xp', 100) is number
+        && d.get('xp', 100) >= 0
+        && d.get('xp', 100) <= 100                   // the welcome XP, nothing more
+        && d.get('earnedXPKeys', []).size() == 0;    // starts empty; only the server fills it
     }
 
     function validUpdate() {
@@ -36,13 +39,7 @@ service cloud.firestore {
       let after = request.resource.data;
       let changed = after.diff(before).affectedKeys();
       return changed.hasOnly(clientFields())
-        // XP can only go up, and by at most one quiz's worth per write.
-        && (!('xp' in changed)
-            || (after.xp is number
-                && after.xp >= before.get('xp', 0)
-                && after.xp - before.get('xp', 0) <= 150))
-        // Earned-key list can only grow, never be reset to farm XP again.
-        && after.get('earnedXPKeys', []).hasAll(before.get('earnedXPKeys', []))
+        // xp and earnedXPKeys are not in clientFields, so any attempt to change them is rejected.
         // Quiz counter moves forward by at most 1.
         && (!('quizzesDone' in changed)
             || (after.quizzesDone >= before.get('quizzesDone', 0)

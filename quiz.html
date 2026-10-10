@@ -523,8 +523,6 @@ const firebaseConfig = {
 };
 
 const ADMIN_EMAIL = "bscit.tiu2012@gmail.com";
-const XP_PER_QUIZ = 100;
-const XP_BONUS_PERFECT = 50;
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -561,16 +559,15 @@ window.saveScoreToFirebase = async function(subject, score, total, pct, level) {
     const isNew = !existingScores[subject];
     const isPerfect = pct === 100;
 
-    // Calculate XP earned
-    let xpEarned = 0;
-    if (isNew) xpEarned += XP_PER_QUIZ;
-    if (isPerfect) xpEarned += XP_BONUS_PERFECT;
-    if (isBetter && !isNew) xpEarned += 25; // improvement bonus
+    // XP is awarded by the server (/api/award-xp); the browser never writes xp.
 
     // Build updated scores
+    // Keep the best attempt (a worse retake no longer overwrites it).
     const updatedScores = {
       ...existingScores,
-      [subject]: { score, total, pct, level, updatedAt: new Date().toISOString() }
+      [subject]: (isNew || isBetter)
+        ? { score, total, pct, level, updatedAt: new Date().toISOString() }
+        : existingScores[subject]
     };
 
     // Build badges
@@ -582,26 +579,36 @@ window.saveScoreToFirebase = async function(subject, score, total, pct, level) {
       if (badge && !badges.includes(badge)) badges.push(badge);
     }
 
-    // Save to Firestore
+    // 1) Make sure the profile exists (welcome XP only; the browser never writes any other xp).
     if (!snap.exists()) {
       await setDoc(userRef, {
         name: currentUser.displayName || currentUser.email.split('@')[0],
         email: currentUser.email,
-        isAdmin: currentUser.email === ADMIN_EMAIL,
-        xp: xpEarned + 100,
-        quizzesDone: 1,
-        scores: updatedScores,
-        badges,
+        xp: 100,
+        quizzesDone: 0,
         joinedAt: new Date().toISOString()
       });
-    } else {
-      await updateDoc(userRef, {
-        scores: updatedScores,
-        badges,
-        xp: increment(xpEarned),
-        quizzesDone: increment(isNew ? 1 : 0)
-      });
     }
+
+    // 2) Ask the server what this result is worth. It pays each reward once and ignores repeats.
+    //    This happens BEFORE the score below is saved, so the server's own records stay authoritative.
+    let xpEarned = 0;
+    try {
+      const token = await currentUser.getIdToken();
+      const res = await fetch('/api/award-xp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ type: 'quiz', subject, score, total })
+      });
+      if (res.ok) xpEarned = (await res.json()).awarded || 0;
+    } catch (e) { console.log('XP award failed:', e); }
+
+    // 3) Save the score, badges and quiz counter.
+    await updateDoc(userRef, {
+      scores: updatedScores,
+      badges,
+      quizzesDone: increment(isNew ? 1 : 0)
+    });
 
     // Update localStorage session
     const session = JSON.parse(localStorage.getItem('ish_session') || '{}');
