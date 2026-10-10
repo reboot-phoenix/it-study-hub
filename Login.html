@@ -30,9 +30,17 @@
     --ff-mono: 'JetBrains Mono', monospace;
   }
 
-  /* Custom cursor — pointer devices only */
+  /* Custom cursor: the real pointer is only hidden once the custom one is actually running
+     (the script adds html.custom-cursor on the first mouse move). :where() keeps specificity at 0
+     so .drag-thumb's grab cursor below still wins. */
+  .cursor, .cursor-ring {
+    display: none; position: fixed; top: 0; left: 0; pointer-events: none; border-radius: 50%;
+  }
+  .cursor { width: 10px; height: 10px; background: #c8f135; z-index: 9999; mix-blend-mode: difference; transition: transform 0.15s ease; }
+  .cursor-ring { width: 36px; height: 36px; border: 1px solid #c8f135; z-index: 9998; opacity: 0.5; }
   @media (pointer: fine) {
-    *, *::before, *::after { cursor: none !important; }
+    html.custom-cursor .cursor, html.custom-cursor .cursor-ring { display: block; }
+    :where(html.custom-cursor) *, :where(html.custom-cursor) *::before, :where(html.custom-cursor) *::after { cursor: none !important; }
   }
   .drag-thumb { cursor: grab !important; }
   .drag-thumb:active { cursor: grabbing !important; }
@@ -284,9 +292,7 @@
 </style>
 </head>
 <body>
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<!-- Custom cursor (pointer devices only — hidden on touch via global.css) -->
+<!-- Custom cursor (pointer devices only) -->
 <div class="cursor" id="cur"></div>
 <div class="cursor-ring" id="curR"></div>
 <div class="login-layout">
@@ -452,14 +458,26 @@
   </div>
 </div>
 
-<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
-<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 <script>
-const c=document.getElementById('cur'),r=document.getElementById('curR');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function anim(){c.style.left=(mx-5)+'px';c.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=(rx-18)+'px';r.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
-document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');});
+// Custom cursor. Runs as a plain script so it works even if the Firebase module below fails to load.
+(function () {
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+  const dot = document.getElementById('cur'), ring = document.getElementById('curR');
+  let mx = 0, my = 0, rx = 0, ry = 0, active = false;
+  document.addEventListener('mousemove', function (e) {
+    mx = e.clientX; my = e.clientY;
+    if (!active) { active = true; rx = mx; ry = my; document.documentElement.classList.add('custom-cursor'); }
+  });
+  (function anim() {
+    dot.style.left = (mx - 5) + 'px'; dot.style.top = (my - 5) + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = (rx - 18) + 'px'; ring.style.top = (ry - 18) + 'px';
+    requestAnimationFrame(anim);
+  })();
+  document.addEventListener('mouseover', function (e) {
+    dot.style.transform = e.target.closest && e.target.closest('a,button') ? 'scale(2)' : 'scale(1)';
+  });
+})();
 </script>
 
 <script type="module">
@@ -825,24 +843,6 @@ makeDragSlider('signupTrack','signupFill','signupHint','signupThumb',
     });
   }
 );
-
-// ── Custom cursor (pointer devices only) ──
-if (window.matchMedia('(pointer: fine)').matches) {
-  const cur = document.getElementById('cur');
-  const curR = document.getElementById('curR');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-  (function anim(){
-    cur.style.left=(mx-5)+'px'; cur.style.top=(my-5)+'px';
-    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-    curR.style.left=(rx-18)+'px'; curR.style.top=(ry-18)+'px';
-    requestAnimationFrame(anim);
-  })();
-  document.querySelectorAll('a,button').forEach(el=>{
-    el.addEventListener('mouseenter',()=>cur.style.transform='scale(2)');
-    el.addEventListener('mouseleave',()=>cur.style.transform='scale(1)');
-  });
-}
 
 </script>
 
