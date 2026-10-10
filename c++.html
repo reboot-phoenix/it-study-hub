@@ -122,7 +122,7 @@
 <script>
 const ADMIN_EMAIL = 'itstudyhub.tiu@gmail.com';
 function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){return null;}}
-function isPremium(){const s=getSession();return s&&(s.isAdmin||s.email===ADMIN_EMAIL);}
+function isPremium(){ return window.__ishPremium === true; } // set by premium-content.js from /api/access
 function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_cpp_done')||'[]');}catch(e){return[];}}
 function saveCompleted(a){localStorage.setItem('ish_cpp_done',JSON.stringify(a));}
 
@@ -352,197 +352,37 @@ try {
    excerpt:'Write code once that works for any data type. Templates are the foundation of generic programming and the driving force behind the Standard Template Library.',
    tags:['Advanced','Templates','Generics'],visual:'<i class="ti ti-puzzle" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a0f0a,#0f1a0f)',
    concepts:['Function Templates','Class Templates','Template Instantiation','template <typename T>','Multiple Template Parameters'],
-   body:`<p><strong>Templates</strong> allow you to write functions and classes that operate on generic types. The compiler generates the specific type versions for you.</p>
-<h2>Function Templates</h2>
-<pre><code>template &lt;typename T&gt;
-T myMax(T x, T y) {
-    return (x &gt; y) ? x : y;
-}
-
-int main() {
-    cout &lt;&lt; myMax&lt;int&gt;(3, 7);       // Outputs 7
-    cout &lt;&lt; myMax&lt;double&gt;(3.1, 2.5); // Outputs 3.1
-    return 0;
-}</code></pre>
-<h2>Class Templates</h2>
-<p>Class templates are heavily used for data structures.</p>
-<pre><code>template &lt;typename T&gt;
-class Box {
-private:
-    T content;
-public:
-    void setContent(T val) { content = val; }
-    T getContent() { return content; }
-};
-
-Box&lt;string&gt; stringBox;
-stringBox.setContent("Secret Password");
-Box&lt;int&gt; intBox;
-intBox.setContent(42);</code></pre>`},
+   body:""},
 
   {id:8,free:false,icon:'<i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'Standard Template Library (STL)',
    excerpt:'Do not reinvent the wheel. The STL provides highly optimized containers, algorithms, and iterators. Vectors and Maps will become your best friends.',
    tags:['Advanced','STL','Containers'],visual:'<i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#080a14,#0f1228)',
    concepts:['Containers','std::vector','std::map','std::unordered_map','Iterators','Algorithms','std::sort'],
-   body:`<p>The <strong>STL</strong> provides three core components: <em>Containers</em> (data structures), <em>Iterators</em> (pointers to navigate them), and <em>Algorithms</em> (sorting, searching).</p>
-<h2>Vectors (Dynamic Arrays)</h2>
-<p>Vectors grow automatically. They are the default container for most use cases.</p>
-<pre><code>#include &lt;vector&gt;
-#include &lt;iostream&gt;
-
-std::vector&lt;int&gt; nums;
-nums.push_back(10);
-nums.push_back(20);
-nums.pop_back(); // Removes 20
-
-// Range-based for loop (C++11)
-for (int n : nums) {
-    std::cout &lt;&lt; n &lt;&lt; std::endl;
-}</code></pre>
-<h2>Maps (Key-Value Pairs)</h2>
-<pre><code>#include &lt;map&gt;
-
-std::map&lt;std::string, int&gt; grades;
-grades["Alice"] = 95;
-grades["Bob"] = 82;
-
-std::cout &lt;&lt; "Alice's grade: " &lt;&lt; grades["Alice"];</code></pre>
-<h2>Algorithms</h2>
-<pre><code>#include &lt;algorithm&gt;
-std::vector&lt;int&gt; v = {5, 2, 9, 1};
-std::sort(v.begin(), v.end()); // v is now {1, 2, 5, 9}</code></pre>`},
+   body:""},
 
   {id:9,free:false,icon:'<i class="ti ti-brain" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'Modern C++ & Smart Pointers',
    excerpt:'Forget manual memory management. C++11 introduced Smart Pointers that automatically clean up memory, drastically reducing memory leaks and segfaults.',
    tags:['Advanced','C++11','Smart Pointers'],visual:'<i class="ti ti-brain" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a0a0f,#141420)',
    concepts:['<memory> library','std::unique_ptr','std::shared_ptr','std::make_unique','Move Semantics','auto Keyword'],
-   body:`<p>Modern C++ (C++11 and later) encourages the use of <strong>Smart Pointers</strong> to automate memory management via RAII (Resource Acquisition Is Initialization).</p>
-<h2>unique_ptr</h2>
-<p>A <code>unique_ptr</code> owns the object exclusively. When it goes out of scope, the memory is automatically deleted.</p>
-<pre><code>#include &lt;memory&gt;
-
-class Entity {
-public:
-    Entity() { cout &lt;&lt; "Created\n"; }
-    ~Entity() { cout &lt;&lt; "Destroyed\n"; }
-    void print() { cout &lt;&lt; "Printing\n"; }
-};
-
-int main() {
-    {
-        // Preferred way to create a unique_ptr (C++14)
-        std::unique_ptr&lt;Entity&gt; entity = std::make_unique&lt;Entity&gt;();
-        entity-&gt;print();
-    } // "Destroyed" is automatically printed here! No delete needed!
-    return 0;
-}</code></pre>
-<h2>shared_ptr</h2>
-<p>Use <code>shared_ptr</code> when multiple owners need to point to the same memory. It keeps a reference count and deletes the memory when the count reaches zero.</p>
-<pre><code>std::shared_ptr&lt;Entity&gt; e1 = std::make_shared&lt;Entity&gt;();
-std::shared_ptr&lt;Entity&gt; e2 = e1; // Reference count is now 2</code></pre>`},
+   body:""},
 
   {id:10,free:false,icon:'<i class="ti ti-folder-open" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'File Handling & Streams',
    excerpt:'Persist your data. Learn how to read from and write to text and binary files using fstream, ifstream, and ofstream.',
    tags:['Advanced','File I/O','fstream'],visual:'<i class="ti ti-folder-open" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#0a0f14,#101828)',
    concepts:['<fstream>','ofstream (Writing)','ifstream (Reading)','File Open Modes','Checking if open()','getline'],
-   body:`<p>File handling in C++ is managed through the <code>&lt;fstream&gt;</code> library, which provides <code>ifstream</code> (input/read) and <code>ofstream</code> (output/write).</p>
-<h2>Writing to a File</h2>
-<pre><code>#include &lt;fstream&gt;
-#include &lt;iostream&gt;
-
-int main() {
-    std::ofstream outFile("data.txt");
-    
-    if (outFile.is_open()) {
-        outFile &lt;&lt; "Writing this to a file.\n";
-        outFile &lt;&lt; "C++ makes it easy!";
-        outFile.close(); // Always close files
-    } else {
-        std::cout &lt;&lt; "Unable to open file";
-    }
-    return 0;
-}</code></pre>
-<h2>Reading from a File</h2>
-<pre><code>#include &lt;fstream&gt;
-#include &lt;string&gt;
-
-std::ifstream inFile("data.txt");
-std::string line;
-
-if (inFile.is_open()) {
-    while (std::getline(inFile, line)) {
-        std::cout &lt;&lt; line &lt;&lt; '\n';
-    }
-    inFile.close();
-}</code></pre>`},
+   body:""},
 
   {id:11,free:false,icon:'<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',level:'Advanced',title:'Multithreading (C++11)',
    excerpt:'Harness the full power of modern multi-core processors. Learn to spawn threads, synchronize them with mutexes, and avoid race conditions.',
    tags:['Advanced','Concurrency','Threads'],visual:'<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',bg:'linear-gradient(135deg,#100a0a,#1e0f0f)',
    concepts:['<thread> library','std::thread','join() vs detach()','Race Conditions','<mutex>','std::lock_guard'],
-   body:`<p>Since C++11, multithreading is part of the standard library, allowing you to run multiple functions concurrently.</p>
-<h2>Creating Threads</h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;thread&gt;
-
-void workerFunction(int x) {
-    std::cout &lt;&lt; "Worker thread executing with value: " &lt;&lt; x &lt;&lt; "\n";
-}
-
-int main() {
-    // Spawn a new thread
-    std::thread t1(workerFunction, 10);
-    
-    std::cout &lt;&lt; "Main thread executing\n";
-    
-    // Wait for t1 to finish before main exits
-    t1.join(); 
-    return 0;
-}</code></pre>
-<h2>Synchronization with Mutex</h2>
-<p>When multiple threads access the same variable, you need a <code>mutex</code> to prevent data corruption.</p>
-<pre><code>#include &lt;mutex&gt;
-std::mutex mtx;
-int sharedData = 0;
-
-void increment() {
-    std::lock_guard&lt;std::mutex&gt; lock(mtx); // Automatically unlocks when out of scope
-    sharedData++;
-}</code></pre>`},
+   body:""},
 
   {id:12,free:false,icon:'<i class="ti ti-shield" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',level:'Advanced',title:'RAII & Rule of Three',
    excerpt:'Write professional, leak-proof C++. Understand RAII principles and know exactly when you need to define custom copy constructors and assignment operators.',
    tags:['Advanced','Best Practices','Memory'],visual:'<i class="ti ti-shield" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️',bg:'linear-gradient(135deg,#0a0a10,#12121e)',
    concepts:['RAII','Rule of Three','Copy Constructor','Copy Assignment Operator','Deep vs Shallow Copy','Rule of Five (C++11)'],
-   body:`<p><strong>RAII</strong> (Resource Acquisition Is Initialization) is the core idiom of C++. It dictates that resource management (memory, file handles, network sockets) should be tied to object lifespan.</p>
-<h2>The Rule of Three</h2>
-<p>If your class manually manages memory (e.g., holds a raw pointer and uses <code>delete</code> in the destructor), you MUST implement three things to avoid shallow copy bugs:</p>
-<ol>
-  <li><strong>Destructor:</strong> To free the memory.</li>
-  <li><strong>Copy Constructor:</strong> To create a deep copy of the memory.</li>
-  <li><strong>Copy Assignment Operator:</strong> To handle assignment of existing objects safely.</li>
-</ol>
-<pre><code>class StringClass {
-private:
-    char* buffer;
-public:
-    // 1. Destructor
-    ~StringClass() { delete[] buffer; }
-    
-    // 2. Copy Constructor
-    StringClass(const StringClass& other) {
-        // Allocate new memory and copy data
-    }
-    
-    // 3. Copy Assignment Operator
-    StringClass& operator=(const StringClass& other) {
-        if (this != &other) {
-            // Clean up old memory, allocate new, and copy
-        }
-        return *this;
-    }
-};</code></pre>
-<blockquote>With modern C++ and Smart Pointers, we often aim for the <strong>Rule of Zero</strong>: design classes so they don't require any manual resource management at all!</blockquote>`}
+   body:""}
 ];
 
 let currentId = null;
@@ -582,10 +422,14 @@ function updateProgress() {
   document.getElementById('progLabel').textContent = `${freeDone} of 6 free modules completed`;
 }
 
-function openLesson(id) {
+async function openLesson(id) {
   const m = MODS.find(x=>x.id===id);
   if (!m) return;
-  if (!m.free && !isPremium()) { window.location.href='premium.html'; return; }
+  if (!m.free && !m.body) {
+    const r = await window.loadPremiumLesson('cpp', id);
+    if (!r.ok) { window.location.href='premium.html'; return; }
+    Object.assign(m, r.data);
+  }
   currentId = id;
   document.getElementById('indexPage').style.display = 'none';
   document.getElementById('lessonPage').style.display = 'block';
@@ -675,5 +519,6 @@ document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
 document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
 </script>
+<script src="premium-content.js"></script>
 </body>
 </html>

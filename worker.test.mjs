@@ -31,8 +31,19 @@ const env = {
   RAZORPAY_KEY_ID: "rzp_test_x", RAZORPAY_KEY_SECRET: "keysecret", RAZORPAY_WEBHOOK_SECRET: "whsecret",
   FIREBASE_SERVICE_ACCOUNT: JSON.stringify({ client_email: "svc@it-study-hub.iam.gserviceaccount.com", private_key: saPem }),
   ASSETS: { fetch: async () => new Response("asset") },
+  PREMIUM: {
+    store: new Map(),
+    async get(key, opts) {
+      const v = this.store.get(key);
+      if (v === undefined) return null;
+      const type = typeof opts === "string" ? opts : opts?.type;
+      return type === "arrayBuffer" ? new TextEncoder().encode(v).buffer : v;
+    },
+  },
 };
-let users, payments, orders, ledger, orderSeq;
+env.PREMIUM.store.set("lesson:java:7", JSON.stringify({ body: "SECRET JAVA 7" }));
+env.PREMIUM.store.set("pdf:BCA-421 JAVA-97-131.pdf", "%PDF-secret");
+let users, payments, orders, ledger, orderSeq, lastFsAuth;
 function reset() {
   users = { alice: { plan: "" }, bob: { plan: "" }, carol: { plan: "elite" } };
   payments = {}; orders = {}; ledger = {}; orderSeq = 0;
@@ -61,11 +72,19 @@ globalThis.fetch = async (input, init = {}) => {
   }
 
   if (url.startsWith("https://firestore.googleapis.com")) {
-    assert.equal(init.headers.Authorization, "Bearer tok");
-    const u = new URL(url); const parts = u.pathname.split("/documents/")[1].split("/");
+    const u = new URL(url);
+    lastFsAuth = init.headers.Authorization;
+    if (method !== "GET") assert.equal(init.headers.Authorization, "Bearer tok", "writes must use the service account"); const parts = u.pathname.split("/documents/")[1].split("/");
     const [col, id] = parts;
     if (col === "users") {
-      if (method === "GET") return users[id] ? J({ fields: { plan: { stringValue: users[id].plan } } }) : J({}, 404);
+      if (method === "GET") {
+        if (!users[id]) return J({}, 404);
+        const f = { plan: { stringValue: users[id].plan || "" } };
+        if (users[id].planExpiresAt) f.planExpiresAt = { timestampValue: users[id].planExpiresAt };
+        if (users[id].role) f.role = { stringValue: users[id].role };
+        if (users[id].isAdmin) f.isAdmin = { booleanValue: true };
+        return J({ fields: f });
+      }
       if (method === "PATCH") {
         if (u.searchParams.get("currentDocument.exists") === "true" && !users[id]) return J({}, 404);
         const f = JSON.parse(init.body).fields;
@@ -188,6 +207,77 @@ await test("never downgrades a higher plan", async () => {
 await test("a webhook cannot be used to mint a plan for an order Razorpay does not know", async () => {
   const res = await hook({ event: "payment.captured", payload: { payment: { entity: { id: "pay_fake", order_id: "order_fake" } } } });
   assert.notEqual(users.alice.plan, "pro"); assert.ok([200, 500].includes(res.status));
+});
+
+
+console.log("premium access and content");
+const get = async (path, uid, extra) =>
+  worker.fetch(new Request("https://x.test" + path, { method: "GET", headers: uid ? await authed(uid, extra) : {} }), env);
+const future = new Date(Date.now() + 86400000 * 30).toISOString();
+const past = new Date(Date.now() - 86400000).toISOString();
+
+await test("/api/access: signed-out is rejected, free user is not premium", async () => {
+  assert.equal((await get("/api/access")).status, 401);
+  assert.deepEqual(await (await get("/api/access", "alice")).json(), { premium: false, plan: "" });
+});
+await test("/api/access: active plan and admins are premium, expired plans are not", async () => {
+  users.alice = { plan: "pro", planExpiresAt: future };
+  assert.equal((await (await get("/api/access", "alice")).json()).premium, true);
+  users.alice = { plan: "pro", planExpiresAt: past };
+  assert.equal((await (await get("/api/access", "alice")).json()).premium, false);
+  users.alice = { plan: "elite" };                       // lifetime, no expiry field
+  assert.equal((await (await get("/api/access", "alice")).json()).premium, true);
+  users.bob = { plan: "", role: "admin" };
+  assert.equal((await (await get("/api/access", "bob")).json()).premium, true);
+  users.bob = { plan: "", isAdmin: true };
+  assert.equal((await (await get("/api/access", "bob")).json()).premium, true);
+  users.bob = { plan: "gold" };                          // made-up plan names grant nothing
+  assert.equal((await (await get("/api/access", "bob")).json()).premium, false);
+});
+await test("/api/access reads the profile with the user's own token, not the service account", async () => {
+  await get("/api/access", "alice");
+  assert.notEqual(lastFsAuth, "Bearer tok");
+});
+await test("/api/lesson: locked for signed-out and free users, no content leaks", async () => {
+  assert.equal((await get("/api/lesson?course=java&id=7")).status, 401);
+  const res = await get("/api/lesson?course=java&id=7", "alice");
+  assert.equal(res.status, 403);
+  assert.ok(!(await res.text()).includes("SECRET"));
+});
+await test("/api/lesson: paid user gets the lesson, with no-store caching", async () => {
+  users.alice = { plan: "basic", planExpiresAt: future };
+  const res = await get("/api/lesson?course=java&id=7", "alice");
+  assert.equal(res.status, 200);
+  assert.deepEqual(await res.json(), { body: "SECRET JAVA 7" });
+  assert.match(res.headers.get("Cache-Control"), /no-store/);
+});
+await test("/api/lesson: bad input and missing lessons", async () => {
+  users.alice = { plan: "pro" };
+  assert.equal((await get("/api/lesson?course=../x&id=7", "alice")).status, 400);
+  assert.equal((await get("/api/lesson?course=java&id=7abc", "alice")).status, 400);
+  assert.equal((await get("/api/lesson?course=java&id=99", "alice")).status, 404);
+});
+await test("/api/pdf: locked for free users, served as a PDF to paid users", async () => {
+  const f = encodeURIComponent("BCA-421 JAVA-97-131.pdf");
+  assert.equal((await get("/api/pdf?f=" + f, "alice")).status, 403);
+  users.alice = { plan: "pro" };
+  const res = await get("/api/pdf?f=" + f, "alice");
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get("Content-Type"), "application/pdf");
+  assert.equal(await res.text(), "%PDF-secret");
+});
+await test("/api/pdf: rejects path tricks and non-PDF names", async () => {
+  users.alice = { plan: "pro" };
+  for (const bad of ["../worker.js", "..%2F..%2Fsecret.pdf", "a/b.pdf", "notes.txt", "x.pdf%00.txt", ""]) {
+    assert.equal((await get("/api/pdf?f=" + bad, "alice")).status, 400, bad);
+  }
+  assert.equal((await get("/api/pdf?f=" + encodeURIComponent("Missing file.pdf"), "alice")).status, 404);
+});
+await test("premium routes fail clearly (503) when the KV store is not bound yet", async () => {
+  const saved = env.PREMIUM; delete env.PREMIUM;
+  users.alice = { plan: "pro" };
+  assert.equal((await get("/api/lesson?course=java&id=7", "alice")).status, 503);
+  env.PREMIUM = saved;
 });
 
 console.log("routing");
