@@ -3,29 +3,18 @@
 //  Include this script on any course page.
 //  Call: window.openPremiumModal(courseName)
 //
-//  RAZORPAY SETUP REQUIRED:
-//  1. Go to https://dashboard.razorpay.com
-//  2. Settings → API Keys → Generate Test Key
-//  3. Replace RZP_KEY_ID below with your key (rzp_test_xxxx)
-//  4. When going live, swap to your live key (rzp_live_xxxx)
-//
-//  SECURITY NOTE:
-//  This file handles the CLIENT side only.
-//  After payment, Razorpay gives you 3 values:
-//    - razorpay_payment_id
-//    - razorpay_order_id
-//    - razorpay_signature
-//  In a real production app you MUST verify these on a server
-//  (Firebase Cloud Function) before activating premium.
-//  For now this is a student project so we write to Firestore
-//  directly, which is acceptable at this stage.
+//  HOW PAYMENT WORKS
+//  1. Browser asks our Worker (/api/create-order) for an order. The Worker
+//     decides the price; the browser never sends an amount.
+//  2. Razorpay Checkout opens for that order.
+//  3. After payment the browser sends Razorpay's three values to
+//     /api/verify-payment. The Worker checks the signature, asks Razorpay
+//     whether the payment really happened, and only then writes the plan.
+//  4. /api/razorpay-webhook does the same if the browser closes early.
+//  This file never writes plan data to Firestore.
 // ══════════════════════════════════════════════════
 
 (function() {
-
-// ── REPLACE THIS WITH YOUR ACTUAL RAZORPAY TEST KEY ──
-// Get it from: https://dashboard.razorpay.com → Settings → API Keys
-const RZP_KEY_ID = 'rzp_test_TCbxQ8kFJk4J53';
 
 const PLANS = [
   {
@@ -365,118 +354,116 @@ window.closePremiumModal = function() {
 };
 
 // ── Razorpay Payment Handler ──
+function pmShowSuccess(planName, planId) {
+  const modal = document.querySelector('.pm-modal');
+  if (!modal) return;
+  modal.innerHTML = `
+    <div style="text-align:center; padding:60px 20px;">
+      <div style="font-size:56px; margin-bottom:20px;"><i class="ti ti-confetti" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
+      <h2 style="font-family:'Bebas Neue','Syne',sans-serif; font-size:36px; color:#c8f135; margin-bottom:12px;">WELCOME TO ${planName.toUpperCase()}!</h2>
+      <p style="color:#9090a8; font-size:14px; margin-bottom:28px;">Your premium access is now active. All locked content is unlocked.</p>
+      <button class="pm-btn pm-btn-lime" style="max-width:240px;margin:0 auto;" onclick="window.closePremiumModal(); location.reload();">START LEARNING →</button>
+    </div>`;
+  hidePremiumCTAs(planId);
+}
+
+function pmShowMessage(title, text) {
+  const modal = document.querySelector('.pm-modal');
+  if (!modal) { alert(title + '\n\n' + text); return; }
+  modal.innerHTML = `
+    <div style="text-align:center; padding:60px 20px;">
+      <h2 style="font-family:'Bebas Neue','Syne',sans-serif; font-size:32px; color:#f0f0f8; margin-bottom:12px;"></h2>
+      <p style="color:#9090a8; font-size:14px; margin-bottom:28px;"></p>
+      <button class="pm-btn pm-btn-lime" style="max-width:240px;margin:0 auto;" onclick="window.closePremiumModal(); location.reload();">REFRESH</button>
+    </div>`;
+  modal.querySelector('h2').textContent = title;
+  modal.querySelector('p').textContent = text;
+}
+
+async function pmApi(path, body, user) {
+  const idToken = await user.getIdToken();
+  const res = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+
 window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
   const originalText = btn.textContent;
+  const reset = () => { btn.textContent = originalText; btn.disabled = false; };
   btn.textContent = 'Loading...';
   btn.disabled = true;
 
-  // Load Razorpay SDK if not already loaded
-  if (!window.Razorpay) {
-    await new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = resolve;
-      script.onerror = reject;
-      document.head.appendChild(script);
-    });
-  }
+  try {
+    // Load Razorpay SDK if not already loaded
+    if (!window.Razorpay) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('Could not load the payment window. Check your connection.'));
+        document.head.appendChild(script);
+      });
+    }
 
-  // Get current user for prefill (name/email only — not for auth)
-  const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
-  const auth = window._fbAuth || getAuth(window._fbApp);
-  const user = auth.currentUser;
+    const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
+    const auth = window._fbAuth || getAuth(window._fbApp);
+    const user = auth.currentUser;
+    if (!user) { alert('Please sign in first.'); reset(); return; }
 
-  const options = {
-    key: RZP_KEY_ID,
-    amount: amount * 100, // Razorpay expects paise (₹499 → 49900)
-    currency: 'INR',
-    name: 'IT Study Hub',
-    description: `${planName} Plan — Premium Access`,
-    image: '',
-    prefill: {
-      name:  user?.displayName || '',
-      email: user?.email || '',
-    },
-    theme: { color: '#c8f135' },
-    handler: async function(response) {
-      // ── Payment success callback ──
-      // response contains:
-      //   response.razorpay_payment_id  — proof of payment
-      //   response.razorpay_order_id    — if you created an order server-side
-      //   response.razorpay_signature   — for server-side verification
-      //
-      // What we do here: write plan to Firestore directly.
-      // This is acceptable for a student project. For production,
-      // you'd send response to a Firebase Cloud Function to verify
-      // the signature before trusting it.
+    // The server picks the price and creates the order. `amount` from the page is ignored.
+    const order = await pmApi('/api/create-order', { planId }, user);
 
-      try {
-        const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
-        const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
-        const db   = window._fbDb || getFirestore(window._fbApp);
-        const auth = window._fbAuth || getAuth(window._fbApp);
-        const user = auth.currentUser;
-
-        if (user) {
-          await updateDoc(doc(db, 'users', user.uid), {
-            plan: planId,
-            planActivatedAt: new Date().toISOString(),
-            razorpayPaymentId: response.razorpay_payment_id
-          });
-        }
-      } catch(e) {
-        console.warn('Firestore update failed:', e);
-        // Still show success UI — payment went through even if Firestore write failed
-        // In production you'd handle this more carefully
-      }
-
-      // Show success screen inside modal
-      const modal = document.querySelector('.pm-modal');
-      if (modal) {
-        modal.innerHTML = `
-          <div style="text-align:center; padding:60px 20px;">
-            <div style="font-size:56px; margin-bottom:20px;"><i class="ti ti-confetti" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
-            <h2 style="font-family:'Bebas Neue','Syne',sans-serif; font-size:36px; color:#c8f135; margin-bottom:12px;">WELCOME TO ${planName.toUpperCase()}!</h2>
-            <p style="color:#9090a8; font-size:14px; margin-bottom:28px;">Your premium access is now active. All locked content is unlocked.</p>
-            <button class="pm-btn pm-btn-lime" style="max-width:240px;margin:0 auto;" onclick="window.closePremiumModal(); location.reload();">START LEARNING →</button>
-          </div>`;
-        // Hook cursor into success button
-        if (window.matchMedia('(pointer: fine)').matches) {
-          const cursor = document.getElementById('cursor') || document.getElementById('cur');
-          const ring   = document.getElementById('cursorRing') || document.getElementById('curR');
-          if (cursor) {
-            modal.querySelectorAll('button').forEach(el => {
-              el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2)'; if(ring) ring.style.transform='scale(1.5)'; });
-              el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)'; if(ring) ring.style.transform='scale(1)'; });
-            });
+    const options = {
+      key: order.keyId,
+      order_id: order.orderId,
+      amount: order.amount,
+      currency: order.currency,
+      name: 'IT Study Hub',
+      description: `${order.planName} Plan — Premium Access`,
+      image: '',
+      prefill: { name: user.displayName || '', email: user.email || '' },
+      theme: { color: '#c8f135' },
+      handler: async function(response) {
+        pmShowMessage('Confirming payment…', 'Please wait a moment. Do not close this window.');
+        const modalBtn = document.querySelector('.pm-modal button');
+        if (modalBtn) modalBtn.style.display = 'none';
+        // Try a few times: the payment can take a second to show as captured.
+        for (let attempt = 0; attempt < 4; attempt++) {
+          try {
+            const result = await pmApi('/api/verify-payment', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }, user);
+            pmShowSuccess(order.planName, result.plan);
+            return;
+          } catch (e) {
+            console.warn('verify attempt failed:', e.message);
+            await new Promise(r => setTimeout(r, 1500 * (attempt + 1)));
           }
         }
-        // Hide all premium CTAs on the page now that user is premium
-        hidePremiumCTAs('pro');
-      }
-    },
-    modal: {
-      backdropclose: false,
-      ondismiss: function() {
-        btn.textContent = originalText;
-        btn.disabled = false;
-      }
-    }
-  };
+        pmShowMessage('Payment received',
+          'We could not confirm it instantly. Your plan will activate automatically within a few minutes. ' +
+          'If it does not, contact support with payment ID ' + response.razorpay_payment_id + '.');
+      },
+      modal: { backdropclose: false, ondismiss: reset }
+    };
 
-  try {
     const rzp = new window.Razorpay(options);
     rzp.on('payment.failed', function(resp) {
-      btn.textContent = originalText;
-      btn.disabled = false;
+      reset();
       alert('Payment failed: ' + resp.error.description);
     });
     rzp.open();
-  } catch(e) {
-    console.error('Razorpay error:', e);
-    btn.textContent = originalText;
-    btn.disabled = false;
-    alert('Payment gateway error. Please try again.');
+  } catch (e) {
+    console.error('Purchase error:', e);
+    reset();
+    alert(e.message || 'Payment gateway error. Please try again.');
   }
 };
 
