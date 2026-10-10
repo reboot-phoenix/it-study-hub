@@ -43,7 +43,7 @@ const env = {
 };
 env.PREMIUM.store.set("lesson:java:7", JSON.stringify({ body: "SECRET JAVA 7" }));
 env.PREMIUM.store.set("pdf:BCA-421 JAVA-97-131.pdf", "%PDF-secret");
-let users, payments, orders, ledger, orderSeq, lastFsAuth;
+let users, payments, orders, ledger, orderSeq, lastFsAuth, lb, listPageSize = 300;
 // ── typed-value helpers for the Firestore mock ──
 let beforePatch = null;
 function toTyped(key, v) {
@@ -67,7 +67,7 @@ function fromTyped(tv) {
 
 function reset() {
   users = { alice: { plan: "" }, bob: { plan: "" }, carol: { plan: "elite" } };
-  payments = {}; orders = {}; ledger = {}; orderSeq = 0;
+  payments = {}; orders = {}; ledger = {}; orderSeq = 0; lb = {}; listPageSize = 300;
 }
 reset();
 
@@ -95,8 +95,29 @@ globalThis.fetch = async (input, init = {}) => {
   if (url.startsWith("https://firestore.googleapis.com")) {
     const u = new URL(url);
     lastFsAuth = init.headers.Authorization;
+    if (u.pathname.endsWith("/documents:commit")) {
+      assert.equal(init.headers.Authorization, "Bearer tok", "commits must use the service account");
+      for (const w of JSON.parse(init.body).writes) lb[w.update.name.split("/").pop()] = fromTyped({ mapValue: { fields: w.update.fields } });
+      return J({});
+    }
     if (method !== "GET") assert.equal(init.headers.Authorization, "Bearer tok", "writes must use the service account"); const parts = u.pathname.split("/documents/")[1].split("/");
     const [col, id] = parts;
+    if (col === "users" && !id && method === "GET") {              // list (used by the rebuild)
+      const all = Object.entries(users);
+      const start = Number(u.searchParams.get("pageToken") || 0);
+      const slice = all.slice(start, start + listPageSize);
+      const documents = slice.map(([uid, doc]) => ({
+        name: `projects/it-study-hub/databases/(default)/documents/users/${uid}`,
+        fields: Object.fromEntries(Object.entries(doc).filter(([k]) => !k.startsWith("__")).map(([k, v]) => [k, toTyped(k, v)])),
+      }));
+      return J({ documents, ...(start + listPageSize < all.length ? { nextPageToken: String(start + listPageSize) } : {}) });
+    }
+    if (col === "leaderboard" && method === "PATCH") {
+      const f = JSON.parse(init.body).fields;
+      lb[id] = lb[id] || {};
+      for (const k of u.searchParams.getAll("updateMask.fieldPaths")) { if (f[k]) lb[id][k] = fromTyped(f[k]); else delete lb[id][k]; }
+      return J({});
+    }
     if (col === "users") {
       if (method === "GET") {
         if (!users[id]) return J({}, 404);
@@ -398,6 +419,55 @@ await test("the practice id list matches practice-panel.html exactly", async () 
   const region = html.slice(html.indexOf("const PROBLEMS = {"));
   const ids = [...region.matchAll(/\n\s*\{\s*id\s*:\s*['"]([a-z0-9_\-]+)['"]\s*,/gi)].map((m) => m[1]);
   assert.deepEqual([...PRACTICE_IDS].sort(), [...ids].sort(), "update PRACTICE_IDS in worker.js to match the page");
+});
+
+console.log("leaderboard");
+const post = async (path, uid, extra) =>
+  worker.fetch(new Request("https://x.test" + path, { method: "POST", headers: uid ? await authed(uid, extra) : {}, body: "{}" }), env);
+
+await test("sync-profile: signed-out and unknown users are refused", async () => {
+  assert.equal((await post("/api/sync-profile")).status, 401);
+  assert.equal((await post("/api/sync-profile", "nobody")).status, 404);
+});
+await test("sync-profile copies only public fields: no email, dob or college ever reach leaderboard/", async () => {
+  users.alice = { name: "Alice", email: "alice@x.edu", dob: "2004-01-01", college: "TIU", xp: 450, photoURL: "https://lh3.googleusercontent.com/a/p",
+                  practice: { solved: { c1: { ts: 1 }, c2: { ts: 2 } } } };
+  assert.equal((await post("/api/sync-profile", "alice")).status, 200);
+  assert.deepEqual(Object.keys(lb.alice).sort(), ["name", "photoURL", "solved", "updatedAt", "xp"]);
+  assert.equal(lb.alice.name, "Alice"); assert.equal(lb.alice.xp, 450); assert.equal(lb.alice.solved, 2);
+  assert.ok(!JSON.stringify(lb.alice).includes("alice@x.edu"));
+});
+await test("sync-profile: names are cleaned, never fall back to the email, and photos must be https", async () => {
+  users.alice = { name: "  Al\u0000ice\u0007 " + "x".repeat(100), email: "secret@x.edu", xp: 1 };
+  await post("/api/sync-profile", "alice");
+  assert.ok(lb.alice.name.startsWith("Alice") && lb.alice.name.length <= 60);
+  users.bob = { email: "bob.private@x.edu", xp: 1, photoURL: "javascript:alert(1)" };
+  await post("/api/sync-profile", "bob");
+  assert.equal(lb.bob.name, "Student"); assert.equal(lb.bob.photoURL, undefined);
+});
+await test("sync-profile: removing a photo removes it from the leaderboard too", async () => {
+  users.alice = { name: "A", xp: 1, photoURL: "https://lh3.googleusercontent.com/a/p" };
+  await post("/api/sync-profile", "alice");
+  assert.ok(lb.alice.photoURL);
+  delete users.alice.photoURL;
+  await post("/api/sync-profile", "alice");
+  assert.equal(lb.alice.photoURL, undefined);
+});
+await test("awarding XP updates the leaderboard in the same request", async () => {
+  users.alice = { name: "Alice", xp: 100, earnedXPKeys: [] };
+  await award("alice", { type: "practice", problemId: "c1" });
+  assert.equal(lb.alice.xp, 110); assert.equal(lb.alice.name, "Alice");
+});
+await test("rebuild: only admins, and it pages through every user", async () => {
+  users = { u1: { name: "One", xp: 10 }, u2: { name: "Two", xp: 20 }, u3: { name: "Three", xp: 30 }, u4: { name: "Four", xp: 40 }, u5: { name: "Five", xp: 50 },
+            boss: { name: "Boss", xp: 5, role: "admin" } };
+  assert.equal((await post("/api/admin/rebuild-leaderboard", "u1")).status, 403);
+  assert.equal((await post("/api/admin/rebuild-leaderboard")).status, 401);
+  listPageSize = 2;                                                       // forces several pages
+  const res = await post("/api/admin/rebuild-leaderboard", "boss");
+  assert.equal(res.status, 200); assert.equal((await res.json()).users, 6);
+  assert.deepEqual(Object.keys(lb).sort(), ["boss", "u1", "u2", "u3", "u4", "u5"]);
+  assert.equal(lb.u3.xp, 30); assert.equal(lb.u3.name, "Three");
 });
 
 console.log("routing");

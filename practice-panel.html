@@ -1356,7 +1356,7 @@ html, body {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc, increment, collection, getDocs, orderBy, query, arrayUnion } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, increment, collection, getDocs, orderBy, query, limit, arrayUnion } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey:"AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
@@ -1370,7 +1370,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 window._db = db;
-window._fs = { doc, getDoc, updateDoc, increment, collection, getDocs, orderBy, query, arrayUnion };
+window._fs = { doc, getDoc, updateDoc, increment, collection, getDocs, orderBy, query, limit, arrayUnion };
 
 try { await setPersistence(auth, browserLocalPersistence); } catch(e) {}
 
@@ -1441,15 +1441,15 @@ window._saveSolve = async function(probId, lang, timeMs) {
 };
 
 window._loadLeaderboard = async function() {
-  const {collection:_c, getDocs:_g, orderBy:_o, query:_q} = window._fs;
+  const {collection:_c, getDocs:_g, orderBy:_o, query:_q, limit:_l} = window._fs;
   const el = document.getElementById('lb-list');
   try {
-    const snap = await _g(_q(_c(db,'users'), _o('xp','desc')));
+    // Public leaderboard entries only (name, XP, solved count, photo); never full profiles.
+    const snap = await _g(_q(_c(db,'leaderboard'), _o('xp','desc'), _l(20)));
     const users = [];
     snap.forEach(d => {
       const data = d.data();
-      const solved = data.practice?.solved ? Object.keys(data.practice.solved).length : 0;
-      users.push({uid:d.id, name:data.name||data.email?.split('@')[0]||'Anonymous', xp:data.xp||0, solved, photo:data.photoURL||null});
+      users.push({uid:d.id, name:data.name||'Anonymous', xp:data.xp||0, solved:data.solved||0, photo:data.photoURL||null});
     });
     const myUid = window._currentUser?.uid;
     const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
