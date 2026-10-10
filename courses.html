@@ -138,6 +138,7 @@
 <div class="cursor" id="cur"></div>
 <div class="cursor-ring" id="curR"></div>
 
+<script src="ish-safe.js"></script>
 <script>
 // Cursor — pointer devices only
 if (window.matchMedia('(pointer: fine)').matches) {
@@ -255,7 +256,15 @@ onAuthStateChanged(auth, async (user) => {
   // ── Photo or initials ──
   if (user.photoURL && initEl) {
     const avatarWrap = document.getElementById('sidebarAvatarWrap');
-    avatarWrap.innerHTML = `<img src="${user.photoURL}" class="avatar-img" alt="${name}" onerror="this.style.display='none'">`;
+    const photo = window.safeImgUrl ? window.safeImgUrl(user.photoURL) : '';
+    if (photo) {
+      const img = document.createElement('img');
+      img.src = photo; img.className = 'avatar-img'; img.alt = name;
+      img.onerror = () => { img.style.display = 'none'; };
+      avatarWrap.replaceChildren(img);
+    } else if (initEl) {
+      initEl.textContent = initials;
+    }
   } else if (initEl) {
     initEl.textContent = initials;
   }

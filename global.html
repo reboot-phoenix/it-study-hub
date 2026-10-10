@@ -241,6 +241,7 @@
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <!-- FIREBASE -->
+<script src="ish-safe.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
@@ -487,7 +488,6 @@ async function renderLeaderboard(myUid, myXP) {
     document.getElementById('sbRank').textContent = '#' + myRank;
     document.getElementById('wRank').textContent = '#' + myRank;
     // Sanitize helper — prevents XSS by escaping HTML special chars
-    const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
     document.getElementById('lbStatus').textContent = everyone.data().count + ' students ranked';
 
@@ -541,8 +541,8 @@ function renderScores(scores) {
   SUBJECTS.forEach(sub => {
     const s = scores[sub.key];
     if (!s) return;
-    const pct = s.pct || 0;
-    const level = s.level || 'beginner';
+    const pct = num(s.pct);
+    const level = ['beginner','intermediate','advanced'].includes(s.level) ? s.level : 'beginner';
     const ltClass = 'lt-' + level;
     html += `
       <div class="score-row">

@@ -155,6 +155,7 @@
 <div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
+<script src="ish-safe.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
@@ -263,10 +264,10 @@ function renderUsersTable(users) {
   }
 
   tbody.innerHTML = sorted.map(u => {
-    const name = u.name || u.email?.split('@')[0] || 'Unknown';
-    const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const name = String(u.name || u.email?.split('@')[0] || 'Unknown');
+    const initials = esc(name.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase());
     const isAdmin = u.role === 'admin';
-    const quizzes = u.quizzesDone || 0;
+    const quizzes = num(u.quizzesDone);
     const joinDate = u.joinedAt ? new Date(u.joinedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : '—';
 
     // Check if new (joined in last 7 days)
@@ -275,11 +276,11 @@ function renderUsersTable(users) {
     return `<tr>
       <td>
         <span class="user-avatar-sm">${initials}</span>
-        ${name}
+        ${esc(name)}
         ${isNew ? '<span class="tag tag-new" style="margin-left:6px;">NEW</span>' : ''}
       </td>
       <td><span class="tag ${isAdmin?'tag-admin':'tag-student'}">${isAdmin?'<i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Admin':'Student'}</span></td>
-      <td style="font-family:var(--ff-mono);font-size:12px;color:var(--lime);">${(u.xp||0).toLocaleString()}</td>
+      <td style="font-family:var(--ff-mono);font-size:12px;color:var(--lime);">${num(u.xp).toLocaleString()}</td>
       <td style="font-family:var(--ff-mono);font-size:12px;color:var(--muted2);">${quizzes}</td>
       <td style="font-family:var(--ff-mono);font-size:11px;color:var(--muted);">${joinDate}</td>
     </tr>`;
@@ -297,11 +298,11 @@ function renderLeaderboard(users) {
         const rank = i+1;
         const medal = rank===1?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#FFD700;"></i>':rank===2?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#C0C0C0;"></i>':rank===3?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#CD7F32;"></i>':'';
         const rankClass = rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
-        const name = u.name || u.email?.split('@')[0] || 'Unknown';
+        const name = String(u.name || u.email?.split('@')[0] || 'Unknown');
         return `<div class="lb-mini-row">
           <div class="lb-mini-rank ${rankClass}">${medal||rank}</div>
-          <div class="lb-mini-name">${name}${u.role==='admin'?' <i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>':''}</div>
-          <div class="lb-mini-xp">${(u.xp||0).toLocaleString()} XP</div>
+          <div class="lb-mini-name">${esc(name)}${u.role==='admin'?' <i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>':''}</div>
+          <div class="lb-mini-xp">${num(u.xp).toLocaleString()} XP</div>
         </div>`;
       }).join('');
 }
@@ -346,11 +347,11 @@ function renderRecentActivity(users) {
   document.getElementById('recentActivityBody').innerHTML = sorted.length === 0
     ? '<div style="font-family:var(--ff-mono);font-size:12px;color:var(--muted);text-align:center;padding:20px;">No recent activity</div>'
     : sorted.map(u => {
-        const name = u.name || u.email?.split('@')[0] || 'Unknown';
+        const name = String(u.name || u.email?.split('@')[0] || 'Unknown');
         const date = new Date(u.joinedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
         return `<div class="activity-item">
           <div class="activity-dot green"></div>
-          <div class="activity-text"><strong>${name}</strong> joined the platform</div>
+          <div class="activity-text"><strong>${esc(name)}</strong> joined the platform</div>
           <div class="activity-time">${date}</div>
         </div>`;
       }).join('');

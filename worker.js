@@ -10,7 +10,6 @@
 //   POST /api/award-xp          the only way XP changes: quiz results and practice solves
 //   POST /api/sync-profile      copies the public bits of a profile (name, xp, photo, solved) to leaderboard/{uid}
 //   POST /api/admin/rebuild-leaderboard   admins only: rebuilds leaderboard/ from users/ (run once after deploying)
-//   /admin*                     existing IP gate (see note below)
 //   everything else             static files
 //
 // Secrets (set with `wrangler secret put <NAME>`; never commit them):
@@ -382,16 +381,29 @@ function cleanName(raw) {
   return String(raw || "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 60) || "Student";
 }
 
+const AVATAR_HOSTS = ["googleusercontent.com", "firebasestorage.googleapis.com", "firebasestorage.app", "storage.googleapis.com", "avatars.githubusercontent.com"];
+
+// A profile photo is shown in other students' pages, so it must be an https URL on a host that serves
+// avatars, with nothing in it that could break out of an HTML attribute. Anything else is dropped.
+export function safeAvatarUrl(raw) {
+  try {
+    if (typeof raw !== "string" || raw.length > 500 || /[\s"'<>`\\]/.test(raw)) return null;
+    const u = new URL(raw);
+    if (u.protocol !== "https:") return null;
+    return AVATAR_HOSTS.some((h) => u.hostname === h || u.hostname.endsWith("." + h)) ? u.href : null;
+  } catch { return null; }
+}
+
 function leaderboardFields(f) {
   const solvedMap = f.practice?.mapValue?.fields?.solved?.mapValue?.fields;
-  const photo = f.photoURL?.stringValue;
+  const photo = safeAvatarUrl(f.photoURL?.stringValue);
   const out = {
     name: { stringValue: cleanName(f.name?.stringValue) },   // never falls back to the email address
     xp: intVal(numOf(f.xp) || 0),
     solved: intVal(solvedMap ? Object.keys(solvedMap).length : 0),
     updatedAt: { timestampValue: new Date().toISOString() },
   };
-  if (photo && photo.length <= 500 && photo.startsWith("https://")) out.photoURL = { stringValue: photo };
+  if (photo) out.photoURL = { stringValue: photo };
   return out;
 }
 
@@ -609,16 +621,10 @@ export default {
       }
     }
 
-    // Existing admin IP gate, unchanged (task 8 replaces it).
-    // NOTE: Cloudflare serves /admin.html straight from static assets without running this
-    // Worker, so this gate does not currently protect anything.
-    if (url.pathname.startsWith("/admin")) {
-      const ip = request.headers.get("CF-Connecting-IP") || "";
-      const ipv4 = ip.startsWith("42.108.85.");
-      const ipv6 = ip.startsWith("2402:3a80:430c:e6cd:");
-      if (!ipv4 && !ipv6) return new Response("Access Denied", { status: 403 });
-    }
-
+    // Admin access is NOT decided here. admin.html is a static file that Cloudflare serves directly,
+    // so a check in this Worker would never run. What protects admin data is Firestore: only profiles
+    // with role == "admin" can read other users' documents (see firestore.rules), and the Worker's
+    // admin routes check the same role.
     return env.ASSETS.fetch(request);
   },
 };

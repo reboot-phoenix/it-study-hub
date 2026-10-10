@@ -506,6 +506,31 @@ await test("refuses unknown emails and duplicate profiles instead of guessing", 
   await assert.rejects(setRole({ email: "not-an-email", token: "tok" }), /full email/);
 });
 
+console.log("avatar urls and the admin gate");
+import { safeAvatarUrl } from "./worker.js";
+await test("avatar URLs: only https on avatar hosts, and nothing that can break out of an attribute", async () => {
+  const good = ["https://lh3.googleusercontent.com/a/photo=s96-c", "https://firebasestorage.googleapis.com/v0/b/it-study-hub.firebasestorage.app/o/pfp%2Fabc?alt=media&token=1",
+                "https://avatars.githubusercontent.com/u/1?v=4"];
+  for (const u of good) assert.ok(safeAvatarUrl(u), "should allow " + u);
+  const bad = ['https://lh3.googleusercontent.com/a" onerror="alert(1)', "https://lh3.googleusercontent.com/a' onerror='x", "https://lh3.googleusercontent.com/a<script>",
+               "http://lh3.googleusercontent.com/a", "javascript:alert(1)", "data:image/svg+xml,<svg onload=alert(1)>", "https://evilgoogleusercontent.com/a",
+               "https://googleusercontent.com.evil.com/a", "https://evil.com/a", "https://lh3.googleusercontent.com/a b", "//lh3.googleusercontent.com/a",
+               "https://lh3.googleusercontent.com/" + "a".repeat(600), 42, null, undefined];
+  for (const u of bad) assert.equal(safeAvatarUrl(u), null, "should reject " + String(u).slice(0, 60));
+});
+await test("a poisoned photoURL never reaches the leaderboard", async () => {
+  users.alice = { name: "A", xp: 1, photoURL: 'https://lh3.googleusercontent.com/a" onerror="alert(document.cookie)' };
+  await post("/api/sync-profile", "alice");
+  assert.equal(lb.alice.photoURL, undefined);
+  assert.ok(!JSON.stringify(lb.alice).includes("onerror"));
+});
+await test("the Worker no longer carries an IP allowlist, and /admin is just a static file", async () => {
+  const src = fs.readFileSync(new URL("./worker.js", import.meta.url), "utf8");
+  assert.ok(!/CF-Connecting-IP/.test(src) && !/["']\d{1,3}\.\d{1,3}\.\d{1,3}\.["']/.test(src), "no IP allowlist in worker.js");
+  const res = await worker.fetch(new Request("https://x.test/admin.html"), env);
+  assert.equal(await res.text(), "asset");
+});
+
 console.log("routing");
 await test("unknown API route is 404, other paths fall through to static assets", async () => {
   assert.equal((await call("/api/nope", {}, {}, "POST")).status, 404);
