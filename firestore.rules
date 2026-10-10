@@ -1,0 +1,75 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // Fields the browser may never change. They are set by the server
+    // (payment webhook, admin console) and never by client code.
+    //   plan, planActivatedAt, razorpayPaymentId, role, isAdmin, email, joinedAt
+
+    // Fields a user may write on their own document.
+    function clientFields() {
+      return ['name', 'username', 'college', 'dob', 'degree', 'yearOfStudy',
+              'linkedin', 'github', 'bio', 'avatarEmoji', 'photoURL',
+              'scores', 'badges', 'quizzesDone', 'practice', 'xp', 'earnedXPKeys'];
+    }
+
+    function validCreate() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(clientFields().concat(['email', 'isAdmin', 'joinedAt']))
+        && d.get('isAdmin', false) == false          // nobody self-promotes
+        && d.get('email', request.auth.token.email) == request.auth.token.email
+        && d.get('xp', 0) is number
+        && d.get('xp', 0) >= 0
+        && d.get('xp', 0) <= 250;                    // first quiz: 100 + 50 + 100 welcome
+    }
+
+    function validUpdate() {
+      let before = resource.data;
+      let after = request.resource.data;
+      let changed = after.diff(before).affectedKeys();
+      return changed.hasOnly(clientFields())
+        // XP can only go up, and by at most one quiz's worth per write.
+        && (!('xp' in changed)
+            || (after.xp is number
+                && after.xp >= before.get('xp', 0)
+                && after.xp - before.get('xp', 0) <= 150))
+        // Earned-key list can only grow, never be reset to farm XP again.
+        && after.get('earnedXPKeys', []).hasAll(before.get('earnedXPKeys', []))
+        // Quiz counter moves forward by at most 1.
+        && (!('quizzesDone' in changed)
+            || (after.quizzesDone >= before.get('quizzesDone', 0)
+                && after.quizzesDone - before.get('quizzesDone', 0) <= 1));
+    }
+
+    function isAdmin() {
+      return signedIn() && (
+        request.auth.token.admin == true ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'admin'
+      );
+    }
+
+    match /users/{uid} {
+      // NOTE: the leaderboard currently reads every user doc, so any signed-in
+      // user can read all profile fields. Replace with a public leaderboard
+      // projection (see task list) and then tighten this to owner or admin.
+      allow read: if signedIn();
+
+      allow create: if isOwner(uid) && validCreate();
+      allow update: if isOwner(uid) && validUpdate();
+      allow delete: if false;
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
