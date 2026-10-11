@@ -46,7 +46,7 @@ env.PREMIUM.store.set("lesson:java:7", JSON.stringify({ body: "SECRET JAVA 7" })
 env.PREMIUM.store.set("pdf:BCA-421 JAVA-97-131.pdf", "%PDF-secret");
 let users, payments, orders, ledger, orderSeq, lastFsAuth, lb, listPageSize = 300;
 let judge0Calls = [];
-let codes = {}, authUsers = {}, emailsSent = [], turnstileCalls = [], emailFails = false, idtSeq = 0, relayCalls = [], relayMode = "ok";
+let codes = {}, authUsers = {}, emailsSent = [], turnstileCalls = [], emailFails = false, idtSeq = 0, relayCalls = [], relayMode = "ok", idtDenied = false;
 // ── typed-value helpers for the Firestore mock ──
 let beforePatch = null;
 function toTyped(key, v) {
@@ -70,7 +70,7 @@ function fromTyped(tv) {
 
 function reset() {
   users = { alice: { plan: "" }, bob: { plan: "" }, carol: { plan: "elite" } };
-  payments = {}; orders = {}; ledger = {}; orderSeq = 0; lb = {}; listPageSize = 300; judge0Calls = []; codes = {}; authUsers = {}; emailsSent = []; turnstileCalls = []; emailFails = false; idtSeq = 0; relayCalls = []; relayMode = "ok";
+  payments = {}; orders = {}; ledger = {}; orderSeq = 0; lb = {}; listPageSize = 300; judge0Calls = []; codes = {}; authUsers = {}; emailsSent = []; turnstileCalls = []; emailFails = false; idtSeq = 0; relayCalls = []; relayMode = "ok"; idtDenied = false;
 }
 reset();
 
@@ -101,6 +101,8 @@ globalThis.fetch = async (input, init = {}) => {
   }
   if (url === "https://script.google.com/macros/s/TESTID/exec") {
     const body = JSON.parse(init.body); relayCalls.push(body);
+    if (relayMode === "html") return new Response("<html>Sign in to Google</html>", { status: 200 });   // what an Apps Script set to "only me" answers with
+    if (body.ping) return body.secret === "relay-secret" ? J({ ok: true, quota: 97 }) : J({ ok: false, error: "forbidden" });
     if (relayMode === "quota") return J({ ok: false, error: "quota" });
     if (relayMode === "down") return J({ ok: false, error: "error" });
     if (body.secret !== "relay-secret") return J({ ok: false, error: "forbidden" });
@@ -114,6 +116,7 @@ globalThis.fetch = async (input, init = {}) => {
   if (url.startsWith("https://identitytoolkit.googleapis.com/v1/projects/it-study-hub/")) {
     assert.equal(init.headers.Authorization, "Bearer tok");
     const body = JSON.parse(init.body);
+    if (idtDenied) return J({ error: { status: "PERMISSION_DENIED" } }, 403);
     if (url.endsWith("/accounts:lookup")) { const u = authUsers[body.email[0]]; return J(u ? { users: [{ localId: u.localId, email: u.email }] } : { kind: "x" }); }
     if (url.endsWith("/accounts")) { const localId = "uid-new-" + ++idtSeq; authUsers[body.email] = { localId, email: body.email, emailVerified: body.emailVerified, displayName: body.displayName }; return J({ localId }); }
   }
@@ -858,6 +861,51 @@ await test("relay: the Apps Script only sends a sign-in code, checks the secret,
   assert.match(gs, /d\.secret !== SECRET/); assert.match(gs, /\^\\d\{6\}\$/); assert.match(gs, /getRemainingDailyQuota/);
   assert.ok(!/d\.(subject|body|html|text)\b/.test(gs), "the script never takes the subject or body from the request");
   assert.match(gs, /Who has access|Anyone/);
+});
+
+console.log("setup check");
+const check = async (key, e = env, ip = freshIp()) =>
+  worker.fetch(new Request("https://x.test/api/setup-check", { headers: { "CF-Connecting-IP": ip, ...(key ? { "X-Setup-Key": key } : {}) } }), e);
+const fullEnv = { ...env, MAIL_RELAY_URL: "https://script.google.com/macros/s/TESTID/exec", MAIL_RELAY_SECRET: "relay-secret", RAZORPAY_KEY_SECRET: "k", RAZORPAY_WEBHOOK_SECRET: "w" };
+const RELAY = "Gmail relay answers (and shows today's remaining emails)";
+
+await test("setup check: needs the owner's key, and says what to do first when OTP_SECRET is missing", async () => {
+  assert.equal((await check(null, fullEnv)).status, 403);
+  assert.equal((await check("wrong", fullEnv)).status, 403);
+  const bare = { ...fullEnv }; delete bare.OTP_SECRET;
+  const r = await check("anything", bare); assert.equal(r.status, 503); assert.match((await r.json()).error, /OTP_SECRET/);
+});
+await test("setup check: everything configured gives ready=true and never shows a secret value", async () => {
+  const res = await check("otp-test-secret", fullEnv); const data = await res.json();
+  assert.equal(res.status, 200); assert.equal(data.ready, true);
+  for (const [name, c] of Object.entries(data.checks)) if (!/premium storage/.test(name)) assert.equal(c.ok, true, name + ": " + c.detail);
+  const dump = JSON.stringify(data);
+  for (const secret of ["otp-test-secret", "ts-secret", "relay-secret", "BEGIN PRIVATE KEY", "keysecret"]) assert.ok(!dump.includes(secret), "leaked " + secret);
+  assert.match(data.checks[RELAY].detail, /97 emails left/);
+});
+await test("setup check: each missing or wrong piece is reported in plain words", async () => {
+  const noMail = { ...fullEnv }; delete noMail.MAIL_RELAY_URL;
+  let d = await (await check("otp-test-secret", noMail)).json();
+  assert.equal(d.ready, false); assert.equal(d.checks["secret MAIL_RELAY_URL"].ok, false);
+  assert.match(d.checks[RELAY].detail, /not both set/);
+
+  idtDenied = true; d = await (await check("otp-test-secret", fullEnv)).json(); idtDenied = false;
+  const um = d.checks["Firebase user management (role: Firebase Authentication Admin)"];
+  assert.equal(um.ok, false); assert.match(um.detail, /Firebase Authentication Admin role/);
+
+  relayMode = "html"; d = await (await check("otp-test-secret", fullEnv)).json(); relayMode = "ok";
+  assert.equal(d.checks[RELAY].ok, false); assert.match(d.checks[RELAY].detail, /Anyone.*NEW VERSION/);
+
+  d = await (await check("otp-test-secret", { ...fullEnv, MAIL_RELAY_SECRET: "nope" })).json();
+  assert.match(d.checks[RELAY].detail, /does not match/);
+
+  d = await (await check("otp-test-secret", { ...fullEnv, TURNSTILE_SECRET: "wrong-ts" })).json();
+  assert.match(d.checks["Turnstile secret is accepted by Cloudflare"].detail, /wrong/);
+});
+await test("setup check: the Apps Script answers a ping with the remaining quota and sends nothing", async () => {
+  const gs = fs.readFileSync(new URL("./mail-relay.gs", import.meta.url), "utf8");
+  assert.match(gs, /if \(d\.ping\) return reply\(\{ ok: true, quota: MailApp\.getRemainingDailyQuota\(\) \}\)/);
+  assert.ok(gs.indexOf("d.ping") > gs.indexOf("d.secret !== SECRET"), "the secret is checked before the ping answers");
 });
 
 console.log("routing");

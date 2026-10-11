@@ -12,6 +12,7 @@ function doPost(e) {
   try {
     const d = JSON.parse(e.postData.contents);
     if (d.secret !== SECRET) return reply({ ok: false, error: 'forbidden' });
+    if (d.ping) return reply({ ok: true, quota: MailApp.getRemainingDailyQuota() });   // used by the Worker's setup check; sends nothing
     if (!/^[^\s@<>"'`\\]{1,64}@[^\s@<>"'`\\]{1,255}\.[^\s@<>"'`\\]{2,}$/.test(String(d.to))) return reply({ ok: false, error: 'bad_address' });
     if (!/^\d{6}$/.test(String(d.code))) return reply({ ok: false, error: 'bad_code' });
     if (MailApp.getRemainingDailyQuota() < 1) return reply({ ok: false, error: 'quota' });

@@ -8,6 +8,7 @@
 //   GET  /api/lesson?course=&id=  premium lesson text (only for users with an active plan)
 //   GET  /api/pdf?f=<file>      premium PDF (only for users with an active plan)
 //   POST /api/award-xp          the only way XP changes: quiz results and practice solves
+//   GET  /api/setup-check       owner-only checklist: which secrets and permissions are working (header X-Setup-Key = OTP_SECRET)
 //   POST /api/otp/request       emails a 6-digit sign-in code (Turnstile-checked, rate-limited)
 //   POST /api/otp/verify        checks the code and returns a Firebase custom token for that email's account
 //   POST /api/run               runs student code on Judge0 (signed-in users only, size- and rate-limited)
@@ -809,6 +810,63 @@ async function otpVerifyRoute(request, env) {
   throw new HttpError(409, "Busy, please try again.");
 }
 
+/* ───────────────────────── Setup check (for the owner) ───────────────────────── */
+// Tells you, piece by piece, what is configured and working, without exposing any secret values.
+// Call it with the header  X-Setup-Key: <your OTP_SECRET>  (see the one-line console snippet in HANDOFF.md).
+
+async function setupCheckRoute(request, env) {
+  if (!env.OTP_SECRET) throw new HttpError(503, "Add the OTP_SECRET secret first; it is also the key for this check.");
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  if (!allowHit("setup-check:" + ip, 20, 3600000)) throw new HttpError(429, "Too many checks. Try again later.");
+  if (!safeEqual(request.headers.get("X-Setup-Key") || "", env.OTP_SECRET)) throw new HttpError(403, "Wrong setup key.");
+
+  const checks = {};
+  const run = async (name, fn) => {
+    try { const detail = await fn(); checks[name] = { ok: true, detail: detail || "ok" }; }
+    catch (e) { checks[name] = { ok: false, detail: String(e.message || e).slice(0, 300) }; }
+  };
+  const present = (name) => { if (!env[name]) throw new Error("not set"); return "set"; };
+
+  for (const name of ["OTP_SECRET", "TURNSTILE_SECRET", "FIREBASE_SERVICE_ACCOUNT", "MAIL_RELAY_URL", "MAIL_RELAY_SECRET"]) {
+    await run("secret " + name, async () => present(name));
+  }
+  for (const name of ["RAZORPAY_KEY_SECRET", "RAZORPAY_WEBHOOK_SECRET"]) await run("secret " + name + " (payments)", async () => present(name));
+  checks["premium storage (KV binding PREMIUM)"] = env.PREMIUM ? { ok: true, detail: "bound" } : { ok: false, detail: "not bound yet (only needed for premium lessons)" };
+
+  await run("Google service account key works", async () => { await getAccessToken(env); return "token obtained"; });
+  await run("Firestore access (role: Cloud Datastore User)", async () => {
+    const res = await fsFetch(env, "loginCodes/setup-check-probe");
+    if (res.status === 404 || res.ok) return "can read and write the database";
+    if (res.status === 403) throw new Error("denied: give the service account the Cloud Datastore User role");
+    throw new Error("unexpected status " + res.status);
+  });
+  await run("Firebase user management (role: Firebase Authentication Admin)", async () => {
+    const res = await idtPost(env, "/accounts:lookup", { email: ["setup-check@example.invalid"] });
+    if (res.ok) return "can look up and create accounts";
+    if (res.status === 403) throw new Error("denied: give the service account the Firebase Authentication Admin role");
+    throw new Error("unexpected status " + res.status + " " + (await res.text()).slice(0, 120));
+  });
+  await run("Firebase sign-in token can be signed", async () => { await mintCustomToken(env, "setup-check"); return "ok"; });
+  await run("Turnstile secret is accepted by Cloudflare", async () => {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: new URLSearchParams({ secret: env.TURNSTILE_SECRET || "", response: "setup-check" }) });
+    const codes = (await res.json())["error-codes"] || [];
+    if (codes.includes("invalid-input-secret")) throw new Error("Cloudflare says this secret key is wrong");
+    return "secret recognised";
+  });
+  await run("Gmail relay answers (and shows today's remaining emails)", async () => {
+    if (!env.MAIL_RELAY_URL || !env.MAIL_RELAY_SECRET) throw new Error("MAIL_RELAY_URL and MAIL_RELAY_SECRET are not both set");
+    const res = await fetch(env.MAIL_RELAY_URL, { method: "POST", redirect: "follow", signal: AbortSignal.timeout(20000), headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ secret: env.MAIL_RELAY_SECRET, ping: true }) });
+    const text = await res.text();
+    let data; try { data = JSON.parse(text); } catch { throw new Error("the web app did not answer with JSON; check it is deployed with 'Who has access: Anyone' and that you deployed a NEW VERSION after editing"); }
+    if (data.error === "forbidden") throw new Error("the secret in the script does not match MAIL_RELAY_SECRET");
+    if (data.ok !== true) throw new Error("relay answered: " + JSON.stringify(data));
+    return "reachable, " + data.quota + " emails left today";
+  });
+
+  const needed = Object.entries(checks).filter(([k]) => !/payments|premium storage/.test(k));
+  return json({ ready: needed.every(([, v]) => v.ok), checks });
+}
+
 /* ───────────────── Premium access and content ───────────────── */
 
 const COURSES = new Set(["java", "c", "cpp", "r", "javascript", "python"]);
@@ -944,6 +1002,7 @@ const ROUTES = {
   "GET /api/pdf": pdfRoute,
   "POST /api/award-xp": awardXpRoute,
   "GET /api/setup-status": setupStatusRoute,
+  "GET /api/setup-check": setupCheckRoute,
   "POST /api/otp/request": otpRequestRoute,
   "POST /api/otp/verify": otpVerifyRoute,
   "POST /api/run": runRoute,
