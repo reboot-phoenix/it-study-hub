@@ -8,6 +8,8 @@
 //   GET  /api/lesson?course=&id=  premium lesson text (only for users with an active plan)
 //   GET  /api/pdf?f=<file>      premium PDF (only for users with an active plan)
 //   POST /api/award-xp          the only way XP changes: quiz results and practice solves
+//   POST /api/otp/request       emails a 6-digit sign-in code (Turnstile-checked, rate-limited)
+//   POST /api/otp/verify        checks the code and returns a Firebase custom token for that email's account
 //   POST /api/run               runs student code on Judge0 (signed-in users only, size- and rate-limited)
 //   POST /api/sync-profile      copies the public bits of a profile (name, xp, photo, solved) to leaderboard/{uid}
 //   POST /api/admin/rebuild-leaderboard   admins only: rebuilds leaderboard/ from users/ (run once after deploying)
@@ -20,6 +22,11 @@
 // Plain var (in wrangler.toml or dashboard):
 //   RAZORPAY_KEY_ID           rzp_test_... or rzp_live_...  (public key id)
 //   JUDGE0_URL                code runner base URL (default https://ce.judge0.com)
+//   EMAIL_FROM                sender for sign-in codes, e.g. "IT Study Hub <login@itstudyhub.dpdns.org>" (must be a verified domain)
+// Secrets for email-code sign-in:
+//   OTP_SECRET                any long random string; keys the hashing of codes
+//   TURNSTILE_SECRET          the Turnstile widget's secret key (verifies the check on the server)
+//   RESEND_API_KEY            Resend API key (or bind Cloudflare Email Service as EMAIL instead)
 // Optional secret:
 //   JUDGE0_KEY                RapidAPI key, if you use a paid/hosted Judge0 instead of the free public one
 // Optional binding:
@@ -155,7 +162,7 @@ export async function getAccessToken(env) {
   const iat = Math.floor(Date.now() / 1000);
   const claims = {
     iss: sa.client_email,
-    scope: "https://www.googleapis.com/auth/datastore",
+    scope: "https://www.googleapis.com/auth/datastore https://www.googleapis.com/auth/identitytoolkit",
     aud: "https://oauth2.googleapis.com/token",
     iat, exp: iat + 3600,
   };
@@ -531,6 +538,214 @@ async function rebuildLeaderboardRoute(request, env) {
   return json({ ok: true, users });
 }
 
+/* ───────────────────── Email code (OTP) sign-in ───────────────────── */
+// Firebase has no built-in "email me a code" login, so the Worker does it: it emails a 6-digit code, checks
+// it, then gives the browser a Firebase custom token for that email's account (created on first sign-in).
+// Codes are stored only as keyed hashes, expire in 10 minutes, allow 5 guesses, and work once.
+
+export const OTP = { ttlMs: 10 * 60 * 1000, maxAttempts: 5, resendMs: 45 * 1000, sendsPerHour: 5 };
+const EMAIL_RE = /^[^\s@<>"'`\\]{1,64}@[^\s@<>"'`\\]{1,255}\.[^\s@<>"'`\\]{2,}$/;
+const ipHits = new Map();   // per-isolate fallback limiter: "kind:ip" -> recent timestamps
+
+function allowHit(key, limit, windowMs) {
+  const now = Date.now();
+  const recent = (ipHits.get(key) || []).filter((t) => now - t < windowMs);
+  if (recent.length >= limit) { ipHits.set(key, recent); return false; }
+  recent.push(now); ipHits.set(key, recent);
+  if (ipHits.size > 5000) for (const [k, v] of ipHits) if (!v.some((t) => now - t < windowMs)) ipHits.delete(k);
+  return true;
+}
+
+async function sha256Hex(text) {
+  const d = await crypto.subtle.digest("SHA-256", enc.encode(text));
+  return [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function randomCode() {                       // uniform 000000-999999 (rejection sampling, no modulo bias)
+  const limit = Math.floor(0x100000000 / 1000000) * 1000000;
+  const buf = new Uint32Array(1);
+  do { crypto.getRandomValues(buf); } while (buf[0] >= limit);
+  return String(buf[0] % 1000000).padStart(6, "0");
+}
+
+function normaliseEmail(raw) {
+  const email = String(raw || "").trim().toLowerCase();
+  if (email.length > 254 || !EMAIL_RE.test(email)) throw new HttpError(400, "Please enter a valid email address.");
+  return email;
+}
+
+async function verifyTurnstile(env, token, request) {
+  if (typeof token !== "string" || !token || token.length > 2048) return false;
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token, remoteip: request.headers.get("CF-Connecting-IP") || "" }),
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    return data.success === true && (!data.hostname || data.hostname === new URL(request.url).hostname);
+  } catch { return false; }
+}
+
+async function sendOtpEmail(env, to, code) {
+  const subject = `${code} is your IT Study Hub code`;
+  const text = `Your IT Study Hub sign-in code is ${code}.\n\nIt expires in 10 minutes. If you did not ask for it, you can ignore this email; nobody can sign in without the code.`;
+  const html = `<div style="font-family:Arial,sans-serif;max-width:420px;margin:auto;padding:24px"><p style="margin:0 0 12px">Your IT Study Hub sign-in code:</p>` +
+    `<p style="font-size:34px;letter-spacing:8px;font-weight:700;margin:0 0 16px">${code}</p>` +
+    `<p style="color:#555;font-size:13px;margin:0">It expires in 10 minutes. If you did not ask for it, ignore this email; nobody can sign in without the code.</p></div>`;
+  try {
+    if (env.EMAIL?.send) {                                         // Cloudflare Email Service binding (Workers Paid)
+      await env.EMAIL.send({ to, from: env.EMAIL_FROM, subject, html, text });
+      return;
+    }
+    if (env.RESEND_API_KEY && env.EMAIL_FROM) {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ from: env.EMAIL_FROM, to: [to], subject, html, text }),
+      });
+      if (!res.ok) throw new Error("Resend " + res.status + " " + (await res.text()));
+      return;
+    }
+  } catch (e) {
+    console.error("OTP email failed:", e.message);
+    throw new HttpError(502, "We could not send the email right now. Please try again, or sign in with Google or GitHub.");
+  }
+  throw new HttpError(503, "Server setup incomplete: email sending is not configured (EMAIL_FROM plus RESEND_API_KEY or an EMAIL binding)");
+}
+
+const ts = (ms) => ({ timestampValue: new Date(ms).toISOString() });
+
+async function serviceKey(env) {
+  if (!env.FIREBASE_SERVICE_ACCOUNT) throw new HttpError(503, "Server setup incomplete: the FIREBASE_SERVICE_ACCOUNT secret is not set on the Worker");
+  const sa = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT);
+  const pem = sa.private_key.replace(/-----(BEGIN|END) PRIVATE KEY-----/g, "").replace(/\s+/g, "");
+  const key = await crypto.subtle.importKey("pkcs8", Uint8Array.from(atob(pem), (c) => c.charCodeAt(0)),
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["sign"]);
+  return { sa, key };
+}
+
+// A Firebase "custom token": the browser exchanges it for a normal signed-in session (signInWithCustomToken).
+async function mintCustomToken(env, uid) {
+  const { sa, key } = await serviceKey(env);
+  const iat = Math.floor(Date.now() / 1000);
+  const claims = { iss: sa.client_email, sub: sa.client_email, aud: "https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit", iat, exp: iat + 3600, uid };
+  const unsigned = bytesToB64url(enc.encode(JSON.stringify({ alg: "RS256", typ: "JWT" }))) + "." + bytesToB64url(enc.encode(JSON.stringify(claims)));
+  const sig = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", key, enc.encode(unsigned));
+  return unsigned + "." + bytesToB64url(sig);
+}
+
+async function idtPost(env, path, body) {
+  const token = await getAccessToken(env);
+  return fetch(`https://identitytoolkit.googleapis.com/v1/projects/${PROJECT_ID}${path}`, {
+    method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify(body),
+  });
+}
+
+// Same email = same account, whichever way they signed in before (Google, GitHub, earlier links, or a code).
+async function getOrCreateAuthUser(env, email, name) {
+  const look = await idtPost(env, "/accounts:lookup", { email: [email] });
+  if (!look.ok) throw new Error("Auth lookup failed: " + look.status + " " + (await look.text()));
+  const found = (await look.json()).users?.[0];
+  if (found?.localId) return { uid: found.localId, isNew: false };
+  const created = await idtPost(env, "/accounts", { email, emailVerified: true, ...(name ? { displayName: name } : {}) });
+  if (!created.ok) throw new Error("Auth create failed: " + created.status + " " + (await created.text()));
+  return { uid: (await created.json()).localId, isNew: true };
+}
+
+function needOtpSecrets(env) {
+  if (!env.OTP_SECRET || !env.TURNSTILE_SECRET) throw new HttpError(503, "Server setup incomplete: OTP_SECRET and TURNSTILE_SECRET are not set on the Worker");
+}
+
+async function otpRequestRoute(request, env) {
+  needOtpSecrets(env);
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  if (!allowHit("otp-req:" + ip, 20, 3600000)) throw new HttpError(429, "Too many requests from your network. Please try again later.");
+  const body = await readJson(request);
+  const email = normaliseEmail(body.email);
+  if (!(await verifyTurnstile(env, body.turnstile, request))) throw new HttpError(400, "The security check failed. Please try again.");
+
+  const id = await sha256Hex(email);          // the record is keyed by a hash, so no address list is kept
+  const path = `loginCodes/${id}`;
+  const now = Date.now();
+  let sends = 0, windowStart = now;
+  const existing = await fsFetch(env, path);
+  if (existing.ok) {
+    const f = (await existing.json()).fields || {};
+    const sentAt = Date.parse(f.sentAt?.timestampValue || 0);
+    if (now - sentAt < OTP.resendMs) return json({ ok: true, resendIn: Math.ceil((OTP.resendMs - (now - sentAt)) / 1000) });
+    const ws = Date.parse(f.windowStart?.timestampValue || 0);
+    if (now - ws < 3600000) { sends = numOf(f.sends) || 0; windowStart = ws; }
+    if (sends >= OTP.sendsPerHour) throw new HttpError(429, "Too many codes were requested for this email. Please try again in a while.");
+  } else if (existing.status !== 404) {
+    throw new Error("Firestore read failed: " + existing.status);
+  }
+
+  const code = randomCode();
+  const rawName = typeof body.name === "string" ? body.name.trim() : "";
+  const fields = {
+    codeHash: { stringValue: await hmacSha256Hex(env.OTP_SECRET, `${id}:${code}`) },
+    expiresAt: ts(now + OTP.ttlMs), attempts: intVal(0), sentAt: ts(now), windowStart: ts(windowStart), sends: intVal(sends + 1),
+  };
+  if (rawName) fields.name = { stringValue: cleanName(rawName) };
+  const mask = ["codeHash", "expiresAt", "attempts", "sentAt", "windowStart", "sends", "name"].map((k) => `updateMask.fieldPaths=${k}`).join("&");
+  const save = await fsFetch(env, path, { method: "PATCH", body: JSON.stringify({ fields }) }, "?" + mask);
+  if (!save.ok) throw new Error("Firestore write failed: " + save.status + " " + (await save.text()));
+
+  try { await sendOtpEmail(env, email, code); }
+  catch (e) { await fsFetch(env, path, { method: "DELETE" }); throw e; }     // no half-finished request left behind
+  return json({ ok: true, resendIn: OTP.resendMs / 1000 });
+}
+
+async function otpVerifyRoute(request, env) {
+  needOtpSecrets(env);
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  if (!allowHit("otp-verify:" + ip, 60, 3600000)) throw new HttpError(429, "Too many attempts from your network. Please try again later.");
+  const body = await readJson(request);
+  const email = normaliseEmail(body.email);
+  if (typeof body.code !== "string" || !/^\d{6}$/.test(body.code)) throw new HttpError(400, "Enter the 6-digit code.");
+
+  const id = await sha256Hex(email);
+  const path = `loginCodes/${id}`;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const res = await fsFetch(env, path);
+    if (res.status === 404) throw new HttpError(400, "That code has expired. Please request a new one.");
+    if (!res.ok) throw new Error("Firestore read failed: " + res.status);
+    const doc = await res.json();
+    const f = doc.fields || {};
+    if (Date.parse(f.expiresAt?.timestampValue || 0) < Date.now()) {
+      await fsFetch(env, path, { method: "DELETE" });
+      throw new HttpError(400, "That code has expired. Please request a new one.");
+    }
+    const attempts = numOf(f.attempts) || 0;
+    if (attempts >= OTP.maxAttempts) {
+      await fsFetch(env, path, { method: "DELETE" });
+      throw new HttpError(429, "Too many wrong tries. Please request a new code.");
+    }
+    // Count this try first. The updateTime precondition makes parallel guesses take turns, so five really means five.
+    const patch = await fsFetch(env, path, { method: "PATCH", body: JSON.stringify({ fields: { attempts: intVal(attempts + 1) } }) },
+      `?updateMask.fieldPaths=attempts&currentDocument.updateTime=${encodeURIComponent(doc.updateTime)}`);
+    if (!patch.ok) {
+      if (/FAILED_PRECONDITION|ABORTED/.test(await patch.text())) continue;   // someone else just wrote it: read again
+      throw new Error("Firestore update failed: " + patch.status);
+    }
+
+    const given = await hmacSha256Hex(env.OTP_SECRET, `${id}:${body.code}`);
+    if (!safeEqual(f.codeHash?.stringValue || "", given)) {
+      const left = OTP.maxAttempts - (attempts + 1);
+      if (left <= 0) { await fsFetch(env, path, { method: "DELETE" }); throw new HttpError(400, "That code is not right. Please request a new code."); }
+      throw new HttpError(400, `That code is not right. ${left} ${left === 1 ? "try" : "tries"} left.`);
+    }
+
+    // Right code: burn it (only one request can win this delete), then sign them in.
+    const burn = await fsFetch(env, path, { method: "DELETE" }, "?currentDocument.exists=true");
+    if (!burn.ok) throw new HttpError(400, "That code was already used. Please request a new one.");
+    const user = await getOrCreateAuthUser(env, email, f.name?.stringValue || "");
+    return json({ token: await mintCustomToken(env, user.uid), isNew: user.isNew });
+  }
+  throw new HttpError(409, "Busy, please try again.");
+}
+
 /* ───────────────── Premium access and content ───────────────── */
 
 const COURSES = new Set(["java", "c", "cpp", "r", "javascript", "python"]);
@@ -665,6 +880,8 @@ const ROUTES = {
   "GET /api/lesson": lessonRoute,
   "GET /api/pdf": pdfRoute,
   "POST /api/award-xp": awardXpRoute,
+  "POST /api/otp/request": otpRequestRoute,
+  "POST /api/otp/verify": otpVerifyRoute,
   "POST /api/run": runRoute,
   "POST /api/sync-profile": syncProfileRoute,
   "POST /api/admin/rebuild-leaderboard": rebuildLeaderboardRoute,

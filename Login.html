@@ -174,7 +174,24 @@
   .form-panel { display: none; }
   .form-panel.active { display: block; }
 
-  /* ── MAGIC LINK SENT STATE ── */
+  /* ── EMAIL CODE (OTP) ── */
+  .otp-btn {
+    width: 100%; padding: 14px; margin-top: 14px; cursor: pointer;
+    background: var(--lime); color: #0a0a0f; border: none; border-radius: 10px;
+    font-family: var(--ff-mono); font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    transition: transform 0.15s, opacity 0.2s;
+  }
+  .otp-btn:hover { transform: translateY(-1px); }
+  .otp-btn:disabled { opacity: 0.5; cursor: wait; transform: none; }
+  .otp-input {
+    width: 100%; max-width: 240px; text-align: center; box-sizing: border-box;
+    font-family: var(--ff-mono); font-size: 30px; letter-spacing: 0.4em; padding: 12px 8px 12px 18px;
+    background: var(--surface2); color: var(--text); border: 1px solid var(--border-active); border-radius: 10px; outline: none;
+  }
+  .otp-input:focus { border-color: var(--lime); }
+  .sent-resend:disabled { cursor: default; text-decoration: none; opacity: 0.6; }
+
+  /* ── CODE ENTRY STATE ── */
   .sent-state {
     display: none;
     flex-direction: column;
@@ -326,7 +343,7 @@
 
       <div id="loginForm">
         <div class="form-title">Welcome back</div>
-        <div class="form-sub">Enter your email — we'll send you a magic sign-in link.</div>
+        <div class="form-sub">Enter your email and we’ll send you a 6-digit code.</div>
 
         <div class="form-group">
           <label>Email Address</label>
@@ -355,25 +372,20 @@
           </button>
         </div>
 
-        <div class="drag-wrap">
-          <div class="drag-track" id="loginTrack">
-            <div class="drag-fill" id="loginFill"></div>
-            <div class="drag-hint" id="loginHint">slide to send magic link →</div>
-            <div class="drag-thumb" id="loginThumb">→</div>
-          </div>
-          <div class="drag-result" id="loginResult"></div>
-        </div>
+        <button class="otp-btn" id="loginSendBtn" onclick="window.sendCode('login')">Send me a code →</button>
 
         <div class="terms">Don't have an account? <a href="#" onclick="event.preventDefault(); window.switchTab('signup')">Sign up free</a></div>
       </div>
 
       <div class="sent-state" id="loginSent">
-        <div class="sent-icon">📬</div>
-        <div class="sent-title">Check your inbox!</div>
-        <div class="sent-sub">We sent a magic sign-in link to:</div>
+        <div class="sent-icon">🔐</div>
+        <div class="sent-title">Enter your code</div>
+        <div class="sent-sub">We emailed a 6-digit code to:</div>
         <div class="sent-email-chip" id="loginSentEmail">—</div>
-        <div class="sent-sub">Click the link in the email to sign in instantly. No password needed.</div>
-        <button class="sent-resend" onclick="window.resendLink('login')">Resend link</button>
+        <input class="otp-input" id="loginOtp" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" maxlength="6" placeholder="······" aria-label="6-digit code" oninput="window.otpInput('login')">
+        <button class="otp-btn" style="max-width:240px;margin-top:0;" onclick="window.verifyCode('login')">Verify &amp; sign in</button>
+        <div class="sent-sub">Not there yet? Check Spam or Promotions. The code works for 10 minutes.</div>
+        <button class="sent-resend" id="loginResendBtn" onclick="window.resendCode('login')">Resend code</button>
         <button class="sent-back" onclick="window.backToForm('login')">← Use a different email</button>
       </div>
     </div>
@@ -419,14 +431,7 @@
           </button>
         </div>
 
-        <div class="drag-wrap" style="margin-top:8px;">
-          <div class="drag-track" id="signupTrack">
-            <div class="drag-fill" id="signupFill"></div>
-            <div class="drag-hint" id="signupHint">slide to send magic link →</div>
-            <div class="drag-thumb" id="signupThumb">→</div>
-          </div>
-          <div class="drag-result" id="signupResult"></div>
-        </div>
+        <button class="otp-btn" id="signupSendBtn" onclick="window.sendCode('signup')">Create account &amp; send code →</button>
 
         <div class="terms">
           By signing up you agree to our <a href="#">Terms</a> &amp; <a href="privacypolicy.html">Privacy Policy</a>.<br>
@@ -437,10 +442,12 @@
       <div class="sent-state" id="signupSent">
         <div class="sent-icon">🚀</div>
         <div class="sent-title">Almost there!</div>
-        <div class="sent-sub">We sent your account activation link to:</div>
+        <div class="sent-sub">We emailed a 6-digit code to:</div>
         <div class="sent-email-chip" id="signupSentEmail">—</div>
-        <div class="sent-sub">Click the link to activate your account instantly. No password ever needed.</div>
-        <button class="sent-resend" onclick="window.resendLink('signup')">Resend link</button>
+        <input class="otp-input" id="signupOtp" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" maxlength="6" placeholder="······" aria-label="6-digit code" oninput="window.otpInput('signup')">
+        <button class="otp-btn" style="max-width:240px;margin-top:0;" onclick="window.verifyCode('signup')">Verify &amp; sign in</button>
+        <div class="sent-sub">Not there yet? Check Spam or Promotions. The code works for 10 minutes.</div>
+        <button class="sent-resend" id="signupResendBtn" onclick="window.resendCode('signup')">Resend code</button>
         <button class="sent-back" onclick="window.backToForm('signup')">← Use a different email</button>
       </div>
     </div>
@@ -486,9 +493,7 @@ import { app } from "/firebase.js";
 import { auth, writeSession } from "/auth.js";
 import {
   getAuth,
-  isSignInWithEmailLink,
-  signInWithEmailLink,
-  sendSignInLinkToEmail,
+  signInWithCustomToken,
   GoogleAuthProvider,
   GithubAuthProvider,
   signInWithPopup,
@@ -496,48 +501,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 
 
-
-// ── ACTION CODE SETTINGS ──
-// IMPORTANT: Change this URL to wherever your Login.html lives in production
-const ACTION_CODE_SETTINGS = {
-  url: window.location.origin + '/Login.html',
-  handleCodeInApp: true,
-};
-
-// ══════════════════════════════════════════════
-// STEP 1 — On page load: check if this is a
-//           magic link callback from email
-// ══════════════════════════════════════════════
-if (isSignInWithEmailLink(auth, window.location.href)) {
-  let email = localStorage.getItem('ish_emailForSignIn');
-  if (!email) {
-    email = window.prompt('Please confirm your email address to complete sign-in:');
-  }
-  if (email) {
-    signInWithEmailLink(auth, email, window.location.href)
-      .then(async (result) => {
-        localStorage.removeItem('ish_emailForSignIn');
-        // If a display name was stored (signup flow), set it now
-        const pendingName = localStorage.getItem('ish_pendingName');
-        if (pendingName && !result.user.displayName) {
-          await updateProfile(result.user, { displayName: pendingName });
-          localStorage.removeItem('ish_pendingName');
-        }
-        const session = {
-          name: result.user.displayName || email.split('@')[0],
-          email: result.user.email,
-          uid: result.user.uid
-        };
-        writeSession(session);
-        // Clean the URL then redirect
-        window.history.replaceState({}, document.title, window.location.pathname);
-        window.location.href = 'global.html';
-      })
-      .catch((e) => {
-        showError(friendlyError(e.code) || e.message);
-      });
-  }
-}
 
 // ══════════════════════════════════════════════
 // TURNSTILE MODAL
@@ -554,24 +517,43 @@ window.onModalTurnstileSuccess = (token) => {
 };
 window.onModalTurnstileExpired = () => { tsToken = null; };
 
+// Shows a message inside the security-check box and a banner, so nobody is left staring at an empty box.
+function tsFail(msg) {
+  const container = document.getElementById('tsModalWidget');
+  container.textContent = msg;
+  container.style.cssText = 'color:#f06060;font-size:13px;line-height:1.5;padding:8px 4px;text-align:center;';
+  showError(msg);
+  tsOnDone = null;
+}
+
 window.showTsOverlay = function(onDone) {
   tsOnDone = onDone;
   const container = document.getElementById('tsModalWidget');
-  
+
   if (tsWidgetId !== null && window.turnstile) {
     try { window.turnstile.remove(tsWidgetId); } catch(_) {}
     tsWidgetId = null;
   }
   container.innerHTML = '';
-  
+  container.style.cssText = '';
+
   document.getElementById('tsOverlay').classList.add('show');
-  if (window.turnstile) {
+  if (!window.turnstile) {
+    // Blocked by an ad-blocker, a school network or a VPN, or still loading.
+    tsFail('The security check could not load. Turn off ad-blockers or VPN for this site, try another browser, or continue with Google or GitHub.');
+    return;
+  }
+  try {
     tsWidgetId = window.turnstile.render(container, {
       sitekey: TURNSTILE_SITEKEY,
       theme: 'dark',
       callback: window.onModalTurnstileSuccess,
       'expired-callback': window.onModalTurnstileExpired,
+      'timeout-callback': () => tsFail('The security check timed out. Close this box and try again.'),
+      'error-callback': (code) => { tsFail('The security check failed (error ' + code + '). Try another browser or network, or continue with Google or GitHub.'); return true; },
     });
+  } catch (e) {
+    tsFail('The security check could not start. Please reload the page and try again.');
   }
 };
 
@@ -624,86 +606,122 @@ async function isDisposableEmail(email) {
 }
 
 // ══════════════════════════════════════════════
-// SEND MAGIC LINK — Login
+// EMAIL CODE (OTP) — type your email, get a 6-digit code, type it in
 // ══════════════════════════════════════════════
-async function doSendLoginLink() {
+let otpEmail = '', otpName = '', verifying = false, resendTimer = null;
+
+function setSendBusy(panel, busy) {
+  const btn = document.getElementById(panel + 'SendBtn');
+  if (btn) btn.disabled = busy;
+}
+
+function startResendCountdown(panel, seconds) {
+  const btn = document.getElementById(panel + 'ResendBtn');
+  clearInterval(resendTimer);
+  let left = Math.max(0, Math.ceil(seconds));
+  const tick = () => {
+    if (left > 0) { btn.disabled = true; btn.textContent = 'Resend code in ' + left + 's'; left--; }
+    else { btn.disabled = false; btn.textContent = 'Resend code'; clearInterval(resendTimer); }
+  };
+  tick();
+  resendTimer = setInterval(tick, 1000);
+}
+
+function showOtpPanel(panel, email, resendIn) {
+  document.getElementById(panel + 'SentEmail').textContent = email;
+  document.getElementById(panel + 'Form').style.display = 'none';
+  document.getElementById(panel + 'Sent').classList.add('show');
+  const input = document.getElementById(panel + 'Otp');
+  input.value = '';
+  input.focus();
+  startResendCountdown(panel, resendIn);
+  showSuccess('Code sent. Check your inbox (and Spam or Promotions if you do not see it).');
+}
+
+async function requestCode(panel, email, name) {
+  setSendBusy(panel, true);
+  try {
+    const res = await fetch('/api/otp/request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name: name || undefined, turnstile: tsToken })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'We could not send the code. Please try again.');
+    otpEmail = email; otpName = name;
+    showOtpPanel(panel, email, data.resendIn || 45);
+  } catch (e) {
+    showError(e.message);
+  } finally {
+    tsToken = null;                       // a security-check token works only once
+    setSendBusy(panel, false);
+  }
+}
+
+window.sendCode = async function(panel) {
   clearBanners();
-  const email = document.getElementById('loginEmail').value.trim();
+  const email = document.getElementById(panel + 'Email').value.trim();
+  const name  = panel === 'signup' ? document.getElementById('signupName').value.trim() : '';
+  if (panel === 'signup' && !name) { showError('Please enter your full name.'); return; }
   if (!email) { showError('Please enter your email address.'); return; }
 
   showSuccess('Checking…');
-  const disposable = await isDisposableEmail(email);
-  if (disposable) { showError('Disposable email addresses are not allowed. Use a real email.'); return; }
+  if (await isDisposableEmail(email)) { showError('Disposable email addresses are not allowed. Use a real email.'); return; }
   clearBanners();
+  window.showTsOverlay(() => requestCode(panel, email, name));   // the security check, then the code is sent
+};
 
-  try {
-    await sendSignInLinkToEmail(auth, email, ACTION_CODE_SETTINGS);
-    localStorage.setItem('ish_emailForSignIn', email);
-    // Show sent state
-    document.getElementById('loginSentEmail').textContent = email;
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('loginSent').classList.add('show');
-  } catch(e) {
-    showError(friendlyError(e.code) || e.message);
-    showVerdict(false, 'login');
-    throw e;
-  }
-}
-
-// ══════════════════════════════════════════════
-// SEND MAGIC LINK — Signup
-// ══════════════════════════════════════════════
-async function doSendSignupLink() {
+window.resendCode = function(panel) {
   clearBanners();
-  const name  = document.getElementById('signupName').value.trim();
-  const email = document.getElementById('signupEmail').value.trim();
-  if (!name)  { showError('Please enter your full name.'); return; }
-  if (!email) { showError('Please enter your email address.'); return; }
+  if (!otpEmail) return;
+  window.showTsOverlay(() => requestCode(panel, otpEmail, otpName));
+};
 
-  showSuccess('Checking email…');
-  const disposable = await isDisposableEmail(email);
-  if (disposable) { showError('Disposable email addresses are not allowed. Use a real email.'); return; }
+window.otpInput = function(panel) {
+  const input = document.getElementById(panel + 'Otp');
+  input.value = input.value.replace(/\D/g, '').slice(0, 6);
+  if (input.value.length === 6) window.verifyCode(panel);      // submits itself once all six digits are in
+};
+
+window.verifyCode = async function(panel) {
+  if (verifying) return;
+  const input = document.getElementById(panel + 'Otp');
+  const code = input.value.trim();
   clearBanners();
-
+  if (!/^\d{6}$/.test(code)) { showError('Enter the 6-digit code from your email.'); return; }
+  verifying = true;
+  showSuccess('Checking your code…');
   try {
-    await sendSignInLinkToEmail(auth, email, ACTION_CODE_SETTINGS);
-    localStorage.setItem('ish_emailForSignIn', email);
-    localStorage.setItem('ish_pendingName', name);   // saved for after link click
-    // Show sent state
-    document.getElementById('signupSentEmail').textContent = email;
-    document.getElementById('signupForm').style.display = 'none';
-    document.getElementById('signupSent').classList.add('show');
-  } catch(e) {
-    showError(friendlyError(e.code) || e.message);
-    showVerdict(false, 'signup');
-    throw e;
-  }
-}
-
-// ══════════════════════════════════════════════
-// RESEND & BACK BUTTONS
-// ══════════════════════════════════════════════
-window.resendLink = async function(panel) {
-  const email = localStorage.getItem('ish_emailForSignIn');
-  if (!email) return;
-  try {
-    await sendSignInLinkToEmail(auth, email, ACTION_CODE_SETTINGS);
-    showSuccess('Link resent! Check your inbox.');
-  } catch(e) {
-    showError(friendlyError(e.code) || e.message);
+    const res = await fetch('/api/otp/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: otpEmail, code })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      clearBanners(); showError(data.error || 'That code did not work. Please try again.');
+      input.value = ''; input.focus();
+      return;
+    }
+    const cred = await signInWithCustomToken(auth, data.token);
+    const user = cred.user;
+    writeSession({ name: user.displayName || user.email.split('@')[0], email: user.email, uid: user.uid });
+    showSuccess('Signed in! Redirecting…');
+    setTimeout(() => { window.location.href = 'global.html'; }, 600);
+  } catch (e) {
+    clearBanners(); showError(friendlyError(e.code) || e.message);
+  } finally {
+    verifying = false;
   }
 };
 
 window.backToForm = function(panel) {
-  if (panel === 'login') {
-    document.getElementById('loginSent').classList.remove('show');
-    document.getElementById('loginForm').style.display = '';
-  } else {
-    document.getElementById('signupSent').classList.remove('show');
-    document.getElementById('signupForm').style.display = '';
-  }
+  clearInterval(resendTimer);
+  document.getElementById(panel + 'Sent').classList.remove('show');
+  document.getElementById(panel + 'Form').style.display = '';
   clearBanners();
 };
+// ══ END EMAIL CODE ══
 
 // ══════════════════════════════════════════════
 // SOCIAL AUTH
@@ -722,7 +740,8 @@ async function handleSocialLogin(provider, providerName) {
     showSuccess(`Signed in with ${providerName}! Redirecting…`);
     setTimeout(() => window.location.href = 'global.html', 900);
   } catch(e) {
-    showError(friendlyError(e.code) || e.message);
+    const msg = friendlyError(e.code);
+    if (msg !== '') showError(msg || e.message);
   }
 }
 window.handleGoogleLogin = () => handleSocialLogin(new GoogleAuthProvider(), 'Google');
@@ -735,103 +754,21 @@ function friendlyError(code) {
   const map = {
     'auth/invalid-email':          'Please enter a valid email address.',
     'auth/too-many-requests':      'Too many attempts. Try again later.',
-    'auth/popup-closed-by-user':   'Sign-in was cancelled.',
+    'auth/popup-closed-by-user':   'Sign-in was cancelled. If Google showed \u201cAccess blocked\u201d, please tell the site team so they can fix it.',
     'auth/unauthorized-domain':    'This domain is not authorised. Add it in Firebase Console → Authentication → Authorized Domains.',
     'auth/operation-not-allowed':  'Email link sign-in is not enabled. Enable it in Firebase Console → Authentication → Sign-in method.',
     'auth/expired-action-code':    'This link has expired. Please request a new one.',
-    'auth/invalid-action-code':    'This link is invalid or already used. Please request a new one.',
+    'auth/invalid-action-code':    'This link is invalid or already used. Some email apps open links automatically; copy the link into your browser, or sign in with Google instead.',
+    'auth/quota-exceeded':         'We have reached today\u2019s limit for sign-in emails. Please continue with Google or GitHub, or try again tomorrow.',
+    'auth/popup-blocked':          'Your browser blocked the sign-in window. Allow pop-ups for this site and try again.',
+    'auth/cancelled-popup-request': '',
+    'auth/network-request-failed': 'Network problem. Check your connection and try again.',
+    'auth/unauthorized-continue-uri': 'This site is not yet allowed to receive sign-in links. Add the domain under Firebase Console \u2192 Authentication \u2192 Settings \u2192 Authorised domains.',
+    'auth/account-exists-with-different-credential': 'This email is already registered with a different sign-in method. Use the method you first signed up with (Google, GitHub or email link).',
+    'auth/internal-error':         'Sign-in could not start. Please try again; if it keeps happening, tell the site team.',
   };
   return map[code];
 }
-
-// ══════════════════════════════════════════════
-// DRAG SLIDER ENGINE
-// ══════════════════════════════════════════════
-function makeDragSlider(trackId, fillId, hintId, thumbId, onComplete) {
-  const track = document.getElementById(trackId);
-  const fill  = document.getElementById(fillId);
-  const hint  = document.getElementById(hintId);
-  const thumb = document.getElementById(thumbId);
-  let dragging = false, startX = 0, maxX = 0, locked = false;
-  const THRESHOLD = 0.86;
-
-  function getMax() { maxX = track.offsetWidth - thumb.offsetWidth - 12; }
-  function setPos(px) {
-    const c = Math.max(0, Math.min(px, maxX));
-    thumb.style.left = (6 + c) + 'px';
-    fill.style.width = (c + thumb.offsetWidth) + 'px';
-    hint.style.opacity = Math.max(0, 1 - (c / maxX) * 2.5);
-    return c;
-  }
-  function reset() {
-    if (locked) return;
-    thumb.classList.add('snap');
-    thumb.style.left = '6px'; fill.style.width = '0'; hint.style.opacity = '1';
-    thumb.textContent = '→'; thumb.className = 'drag-thumb snap';
-    fill.className = 'drag-fill'; track.className = 'drag-track';
-    setTimeout(() => thumb.classList.remove('snap'), 400);
-  }
-  function trigger() {
-    locked = true;
-    thumb.className = 'drag-thumb loading'; thumb.textContent = ''; hint.style.opacity = '0';
-    onComplete(
-      () => { thumb.className = 'drag-thumb granted snap'; thumb.textContent = '✓'; fill.className = 'drag-fill full'; track.className = 'drag-track success-state'; spawnParticles(thumb, true); },
-      () => { thumb.className = 'drag-thumb denied'; thumb.textContent = '✗'; fill.className = 'drag-fill red'; track.className = 'drag-track error-state'; spawnParticles(thumb, false); document.querySelector('.right-panel').classList.add('glitching'); setTimeout(() => { document.querySelector('.right-panel').classList.remove('glitching'); locked = false; reset(); }, 1800); }
-    );
-  }
-  thumb.addEventListener('mousedown', e => { if(locked)return; e.preventDefault(); dragging=true; getMax(); startX=e.clientX-(parseFloat(thumb.style.left||'6')-6); thumb.classList.remove('snap'); });
-  document.addEventListener('mousemove', e => { if(!dragging||locked)return; const pos=setPos(e.clientX-startX); if(pos/maxX>=THRESHOLD){dragging=false;setPos(maxX);trigger();} });
-  document.addEventListener('mouseup', ()=>{ if(!dragging)return; dragging=false; if(!locked)reset(); });
-  thumb.addEventListener('touchstart', e=>{ if(locked)return; e.preventDefault(); dragging=true; getMax(); startX=e.touches[0].clientX-(parseFloat(thumb.style.left||'6')-6); },{passive:false});
-  document.addEventListener('touchmove', e=>{ if(!dragging||locked)return; e.preventDefault(); const pos=setPos(e.touches[0].clientX-startX); if(pos/maxX>=THRESHOLD){dragging=false;setPos(maxX);trigger();} },{passive:false});
-  document.addEventListener('touchend', ()=>{ if(!dragging)return; dragging=false; if(!locked)reset(); });
-  window.addEventListener('resize', getMax);
-  window.addEventListener('load', getMax);
-}
-
-function spawnParticles(el, success) {
-  const rect = el.getBoundingClientRect();
-  const color = success ? '#c8f135' : '#ff5f56';
-  for (let i = 0; i < 14; i++) {
-    const p = document.createElement('div'); p.className = 'particle';
-    const size = Math.random()*5+3;
-    p.style.cssText = `width:${size}px;height:${size}px;background:${color};left:${rect.left+rect.width/2+(Math.random()-.5)*60}px;top:${rect.top}px;animation-duration:${Math.random()*.8+.6}s;`;
-    document.body.appendChild(p); setTimeout(()=>p.remove(),1500);
-  }
-}
-
-function showVerdict(ok, panel) {
-  const resultEl = document.getElementById(panel === 'login' ? 'loginResult' : 'signupResult');
-  if (!resultEl) return;
-  resultEl.textContent = ok ? '✓ Link sent! Check your inbox.' : '✗ Something went wrong. Try again.';
-  resultEl.className = 'drag-result show ' + (ok ? 'ok' : 'fail');
-  if (!ok) setTimeout(() => resultEl.classList.remove('show'), 2500);
-}
-
-// ── Wire login slider ──
-makeDragSlider('loginTrack','loginFill','loginHint','loginThumb',
-  (onSuccess, onFail) => {
-    const email = document.getElementById('loginEmail').value.trim();
-    if (!email) { showError('Please enter your email address first.'); onFail(); return; }
-    window.showTsOverlay(async () => {
-      try { await doSendLoginLink(); onSuccess(); showVerdict(true, 'login'); }
-      catch(e) { onFail(); }
-    });
-  }
-);
-
-// ── Wire signup slider ──
-makeDragSlider('signupTrack','signupFill','signupHint','signupThumb',
-  (onSuccess, onFail) => {
-    const name  = document.getElementById('signupName').value.trim();
-    const email = document.getElementById('signupEmail').value.trim();
-    if (!name || !email) { showError('Please fill in your name and email first.'); onFail(); return; }
-    window.showTsOverlay(async () => {
-      try { await doSendSignupLink(); onSuccess(); showVerdict(true, 'signup'); }
-      catch(e) { onFail(); }
-    });
-  }
-);
 
 </script>
 

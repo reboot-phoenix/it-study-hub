@@ -15,6 +15,13 @@ RAZORPAY_KEY_ID = "rzp_test_TCbxQ8kFJk4J53"
 # for more headroom use a hosted Judge0 and `npx wrangler secret put JUDGE0_KEY` (RapidAPI key).
 JUDGE0_URL = "https://ce.judge0.com"
 
+# Email-code sign-in. EMAIL_FROM must be an address on a domain you have verified with your email service
+# (Resend by default). Secrets, set with `npx wrangler secret put <NAME>`:
+#   OTP_SECRET        any long random string (for example the output of: openssl rand -hex 32)
+#   TURNSTILE_SECRET  the secret key of your Turnstile widget (Cloudflare dashboard > Turnstile)
+#   RESEND_API_KEY    from resend.com > API Keys
+EMAIL_FROM = "IT Study Hub <login@itstudyhub.dpdns.org>"
+
 # Secrets are NOT stored here. Set them with:
 #   npx wrangler secret put RAZORPAY_KEY_SECRET
 #   npx wrangler secret put RAZORPAY_WEBHOOK_SECRET

@@ -28,6 +28,7 @@ async function idToken(uid, overrides = {}, signWith = fb.privateKey) {
 
 // ── mock world ──
 const env = {
+  OTP_SECRET: "otp-test-secret", TURNSTILE_SECRET: "ts-secret", EMAIL_FROM: "IT Study Hub <login@itstudyhub.test>", RESEND_API_KEY: "re_test",
   RAZORPAY_KEY_ID: "rzp_test_x", RAZORPAY_KEY_SECRET: "keysecret", RAZORPAY_WEBHOOK_SECRET: "whsecret",
   FIREBASE_SERVICE_ACCOUNT: JSON.stringify({ client_email: "svc@it-study-hub.iam.gserviceaccount.com", private_key: saPem }),
   ASSETS: { fetch: async () => new Response("asset") },
@@ -45,10 +46,11 @@ env.PREMIUM.store.set("lesson:java:7", JSON.stringify({ body: "SECRET JAVA 7" })
 env.PREMIUM.store.set("pdf:BCA-421 JAVA-97-131.pdf", "%PDF-secret");
 let users, payments, orders, ledger, orderSeq, lastFsAuth, lb, listPageSize = 300;
 let judge0Calls = [];
+let codes = {}, authUsers = {}, emailsSent = [], turnstileCalls = [], emailFails = false, idtSeq = 0;
 // ── typed-value helpers for the Firestore mock ──
 let beforePatch = null;
 function toTyped(key, v) {
-  if (["planExpiresAt", "planActivatedAt"].includes(key) && typeof v === "string") return { timestampValue: v };
+  if (["planExpiresAt", "planActivatedAt", "expiresAt", "sentAt", "windowStart"].includes(key) && typeof v === "string") return { timestampValue: v };
   if (typeof v === "boolean") return { booleanValue: v };
   if (typeof v === "number") return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
   if (typeof v === "string") return { stringValue: v };
@@ -68,7 +70,7 @@ function fromTyped(tv) {
 
 function reset() {
   users = { alice: { plan: "" }, bob: { plan: "" }, carol: { plan: "elite" } };
-  payments = {}; orders = {}; ledger = {}; orderSeq = 0; lb = {}; listPageSize = 300; judge0Calls = [];
+  payments = {}; orders = {}; ledger = {}; orderSeq = 0; lb = {}; listPageSize = 300; judge0Calls = []; codes = {}; authUsers = {}; emailsSent = []; turnstileCalls = []; emailFails = false; idtSeq = 0;
 }
 reset();
 
@@ -89,6 +91,21 @@ globalThis.fetch = async (input, init = {}) => {
     if (src.includes("EMOJI")) return J({ stdout: b64("héllo 🌍\n"), status: { description: "Accepted" }, time: "0.01", memory: 1024 });
     const stdin = Buffer.from(body.stdin || "", "base64").toString("utf8");
     return J({ stdout: b64("ran lang " + body.language_id + " stdin=" + stdin), status: { description: "Accepted" }, time: "0.02", memory: 2048 });
+  }
+  if (url === "https://challenges.cloudflare.com/turnstile/v0/siteverify") {
+    const p = new URLSearchParams(init.body); turnstileCalls.push(Object.fromEntries(p));
+    return J(p.get("response") === "ts-ok" && p.get("secret") === "ts-secret" ? { success: true, hostname: "x.test" } : { success: false, "error-codes": ["invalid-input-response"] });
+  }
+  if (url === "https://api.resend.com/emails") {
+    if (emailFails) return J({ message: "nope" }, 500);
+    const body = JSON.parse(init.body); assert.equal(init.headers.Authorization, "Bearer re_test");
+    emailsSent.push(body); return J({ id: "em_1" });
+  }
+  if (url.startsWith("https://identitytoolkit.googleapis.com/v1/projects/it-study-hub/")) {
+    assert.equal(init.headers.Authorization, "Bearer tok");
+    const body = JSON.parse(init.body);
+    if (url.endsWith("/accounts:lookup")) { const u = authUsers[body.email[0]]; return J(u ? { users: [{ localId: u.localId, email: u.email }] } : { kind: "x" }); }
+    if (url.endsWith("/accounts")) { const localId = "uid-new-" + ++idtSeq; authUsers[body.email] = { localId, email: body.email, emailVerified: body.emailVerified, displayName: body.displayName }; return J({ localId }); }
   }
   if (url.includes("securetoken@system.gserviceaccount.com")) return J({ keys: [fbJwk] });
   if (url === "https://oauth2.googleapis.com/token") return J({ access_token: "tok", expires_in: 3600 });
@@ -131,6 +148,25 @@ globalThis.fetch = async (input, init = {}) => {
         fields: Object.fromEntries(Object.entries(doc).filter(([k]) => !k.startsWith("__")).map(([k, v]) => [k, toTyped(k, v)])),
       }));
       return J({ documents, ...(start + listPageSize < all.length ? { nextPageToken: String(start + listPageSize) } : {}) });
+    }
+    if (col === "loginCodes") {
+      if (method === "GET") {
+        if (!codes[id]) return J({}, 404);
+        const fields = {}; for (const [k, v] of Object.entries(codes[id])) if (!k.startsWith("__")) fields[k] = toTyped(k, v);
+        return J({ fields, updateTime: String(codes[id].__v || 1) });
+      }
+      if (method === "PATCH") {
+        if (beforePatch) { const hook = beforePatch; beforePatch = null; hook(codes[id]); }
+        const pre = u.searchParams.get("currentDocument.updateTime");
+        if (pre !== null && (!codes[id] || pre !== String(codes[id].__v || 1))) return J({ error: { status: "FAILED_PRECONDITION" } }, 400);
+        const f = JSON.parse(init.body).fields; codes[id] = codes[id] || {};
+        for (const k of u.searchParams.getAll("updateMask.fieldPaths")) { if (f[k]) codes[id][k] = fromTyped(f[k]); else delete codes[id][k]; }
+        codes[id].__v = (codes[id].__v || 1) + 1; return J({});
+      }
+      if (method === "DELETE") {
+        if (u.searchParams.get("currentDocument.exists") === "true" && !codes[id]) return J({ error: { status: "NOT_FOUND" } }, 404);
+        delete codes[id]; return J({});
+      }
     }
     if (col === "leaderboard" && method === "PATCH") {
       const f = JSON.parse(init.body).fields;
@@ -540,7 +576,8 @@ await test("a poisoned photoURL never reaches the leaderboard", async () => {
 });
 await test("the Worker no longer carries an IP allowlist, and /admin is just a static file", async () => {
   const src = fs.readFileSync(new URL("./worker.js", import.meta.url), "utf8");
-  assert.ok(!/CF-Connecting-IP/.test(src) && !/["']\d{1,3}\.\d{1,3}\.\d{1,3}\.["']/.test(src), "no IP allowlist in worker.js");
+  // The header is still read for rate limits and the Turnstile check; what must never come back is an allowlist of addresses.
+  assert.ok(!/startsWith\(["']\d/.test(src) && !/Access Denied/.test(src) && !/["']\d{1,3}\.\d{1,3}\.\d{1,3}\.["']/.test(src), "no IP allowlist in worker.js");
   const res = await worker.fetch(new Request("https://x.test/admin.html"), env);
   assert.equal(await res.text(), "asset");
 });
@@ -615,6 +652,128 @@ await test("a missing service-account secret gives a clear 503, not a vague fail
   const res = await fresh.fetch(new Request("https://x.test/api/access", { headers: await authed("alice") }), noSecret);
   assert.equal(res.status, 503);
   assert.match((await res.json()).error, /FIREBASE_SERVICE_ACCOUNT/);
+});
+
+console.log("email code (OTP) sign-in");
+const otpReq = async (body, ip = "10.0.0.1", extra = {}) =>
+  worker.fetch(new Request("https://x.test/api/otp/request", { method: "POST", headers: { "Content-Type": "application/json", "CF-Connecting-IP": ip, ...extra }, body: JSON.stringify(body) }), env);
+const otpVerify = async (body, ip = "10.0.0.1") =>
+  worker.fetch(new Request("https://x.test/api/otp/verify", { method: "POST", headers: { "Content-Type": "application/json", "CF-Connecting-IP": ip }, body: JSON.stringify(body) }), env);
+const lastCode = () => emailsSent.at(-1).subject.slice(0, 6);
+const decodeJwt = (jwt) => JSON.parse(Buffer.from(jwt.split(".")[1], "base64url").toString());
+let ipN = 0; const freshIp = () => `10.1.${Math.floor(++ipN / 250)}.${ipN % 250}`;
+
+await test("request: refuses to run without its secrets, and rejects bad emails and failed security checks", async () => {
+  const bare = { ...env }; delete bare.OTP_SECRET;
+  const r0 = await worker.fetch(new Request("https://x.test/api/otp/request", { method: "POST", body: JSON.stringify({ email: "a@b.edu", turnstile: "ts-ok" }) }), bare);
+  assert.equal(r0.status, 503); assert.match((await r0.json()).error, /OTP_SECRET/);
+  assert.equal((await otpReq({ email: "not an email", turnstile: "ts-ok" }, freshIp())).status, 400);
+  assert.equal((await otpReq({ email: "ana@college.edu", turnstile: "ts-bad" }, freshIp())).status, 400);
+  assert.equal((await otpReq({ email: "ana@college.edu" }, freshIp())).status, 400);
+  assert.equal(emailsSent.length, 0, "nothing was emailed");
+});
+await test("request: emails a 6-digit code (code in the subject), stores only hashes, and the Turnstile secret is checked server-side", async () => {
+  const res = await otpReq({ email: "  Ana@College.EDU ", turnstile: "ts-ok", name: "Ana" }, freshIp());
+  assert.equal(res.status, 200); assert.equal((await res.json()).resendIn, 45);
+  assert.equal(emailsSent.length, 1); const mail = emailsSent[0];
+  assert.deepEqual(mail.to, ["ana@college.edu"]); assert.equal(mail.from, "IT Study Hub <login@itstudyhub.test>");
+  assert.match(mail.subject, /^\d{6} is your IT Study Hub code$/); assert.ok(mail.text.includes(lastCode()) && mail.html.includes(lastCode()));
+  assert.equal(turnstileCalls[0].secret, "ts-secret"); assert.equal(turnstileCalls[0].response, "ts-ok");
+  const stored = Object.values(codes)[0];
+  const dump = JSON.stringify(stored);
+  assert.ok(!dump.includes(lastCode()), "the code is not stored"); assert.ok(!dump.includes("ana@college.edu"), "the address is not stored");
+  assert.match(stored.codeHash, /^[0-9a-f]{64}$/); assert.equal(stored.attempts, 0);
+  const ttl = Date.parse(stored.expiresAt) - Date.now(); assert.ok(ttl > 9 * 60000 && ttl <= 10 * 60000);
+});
+await test("request: a second ask within 45 seconds sends nothing; an hourly cap stops code spam", async () => {
+  await otpReq({ email: "bo@college.edu", turnstile: "ts-ok" }, freshIp());
+  const again = await (await otpReq({ email: "bo@college.edu", turnstile: "ts-ok" }, freshIp())).json();
+  assert.equal(emailsSent.length, 1); assert.ok(again.resendIn > 0 && again.resendIn <= 45);
+  const doc = Object.values(codes)[0]; doc.sentAt = new Date(Date.now() - 60000).toISOString(); doc.sends = 5;   // pretend 5 already went out this hour
+  assert.equal((await otpReq({ email: "bo@college.edu", turnstile: "ts-ok" }, freshIp())).status, 429);
+  assert.equal(emailsSent.length, 1);
+});
+await test("request: one network address is limited, and an email-provider failure leaves nothing behind", async () => {
+  const ip = "10.9.9.9";
+  for (let i = 0; i < 20; i++) assert.equal((await otpReq({ email: `u${i}@college.edu`, turnstile: "ts-ok" }, ip)).status, 200);
+  assert.equal((await otpReq({ email: "one-more@college.edu", turnstile: "ts-ok" }, ip)).status, 429);
+  emailFails = true;
+  const bad = await otpReq({ email: "fail@college.edu", turnstile: "ts-ok" }, freshIp());
+  assert.equal(bad.status, 502); assert.match((await bad.json()).error, /Google or GitHub/);
+  const failId = Object.keys(codes).length; assert.equal(failId, 20, "the failed request's record was removed");
+});
+await test("request: with no email provider configured the error says what is missing", async () => {
+  const noMail = { ...env }; delete noMail.RESEND_API_KEY;
+  const r = await worker.fetch(new Request("https://x.test/api/otp/request", { method: "POST", headers: { "CF-Connecting-IP": freshIp() }, body: JSON.stringify({ email: "x@college.edu", turnstile: "ts-ok" }) }), noMail);
+  assert.equal(r.status, 503); assert.match((await r.json()).error, /email sending is not configured/);
+});
+
+await test("verify: the right code signs a NEW person in, creating their account with a verified email and name", async () => {
+  await otpReq({ email: "new@college.edu", turnstile: "ts-ok", name: "Nia Rao" }, freshIp());
+  const code = lastCode();
+  const res = await otpVerify({ email: "NEW@college.edu", code }, freshIp());
+  const data = await res.json();
+  assert.equal(res.status, 200); assert.equal(data.isNew, true);
+  const u = authUsers["new@college.edu"]; assert.equal(u.emailVerified, true); assert.equal(u.displayName, "Nia Rao");
+  // the token is a Firebase custom token, signed by the service account
+  const [h, p, sig] = data.token.split(".");
+  const ok = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", sa.publicKey, Buffer.from(sig, "base64url"), enc.encode(h + "." + p));
+  assert.ok(ok, "signature verifies with the service account's public key");
+  const c = decodeJwt(data.token);
+  assert.equal(c.uid, u.localId); assert.equal(c.iss, "svc@it-study-hub.iam.gserviceaccount.com"); assert.equal(c.sub, c.iss);
+  assert.equal(c.aud, "https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit"); assert.ok(c.exp - c.iat <= 3600);
+  assert.equal(Object.keys(codes).length, 0, "the code is gone after use");
+});
+await test("verify: someone who already has an account (Google, GitHub, old links) lands in the SAME account", async () => {
+  authUsers["old@college.edu"] = { localId: "uid-existing", email: "old@college.edu" };
+  await otpReq({ email: "old@college.edu", turnstile: "ts-ok" }, freshIp());
+  const data = await (await otpVerify({ email: "old@college.edu", code: lastCode() }, freshIp())).json();
+  assert.equal(data.isNew, false); assert.equal(decodeJwt(data.token).uid, "uid-existing");
+  assert.equal(idtSeq, 0, "no duplicate account was created");
+});
+await test("verify: a used code cannot be used twice", async () => {
+  await otpReq({ email: "once@college.edu", turnstile: "ts-ok" }, freshIp()); const code = lastCode();
+  assert.equal((await otpVerify({ email: "once@college.edu", code }, freshIp())).status, 200);
+  const again = await otpVerify({ email: "once@college.edu", code }, freshIp());
+  assert.equal(again.status, 400); assert.match((await again.json()).error, /expired/);
+});
+await test("verify: wrong codes count down, and after five the code is dead even if the right one is then typed", async () => {
+  await otpReq({ email: "guess@college.edu", turnstile: "ts-ok" }, freshIp());
+  const right = lastCode(); const wrong = right === "000000" ? "111111" : "000000";
+  const first = await otpVerify({ email: "guess@college.edu", code: wrong }, freshIp());
+  assert.equal(first.status, 400); assert.match((await first.json()).error, /4 tries left/);
+  for (let i = 0; i < 3; i++) await otpVerify({ email: "guess@college.edu", code: wrong }, freshIp());
+  const last = await otpVerify({ email: "guess@college.edu", code: wrong }, freshIp());
+  assert.equal(last.status, 400); assert.match((await last.json()).error, /request a new code/);
+  const afterwards = await otpVerify({ email: "guess@college.edu", code: right }, freshIp());
+  assert.equal(afterwards.status, 400); assert.equal(Object.keys(authUsers).includes("guess@college.edu"), false, "no account was created");
+});
+await test("verify: expired codes, unknown emails and malformed input are all refused", async () => {
+  await otpReq({ email: "late@college.edu", turnstile: "ts-ok" }, freshIp()); const code = lastCode();
+  Object.values(codes)[0].expiresAt = new Date(Date.now() - 1000).toISOString();
+  const exp = await otpVerify({ email: "late@college.edu", code }, freshIp());
+  assert.equal(exp.status, 400); assert.match((await exp.json()).error, /expired/);
+  assert.equal((await otpVerify({ email: "nobody@college.edu", code: "123456" }, freshIp())).status, 400);
+  assert.equal((await otpVerify({ email: "late@college.edu", code: "12345" }, freshIp())).status, 400);
+  assert.equal((await otpVerify({ email: "late@college.edu", code: "abcdef" }, freshIp())).status, 400);
+  assert.equal((await otpVerify({ email: "bad", code: "123456" }, freshIp())).status, 400);
+});
+await test("verify: parallel guesses take turns, so a guess made at the same moment is still counted", async () => {
+  await otpReq({ email: "race@college.edu", turnstile: "ts-ok" }, freshIp()); const right = lastCode();
+  const wrong = right === "000000" ? "111111" : "000000";
+  beforePatch = (doc) => { doc.attempts = 2; doc.__v = (doc.__v || 1) + 1; };   // another guess lands between our read and write
+  await otpVerify({ email: "race@college.edu", code: wrong }, freshIp());
+  assert.equal(Object.values(codes)[0].attempts, 3, "their guess and ours both count");
+});
+await test("verify: verification is rate-limited per network address", async () => {
+  const ip = "10.8.8.8";
+  for (let i = 0; i < 60; i++) await otpVerify({ email: "x@college.edu", code: "123456" }, ip);
+  assert.equal((await otpVerify({ email: "x@college.edu", code: "123456" }, ip)).status, 429);
+});
+await test("codes look random: always six digits, with leading zeros kept", async () => {
+  const seen = new Set();
+  for (let i = 0; i < 40; i++) { await otpReq({ email: `r${i}@college.edu`, turnstile: "ts-ok" }, freshIp()); seen.add(lastCode()); }
+  assert.ok([...seen].every((c) => /^\d{6}$/.test(c))); assert.ok(seen.size > 35, "no repeats pattern");
 });
 
 console.log("routing");
