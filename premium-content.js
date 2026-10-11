@@ -59,7 +59,12 @@
     if (!accessPromise) {
       accessPromise = (async () => {
         const res = await apiGet('/api/access');
-        if (!res.ok) { accessPromise = null; return false; }   // retry next time
+        if (!res.ok) {
+          accessPromise = null;   // retry next time
+          let why = ''; try { why = (await res.json()).error || ''; } catch (e) {}
+          console.warn('Premium check failed (' + res.status + '): ' + (why || 'no details') + '. Premium content stays locked until this works.');
+          return false;
+        }
         const data = await res.json().catch(() => ({}));
         const premium = data.premium === true;
         const changed = premium !== window.__ishPremium;

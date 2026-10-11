@@ -98,7 +98,7 @@
   <div class="fade-up" class="anim-delay-25">
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
-      <a href="https://github.com/esd-project-tiu/it-study-hub/raw/main/pdf/python.pdf" target="_blank" class="mat-item">
+      <a href="/pdf/python.pdf" target="_blank" class="mat-item">
         <div class="mat-icon"><i class="ti ti-file-text" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
         <div class="mat-info"><div class="mat-title">Python Basics Cheat Sheet</div><div class="mat-desc">Variables, Loops, Functions · Free</div></div>
         <span class="mat-action">↓ Download</span>
@@ -153,7 +153,6 @@
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
 
 <script>
-const ADMIN_EMAIL = 'itstudyhub.tiu@gmail.com';
 function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){return null;}}
 function isPremium(){ return window.__ishPremium === true; } // set by premium-content.js from /api/access
 function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_python_done')||'[]');}catch(e){return[];}}

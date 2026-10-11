@@ -607,6 +607,16 @@ await test("run: runner timeouts, quota errors and failures become clear, safe m
   assert.equal(t3.status, 502); assert.ok(!JSON.stringify(await t3.json()).includes("boom"), "upstream details are not leaked");
 });
 
+console.log("setup diagnostics");
+await test("a missing service-account secret gives a clear 503, not a vague failure", async () => {
+  const fresh = (await import("./worker.js?fresh=" + Date.now())).default;      // new module instance: empty token cache
+  const noSecret = { ...env }; delete noSecret.FIREBASE_SERVICE_ACCOUNT;
+  users.alice = { plan: "pro" };
+  const res = await fresh.fetch(new Request("https://x.test/api/access", { headers: await authed("alice") }), noSecret);
+  assert.equal(res.status, 503);
+  assert.match((await res.json()).error, /FIREBASE_SERVICE_ACCOUNT/);
+});
+
 console.log("routing");
 await test("unknown API route is 404, other paths fall through to static assets", async () => {
   assert.equal((await call("/api/nope", {}, {}, "POST")).status, 404);

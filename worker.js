@@ -143,7 +143,7 @@ let tokenCache = { token: null, exp: 0 };
 
 export async function getAccessToken(env) {
   if (tokenCache.token && Date.now() < tokenCache.exp) return tokenCache.token;
-  if (!env.FIREBASE_SERVICE_ACCOUNT) throw new Error("FIREBASE_SERVICE_ACCOUNT is not set");
+  if (!env.FIREBASE_SERVICE_ACCOUNT) throw new HttpError(503, "Server setup incomplete: the FIREBASE_SERVICE_ACCOUNT secret is not set on the Worker");
   const sa = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT);
 
   const pem = sa.private_key.replace(/-----(BEGIN|END) PRIVATE KEY-----/g, "").replace(/\s+/g, "");
