@@ -94,7 +94,10 @@ globalThis.fetch = async (input, init = {}) => {
   }
   if (url === "https://challenges.cloudflare.com/turnstile/v0/siteverify") {
     const p = new URLSearchParams(init.body); turnstileCalls.push(Object.fromEntries(p));
-    return J(p.get("response") === "ts-ok" && p.get("secret") === "ts-secret" ? { success: true, hostname: "x.test" } : { success: false, "error-codes": ["invalid-input-response"] });
+    if (p.get("secret") !== "ts-secret") return J({ success: false, "error-codes": ["invalid-input-secret"] });
+    if (p.get("response") === "ts-other-host") return J({ success: true, hostname: "somewhere-else.example" });
+    if (p.get("response") === "ts-used") return J({ success: false, "error-codes": ["timeout-or-duplicate"] });
+    return J(p.get("response") === "ts-ok" ? { success: true, hostname: "x.test" } : { success: false, "error-codes": ["invalid-input-response"] });
   }
   if (url === "https://api.resend.com/emails") {
     if (emailFails) return J({ message: "nope" }, 500);
@@ -774,6 +777,49 @@ await test("codes look random: always six digits, with leading zeros kept", asyn
   const seen = new Set();
   for (let i = 0; i < 40; i++) { await otpReq({ email: `r${i}@college.edu`, turnstile: "ts-ok" }, freshIp()); seen.add(lastCode()); }
   assert.ok([...seen].every((c) => /^\d{6}$/.test(c))); assert.ok(seen.size > 35, "no repeats pattern");
+});
+
+console.log("setup status");
+const statusOf = async (e) => { const r = await worker.fetch(new Request("https://x.test/api/setup-status"), e); const body = await r.json(); return { status: r.status, body, text: JSON.stringify(body) }; };
+await test("setup-status: shows ok/missing/invalid for each item, and never a secret value", async () => {
+  const full = await statusOf(env);
+  assert.equal(full.status, 200); assert.equal(full.body.emailCodeLoginReady, true); assert.equal(full.body.checks.OTP_SECRET, "ok");
+  for (const secret of [env.OTP_SECRET, env.TURNSTILE_SECRET, env.RESEND_API_KEY, env.FIREBASE_SERVICE_ACCOUNT, env.RAZORPAY_KEY_SECRET]) assert.ok(!full.text.includes(secret), "no secret value is shown");
+  const partial = { ...env }; delete partial.TURNSTILE_SECRET; delete partial.RESEND_API_KEY; partial.FIREBASE_SERVICE_ACCOUNT = "{half pasted";
+  const p = await statusOf(partial);
+  assert.equal(p.body.checks.TURNSTILE_SECRET, "missing"); assert.equal(p.body.checks.FIREBASE_SERVICE_ACCOUNT, "invalid");
+  assert.match(p.body.checks.EMAIL_SENDING, /missing/); assert.equal(p.body.emailCodeLoginReady, false); assert.equal(p.body.checks.OTP_SECRET, "ok");
+  const none = await statusOf({ ASSETS: env.ASSETS });
+  assert.equal(none.body.checks.FIREBASE_SERVICE_ACCOUNT, "missing"); assert.equal(none.body.checks.PREMIUM_STORAGE_KV, "missing");
+});
+await test("otp request names exactly the secret that is missing", async () => {
+  const noTs = { ...env }; delete noTs.TURNSTILE_SECRET;
+  const r = await worker.fetch(new Request("https://x.test/api/otp/request", { method: "POST", body: JSON.stringify({ email: "a@b.edu", turnstile: "x" }) }), noTs);
+  const msg = (await r.json()).error;
+  assert.equal(r.status, 503); assert.match(msg, /TURNSTILE_SECRET is not set/); assert.ok(!/OTP_SECRET/.test(msg), "does not blame the one that is fine");
+  const neither = { ...env }; delete neither.TURNSTILE_SECRET; delete neither.OTP_SECRET;
+  assert.match((await (await worker.fetch(new Request("https://x.test/api/otp/request", { method: "POST", body: "{}" }), neither)).json()).error, /OTP_SECRET and TURNSTILE_SECRET are not set/);
+});
+
+console.log("security-check diagnostics");
+await test("a wrong Turnstile secret is named, with a plain-words fix", async () => {
+  const wrong = { ...env, TURNSTILE_SECRET: "secret-from-another-widget" };
+  const r = await worker.fetch(new Request("https://x.test/api/otp/request", { method: "POST", headers: { "CF-Connecting-IP": "10.7.7.7" }, body: JSON.stringify({ email: "a@college.edu", turnstile: "ts-ok" }) }), wrong);
+  const msg = (await r.json()).error;
+  assert.equal(r.status, 400); assert.match(msg, /invalid-input-secret/); assert.match(msg, /TURNSTILE_SECRET is wrong/);
+  assert.equal(emailsSent.length, 0);
+});
+await test("reused and wrong-site checks get their own explanations, and nothing is emailed", async () => {
+  const send = async (token, ip) => (await (await otpReq({ email: "z@college.edu", turnstile: token }, ip)).json()).error;
+  assert.match(await send("ts-used", "10.7.7.8"), /expired or was already used/);
+  assert.match(await send("ts-other-host", "10.7.7.9"), /hostname-mismatch:somewhere-else.example.*different website address/);
+  assert.match(await send("junk", "10.7.7.10"), /did not finish/);
+  assert.equal(emailsSent.length, 0);
+});
+await test("setup-status tells you when Cloudflare rejects the Turnstile secret itself", async () => {
+  const wrong = await statusOf({ ...env, TURNSTILE_SECRET: "nope" });
+  assert.match(wrong.body.checks.TURNSTILE_SECRET, /wrong/); assert.equal(wrong.body.emailCodeLoginReady, false);
+  assert.equal((await statusOf(env)).body.checks.TURNSTILE_SECRET, "ok");
 });
 
 console.log("routing");

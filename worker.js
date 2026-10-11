@@ -575,16 +575,29 @@ function normaliseEmail(raw) {
 }
 
 async function verifyTurnstile(env, token, request) {
-  if (typeof token !== "string" || !token || token.length > 2048) return false;
+  if (typeof token !== "string" || !token || token.length > 2048) return { ok: false, codes: ["missing-input-response"] };
   try {
     const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
       method: "POST",
       body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token, remoteip: request.headers.get("CF-Connecting-IP") || "" }),
     });
-    if (!res.ok) return false;
+    if (!res.ok) return { ok: false, codes: ["siteverify-http-" + res.status] };
     const data = await res.json();
-    return data.success === true && (!data.hostname || data.hostname === new URL(request.url).hostname);
-  } catch { return false; }
+    if (data.success !== true) return { ok: false, codes: data["error-codes"]?.length ? data["error-codes"] : ["unknown"] };
+    const host = new URL(request.url).hostname;
+    if (data.hostname && data.hostname !== host) return { ok: false, codes: ["hostname-mismatch:" + data.hostname] };
+    return { ok: true, codes: [] };
+  } catch { return { ok: false, codes: ["siteverify-unreachable"] }; }
+}
+
+// Plain-words hint for the site owner, shown with Cloudflare's own reason code.
+function turnstileHint(codes) {
+  const c = codes.join(" ");
+  if (/invalid-input-secret|missing-input-secret/.test(c)) return "The Worker's TURNSTILE_SECRET is wrong, or belongs to a different Turnstile widget than this page uses.";
+  if (/timeout-or-duplicate/.test(c)) return "The check expired or was already used. Please try again.";
+  if (/hostname-mismatch/.test(c)) return "The check was solved on a different website address than this one.";
+  if (/missing-input-response|invalid-input-response/.test(c)) return "The check did not finish. Please try again.";
+  return "Please try again.";
 }
 
 async function sendOtpEmail(env, to, code) {
@@ -654,7 +667,38 @@ async function getOrCreateAuthUser(env, email, name) {
 }
 
 function needOtpSecrets(env) {
-  if (!env.OTP_SECRET || !env.TURNSTILE_SECRET) throw new HttpError(503, "Server setup incomplete: OTP_SECRET and TURNSTILE_SECRET are not set on the Worker");
+  const missing = ["OTP_SECRET", "TURNSTILE_SECRET"].filter((k) => !env[k]);
+  if (missing.length) throw new HttpError(503, `Server setup incomplete: ${missing.join(" and ")} ${missing.length > 1 ? "are" : "is"} not set on the Worker`);
+}
+
+// A public, value-free checklist of what the Worker can see (ok / missing / invalid), so setup mistakes are easy to find.
+// Visit /api/setup-status in a browser. It never shows a secret's value.
+async function setupStatusRoute(request, env) {
+  const has = (k) => (typeof env[k] === "string" ? env[k].trim().length > 0 : !!env[k]);
+  const simple = (k) => (has(k) ? "ok" : "missing");
+  let serviceAccount = "missing";
+  if (has("FIREBASE_SERVICE_ACCOUNT")) {
+    try { const sa = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT); serviceAccount = sa.client_email && sa.private_key ? "ok" : "invalid"; }
+    catch { serviceAccount = "invalid"; }       // usually a half-pasted JSON file
+  }
+  let turnstile = simple("TURNSTILE_SECRET");
+  if (turnstile === "ok") {
+    // A made-up answer with the real secret: Cloudflare says "invalid-input-secret" only if the secret itself is wrong.
+    const probe = await verifyTurnstile(env, "setup-check", request);
+    if (probe.codes.some((c) => /secret/.test(c))) turnstile = "wrong: Cloudflare rejected this secret";
+  }
+  const checks = {
+    OTP_SECRET: simple("OTP_SECRET"),
+    TURNSTILE_SECRET: turnstile,
+    FIREBASE_SERVICE_ACCOUNT: serviceAccount,
+    EMAIL_FROM: simple("EMAIL_FROM"),
+    EMAIL_SENDING: env.EMAIL?.send || has("RESEND_API_KEY") ? "ok" : "missing (RESEND_API_KEY)",
+    RAZORPAY_KEY_SECRET: simple("RAZORPAY_KEY_SECRET"),
+    RAZORPAY_WEBHOOK_SECRET: simple("RAZORPAY_WEBHOOK_SECRET"),
+    PREMIUM_STORAGE_KV: env.PREMIUM ? "ok" : "missing",
+  };
+  const loginReady = ["OTP_SECRET", "TURNSTILE_SECRET", "FIREBASE_SERVICE_ACCOUNT", "EMAIL_FROM", "EMAIL_SENDING"].every((k) => checks[k] === "ok");
+  return json({ emailCodeLoginReady: loginReady, checks });
 }
 
 async function otpRequestRoute(request, env) {
@@ -663,7 +707,8 @@ async function otpRequestRoute(request, env) {
   if (!allowHit("otp-req:" + ip, 20, 3600000)) throw new HttpError(429, "Too many requests from your network. Please try again later.");
   const body = await readJson(request);
   const email = normaliseEmail(body.email);
-  if (!(await verifyTurnstile(env, body.turnstile, request))) throw new HttpError(400, "The security check failed. Please try again.");
+  const human = await verifyTurnstile(env, body.turnstile, request);
+  if (!human.ok) throw new HttpError(400, `The security check failed (${human.codes.join(", ")}). ${turnstileHint(human.codes)}`);
 
   const id = await sha256Hex(email);          // the record is keyed by a hash, so no address list is kept
   const path = `loginCodes/${id}`;
@@ -880,6 +925,7 @@ const ROUTES = {
   "GET /api/lesson": lessonRoute,
   "GET /api/pdf": pdfRoute,
   "POST /api/award-xp": awardXpRoute,
+  "GET /api/setup-status": setupStatusRoute,
   "POST /api/otp/request": otpRequestRoute,
   "POST /api/otp/verify": otpVerifyRoute,
   "POST /api/run": runRoute,
