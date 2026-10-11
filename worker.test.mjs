@@ -46,7 +46,7 @@ env.PREMIUM.store.set("lesson:java:7", JSON.stringify({ body: "SECRET JAVA 7" })
 env.PREMIUM.store.set("pdf:BCA-421 JAVA-97-131.pdf", "%PDF-secret");
 let users, payments, orders, ledger, orderSeq, lastFsAuth, lb, listPageSize = 300;
 let judge0Calls = [];
-let codes = {}, authUsers = {}, emailsSent = [], turnstileCalls = [], emailFails = false, idtSeq = 0;
+let codes = {}, authUsers = {}, emailsSent = [], turnstileCalls = [], emailFails = false, idtSeq = 0, relayCalls = [], relayMode = "ok";
 // ── typed-value helpers for the Firestore mock ──
 let beforePatch = null;
 function toTyped(key, v) {
@@ -70,7 +70,7 @@ function fromTyped(tv) {
 
 function reset() {
   users = { alice: { plan: "" }, bob: { plan: "" }, carol: { plan: "elite" } };
-  payments = {}; orders = {}; ledger = {}; orderSeq = 0; lb = {}; listPageSize = 300; judge0Calls = []; codes = {}; authUsers = {}; emailsSent = []; turnstileCalls = []; emailFails = false; idtSeq = 0;
+  payments = {}; orders = {}; ledger = {}; orderSeq = 0; lb = {}; listPageSize = 300; judge0Calls = []; codes = {}; authUsers = {}; emailsSent = []; turnstileCalls = []; emailFails = false; idtSeq = 0; relayCalls = []; relayMode = "ok";
 }
 reset();
 
@@ -98,6 +98,13 @@ globalThis.fetch = async (input, init = {}) => {
     if (p.get("response") === "ts-other-host") return J({ success: true, hostname: "somewhere-else.example" });
     if (p.get("response") === "ts-used") return J({ success: false, "error-codes": ["timeout-or-duplicate"] });
     return J(p.get("response") === "ts-ok" ? { success: true, hostname: "x.test" } : { success: false, "error-codes": ["invalid-input-response"] });
+  }
+  if (url === "https://script.google.com/macros/s/TESTID/exec") {
+    const body = JSON.parse(init.body); relayCalls.push(body);
+    if (relayMode === "quota") return J({ ok: false, error: "quota" });
+    if (relayMode === "down") return J({ ok: false, error: "error" });
+    if (body.secret !== "relay-secret") return J({ ok: false, error: "forbidden" });
+    emailsSent.push({ subject: `${body.code} is your IT Study Hub code`, to: [body.to], viaRelay: true }); return J({ ok: true });
   }
   if (url === "https://api.resend.com/emails") {
     if (emailFails) return J({ message: "nope" }, 500);
@@ -820,6 +827,37 @@ await test("setup-status tells you when Cloudflare rejects the Turnstile secret 
   const wrong = await statusOf({ ...env, TURNSTILE_SECRET: "nope" });
   assert.match(wrong.body.checks.TURNSTILE_SECRET, /wrong/); assert.equal(wrong.body.emailCodeLoginReady, false);
   assert.equal((await statusOf(env)).body.checks.TURNSTILE_SECRET, "ok");
+});
+
+console.log("email via Gmail relay (no domain needed)");
+await test("relay: when configured it is used instead of any other provider, and only the code travels", async () => {
+  const relayEnv = { ...env, MAIL_RELAY_URL: "https://script.google.com/macros/s/TESTID/exec", MAIL_RELAY_SECRET: "relay-secret" };
+  const res = await worker.fetch(new Request("https://x.test/api/otp/request", { method: "POST", headers: { "CF-Connecting-IP": freshIp() }, body: JSON.stringify({ email: "relay@college.edu", turnstile: "ts-ok" }) }), relayEnv);
+  assert.equal(res.status, 200);
+  assert.equal(relayCalls.length, 1); assert.deepEqual(Object.keys(relayCalls[0]).sort(), ["code", "secret", "to"], "no subject, body or HTML is sent: the script writes the email itself");
+  assert.match(relayCalls[0].code, /^\d{6}$/); assert.equal(relayCalls[0].to, "relay@college.edu");
+  assert.equal(emailsSent[0].viaRelay, true, "Resend was not used");
+  // and the code that was emailed really signs the person in
+  const v = await otpVerify({ email: "relay@college.edu", code: relayCalls[0].code }, freshIp());
+  assert.equal(v.status, 200);
+});
+await test("relay: a full daily quota gives a clear message, and a broken relay a safe one; nothing is left behind", async () => {
+  const relayEnv = { ...env, MAIL_RELAY_URL: "https://script.google.com/macros/s/TESTID/exec", MAIL_RELAY_SECRET: "relay-secret" };
+  const ask = (email) => worker.fetch(new Request("https://x.test/api/otp/request", { method: "POST", headers: { "CF-Connecting-IP": freshIp() }, body: JSON.stringify({ email, turnstile: "ts-ok" }) }), relayEnv);
+  relayMode = "quota"; const q = await ask("q@college.edu");
+  assert.equal(q.status, 503); assert.match((await q.json()).error, /Google or GitHub/);
+  relayMode = "down"; const d = await ask("d@college.edu");
+  assert.equal(d.status, 502); assert.ok(!JSON.stringify(await d.json()).includes("forbidden"));
+  assert.equal(Object.keys(codes).length, 0, "failed sends leave no code record");
+  const wrong = { ...relayEnv, MAIL_RELAY_SECRET: "not-the-secret" };
+  const f = await worker.fetch(new Request("https://x.test/api/otp/request", { method: "POST", headers: { "CF-Connecting-IP": freshIp() }, body: JSON.stringify({ email: "f@college.edu", turnstile: "ts-ok" }) }), wrong);
+  assert.equal(f.status, 502);
+});
+await test("relay: the Apps Script only sends a sign-in code, checks the secret, and has no way to send other text", async () => {
+  const gs = fs.readFileSync(new URL("./mail-relay.gs", import.meta.url), "utf8");
+  assert.match(gs, /d\.secret !== SECRET/); assert.match(gs, /\^\\d\{6\}\$/); assert.match(gs, /getRemainingDailyQuota/);
+  assert.ok(!/d\.(subject|body|html|text)\b/.test(gs), "the script never takes the subject or body from the request");
+  assert.match(gs, /Who has access|Anyone/);
 });
 
 console.log("routing");

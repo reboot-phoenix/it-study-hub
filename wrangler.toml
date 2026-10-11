@@ -19,7 +19,8 @@ JUDGE0_URL = "https://ce.judge0.com"
 # (Resend by default). Secrets, set with `npx wrangler secret put <NAME>`:
 #   OTP_SECRET        any long random string (for example the output of: openssl rand -hex 32)
 #   TURNSTILE_SECRET  the secret key of your Turnstile widget (Cloudflare dashboard > Turnstile)
-#   RESEND_API_KEY    from resend.com > API Keys
+#   MAIL_RELAY_URL / MAIL_RELAY_SECRET   from mail-relay.gs (Google Apps Script, sends from your Gmail; no domain needed)
+#   (or RESEND_API_KEY + EMAIL_FROM, but Resend needs a domain you own)
 EMAIL_FROM = "IT Study Hub <login@itstudyhub.dpdns.org>"
 
 # Secrets are NOT stored here. Set them with:

@@ -26,7 +26,9 @@
 // Secrets for email-code sign-in:
 //   OTP_SECRET                any long random string; keys the hashing of codes
 //   TURNSTILE_SECRET          the Turnstile widget's secret key (verifies the check on the server)
-//   RESEND_API_KEY            Resend API key (or bind Cloudflare Email Service as EMAIL instead)
+//   MAIL_RELAY_URL            web-app URL of the Google Apps Script in mail-relay.gs (sends from your Gmail; no domain needed)
+//   MAIL_RELAY_SECRET         the same long random string you put in that script
+//   (alternatively RESEND_API_KEY + EMAIL_FROM with a verified domain, or a Cloudflare EMAIL binding)
 // Optional secret:
 //   JUDGE0_KEY                RapidAPI key, if you use a paid/hosted Judge0 instead of the free public one
 // Optional binding:
@@ -607,6 +609,21 @@ async function sendOtpEmail(env, to, code) {
     `<p style="font-size:34px;letter-spacing:8px;font-weight:700;margin:0 0 16px">${code}</p>` +
     `<p style="color:#555;font-size:13px;margin:0">It expires in 10 minutes. If you did not ask for it, ignore this email; nobody can sign in without the code.</p></div>`;
   try {
+    if (env.MAIL_RELAY_URL && env.MAIL_RELAY_SECRET) {
+      // Google Apps Script relay (see mail-relay.gs): mail is sent from your own Gmail, no domain needed.
+      // Only the code goes over; the script writes the email itself, so a leaked secret cannot send arbitrary mail.
+      const res = await fetch(env.MAIL_RELAY_URL, {
+        method: "POST", redirect: "follow", signal: AbortSignal.timeout(20000),
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ secret: env.MAIL_RELAY_SECRET, to, code }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.ok !== true) {
+        if (data.error === "quota") throw new HttpError(503, "We have sent as many sign-in emails as we can today. Please sign in with Google or GitHub, or try again tomorrow.");
+        throw new Error("Mail relay " + res.status + " " + JSON.stringify(data));
+      }
+      return;
+    }
     if (env.EMAIL?.send) {                                         // Cloudflare Email Service binding (Workers Paid)
       await env.EMAIL.send({ to, from: env.EMAIL_FROM, subject, html, text });
       return;
@@ -621,10 +638,11 @@ async function sendOtpEmail(env, to, code) {
       return;
     }
   } catch (e) {
+    if (e instanceof HttpError) throw e;
     console.error("OTP email failed:", e.message);
     throw new HttpError(502, "We could not send the email right now. Please try again, or sign in with Google or GitHub.");
   }
-  throw new HttpError(503, "Server setup incomplete: email sending is not configured (EMAIL_FROM plus RESEND_API_KEY or an EMAIL binding)");
+  throw new HttpError(503, "Server setup incomplete: email sending is not configured (set MAIL_RELAY_URL and MAIL_RELAY_SECRET, or RESEND_API_KEY and EMAIL_FROM, or an EMAIL binding)");
 }
 
 const ts = (ms) => ({ timestampValue: new Date(ms).toISOString() });
