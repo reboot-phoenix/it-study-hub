@@ -11,8 +11,8 @@ window.ishSyncProfile = async function (user, force) {
     if (!user) return;
     const key = 'ish_lb_synced_' + user.uid;
     if (!force && sessionStorage.getItem(key)) return;
-    const token = await user.getIdToken();
-    const res = await fetch('/api/sync-profile', { method: 'POST', headers: { Authorization: 'Bearer ' + token } });
+    const { apiFetch } = await import('/auth.js');
+    const res = await apiFetch('/api/sync-profile', { method: 'POST' });
     if (res.ok) sessionStorage.setItem(key, '1');
   } catch (e) { /* leaderboard sync is best effort */ }
 };

@@ -857,19 +857,12 @@ nav {
 <script src="ish-safe.js"></script>
 <script src="ish-config.js"></script>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { app } from "/firebase.js";
+import { auth, signOutEverywhere, clearSession, writeSession } from "/auth.js";
 import { getAuth, onAuthStateChanged, signOut, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, orderBy, query, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-storage.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
-  authDomain: "it-study-hub.firebaseapp.com",
-  projectId: "it-study-hub",
-  storageBucket: "it-study-hub.firebasestorage.app",
-  messagingSenderId: "566661039167",
-  appId: "1:566661039167:web:122691d263631e404ea48a"
-};
 
 
 const SUBJECTS = [
@@ -940,10 +933,6 @@ const PRIVILEGE_DEFS = {
   ],
 };
 
-const app = initializeApp(firebaseConfig);
-
-await window.ishInitAppCheck?.(app);
-const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
@@ -1044,9 +1033,9 @@ window.saveProfile = async function() {
     Object.assign(userData, fields);
     document.getElementById('heroName').textContent = name;
     renderMetaRow();
-    localStorage.setItem('ish_session', JSON.stringify({
+    writeSession({
       ...JSON.parse(localStorage.getItem('ish_session')||'{}'), name
-    }));
+    });
     showToast('Profile updated', 'success');
     document.getElementById('editModalOverlay').classList.remove('open');
   } catch(e) { showToast('Could not save. Try again.', 'error'); }
@@ -1090,7 +1079,7 @@ function renderPrivileges(role) {
 onAuthStateChanged(auth, async (user) => {
   document.getElementById('authLoader').style.display = 'none';
   if (!user) {
-    localStorage.removeItem('ish_session');
+    clearSession();
     document.getElementById('gateScreen').style.display = 'flex';
     document.getElementById('profilePage').style.display = 'none';
     return;
@@ -1335,16 +1324,12 @@ function renderBadges(earned) {
   container.innerHTML = html;
 }
 
-window.handleLogout = async function() {
-  await signOut(auth);
-  localStorage.removeItem('ish_session');
-  window.location.href = 'index.html';
-};
+window.handleLogout = () => signOutEverywhere();
 
 window.confirmDelete = function() {
   if (!confirm('This will permanently delete your account and all data. This cannot be undone.')) return;
   deleteUser(currentUser)
-    .then(() => { localStorage.removeItem('ish_session'); window.location.href = 'index.html'; })
+    .then(() => { clearSession(); window.location.href = 'index.html'; })
     .catch(e => {
       if (e.code === 'auth/requires-recent-login') showToast('Sign out and sign back in first', 'error');
       else showToast('Could not delete account', 'error');

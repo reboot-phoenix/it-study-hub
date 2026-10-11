@@ -244,18 +244,11 @@
 <script src="ish-safe.js"></script>
 <script src="ish-config.js"></script>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { app } from "/firebase.js";
+import { auth, signOutEverywhere, clearSession, mergeSession } from "/auth.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, collection, getDocs, orderBy, query, limit, where, getCountFromServer, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
-  authDomain: "it-study-hub.firebaseapp.com",
-  projectId: "it-study-hub",
-  storageBucket: "it-study-hub.firebasestorage.app",
-  messagingSenderId: "566661039167",
-  appId: "1:566661039167:web:122691d263631e404ea48a"
-};
 
 const SUBJECTS = [
   { key:'c',      label:'C Programming',   icon:'<i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#60a5fa' },
@@ -277,10 +270,6 @@ const ALL_BADGES = [
   { id:'admin_star',  icon:'<i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', label:'Admin',       desc:'Platform admin' },
 ];
 
-const app = initializeApp(firebaseConfig);
-
-await window.ishInitAppCheck?.(app);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
 // ── INSTANT SESSION PRE-CHECK (eliminates flicker) ──
@@ -309,7 +298,7 @@ onAuthStateChanged(auth, async (user) => {
 
   if (!user) {
     // Clear any stale session
-    localStorage.removeItem('ish_session');
+    clearSession();
     document.getElementById('gateScreen').style.display = 'flex';
     document.getElementById('dashScreen').style.display = 'none';
     return;
@@ -371,8 +360,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('adminChip').style.display = 'flex';
   }
   try {   // remembered for the nav dropdown on other pages (cosmetic)
-    const sess = JSON.parse(localStorage.getItem('ish_session') || '{}');
-    localStorage.setItem('ish_session', JSON.stringify({ ...sess, isAdmin }));
+    mergeSession({ isAdmin });
   } catch(e) {}
 
   // Keep my public leaderboard entry fresh (name, XP, photo). Once per session.
@@ -603,11 +591,7 @@ function avgPct(scores, keys) {
 }
 
 // ── LOGOUT ──
-window.handleLogout = async function() {
-  await signOut(auth);
-  localStorage.removeItem('ish_session');
-  window.location.href = 'index.html';
-};
+window.handleLogout = () => signOutEverywhere();
 </script>
 
 <script>

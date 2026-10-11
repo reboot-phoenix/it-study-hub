@@ -158,18 +158,11 @@
 <script src="ish-safe.js"></script>
 <script src="ish-config.js"></script>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { app } from "/firebase.js";
+import { auth, signOutEverywhere } from "/auth.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, getDoc, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
-  authDomain: "it-study-hub.firebaseapp.com",
-  projectId: "it-study-hub",
-  storageBucket: "it-study-hub.firebasestorage.app",
-  messagingSenderId: "566661039167",
-  appId: "1:566661039167:web:122691d263631e404ea48a"
-};
 
 const SUBJECTS = [
   {key:'c',      label:'C Programming', icon:'<i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#60a5fa'},
@@ -180,10 +173,6 @@ const SUBJECTS = [
   {key:'web',    label:'HTML+CSS+JS',   icon:'<i class="ti ti-world" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>', color:'#c8f135'},
 ];
 
-const app = initializeApp(firebaseConfig);
-
-await window.ishInitAppCheck?.(app);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
 // ── AUTH GATE ──
@@ -384,11 +373,7 @@ function renderAvgScores(users) {
 }
 
 // ── LOGOUT ──
-window.handleLogout = async function() {
-  await signOut(auth);
-  localStorage.removeItem('ish_session');
-  window.location.href = 'index.html';
-};
+window.handleLogout = () => signOutEverywhere();
 </script>
 
 <script>

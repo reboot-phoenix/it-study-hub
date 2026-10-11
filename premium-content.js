@@ -11,47 +11,16 @@
      __ishPremium                    → last known answer (true / false), for sync UI checks
 ══════════════════════════════════════════════════ */
 (function () {
-  const FIREBASE = 'https://www.gstatic.com/firebasejs/12.13.0/';
-  const firebaseConfig = {
-    apiKey: "AIzaSyBTFhNaI82vjwp0kuIhkASUt4Na22OogRQ",
-    authDomain: "it-study-hub.firebaseapp.com",
-    projectId: "it-study-hub",
-    storageBucket: "it-study-hub.firebasestorage.app",
-    messagingSenderId: "566661039167",
-    appId: "1:566661039167:web:122691d263631e404ea48a"
-  };
-
   window.__ishPremium = false;
-  let userPromise = null;
 
-  // Resolves to the signed-in Firebase user, or null. Reuses the page's Firebase app if it has one.
-  function getUser() {
-    if (!userPromise) {
-      userPromise = (async () => {
-        const { getApps, getApp, initializeApp } = await import(FIREBASE + 'firebase-app.js');
-        const { getAuth } = await import(FIREBASE + 'firebase-auth.js');
-        const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-        await window.ishInitAppCheck?.(app);
-        const auth = getAuth(app);
-        return new Promise((resolve) => {
-          const off = auth.onAuthStateChanged((u) => { off(); resolve(u); });
-        });
-      })().catch((e) => { console.warn('premium-content: auth unavailable', e); return null; });
-    }
-    return userPromise;
-  }
-
+  // Calls our Worker with the signed-in user's token (see /auth.js). Not signed in -> a 401 response.
   async function apiGet(path) {
-    const user = await getUser();
-    if (!user) return { ok: false, status: 401 };
-    let res;
     try {
-      const token = await user.getIdToken();
-      res = await fetch(path, { headers: { Authorization: 'Bearer ' + token } });
+      const { apiFetch } = await import('/auth.js');
+      return await apiFetch(path);
     } catch (e) {
       return { ok: false, status: 0 };
     }
-    return res;
   }
 
   let accessPromise = null;
@@ -62,7 +31,7 @@
         if (!res.ok) {
           accessPromise = null;   // retry next time
           let why = ''; try { why = (await res.json()).error || ''; } catch (e) {}
-          console.warn('Premium check failed (' + res.status + '): ' + (why || 'no details') + '. Premium content stays locked until this works.');
+          if (res.status !== 401) console.warn('Premium check failed (' + res.status + '): ' + (why || 'no details') + '. Premium content stays locked until this works.');
           return false;
         }
         const data = await res.json().catch(() => ({}));

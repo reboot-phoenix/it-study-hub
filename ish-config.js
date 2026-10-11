@@ -16,7 +16,7 @@ window.ISH_APPCHECK_SITE_KEY = '';   // e.g. '6Lc...'  (public site key, safe to
 
 (function () {
   const started = new WeakSet();
-  // Call right after initializeApp(): `await window.ishInitAppCheck?.(app);`
+  // firebase.js calls this right after it creates the Firebase app; pages never need to.
   window.ishInitAppCheck = async function (app) {
     try {
       const key = window.ISH_APPCHECK_SITE_KEY;

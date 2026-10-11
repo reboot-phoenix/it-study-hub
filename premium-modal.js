@@ -384,13 +384,8 @@ function pmShowMessage(title, text) {
   modal.querySelector('p').textContent = text;
 }
 
-async function pmApi(path, body, user) {
-  const idToken = await user.getIdToken();
-  const res = await fetch(path, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
-    body: JSON.stringify(body),
-  });
+async function pmApi(path, body) {
+  const res = await window.ishAuth.apiFetch(path, { method: 'POST', body });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || 'Request failed');
   return data;
@@ -420,7 +415,7 @@ window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
     if (!user) { alert('Please sign in first.'); reset(); return; }
 
     // The server picks the price and creates the order. `amount` from the page is ignored.
-    const order = await pmApi('/api/create-order', { planId }, user);
+    const order = await pmApi('/api/create-order', { planId });
 
     const options = {
       key: order.keyId,
@@ -443,7 +438,7 @@ window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-            }, user);
+            });
             pmShowSuccess(order.planName, result.plan);
             return;
           } catch (e) {
