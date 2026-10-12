@@ -1,6 +1,6 @@
+# Pages that are for signed-in users carry <meta name="robots" content="noindex">. They are NOT blocked here,
+# because a crawler must be allowed to fetch a page to see its noindex instruction.
 User-agent: *
-Disallow: /admin.html
-Disallow: /Login.html
-Disallow: /profile.html
+Disallow: /api/
 
 Sitemap: https://itstudyhub.dpdns.org/sitemap.xml

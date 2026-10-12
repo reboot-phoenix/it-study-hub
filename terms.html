@@ -7,6 +7,15 @@
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Terms of Service — IT Study Hub</title>
+<meta name="description" content="The terms of service for using IT Study Hub: your account, acceptable use, premium plans and how we protect the platform.">
+<link rel="canonical" href="https://itstudyhub.dpdns.org/terms">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="IT Study Hub">
+<meta property="og:title" content="Terms of Service — IT Study Hub">
+<meta property="og:description" content="The terms of service for using IT Study Hub: your account, acceptable use, premium plans and how we protect the platform.">
+<meta property="og:url" content="https://itstudyhub.dpdns.org/terms">
+<meta property="og:image" content="https://itstudyhub.dpdns.org/team_image.jpeg">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 :root{
   --bg:#04040a;--surface:#0a0a14;--surface2:#111120;
@@ -14,7 +23,8 @@
   --text:#eeeef5;--muted:#6b6b80;--muted2:#9494a8;
   --ff-display:'Syne',sans-serif;--ff-body:'DM Sans',sans-serif;--ff-mono:'JetBrains Mono',monospace;
 }
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;cursor:none!important;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:where(html.custom-cursor) *, :where(html.custom-cursor) *::before, :where(html.custom-cursor) *::after{cursor:none!important;}
 body{background:var(--bg);color:var(--text);font-family:var(--ff-body);min-height:100vh;padding:60px 48px;display:flex;justify-content:center;}
 .container{max-width:700px;width:100%;}
 .nav-back{font-family:var(--ff-mono);font-size:11px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:40px;display:inline-flex;}
@@ -68,5 +78,7 @@ document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 document.addEventListener('mouseover',e=>{if(e.target.closest('a')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
 document.addEventListener('mouseout',e=>{if(e.target.closest('a')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
 </script>
+<script src="ish-cursor-guard.js" defer></script>
+<script src="ish-a11y.js" defer></script>
 </body>
 </html>

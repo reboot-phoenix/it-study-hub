@@ -7,6 +7,15 @@
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>IT Study Hub — Practice Panel</title>
+<meta name="description" content="Practise coding in your browser: 77 problems in C, C++, Java, Python, R and JavaScript with a built-in editor, test cases and a leaderboard.">
+<link rel="canonical" href="https://itstudyhub.dpdns.org/practice-panel">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="IT Study Hub">
+<meta property="og:title" content="IT Study Hub — Practice Panel">
+<meta property="og:description" content="Practise coding in your browser: 77 problems in C, C++, Java, Python, R and JavaScript with a built-in editor, test cases and a leaderboard.">
+<meta property="og:url" content="https://itstudyhub.dpdns.org/practice-panel">
+<meta property="og:image" content="https://itstudyhub.dpdns.org/team_image.jpeg">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 /* ─────────────────────────────────────────
    RESET & ROOT
@@ -1073,6 +1082,7 @@ html, body {
   scrollbar-color: var(--border) transparent;
 }
 </style>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 </head>
 <body>
 
@@ -1453,7 +1463,7 @@ window._loadLeaderboard = async function() {
       const safeName = esc(u.name||'?');
       const ini = safeName.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
       const safePhoto = window.safeImgUrl(u.photo);
-      const av = safePhoto ? `<img src="${esc(safePhoto)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : ini;
+      const av = safePhoto ? `<img src="${esc(safePhoto)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : ini;
       return `<div class="lb-entry${isMe?' me':''}"><div class="lb-rank${rc?' '+rc:''}">${i===0?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#FFD700;"></i>':i===1?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#C0C0C0;"></i>':i===2?'<i class="ti ti-medal" aria-hidden="true" style="font-size:18px;vertical-align:-2px;color:#CD7F32;"></i>':'#'+(i+1)}</div><div class="lb-avatar">${av}</div><div class="lb-name">${safeName}${isMe?' (you)':''}</div><div class="lb-xp">${u.xp.toLocaleString()} XP</div><div class="lb-solved">${u.solved}✓</div></div>`;
     }).join('');
   } catch(e) {
@@ -2639,5 +2649,7 @@ function fireConfetti() {
 /* Boot if fast-path worked */
 if (window._currentUser) window._appReady && window._appReady();
 </script>
+<script src="ish-cursor-guard.js" defer></script>
+<script src="ish-a11y.js" defer></script>
 </body>
 </html>

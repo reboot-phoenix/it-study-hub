@@ -1,14 +1,17 @@
 # Files Cloudflare should NOT publish as part of the website
+.dev.vars
+.gitignore
+HANDOFF.md
+LICENSE
+README.md
+firebase.json
+firestore.rules
+mail-relay.gs
+package.json
+premium-export/
+scripts/
+shared.test.mjs
+storage.rules
 worker.js
 worker.test.mjs
 wrangler.toml
-package.json
-.dev.vars
-firestore.rules
-storage.rules
-firebase.json
-LICENSE
-README.md
-scripts/
-premium-export/
-.gitignore

@@ -8,10 +8,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Your IT Study Hub profile — track XP, streaks, quiz scores, badges and premium status.">
 <title>My Profile — IT Study Hub</title>
+<meta name="robots" content="noindex, nofollow">
 <link rel="stylesheet" href="global.css">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-@media (pointer: fine) { *, *::before, *::after { cursor: none !important; } }
+@media (pointer: fine) { :where(html.custom-cursor) *, :where(html.custom-cursor) *::before, :where(html.custom-cursor) *::after { cursor: none !important; } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
@@ -751,7 +752,7 @@ nav {
   <div class="modal avatar-modal" onclick="event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-title">Choose Your Avatar</div>
-      <button class="modal-close" onclick="closeAvatarModal()">
+      <button class="modal-close" onclick="closeAvatarModal()" aria-label="Close">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -783,7 +784,7 @@ nav {
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-title">Edit Profile</div>
-      <button class="modal-close" onclick="closeEditModal()">
+      <button class="modal-close" onclick="closeEditModal()" aria-label="Close">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -1358,5 +1359,7 @@ if (window.matchMedia('(pointer: fine)').matches) {
 }
 </script>
 <script src="ish-sync.js"></script>
+<script src="ish-cursor-guard.js" defer></script>
+<script src="ish-a11y.js" defer></script>
 </body>
 </html>

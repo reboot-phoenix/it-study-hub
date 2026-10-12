@@ -7,6 +7,7 @@
 <link rel="shortcut icon" href="favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>404 — Page Not Found | IT Study Hub</title>
+<meta name="robots" content="noindex, nofollow">
 <style>
 :root {
   --bg:#04040a; --surface:#0a0a14; --border:rgba(255,255,255,0.07);
@@ -16,7 +17,7 @@
   --ff-mono:'JetBrains Mono',monospace;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-@media(pointer:fine){*,*::before,*::after{cursor:none!important;}}
+@media(pointer:fine){:where(html.custom-cursor) *, :where(html.custom-cursor) *::before, :where(html.custom-cursor) *::after { cursor: none !important; }}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}}
 html,body{height:100%;}
 body{background:var(--bg);color:var(--text);font-family:var(--ff-body);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;overflow:hidden;}
@@ -184,5 +185,7 @@ if(window.matchMedia('(pointer: fine)').matches){
   });
 }
 </script>
+<script src="ish-cursor-guard.js" defer></script>
+<script src="ish-a11y.js" defer></script>
 </body>
 </html>

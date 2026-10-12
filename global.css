@@ -232,7 +232,7 @@ body.tier-admin {
 
 /* Custom cursor only on pointer (non-touch) devices */
 @media (pointer: fine) {
-  *, *::before, *::after { cursor: none !important; }
+  :where(html.custom-cursor) *, :where(html.custom-cursor) *::before, :where(html.custom-cursor) *::after { cursor: none !important; }
 }
 
 /* Keyboard focus — visible outline for all interactive elements */

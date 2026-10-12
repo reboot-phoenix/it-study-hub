@@ -7,6 +7,7 @@
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel — IT Study Hub</title>
+<meta name="robots" content="noindex, nofollow">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="pages.css">
 </head>
@@ -383,5 +384,7 @@ document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 (function anim(){c.style.left=(mx-5)+'px';c.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=(rx-18)+'px';r.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
 document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>c.style.transform='scale(2)');el.addEventListener('mouseleave',()=>c.style.transform='scale(1)');});
 </script>
+<script src="ish-cursor-guard.js" defer></script>
+<script src="ish-a11y.js" defer></script>
 </body>
 </html>
