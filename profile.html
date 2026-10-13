@@ -1044,6 +1044,31 @@ window.saveProfile = async function() {
 };
 
 // ── META ROW (college, DOB, year) ─────────────────────────
+// Plan name, whether it is still active, and when it ends. planExpiresAt is absent for lifetime (Elite) plans.
+const PLAN_NAMES = { basic: 'Starter', pro: 'Pro', elite: 'Elite' };
+const COURSE_NAMES = { java: 'Java', c: 'C', cpp: 'C++', r: 'R', javascript: 'JavaScript', python: 'Python' };
+function planInfo() {
+  const plan = userData.plan || '';
+  if (!PLAN_NAMES[plan]) return null;
+  const raw = userData.planExpiresAt;
+  const exp = raw ? (typeof raw.toDate === 'function' ? raw.toDate() : new Date(raw)) : null;
+  return { plan, name: PLAN_NAMES[plan], exp, active: !exp || exp.getTime() > Date.now() };
+}
+function planLine() {
+  const p = planInfo();
+  if (!p) return '';
+  const fmt = (d) => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  let text = p.name + ' plan';
+  if (!p.exp) text += ' · lifetime';
+  else if (p.active) text += ' · expires ' + fmt(p.exp) + ' (' + Math.max(1, Math.ceil((p.exp - Date.now()) / 86400000)) + ' days left)';
+  else text += ' · expired on ' + fmt(p.exp);
+  if (p.plan === 'basic' && p.active) {
+    const picked = (Array.isArray(userData.starterCourses) ? userData.starterCourses : []).map((c) => COURSE_NAMES[c]).filter(Boolean);
+    text += picked.length ? ' · courses: ' + picked.join(', ') : ' · choose your 2 courses on any locked module';
+  }
+  return `<span class="meta-item">${esc(text)}</span>`;
+}
+
 function renderMetaRow() {
   const row = document.getElementById('heroMetaRow');
   const items = [];
@@ -1052,6 +1077,8 @@ function renderMetaRow() {
   if (userData.dob)         items.push(`<span class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${new Date(userData.dob).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</span>`);
   if (safeUrl(userData.linkedin))    items.push(`<a class="meta-item" href="${esc(safeUrl(userData.linkedin))}" rel="noopener noreferrer" target="_blank" style="text-decoration:none;color:var(--blue);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</a>`);
   if (safeUrl(userData.github))      items.push(`<a class="meta-item" href="${esc(safeUrl(userData.github))}" rel="noopener noreferrer" target="_blank" style="text-decoration:none;color:var(--muted2);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub</a>`);
+  const plan = planLine();
+  if (plan) items.push(plan);
   row.innerHTML = items.join('');
 }
 
@@ -1152,7 +1179,8 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('chipLevel').textContent = 'ADMIN';
     renderPrivileges('admin');
   } else {
-    const plan = userData.plan || '';
+    const info = planInfo();
+    const plan = info && info.active ? info.plan : '';   // an expired plan earns no badge
     if (plan === 'elite') {
       document.getElementById('chipElite').style.display = 'inline-flex';
       document.getElementById('chipLevel').textContent = 'ELITE';

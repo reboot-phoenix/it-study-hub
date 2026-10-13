@@ -183,13 +183,16 @@ function setPlanBadge(plan, isAdmin) {
   if (!badge) return;
   if (isAdmin) {
     badge.className = 'plan-badge plan-admin';
-    badge.textContent = '<i class="ti ti-shield" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Admin';
+    badge.innerHTML = '<i class="ti ti-shield" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Admin';
   } else if (plan === 'elite') {
     badge.className = 'plan-badge plan-elite';
-    badge.textContent = '<i class="ti ti-crown" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Elite';
+    badge.innerHTML = '<i class="ti ti-crown" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Elite';
   } else if (plan === 'pro') {
     badge.className = 'plan-badge plan-pro';
-    badge.textContent = '<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Pro';
+    badge.innerHTML = '<i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Pro';
+  } else if (plan === 'basic') {
+    badge.className = 'plan-badge plan-pro';
+    badge.textContent = 'Starter';
   } else {
     badge.className = 'plan-badge plan-free';
     badge.textContent = 'Free';
@@ -280,6 +283,9 @@ onAuthStateChanged(auth, async (user) => {
       const data = userDoc.data();
       isAdmin        = data.role === 'admin';
       plan           = data.plan           || 'free';
+      // An expired plan is a free account (the Worker already refuses its premium content).
+      const exp = data.planExpiresAt ? (typeof data.planExpiresAt.toDate === 'function' ? data.planExpiresAt.toDate().getTime() : Date.parse(data.planExpiresAt)) : null;
+      if (exp !== null && exp <= Date.now()) plan = 'free';
       xp             = data.xp             || 0;
       coursesStarted = data.coursesStarted || 0;
     }

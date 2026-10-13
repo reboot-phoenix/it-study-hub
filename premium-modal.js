@@ -270,6 +270,16 @@ function buildModal(courseName) {
 }
 
 // ── Show already-premium state ──
+// Pro or Elite that has not expired yet, or an admin. (Starter can still upgrade, so it does not count here.)
+function hasFullPlan(data) {
+  if (data.role === 'admin') return true;
+  if (data.plan !== 'pro' && data.plan !== 'elite') return false;
+  const raw = data.planExpiresAt;
+  if (!raw) return true;                                   // lifetime
+  const ms = typeof raw.toDate === 'function' ? raw.toDate().getTime() : Date.parse(raw);
+  return ms > Date.now();
+}
+
 function showAlreadyPremium(plan) {
   const grid = document.getElementById('pm-plans-grid');
   if (!grid) return;
@@ -330,7 +340,7 @@ window.openPremiumModal = async function(courseName) {
   const data = snap.exists() ? snap.data() : {};
 
   // FIX 3: isPremiumUser check uses Firestore data, not localStorage
-  const isPremiumUser = data.plan === 'pro' || data.plan === 'elite' || data.role === 'admin';
+  const isPremiumUser = hasFullPlan(data);
 
   if (isPremiumUser) {
     const overlay = buildModal(courseName);
@@ -515,7 +525,7 @@ async function checkAndHidePremiumCTAs() {
     if (!snap.exists()) return;
 
     const data = snap.data();
-    const isPremium = data.plan === 'pro' || data.plan === 'elite' || data.role === 'admin';
+    const isPremium = hasFullPlan(data);
     if (isPremium) {
       hidePremiumCTAs(data.plan || 'pro');
     }

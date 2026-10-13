@@ -7,6 +7,7 @@
 //   GET  /api/access            does the signed-in user currently have premium access?
 //   GET  /api/lesson?course=&id=  premium lesson text (only for users with an active plan)
 //   GET  /api/pdf?f=<file>      premium PDF (only for users with an active plan)
+//   POST /api/starter-courses   a Starter buyer picks their two courses (once)
 //   POST /api/award-xp          the only way XP changes: quiz results and practice solves
 //   GET  /api/setup-check       owner-only checklist: which secrets and permissions are working (header X-Setup-Key = OTP_SECRET)
 //   POST /api/otp/request       emails a 6-digit sign-in code (Turnstile-checked, rate-limited)
@@ -35,13 +36,13 @@
 // Optional binding:
 //   RUN_LIMITER               a Cloudflare Rate Limiting binding for /api/run (see wrangler.toml)
 // KV namespace binding:
-//   PREMIUM                   holds premium lesson text ("lesson:<course>:<id>") and PDFs ("pdf:<file>")
+//   PREMIUM                   holds premium lesson text ("lesson:<course>:<id>"), premium quizzes ("quiz:<course>:<id>") and PDFs ("pdf:<file>")
 
 const PROJECT_ID = "it-study-hub";
 
 // Server-side source of truth for prices. The browser never sends an amount.
 const PLANS = {
-  basic: { name: "Starter", price: 199, months: 6, rank: 1 },
+  basic: { name: "Starter", price: 199, months: 6, rank: 1, courses: 2 },   // courses: how many courses it unlocks (absent = all six)
   pro:   { name: "Pro",     price: 499, months: 12, rank: 2 },
   elite: { name: "Elite",   price: 999, months: null, rank: 3 }, // lifetime
 };
@@ -875,17 +876,27 @@ const COURSES = new Set(["java", "c", "cpp", "r", "javascript", "python"]);
 // the Worker's own service account, so this keeps working even if Firestore App Check enforcement is on
 // (a request made with only the user's token would carry no App Check token and be refused).
 // Premium = an active (not expired) paid plan, or an admin.
+// Courses: Pro, Elite and admins can open all six. Starter opens the two courses stored in users/{uid}.starterCourses
+// (written only by /api/starter-courses below). `mayChoose` is true while a Starter plan has no choice yet.
 export async function getAccess(request, env) {
   const uid = await requireUser(request);
   const res = await fsFetch(env, `users/${encodeURIComponent(uid)}`);
-  if (res.status === 404) return { uid, plan: "", premium: false, admin: false };
+  if (res.status === 404) return { uid, plan: "", premium: false, admin: false, courses: [], mayChoose: false, expiresAt: null };
   if (!res.ok) throw new Error("Firestore read failed: " + res.status);
   const f = (await res.json()).fields || {};
   const plan = f.plan?.stringValue || "";
-  const expiresMs = f.planExpiresAt?.timestampValue ? Date.parse(f.planExpiresAt.timestampValue) : null;
+  const expiresAt = f.planExpiresAt?.timestampValue || null;
+  const expiresMs = expiresAt ? Date.parse(expiresAt) : null;
   const planActive = !!PLANS[plan] && (expiresMs === null || expiresMs > Date.now());
   const admin = f.role?.stringValue === "admin";   // the one and only admin switch; set in the Firebase console or with scripts/grant-admin.mjs
-  return { uid, plan, admin, premium: planActive || admin };
+  const limit = planActive ? PLANS[plan].courses : undefined;
+  let courses = [...COURSES], mayChoose = false;
+  if (!admin && planActive && limit) {
+    const picked = (f.starterCourses?.arrayValue?.values || []).map((v) => v.stringValue).filter((c) => COURSES.has(c));
+    courses = [...new Set(picked)].slice(0, limit);
+    mayChoose = courses.length < limit;
+  } else if (!admin && !planActive) courses = [];
+  return { uid, plan, admin, premium: planActive || admin, courses, mayChoose, expiresAt: planActive && !admin ? expiresAt : null };
 }
 
 function requireStore(env) {
@@ -895,7 +906,15 @@ function requireStore(env) {
 
 async function accessRoute(request, env) {
   const a = await getAccess(request, env);
-  return json({ premium: a.premium, plan: a.plan });
+  return json({ premium: a.premium, plan: a.plan, courses: a.courses, mayChoose: a.mayChoose, expiresAt: a.expiresAt });
+}
+
+// Premium is not enough: the plan must also cover this course (Starter = two chosen courses).
+function requireCourse(a, course) {
+  if (a.courses.includes(course)) return;
+  const e = new HttpError(403, a.mayChoose ? "Choose your two Starter courses first" : "Your plan does not include this course");
+  e.extra = { code: a.mayChoose ? "choose_courses" : "course_not_in_plan", courses: a.courses };
+  throw e;
 }
 
 async function lessonRoute(request, env) {
@@ -907,12 +926,24 @@ async function lessonRoute(request, env) {
 
   const a = await getAccess(request, env);
   if (!a.premium) throw new HttpError(403, "Premium plan required");
+  requireCourse(a, course);
 
-  const body = await store.get(`lesson:${course}:${Number(id)}`, "text");
-  if (body === null) throw new HttpError(404, "Lesson not found");
-  return new Response(body, {
+  const [lesson, quiz] = await Promise.all([
+    store.get(`lesson:${course}:${Number(id)}`, "text"),
+    store.get(`quiz:${course}:${Number(id)}`, "text"),
+  ]);
+  if (lesson === null) throw new HttpError(404, "Lesson not found");
+  let out = lesson;
+  if (quiz !== null) out = JSON.stringify({ ...JSON.parse(lesson), quiz: JSON.parse(quiz) });   // the quiz (with its answers) travels only with the lesson
+  return new Response(out, {
     headers: { "Content-Type": "application/json", "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" },
   });
+}
+
+// Which course a premium PDF belongs to, from its file name.
+const PDF_COURSES = [["BCA-421 JAVA-", "java"], ["IT_Study_Hub_C_Programming_Module_", "c"], ["C++ lecture notes", "cpp"]];
+export function pdfCourse(file) {
+  return PDF_COURSES.find(([prefix]) => file.startsWith(prefix))?.[1] || null;
 }
 
 async function pdfRoute(request, env) {
@@ -922,6 +953,9 @@ async function pdfRoute(request, env) {
 
   const a = await getAccess(request, env);
   if (!a.premium) throw new HttpError(403, "Premium plan required");
+  const course = pdfCourse(file);
+  if (course) requireCourse(a, course);
+  else if (a.courses.length < COURSES.size) throw new HttpError(403, "Your plan does not include this file");   // unknown file: only all-course access
 
   const data = await store.get(`pdf:${file}`, { type: "arrayBuffer" });
   if (data === null) throw new HttpError(404, "File not found");
@@ -933,6 +967,25 @@ async function pdfRoute(request, env) {
       "X-Content-Type-Options": "nosniff",
     },
   });
+}
+
+// A Starter buyer picks exactly two courses, once. Only the Worker can write the field (it is not in the browser rules).
+// To let someone change their pick, edit users/{uid}.starterCourses in the Firebase console.
+async function starterCoursesRoute(request, env) {
+  const a = await getAccess(request, env);
+  if (!a.premium || a.admin) throw new HttpError(403, "You need an active Starter plan to choose courses");
+  const limit = PLANS[a.plan]?.courses;
+  if (!limit) throw new HttpError(400, "Your plan already includes every course");
+  if (!a.mayChoose) throw new HttpError(409, "You have already chosen your courses");
+  const { courses } = await readJson(request);
+  if (!Array.isArray(courses) || courses.length !== limit || new Set(courses).size !== limit || !courses.every((c) => COURSES.has(c))) {
+    throw new HttpError(400, `Choose exactly ${limit} different courses`);
+  }
+  const body = { fields: { starterCourses: { arrayValue: { values: courses.map((c) => ({ stringValue: c })) } } } };
+  const res = await fsFetch(env, `users/${encodeURIComponent(a.uid)}`, { method: "PATCH", body: JSON.stringify(body) },
+    "?updateMask.fieldPaths=starterCourses&currentDocument.exists=true");
+  if (!res.ok) throw new Error("Firestore update failed: " + res.status);
+  return json({ ok: true, courses });
 }
 
 /* ─────────────────────────── API routes ─────────────────────────── */
@@ -1008,6 +1061,7 @@ const ROUTES = {
   "POST /api/run": runRoute,
   "POST /api/sync-profile": syncProfileRoute,
   "POST /api/admin/rebuild-leaderboard": rebuildLeaderboardRoute,
+  "POST /api/starter-courses": starterCoursesRoute,
   "POST /api/create-order": createOrder,
   "POST /api/verify-payment": verifyPayment,
   "POST /api/razorpay-webhook": razorpayWebhook,
@@ -1025,7 +1079,7 @@ export default {
       try {
         return await handler(request, env);
       } catch (e) {
-        if (e instanceof HttpError) return json({ error: e.message }, e.status);
+        if (e instanceof HttpError) return json({ error: e.message, ...(e.extra || {}) }, e.status);
         console.error("API error:", e.message);
         return json({ error: "Something went wrong. Please try again." }, 500);
       }
