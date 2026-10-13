@@ -35,7 +35,7 @@
   src: url('./fonts/syne-v24-latin-800.woff2') format('woff2');
 }
 @font-face {
-  font-display: swap;
+  font-display: block;   /* headline font: wait for it (it is preloaded) instead of flashing a wide fallback first */
   font-family: 'Bebas Neue';
   font-style: normal;
   font-weight: 400;
