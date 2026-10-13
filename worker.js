@@ -941,7 +941,7 @@ async function lessonRoute(request, env) {
 }
 
 // Which course a premium PDF belongs to, from its file name.
-const PDF_COURSES = [["BCA-421 JAVA-", "java"], ["IT_Study_Hub_C_Programming_Module_", "c"], ["C++ lecture notes", "cpp"]];
+const PDF_COURSES = [["IT_Study_Hub_Java_Module_", "java"], ["IT_Study_Hub_C_Programming_Module_", "c"], ["IT_Study_Hub_Cpp_Module_", "cpp"], ["IT_Study_Hub_JavaScript_Module_", "javascript"], ["IT_STUDY_HUB_R_Module_", "r"]];
 export function pdfCourse(file) {
   return PDF_COURSES.find(([prefix]) => file.startsWith(prefix))?.[1] || null;
 }

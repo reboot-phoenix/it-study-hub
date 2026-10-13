@@ -106,7 +106,7 @@
       let code = ''; try { code = (await res.json()).code || ''; } catch (e) {}
       if (res.status === 403 && code) {
         // The plan is fine; this particular course is not part of it (Starter), or the picker has not been used yet.
-        const course = /^BCA-421 JAVA/.test(file) ? 'java' : /^IT_Study_Hub_C_/.test(file) ? 'c' : /^C\+\+/.test(file) ? 'cpp' : '';
+        const course = /^IT_Study_Hub_Java_/.test(file) ? 'java' : /^IT_Study_Hub_C_/.test(file) ? 'c' : /^IT_Study_Hub_Cpp_/.test(file) ? 'cpp' : /^IT_Study_Hub_JavaScript_/.test(file) ? 'javascript' : /^IT_STUDY_HUB_R_/.test(file) ? 'r' : '';
         window.ishLocked(course);
       } else if (res.status === 401 || res.status === 403) {
         window.location.href = 'premium.html';

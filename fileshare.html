@@ -6,18 +6,19 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Download free PDF notes for C, Java, Python, C++, C# and Web Development — curated for TIU IT students.">
+<meta name="description" content="Download free PDF notes for C, Java, Python, C++, JavaScript and R — curated for TIU IT students.">
 <title>File Share — Free Study Materials | IT Study Hub</title>
 <link rel="canonical" href="https://itstudyhub.dpdns.org/fileshare">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="IT Study Hub">
 <meta property="og:title" content="File Share — Free Study Materials | IT Study Hub">
-<meta property="og:description" content="Download free PDF notes for C, Java, Python, C++, C# and Web Development — curated for TIU IT students.">
+<meta property="og:description" content="Download free PDF notes for C, Java, Python, C++, JavaScript and R — curated for TIU IT students.">
 <meta property="og:url" content="https://itstudyhub.dpdns.org/fileshare">
 <meta property="og:image" content="https://itstudyhub.dpdns.org/team_image.jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="pages.css">
+<style>.file-card.type-javascript::before{background:#c8f135}.file-card.type-r::before{background:#38bdf8}</style>
 </head>
 <body>
 
@@ -43,8 +44,8 @@
     <button class="filter-btn" onclick="filterFiles('java',this)"><i class="ti ti-coffee" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> Java OOPs <span class="filter-count" id="cnt-java">0</span></button>
     <button class="filter-btn" onclick="filterFiles('python',this)"><i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> Python <span class="filter-count" id="cnt-python">0</span></button>
     <button class="filter-btn" onclick="filterFiles('cpp',this)"><i class="ti ti-plus" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> C++ <span class="filter-count" id="cnt-cpp">0</span></button>
-    <button class="filter-btn" onclick="filterFiles('csharp',this)"><i class="ti ti-diamond" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> C# .NET <span class="filter-count" id="cnt-csharp">0</span></button>
-    <button class="filter-btn" onclick="filterFiles('web',this)"><i class="ti ti-world" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> HTML+CSS+JS <span class="filter-count" id="cnt-web">0</span></button>
+    <button class="filter-btn" onclick="filterFiles('javascript',this)"><i class="ti ti-brand-javascript" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> JavaScript <span class="filter-count" id="cnt-javascript">0</span></button>
+    <button class="filter-btn" onclick="filterFiles('r',this)"><i class="ti ti-chart-bar" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> R Programming <span class="filter-count" id="cnt-r">0</span></button>
 
     <div class="storage-box">
       <div class="storage-label">Resource Info</div>
@@ -109,57 +110,76 @@
 const FILES = [
   // C PROGRAMMING
   { id:1, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 1', desc:'Module 1: Foundations of C programming.', size:'~169 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_1.pdf' },
-{ id:2, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 2', desc:'Module 2: Core concepts and program structure.', size:'~94 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_2.pdf' },
-{ id:3, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 3', desc:'Module 3: Control flow, loops and decision making.', size:'~145 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_3.pdf' },
-{ id:4, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 4', desc:'Module 4: Functions, arrays and strings.', size:'~163 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_4.pdf' },
-{ id:5, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 5', desc:'Module 5: Pointers and memory management.', size:'~125 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_5.pdf' },
-{ id:6, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 6', desc:'Module 6: Structures, unions and enumerations.', size:'~137 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_6.pdf' },
-{ id:32, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 7', desc:'Module 7: File handling and I/O operations.', size:'~126 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_7.pdf' },
-{ id:33, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 8', desc:'Module 8: Dynamic memory and advanced pointers.', size:'~127 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_8.pdf' },
-{ id:34, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 9', desc:'Module 9: Preprocessor directives and macros.', size:'~128 KB', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_C_Programming_Module_9.pdf' },
-{ id:35, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 10', desc:'Module 10: Bitwise operations and data manipulation.', size:'~141 KB', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_C_Programming_Module_10.pdf' },
-{ id:36, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 11', desc:'Module 11: Sorting, searching and algorithms.', size:'~134 KB', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_C_Programming_Module_11.pdf' },
-{ id:37, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 12', desc:'Module 12: Advanced topics and interview preparation.', size:'~48 KB', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_C_Programming_Module_12.pdf' },
-
+  { id:2, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 2', desc:'Module 2: Core concepts and program structure.', size:'~94 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_2.pdf' },
+  { id:3, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 3', desc:'Module 3: Control flow, loops and decision making.', size:'~145 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_3.pdf' },
+  { id:4, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 4', desc:'Module 4: Functions, arrays and strings.', size:'~163 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_4.pdf' },
+  { id:5, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 5', desc:'Module 5: Pointers and memory management.', size:'~125 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_5.pdf' },
+  { id:6, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 6', desc:'Module 6: Structures, unions and enumerations.', size:'~137 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_6.pdf' },
+  { id:32, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 7', desc:'Module 7: File handling and I/O operations.', size:'~126 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_7.pdf' },
+  { id:33, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 8', desc:'Module 8: Dynamic memory and advanced pointers.', size:'~127 KB', format:'PDF', url:'/pdf/IT_Study_Hub_C_Programming_Module_8.pdf' },
+  { id:34, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 9', desc:'Module 9: Preprocessor directives and macros.', size:'~128 KB', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_C_Programming_Module_9.pdf' },
+  { id:35, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 10', desc:'Module 10: Bitwise operations and data manipulation.', size:'~141 KB', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_C_Programming_Module_10.pdf' },
+  { id:36, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 11', desc:'Module 11: Sorting, searching and algorithms.', size:'~134 KB', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_C_Programming_Module_11.pdf' },
+  { id:37, type:'c', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C Programming — Module 12', desc:'Module 12: Advanced topics and interview preparation.', size:'~48 KB', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_C_Programming_Module_12.pdf' },
   // JAVA
-  { id:7, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java OOPs — Pages 1–28', desc:'Introduction to Java, JVM architecture, data types and control flow.', size:'~142 KB', format:'PDF', url:'/pdf/BCA-421%20JAVA-1-28.pdf' },
-  { id:8, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java OOPs — Pages 29–72', desc:'Control statements, classes and methods (chapters 3–4).', size:'~182 KB', format:'PDF', url:'/pdf/BCA-421%20JAVA-29-72.pdf' },
-  { id:9, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java OOPs — Pages 73–96', desc:'Packages, interfaces and exception handling (chapters 5–6).', size:'~120 KB', format:'PDF', url:'/pdf/BCA-421%20JAVA-73-96.pdf' },
-  { id:10, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java OOPs — Pages 97–131', desc:'Exception handling, multithreading and thread lifecycle.', size:'~2 MB', format:'PDF', url:'', premium:true, file:'BCA-421 JAVA-97-131.pdf' },
-  { id:11, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java OOPs — Pages 133–188', desc:'String handling, packages, collections framework and recursion.', size:'~2.5 MB', format:'PDF', url:'', premium:true, file:'BCA-421 JAVA-133-188.pdf' },
-  { id:12, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java OOPs — Pages 189–260', desc:'AWT, GUI programming, layout managers, applets and event handling.', size:'~3 MB', format:'PDF', url:'', premium:true, file:'BCA-421 JAVA-189-260.pdf' },
-
+  { id:101, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 1', desc:'Module 1: The Java Engine & Syntax Basics.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Java_Module_1.pdf' },
+  { id:102, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 2', desc:'Module 2: Control Flow & Memory Management for Arrays.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Java_Module_2.pdf' },
+  { id:103, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 3', desc:'Module 3: Mastering Strings & Essential Utility Classes.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Java_Module_3.pdf' },
+  { id:104, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 4', desc:'Module 4: OOP Principles — Classes, Objects & Constructors.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Java_Module_4.pdf' },
+  { id:105, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 5', desc:'Module 5: Advanced OOP — Inheritance, Polymorphism & Abstraction.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Java_Module_5.pdf' },
+  { id:106, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 6', desc:'Module 6: Defensive Programming (Exception Handling & File I/O).', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Java_Module_6.pdf' },
+  { id:107, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 7', desc:'Module 7: The Java Collections Framework (JCF).', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Java_Module_7.pdf' },
+  { id:108, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 8', desc:'Module 8: Functional Programming (Java 8+ Features).', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Java_Module_8.pdf' },
+  { id:109, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 9', desc:'Module 9: Multithreading & Concurrency.', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_Java_Module_9.pdf' },
+  { id:110, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 10', desc:'Module 10: Relational Databases & JDBC.', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_Java_Module_10.pdf' },
+  { id:111, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 11', desc:'Module 11: Enterprise Backend with Spring Boot.', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_Java_Module_11.pdf' },
+  { id:112, type:'java', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Java Programming — Module 12', desc:'Module 12: Testing, Debugging & Production Deployment.', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_Java_Module_12.pdf' },
   // PYTHON
   { id:13, type:'python', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'Python Complete Notes', desc:'Full Python notes: syntax, data structures, OOP, file handling and modules.', size:'~391 KB', format:'PDF', url:'/pdf/python.pdf' },
-
   // C++
-  { id:14, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Lecture Notes — Pages 1–18', desc:'OOP concepts, basics of C++ and tokens.', size:'~485 KB', format:'PDF', url:'/pdf/C%2B%2B%20lecture%20notes%20Complete-1-18.pdf' },
-  { id:15, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Lecture Notes — Pages 19–35', desc:'Data types, constants, operators, control structures, functions and overloading.', size:'~355 KB', format:'PDF', url:'/pdf/C%2B%2B%20lecture%20notes%20Complete-19-35.pdf' },
-  { id:16, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Lecture Notes — Pages 36–64', desc:'Classes, member functions, static members, friend functions and constructors.', size:'~337 KB', format:'PDF', url:'/pdf/C%2B%2B%20lecture%20notes%20Complete-36-64.pdf' },
-  { id:17, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Lecture Notes — Pages 67–120', desc:'Operator overloading, templates and exception handling.', size:'~2.5 MB', format:'PDF', url:'', premium:true, file:'C++ lecture notes Complete-67-120.pdf' },
-  { id:18, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Lecture Notes — Pages 108–132', desc:'STL containers, iterators and algorithms.', size:'~2 MB', format:'PDF', url:'', premium:true, file:'C++ lecture notes Complete-108-132.pdf' },
-  { id:19, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Lecture Notes — Pages 133–146', desc:'File I/O streams, advanced memory management and RAII.', size:'~1.5 MB', format:'PDF', url:'', premium:true, file:'C++ lecture notes Complete-133-146.pdf' },
-
-  // C#
-  { id:20, type:'csharp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C# Notes — Pages 1–82', desc:'Introduction to C#, .NET framework, data types and OOP basics.', size:'~291 KB', format:'PDF', url:'/pdf/C%23%20NOTES-1-82.pdf' },
-  { id:21, type:'csharp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C# Notes — Pages 83–126', desc:'Inheritance, interfaces, abstract classes and access modifiers.', size:'~208 KB', format:'PDF', url:'/pdf/C%23%20NOTES-83-126.pdf' },
-  { id:22, type:'csharp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C# Notes — Pages 127–192', desc:'Collections, generics, delegates and events.', size:'~331 KB', format:'PDF', url:'/pdf/C%23%20NOTES-127-192.pdf' },
-  { id:23, type:'csharp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C# Notes — Pages 193–224', desc:'LINQ queries, lambda expressions and extension methods.', size:'~143 KB', format:'PDF', url:'/pdf/C%23%20NOTES-193-224.pdf' },
-  { id:24, type:'csharp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C# Notes — Pages 225–314', desc:'Async/await, multithreading and exception handling.', size:'~378 KB', format:'PDF', url:'/pdf/C%23%20NOTES-225-314.pdf' },
-  { id:25, type:'csharp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C# Notes — Pages 315–469', desc:'File I/O, WinForms, advanced .NET topics and interview prep.', size:'~437 KB', format:'PDF', url:'/pdf/C%23%20NOTES-315-469.pdf' },
-
-  // HTML + CSS + JS
-  { id:26, type:'web', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'HTML Notes — Pages 1–21', desc:'HTML5 basics: document structure, headings, links, images and lists.', size:'~376 KB', format:'PDF', url:'/pdf/HTML%20notes-1-21.pdf' },
-  { id:27, type:'web', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'HTML Notes — Pages 22–57', desc:'Forms, tables, semantic elements and HTML5 APIs.', size:'~736 KB', format:'PDF', url:'/pdf/HTML%20notes-22-57.pdf' },
-  { id:28, type:'web', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'HTML Notes — Pages 58–77', desc:'Multimedia, iframes, accessibility and advanced HTML5 features.', size:'~465 KB', format:'PDF', url:'/pdf/HTML%20notes-58-77.pdf' },
-  { id:29, type:'web', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'CSS Complete Notes', desc:'Full CSS: selectors, box model, flexbox, grid, animations and responsive design.', size:'~153 KB', format:'PDF', url:'/pdf/CSS%20notes.pdf' },
-  { id:30, type:'web', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript Notes — Pages 1–28', desc:'JS fundamentals: variables, data types, functions, arrays and objects.', size:'~140 KB', format:'PDF', url:'/pdf/JS%20Notes-1-28.pdf' },
-  { id:31, type:'web', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript Notes — Pages 29–45', desc:'DOM manipulation, events, ES6+ features and async programming.', size:'~106 KB', format:'PDF', url:'/pdf/JS%20Notes-29-45.pdf' },
+  { id:113, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 1', desc:'Module 1: Introduction to C++.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Cpp_Module_1.pdf' },
+  { id:114, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 2', desc:'Module 2: Control Statements.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Cpp_Module_2.pdf' },
+  { id:115, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 3', desc:'Module 3: Classes & Objects.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Cpp_Module_3.pdf' },
+  { id:116, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 4', desc:'Module 4: Pointers & Memory Management.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Cpp_Module_4.pdf' },
+  { id:117, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 5', desc:'Module 5: Inheritance & Polymorphism.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Cpp_Module_5.pdf' },
+  { id:118, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 6', desc:'Module 6: Exception Handling.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Cpp_Module_6.pdf' },
+  { id:119, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 7', desc:'Module 7: Templates & Generic Programming.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Cpp_Module_7.pdf' },
+  { id:120, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 8', desc:'Module 8: Standard Template Library (STL).', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_Cpp_Module_8.pdf' },
+  { id:121, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 9', desc:'Module 9: Modern C++ & Smart Pointers.', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_Cpp_Module_9.pdf' },
+  { id:122, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 10', desc:'Module 10: File Handling & Streams.', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_Cpp_Module_10.pdf' },
+  { id:123, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 11', desc:'Module 11: Multithreading (C++11).', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_Cpp_Module_11.pdf' },
+  { id:124, type:'cpp', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'C++ Programming — Module 12', desc:'Module 12: RAII & Rule of Three.', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_Cpp_Module_12.pdf' },
+  // JAVASCRIPT
+  { id:125, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 1', desc:'Module 1: JavaScript Foundations & Syntax.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_JavaScript_Module_1.pdf' },
+  { id:126, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 2', desc:'Module 2: Control Flow & Logic.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_JavaScript_Module_2.pdf' },
+  { id:127, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 3', desc:'Module 3: Functions Deep Dive.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_JavaScript_Module_3.pdf' },
+  { id:128, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 4', desc:'Module 4: Arrays & Objects Mastery.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_JavaScript_Module_4.pdf' },
+  { id:129, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 5', desc:'Module 5: The DOM & Event Handling.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_JavaScript_Module_5.pdf' },
+  { id:130, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 6', desc:'Module 6: Modern JavaScript (ES6+).', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_JavaScript_Module_6.pdf' },
+  { id:131, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 7', desc:'Module 7: Asynchronous JavaScript.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_JavaScript_Module_7.pdf' },
+  { id:132, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 8', desc:'Module 8: Advanced Functions & Closures.', size:'', format:'PDF', url:'/pdf/IT_Study_Hub_JavaScript_Module_8.pdf' },
+  { id:133, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 9', desc:'Module 9: OOP in JavaScript.', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_JavaScript_Module_9.pdf' },
+  { id:134, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 10', desc:'Module 10: Error Handling & Debugging.', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_JavaScript_Module_10.pdf' },
+  { id:135, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 11', desc:'Module 11: Modules, Bundlers & Tooling.', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_JavaScript_Module_11.pdf' },
+  { id:136, type:'javascript', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'JavaScript — Module 12', desc:'Module 12: Testing & Performance.', size:'', format:'PDF', url:'', premium:true, file:'IT_Study_Hub_JavaScript_Module_12.pdf' },
+  // R
+  { id:137, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 1', desc:'Module 1: Intro to R & RStudio.', size:'', format:'PDF', url:'/pdf/IT_STUDY_HUB_R_Module_1.pdf' },
+  { id:138, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 2', desc:'Module 2: Variables & Data Types.', size:'', format:'PDF', url:'/pdf/IT_STUDY_HUB_R_Module_2.pdf' },
+  { id:139, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 3', desc:'Module 3: Control Flow & Logic.', size:'', format:'PDF', url:'/pdf/IT_STUDY_HUB_R_Module_3.pdf' },
+  { id:140, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 4', desc:'Module 4: Functions & Parameters.', size:'', format:'PDF', url:'/pdf/IT_STUDY_HUB_R_Module_4.pdf' },
+  { id:141, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 5', desc:'Module 5: Data Frames & Tibbles.', size:'', format:'PDF', url:'/pdf/IT_STUDY_HUB_R_Module_5.pdf' },
+  { id:142, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 6', desc:'Module 6: Vectors, Lists & Matrices.', size:'', format:'PDF', url:'/pdf/IT_STUDY_HUB_R_Module_6.pdf' },
+  { id:143, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 7', desc:'Module 7: Data Manipulation with dplyr.', size:'', format:'PDF', url:'/pdf/IT_STUDY_HUB_R_Module_7.pdf' },
+  { id:144, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 8', desc:'Module 8: Error Handling & Debugging.', size:'', format:'PDF', url:'/pdf/IT_STUDY_HUB_R_Module_8.pdf' },
+  { id:145, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 9', desc:'Module 9: Functional Programming.', size:'', format:'PDF', url:'', premium:true, file:'IT_STUDY_HUB_R_Module_9.pdf' },
+  { id:146, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 10', desc:'Module 10: Data Visualization with ggplot2.', size:'', format:'PDF', url:'', premium:true, file:'IT_STUDY_HUB_R_Module_10.pdf' },
+  { id:147, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 11', desc:'Module 11: Statistical Analysis & Modeling.', size:'', format:'PDF', url:'', premium:true, file:'IT_STUDY_HUB_R_Module_11.pdf' },
+  { id:148, type:'r', icon:'<i class="ti ti-file" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', name:'R Programming — Module 12', desc:'Module 12: Shiny & R Markdown.', size:'', format:'PDF', url:'', premium:true, file:'IT_STUDY_HUB_R_Module_12.pdf' }
 ];
 
-const BADGES = {c:'badge-c',java:'badge-java',python:'badge-python',cpp:'badge-cpp',csharp:'badge-csharp',web:'badge-web'};
-const LABELS = {c:'C',java:'Java',python:'Python',cpp:'C++',csharp:'C#',web:'Web'};
-const COLORS = {c:'#60a5fa',java:'#f7b731',python:'#43e97b',cpp:'#a78bfa',csharp:'#38bdf8',web:'#c8f135'};
+const BADGES = {c:'badge-c',java:'badge-java',python:'badge-python',cpp:'badge-cpp',javascript:'badge-web',r:'badge-csharp'};
+const LABELS = {c:'C',java:'Java',python:'Python',cpp:'C++',javascript:'JavaScript',r:'R'};
+const COLORS = {c:'#60a5fa',java:'#f7b731',python:'#43e97b',cpp:'#a78bfa',javascript:'#c8f135',r:'#38bdf8'};
 
 let activeFilter = 'all';
 let searchTerm = '';
@@ -173,7 +193,7 @@ function init() {
 
 function updateCounts() {
   document.getElementById('cnt-all').textContent = FILES.length;
-  ['c','java','python','cpp','csharp','web'].forEach(t => {
+  ['c','java','python','cpp','javascript','r'].forEach(t => {
     const cnt = document.getElementById('cnt-'+t);
     if (cnt) cnt.textContent = FILES.filter(f=>f.type===t).length;
   });
@@ -185,7 +205,7 @@ function filterFiles(type, btn) {
   document.getElementById('searchInput').value = '';
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  const labels = {all:'All Files',c:'C Programming',java:'Java OOPs',python:'Python',cpp:'C++',csharp:'C# .NET',web:'HTML+CSS+JS'};
+  const labels = {all:'All Files',c:'C Programming',java:'Java OOPs',python:'Python',cpp:'C++',javascript:'JavaScript',r:'R Programming'};
   document.getElementById('secTitle').textContent = labels[type] || 'All Files';
   renderFiles();
 }
@@ -216,9 +236,7 @@ function renderFiles() {
       <div>
         <div class="file-name">${f.name}</div>
         <div class="file-meta">
-          <span>${f.size}</span>
-          <span class="file-meta-dot">·</span>
-          <span>${f.format}</span>
+          ${f.size?`<span>${f.size}</span><span class="file-meta-dot">·</span>`:''}<span>${f.format}</span>
         </div>
       </div>
       <div class="file-desc">${f.desc}</div>
