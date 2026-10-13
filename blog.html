@@ -20,6 +20,17 @@
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="pages.css">
 <style>
+/* Readability pass: long headlines use the body font (Syne ExtraBold is for short logo-style text), even card heights, tidy sidebar */
+.post-title, .feat-title { font-family: var(--ff-body); font-weight: 700; letter-spacing: -0.015em; line-height: 1.25; }
+.post-title { font-size: 19px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.feat-title { font-size: clamp(24px, 3vw, 34px); line-height: 1.2; }
+.cat-btn { justify-content: flex-start; gap: 10px; }
+.cat-btn .cat-count { margin-left: auto; }
+.sidebar { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.16) transparent; }
+.sidebar::-webkit-scrollbar { width: 8px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.16); border-radius: 8px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: rgba(200,241,53,0.4); }
 /* ── Thumb base ── */
 .post-thumb {
   display:flex; align-items:center; justify-content:center;
