@@ -43,9 +43,7 @@ const PLANS = [
       'Unlock ALL 6 courses',
       'Advanced + Expert lessons',
       'All PDFs & cheat sheets',
-      'Priority quiz feedback',
       'Access for 12 months',
-      'Certificate of completion',
     ],
     cta: 'Go Pro'
   },
@@ -60,8 +58,6 @@ const PLANS = [
       'Everything in Pro',
       'Lifetime access — forever',
       'Early access to new courses',
-      'Direct mentor Q&A sessions',
-      'Exclusive Discord community',
       'Profile Elite badge <i class="ti ti-trophy" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>',
     ],
     cta: 'Go Elite'

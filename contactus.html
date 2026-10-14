@@ -36,99 +36,31 @@
     <p class="sidebar-label">Support Channels</p>
     <div class="contact-method">
       <div class="cm-icon"><i class="ti ti-mail" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️</div>
-      <div class="cm-text">contact@itstudyhub.dpdns.org</div>
+      <div class="cm-text"><a href="mailto:contact@itstudyhub.dpdns.org" style="color:inherit;text-decoration:none;">contact@itstudyhub.dpdns.org</a></div>
     </div>
     <div class="contact-method">
-      <div class="cm-icon"><i class="ti ti-message" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
-      <div class="cm-text">Discord: hub_devs_88</div>
-    </div>
-    <div class="contact-method">
-      <div class="cm-icon"><i class="ti ti-brand-twitter" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
-      <div class="cm-text">@itstudyhub_legal</div>
+      <div class="cm-icon"><i class="ti ti-shield" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
+      <div class="cm-text"><a href="mailto:admin@itstudyhub.dpdns.org" style="color:inherit;text-decoration:none;">admin@itstudyhub.dpdns.org</a></div>
     </div>
 
-    <p class="sidebar-label" class="mt-20">System Status</p>
-    <div style="background:var(--lime-dim); padding:12px; border-radius:10px; border: 1px solid var(--border-active);">
-        <div class="mono-sm-lime">Ticket Response Time</div>
-        <div style="font-family:var(--ff-display); font-size:20px; color:var(--text); margin-top:4px;">~ 2 Hours</div>
-    </div>
   </aside>
 
   <main class="main">
     <section class="hero fade-up">
       <div class="hero-eyebrow">Get In Touch · Support</div>
-      <h1 class="hero-title">Send a <em>Message</em></h1>
-      <p style="color:var(--muted2); font-size:15px; max-width:500px; line-height:1.75;">Have a technical question about C++ pointers or a billing issue? Drop us a line and our mentors will get back to you.</p>
+      <h1 class="hero-title">Email <em>Us</em></h1>
+      <p style="color:var(--muted2); font-size:15px; max-width:500px; line-height:1.75;">Have a question about the site or a billing issue? Send us an email and we will get back to you.</p>
     </section>
 
     <section class="fade-up" class="anim-delay-2">
       <div class="contact-card">
-        <form id="contactForm" onsubmit="handleSubmit(event)">
-          <div class="form-group">
-            <label class="form-label">Full Name</label>
-            <input type="text" class="form-input" placeholder="e.g. Dennis Ritchie" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Email Address</label>
-            <input type="email" class="form-input" placeholder="your@email.com" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Subject</label>
-            <select class="form-input" style="appearance:none;">
-                <option>Technical Support</option>
-                <option>Premium Subscription Issue</option>
-                <option>General Inquiry</option>
-                <option>Partnership</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Your Message</label>
-            <textarea class="form-textarea" placeholder="Describe your issue or query in detail..." required></textarea>
-          </div>
-          <button type="submit" class="btn-submit">
-            <span>Send Message</span>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14 2L7.7 8.3M14 2L9.1 14L7.7 8.3M14 2L2 6.9L7.7 8.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </form>
+        <p style="color:var(--muted2);font-size:15px;line-height:1.75;margin:0 0 14px;"><strong style="color:var(--text);">General questions</strong> (site, courses, your account): <a href="mailto:contact@itstudyhub.dpdns.org" style="color:var(--lime);text-decoration:none;">contact@itstudyhub.dpdns.org</a></p>
+        <p style="color:var(--muted2);font-size:15px;line-height:1.75;margin:0;"><strong style="color:var(--text);">Payments, refunds, plan upgrades:</strong> <a href="mailto:admin@itstudyhub.dpdns.org" style="color:var(--lime);text-decoration:none;">admin@itstudyhub.dpdns.org</a>. Include your payment ID.</p>
       </div>
     </section>
   </main>
 </div>
 
-<div class="toast" id="toast">
-  <span style="font-size:18px;"><i class="ti ti-rocket" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>
-  <div>
-    <div style="font-size:13px; font-weight:700;">Message Sent!</div>
-    <div class="mono-sm-lime">We'll reach out via email shortly.</div>
-  </div>
-</div>
-
-<script>
-  function handleSubmit(e) {
-    e.preventDefault();
-    const btn = e.target.querySelector('.btn-submit');
-    const originalText = btn.innerHTML;
-    
-    // UI Feedback
-    btn.innerHTML = "Processing...";
-    btn.style.opacity = "0.7";
-    btn.style.pointerEvents = "none";
-
-    setTimeout(() => {
-        const toast = document.getElementById('toast');
-        toast.classList.add('show');
-        e.target.reset();
-        
-        btn.innerHTML = originalText;
-        btn.style.opacity = "1";
-        btn.style.pointerEvents = "auto";
-
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 4000);
-    }, 1200);
-  }
-</script>
 <!-- Custom Cursor -->
 <div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
