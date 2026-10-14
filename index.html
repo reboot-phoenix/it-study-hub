@@ -7,51 +7,36 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Free IT learning platform for students worldwide. 6 programming courses (C, Java, Python, C++, R, JavaScript), skill-level quizzes, blog, and a practice IDE — all in one place.">
-<meta name="keywords" content="IT Study Hub, programming courses, learn to code, C Java Python C++ JavaScript, skill quiz, computer science students">
-<meta name="author" content="IT Study Hub — Built by Dithsa Dutta">
-
-<!-- Open Graph (Google, Facebook, WhatsApp previews) -->
+<meta name="description" content="Notes, quizzes and practice problems for IT students: C, Java, Python, C++, R and JavaScript. The first six modules of every course are free.">
+<meta name="keywords" content="IT Study Hub, programming courses, learn to code, C Java Python C++ R JavaScript, skill quiz, practice problems, IT students">
+<meta name="author" content="IT Study Hub">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://itstudyhub.dpdns.org/">
 <meta property="og:title" content="IT Study Hub">
-<meta property="og:description" content="6 programming courses, skill-level quizzes, a practice IDE and a study community — completely free for CS students everywhere.">
+<meta property="og:description" content="Notes, quizzes and practice problems for IT students: C, Java, Python, C++, R and JavaScript. The first six modules of every course are free.">
 <meta property="og:image" content="https://itstudyhub.dpdns.org/team_image.jpeg">
-
-<!-- Twitter card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="IT Study Hub — Free Programming Courses for Students">
-<meta name="twitter:description" content="6 programming courses, skill-level quizzes, a practice IDE and a study community — completely free for CS students everywhere.">
+<meta name="twitter:title" content="IT Study Hub">
+<meta name="twitter:description" content="Notes, quizzes and practice problems for IT students: C, Java, Python, C++, R and JavaScript. The first six modules of every course are free.">
 <meta name="twitter:image" content="https://itstudyhub.dpdns.org/team_image.jpeg">
-<meta name="theme-color" content="#c8f135">
+<meta name="theme-color" content="#0e1220">
 <title>IT Study Hub</title>
 <link rel="canonical" href="https://itstudyhub.dpdns.org/">
 <meta property="og:site_name" content="IT Study Hub">
-<link rel="preload" href="fonts/bebas-neue-v16-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dm-sans-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/dm-sans-v17-latin-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/jetbrains-mono-v24-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="index-page.css">
-<style>
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-/* Active nav item */
-nav .nav-links li a.nav-active {
-  color: var(--lime, #c8f135);
-  font-weight: 600;
-}
-</style>
 </head>
-<body>
 
-<!-- Cursor -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<body class="home">
 
 <!-- ═══════ NAV ═══════ -->
 <nav>
   <a href="#" class="nav-logo">
-    <div class="dot"></div>
-    IT STUDY HUB
+    <span class="dot"></span>
+    IT Study Hub
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
@@ -110,7 +95,6 @@ nav .nav-links li a.nav-active {
   </div>
 </nav>
 
-<!-- ═══════ MOBILE NAV DRAWER ═══════ -->
 <div class="nav-mobile-drawer" id="mobileDrawer">
   <button class="nav-mobile-close" id="drawerClose">✕ Close</button>
   <a href="index.html" class="nav-active">Home</a>
@@ -121,703 +105,181 @@ nav .nav-links li a.nav-active {
   <a href="premium.html" class="nav-premium-link"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Pricing</a>
 </div>
 
-<!-- ═══════ HERO ═══════ -->
-<section class="hero">
-  <div class="hero-bg">
-    <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <line x1="0" y1="100" x2="1200" y2="100" stroke="#c8f135" stroke-width="0.5"/>
-      <line x1="0" y1="300" x2="1200" y2="300" stroke="#c8f135" stroke-width="0.5"/>
-      <line x1="0" y1="500" x2="1200" y2="500" stroke="#c8f135" stroke-width="0.5"/>
-      <line x1="200" y1="0" x2="200" y2="700" stroke="#c8f135" stroke-width="0.5"/>
-      <line x1="600" y1="0" x2="600" y2="700" stroke="#c8f135" stroke-width="0.5"/>
-      <line x1="1000" y1="0" x2="1000" y2="700" stroke="#c8f135" stroke-width="0.5"/>
-      <circle cx="200" cy="100" r="5" fill="#c8f135"/>
-      <circle cx="600" cy="300" r="5" fill="#c8f135"/>
-      <circle cx="1000" cy="100" r="5" fill="#c8f135"/>
-      <circle cx="200" cy="500" r="5" fill="#c8f135"/>
-      <circle cx="1000" cy="500" r="5" fill="#c8f135"/>
-      <path d="M200 100 L600 300 L1000 100" stroke="#c8f135" stroke-width="0.5" fill="none"/>
-      <path d="M200 500 L600 300 L1000 500" stroke="#c8f135" stroke-width="0.5" fill="none"/>
-    </svg>
-  </div>
+<main id="main">
 
-  <div class="hero-left">
-    <div class="hero-eyebrow">Notes, quizzes and practice for IT students</div>
-    <h1 class="hero-title" aria-label="Learn to code, step by step.">
-      LEARN TO CODE<br>
-      <span class="highlight">STEP BY STEP.</span>
-    </h1>
-    <p class="hero-desc">
-      Six programming courses with notes, quizzes and a practice panel. Made by students at
-      Techno India University. The first six modules of every course are free.
-    </p>
-    <div class="hero-actions">
-      <a href="courses.html" class="btn-lime">Explore Courses →</a>
-      <a href="Login.html" class="btn-ghost" id="heroAuthBtn">Sign In to Track Progress</a>
+<!-- Intro -->
+<section class="intro">
+  <div class="intro-text">
+    <h1>Notes, quizzes and practice problems for IT students</h1>
+    <p class="lede">Six courses, in C, Java, Python, C++, R and JavaScript, written by students at Techno India University. The first six modules of every course are free.</p>
+    <div class="intro-actions">
+      <a href="#courses" class="btn btn-primary" id="heroAuthBtn">Choose a course</a>
+      <a href="quiz.html" class="btn btn-quiet">Take the skill quiz</a>
     </div>
   </div>
-
-  <div class="hero-right">
-    <div class="hero-card">
-      <div class="hero-card-title">Pick a course</div>
-      <ul class="hero-card-list">
-        <li><a href="c.html"><span class="hc-name">C</span><span class="hc-desc">Pointers, memory and how programs really run</span><span class="hc-arrow" aria-hidden="true">→</span></a></li>
-        <li><a href="java.html"><span class="hc-name">Java</span><span class="hc-desc">Object-oriented programming</span><span class="hc-arrow" aria-hidden="true">→</span></a></li>
-        <li><a href="python.html"><span class="hc-name">Python</span><span class="hc-desc">Scripting, data structures and automation</span><span class="hc-arrow" aria-hidden="true">→</span></a></li>
-        <li><a href="c++.html"><span class="hc-name">C++</span><span class="hc-desc">OOP, the STL and performance</span><span class="hc-arrow" aria-hidden="true">→</span></a></li>
-        <li><a href="r.html"><span class="hc-name">R</span><span class="hc-desc">Statistics and data visualisation</span><span class="hc-arrow" aria-hidden="true">→</span></a></li>
-        <li><a href="javascript.html"><span class="hc-name">JavaScript</span><span class="hc-desc">The web: DOM, async code and ES6+</span><span class="hc-arrow" aria-hidden="true">→</span></a></li>
-      </ul>
-      <p class="hero-card-foot">Not sure where to start? <a href="quiz.html">Take the skill quiz</a> and we'll suggest a level.</p>
+  <figure class="practical">
+    <div class="practical-page">
+      <p><b>Aim:</b> Print the squares of the numbers 1 to 5.</p>
+      <p><b>Program:</b></p>
+<pre><code>for n in range(1, 6):
+    print(n, "squared is", n * n)</code></pre>
+      <p><b>Output:</b></p>
+<pre><code>1 squared is 1
+2 squared is 4
+3 squared is 9
+4 squared is 16
+5 squared is 25</code></pre>
     </div>
-  </div>
+    <figcaption>A sample Python program</figcaption>
+  </figure>
 </section>
 
-<!-- ═══════ TICKER ═══════ -->
-<div class="ticker">
-  <div class="ticker-track">
-    <div class="ticker-item"><strong>6</strong> programming courses</div>
-    <div class="ticker-item"><strong>12</strong> modules per course</div>
-    <div class="ticker-item"><strong>25</strong>-question skill quiz</div>
-    <div class="ticker-item"><strong>70+</strong> practice problems</div>
-    <div class="ticker-item"><strong>Free</strong> to start</div>
-    <div class="ticker-item"><strong>C · Java · Python · C++ · R · JavaScript</strong></div>
-  </div>
-</div>
+<!-- Courses (the only place the courses are listed) -->
+<section class="block" id="courses">
+  <h2>Courses</h2>
+  <p class="block-intro">Each course has 12 modules. Modules 1–6 are free; the rest come with a paid plan. Not sure where to start? The <a href="quiz.html">skill quiz</a> has 25 questions per subject and suggests a level.</p>
+  <ul class="course-list">
+      <li><a href="c.html"><span class="course-name">C</span><span class="course-desc">Pointers, memory allocation and how programs work with the hardware.</span><span class="course-open">Open course</span></a></li>
+      <li><a href="java.html"><span class="course-name">Java</span><span class="course-desc">Object-oriented programming: abstraction, polymorphism and design that scales.</span><span class="course-open">Open course</span></a></li>
+      <li><a href="python.html"><span class="course-name">Python</span><span class="course-desc">Scripts, automation and the data structures behind them.</span><span class="course-open">Open course</span></a></li>
+      <li><a href="c++.html"><span class="course-name">C++</span><span class="course-desc">The STL, dynamic memory and writing efficient algorithms.</span><span class="course-open">Open course</span></a></li>
+      <li><a href="r.html"><span class="course-name">R</span><span class="course-desc">Statistics and data visualisation for analysis and research.</span><span class="course-open">Open course</span></a></li>
+      <li><a href="javascript.html"><span class="course-name">JavaScript</span><span class="course-desc">The DOM, asynchronous code and ES6+, for building interactive pages.</span><span class="course-open">Open course</span></a></li>
+  </ul>
+</section>
 
-<!-- ═══════ COURSES ═══════ -->
-<section class="courses-section" id="courses">
-  <div class="courses-header">
+<!-- Practice -->
+<section class="block" id="practice">
+  <div class="split">
     <div>
-      <div class="section-label reveal">Our Courses</div>
-      <h2 class="section-title reveal">6 SUBJECTS.<br>3 SKILL LEVELS.</h2>
+      <h2>Practice problems</h2>
+      <p>Write code in the browser and run it against test cases. There are 77 problems across the six languages: 27 easy, 32 medium and 18 hard. Sign in to run your code.</p>
+      <p><a href="practice-panel.html" class="btn btn-quiet">Open the practice panel</a></p>
     </div>
-    <div class="reveal">
-      <a href="courses.html" class="btn-ghost">View All Courses →</a>
-    </div>
-  </div>
-
-  <div class="courses-grid reveal">
-    <a href="c.html" class="course-card">
-      <div class="course-icon">
-        <!-- C language official logo -->
-        <svg viewBox="0 0 128 128" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path fill="#00599C" d="M115.4 30.7L67.1 2.9c-.8-.5-1.9-.7-3.1-.7-1.2 0-2.3.3-3.1.7l-48 27.9c-1.7 1-2.9 3.5-2.9 5.4v55.7c0 1.1.2 2.4 1 3.5l106.8-55.5c-.3-2.1-1.3-3.5-2.4-4.2z"/><path fill="#004482" d="M10.7 95.3c.5.8 1.2 1.5 1.9 1.9l48.2 27.9c.8.5 1.9.7 3.1.7 1.2 0 2.3-.3 3.1-.7l48-27.9c1.7-1 2.9-3.5 2.9-5.4V36.1c0-.9-.1-1.9-.6-2.8L10.7 95.3z"/><path fill="#659AD2" d="M92.1 55.8c-1.8-3.2-4.3-5.6-7.5-7.3-3.1-1.6-6.7-2.4-10.6-2.4-3.9 0-7.4.8-10.6 2.4-3.1 1.6-5.7 4.1-7.5 7.3-1.8 3.2-2.7 6.9-2.7 11.2s.9 8.1 2.7 11.2c1.8 3.2 4.3 5.7 7.5 7.3 3.1 1.6 6.7 2.4 10.6 2.4 3.2 0 6.1-.5 8.6-1.5 2.5-1 4.7-2.6 6.5-4.6l-7.3-7.3c-1.1 1.2-2.4 2.2-3.8 2.9-1.4.7-3 1-4.7 1-2.2 0-4.1-.5-5.7-1.5-1.6-1-2.9-2.4-3.8-4.3-.9-1.8-1.3-3.9-1.3-6.3s.4-4.4 1.3-6.3c.9-1.8 2.1-3.2 3.8-4.3 1.6-1 3.5-1.5 5.7-1.5 1.7 0 3.2.3 4.5 1s2.5 1.6 3.6 2.9l7.3-7.3c-1.8-2-3.9-3.5-6.2-4.6z"/></svg>
-      </div>
-      <div class="course-tag">Subject 01</div>
-      <div class="course-name">C PROGRAMMING</div>
-      <div class="course-desc">Pointers, memory management, data structures. The foundation every programmer needs.</div>
-      <div class="course-depth">Depth: Syntax → Pointers → File I/O → Data Structures</div>
-      <div class="course-meta">
-        <div class="course-levels">
-          <span class="level-pip lp-b">BEG</span>
-          <span class="level-pip lp-i">INT</span>
-          <span class="level-pip lp-a">ADV</span>
-        </div>
-        <div class="course-syllabus">
-          <p>What you'll learn:</p>
-          <ul><li>Variables & Data Types</li><li>Control Statements</li><li>Functions</li><li>Pointers</li><li>Arrays & Strings</li></ul>
-        </div>
-        <span class="course-arrow">→</span>
-      </div>
-    </a>
-    <a href="java.html" class="course-card">
-      <div class="course-icon">
-        <!-- Java official logo -->
-        <svg viewBox="0 0 128 128" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path fill="#EA2D2E" d="M47.617 98.12s-4.767 2.774 3.397 3.71c9.892 1.13 14.947.968 25.845-1.092 0 0 2.871 1.795 6.873 3.351-24.439 10.47-55.308-.607-36.115-5.969zm-2.988-13.665s-5.348 3.959 2.823 4.805c10.567 1.091 18.91.938 33.354-1.273 0 0 1.993 2.025 5.132 3.131-29.542 8.64-62.446.68-41.309-6.663z"/><path fill="#EA2D2E" d="M69.802 61.271c6.025 6.935-1.58 13.17-1.58 13.17s15.289-7.891 8.269-17.777c-6.559-9.215-11.587-13.792 15.635-29.58 0 .001-42.731 10.67-22.324 34.187z"/><path fill="#EA2D2E" d="M102.123 108.229s3.529 2.91-3.888 5.159c-14.102 4.272-58.706 5.56-71.094.171-4.451-1.938 3.899-4.625 6.526-5.192 2.739-.593 4.303-.485 4.303-.485-4.953-3.487-32.013 6.85-13.743 9.815 49.821 8.076 90.817-3.637 77.896-9.468zm-17.858-14.48s-5.348 4.264-4.771 6.416c5.565-.765 10.84-2.651 10.84-2.651l-6.069-3.765zm-32.163-16.044s-22.686 5.389-8.033 7.348c6.188.828 18.518.638 30.011-.326 9.39-.789 18.813-2.474 18.813-2.474s-3.308 1.419-5.704 3.053c-23.042 6.061-67.544 3.238-54.731-2.958 10.832-5.239 19.644-4.643 19.644-4.643zm41.695 23.275c23.421-12.167 12.591-23.86 5.032-22.285-1.848.385-2.677.72-2.677.72s.688-1.079 2-1.543c14.953-5.255 26.451 15.503-4.823 23.725 0-.002.359-.327.468-.617z"/><path fill="#EA2D2E" d="M76.491 1.587S89.459 14.563 64.188 34.51c-20.266 16.006-4.621 25.13-.007 35.559-11.831-10.673-20.509-20.07-14.688-28.815C58.041 28.42 81.722 22.195 76.491 1.587zm-9.276 124.434c22.476 1.437 57-.8 57.817-11.436 0 0-1.571 4.032-18.577 7.231-19.186 3.612-42.854 3.191-56.887.874 0 .001 2.875 2.381 17.647 3.331z"/></svg>
-      </div>
-      <div class="course-tag">Subject 02</div>
-      <div class="course-name">OOPS JAVA</div>
-      <div class="course-desc">Classes, inheritance, polymorphism, interfaces. Master object-oriented design.</div>
-      <div class="course-depth">Depth: OOP Basics → Inheritance → Interfaces → Design Patterns</div>
-      <div class="course-meta">
-        <div class="course-levels">
-          <span class="level-pip lp-b">BEG</span>
-          <span class="level-pip lp-i">INT</span>
-          <span class="level-pip lp-a">ADV</span>
-        </div>
-        <div class="course-syllabus">
-          <p>What you'll learn:</p>
-          <ul><li>OOP concepts</li><li>Classes & Objects</li><li>Inheritance</li><li>Polymorphism</li></ul>
-        </div>
-        <span class="course-arrow">→</span>
-      </div>
-    </a>
-    <a href="python.html" class="course-card">
-      <div class="course-icon">
-        <!-- Python official logo -->
-        <svg viewBox="0 0 128 128" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><linearGradient id="pybg1" x1="70.252" y1="1237.476" x2="170.659" y2="1151.089" gradientUnits="userSpaceOnUse" gradientTransform="matrix(.563 0 0 .568 -9.14 -706.46)"><stop offset="0" stop-color="#5A9FD4"/><stop offset="1" stop-color="#306998"/></linearGradient><linearGradient id="pybg2" x1="209.474" y1="1098.811" x2="173.62" y2="1149.537" gradientUnits="userSpaceOnUse" gradientTransform="matrix(.563 0 0 .568 -9.14 -706.46)"><stop offset="0" stop-color="#FFD43B"/><stop offset="1" stop-color="#FFE873"/></linearGradient><path fill="url(#pybg1)" d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H28.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zm-13.354 7.569c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z"/><path fill="url(#pybg2)" d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.693 5.818 10.627 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z"/></svg>
-      </div>
-      <div class="course-tag">Subject 03</div>
-      <div class="course-name">PYTHON</div>
-      <div class="course-desc">From scripting to data science. Python's clean syntax makes concepts click fast.</div>
-      <div class="course-depth">Depth: Scripting → OOP → File Handling → Data Viz with Matplotlib</div>
-      <div class="course-meta">
-        <div class="course-levels">
-          <span class="level-pip lp-b">BEG</span>
-          <span class="level-pip lp-i">INT</span>
-          <span class="level-pip lp-a">ADV</span>
-        </div>
-        <div class="course-syllabus">
-          <p>What you'll learn:</p>
-          <ul><li>Syntax Basics</li><li>Functions</li><li>File Handling</li><li>OOP in Python</li><li>Matplotlib</li></ul>
-        </div>
-        <span class="course-arrow">→</span>
-      </div>
-    </a>
-    <a href="c++.html" class="course-card">
-      <div class="course-icon">
-        <!-- C++ official logo -->
-        <svg viewBox="0 0 128 128" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path fill="#9C033A" d="M117.5 33.5l.3-.2c-.6-1.1-1.5-2.1-2.4-2.6L67.1 2.9c-.8-.5-1.9-.7-3.1-.7-1.2 0-2.3.3-3.1.7l-48 27.9c-1.7 1-2.9 3.5-2.9 5.4v55.7c0 1.1.2 2.4 1 3.5l.2-.1.2.3c.3.4.7.8 1.1 1.1l48.2 27.9c.8.5 1.9.7 3.1.7 1.2 0 2.3-.3 3.1-.7l48-27.9c1.7-1 2.9-3.5 2.9-5.4V36.1c.1-1-.1-2.3-.3-2.6z"/><path fill="#fff" d="M93.9 55.3c-1.9-3.2-4.6-5.7-7.9-7.4-3.2-1.7-7-2.6-11.2-2.6-4.3 0-8 .9-11.2 2.6-3.2 1.7-5.9 4.1-7.8 7.3-1.9 3.2-2.8 7-2.8 11.3s.9 8.1 2.8 11.3c1.9 3.2 4.6 5.7 7.9 7.4 3.3 1.7 7.1 2.6 11.3 2.6 3.5 0 6.7-.6 9.6-1.9 2.9-1.3 5.3-3.1 7.3-5.5l-9.1-5.3c-1.1 1.4-2.4 2.4-3.9 3.1-1.5.7-3.1 1-5 1-2.3 0-4.3-.5-6.1-1.6-1.7-1.1-3-2.6-4-4.6-.9-2-1.4-4.2-1.4-6.8 0-2.5.5-4.7 1.4-6.6 1-1.9 2.3-3.4 4-4.5 1.7-1.1 3.7-1.6 6-1.6 1.8 0 3.4.3 4.8 1 1.4.7 2.7 1.7 3.7 3l9-5.2zm15.1 5.9h-4.4v-4.4h-4.7v4.4h-4.4v4.7h4.4v4.4h4.7v-4.4h4.4zm16.1 0h-4.4v-4.4h-4.7v4.4h-4.4v4.7h4.4v4.4h4.7v-4.4h4.4z"/></svg>
-      </div>
-      <div class="course-tag">Subject 04</div>
-      <div class="course-name">C++</div>
-      <div class="course-desc">Templates, STL, virtual functions, operator overloading. C with superpowers.</div>
-      <div class="course-depth">Depth: OOP → STL → Templates → Virtual Functions</div>
-      <div class="course-meta">
-        <div class="course-levels">
-          <span class="level-pip lp-b">BEG</span>
-          <span class="level-pip lp-i">INT</span>
-          <span class="level-pip lp-a">ADV</span>
-        </div>
-        <div class="course-syllabus">
-          <p>What you'll learn:</p>
-          <ul><li>STL</li><li>Templates</li><li>OOP concepts</li></ul>
-        </div>
-        <span class="course-arrow">→</span>
-      </div>
-    </a>
-    <a href="r.html" class="course-card">
-      <div class="course-icon">
-        <!-- R language official logo -->
-        <svg viewBox="0 0 128 128" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><circle cx="64" cy="64" r="64" fill="#2369BD"/><ellipse cx="64" cy="64" rx="52" ry="52" fill="#fff" opacity="0.1"/><path fill="#fff" d="M30 24h40c22 0 34 10 34 28 0 14-8 24-21 28l24 24H89L67 82H46v22H30V24zm16 14v30h22c11 0 18-6 18-15s-7-15-18-15H46z"/><ellipse cx="88" cy="94" rx="16" ry="10" fill="#CBE5F7" opacity="0.8"/></svg>
-      </div>
-      <div class="course-tag">Subject 05</div>
-      <div class="course-name">R PROGRAMMING</div>
-      <div class="course-desc">Statistical computing and data visualization. The language of data science and research.</div>
-      <div class="course-depth">Depth: R Basics → Data Frames → ggplot2 → Statistical Analysis</div>
-      <div class="course-meta">
-        <div class="course-levels">
-          <span class="level-pip lp-b">BEG</span>
-          <span class="level-pip lp-i">INT</span>
-          <span class="level-pip lp-a">ADV</span>
-        </div>
-        <div class="course-syllabus">
-          <p>What you'll learn:</p>
-          <ul><li>R Syntax & Data Types</li><li>Vectors & Data Frames</li><li>Data Wrangling</li><li>ggplot2 Visualization</li><li>Statistical Analysis</li></ul>
-        </div>
-        <span class="course-arrow">→</span>
-      </div>
-    </a>
-    <a href="javascript.html" class="course-card">
-      <div class="course-icon">
-        <!-- JavaScript logo - clean official version -->
-        <svg viewBox="0 0 128 128" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><rect width="128" height="128" fill="#F7DF1E" rx="4"/><path fill="#323330" d="M67.5 95.2c2.1 3.4 4.9 5.9 9.7 5.9 4.1 0 6.7-2 6.7-4.8 0-3.4-2.7-4.6-7.2-6.5l-2.5-1.1c-7.1-3-11.9-6.8-11.9-14.8 0-7.4 5.6-13 14.4-13 6.2 0 10.7 2.2 13.9 7.9l-7.6 4.9c-1.7-3-3.4-4.1-6.3-4.1-2.9 0-4.7 1.8-4.7 4.1 0 2.9 1.8 4 6 5.8l2.5 1.1c8.4 3.6 13.2 7.2 13.2 15.5 0 8.9-7 13.7-16.4 13.7-9.2 0-15.1-4.4-18-10.1l7.9-4.5zM40.8 96c1.5 2.7 2.9 5 6.2 5 3.2 0 5.2-1.2 5.2-6V63.4h9.7v31.8c0 9.9-5.8 14.4-14.3 14.4-7.7 0-12.1-4-14.3-8.8L40.8 96z"/></svg>
-      </div>
-      <div class="course-tag">Subject 06</div>
-      <div class="course-name">JAVASCRIPT</div>
-      <div class="course-desc">From DOM manipulation to async programming. The language that powers the modern web.</div>
-      <div class="course-depth">Depth: JS Basics → DOM → ES6+ → Async/Await → Mini Projects</div>
-      <div class="course-meta">
-        <div class="course-levels">
-          <span class="level-pip lp-b">BEG</span>
-          <span class="level-pip lp-i">INT</span>
-          <span class="level-pip lp-a">ADV</span>
-        </div>
-        <div class="course-syllabus">
-          <p>What you'll learn:</p>
-          <ul><li>JS Fundamentals</li><li>DOM Manipulation</li><li>ES6+ Features</li><li>Async / Promises</li><li>Mini Projects</li></ul>
-        </div>
-        <span class="course-arrow">→</span>
-      </div>
-    </a>
+    <table class="problems">
+      <caption>A few of the C problems</caption>
+      <thead><tr><th scope="col">Problem</th><th scope="col">Difficulty</th></tr></thead>
+      <tbody>
+        <tr><td>Hello, World!</td><td class="diff diff-easy">Easy</td></tr>
+        <tr><td>Sum of Two Numbers</td><td class="diff diff-easy">Easy</td></tr>
+        <tr><td>Factorial</td><td class="diff diff-medium">Medium</td></tr>
+        <tr><td>Fibonacci Series</td><td class="diff diff-medium">Medium</td></tr>
+        <tr><td>Bubble Sort</td><td class="diff diff-hard">Hard</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
-<!-- ═══════ HOW IT WORKS ═══════ -->
-<section class="how-section">
-  <div class="section-label reveal">The Process</div>
-  <h2 class="section-title reveal">HOW IT WORKS</h2>
-  <div class="how-grid">
-    <div class="how-steps reveal">
-      <div class="how-step">
-        <div class="step-num">01</div>
-        <div class="step-content">
-          <h4>Create Your Account</h4>
-          <p>Sign in with an email code, Google or GitHub. It is free.</p>
-        </div>
-      </div>
-      <div class="how-step">
-        <div class="step-num">02</div>
-        <div class="step-content">
-          <h4>Take the Skill Quiz</h4>
-          <p>25 MCQ questions gauge your knowledge across Beginner, Intermediate, and Advanced levels.</p>
-        </div>
-      </div>
-      <div class="how-step">
-        <div class="step-num">03</div>
-        <div class="step-content">
-          <h4>Get Your Level</h4>
-          <p>The quiz suggests whether to start at Beginner, Intermediate or Advanced.</p>
-        </div>
-      </div>
-      <div class="how-step">
-        <div class="step-num">04</div>
-        <div class="step-content">
-          <h4>Learn & Track Progress</h4>
-          <p>Work through the modules. Your progress is saved to your account.</p>
-        </div>
-      </div>
-    </div>
-    <div class="how-visual reveal">
-      <div class="section-label how-label-spaced">What You Get</div>
-      <div class="platform-facts">
-        <div class="pf-item">
-          <div class="pf-icon">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="11" rx="2" stroke="#c8f135" stroke-width="1.4"/><path d="M7 8l2 2 4-4" stroke="#c8f135" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <div class="pf-text">
-            <div class="pf-label">Practical topics</div>
-            <div class="pf-sub">Each course starts with the basics and builds toward what you need for projects and interviews</div>
-          </div>
-        </div>
-        <div class="pf-item">
-          <div class="pf-icon">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="3" width="16" height="12" rx="2" stroke="#c8f135" stroke-width="1.4"/><path d="M7 17h6" stroke="#c8f135" stroke-width="1.4" stroke-linecap="round"/><path d="M10 15v2" stroke="#c8f135" stroke-width="1.4" stroke-linecap="round"/></svg>
-          </div>
-          <div class="pf-text">
-            <div class="pf-label">6 Course Tracks</div>
-            <div class="pf-sub">C · Java · Python · C++ · R · JavaScript — each with Beginner, Intermediate, and Advanced tiers</div>
-          </div>
-        </div>
-        <div class="pf-item">
-          <div class="pf-icon">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.5" stroke="#c8f135" stroke-width="1.4"/><path d="M10 6v4l3 2" stroke="#c8f135" stroke-width="1.4" stroke-linecap="round"/></svg>
-          </div>
-          <div class="pf-text">
-            <div class="pf-label">Learn at Your Own Pace</div>
-            <div class="pf-sub">No deadlines. Open any module whenever you like, on any device</div>
-          </div>
-        </div>
-        <div class="pf-item">
-          <div class="pf-icon">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M4 6h8M4 14h6" stroke="#c8f135" stroke-width="1.4" stroke-linecap="round"/></svg>
-          </div>
-          <div class="pf-text">
-            <div class="pf-label">PDF notes</div>
-            <div class="pf-sub">Module-by-module notes you can download. Modules 1–8 are free</div>
-          </div>
-        </div>
-        <div class="pf-item">
-          <div class="pf-icon">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 7l7-4 7 4v6l-7 4-7-4V7z" stroke="#c8f135" stroke-width="1.4" stroke-linejoin="round"/><path d="M10 3v14M3 7l7 4 7-4" stroke="#c8f135" stroke-width="1.4"/></svg>
-          </div>
-          <div class="pf-text">
-            <div class="pf-label">Skill quiz</div>
-            <div class="pf-sub">25 questions per subject that suggest which level to start at</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- Blog -->
+<section class="block" id="articles">
+  <h2>Recent articles</h2>
+  <ul class="post-list">
+      <li><a href="blog-post.html?id=18"><span class="post-title">What Happens When You Open a Website?</span><span class="post-meta">Jun 28, 2026</span><span class="post-meta">9 min read</span></a></li>
+      <li><a href="blog-post.html?id=17"><span class="post-title">Why Understanding Data Structures Makes You a Better Programmer</span><span class="post-meta">Jun 25, 2026</span><span class="post-meta">8 min read</span></a></li>
+      <li><a href="blog-post.html?id=16"><span class="post-title">How a Program Actually Works: From Code to Output</span><span class="post-meta">Jun 22, 2026</span><span class="post-meta">7 min read</span></a></li>
+  </ul>
+  <p class="block-more"><a href="blog.html">All articles</a></p>
 </section>
 
-<!-- ═══════ BLOG ═══════ -->
-<section class="blog-section">
-  <div class="blog-header">
+<!-- Plans -->
+<section class="block" id="plans">
+  <h2>Free and paid</h2>
+  <div class="split plans">
     <div>
-      <div class="section-label reveal">Latest Posts</div>
-      <h2 class="section-title reveal">FROM THE BLOG</h2>
+      <h3>Free</h3>
+      <p>Modules 1–6 of every course, the PDF notes for modules 1–8, the skill quiz and the practice problems.</p>
     </div>
-    <a href="blog.html" class="btn-ghost reveal">Read All Posts →</a>
-  </div>
-  <div class="blog-grid reveal">
-    <!-- FEATURED — Post 0: AI in Systems Programming -->
-    <a href="blog-post.html?id=0" class="blog-card featured">
-      <div class="blog-thumb" class="blog-thumb-featured">
-        <div class="blog-thumb-watermark">AI</div>
-        <div class="blog-thumb-tag-ai">TREND · AI · PROGRAMMING</div>
-        <div class="blog-thumb-title-ai">RISE OF AI</div>
-        <div class="blog-thumb-divider-ai"></div>
-        <div class="blog-thumb-sub-ai">Systems Programming</div>
-      </div>
-      <div class="blog-body">
-        <div class="blog-category">Trend · AI · Programming</div>
-        <div class="blog-title">The Rise of AI in Systems Programming</div>
-        <div class="blog-excerpt">Will LLMs replace C++ developers, or just make them faster? We explore how AI is changing low-level code and what it means for the next generation of IT students.</div>
-        <div class="blog-meta">IT Study Hub · May 15, 2026 · 6 min read</div>
-      </div>
-    </a>
-    <!-- Post 1: Java Streams -->
-    <a href="blog-post.html?id=1" class="blog-card">
-      <div class="blog-thumb" class="blog-thumb-java">
-        <div class="blog-thumb-watermark-java">JAVA</div>
-        <div class="blog-thumb-tag-java">TUTORIAL · JAVA · OOP</div>
-        <div class="blog-thumb-title-java">.stream()</div>
-        <div class="blog-thumb-divider-java"></div>
-      </div>
-      <div class="blog-body">
-        <div class="blog-category">Tutorial · Java · OOP</div>
-        <div class="blog-title">Mastering Java Streams for Cleaner Code</div>
-        <div class="blog-excerpt">Stop writing messy for-loops. Learn how to process data efficiently using the Java Stream API with practical examples.</div>
-        <div class="blog-meta">IT Study Hub · May 10, 2026 · 8 min read</div>
-      </div>
-    </a>
-    <!-- Post 2: Tech Interview -->
-    <a href="blog-post.html?id=2" class="blog-card">
-      <div class="blog-thumb" class="blog-thumb-career">
-        <div class="blog-thumb-watermark-career">CAREER</div>
-        <div class="blog-thumb-tag-career">CAREER · INTERVIEW · TIPS</div>
-        <div class="blog-thumb-title-java">ACE THE INTERVIEW</div>
-        <div class="blog-thumb-divider-career"></div>
-      </div>
-      <div class="blog-body">
-        <div class="blog-category">Career · Interview · Tips</div>
-        <div class="blog-title">How to Ace Your First Tech Interview</div>
-        <div class="blog-excerpt">From whiteboarding logic to behavioral questions — everything you need to know before walking into the room.</div>
-        <div class="blog-meta">IT Study Hub · May 5, 2026 · 7 min read</div>
-      </div>
-    </a>
-  </div>
-</section>
-
-<!-- ═══════ WHY US ═══════ -->
-<section class="features-section">
-  <div class="features-inner">
     <div>
-      <div class="section-label reveal">Why Choose Us</div>
-      <h2 class="section-title reveal">WHY IT STUDY HUB</h2>
-      <ul class="section-sub reveal why-list">
-        <li class="why-item"><span class="why-check">✓</span> Every course is split into 12 modules, so you always know what comes next</li>
-        <li class="why-item"><span class="why-check">✓</span> A skill quiz suggests where to start, so you do not repeat what you already know</li>
-        <li class="why-item"><span class="why-check">✓</span> The first six modules of every course are free, and no university account is needed</li>
-      </ul>
-    </div>
-    <div class="features-grid reveal">
-      <a href="quiz.html" class="feature-item"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg></div><div class="feature-name">Skill Quiz</div><div class="feature-text">Check your level before you start a course.</div></a>
-      <a href="fileshare.html" class="feature-item"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><polyline points="9 14 12 17 15 14"/></svg></div><div class="feature-name">File Share</div><div class="feature-text">Download the PDF notes for each course.</div></a>
-      <a href="blog.html" class="feature-item"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><div class="feature-name">Tech Blog</div><div class="feature-text">Articles on programming, careers and study tips.</div></a>
-      <a href="team.html" class="feature-item"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="feature-name">Members Area</div><div class="feature-text">Join a growing community of IT students learning together.</div></a>
-      <a href="courses.html" class="feature-item"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="feature-name">3 Skill Levels</div><div class="feature-text">Beginner, Intermediate and Advanced tracks for every subject.</div></a>
-      <a href="fileshare.html" class="feature-item"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="feature-name">Free Resources</div><div class="feature-text">Core study materials are completely free for every student, everywhere.</div></a>
+      <h3>Paid plans</h3>
+      <p>Modules 7–12 and the later PDF notes.</p>
+      <dl class="price-list">
+        <div><dt>Starter</dt><dd>₹199 for any 2 courses, 6 months</dd></div>
+        <div><dt>Pro</dt><dd>₹499 for all 6 courses, 12 months</dd></div>
+        <div><dt>Elite</dt><dd>₹999 for all 6 courses, for life</dd></div>
+      </dl>
+      <p><a href="premium.html">Compare plans</a></p>
     </div>
   </div>
 </section>
 
-<!-- PRACTICE PANEL -->
-<section class="practice-section reveal">
-  <div class="practice-inner">
-
-    <!-- LEFT: text -->
-    <div class="practice-left">
-      <div class="section-label">Live Practice Panel</div>
-      <h2 class="section-title">Code. Run. <span class="practice-learn-span">Learn.</span></h2>
-      <p class="section-sub practice-sub">Write and run code in your browser: a code editor, six languages, 70+ problems sorted by difficulty, and hints when you are stuck. Nothing to install. Sign in to run your code.</p>
-
-      <div class="practice-langs">
-        <span class="plang">C</span>
-        <span class="plang">Java</span>
-        <span class="plang">Python</span>
-        <span class="plang">C++</span>
-        <span class="plang">R</span>
-        <span class="plang">JS</span>
-      </div>
-
-      <div class="practice-stats">
-        <div class="pstat">
-          <div class="pstat-val">70+</div>
-          <div class="pstat-lab">Problems</div>
-        </div>
-        <div class="pstat">
-          <div class="pstat-val">3</div>
-          <div class="pstat-lab">Difficulty Tiers</div>
-        </div>
-        <div class="pstat">
-          <div class="pstat-val">6</div>
-          <div class="pstat-lab">Languages</div>
-        </div>
-        <div class="pstat">
-          <div class="pstat-val pstat-val-free">FREE</div>
-          <div class="pstat-lab">To Get Started</div>
-        </div>
-      </div>
-
-      <a href=# class="btn-lime practice-btn">
-        Launch Practice Panel
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="practice-btn-icon"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
-
-    <!-- RIGHT: illustration of the panel -->
-    <div class="practice-right">
-      <div class="practice-preview">
-
-        <!-- topbar -->
-        <div class="pp-topbar">
-          <div class="pp-dots">
-            <span class="td-red-dot"></span>
-            <span class="td-amber-dot"></span>
-            <span class="td-green-dot"></span>
-          </div>
-          <span class="pp-title">practice-panel.html — IT Study Hub</span>
-          <a href="practice-panel.html" class="pp-launch">Open ↗</a>
-        </div>
-
-        <!-- mock editor -->
-        <div class="pp-body">
-          <div class="pp-sidebar">
-            <div class="pp-prob active">1. Hello, World!</div>
-            <div class="pp-prob">2. Sum of Two Numbers</div>
-            <div class="pp-prob solved">3. Factorial ✓</div>
-            <div class="pp-prob">4. Reverse String</div>
-            <div class="pp-prob">5. Check Prime</div>
-          </div>
-          <div class="pp-editor">
-            <div class="pp-line"><span class="pp-kw">#include</span> <span class="pp-str">&lt;stdio.h&gt;</span></div>
-            <div class="pp-line">&nbsp;</div>
-            <div class="pp-line"><span class="pp-kw">int</span> <span class="pp-fn">main</span>(<span class="pp-kw">void</span>) {</div>
-            <div class="pp-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="pp-fn">printf</span>(<span class="pp-str">"Hello, World!\n"</span>);</div>
-            <div class="pp-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="pp-kw">return</span> <span class="pp-num">0</span>;</div>
-            <div class="pp-line">}</div>
-            <div class="pp-line"> </div>
-            <div class="pp-output">
-              <span class="pp-out-label">▶ Output</span>
-              <span class="pp-out-ok">Hello, World!</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
+<!-- About -->
+<section class="block" id="about">
+  <h2>Who makes this</h2>
+  <p class="about-text">IT Study Hub is built by four IT students at Techno India University, Kolkata. We write the notes and quizzes ourselves and build the site as we learn. <a href="team.html">Meet the team</a></p>
 </section>
 
-<!-- ═══════ PREMIUM TEASER ═══════ -->
-<section class="premium-section" id="premium">
-  <div class="prem-bg-glow"></div>
-  <div class="prem-inner">
-    <div class="prem-left reveal">
-      <div class="section-label">Unlock More</div>
-      <h2 class="section-title">PREMIUM <span class="prem-gold-span">PLANS</span></h2>
-      <p class="section-sub prem-sub">The first six modules of every course are free. Premium unlocks modules 7–12 and the later PDF notes, from ₹199.</p>
-      <div class="prem-plan-pills">
-        <div class="prem-pill">
-          <div class="pp-name">Starter</div>
-          <div class="pp-price">₹199</div>
-          <div class="pp-tag">Any 2 courses</div>
-          <div class="prem-starter-features">
-            Any 2 courses you choose<br>
-            6 months of access
-          </div>
-        </div>
-        <div class="prem-pill prem-pill-active">
-          <div class="pp-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" class="prem-badge-svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Popular</div>
-          <div class="pp-name">Pro</div>
-          <div class="pp-price prem-price-lime">₹499</div>
-          <div class="pp-tag">All 6 courses</div>
-        </div>
-        <div class="prem-pill prem-pill-gold">
-          <div class="pp-badge pp-badge-gold"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="prem-badge-svg"><path d="M2 19l2-10 5 5 3-8 3 8 5-5 2 10H2zm0 2h20v2H2v-2z"/></svg>Best</div>
-          <div class="pp-name">Elite</div>
-          <div class="pp-price prem-price-gold">₹999</div>
-          <div class="pp-tag">Lifetime access</div>
-        </div>
-      </div>
-      <div class="prem-actions">
-        <button class="btn-gold" onclick="window.openPremiumModal('All Courses')">Unlock Premium →</button>
-        <a href="premium.html" class="btn-ghost">See All Plans</a>
-      </div>
-      <p class="prem-footer-note">One-time payment, no subscription</p>
-    </div>
-    <div class="prem-right reveal">
-      <div class="prem-feature-list">
-        <div class="pfl-item">
-          <div class="pfl-icon pfl-icon-lime"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg></div>
-          <div>
-            <div class="pfl-name">Modules 7–12</div>
-            <div class="pfl-sub">The later, more advanced modules of each course</div>
-          </div>
-        </div>
-        <div class="pfl-item">
-          <div class="pfl-icon pfl-icon-lime"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>
-          <div>
-            <div class="pfl-name">PDF notes</div>
-            <div class="pfl-sub">Notes for the later modules, to download</div>
-          </div>
-        </div>
-        <div class="pfl-item">
-          <div class="pfl-icon pfl-icon-gold"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-          <div>
-            <div class="pfl-name">Pay with UPI or card</div>
-            <div class="pfl-sub">Payment goes through Razorpay and your account upgrades right after</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+</main>
 
-<!-- ═══════ BUILT BY STUDENTS ═══════ -->
-<section class="about-section">
-  <div class="about-inner">
-    <div class="section-label reveal about-label">The People Behind It</div>
-    <h2 class="section-title reveal about-title">BUILT BY STUDENTS.<br>FOR STUDENTS.</h2>
-    <div class="reveal about-card">
-      <div class="about-name-row">
-        <div class="about-name">Dithsa Dutta</div>
-        <span class="about-role-badge">Lead Developer & Founder</span>
-      </div>
-      <div class="about-uni">Techno India University · IT Study Hub 2026</div>
-      <p class="about-bio">Built this because learning to code shouldn't depend on where you study or who you know. The first six modules of every course are free, and the rest are available with a paid plan.</p>
-      <div class="about-tags">
-        <span class="about-tag about-tag-lime"><i class="ti ti-tools" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>️ Web Developer</span>
-        <span class="about-tag about-tag-muted"><i class="ti ti-palette" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> UI Designer</span>
-        <span class="about-tag about-tag-muted"><i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> BSc IT · 3rd Year</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════ CTA ═══════ -->
-<section class="cta-section">
-  <div class="cta-glow"></div>
-  <div class="cta-inner reveal">
-    <div class="section-label">Get Started Today</div>
-    <h2 class="cta-title">READY TO <span class="lime">LEVEL UP</span><br>YOUR SKILLS?</h2>
-    <p class="cta-sub">Create a free account, take the skill quiz, and start learning at the right level — right now.</p>
-    <div class="cta-actions">
-      <a href="Login.html" class="btn-lime" id="ctaSignupBtn">Create Free Account →</a>
-      <a href="courses.html" class="btn-ghost">Browse Courses</a>
-    </div>
-    <p class="cta-note">
-      Don't want an account? <a href="courses.html" class="cta-link">Skip signup and browse freely →</a>
-    </p>
-  </div>
-</section>
-
-<!-- ═══════ FOOTER ═══════ -->
 <footer>
-  <div class="footer-top footer-top-grid">
+  <div class="footer-grid">
     <div class="footer-brand">
-      <a href="index.html" class="nav-logo footer-logo">
-        <div class="dot"></div>
-        IT STUDY HUB
-      </a>
-      <p>Your IT learning companion for CS students everywhere. Courses, quizzes, blogs, and study resources — all in one place.</p>
+      <a href="index.html" class="nav-logo"><span class="dot"></span>IT Study Hub</a>
+      <p>Notes, quizzes and practice problems for IT students. Built at Techno India University, Kolkata.</p>
     </div>
     <div class="footer-col">
-      <h5>Courses</h5>
-      <a href="c.html">C Programming</a>
-      <a href="java.html">OOPs Java</a>
+      <h4>Courses</h4>
+      <a href="c.html">C</a>
+      <a href="java.html">Java</a>
       <a href="python.html">Python</a>
       <a href="c++.html">C++</a>
-      <a href="r.html">R Programming</a>
+      <a href="r.html">R</a>
       <a href="javascript.html">JavaScript</a>
     </div>
     <div class="footer-col">
-      <h5>Platform</h5>
-      <a href="index.html">Home</a>
+      <h4>Site</h4>
+      <a href="quiz.html">Skill quiz</a>
       <a href="blog.html">Blog</a>
-      <a href="fileshare.html">File Share</a>
-      <a href="team.html">Community</a>
-      <a href="quiz.html">Skill Quiz</a>
-      <a href="premium.html"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" class="footer-premium-svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Premium</a>
+      <a href="fileshare.html">File share</a>
+      <a href="premium.html">Pricing</a>
+      <a href="team.html">Team</a>
     </div>
     <div class="footer-col">
-      <h5>Account</h5>
-      <a href="Login.html">Sign In</a>
-      <a href="Login.html">Create Account</a>
-      <a href="about.html">About</a>
-      <a href="contactus.html">Contact Us</a>
-      <a href="privacypolicy.html">Privacy Policy</a>
-      <a href="terms.html">Terms of Service</a>
-    </div>
-    <div class="footer-col">
-      <h5>Contact</h5>
+      <h4>Help</h4>
       <a href="mailto:contact@itstudyhub.dpdns.org">contact@itstudyhub.dpdns.org</a>
       <a href="mailto:admin@itstudyhub.dpdns.org">admin@itstudyhub.dpdns.org</a>
-      <a href="support.html" class="footer-support-link">Support Center</a>
+      <a href="support.html">Support</a>
+      <a href="privacypolicy.html">Privacy policy</a>
+      <a href="terms.html">Terms of service</a>
     </div>
   </div>
-  <div class="footer-bottom">
-    <p>© 2026 IT Study Hub · Built by Students, for Students</p>
-    <a href="mailto:contact@itstudyhub.dpdns.org" class="footer-email">contact@itstudyhub.dpdns.org</a>
-  </div>
+  <p class="footer-bottom">&copy; 2026 IT Study Hub</p>
 </footer>
 
 <script>
-/* ── Cursor ── */
-const cursor = document.getElementById('cursor');
-const ring   = document.getElementById('cursorRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-(function animCursor() {
-  cursor.style.left = (mx-5)+'px'; cursor.style.top = (my-5)+'px';
-  rx += (mx-rx)*0.12; ry += (my-ry)*0.12;
-  ring.style.left = (rx-18)+'px'; ring.style.top = (ry-18)+'px';
-  requestAnimationFrame(animCursor);
-})();
-document.querySelectorAll('a, button').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2)'; ring.style.transform='scale(1.5)'; });
-  el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)'; ring.style.transform='scale(1)'; });
-});
-
-/* ── Scroll reveal ── */
-const revealEls = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      e.target.style.transitionDelay = (i % 4) * 0.08 + 's';
-      e.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1 });
-revealEls.forEach(el => observer.observe(el));
-
-
-
-/* ── Dropdown toggle ── */
-function toggleDropdown() {
-  document.getElementById('userDropdown').classList.toggle('open');
-}
+/* Dropdown */
+function toggleDropdown() { document.getElementById('userDropdown').classList.toggle('open'); }
 document.addEventListener('click', e => {
-  if (!document.getElementById('userAvatarBtn').contains(e.target)) {
-    document.getElementById('userDropdown').classList.remove('open');
-  }
+  if (!document.getElementById('userAvatarBtn').contains(e.target)) document.getElementById('userDropdown').classList.remove('open');
 });
 
-// ── AUTH UI (reads localStorage set by Login.html) ──
+/* Shows the signed-in state (display only; every real check happens on the server) */
 function updateAuthUI() {
   const session = JSON.parse(localStorage.getItem('ish_session') || 'null');
   const loginBtn  = document.getElementById('navLoginBtn');
   const avatarBtn = document.getElementById('userAvatarBtn');
   const heroBtn   = document.getElementById('heroAuthBtn');
-  const ctaBtn    = document.getElementById('ctaSignupBtn');
   if (session && session.name) {
     loginBtn.style.display = 'none';
     avatarBtn.style.display = 'flex';
     const initials = session.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
     document.getElementById('avatarInitial').textContent = initials;
     document.getElementById('avatarName').textContent = session.name.split(' ')[0];
-    document.getElementById('ddName').textContent = session.name + (session.isAdmin ? ' ★' : '');
+    document.getElementById('ddName').textContent = session.name;
     document.getElementById('ddEmail').textContent = session.email || '';
-    if (heroBtn) { heroBtn.textContent = 'Go to My Courses →'; heroBtn.href = 'courses.html'; }
-    if (ctaBtn)  { ctaBtn.textContent  = 'Continue Learning →'; ctaBtn.href = 'courses.html'; }
+    if (heroBtn) { heroBtn.textContent = 'Go to my courses'; heroBtn.href = 'courses.html'; }
   } else {
     loginBtn.style.display = 'flex';
     avatarBtn.style.display = 'none';
   }
 }
-
 function handleLogout() {
   localStorage.removeItem('ish_session');
   updateAuthUI();
   document.getElementById('userDropdown').classList.remove('open');
 }
-
 updateAuthUI();
 
-/* ── Mobile nav ── */
+/* Mobile menu */
 const hamburger = document.getElementById('navHamburger');
 const drawer    = document.getElementById('mobileDrawer');
 const drawerClose = document.getElementById('drawerClose');
@@ -827,14 +289,12 @@ hamburger.addEventListener('click', () => drawer.classList.contains('open') ? cl
 drawerClose.addEventListener('click', closeDrawer);
 drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
 
-/* ── Active nav highlight ── */
+/* Highlight the current page in the nav */
 (function() {
   const page = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a').forEach(a => {
     const href = a.getAttribute('href');
-    if (href === page || (page === '' && href === 'index.html')) {
-      a.classList.add('nav-active');
-    }
+    if (href === page || (page === '' && href === 'index.html')) a.classList.add('nav-active');
   });
 })();
 </script>
