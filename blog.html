@@ -155,12 +155,6 @@
       <div class="tc-meta">8 min · Tutorial</div>
     </div>
 
-    <div class="subscribe-box" class="mt-16">
-      <div class="sb-title">Stay Sharp</div>
-      <p class="sb-sub">Weekly code snippets, career tips, and tech news straight to your inbox.</p>
-      <input type="email" class="sb-input" id="subEmail" placeholder="you@college.edu">
-      <button class="sb-btn" onclick="handleSubscribe()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> JOIN THE LIST</button>
-    </div>
   </aside>
 
   <!-- MAIN -->
@@ -1406,23 +1400,6 @@ function openPost(id) {
 }
 
 // ── Subscribe ──
-function handleSubscribe() {
-  const email = document.getElementById('subEmail').value.trim();
-  if (!email || !email.includes('@')) {
-    showToast('❌', 'Invalid email', 'Please enter a valid email address.');
-    return;
-  }
-  // Save to localStorage for now (replace with Firestore later)
-  const subs = JSON.parse(localStorage.getItem('ish_subscribers') || '[]');
-  if (subs.includes(email)) {
-    showToast('ℹ️', 'Already subscribed!', 'This email is already on our list.');
-    return;
-  }
-  subs.push(email);
-  localStorage.setItem('ish_subscribers', JSON.stringify(subs));
-  document.getElementById('subEmail').value = '';
-  showToast('✅', 'You\'re in!', 'Weekly dev content coming your way.');
-}
 
 // ── Toast ──
 const _TOAST_SVG = {
@@ -1489,7 +1466,6 @@ attachCursorHover();
 window.openPost = openPost;
 window.filterByCategory = filterByCategory;
 window.filterPosts = filterPosts;
-window.handleSubscribe = handleSubscribe;
 </script>
 <script src="ish-cursor-guard.js" defer></script>
 <script src="ish-a11y.js" defer></script>
