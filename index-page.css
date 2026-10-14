@@ -1100,3 +1100,13 @@ footer { background: var(--surface); border-top: 1px solid var(--border); paddin
   .practice-right   { display: none; }
   .practice-stats   { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* Hero card: a plain list of the courses (replaces the fake terminal) */
+.hero-card { width: 100%; max-width: 420px; margin-left: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px 26px; }
+.hero-card-title { font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.hero-card-list { list-style: none; margin: 14px 0 0; padding: 0; }
+.hero-card-list li { border-top: 1px solid var(--border); }
+.hero-card-list a { display: flex; justify-content: space-between; padding: 13px 0; color: var(--text); text-decoration: none; font-size: 15px; }
+.hero-card-list a span:last-child { color: var(--muted); font-size: 13px; }
+.hero-card-list a:hover span:first-child { color: var(--lime); }
+.hero-card-foot { margin: 16px 0 0; font-size: 13px; line-height: 1.6; color: var(--muted2, var(--muted)); }
