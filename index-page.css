@@ -1101,12 +1101,17 @@ footer { background: var(--surface); border-top: 1px solid var(--border); paddin
   .practice-stats   { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Hero card: a plain list of the courses (replaces the fake terminal) */
-.hero-card { width: 100%; max-width: 420px; margin-left: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px 26px; }
+/* Hero card: pick a course (replaces the fake terminal) */
+.hero-card { width: 100%; max-width: 440px; margin-left: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px 26px; }
 .hero-card-title { font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .hero-card-list { list-style: none; margin: 14px 0 0; padding: 0; }
 .hero-card-list li { border-top: 1px solid var(--border); }
-.hero-card-list a { display: flex; justify-content: space-between; padding: 13px 0; color: var(--text); text-decoration: none; font-size: 15px; }
-.hero-card-list a span:last-child { color: var(--muted); font-size: 13px; }
-.hero-card-list a:hover span:first-child { color: var(--lime); }
+.hero-card-list a { display: grid; grid-template-columns: 1fr auto; column-gap: 12px; align-items: center; padding: 13px 0; color: var(--text); text-decoration: none; }
+.hc-name { font-size: 16px; font-weight: 600; }
+.hc-desc { grid-column: 1; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.hc-arrow { grid-column: 2; grid-row: 1 / span 2; color: var(--muted); transition: transform 0.2s, color 0.2s; }
+.hero-card-list a:hover .hc-name, .hero-card-list a:hover .hc-arrow { color: var(--lime); }
+.hero-card-list a:hover .hc-arrow { transform: translateX(3px); }
 .hero-card-foot { margin: 16px 0 0; font-size: 13px; line-height: 1.6; color: var(--muted2, var(--muted)); }
+.hero-card-foot a { color: var(--lime); text-decoration: none; }
+.hero-card-foot a:hover { text-decoration: underline; }
