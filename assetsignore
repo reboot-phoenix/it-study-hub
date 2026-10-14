@@ -15,3 +15,7 @@ storage.rules
 worker.js
 worker.test.mjs
 wrangler.toml
+kv-bulk.json
+grant-admin.mjs
+extract-premium.mjs
+site.test.mjs
