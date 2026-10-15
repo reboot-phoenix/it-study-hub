@@ -8,12 +8,12 @@
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R Programming — IT Study Hub</title>
-<meta name="description" content="Learn R programming free: RStudio basics, statistical computing, dplyr, ggplot2, Shiny dashboards and reproducible research, with 12 modules and quizzes.">
+<meta name="description" content="Learn R programming free: R basics, data structures, dplyr, tidyr, ggplot2, statistics, lubridate, tidymodels and Quarto reports, with 12 modules and a pass-to-proceed quiz for each.">
 <link rel="canonical" href="https://itstudyhub.dpdns.org/r">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="IT Study Hub">
 <meta property="og:title" content="R Programming — IT Study Hub">
-<meta property="og:description" content="Learn R programming free: RStudio basics, statistical computing, dplyr, ggplot2, Shiny dashboards and reproducible research, with 12 modules and quizzes.">
+<meta property="og:description" content="Learn R programming free: R basics, data structures, dplyr, tidyr, ggplot2, statistics, lubridate, tidymodels and Quarto reports, with 12 modules and a pass-to-proceed quiz for each.">
 <meta property="og:url" content="https://itstudyhub.dpdns.org/r">
 <meta property="og:image" content="https://itstudyhub.dpdns.org/team_image.jpeg">
 <meta name="twitter:card" content="summary_large_image">
@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="course-page.css">
 <base target="_blank">
 </head>
-<body>
+<body class="course-r">
 <div class="read-progress" id="readProgress"></div>
 
 <nav>
@@ -36,12 +36,12 @@
   <div class="fade-up">
     <div class="course-eyebrow">Subject 04 · IT Study Hub</div>
     <h1 class="course-title">R <em>Programming</em></h1>
-    <p class="course-desc">Master the language of data science. From RStudio basics and statistical computing to advanced dplyr, ggplot2, Shiny dashboards, and reproducible research with R Markdown.</p>
+    <p class="course-desc">Master the language of data science. From R and RStudio basics through dplyr, tidyr, ggplot2, statistics, dates with lubridate and machine learning with tidymodels, to reproducible reports with R Markdown and Quarto. Pass each module quiz (75%) to unlock the next.</p>
     <div class="course-chips">
       <span class="chip chip-lime"><i class="ti ti-circle-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> R 4.4 & Tidyverse</span>
       <span class="chip chip-lime">6 Free Modules</span>
       <span class="chip chip-gold">6 Premium Modules</span>
-      <span class="chip chip-lime">Real PDF Notes</span>
+      <span class="chip chip-lime">8-Question Quiz per Module</span>
     </div>
   </div>
 
@@ -115,11 +115,19 @@ function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')|
 function isPremium(){ return typeof window.ishHasCourse === 'function' && window.ishHasCourse('r'); } // set by premium-content.js from /api/access (Starter plans open only their two chosen courses)
 function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_r_done')||'[]');}catch(e){return[];}}
 function saveCompleted(a){localStorage.setItem('ish_r_done',JSON.stringify(a));}
+// Module quizzes: 8 questions, 75% (6/8) to pass. Passing unlocks the next module.
+const QUIZ_KEY='ish_r_quiz', PASS_RATIO=0.75;
+function getQuiz(){try{return JSON.parse(localStorage.getItem(QUIZ_KEY)||'{}')||{};}catch(e){return {};}}
+function saveQuiz(q){try{localStorage.setItem(QUIZ_KEY,JSON.stringify(q));}catch(e){}}
+function quizPassed(id){const q=getQuiz()[id];return !!(q&&q.passed);}
+function isUnlocked(id){return id<=1||quizPassed(id-1);}
+const qEsc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 let MODS = [];
 
 let currentId = null;
-let completed = getCompleted();
+let completed = Object.keys(getQuiz()).filter(k=>quizPassed(+k)).map(Number);   // a module counts as done only once its quiz is passed
+saveCompleted(completed);
 const TOTAL_FREE = 6;
 
 // RENDER INDEX
@@ -152,14 +160,16 @@ function renderIndex() {
 function renderCard(m) {
   const done = completed.includes(m.id);
   const locked = !m.free && !isPremium();
-  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}`;
+  const gated = !locked && !isUnlocked(m.id);
+  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}${gated?' gated':''}`;
   const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
-  const click = locked ? `onclick="ishLocked('r')"` : `onclick="openLesson(${m.id})"`;
+  const click = locked ? `onclick="ishLocked('r')"` : gated ? `onclick="gateToast(${m.id})"` : `onclick="openLesson(${m.id})"`;
   return `<div class="${cls}" ${click}>
     <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
     <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
     <div class="mod-title">${m.title}</div>
     <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
+    ${gated?`<div class="mod-gate">🔒 Pass Module ${String(m.id-1).padStart(2,'0')} quiz to unlock</div>`:''}
     <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">→</span></div>
   </div>`;
 }
@@ -175,6 +185,8 @@ function updateProgress() {
 async function openLesson(id) {
   const m = MODS.find(x=>x.id===id);
   if (!m) return;
+  if (!isUnlocked(id)) { gateToast(id); return; }
+  quizAttempt = null;
   if (!m.free && !m.body) {
     const r = await window.loadPremiumLesson('r', id);
     if (!r.ok) { window.ishLessonDenied(r, 'r'); return; }
@@ -188,7 +200,7 @@ async function openLesson(id) {
 
   const done = completed.includes(id);
   const mb = document.getElementById('markBtn');
-  mb.textContent = done ? '✓ Completed' : '✓ Mark Done';
+  mb.textContent = done ? '✓ Completed' : '✓ Pass Quiz to Finish';
   mb.classList.toggle('done-btn', done);
   document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
@@ -215,6 +227,7 @@ async function openLesson(id) {
          <div class="concepts-title">Key Concepts Covered</div>
          <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
        </div>
+       <div class="mq" id="mqBox"></div>
        <div class="les-footer">
          <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
          <div class="nav-lessons">
@@ -224,6 +237,7 @@ async function openLesson(id) {
        </div>`;
 
   document.getElementById('lessonContent').innerHTML = html;
+  renderQuiz();
   renderSidebar();
 
   // Scroll progress
@@ -240,20 +254,21 @@ function renderSidebar() {
   document.getElementById('sbProgFill').style.width = pct+'%';
   document.getElementById('sbProgLabel').textContent = `${freeDone} / ${TOTAL_FREE} free`;
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
-    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
+    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium(), gated=!locked&&!isUnlocked(m.id);
 
     // PREMIUM REDIRECT LOGIC in sidebar
-    const click = locked ? `ishLocked('r')` : `openLesson(${m.id})`;
+    const click = locked ? `ishLocked('r')` : gated ? `gateToast(${m.id})` : `openLesson(${m.id})`;
 
     return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${click}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
-      ${locked?'<span style="font-size:10px;opacity:0.5;color:var(--gold);"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
+      ${locked||gated?'<span style="font-size:10px;opacity:0.5;color:var(--gold);"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
     </button>`;
   }).join('');
 }
 
 function goBack(){
+  quizAttempt=null;
   document.getElementById('lessonPage').style.display='none';
   document.getElementById('indexPage').style.display='block';
   renderIndex();
@@ -270,23 +285,77 @@ function prevLesson() {
 
 function nextLesson() {
   if(currentId<MODS.length) {
+    if(!quizPassed(currentId)) { gateToast(currentId+1); return; }
     const m = MODS.find(x=>x.id===currentId+1);
-    if(m.free) openLesson(currentId+1);
+    if(m.free || isPremium()) openLesson(currentId+1);
     else ishLocked('r');
   }
+}
+function gateToast(id){
+  showToast('🔒 Pass the Module '+String(id-1).padStart(2,'0')+' quiz (75%+) to unlock this module');
+  if(currentId===id-1){const b=document.getElementById('mqBox'); if(b) b.scrollIntoView({behavior:'smooth',block:'center'});}
 }
 
 function markDone() {
   if(!currentId) return;
-  const m = MODS.find(x=>x.id===currentId);
-  if(!m.free&&!isPremium()) return;
-
-  if(!completed.includes(currentId)){
-    completed.push(currentId);
-    saveCompleted(completed);
-    showToast('✓ Module marked complete! <i class="ti ti-circle-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>');
-  }
+  if(!quizPassed(currentId)){ showToast('Pass the module quiz (6 of 8) to finish this module'); const b=document.getElementById('mqBox'); if(b) b.scrollIntoView({behavior:'smooth',block:'center'}); return; }
   openLesson(currentId);
+}
+
+/* ── MODULE QUIZ ── */
+let quizAttempt = null;   // {id, order:[[optionIndex...]...], picks:[]}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function renderQuiz(){
+  const box=document.getElementById('mqBox'); if(!box) return;
+  const m=MODS.find(x=>x.id===currentId);
+  if(!m||!Array.isArray(m.quiz)||!m.quiz.length){ box.style.display='none'; return; }
+  const need=Math.ceil(m.quiz.length*PASS_RATIO), rec=getQuiz()[currentId];
+  const head=`<div class="mq-head"><div class="mq-title">Module Quiz</div><div class="mq-rule">${m.quiz.length} QUESTIONS · PASS = ${need}/${m.quiz.length} (75%)</div></div>`;
+  if(!quizAttempt||quizAttempt.id!==currentId){
+    if(rec&&rec.passed){
+      box.innerHTML=head+`<div class="mq-result pass"><span class="mq-score">✓ Passed — best ${rec.best}/${m.quiz.length}</span>${currentId<MODS.length?'The next module is unlocked.':'You have completed the course.'}</div>
+        <div class="mq-actions">${currentId<MODS.length?'<button class="mq-btn" onclick="nextLesson()">Next Module →</button>':''}<button class="mq-btn ghost" onclick="startQuiz()">Retake Quiz</button></div>`;
+    } else {
+      box.innerHTML=head+`<div class="mq-sub">Answer all ${m.quiz.length} questions. You need at least ${need} correct to pass and unlock the next module.${rec?` Your best so far: ${rec.best}/${m.quiz.length}.`:''}</div>
+        <div class="mq-actions"><button class="mq-btn" onclick="startQuiz()">Start Quiz</button></div>`;
+    }
+    return;
+  }
+  const a=quizAttempt;
+  box.innerHTML=head+`<div class="mq-sub">Choose one answer for each question, then submit.</div>`+m.quiz.map((q,qi)=>`<div class="mq-q"><div class="mq-qtext"><span class="mq-qnum">Q${qi+1}</span>${qEsc(q.q)}</div>`+
+    a.order[qi].map(oi=>`<label class="mq-opt${a.picks[qi]===oi?' sel':''}"><input type="radio" name="mq${qi}" ${a.picks[qi]===oi?'checked':''} onchange="pickAnswer(${qi},${oi})"><span>${qEsc(q.o[oi])}</span></label>`).join('')+`</div>`).join('')+
+    `<div class="mq-actions"><button class="mq-btn" onclick="submitQuiz()">Submit Answers</button></div>`;
+}
+function startQuiz(){
+  const m=MODS.find(x=>x.id===currentId); if(!m||!m.quiz) return;
+  quizAttempt={id:currentId,order:m.quiz.map(q=>shuffle(q.o.map((_,i)=>i))),picks:m.quiz.map(()=>null)};
+  renderQuiz();
+  document.getElementById('mqBox').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function pickAnswer(qi,oi){ if(!quizAttempt) return; quizAttempt.picks[qi]=oi; renderQuiz(); }
+function submitQuiz(){
+  const m=MODS.find(x=>x.id===currentId), a=quizAttempt; if(!m||!a) return;
+  if(a.picks.some(p=>p===null)){ showToast('Answer every question before submitting'); return; }
+  const total=m.quiz.length, need=Math.ceil(total*PASS_RATIO);
+  const score=m.quiz.reduce((n,q,i)=>n+(a.picks[i]===q.a?1:0),0), passed=score>=need;
+  const store=getQuiz(), prev=store[currentId]||{best:0,passed:false};
+  store[currentId]={best:Math.max(prev.best||0,score),passed:prev.passed||passed};
+  saveQuiz(store);
+  if(passed&&!completed.includes(currentId)){ completed.push(currentId); saveCompleted(completed); }
+  const box=document.getElementById('mqBox');
+  const review=m.quiz.map((q,qi)=>`<div class="mq-q"><div class="mq-qtext"><span class="mq-qnum">Q${qi+1}</span>${qEsc(q.q)}</div>`+
+    q.o.map((t,oi)=>`<div class="mq-opt${oi===q.a?' right':(a.picks[qi]===oi?' wrong':'')}"><span>${oi===q.a?'✓ ':(a.picks[qi]===oi?'✗ ':'')}${qEsc(t)}</span></div>`).join('')+
+    `<div class="mq-exp">${qEsc(q.e||'')}</div></div>`).join('');
+  const verdict=passed
+    ? `<div class="mq-result pass"><span class="mq-score">✓ ${score}/${total} — Passed</span>${currentId<MODS.length?'Module '+String(currentId+1).padStart(2,'0')+' is now unlocked.':'Course complete — well done!'}</div>`
+    : `<div class="mq-result fail"><span class="mq-score">${score}/${total} — Not yet</span>You need ${need}/${total} (75%) to continue. Review the lesson above and try again.</div>`;
+  box.innerHTML=`<div class="mq-head"><div class="mq-title">Quiz Results</div><div class="mq-rule">PASS = ${need}/${total} (75%)</div></div>`+verdict+review+
+    `<div class="mq-actions">${passed&&currentId<MODS.length?'<button class="mq-btn" onclick="quizAttempt=null;nextLesson()">Next Module →</button>':''}<button class="mq-btn ghost" onclick="startQuiz()">${passed?'Retake Quiz':'Retake Quiz'}</button></div>`;
+  quizAttempt=null;
+  const mb=document.getElementById('markBtn'); mb.textContent=quizPassed(currentId)?'✓ Completed':'✓ Pass Quiz to Finish'; mb.classList.toggle('done-btn',quizPassed(currentId));
+  if(passed) showToast('✓ Quiz passed — module complete!');
+  renderSidebar();
+  box.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function showToast(msg){
