@@ -193,46 +193,7 @@
   <div class="quiz-box" id="quizBox"></div>
 </div>
 
-<!-- C TERMINAL PANEL -->
-<div id="terminalPanel" style="display:none;position:fixed;bottom:0;left:0;right:0;height:340px;background:#0a0c10;border-top:2px solid #c8f135;z-index:7000;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace;box-shadow:0 -8px 40px rgba(0,0,0,0.7);transform:translateY(100%);transition:transform 0.3s cubic-bezier(.4,0,.2,1);" id="terminalPanel">
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:#0c0f14;border-bottom:1px solid rgba(200,241,53,0.15);">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <span style="font-size:11px;color:#c8f135;letter-spacing:1px;"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> C PRACTICE TERMINAL</span>
-      <span style="font-size:10px;color:rgba(255,255,255,0.3);">· Powered by Judge0</span>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <button onclick="runCode()" style="background:#c8f135;color:#000;border:none;padding:5px 14px;border-radius:6px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.5px;">▶ RUN</button>
-      <button onclick="clearTerminal()" style="background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1);padding:5px 10px;border-radius:6px;font-family:inherit;font-size:11px;cursor:pointer;">CLR</button>
-      <button onclick="closeTerminal()" style="background:transparent;color:rgba(255,101,132,0.7);border:1px solid rgba(255,101,132,0.2);padding:5px 10px;border-radius:6px;font-family:inherit;font-size:11px;cursor:pointer;">✕</button>
-    </div>
-  </div>
-  <div style="display:flex;flex:1;overflow:hidden;">
-    <div style="flex:1;display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,0.06);">
-      <div style="font-size:10px;color:rgba(255,255,255,0.3);padding:6px 12px;letter-spacing:.5px;">CODE EDITOR</div>
-      <textarea id="termCode" spellcheck="false" style="flex:1;background:transparent;border:none;color:#e0e8ff;font-family:'JetBrains Mono',monospace;font-size:13px;padding:8px 14px;resize:none;outline:none;line-height:1.6;" placeholder="// Write your C code here...
-#include &lt;stdio.h&gt;
 
-int main() {
-    printf(&quot;Hello, C!\\n&quot;);
-    return 0;
-}">#include &lt;stdio.h&gt;
-
-int main() {
-    printf("Hello, C!\\n");
-    return 0;
-}</textarea>
-    </div>
-    <div style="width:42%;display:flex;flex-direction:column;">
-      <div style="font-size:10px;color:rgba(255,255,255,0.3);padding:6px 12px;letter-spacing:.5px;">OUTPUT</div>
-      <div id="termOutput" style="flex:1;color:#a8e890;font-size:13px;padding:8px 14px;overflow-y:auto;white-space:pre-wrap;line-height:1.6;">// Output will appear here after clicking RUN</div>
-    </div>
-  </div>
-</div>
-
-<!-- Terminal Toggle Button -->
-<button onclick="toggleTerminal()" id="termToggleBtn" title="Open C Practice Terminal" style="position:fixed;bottom:24px;right:24px;z-index:6999;background:#0a0c10;border:1px solid rgba(200,241,53,0.4);border-radius:12px;padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#c8f135;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 24px rgba(0,0,0,0.5);transition:all 0.2s;" onmouseover="this.style.background='rgba(200,241,53,0.1)'" onmouseout="this.style.background='#0a0c10'">
-  <span class="fs-15"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i></span> C Terminal
-</button>
 
 <!-- Firebase init for c.html (needed by resolvePremiumStatus + openPremiumModal) -->
 <script src="ish-config.js"></script>
@@ -609,64 +570,6 @@ document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick
 document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
 
 document.getElementById('quizOverlay').addEventListener('click',function(e){if(e.target===this)closeQuiz();});
-
-// ── C Practice Terminal ──
-let termOpen = false;
-function toggleTerminal() {
-  termOpen ? closeTerminal() : openTerminal();
-}
-function openTerminal() {
-  termOpen = true;
-  const p = document.getElementById('terminalPanel');
-  p.style.display = 'flex';
-  requestAnimationFrame(() => { p.style.transform = 'translateY(0)'; });
-  document.getElementById('termToggleBtn').style.borderColor = '#c8f135';
-  document.getElementById('termToggleBtn').style.color = '#c8f135';
-  document.getElementById('termToggleBtn').innerHTML = '<span class="fs-15"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i></span> Close Terminal';
-}
-function closeTerminal() {
-  termOpen = false;
-  const p = document.getElementById('terminalPanel');
-  p.style.transform = 'translateY(100%)';
-  setTimeout(() => { p.style.display = 'none'; }, 310);
-  document.getElementById('termToggleBtn').innerHTML = '<span class="fs-15"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i></span> C Terminal';
-}
-function clearTerminal() {
-  document.getElementById('termOutput').textContent = '// Output cleared. Write code and click RUN.';
-  document.getElementById('termCode').value = '#include <stdio.h>\n\nint main() {\n    printf("Hello, C!\\n");\n    return 0;\n}';
-}
-async function runCode() {
-  const code = document.getElementById('termCode').value;
-  const out = document.getElementById('termOutput');
-  out.style.color = '#9090a8';
-  out.textContent = '⏳ Compiling and running...';
-  try {
-    // Code is run by our Worker (keys stay server-side); you must be signed in.
-    const resp = await window.ishAuth.apiFetch('/api/run', { method: 'POST', body: { language: 'c', code } });
-    if (resp.status === 401) {
-      out.style.color = '#f06060';
-      out.textContent = '⚠️ Please sign in to run code.';
-      return;
-    }
-    const data = await resp.json().catch(() => ({}));
-    if (!resp.ok) {
-      out.style.color = '#f06060';
-      out.textContent = '⚠️ ' + (data.error || 'Could not run your code. Please try again.');
-    } else if (data.stdout) {
-      out.style.color = '#a8e890';
-      out.textContent = data.stdout;
-    } else if (data.compile_output || data.stderr) {
-      out.style.color = '#f06060';
-      out.textContent = '⚠️ Error:\n' + (data.compile_output || data.stderr);
-    } else {
-      out.style.color = '#9090a8';
-      out.textContent = '(no output)';
-    }
-  } catch(e) {
-    out.style.color = '#f06060';
-    out.textContent = '⚠️ Terminal Error\n\n' + (e.message || 'Could not reach the code runner.');
-  }
-}
 </script>
 <script src="premium-content.js"></script>
 <script src="ish-cursor-guard.js" defer></script>

@@ -1,0 +1,4 @@
+# The practice panel is switched off for now (the code runner costs money). These send visitors to the homepage.
+# To switch it back on: delete these two lines, re-add the links listed in HANDOFF.md ("Practice panel is switched off").
+/practice-panel / 302
+/practice-panel.html / 302
