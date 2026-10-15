@@ -1,1 +1,833 @@
-{"course":"r","mods":[{"id":1,"free":true,"icon":"<i class=\"ti ti-circle-filled\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","level":"Beginner","title":"Intro to R & RStudio","excerpt":"Created by statisticians for statisticians, R is the gold standard for data analysis. Understand the R ecosystem, RStudio IDE, and how to write your first script.","tags":["Beginner","History","RStudio"],"visual":"<i class=\"ti ti-circle-filled\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","bg":"linear-gradient(135deg,#0a1020,#101830)","concepts":["Ross Ihaka & Robert Gentleman","RStudio IDE","CRAN","R Console vs Script","install.packages()"],"body":"<p><strong>R</strong> is an open-source programming language and environment for statistical computing and graphics. It was created by <strong>Ross Ihaka</strong> and <strong>Robert Gentleman</strong> at the University of Auckland, New Zealand, in 1993. Today, R is the third-most popular language for data science, behind only Python and SQL.</p>\n<h2>Why Learn R?</h2>\n<ul>\n  <li><strong>Statistical Power:</strong> R was built by statisticians, for statisticians. It has the most comprehensive collection of statistical packages in the world.</li>\n  <li><strong>Data Visualization:</strong> Libraries like <code>ggplot2</code> produce publication-quality graphics with minimal code.</li>\n  <li><strong>Reproducible Research:</strong> R Markdown allows you to weave narrative text and code together into dynamic reports.</li>\n  <li><strong>Vibrant Community:</strong> CRAN (Comprehensive R Archive Network) hosts over 20,000 packages.</li>\n</ul>\n<h2>Your First R Script</h2>\n<p>R can be used interactively in the console or via saved scripts (.R files). RStudio is the recommended IDE. Let's write your first lines:</p>\n<pre><code># This is a comment in R\n# R uses the assignment operator <- (or =)\nmessage <- \"Hello, IT Study Hub!\"\nprint(message)\n\n# R is also a powerful calculator\n2 + 3\nsqrt(144)\npi * 4^2\n\n# Getting help\n?sqrt\nhelp(\"mean\")</code></pre>\n<h2>Installing Packages</h2>\n<p>R's true power comes from its packages. The <code>tidyverse</code> is a collection of essential data science packages maintained by Posit (formerly RStudio).</p>\n<pre><code># Install a package (run once)\ninstall.packages(\"tidyverse\")\n\n# Load it into your session (run every time)\nlibrary(tidyverse)</code></pre>"},{"id":2,"free":true,"icon":"<i class=\"ti ti-chart-bar\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","level":"Beginner","title":"Variables & Data Types","excerpt":"R has unique data types designed for statistics. Master vectors, factors, lists, and understand the crucial concept of coercion in R.","tags":["Beginner","Data Types","Vectors"],"visual":"<i class=\"ti ti-chart-bar\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","bg":"linear-gradient(135deg,#0a1a10,#102818)","concepts":["Atomic Vectors","Factors","Coercion Rules","Lists","Type Checking (class(), typeof())"],"body":"<p>R has five basic atomic data types: <strong>character</strong>, <strong>numeric</strong> (double), <strong>integer</strong>, <strong>logical</strong>, and <strong>complex</strong>. Unlike many languages, the most fundamental data structure in R is the <strong>vector</strong> — even a single number is a vector of length 1.</p>\n<h2>Creating Vectors</h2>\n<p>The <code>c()</code> function (combine/concatenate) is used to create vectors. All elements in an atomic vector must be of the same type.</p>\n<pre><code># Numeric vector\nages <- c(20, 22, 19, 21, 23)\n\n# Character vector\nnames <- c(\"Dithsha\", \"Mithila\", \"Rohan\")\n\n# Logical vector\npassed <- c(TRUE, FALSE, TRUE, TRUE)\n\n# Integer vector (append L)\nscores <- c(95L, 88L, 92L)\n\n# Sequence generation\n1:10\nseq(0, 100, by = 10)\nrep(\"A\", times = 5)</code></pre>\n<h2>Coercion Hierarchy</h2>\n<p>R automatically converts (coerces) elements to the most flexible type when mixed:</p>\n<pre><code># logical → integer → numeric → character\nc(1, \"hello\", TRUE)  # All become character\nc(1, TRUE, 5)        # logical becomes numeric: c(1, 1, 5)</code></pre>\n<h2>Factors — R's Statistical Superpower</h2>\n<p>Factors are used to store categorical data. They are internally stored as integers with associated labels (levels), making them memory-efficient and analysis-friendly.</p>\n<pre><code>gender <- factor(c(\"Male\", \"Female\", \"Female\", \"Male\"))\nlevels(gender)       # \"Female\" \"Male\"\nsummary(gender)      # Counts per level\n\n# Ordered factors\ngrade <- factor(c(\"B\", \"A\", \"C\", \"A\"), \n                levels = c(\"F\", \"D\", \"C\", \"B\", \"A\"),\n                ordered = TRUE)</code></pre>"},{"id":3,"free":true,"icon":"<i class=\"ti ti-arrows-shuffle\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","level":"Beginner","title":"Control Flow & Logic","excerpt":"Direct your data analysis workflow using conditional statements, loops, and R's powerful vectorized operations that eliminate the need for many loops.","tags":["Beginner","Logic","Conditionals"],"visual":"<i class=\"ti ti-arrows-shuffle\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","bg":"linear-gradient(135deg,#0f0a14,#201028)","concepts":["if / else","for loop","while loop","Vectorization","apply family (lapply, sapply)"],"body":"<p>Control flow in R follows standard programming paradigms, but R's <strong>vectorized</strong> nature means you often don't need explicit loops. Operating on entire vectors at once is both faster and more idiomatic in R.</p>\n<h2>Conditional Statements</h2>\n<pre><code>score <- 85\n\nif (score >= 90) {\n  grade <- \"A\"\n} else if (score >= 80) {\n  grade <- \"B\"\n} else if (score >= 70) {\n  grade <- \"C\"\n} else {\n  grade <- \"F\"\n}\n\n# Vectorized ifelse (no loop needed!)\nscores <- c(95, 82, 67, 91, 74)\ngrades <- ifelse(scores >= 90, \"A\",\n          ifelse(scores >= 80, \"B\",\n          ifelse(scores >= 70, \"C\", \"F\")))</code></pre>\n<h2>Loops in R</h2>\n<p>While R supports <code>for</code> and <code>while</code> loops, they are generally slower than vectorized operations. Use them when vectorization isn't possible.</p>\n<pre><code># For loop\nfor (i in 1:5) {\n  print(paste(\"Iteration:\", i))\n}\n\n# Looping over a vector\ntech_stack <- c(\"R\", \"dplyr\", \"ggplot2\")\nfor (tech in tech_stack) {\n  print(tech)\n}\n\n# While loop\ncount <- 1\nwhile (count <= 5) {\n  print(count)\n  count <- count + 1\n}</code></pre>\n<h2>The apply Family — R's Loop Replacement</h2>\n<p>R provides a family of functions to apply operations across data structures without explicit loops:</p>\n<pre><code>numbers <- list(a = 1:5, b = 6:10, c = 11:15)\n\n# lapply returns a list\nlapply(numbers, mean)\n\n# sapply simplifies to a vector/matrix\nsapply(numbers, mean)\n\n# Apply to rows or columns of a matrix\nmat <- matrix(1:9, nrow = 3)\napply(mat, 1, sum)   # Row sums (MARGIN = 1)\napply(mat, 2, mean)  # Column means (MARGIN = 2)</code></pre>"},{"id":4,"free":true,"icon":"<i class=\"ti ti-tools\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>️","level":"Beginner","title":"Functions & Parameters","excerpt":"Break down analysis into reusable functions. Discover R's flexible argument handling, default values, and the powerful concept of lexical scoping.","tags":["Beginner","Functions","Modularity"],"visual":"<i class=\"ti ti-tools\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>️","bg":"linear-gradient(135deg,#14140a,#282810)","concepts":["Function Syntax","Default Arguments","... (Ellipsis)","Lexical Scoping","Return Values"],"body":"<p>Functions are the building blocks of reusable code in R. They encapsulate logic, accept inputs (arguments), and return outputs. R functions are <strong>first-class objects</strong> — they can be passed as arguments to other functions and returned from functions.</p>\n<h2>Creating Custom Functions</h2>\n<pre><code># Basic function\nsquare <- function(x) {\n  return(x^2)\n}\nsquare(5)  # 25\n\n# Function with default arguments\ngreet <- function(name, greeting = \"Hello\") {\n  paste(greeting, name, \"!\")\n}\ngreet(\"Dithsha\")           # \"Hello Dithsha !\"\ngreet(\"Mithila\", \"Hi\")     # \"Hi Mithila !\"\n\n# Multiple return values (as a list)\nstats_summary <- function(x) {\n  list(\n    mean = mean(x),\n    median = median(x),\n    sd = sd(x)\n  )\n}\nresult <- stats_summary(c(1, 2, 3, 4, 5))\nresult$mean    # 3</code></pre>\n<h2>The Ellipsis (...)</h2>\n<p>The <code>...</code> argument allows a function to accept an arbitrary number of additional arguments, which it can then pass to another function.</p>\n<pre><code>my_plot <- function(x, y, ...) {\n  plot(x, y, col = \"blue\", pch = 19, ...)\n}\n\n# Additional arguments like 'main' and 'xlab' are passed through\nmy_plot(1:10, 1:10, main = \"My Chart\", xlab = \"X Axis\")</code></pre>\n<h2>Lexical Scoping</h2>\n<p>R uses <strong>lexical scoping</strong>, meaning functions look for variables first in their own body, then in the environment where they were defined.</p>\n<pre><code>outer_var <- 100\n\nmy_func <- function() {\n  inner_var <- 50\n  return(outer_var + inner_var)  # Can access outer_var\n}\n\nmy_func()  # 150</code></pre>"},{"id":5,"free":true,"icon":"<i class=\"ti ti-building\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>️","level":"Beginner","title":"Data Frames & Tibbles","excerpt":"Data frames are the workhorse of R data analysis. Learn to create, index, filter, and manipulate tabular data — the foundation of all data science in R.","tags":["Beginner","Data Frames","Tibbles"],"visual":"<i class=\"ti ti-building\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>️","bg":"linear-gradient(135deg,#140a14,#281028)","concepts":["data.frame()","tibble()","Indexing ($, [], [[]])","Subsetting","str() & summary()"],"body":"<p>A <strong>data frame</strong> is R's most important data structure for data analysis. It is a two-dimensional table where each column can be a different data type (numeric, character, factor, etc.), similar to a spreadsheet or SQL table. <strong>Tibbles</strong> are the modern, enhanced version from the tidyverse.</p>\n<h2>Creating Data Frames</h2>\n<pre><code># Traditional data frame\nstudents <- data.frame(\n  name = c(\"Dithsha\", \"Mithila\", \"Rohan\"),\n  age = c(20, 21, 19),\n  gpa = c(3.8, 3.9, 3.5),\n  honors = c(TRUE, TRUE, FALSE)\n)\n\n# Modern tibble (tidyverse)\nlibrary(tibble)\nstudents_tib <- tibble(\n  name = c(\"Dithsha\", \"Mithila\", \"Rohan\"),\n  age = c(20, 21, 19),\n  gpa = c(3.8, 3.9, 3.5)\n)</code></pre>\n<h2>Indexing and Subsetting</h2>\n<p>R provides multiple ways to access data:</p>\n<pre><code># By column name using $\nstudents$age           # Returns vector: c(20, 21, 19)\nstudents$gpa[1]       # First student's GPA: 3.8\n\n# By position [row, column]\nstudents[1, 2]        # Row 1, Column 2: 20\nstudents[1, ]         # Entire first row\nstudents[, \"name\"]    # Entire name column\n\n# Logical subsetting\nstudents[students$age > 19, ]   # Students older than 19\nstudents[students$honors == TRUE, \"name\"]  # Names of honors students</code></pre>\n<h2>Inspecting Data</h2>\n<pre><code>head(students)        # First 6 rows\nstr(students)         # Structure of the object\nsummary(students)     # Statistical summary per column\ndim(students)         # Dimensions: rows x columns\nnrow(students)        # Number of rows\nncol(students)        # Number of columns</code></pre>\n<h2>Why Tibbles?</h2>\n<p>Tibbles never convert strings to factors, never create row names, and print more cleanly. They are the default in the tidyverse and highly recommended for modern R workflows.</p>"},{"id":6,"free":true,"icon":"<i class=\"ti ti-package\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","level":"Beginner","title":"Vectors, Lists & Matrices","excerpt":"Move beyond basic vectors. Discover matrices, arrays, and nested lists — the complete toolkit of R's core data structures for any analysis task.","tags":["Beginner","Data Structures","Arrays"],"visual":"<i class=\"ti ti-package\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","bg":"linear-gradient(135deg,#0a1414,#102828)","concepts":["Atomic Vectors","Lists (recursive)","Matrices","Arrays","rbind() & cbind()"],"body":"<p>While data frames handle most tabular data, understanding R's lower-level data structures is essential for advanced programming, linear algebra, and efficient memory usage.</p>\n<h2>Matrices — 2D Numeric Arrays</h2>\n<p>Matrices are two-dimensional structures where <strong>all elements must be the same type</strong> (usually numeric). They are essential for linear algebra and statistical modeling.</p>\n<pre><code># Create a matrix\nm <- matrix(1:9, nrow = 3, ncol = 3, byrow = TRUE)\nprint(m)\n\n#      [,1] [,2] [,3]\n# [1,]    1    2    3\n# [2,]    4    5    6\n# [3,]    7    8    9\n\n# Matrix operations\nm * 2           # Scalar multiplication\nt(m)            # Transpose\ndiag(m)         # Diagonal elements\ndet(m)          # Determinant\neigen(m)        # Eigenvalues and eigenvectors</code></pre>\n<h2>Lists — R's Most Flexible Structure</h2>\n<p>Unlike vectors, lists can hold elements of <strong>different types and sizes</strong>, including other lists. They are the foundation for complex R objects like model outputs.</p>\n<pre><code>my_list <- list(\n  name = \"Dithsha\",\n  scores = c(95, 88, 92),\n  matrix = matrix(1:4, nrow = 2),\n  passed = TRUE\n)\n\n# Access elements\nmy_list$name        # By name\nmy_list[[2]]       # By position (returns the element)\nmy_list[2]         # By position (returns a sub-list)\nmy_list[[\"scores\"]] # By name with double brackets</code></pre>\n<h2>Combining Data</h2>\n<pre><code>df1 <- data.frame(id = 1:3, score = c(85, 90, 78))\ndf2 <- data.frame(id = 1:3, grade = c(\"B\", \"A\", \"C\"))\n\n# Column bind\ncbind(df1, df2$grade)\n\n# Row bind\nrbind(df1, data.frame(id = 4, score = 92))</code></pre>"},{"id":7,"free":false,"icon":"<i class=\"ti ti-dna\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","level":"Intermediate","title":"Data Manipulation with dplyr","excerpt":"Master the grammar of data manipulation. Learn filter, select, mutate, arrange, and summarise to transform raw data into insights with elegant, readable code.","tags":["Intermediate","dplyr","Tidyverse"],"visual":"<i class=\"ti ti-dna\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","bg":"linear-gradient(135deg,#0a0f1a,#101828)","concepts":["filter() & select()","mutate() & transmute()","arrange() & summarise()","group_by()","%>% Pipe Operator"],"body":""},{"id":8,"free":false,"icon":"⚠️","level":"Intermediate","title":"Error Handling & Debugging","excerpt":"Build robust R scripts. Learn how to catch errors gracefully using tryCatch, create custom warnings, and use RStudio's powerful debugging tools.","tags":["Intermediate","Debugging","Robustness"],"visual":"⚠️","bg":"linear-gradient(135deg,#10080a,#200f12)","concepts":["tryCatch()","stop() & warning()","browser() & debug()","traceback()","Custom Conditions"],"body":""},{"id":9,"free":false,"icon":"<i class=\"ti ti-link\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","level":"Advanced","title":"Functional Programming","excerpt":"Unlock R's functional nature. Master the purrr package, anonymous functions, function factories, and higher-order functions for elegant data pipelines.","tags":["Advanced","purrr","Functional"],"visual":"<i class=\"ti ti-link\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","bg":"linear-gradient(135deg,#1a0a0a,#280f0f)","concepts":["purrr::map()","Anonymous Functions","Function Factories","Closures","Higher-Order Functions"],"body":""},{"id":10,"free":false,"icon":"<i class=\"ti ti-zoom-in\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","level":"Advanced","title":"Data Visualization with ggplot2","excerpt":"Turn data into compelling stories. Master the Grammar of Graphics with ggplot2 — aesthetics, geoms, facets, themes, and custom annotations.","tags":["Advanced","ggplot2","Visualization"],"visual":"<i class=\"ti ti-zoom-in\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","bg":"linear-gradient(135deg,#1a1a0a,#28280f)","concepts":["Grammar of Graphics","aes() & geoms","facets","scales & themes","Annotations & Customization"],"body":""},{"id":11,"free":false,"icon":"<i class=\"ti ti-bolt\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","level":"Advanced","title":"Statistical Analysis & Modeling","excerpt":"Leverage R's statistical roots. Perform regression, hypothesis testing, ANOVA, and probability distributions to extract meaningful insights from data.","tags":["Advanced","Statistics","Modeling"],"visual":"<i class=\"ti ti-bolt\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>","bg":"linear-gradient(135deg,#0a1a1a,#0f2828)","concepts":["Linear Regression (lm)","Hypothesis Testing","Probability Distributions","ANOVA","Model Diagnostics"],"body":""},{"id":12,"free":false,"icon":"<i class=\"ti ti-database\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>️","level":"Advanced","title":"Shiny & R Markdown","excerpt":"Build interactive dashboards and reproducible reports. Learn Shiny for web apps and R Markdown for dynamic documents that update with your data.","tags":["Advanced","Shiny","Reports"],"visual":"<i class=\"ti ti-database\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>️","bg":"linear-gradient(135deg,#1a0a1a,#280f28)","concepts":["ui & server","Reactive Programming","R Markdown (.Rmd)","Knitr","Interactive Outputs"],"body":""}]}
+{
+ "course": "r",
+ "mods": [
+  {
+   "id": 1,
+   "free": true,
+   "icon": "<i class=\"ti ti-settings\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Beginner",
+   "title": "R and Environment Setup",
+   "excerpt": "R is a free, open-source programming language and software environment specifically engineered for statistical computing, data analytics, scientific research, machine learning,…",
+   "tags": [
+    "Beginner",
+    "Introduction to R and the R Ecosystem",
+    "What is R?"
+   ],
+   "visual": "<i class=\"ti ti-settings\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#0a1020,#101830)",
+   "concepts": [
+    "Introduction to R and the R Ecosystem",
+    "What is R?",
+    "What is RStudio and Why Use an IDE?",
+    "Installation and Environment Configuration",
+    "Step-by-Step Installation Process",
+    "Installing R"
+   ],
+   "body": "<h2>1. Introduction to R and the R Ecosystem</h2>\n<h3>1.1 What is R?</h3>\n<p>R is a free, open-source programming language and software environment specifically engineered for statistical computing, data analytics, scientific research, machine learning, and graphical data visualization. Developed originally in 1993 by Ross Ihaka and Robert Gentleman at the University of Auckland, New Zealand—and built as a free implementation of the S programming language—R has evolved into the de facto standard language for academic researchers, data scientists, biostatisticians, quantitative analysts, and financial modelers across the globe.</p>\n<p>The power of R lies heavily in its comprehensive ecosystem of community-contributed packages. While base R provides robust foundational tools for data manipulation, statistical testing, and visualization, the global user community continuously extends R's capabilities through repositories like CRAN (Comprehensive R Archive Network), Bioconductor, and GitHub. These packages allow users to transition seamlessly from basic arithmetic to advanced deep learning, spatial GIS mapping, interactive web dashboarding (via Shiny), and high-performance parallel computing.</p>\n<h3>1.2 What is RStudio and Why Use an IDE?</h3>\n<p>While you can execute R commands directly inside a plain commandline interface or terminal shell, interacting with a complex data analysis project becomes exponentially easier through an Integrated Development Environment (IDE). RStudio (developed by Posit, formerly RStudio, PBC) is the gold-standard IDE designed expressly for R.</p>\n<p>RStudio unifies your entire workflow into a single, highly customizable screen divided into four primary panes:</p>\n<ul>\n<li><strong>Source Editor (Top-Left):</strong> Where you write, edit, save, and execute script files (.R), R Markdown files (.Rmd), Quarto documents, and code notebooks. It features syntax highlighting, autocompletion (Tab-completion), code folding, and integrated debugging tools.</li>\n<li><strong>Console / Terminal (Bottom-Left):</strong> The direct engine interface where R code is executed line-by-line, showing output, error messages, and warnings. It also contains a terminal tab for direct interaction with your operating system's command shell (Bash, Zsh, etc.).</li>\n<li><strong>Environment / History / Connections (Top-Right):</strong> Displays all active variables, vectors, data frames, functions, and models currently stored in your workspace memory. It also tracks your command history and facilitates Git/SVN version control tracking.</li>\n<li><strong>Files / Plots / Packages / Help / Viewer (Bottom-Right):</strong> A multipurpose management hub.</li>\n<li><strong>Files:</strong> Navigate your project directories and manage file structures.</li>\n<li><strong>Plots:</strong> Inspect generated visualizations with options to zoom, export as PNG/PDF, or copy to clipboard.</li>\n<li><strong>Packages:</strong> View installed libraries, check update statuses, and install/load packages graphically.</li>\n<li><strong>Help:</strong> Access comprehensive documentation pages, function manuals, and package vignettes.</li>\n<li><strong>Viewer:</strong> Render local web content, interactive HTML widgets, or Shiny applications directly inside RStudio.</li>\n</ul>\n<h2>2. Installation and Environment Configuration</h2>\n<p>Properly setting up your local machine ensures that your coding workflow remains friction-free as projects grow in scale and complexity.</p>\n<h3>2.1 Step-by-Step Installation Process</h3>\n<p>To run R code via RStudio, you must install two distinct pieces of software: the core R language interpreter first, followed by the RStudio IDE interface.</p>\n<h4>Installing R:</h4>\n<ul>\n<li>Navigate to the official <a href=\"https://cran.r-project.org/\" target=\"_blank\" rel=\"noopener\">CRAN website.</a></li>\n<li><strong>Select your operating system:</strong> Download R for Windows, Download R for macOS, or Download R for Linux.</li>\n</ul>\n<p>For Windows, click on \"base\" and download the latest installer executable (e.g., R-x.x.x-win.exe). Run the executable, accept the default configurations (unless custom paths are required), and complete the wizard.</p>\n<p>For macOS, choose the appropriate .pkg binary matching your processor architecture (Intel CPU vs. Apple Silicon M1/M2/M3/M4 chips). Download, open, and follow the standard installation prompts.</p>\n<p>For Linux (Ubuntu/Debian/Fedora), it is recommended to add the official CRAN repository to your system sources list to ensure access to up-to-date binaries via your terminal package manager (e.g., sudo apt install r-base).</p>\n<h4>Installing RStudio:</h4>\n<p>. Visit the <a href=\"https://posit.co/download/rstudio-desktop/\" target=\"_blank\" rel=\"noopener\">Posit Download Page</a></p>\n<p>Select RStudio Desktop (Free) and download the installer tailored to your specific operating system.</p>\n<p>Run the installer. Because RStudio automatically scans your system directories upon launch to locate the path of the core R executable, you do not need to manually configure environment variables under standard conditions.</p>\n<h3>2.2 Package Management and Lifecycle Operations</h3>\n<p>Packages are bundled collections of R functions, compiled C/Fortran routines, documentation files, and sample datasets. Managing them effectively is a fundamental skill for any R programmer.</p>\n<h4>The CRAN Repository and Mirror Selection</h4>\n<p>CRAN is a worldwide network of server mirrors that store identical, verified versions of R packages. When installing packages, R pulls binaries (pre-compiled for Windows/macOS) or source code (for Linux) from your designated mirror. You can inspect or set your default mirror in RStudio via Tools &gt; Global Options &gt; Packages, or programmatically:</p>\n<pre><code># Check current repository setting\ngetOption(\"repos\")\n# Set a temporary mirror (e.g., to the global cloud mirror)\noptions(repos = c(CRAN = \"https://cloud.r-project.org/\"))</code></pre>\n<p>Installing Packages (<code>install.packages()</code>)</p>\n<p>To download and install a package from CRAN onto your local hard drive, use the <code>install.packages()</code> function with the package name enclosed in quotation marks:</p>\n<pre><code># Installing a single package\ninstall.packages(\"tidyverse\")\n# Installing multiple packages simultaneously using a character vector\ninstall.packages(c(\"data.table\", \"ggplot2\", \"dplyr\", \"lubridate\", \"stringr\"))</code></pre>\n<p>Note: If you are running Linux or compiling from source on macOS, you may be prompted to install system-level development tools (build-essential, gfortran, or Xcode command-line tools) if a package contains compiled C++ or Fortran code.</p>\n<p>Loading Packages (<code>library()</code> vs. <code>require()</code>)</p>\n<p>Installing a package downloads it to your machine, but it does not make its functions immediately available in your current R session. To load a package into active memory, use <code>library()</code>:</p>\n<pre><code># Load the ggplot2 library\nlibrary(ggplot2)\n# Alternative approach using require()#\nrequire()\nreturns a logical TRUE/FALSE value (useful inside custom functions)if(!require(dplyr)) {\n  install.packages(\"dplyr\")\n  library(dplyr)\n}</code></pre>\n<p>Updating and Removing Packages As packages evolve, maintaining up-to-date versions ensures compatibility and bug fixes.</p>\n<pre><code># Update all installed packages on your system\nupdate.packages(ask = FALSE, checkBuilt = TRUE)\n# Update a specific package\nupdate.packages(\"ggplot2\")\n# Remove a package from your system\nremove.packages(\"tidyverse\")\nPackage Management Best Practices</code></pre>\n<p>Never put <code>install.packages()</code> inside shared scripts: Putting installation commands directly inside scripts that colleagues or clients will run can overwrite their local package versions or cause unexpected permission errors. Instead, install packages interactively in the console or place a check at the top of scripts to install missing packages conditionally.</p>\n<p>Namespace Collisions: When two packages contain functions with identical names (e.g., <code>dplyr::filter()</code> and <code>stats::filter()</code>), R uses the function from the package loaded most recently. To avoid ambiguity, use explicit namespace scoping with the double-colon operator (::):</p>\n<pre><code># Explicitly call the filter function from the dplyr package\nfiltered_data &lt;- dplyr::filter(my_data, age &gt; 30)</code></pre>\n<h2>3. Basic Syntax, Arithmetic Operations, and the Console</h2>\n<p>The R console functions as an interactive command-line interface where expressions are evaluated line by line.</p>\n<h3>3.1 Arithmetic Operations and Operator Precedence</h3>\n<p>R supports all standard mathematical arithmetic operators. You can type these directly into the R console:</p>\n<p>Resul Operato Exampl t / Operation r e Code Outpu t Addition + 15 + 7 22 50 - - Subtraction 32 18 Multiplicatio * 6 * 8 48 Resul Operato Exampl t / Operation r e Code Outpu t n 100 / Division / 25 4 Exponentiatio ^ or ** 2^5 32 n Modulo 17 <code>%%</code> <code>%%</code> 2 (Remainder) 5 Integer 17 <code>%/%</code> <code>%/%</code> 5 Division 3 Operator Precedence Rules R follows standard mathematical order of operations (PEMDAS/BODMAS):</p>\n<p>Parentheses ( )</p>\n<p>Exponents ^ or **</p>\n<p>Multiplication * and Division / (evaluated left to right)</p>\n<p>Addition + and Subtraction - (evaluated left to right)</p>\n<pre><code># Example demonstrating precedence rules\nresult_1 &lt;- 5 +\n  3 * 2 # Evaluates to 11 (multiplication happens first)\nresult_2 &lt;- (5 + 3) * 2 # Evaluates to 16 (parentheses override standard order)\nresult_3 &lt;- 2^3 +\n  4 # Evaluates to 12 (exponentiation happens before addition)</code></pre>\n<h3>3.2 Variables and Assignment Operators</h3>\n<p>To store results for future use, you assign values to variables (identifiers/objects) using assignment operators.</p>\n<h4>Assignment Operators in R</h4>\n<p>The Leftward Assignment Operator (<code>&lt;-</code>): This is the idiomatic, traditional, and most widely accepted assignment operator in the R community. It reads clearly as \"store this value into this variable.\"</p>\n<ul>\n<li><strong>The Equals Sign (=):</strong> Can also be used for assignment at the top level, but is more frequently reserved for passing arguments inside function calls.</li>\n<li><strong>The Rightward Assignment Operator (<code>-&gt;</code>):</strong> Assigns the result of an expression on the left to a variable name on the right. While valid syntax, it is rarely used in standard R code.</li>\n</ul>\n<pre><code># Standard leftward assignment\ncurrent_temperature_celsius &lt;- 24.5\n# Calculation using assigned variables\ntemperature_fahrenheit &lt;- (current_temperature_celsius * 9/5) +\n  32\n# Display the value stored in the variable\nprint(temperature_fahrenheit)# Alternatively, typing the variable name alone prints its contents:</code></pre>\n<p>temperature_fahrenheit</p>\n<h4>Rules for Valid Variable Names</h4>\n<p>Variable names can contain letters, numbers, periods (.), and underscores (_).</p>\n<p>They must start with either a letter or a period followed immediately by a letter (they cannot start with a number or an underscore).</p>\n<p>R is strictly case-sensitive (MyVar, myvar, and myVar represent three completely distinct objects in memory).</p>\n<p>Reserved keywords (such as if, else, while, function, TRUE, FALSE, NULL, NA) cannot be used as variable names.</p>\n<h3>3.3 Basic Data Types in R</h3>\n<p>Before performing complex analysis, you must understand the primitive atomic data types that form the building blocks of all R objects:</p>\n<p>Numeric (Double): Real numbers stored with double-precision floating-point accuracy.</p>\n<pre><code>pi_value &lt;- 3.14159class(pi_value) # Returns \"numeric\"</code></pre>\n<p>Integer: Whole numbers without decimals. Designated by appending an uppercase L suffix.</p>\n<pre><code>item_count &lt;- 42Lclass(item_count) # Returns \"integer\"</code></pre>\n<p>Character (String): Text data enclosed in either single (') or double (\") quotation marks.</p>\n<pre><code>employee_name &lt;- \"Dr. Jane Doe\"class(employee_name) # Returns \"character\"</code></pre>\n<p>Logical (Boolean): Binary truth values representing TRUE or FALSE (or abbreviated as T and F).</p>\n<pre><code>is_project_complete &lt;- FALSEclass(is_project_complete) # Returns \"logical\"</code></pre>\n<p>Complex: Numbers with real and imaginary components.</p>\n<pre><code>complex_number &lt;- 3 +\n  2iclass(complex_number) # Returns \"complex\"</code></pre>\n<h2>4. Working with Functions, Help Documentation, and Syntax Conventions</h2>\n<h3>4.1 Using Built-in Functions</h3>\n<p>R comes pre-loaded with thousands of mathematical, statistical, and utility functions. Functions take inputs (called arguments) inside parentheses, process them, and return a value or object.</p>\n<pre><code># Mathematical utility\nfunctionsabs(-15) # Absolute value -&gt; 15\nsqrt(144) # Square root -&gt; 12\nlog(100, base = 10) # Logarithm -&gt; 2\nexp(1) # Exponential function (Euler's number e) -&gt; 2.718282\nfactorial(5) # Factorial (5*4*3*2*1) -&gt; 120\nround(3.14159, digits = 2) # Rounding -&gt; 3.14 4.2 Accessing Documentation and Help Files</code></pre>\n<p>When you need to know how a specific function works, what arguments it accepts, or see examples of its usage, R provides built-in help systems. R</p>\n<p># Open the help page for a specific function</p>\n<p><code>help(mean)</code># Shortcut syntax:</p>\n<p>?mean</p>\n<p># Search for help documentation across all installed packages using keywords ??regression</p>\n<p># View practical examples and code demonstrations for a function <code>example(plot)</code></p>\n<p># View a comprehensive package overview or tutorial vignette (if available)</p>\n<p><code>vignette(\"dplyr\")</code></p>\n<p>4.3 Comments, Code Formatting, and Style Guides</p>\n<p>Writing clean, readable code is essential for collaboration and long-term project maintenance.</p>\n<p>Comments: Any text following the hash symbol (#) on a line is treated as a comment and ignored by the R interpreter.</p>\n<pre><code># Calculate the total annual revenue by multiplying monthly average by 12\nannual_revenue &lt;- monthly_avg * 12 # This is an inline comment</code></pre>\n<p>Style Guidelines: The R community largely follows the styling conventions established by Google's R Style Guide or the Tidyverse Style Guide:</p>\n<p>Use meaningful, lowercase snake_case for variable and function names (e.g., customer_age_total instead of CustomerAge or c_tot).</p>\n<p>Always place spaces around binary operators (=, +, -, <code>&lt;-</code>, *, /) and after commas.</p>\n<p>Keep line lengths reasonable (typically under 80–100 characters) to avoid horizontal scrolling in code editors.</p>\n<h2>5. Troubleshooting Common Beginner Errors</h2>\n<p>Beginners frequently encounter specific error messages when first learning R. Recognizing these patterns saves time during debugging:</p>\n<p>Error: unexpected symbol in...</p>\n<p>Cause: Usually caused by a missing comma, unmatched quotation marks, or a syntax typo.</p>\n<p>Solution: Check your previous line for missing closing quotes or arithmetic symbols.</p>\n<p>Error in <code>library(...)</code> : there is no package called '...'</p>\n<p>Cause: You tried to load a package using <code>library()</code> before installing it on your machine.</p>\n<p>Solution: Run <code>install.packages(\"package_name\")</code> first, then load it.</p>\n<p>Error: object '...' not found</p>\n<p>Cause: You referenced a variable name that has not been created, contains a typo, or was deleted from the workspace.</p>\n<p>Solution: Check your Environment pane to confirm the exact spelling of your variable name.</p>\n<p>Warning: NAs introduced by coercion</p>\n<p>Cause: You attempted to convert a character string into a numeric value (e.g., converting \"apple\" to a number), resulting in missing values (NA).</p>\n<p>Solution: Verify the data type of your input vector before performing mathematical transformations.</p>\n<h2>6. Summary and Self-Assessment Checklist</h2>\n<ul>\n<li><strong>Before moving on to Module 2 (Data Structures:</strong> Vectors, Matrices, Lists, and Data Frames), verify that you can comfortably perform the following tasks without assistance:</li>\n<li>☐ Successfully install R and launch RStudio Desktop.</li>\n<li>☐ Install a new package from CRAN and load it into your session using <code>library()</code>.</li>\n<li>☐ Use the R console to execute basic arithmetic equations and calculate remainders or exponents.</li>\n<li>☐ Create variables using the assignment operator (<code>&lt;-</code>) and perform multi-step mathematical calculations with them.</li>\n<li>☐ Use ?function_name to read documentation and troubleshoot function arguments.</li>\n<li>☐ Write clean, commented scripts adhering to standard snake_case naming conventions.</li>\n</ul>",
+   "quiz": [
+    {
+     "q": "Who originally created the R language, and where?",
+     "o": [
+      "Guido van Rossum at CWI, Netherlands",
+      "Ross Ihaka and Robert Gentleman at the University of Auckland",
+      "Hadley Wickham at Posit",
+      "John Chambers at Bell Labs in 2005"
+     ],
+     "a": 1,
+     "e": "R was created in 1993 by Ross Ihaka and Robert Gentleman in Auckland, New Zealand, as a free implementation of S."
+    },
+    {
+     "q": "Which RStudio pane is where you write and save .R scripts and R Markdown files?",
+     "o": [
+      "Console",
+      "Source Editor",
+      "Environment pane",
+      "Viewer"
+     ],
+     "a": 1,
+     "e": "The Source Editor (top-left) is for scripts, .Rmd files and notebooks."
+    },
+    {
+     "q": "What does install.packages(\"ggplot2\") do?",
+     "o": [
+      "Loads ggplot2 into the current session",
+      "Downloads and installs ggplot2 onto your machine",
+      "Updates every installed package",
+      "Removes ggplot2"
+     ],
+     "a": 1,
+     "e": "Installing downloads the package; you still need library() to load it."
+    },
+    {
+     "q": "Which call makes a package's functions available in the current session?",
+     "o": [
+      "install(ggplot2)",
+      "get(\"ggplot2\")",
+      "update.packages()",
+      "library(ggplot2)"
+     ],
+     "a": 3,
+     "e": "library() loads an installed package into memory."
+    },
+    {
+     "q": "What is the idiomatic assignment operator in R?",
+     "o": [
+      "=>",
+      "<-",
+      "==",
+      ":="
+     ],
+     "a": 1,
+     "e": "The leftward arrow <- is the standard, community-preferred assignment operator."
+    },
+    {
+     "q": "What does dplyr::filter() mean?",
+     "o": [
+      "Rename filter to dplyr",
+      "Install dplyr",
+      "Call filter() from the dplyr package explicitly",
+      "Filter only dplyr objects"
+     ],
+     "a": 2,
+     "e": "The double-colon operator avoids namespace collisions such as dplyr::filter vs stats::filter."
+    },
+    {
+     "q": "Which variable name is INVALID in R?",
+     "o": [
+      "my_var",
+      "my.var",
+      "2nd_value",
+      "myVar"
+     ],
+     "a": 2,
+     "e": "Names cannot start with a number."
+    },
+    {
+     "q": "How do you open the help page for the function mean?",
+     "o": [
+      "help.me(mean)",
+      "?mean",
+      "!mean",
+      "about(mean)"
+     ],
+     "a": 1,
+     "e": "?function_name (or help()) opens the documentation page."
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "free": true,
+   "icon": "<i class=\"ti ti-database\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Beginner",
+   "title": "R Data Structures and Types",
+   "excerpt": "At the core of R’s architecture lies a fundamental rule: all atomic data structures are strictly homogeneous. This means that every single element inside an atomic vector, matrix,…",
+   "tags": [
+    "Beginner",
+    "Atomic Vectors and Homogeneity",
+    "The Hierarchy of Automatic Type Coercion"
+   ],
+   "visual": "<i class=\"ti ti-database\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#0a1a10,#102818)",
+   "concepts": [
+    "Atomic Vectors and Homogeneity",
+    "The Hierarchy of Automatic Type Coercion",
+    "Vectors: Creation, Indexing, and Manipulation",
+    "Advanced Vector Creation Techniques",
+    "Comprehensive Vector Indexing and Subsetting",
+    "Logical Indexing"
+   ],
+   "body": "<h2>1. Deep Dive into Atomic Data Types and Memory Management</h2>\n<h3>1.1 Atomic Vectors and Homogeneity</h3>\n<p>At the core of R’s architecture lies a fundamental rule: all atomic data structures are strictly homogeneous. This means that every single element inside an atomic vector, matrix, or array must belong to the exact same underlying data class. If you attempt to mix data classes, R does not throw an error; instead, it automatically forces all elements into a single common type via automatic type coercion.</p>\n<p>To understand how R manages data in memory, we must examine the four primary atomic types along with two specialized numerical subtypes:</p>\n<p>Double (Numeric): R uses doubleprecision 64-bit floating-point numbers as its default representation for all real numbers. Even if you define an integer-looking number like x <code>&lt;-</code> 42, R allocates memory for a double-precision floating-point number. This ensures precision in mathematical computations, but requires careful handling when exact integer counting or memory footprint optimization is critical.</p>\n<pre><code># Creating a double vector financial_returns &lt;-\nc(0.045, - 0.012, 0.089, 0.023)\ntypeof(financial_returns) # Returns \"double\"\nmode(financial_returns) # Returns \"numeric\"\nstorage.mode(financial_returns) # Returns \"double\"</code></pre>\n<p>Integer: Integers represent exact whole numbers without fractional components. To explicitly instruct R to allocate memory for a 32-bit signed integer instead of a default double, you append an uppercase L suffix to the numeric literal. This saves memory when working with massive datasets of whole numbers (e.g., millions of transaction IDs or categorical index mappings).</p>\n<pre><code># Creating an integer vector using the L suffix\ntransaction_counts &lt;- c(15L, 42L, 100L, 0L)\ntypeof(transaction_counts) # Returns\n\"integer\"is.integer(transaction_co unts) # Returns TRUE</code></pre>\n<p>Character: Character vectors store string data. Strings can contain letters, numbers, punctuation marks, and whitespace, enclosed in either single quotes (') or double quotes (\"). R stores character strings internally in a global string cache to optimize memory when identical strings are repeated across large vectors.</p>\n<pre><code># Creating a character vector client_names &lt;-\nc(\"Acme Corp\", \"Globex Corporation\", \"Initech LLC\")\ntypeof(client_names) # Returns \"character\"\nnchar(client_names) # Returns character lengths: 9, 18, 11</code></pre>\n<p>Logical: Logical vectors store Boolean truth values (TRUE, FALSE, or shorthand T, F). Under the hood, R represents TRUE as integer 1, FALSE as integer 0, and missing values (NA) as a special designation. Logical vectors are generated instantly during comparative evaluations.</p>\n<pre><code># Creating a logical vector\ncompliance_status &lt;- c(TRUE, FALSE, TRUE, TRUE)\ntypeof(compliance_status) # Returns \"logical\"\n# Complex and Raw Types:</code></pre>\n<ul>\n<li><strong>Complex numbers:</strong> Contain both a real and an imaginary component denoted by an i suffix (e.g., 3 + 4i).</li>\n<li><strong>Raw bytes:</strong> Store low-level raw byte data (raw), representing bytes directly in hexadecimal format (useful for reading binary files or cryptographic hashing).</li>\n</ul>\n<h3>1.2 The Hierarchy of Automatic Type Coercion</h3>\n<p>When you combine heterogeneous elements into a single vector using <code>c()</code>, R evaluates the data types and coerces all elements upward to the lowest common denominator that can accommodate all values without information loss.</p>\n<ul>\n<li><strong>The strict coercion hierarchy flows from left to right:</strong> Logical⟶Integer⟶Numeric (Double) ⟶Complex⟶Character Logical to Integer: TRUE becomes 1L, FALSE becomes 0L.</li>\n<li><strong>Integer to Numeric:</strong> Whole numbers gain decimal floating-point representations (.0).</li>\n<li><strong>Numeric to Character:</strong> Numbers are wrapped in quotes and converted to text strings.</li>\n</ul>\n<pre><code># Demonstrating automatic coercion behavior\ncoerced_vector &lt;- c(TRUE, 42L, 3.14159, \"Project Alpha\")\nprint(coerced_vector)# Output: [1] \"TRUE\" \"42\" \"3.14159\" \"Project Alpha\"#\nEvery element has been coerced into a character string!</code></pre>\n<p>Explicit Type Coercion (as.* functions)</p>\n<p>Rather than relying on accidental automatic coercion, R provides robust explicit conversion functions prefixed with as.:</p>\n<p><code>as.numeric(x)</code></p>\n<p><code>as.integer(x)</code></p>\n<p><code>as.character(x)</code></p>\n<p># <code>as.logical(x)</code></p>\n<pre><code># Converting character strings back into numeric values\nstring_numbers &lt;- c(\"10.5\", \"20.1\", \"35.8\")\nconverted_numeric &lt;- as.numeric(string_numbers)sum(conv erted_numeric) # Successfully calculates sum: 66.4</code></pre>\n<h2>2. Vectors: Creation, Indexing, and Manipulation</h2>\n<p>Vectors are the lifeblood of R programming. Even when you assign a single number like x <code>&lt;-</code> 7, R internally stores it as a numeric vector of length 1.</p>\n<h3>2.1 Advanced Vector Creation Techniques</h3>\n<p>Beyond basic concatenation with <code>c()</code>, R provides powerful built-in generators for creating patterned or sequential vectors:</p>\n<p>The Colon Operator (:): Generates regular sequences of integers incrementing or decrementing by 1.</p>\n<pre><code>positive_sequence &lt;- 1:10 # 1, 2, 3, 4, 5, 6, 7, 8, 9, 10\nnegative_sequence &lt;- 5:-5 # 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5</code></pre>\n<p>The Sequence Function (<code>seq()</code>): Offers precise control over starting points, ending points, step intervals (by), and total output length (length.out).</p>\n<pre><code># Step-based sequence\nstep_seq &lt;- seq(from = 0, to = 100, by = 12.5)\n# Length-constrained sequence (evenly spaced intervals)\neven_spread &lt;- seq(from = 1, to = 10, length.out = 5)# Returns: 1.0, 3.25, 5.5, 7.75, 10.0</code></pre>\n<p>The Repetition Function (<code>rep()</code>): Replicates vectors, elements, or structured patterns.</p>\n<pre><code># Repeat an entire vector a specified number of timesrep(c(\"Q1\", \"Q2\"), times = 3) # \"Q1\", \"Q2\", \"Q1\", \"Q2\", \"Q1\", \"Q2\"\n# Repeat each individual element\nconsecutivelyrep(c(\"Control\",\n\"Treatment\"), each = 3) # \"Control\", \"Control\", \"Control\", \"Treatment\", \"Treatment\", \"Treatment\"</code></pre>\n<h3>2.2 Comprehensive Vector Indexing and Subsetting</h3>\n<p>R utilizes square brackets [ ] for extracting, modifying, or filtering vector subsets. R uses 1-based indexing, meaning the first element in any vector resides at index position 1 (not 0).</p>\n<p>There are four primary methods for subsetting vectors:</p>\n<p>1. Positive Integer Indexing</p>\n<p>Passes specific positions to extract elements. You can request elements in any order or duplicate positions.</p>\n<pre><code>sensor_readings &lt;- c(22.1, 23.4, 21.9, 24.5, 25.0)\nsensor_readings[1] # Returns 22.1 (first element)\nsensor_readings[c(2, 4)] # Returns 23.4 and 24.5\nsensor_readings[c(1, 1, 3)] # Returns 22.1, 22.1, 21.9\n2. Negative Integer Indexing</code></pre>\n<p>Excludes specified positions while returning everything else. You cannot mix positive and negative indices within the same subsetting bracket.</p>\n<pre><code># Exclude the first and last sensor readings\nsensor_readings[c(-1, -5)] # Returns 23.4, 21.9, 24.5</code></pre>\n<h2>3. Logical Indexing</h2>\n<p>Passes a logical vector of the exact same length (or recycled length) as the target vector. R extracts elements where the logical value evaluates to TRUE and drops elements where it evaluates to FALSE.</p>\n<pre><code># Extract readings strictly greater than 23.0\nhigh_readings &lt;- sensor_readings[sensor_readings &gt; 23.0]# Evaluates logical vector:\nc(FALSE, TRUE, FALSE, TRUE, TRUE)# Returns: 23.4, 24.5, 25.0</code></pre>\n<h2>4. Named Vector Indexing</h2>\n<p>Vectors can have character names attached to individual elements. You can subset these vectors using character strings matching those names.</p>\n<pre><code>department_budgets &lt;- c(IT = 150000, Marketing = 85000, HR = 60000)</code></pre>\n<p>department_budgets[\"Marketing\"] # Returns 85000</p>\n<p>2.3 Vectorized Operations and the Recycling Rule</p>\n<p>Unlike languages where arithmetic operations require explicit for loops to iterate through array indices, R performs operations vectorized by design.</p>\n<pre><code>base_prices &lt;- c(100, 200, 300, 400)\ntax_multiplier &lt;- 1.08\n# Vectorized multiplication multiplies every element simultaneously\nfinal_prices &lt;- base_prices * tax_multiplier# Returns: 108, 216, 324, 432</code></pre>\n<p>The Recycling Rule in Detail When executing arithmetic operations on two vectors of unequal length, R automatically loops back and recycles elements from the shorter vector until it matches the length of the longer vector.</p>\n<p>If the length of the longer vector is an exact multiple of the shorter vector, recycling occurs silently.</p>\n<p>If the lengths are not clean multiples, R executes the recycling but issues a warning notice (\"longer object length is not a multiple of shorter object length\").</p>\n<pre><code>vector_a &lt;- c(1, 2, 3, 4, 5, 6)\nvector_b &lt;- c(10, 20)\n# vector_b is recycled as (10, 20, 10, 20, 10, 20)\nresult_vector &lt;- vector_a +\n  vector_b# Returns: 11, 22, 13, 24, 15, 26\n3. Matrices and Multi-Dimensional Arrays</code></pre>\n<p>While 1D vectors handle linear sequences of data, multidimensional structures are required for tabular datasets, grids, spatial coordinates, and tensor mathematics.</p>\n<p>3.1 Creating and Populating Matrices</p>\n<p>A matrix is a two-dimensional rectangular data structure where all rows and columns share a</p>\n<p>single atomic data type. Matrices are constructed using the <code>matrix()</code> function.</p>\n<pre><code># Create a 3x3 matrix filled with numbers 1 through 9# Default behavior populates column-bycolumn (column-major order)\nmatrix_col &lt;- matrix(data = 1:9, nrow = 3, ncol = 3)\n# Populate row-by-row using byrow = TRUE\nmatrix_row &lt;- matrix(data = 1:6, nrow = 2, ncol = 3, byrow = TRUE)\n3.2 Two-Dimensional Indexing and Matrix Attributes</code></pre>\n<p>Matrix indexing uses a row-andcolumn coordinate system separated by a comma inside square brackets:</p>\n<p>matrix[row_index, column_index]. Leaving either index blank instructs R to return the entire row or column.</p>\n<pre><code>sample_matrix &lt;- matrix(c(10, 20, 30, 40, 50, 60), nrow = 2, ncol = 3)</code></pre>\n<p>sample_matrix[1, 2] # Extracts element at row 1, column 2 <code>-&gt;</code> 30 sample_matrix[2, ] # Extracts entire 2nd row as a vector <code>-&gt;</code> 20, 40, 60 sample_matrix[, 3] # Extracts entire 3rd column as a vector <code>-&gt;</code> 50, 60 Essential Matrix Functions</p>\n<p>Dimensions: <code>dim(sample_matrix)</code> returns c(2, 3). You can also check individual dimensions using <code>nrow(sample_matrix)</code> and <code>ncol(sample_matrix)</code>.</p>\n<h4>Naming Rows and Columns:</h4>\n<pre><code>rownames(sample_matrix) &lt;- c(\"Region_A\", \"Region_B\")\ncolnames(sample_matrix) &lt;- c(\"Jan\", \"Feb\", \"Mar\")\n# Now you can index using names\nsample_matrix[\"Region_A\", \"Feb\"] # Returns 30</code></pre>\n<p>Binding Vectors: Combine vectors or matrices together using row binding (<code>rbind()</code>) and column binding (<code>cbind()</code>).</p>\n<pre><code>new_row &lt;- c(70, 80, 90)\nexpanded_matrix &lt;- rbind(sample_matrix, new_row)</code></pre>\n<h4>Matrix Algebra vs. Element-Wise Operations</h4>\n<ul>\n<li><strong>Element-wise multiplication (*):</strong> Multiplies corresponding elements.</li>\n<li><strong>Matrix multiplication (%*%):</strong> Executes true linear algebra dotproduct matrix multiplication.</li>\n</ul>\n<pre><code>mat_a &lt;- matrix(1:4, nrow = 2)\nmat_b &lt;- matrix(5:8, nrow = 2)\ndot_product &lt;- mat_a %*% mat_b\n# 3.3 Arrays</code></pre>\n<p>Arrays extend matrices into three or more dimensions. They are created using the <code>array()</code> function, making them indispensable for handling panel data, spatiotemporal grids, or multifactor experimental designs.</p>\n<pre><code># Create a 3-dimensional array (2 rows, 3 columns, 2 distinct matrices/layers)\ncomplex_array &lt;- array(data = 1:12, dim = c(2, 3, 2))\n# Indexing an array: array[row, column, layer]\nelement_val &lt;- complex_array[1, 2, 2] # Row 1, Col 2, Layer 2\n4. Factors and Categorical Data Management</code></pre>\n<p>Categorical variables represent qualitative groupings (e.g., educational levels, employee departments, customer satisfaction ratings). In R, categorical data is managed using factors.</p>\n<h3>4.1 Why Factors Matter</h3>\n<p>While character vectors can store text categories, character strings lack internal structure and explicit grouping rules. Factors solve this by storing categorical data efficiently as underlying integer vectors coupled with metadata called levels.</p>\n<p>Factors are essential for:</p>\n<ul>\n<li><strong>Statistical Modeling:</strong> Functions like <code>lm()</code> (linear regression) or <code>glm()</code> automatically convert factors into contrast-coded dummy variables.</li>\n<li><strong>Data Visualization:</strong> Packages like ggplot2 use factor levels to determine categorical axis ordering, legend groupings, and color palettes.</li>\n<li><strong>Data Integrity:</strong> Factors prevent accidental data entry errors by restricting values strictly to predefined allowable levels.</li>\n</ul>\n<h3>4.2 Creating and Managing Nominal Factors</h3>\n<p>To convert a character vector into a factor, use the <code>factor()</code> function:</p>\n<pre><code># Raw survey responses\neducation_levels &lt;- c(\"Bachelor\", \"Master\", \"PhD\", \"Bachelor\", \"High School\", \"Master\")\n# Convert to a nominal factor\nedu_factor &lt;- factor(education_levels)\nprint(edu_factor)# Output levels automatically sorted alphabetically:# Levels: Bachelor High School Master PhD</code></pre>\n<p>You can inspect the underlying integer codes and assigned text levels using dedicated helper functions:</p>\n<pre><code>levels(edu_factor) # Returns the distinct category levels\nnlevels(edu_factor) # Returns total count of levels (4)as.numeric(edu_factor) # Returns underlying integer representations (e.g., 1, 3, 4, 1, 2, 3)</code></pre>\n<h3>4.3 Ordered Factors (Ordinal Data)</h3>\n<p>By default, factor levels are treated as nominal (unordered). When your categorical data possesses a logical, hierarchical ranking (e.g., Low &lt; Medium &lt; High), you must create an ordered factor by setting ordered = TRUE and explicitly specifying the level hierarchy.</p>\n<pre><code># Raw customer sentiment feedback\nraw_feedback &lt;- c(\"Medium\", \"High\", \"Low\", \"High\", \"Medium\", \"Low\")\n# Create an ordered factor with a custom logical hierarchy\nsentiment_ordered &lt;- factor(\nraw_feedback,\nlevels = c(\"Low\", \"Medium\", \"High\"),\nordered = TRUE\n)\nprint(sentiment_ordered)# Now R recognizes mathematical inequalities between categories:\nsentiment_ordered[2] &gt; sentiment_ordered[3] # Evaluates to TRUE (High &gt; Low)</code></pre>\n<h3>4.4 Modifying and Reordering Factor Levels</h3>\n<p>A common challenge in data wrangling is modifying factor levels without corrupting underlying data.</p>\n<h4>Renaming Levels:</h4>\n<pre><code>levels(sentiment_ordered) &lt;- c(\"Basic\", Moderate\", \"Advanced\")</code></pre>\n<p>Reordering Levels Manually: By default, plots display factors in alphabetical order. You can override this using <code>factor()</code> with custom level orders or package utilities like <code>forcats::fct_reorder()</code>.</p>\n<h2>5. Troubleshooting Common Module 2 Errors</h2>\n<p>Error: subscript out of bounds</p>\n<p>Cause: You attempted to index a vector, matrix, or array using an index position that exceeds its total length or dimensions (e.g., calling vector[10] on a vector of length 5).</p>\n<p>Solution: Check vector lengths using <code>length()</code> or dimensions using <code>dim()</code> before subsetting.</p>\n<p>Warning: NAs introduced by coercion</p>\n<p>Cause: During explicit type conversion (e.g., <code>as.numeric()</code>), R encountered character strings that could not be successfully parsed into numbers (e.g., trying to convert \"abc\" to numeric).</p>\n<p>Solution: Inspect your data for stray text or malformed missing values.</p>\n<p>Error in <code>matrix(...)</code> : data length differs from size of matrix</p>\n<p>Cause: The number of elements provided to <code>matrix()</code> does not cleanly divide into the specified nrow and ncol dimensions.</p>\n<p>Solution: Ensure your data vector length matches the product of rows and columns.</p>\n<h2>6. Summary Checklist for Module 2</h2>\n<p>Before progressing to Module 3, verify that you can:</p>\n<ul>\n<li>☐ Explain atomic vector homogeneity and automatic type coercion rules.</li>\n<li>☐ Create vectors utilizing :, <code>seq()</code>, and <code>rep()</code>.</li>\n<li>☐ Execute 1-based indexing using positive integers, negative exclusions, logical masks, and names.</li>\n<li>☐ Describe vector recycling behavior during arithmetic operations.</li>\n<li>☐ Construct, index, and perform matrix operations using %*% and <code>cbind()</code> / <code>rbind()</code>.</li>\n<li>☐ Build and manipulate nominal and ordered factors for categorical data analysis.</li>\n</ul>",
+   "quiz": [
+    {
+     "q": "What rule applies to every atomic vector in R?",
+     "o": [
+      "It can hold mixed types",
+      "All elements must be of the same type",
+      "It must be numeric",
+      "It must be named"
+     ],
+     "a": 1,
+     "e": "Atomic structures are strictly homogeneous."
+    },
+    {
+     "q": "What does c(TRUE, 42L, 3.14, \"Alpha\") produce?",
+     "o": [
+      "A list",
+      "A numeric vector",
+      "A character vector",
+      "An error"
+     ],
+     "a": 2,
+     "e": "Coercion moves up the hierarchy to character, the most flexible type."
+    },
+    {
+     "q": "Which suffix creates an integer literal, as in 15L?",
+     "o": [
+      "i",
+      "L",
+      "I",
+      "int"
+     ],
+     "a": 1,
+     "e": "The L suffix tells R to store a 32-bit integer rather than a double."
+    },
+    {
+     "q": "Which expression selects everything EXCEPT the first element of vector x?",
+     "o": [
+      "x[0]",
+      "x[1]",
+      "x[-1]",
+      "x[!1]"
+     ],
+     "a": 2,
+     "e": "Negative integer indexing excludes the given positions."
+    },
+    {
+     "q": "What is the recycling rule?",
+     "o": [
+      "Duplicate values are removed",
+      "The shorter vector is reused to match the longer one in vectorized operations",
+      "Vectors are sorted automatically",
+      "NA values are replaced with zero"
+     ],
+     "a": 1,
+     "e": "R repeats the shorter vector to match the longer one's length."
+    },
+    {
+     "q": "By default, matrix(1:6, nrow = 2) fills values…",
+     "o": [
+      "Row by row",
+      "Column by column",
+      "Randomly",
+      "Diagonally"
+     ],
+     "a": 1,
+     "e": "R fills column-major unless byrow = TRUE is given."
+    },
+    {
+     "q": "Which structure stores categorical data with a fixed set of levels?",
+     "o": [
+      "Factor",
+      "Raw vector",
+      "Complex vector",
+      "Array"
+     ],
+     "a": 0,
+     "e": "Factors store integer codes plus a levels attribute."
+    },
+    {
+     "q": "What does making a factor with ordered = TRUE enable?",
+     "o": [
+      "Alphabetical sorting only",
+      "Meaningful comparisons such as 'Low' < 'High'",
+      "Automatic type conversion to numeric",
+      "Faster file import"
+     ],
+     "a": 1,
+     "e": "Ordered factors represent ordinal data with a defined hierarchy."
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "free": true,
+   "icon": "<i class=\"ti ti-table\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Beginner",
+   "title": "Lists, Data Frames & External Data",
+   "excerpt": "In previous modules, we examined atomic vectors, matrices, and arrays. Those data structures share a strict requirement: homogeneity, meaning every element inside them must belong…",
+   "tags": [
+    "Beginner",
+    "What is a List?",
+    "Creating Lists with list()"
+   ],
+   "visual": "<i class=\"ti ti-table\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#0f0a14,#201028)",
+   "concepts": [
+    "What is a List?",
+    "Creating Lists with list()",
+    "What is a Data Frame?",
+    "Creating Data Frames from Scratch",
+    "Dimension and Attribute Helpers",
+    "Numeric Indexing"
+   ],
+   "body": "<h2>1. Introduction to Lists: The Ultimate Heterogeneous Data Structure</h2>\n<h3>1.1 What is a List?</h3>\n<p>In previous modules, we examined atomic vectors, matrices, and arrays. Those data structures share a strict requirement: homogeneity, meaning every element inside them must belong to the exact same atomic data type (e.g., all numbers, all characters, or all logicals).</p>\n<p>R breaks this structural limitation with lists. A list is a specialized one-dimensional vector, but with a crucial distinction: lists are heterogeneous. This means a single list can bundle together elements of completely different classes, lengths, and structures. Inside one list, you can store a numeric vector, a character string, a logical flag, a two-dimensional matrix, a linear regression model, a custom function, and even another list nested inside it.</p>\n<h3>1.2 Creating Lists with <code>list()</code></h3>\n<p>Lists are constructed using the <code>list()</code> function. You can assign names to list components during creation or keep them anonymous. R</p>\n<p># Constructing a comprehensive, heterogeneous employee record list employee_record <code>&lt;-</code> list( full_name = \"Dr. Eleanor Vance\",</p>\n<p>employee_id = 10482L, is_tenured = TRUE, base_salary = 125000.50,</p>\n<p>performance_scores = c(92, 88, 95, 91),</p>\n<p>historical_reviews = matrix(c(\"2023\", \"Exceeds\", \"2024\", \"Meets\"), nrow = 2, byrow = TRUE), department_metadata = list(</p>\n<p>division = \"Research &amp; Development\",</p>\n<p>building_code = \"Bldg-4A\", budget_allocated = 450000</p>\n<p>) )</p>\n<p># Inspect the high-level structure of the list</p>\n<p><code>str(employee_record)</code></p>\n<h3>1.3 Subsetting Lists: Single Brackets vs. Double Brackets vs. Dollar Signs</h3>\n<p>Because lists can contain nested objects of varying structures, subsetting them requires careful attention to the three distinct access operators in R:</p>\n<p>Single Square Brackets ([ ]):</p>\n<ul>\n<li><strong>Behavior:</strong> Returns a sub-list containing the requested elements, preserving the list wrapper class.</li>\n<li><strong>Use Case:</strong> When you want to extract multiple elements from a list while maintaining the list container format.</li>\n</ul>\n<pre><code># Extracts elements 1 and 2 as a smaller, nested sub-list\nsub_list &lt;- employee_record[1:2]class(sub_list) # Returns \"list\"</code></pre>\n<p>Double Square Brackets ([[ ]]):</p>\n<ul>\n<li><strong>Behavior:</strong> Extracts the exact underlying contents of a single list element, stripping away the outer list container wrapper.</li>\n<li><strong>Use Case:</strong> When you want to access the raw vector, matrix, or data frame stored inside the list element to perform mathematical or text operations on it.</li>\n</ul>\n<pre><code># Extracts the raw numeric vector directly (not wrapped in a list)\nscores_vector &lt;- employee_record[[5]]class(scores_v ector) # Returns \"numeric\" (or \"integer\")\n# You can now perform vector operations directly on it:\nmean(scores_vector) # Returns 91.5</code></pre>\n<p>The Dollar Sign Operator ($):</p>\n<ul>\n<li><strong>Behavior:</strong> A convenient shorthand shortcut for extracting a named element from a list, functioning identically to double square brackets ([[ ]]). It also enables tab-completion in RStudio.</li>\n<li><strong>Use Case:</strong> Accessing named attributes cleanly without typing quotation marks.</li>\n</ul>\n<pre><code># Accessing the full_name component directly by name\nemployee_name &lt;- employee_record$full_name\n# Accessing nested list items by chaining operators\nemployee_building &lt;- employee_record$department_metadat a$building_code</code></pre>\n<h2>2. Introduction to Data Frames: The Foundation of R Data Manipulation</h2>\n<h3>2.1 What is a Data Frame?</h3>\n<p>While lists allow maximum flexibility through heterogeneity, real-world data analysis almost always revolves around rectangular, tabular data (rows and columns). In R, the data frame is the definitive data structure designed expressly for this purpose.</p>\n<p>Under the hood, a data frame is a specialized two-dimensional list where every column acts as an atomic vector of equal length. Because each column is an independent vector:</p>\n<ul>\n<li><strong>Columns must be homogeneous:</strong> Every individual element within a specific column must share the same data type.</li>\n<li><strong>Columns can be heterogeneous across columns:</strong> Column 1 can be an integer vector, Column 2 a character vector, Column 3 a logical vector, and Column 4 a numeric floating-point vector.</li>\n</ul>\n<p>This tabular architecture makes data frames the ideal format for loading datasets from spreadsheets, SQL databases, and CSV files.</p>\n<h3>2.2 Creating Data Frames from Scratch</h3>\n<p>You can build a data frame manually using the <code>data.frame()</code> function by passing equal-length vectors as named arguments:</p>\n<pre><code># Creating a structured customer analytics data frame\ncustomer_analytics &lt;- data.frame( customer_id = c(1001L, 1002L, 1003L, 1004L, 1005L), company_name = c(\"Apex Logistics\", \"BlueSky Tech\", \"CyberDynamics\", \"Delta Industries\", \"Echo Retail\"),\nannual_revenue = c(1250000.50, 430000.00, 8900002.10, 670000.00, 215000.50),\nemployee_count = c(45, 12, 310, 85, 9),\nis_enterprise_tier = c(TRUE, FALSE, TRUE, TRUE, FALSE),\naccount_status = factor(c(\"Active\", \"Pending\", \"Active\", \"Inactive\", \"Active\"))\n)\n# # Print the data frame\nprint(customer_analytics) 2.3 Inspecting Data Frames: Essential Diagnostic Functions</code></pre>\n<p>When working with large external datasets, you should never blindly print the entire table to the console. Instead, use these core diagnostic functions to inspect structure and data integrity:</p>\n<p>head(x, n) and tail(x, n): Inspects the first or last n rows (default is 6) to verify formatting and column alignment.</p>\n<pre><code>head(customer_analytics, n = 3) # Inspects the first 3 rows\nstr(x) (Structure): Displays a concise summary of the data frame's dimensions, class types, and sample contents for every column. Essential for catching import errors.</code></pre>\n<pre><code>str(customer_analytics)</code></pre>\n<p><code>summary(x)</code>: Generates comprehensive statistical summaries for every column. For numeric columns, it outputs minimum, first quartile, median, mean, third quartile, and maximum values. For character and factor columns, it provides frequency counts.</p>\n<pre><code>summary(customer_analytics)</code></pre>\n<h4>Dimension and Attribute Helpers:</h4>\n<ul>\n<li><strong><code>dim(customer_analytics)</code>:</strong> Returns row and column counts [5, 6].</li>\n<li><strong><code>nrow(customer_analytics)</code>:</strong> Returns total row count (5).</li>\n<li><strong><code>ncol(customer_analytics)</code>:</strong> Returns total column count (6).</li>\n</ul>\n<p><code>names(customer_analytics)</code> or <code>colnames(customer_analytics)</code>: Returns vector of column header names.</p>\n<p><code>rownames(customer_analytics)</code>: Returns row identifier labels.</p>\n<p>2.4 Indexing and Subsetting Data Frames</p>\n<p>Because data frames are twodimensional structures, they support two-dimensional coordinate indexing: dataframe[row_index, column_index].</p>\n<h4>Numeric Indexing:</h4>\n<pre><code># Extract element at row 2, column 3 (annual revenue for BlueSky Tech) customer_analytics[2, 3] # Extract rows 1 through 3 across all columns</code></pre>\n<p>customer_analytics[1:3, ] # Extract entire column 2 as a character vector customer_analytics[, 2] Column Access via Dollar Sign ($): Extracts an entire column as a standalone vector using its column name:</p>\n<pre><code>revenues &lt;- customer_analytics$annual_revenue mean(revenues) # Calculates average annual revenue across all customers</code></pre>\n<p>Conditional Subsetting with Logical Filters (<code>subset()</code> and [ ]):</p>\n<pre><code># Method 1: Using square brackets with logical conditions\nenterprise_clients &lt;- customer_analytics[customer_analyt ics$is_enterprise_tier == TRUE, ] # Method 2: Using the dedicated\nsubset()\nfunction\nhigh_revenue_clients &lt;- subset(customer_analytics, annual_revenue &gt; 500000)</code></pre>\n<h2>3. Importing and Exporting Data in R</h2>\n<p>Real-world analytics pipelines rarely start with manually typed data frames. Instead, data must be ingested from external storage files, databases, or web APIs.</p>\n<h3>3.1 Handling Flat Files: CSV and Delimited TXT Files</h3>\n<p>Base R provides robust, built-in functions for importing and exporting comma-separated values (.csv) and tab-delimited text files without requiring external packages.</p>\n<h4>Reading CSV Files (<code>read.csv()</code>) R</h4>\n<p># Standard syntax for reading a CSV file from disk# header = TRUE specifies that the first row contains column headers# stringsAsFactors = FALSE prevents character strings from automatically converting to factors (in older R versions) clinical_trial_data <code>&lt;-</code> read.csv( file =</p>\n<p>\"data/clinical_trials_2026.csv\",</p>\n<p>header = TRUE,</p>\n<p>sep = \",\",</p>\n<p>stringsAsFactors = FALSE, na.strings = c(\"\", \"NA\", \"NULL\") # Defines how missing values are represented ) Reading Tab-Delimited TXT Files (<code>read.delim()</code>) R</p>\n<p># Used for tab-separated values (.txt or .tsv)</p>\n<p>genomic_data <code>&lt;-</code> read.delim(</p>\n<p>file = \"data/gene_expression.txt\",</p>\n<p>header = TRUE, sep = \"\\t\"</p>\n<p>)</p>\n<h4>Writing Data Frames to Disk (<code>write.csv()</code>)</h4>\n<p>Once you have cleaned, transformed, or analyzed your data frame, you can export it back to disk: R</p>\n<p># Export data frame to a CSV file, omitting row index numbers write.csv(</p>\n<p>x = clinical_trial_data,</p>\n<p>file =</p>\n<p>\"output/cleaned_clinical_data.csv\", row.names = FALSE</p>\n<p>)</p>\n<h3>3.2 Working with Microsoft Excel Files (.xlsx, .xls)</h3>\n<p>Base R cannot read Excel workbooks natively because Excel files are compressed binary XML archives (.zip containers housing proprietary schemas). To work with Excel files, you must install and load specialized external packages. The modern standard package for reading Excel files is readxl, while openxlsx or writexl are commonly used for exporting.</p>\n<h4>Installing and Loading readxl R</h4>\n<p># Install the readxl package (uncomment if not already installed)# <code>install.packages(\"readxl\")</code> # Load the library into your active session <code>library(readxl)</code></p>\n<h4>Reading Excel Workbooks</h4>\n<pre><code># Inspect all sheet names available inside an Excel workbook without loading the full file\nexcel_sheets(\"data/quarterly_finan cials.xlsx\")\n# Read a specific sheet into an R data frame\nq1_budget &lt;- read_excel(\npath = \"data/quarterly_financials.xlsx\", sheet = \"Q1_Summary\", col_names = TRUE\n)</code></pre>\n<h4>Exporting Data Frames to Excel Workbooks (writexl)</h4>\n<pre><code># Install and load writexl for exporting data frames to Excel#\ninstall.packages(\"writexl\")\nlibrary(writexl)\n# Write data frame to an Excel file\nwrite_xlsx(\nx = customer_analytics,\npath = \"output/customer_export.xlsx\"\n)</code></pre>\n<h2>4. Troubleshooting Common Module 3 Errors</h2>\n<p>Error in <code>read.table(...)</code> : duplicate 'row.names' are not allowed Cause: The input file contains row identifiers in the header row that conflict with R's internal row naming conventions.</p>\n<p>Solution: Check your file headers and ensure row.names = 1 is specified if the first column represents row names, or row.names = NULL if it does not.</p>\n<p>Error: $ operator is invalid for atomic vectors</p>\n<p>Cause: You attempted to use the dollar sign accessor ($) on an atomic vector or matrix instead of a list or data frame.</p>\n<p>Solution: Ensure your object is a valid data frame or list using <code>is.data.frame()</code> or <code>is.list()</code>.</p>\n<p>Error in open.connection(file, \"r\") : cannot open the connection</p>\n<p>Cause: The file path provided to <code>read.csv()</code> or <code>read_excel()</code> is incorrect, the file is currently open and locked by another program (like Microsoft Excel), or you lack read permissions for that directory.</p>\n<p>Solution: Verify your working directory using <code>getwd()</code>, check file path spelling, or use absolute file paths. Close any external programs holding the file locked.</p>\n<h2>5. Summary Checklist for Module 3</h2>\n<p>Before progressing to Module 4, verify that you can:</p>\n<ul>\n<li>☐ Construct heterogeneous lists containing nested data structures.</li>\n<li>☐ Extract list components using single brackets [ ], double brackets [[ ]], and dollar signs $.</li>\n<li>☐ Build, inspect, and summarize rectangular data frames.</li>\n<li>☐ Index and filter data frames using coordinate indices and logical boolean conditions.</li>\n<li>☐ Import comma-separated (.csv) and tab-delimited text files into R using base functions.</li>\n<li>☐ Read and write Microsoft Excel workbooks using external packages like readxl and writexl.</li>\n</ul>",
+   "quiz": [
+    {
+     "q": "What makes a list different from an atomic vector?",
+     "o": [
+      "It can only hold numbers",
+      "It can hold elements of different types and structures",
+      "It cannot be named",
+      "It is always two-dimensional"
+     ],
+     "a": 1,
+     "e": "Lists are heterogeneous containers."
+    },
+    {
+     "q": "What does my_list[[2]] return?",
+     "o": [
+      "A sub-list containing element 2",
+      "The raw element stored at position 2",
+      "The length of the list",
+      "Element 2 as a character string"
+     ],
+     "a": 1,
+     "e": "Double brackets extract the element itself; single brackets return a list."
+    },
+    {
+     "q": "What does my_list[1:2] return?",
+     "o": [
+      "Elements 1 and 2 as a smaller list",
+      "A numeric vector",
+      "A data frame",
+      "An error"
+     ],
+     "a": 0,
+     "e": "Single brackets always return a list."
+    },
+    {
+     "q": "Which best describes a data frame?",
+     "o": [
+      "A list of equal-length vectors arranged as columns",
+      "A factor with levels",
+      "A 3-D array",
+      "A single atomic vector"
+     ],
+     "a": 0,
+     "e": "Each column is a vector; all columns share the same length."
+    },
+    {
+     "q": "Which expression extracts the column salary from df as a vector?",
+     "o": [
+      "df$salary",
+      "df[salary]",
+      "df(salary)",
+      "df->salary"
+     ],
+     "a": 0,
+     "e": "The $ operator pulls one column out by name."
+    },
+    {
+     "q": "Which function reads a comma-separated file into a data frame in base R?",
+     "o": [
+      "import.table()",
+      "load.csv()",
+      "read.csv()",
+      "open.file()"
+     ],
+     "a": 2,
+     "e": "read.csv() reads CSV files into data frames."
+    },
+    {
+     "q": "Which package is used in the notes to read Excel workbooks?",
+     "o": [
+      "rpart",
+      "stringr",
+      "ggplot2",
+      "readxl"
+     ],
+     "a": 3,
+     "e": "readxl provides read_excel() and excel_sheets()."
+    },
+    {
+     "q": "Which function exports a data frame to a CSV file in base R?",
+     "o": [
+      "put.csv()",
+      "export()",
+      "save.csv()",
+      "write.csv()"
+     ],
+     "a": 3,
+     "e": "write.csv() writes a data frame to disk; row.names = FALSE omits the index."
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "free": true,
+   "icon": "<i class=\"ti ti-arrows-shuffle\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Beginner",
+   "title": "Control Structures, Functions & Scope",
+   "excerpt": "In programming, conditional statements enable your scripts to evaluate logical conditions and alter execution paths dynamically based on runtime data. R supports standard…",
+   "tags": [
+    "Beginner",
+    "Conditional Statements and Decision-Making Logic",
+    "The if, else if, and else Control Flow"
+   ],
+   "visual": "<i class=\"ti ti-arrows-shuffle\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#14140a,#282810)",
+   "concepts": [
+    "Conditional Statements and Decision-Making Logic",
+    "The if, else if, and else Control Flow",
+    "Important Caveats for if Statements",
+    "The Vectorized ifelse() Function",
+    "Iteration: Loops and Vectorization Alternatives",
+    "The for Loop"
+   ],
+   "body": "<h2>1. Conditional Statements and Decision-Making Logic</h2>\n<p>In programming, conditional statements enable your scripts to evaluate logical conditions and alter execution paths dynamically based on runtime data. R supports standard conditional structures alongside specialized vectorized evaluation functions.</p>\n<h3>1.1 The if, else if, and else Control Flow</h3>\n<p>The fundamental building block for scalar decision-making in R is the if statement. It evaluates a single logical condition that yields a boolean value (TRUE or FALSE). If the condition evaluates to TRUE, the corresponding code block within the curly braces {} executes.</p>\n<pre><code># Scalar conditional statement\naccount_balance &lt;- 1500.50\ncredit_limit &lt;- 5000.00 if (account_balance &lt; 0) {\nstatus_message &lt;- \"Account is overdrawn.\"\n} else if (account_balance &lt; 1000) {\nstatus_message &lt;- \"Account balance is low.\"\n} else {\nstatus_message &lt;- \"Account balance is healthy.\"\n}\nprint(status_message)</code></pre>\n<h4>Important Caveats for if Statements:</h4>\n<ul>\n<li><strong>Length 1 Requirement:</strong> The expression evaluated inside an <code>if()</code> statement must evaluate to a single logical value of length 1 (TRUE or FALSE). If you pass a vector containing multiple boolean values, R will evaluate only the first element and throw a warning (\"the condition has length &gt; 1 and only the first element will be used\").</li>\n<li><strong>Curly Brace Placement:</strong> In R, the opening curly brace { should appear on the same line as the if or else keyword. Placing it on a new line can cause premature statement termination due to R's automatic semicolon insertion parser.</li>\n</ul>\n<h3>1.2 The Vectorized <code>ifelse()</code> Function</h3>\n<p>When working with vectors or columns inside a data frame, standard if statements fail because they cannot evaluate elements element-by-element across vectors. To solve this, R provides the vectorized <code>ifelse()</code> function. ifelse(test, yes, no) takes three arguments:</p>\n<ul>\n<li><strong>test:</strong> A logical vector or condition.</li>\n<li><strong>yes:</strong> Return values for elements where the test evaluates to TRUE.</li>\n<li><strong>no:</strong> Return values for elements where the test evaluates to FALSE.</li>\n</ul>\n<pre><code># Vectorized evaluation across an entire dataset column\nemployee_performance_scores &lt;- c(72, 88, 95, 60, 81, 45, 90)\n# Apply vectorized evaluation\nperformance_tiers &lt;- ifelse(\nemployee_performance_scores &gt;= 90, \"Exceptional\",\nifelse(employee_performance_scores &gt;= 75, \"Satisfactory\", \"Needs Improvement\") )\nprint(performance_tiers)# Returns: \"Needs Improvement\", \"Satisfactory\", \"Exceptional\", \"Needs Improvement\", \"Satisfactory\", \"Needs Improvement\", \"Exceptional\"</code></pre>\n<h2>2. Iteration: Loops and Vectorization Alternatives</h2>\n<p>Repetitive tasks are common in data analysis, but how you execute repetition dictates the performance and scalability of your code.</p>\n<h3>2.1 The for Loop</h3>\n<p>A for loop iterates through a predefined vector, sequence, or list, executing a block of code for each item.</p>\n<pre><code># Calculating compound interest over a 5-year period using a for loop\nprincipal &lt;- 10000 annual_rate &lt;- 0.05\nyears &lt;- 5\nbalance_history &lt;- numeric(years) # Pre-allocate vector for memory efficiency\nfor (t in 1:years) {\nprincipal &lt;- principal * (1 + annual_rate)\nbalance_history[t] &lt;- round(principal, 2)\n}\nprint(balance_history) 2.2 The while Loop</code></pre>\n<p>A while loop repeatedly executes a block of code as long as a specified condition remains TRUE. It is primarily used when the total number of iterations is unknown beforehand (e.g., convergence algorithms or Monte Carlo simulations).</p>\n<pre><code># Simulating a random walk until a threshold is reached\ntarget_value &lt;- 50\ncurrent_value &lt;- 10 iteration_count &lt;- 0\nset.seed(42) # Ensure reproducibility\nwhile (current_value &lt; target_value) {\nstep &lt;- sample(c(-2, 3, 5, 8), size = 1)\ncurrent_value &lt;- current_value +\n  step\niteration_count &lt;- iteration_count +\n  1\n}\ncat(\"Reached target after\", iteration_count, \"iterations. Final value:\", current_value) 2.3 The repeat Loop and break / next Statements</code></pre>\n<ul>\n<li><strong>repeat Loop:</strong> Creates an infinite loop that continues running indefinitely until explicitly stopped.</li>\n<li><strong>break:</strong> Instantly terminates and exits the current loop.</li>\n<li><strong>next:</strong> Skips the remaining statements in the current iteration and jumps directly to the next iteration cycle.</li>\n</ul>\n<pre><code># Using repeat with break and next\ncounter &lt;- 0repeat {\ncounter &lt;- counter +\n  1\n# Skip odd numbers if (counter %% 2 != 0) {\nnext\n}\nprint(counter)\n# Terminate loop once counter reaches 10\nif (counter &gt;= 10) {\nbreak\n}\n}\n2.4 Vectorization vs. Explicit Loops: The Performance Imperative</code></pre>\n<p>While for loops are intuitive, explicit loops in interpreted R code are notoriously slow when processing millions of rows.</p>\n<p>Under the hood, R is built on compiled C and Fortran libraries. Vectorization replaces explicit loops with optimized, compiled low-level routines that execute data transformations simultaneously across memory blocks.</p>\n<pre><code># INEFFICIENT APPROACH: Using a for loop on 1 million elements\nn &lt;- 1000000\nx &lt;- runif(n)\ny &lt;- numeric(n)\n# Benchmark loop execution (Conceptual)#\nsystem.time(for(i in 1:n) {\n  y[i] &lt;- sqrt(x[i])\n}\n)\n# EFFICIENT APPROACH: Vectorized execution# Executes instantly via compiled C vector operations\ny_vectorized &lt;- sqrt(x) 2.5 The Apply Family (apply, lapply, sapply)</code></pre>\n<p>When vectorization isn't directly applicable (such as applying custom functions across rows or columns of a matrix/data frame), avoid for loops by using the built-in apply family of functional programming loop alternatives:</p>\n<p>apply(X, MARGIN, FUN): Evaluates a function across rows (MARGIN = 1) or columns (MARGIN = 2) of a matrix or data frame.</p>\n<pre><code>mat &lt;- matrix(1:9, nrow = 3)# Calculate the mean of each row\nrow_means &lt;- apply(mat, MARGIN = 1, FUN = mean)</code></pre>\n<ul>\n<li><strong>lapply(X, FUN):</strong> Applies a function to every element of a list or vector, always returning a list.</li>\n<li><strong>sapply(X, FUN):</strong> Simplified wrapper around <code>lapply()</code> that automatically attempts to simplify/coerce the output into a vector or matrix if possible.</li>\n</ul>\n<h2>3. Writing Custom User-Defined Functions</h2>\n<p>Encapsulating complex multi-step logic into custom functions makes your code modular, testable, and reusable.</p>\n<h3>3.1 Anatomy of an R Function</h3>\n<p>Functions in R are first-class objects created using the <code>function()</code> keyword. A function consists of:</p>\n<ul>\n<li><strong>Function Name:</strong> The identifier used to call the function.</li>\n<li><strong>Arguments:</strong> Input parameters passed into the function (which can include default values).</li>\n<li><strong>Body:</strong> The block of code enclosed in {} that performs computations.</li>\n<li><strong>Return Value:</strong> The final evaluated expression inside the body (or an explicit <code>return()</code> call).</li>\n</ul>\n<pre><code># Define a custom function to calculate Descriptive Statistics\ncalculate_summary_stats &lt;- function(numeric_vector, remove_na = TRUE) {\n# Validate input data type\nif (!is.numeric(numeric_vector)) {\nstop(\"Error: Input argument 'numeric_vector' must be a numeric vector.\")\n}\n# Handle missing values if requested\nif (remove_na) {\nclean_vector &lt;-\nnumeric_vector[!is.na(numeric_vect or)]\n} else {\nclean_vector &lt;- numeric_vector\n}\n# # Compute summary metrics\nstats_list &lt;- list(\nsample_size = length(clean_vector),\narithmetic_mean = mean(clean_vector),\nmedian_val = median(clean_vector),\nstandard_deviation = sd(clean_vector),\ntotal_sum = sum(clean_vector)\n)\n# Return the structured list\nreturn(stats_list)\n}\n# Test the custom function\nsample_data &lt;- c(12, 45, 23, 67, 34, 89, 56, NA)\nresult &lt;-\ncalculate_summary_stats(sample_dat a, remove_na = TRUE)\nprint(result)</code></pre>\n<h3>3.2 Advanced Argument Handling: Default Values and Ellipses (...)</h3>\n<p>Default Arguments: You can assign default values to arguments in case the user omits them during function invocation.</p>\n<p>The Ellipses (...) Argument: Allows a function to accept an arbitrary, variable number of additional arguments and pass them downstream to underlying functions (e.g., passing extra plotting parameters to <code>plot()</code>).</p>\n<pre><code># Function utilizing default arguments and ellipses\ngenerate_custom_plot &lt;- function(x_data, y_data, plot_title = \"Default Analysis Plot\", ...) {\nplot(\nx = x_data, y = y_data,\nmain = plot_title, xlab = \"X Variable\", ylab = \"Y Variable\",\n... # Passes additional graphical parameters (col, pch, cex, etc.)\n)\n}\n# Call function passing extra graphical parameters via ...\nx_vals &lt;- 1:10 y_vals &lt;- (1:10)^2\ngenerate_custom_plot(x_vals, y_vals, plot_title = \"Quadratic Growth Curve\", col = \"blue\", pch = 19)</code></pre>\n<h3>3.3 Lexical Scoping and Environments in R</h3>\n<p>R relies heavily on lexical scoping, meaning the values of variables are determined by how functions are nested within source code environments, rather than how they are called.</p>\n<h4>The Search Path and Scope Hierarchy:</h4>\n<ul>\n<li><strong>Local Environment:</strong> Variables created inside a function body exist exclusively within that function's execution environment. They are destroyed the moment the function finishes running.</li>\n<li><strong>Enclosing Environment:</strong> If a variable is referenced inside a function but not defined locally, R searches outward into the parent environment where the function was defined.</li>\n</ul>\n<p>Global Environment (.GlobalEnv): Your active workspace in RStudio where variables assigned with <code>&lt;-</code> reside.</p>\n<p>Loaded Package Namespaces: Base R packages, installed libraries, and system functions.</p>\n<pre><code># # Demonstrating lexical scoping\nglobal_multiplier &lt;- 10\nmultiply_by_global &lt;- function(x) {\n# 'global_multiplier' is not defined locally,\n# so R searches outward and finds it in the global environment\nresult &lt;- x * global_multiplier\nreturn(result)\n}\nmultiply_by_global(5) # Returns 50\nAssignment Operators in Functions (&lt;- vs. &lt;&lt;-):\n&lt;- (Standard Local Assignment): Always creates or modifies a variable inside the current local environment.\n&lt;&lt;- (Global/Superassignment Operator): Searches parent environments and modifies or creates a variable in the parent or global environment. Caution: Overusing &lt;&lt;- is considered poor practice because it introduces hidden side effects and makes code difficult to debug.</code></pre>\n<h2>4. Troubleshooting Common Module 4 Errors</h2>\n<p>Error in if (...) : missing value where TRUE/FALSE needed</p>\n<p>Cause: The condition passed to an <code>if()</code> statement evaluated to NA or NULL instead of a definitive boolean value.</p>\n<p>Solution: Check your condition for missing values using <code>is.na()</code> before evaluating control statements.</p>\n<p>Error: unexpected 'else' in \"else\"</p>\n<p>Cause: You placed the else keyword on a new line following the closing brace } of an if block, or you included code between } and else.</p>\n<p>Solution: Ensure else begins on the exact same line as the closing brace: } else {.</p>\n<p>Error in <code>function(...)</code> : argument \"x\" is missing, with no default Cause: You called a custom function without supplying a required argument that lacks a default value.</p>\n<p>Solution: Provide all mandatory arguments or assign default fallback values (e.g., arg = NULL) inside the function definition.</p>\n<h2>5. Summary Checklist for Module 4</h2>\n<p>Before progressing to Module 5, verify that you can:</p>\n<ul>\n<li>☐ Write conditional decision trees using if, else if, and else.</li>\n<li>☐ Execute vectorized evaluations across datasets using <code>ifelse()</code>.</li>\n<li>☐ Construct repetitive loops using for, while, and repeat with break and next.</li>\n<li>☐ Explain why vectorization is superior to explicit for loops in R.</li>\n<li>☐ Write robust, modular userdefined functions with input validation and default arguments.</li>\n<li>☐ Describe R's lexical scoping rules and environment hierarchy.</li>\n</ul>",
+   "quiz": [
+    {
+     "q": "Which keyword chain gives multi-branch conditional logic in R?",
+     "o": [
+      "switch only",
+      "when / otherwise",
+      "if / else if / else",
+      "case / default"
+     ],
+     "a": 2,
+     "e": "R uses if, else if and else for branching."
+    },
+    {
+     "q": "What is ifelse() designed for?",
+     "o": [
+      "Looping over files",
+      "Vectorized conditional evaluation over a whole vector",
+      "Defining functions",
+      "Error handling"
+     ],
+     "a": 1,
+     "e": "ifelse() tests every element and returns a result vector."
+    },
+    {
+     "q": "Which statement skips to the next iteration of a loop?",
+     "o": [
+      "skip",
+      "continue",
+      "next",
+      "pass"
+     ],
+     "a": 2,
+     "e": "R uses next to skip and break to exit."
+    },
+    {
+     "q": "Which statement terminates a loop entirely?",
+     "o": [
+      "stop",
+      "break",
+      "exit",
+      "end"
+     ],
+     "a": 1,
+     "e": "break exits the loop immediately."
+    },
+    {
+     "q": "Why is vectorization usually preferred over explicit loops in R?",
+     "o": [
+      "Loops are syntax errors",
+      "Vectorized operations run in compiled code and are far faster",
+      "Loops cannot use indices",
+      "Vectorized code uses less typing only"
+     ],
+     "a": 1,
+     "e": "Vectorized operations execute efficiently via compiled C routines."
+    },
+    {
+     "q": "What does a function return if it has no explicit return()?",
+     "o": [
+      "NULL always",
+      "The value of the last evaluated expression",
+      "An error",
+      "The first argument"
+     ],
+     "a": 1,
+     "e": "R returns the last expression evaluated."
+    },
+    {
+     "q": "What is the purpose of ... (ellipsis) in a function definition?",
+     "o": [
+      "To mark unfinished code",
+      "To pass extra, unspecified arguments through to other functions",
+      "To declare a default value",
+      "To make a function recursive"
+     ],
+     "a": 1,
+     "e": "The ellipsis forwards additional arguments to inner calls."
+    },
+    {
+     "q": "Under lexical scoping, when a variable is not found inside a function, R…",
+     "o": [
+      "Returns NA",
+      "Searches outward through enclosing environments",
+      "Throws an error immediately",
+      "Creates it locally"
+     ],
+     "a": 1,
+     "e": "R looks in the enclosing environments up to the global environment."
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "free": true,
+   "icon": "<i class=\"ti ti-filter\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Intermediate",
+   "title": "Data Manipulation with dplyr",
+   "excerpt": "The Tidyverse is an opinionated, highly integrated collection of R packages designed specifically for data science, data wrangling, exploratory analysis, and visualization.…",
+   "tags": [
+    "Intermediate",
+    "Introduction to the Tidyverse Ecosystem",
+    "What is the Tidyverse?"
+   ],
+   "visual": "<i class=\"ti ti-filter\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#140a14,#281028)",
+   "concepts": [
+    "Introduction to the Tidyverse Ecosystem",
+    "What is the Tidyverse?",
+    "Core Philosophy of Tidy",
+    "Installing and Loading the Tidyverse",
+    "Core dplyr Verbs: The Grammar of Data Manipulation",
+    "Filtering Rows with filter()"
+   ],
+   "body": "<h2>1. Introduction to the Tidyverse Ecosystem</h2>\n<h3>1.1 What is the Tidyverse?</h3>\n<p>The Tidyverse is an opinionated, highly integrated collection of R packages designed specifically for data science, data wrangling, exploratory analysis, and visualization. Developed primarily by Hadley Wickham and the engineering team at Posit (formerly RStudio), the Tidyverse shares a unified design philosophy, standardized grammar, and a consistent underlying data structure known as \"tidy data.\"</p>\n<p>In base R, different functions often expect vastly different input structures (e.g., matrices vs. lists vs. data frames) and return inconsistent output formats.</p>\n<p>The Tidyverse eliminates this friction by ensuring that all core packages operate exclusively on tibbles—a modern, enhanced reimagining of the standard R data frame.</p>\n<h3>1.2 Core Philosophy of Tidy</h3>\n<p>Data A dataset is considered \"tidy\" if it adheres to three interrelated structural rules:</p>\n<p>Each variable forms a column. Every column represents a single, distinct attribute or measured characteristic.</p>\n<p>Each observation forms a row. Every row represents a single case, record, or entity.</p>\n<p>Each type of observational unit forms a table. Distinct entities (e.g., customers vs. transactions) are kept in separate, linkable tables rather than crammed into a single bloated spreadsheet.</p>\n<h3>1.3 Installing and Loading the Tidyverse</h3>\n<p>Because the Tidyverse is a suite of multiple packages, you can install the entire ecosystem with a single command:</p>\n<pre><code># Install the complete Tidyverse suite (run once)\ninstall.packages(\"tidyverse\")</code></pre>\n<p>When you load the library using <code>library(tidyverse)</code>, it loads the core packages simultaneously:</p>\n<ul>\n<li><strong>dplyr:</strong> For data manipulation (filtering, selecting, mutating, summarizing).</li>\n<li><strong>ggplot2:</strong> For declarative data visualization.</li>\n<li><strong>tidyr:</strong> For data tidying, reshaping, pivoting, and missing value management.</li>\n<li><strong>readr:</strong> For fast, efficient flatfile data import (.csv, .tsv).</li>\n<li><strong>tibble:</strong> For modern reimagined data frames.</li>\n<li><strong>stringr:</strong> For string manipulation and regular expressions.</li>\n<li><strong>forcats:</strong> For working with categorical factors.</li>\n<li><strong>purrr:</strong> For functional programming and looping replacements.</li>\n</ul>\n<pre><code># Load the Tidyverse into your active session\nlibrary(tidyverse)</code></pre>\n<h2>2. Core dplyr Verbs: The Grammar of Data Manipulation</h2>\n<p>dplyr treats data manipulation like a specialized grammar where every core operation is represented by a specific verb function. Every core dplyr verb shares two universal design characteristics:</p>\n<p>The first argument is always a data frame (or tibble).</p>\n<p>The output is always a new data frame (or tibble).</p>\n<p>This consistency allows verbs to chain together seamlessly.</p>\n<h3>2.1 Filtering Rows with <code>filter()</code></h3>\n<p>The <code>filter()</code> function extracts subsets of rows from a data frame based on logical conditions (predicates) that evaluate to TRUE.</p>\n<pre><code># Sample dataset creation for demonstration\nset.seed(123)\nemployee_df &lt;- tibble(\nemp_id = 101:110,\ndepartment = c(\"Engineering\", \"Marketing\", \"Engineering\", \"Sales\", \"HR\", \"Engineering\", \"Sales\", \"HR\", \"Marketing\", \"Engineering\"),\nsalary = c(95000, 62000, 110000, 75000, 58000, 105000, 82000, 60000, 68000, 115000),\nyears_experience = c(6, 3, 10, 4, 2, 9, 5, 3, 4, 11),\nactive_status = c(TRUE, TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE) )\n# Filter employees in Engineering with a salary greater than 100,000\nsenior_engineers &lt;- filter(employee_df, department == \"Engineering\" &amp; salary &gt; 100000)\nprint(senior_engineers)</code></pre>\n<h4>Advanced Filtering Operators:</h4>\n<ul>\n<li><strong>Comparison operators:</strong> ==, !=, &gt;, &lt;, &gt;=, &lt;=</li>\n<li><strong>Logical operators:</strong> &amp; (AND), | (OR), ! (NOT)</li>\n<li><strong>Membership testing (<code>%in%</code>):</strong> Replaces cumbersome multicondition or statements (|).</li>\n</ul>\n<pre><code># Filter employees in Engineering or Sales\neng_sales &lt;- filter(employee_df, department %in% c(\"Engineering\", \"Sales\"))</code></pre>\n<h4>Handling Missing Values (<code>is.na()</code>):</h4>\n<pre><code># Filter rows where salary data is not missing\nvalid_salary &lt;- filter(employee_df, !is.na(salary))</code></pre>\n<h3>2.2 Selecting and Renaming Columns with <code>select()</code></h3>\n<p>The <code>select()</code> function allows you to isolate, drop, or reorder columns by name or position.</p>\n<pre><code># Select specific columns by name\nid_and_salary &lt;- select(employee_df, emp_id, salary) # Drop specific columns by preceding them with a negative sign (-)\nslim_df &lt;- select(employee_df, - active_status)\n# Reorder columns by placing specific columns first using everything()\nreordered_df &lt;- select(employee_df, salary, department, everything())</code></pre>\n<p>Helper Functions inside <code>select()</code>:</p>\n<ul>\n<li><strong><code>starts_with(\"abc\")</code>:</strong> Matches columns starting with specific text.</li>\n<li><strong><code>ends_with(\"xyz\")</code>:</strong> Matches columns ending with specific text.</li>\n<li><strong><code>contains(\"name\")</code>:</strong> Matches columns containing specific substrings.</li>\n</ul>\n<p>num_range(\"x\", 1:3): Matches x1, x2, x3.</p>\n<h3>2.3 Creating and Modifying Columns with <code>mutate()</code></h3>\n<p>The <code>mutate()</code> function computes new columns or modifies existing ones while preserving all original columns in the data frame.</p>\n<pre><code># Calculate annual bonus and total compensation\nenhanced_df &lt;- mutate(\nemployee_df,\nannual_bonus = salary * 0.12,\ntotal_compensation = salary +\n  annual_bonus,\nseniority_tier = if_else(years_experience &gt;= 5, \"Senior\", \"Junior\") )\nprint(enhanced_df)</code></pre>\n<h4>Advanced Mutation Features:</h4>\n<ul>\n<li><strong><code>transmute()</code>:</strong> Operates identically to <code>mutate()</code>, but drops all original columns, keeping only the newly computed variables.</li>\n<li><strong><code>across()</code>:</strong> Applies transformations across multiple columns simultaneously.</li>\n</ul>\n<pre><code># Round all numeric columns to 2 decimal places#\nrounded_df &lt;- mutate(employee_df, across(where(is.numeric), ~ round(., 2)))</code></pre>\n<h3>2.4 Sorting Rows with <code>arrange()</code></h3>\n<p>The <code>arrange()</code> function sorts the rows of a data frame based on the values of one or more columns. By default, sorting is ascending. To sort in descending order, wrap column names in <code>desc()</code>.</p>\n<pre><code># Sort employees by department (alphabetical) and then by salary (descending)\nsorted_employees &lt;- arrange(employee_df, department, desc(salary))\nprint(sorted_employees)</code></pre>\n<h3>2.5 Summarizing Data with <code>summarise()</code> and Grouping with <code>group_by()</code></h3>\n<p>The <code>summarise()</code> function collapses multiple rows down into a single summary statistical row (e.g., calculating means, sums, standard deviations, or counts).</p>\n<p>On its own, <code>summarise()</code> operates on the entire dataset. Its true power emerges when paired with <code>group_by()</code>, which partitions the dataset into independent groups before calculating metrics for each group.</p>\n<pre><code># Group employees by department and calculate summary statistics\ndepartment_summary &lt;- employee_df %&gt;%\ngroup_by(department) %&gt;%\n  summarise(\n# headcount =\nn(),\n# Count of rows in group\navg_salary = mean(salary), # Mean salary\nmedian_salary = median(salary), # Median salary\nmax_experience = max(years_experience), # Maximum experience\ntotal_payroll = sum(salary) # Total payroll sum\n) %&gt;%\nungroup() # Always good practice to ungroup after grouped summaries\nprint(department_summary)\n3. Chaining Operations Using the Pipe Operator (%&gt;% or |&gt;)</code></pre>\n<p>Complex data analysis workflows rarely consist of a single isolated operation. Instead, they require a sequence of dependent steps: filtering rows, selecting specific columns, creating new derived metrics, grouping by categories, summarizing statistics, and sorting the output.</p>\n<h3>3.1 The Problem with Nested</h3>\n<p>Functions and Temporary Variables Without pipe operators, chaining multiple functions together leads to two anti-patterns:</p>\n<p>Nested Functions (Hard to read from inside out):</p>\n<pre><code># Difficult to read and debug\nresult &lt;- arrange(summarise(group_by(filter( employee_df, salary &gt; 60000), department), mean_sal = mean(salary)), desc(mean_sal))</code></pre>\n<p>Intermediate Temporary Variables (Clutters the workspace):</p>\n<pre><code># Clutters R memory with unnecessary temporary objects\nstep1 &lt;- filter(employee_df, salary &gt; 60000)\nstep2 &lt;- group_by(step1, department)\nstep3 &lt;- summarise(step2, mean_sal = mean(salary))\nresult &lt;- arrange(step3, desc(mean_sal))\n3.2 The Magrittr Pipe (%&gt;%)\nand Native Base R Pipe (|&gt;)\nThe pipe operator (%&gt;%, originally popularized by the magrittr package and bundled with the Tidyverse, or the native base R pipe |&gt; introduced in R 4.1.0)\nsolves this problem completely.</code></pre>\n<p>The pipe takes the output of the expression on its left-hand side and automatically injects it as the first argument into the function on its right-hand side. This allows you to write fluid, left-to-right code pipelines that read naturally like a sentence: \"Take this data, then filter it, then mutate it, then group it, then summarize it.\"</p>\n<pre><code># Clean, highly readable Tidyverse pipeline using pipes\ndepartment_analysis &lt;- employee_df %&gt;%\nfilter(active_status == TRUE) %&gt;%\nmutate(adjusted_salary = salary * 1.08) %&gt;%\n# group_by(department) %&gt;%\nsummarise(\nemployee_count = n(), average_adjusted_salary = mean(adjusted_salary)\n) %&gt;%\nfilter(employee_count &gt;= 2) %&gt;%\narrange(desc(average_adjusted_sala ry))\nprint(department_analysis) 4. Advanced Data Transformation Patterns in dplyr</code></pre>\n<p>To master dplyr, you should also understand advanced relational data joining and pivoting techniques:</p>\n<h3>4.1 Joining Relational Tables</h3>\n<p>Real-world data is rarely stored in a single flat table. dplyr provides SQL-inspired mutating join functions to combine two tables based on shared primary/foreign keys:</p>\n<ul>\n<li><strong>inner_join(x, y, by = \"id\"):</strong> Returns only rows that have matching keys in both tables.</li>\n<li><strong>left_join(x, y, by = \"id\"):</strong> Returns all rows from the left table, appending matching columns from the right table (unmatched rows get NA).</li>\n<li><strong>right_join(x, y, by = \"id\"):</strong> Returns all rows from the right table.</li>\n<li><strong>full_join(x, y, by = \"id\"):</strong> Returns all rows from both tables, filling in NA where matches are missing.</li>\n</ul>\n<pre><code># Example mutating join\ndepartments_metadata &lt;- tibble(\ndepartment = c(\"Engineering\", \"Marketing\", \"Sales\", \"HR\", \"Legal\"),\noffice_location = c(\"Building A\", \"Building B\", \"Building C\", \"Building D\", \"Building E\") )\nmerged_company_data &lt;- employee_df %&gt;%\nleft_join(departments_metadata, by = \"department\")</code></pre>\n<h2>5. Troubleshooting Common Module 5 Errors</h2>\n<p>Error: could not find function \"<code>%&gt;%</code>\"</p>\n<p>Cause: You attempted to use the pipe operator without loading dplyr, magrittr, or the tidyverse package into your active session.</p>\n<p>Solution: Run <code>library(tidyverse)</code> at the top of your script.</p>\n<p>Error in grouped data frame operation: object '...' not found Cause: You performed a calculation referencing a variable that was dropped or renamed earlier in the pipeline.</p>\n<p>Solution: Inspect the intermediate output of your pipeline step-bystep by running chunks of the code before the failing verb.</p>\n<p>Confusing <code>mutate()</code> with <code>summarise()</code> row counts</p>\n<p>Cause: Using <code>mutate()</code> when you intended to collapse rows down (<code>summarise()</code>), or vice versa, resulting in unexpected row duplication or data loss.</p>\n<p>Solution: Remember: <code>mutate()</code> preserves the exact number of rows in your input data frame while adding/modifying columns; <code>summarise()</code> collapses rows down into grouped summary statistics.</p>\n<h2>6. Summary Checklist for Module 5</h2>\n<p>Before progressing to Module 6, verify that you can:</p>\n<ul>\n<li>☐ Explain the Tidyverse philosophy and the core rules of \"tidy data.\"</li>\n<li>☐ Filter rows efficiently using <code>filter()</code> with comparison and logical operators.</li>\n<li>☐ Select, drop, and reorder columns using <code>select()</code> and helper functions.</li>\n<li>☐ Create and modify derived variables using <code>mutate()</code>.</li>\n<li>☐ Sort datasets using <code>arrange()</code> in ascending and descending order.</li>\n<li>☐ Calculate grouped summary statistics by combining <code>group_by()</code> and <code>summarise()</code>.</li>\n<li>☐ Construct clean, readable data analysis pipelines using the pipe operator (<code>%&gt;%</code> or <code>|&gt;</code>).</li>\n</ul>",
+   "quiz": [
+    {
+     "q": "What are the tidy data rules?",
+     "o": [
+      "Each variable is a column, each observation a row, each observational unit a table",
+      "All data is stored in lists",
+      "Every table has exactly three columns",
+      "Rows are variables and columns are observations"
+     ],
+     "a": 0,
+     "e": "These three rules define tidy data."
+    },
+    {
+     "q": "Which dplyr verb keeps rows that meet a condition?",
+     "o": [
+      "select()",
+      "filter()",
+      "mutate()",
+      "arrange()"
+     ],
+     "a": 1,
+     "e": "filter() subsets rows by logical conditions."
+    },
+    {
+     "q": "Which verb chooses or drops columns?",
+     "o": [
+      "group_by()",
+      "select()",
+      "summarise()",
+      "filter()"
+     ],
+     "a": 1,
+     "e": "select() picks columns by name, position or helper."
+    },
+    {
+     "q": "Which verb creates new columns while keeping existing ones?",
+     "o": [
+      "arrange()",
+      "transmute()",
+      "mutate()",
+      "rename()"
+     ],
+     "a": 2,
+     "e": "mutate() adds or modifies columns; transmute() keeps only the new ones."
+    },
+    {
+     "q": "How do you sort rows in descending order of salary?",
+     "o": [
+      "sort(salary)",
+      "arrange(-desc)",
+      "arrange(desc(salary))",
+      "order(salary, up)"
+     ],
+     "a": 2,
+     "e": "arrange() with desc() sorts descending."
+    },
+    {
+     "q": "What does group_by() followed by summarise() produce?",
+     "o": [
+      "A sorted data frame",
+      "A list of data frames",
+      "The original rows unchanged",
+      "One summary row per group"
+     ],
+     "a": 3,
+     "e": "summarise() collapses each group to a single row."
+    },
+    {
+     "q": "What do the pipes %>% and |> do?",
+     "o": [
+      "Assign values",
+      "Pass the left result as the first argument of the next function",
+      "Compare two values",
+      "Join two tables"
+     ],
+     "a": 1,
+     "e": "Pipes chain operations so code reads left to right."
+    },
+    {
+     "q": "Which function family combines two relational tables by a key?",
+     "o": [
+      "bind_cols only",
+      "merge_none()",
+      "join functions such as left_join()",
+      "split()"
+     ],
+     "a": 2,
+     "e": "dplyr joins (left_join, inner_join, …) combine tables on keys."
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "free": true,
+   "icon": "<i class=\"ti ti-package\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Intermediate",
+   "title": "Data Reshaping & Text Processing",
+   "excerpt": "Data science workflows rarely begin with clean, ready-to-analyze data. Real-world datasets often arrive in arbitrary, humanreadable layouts designed for printing, manual entry, or…",
+   "tags": [
+    "Intermediate",
+    "Part 1: Theoretical Foundations of Tidy Data",
+    "The Anatomy of Tidy Data"
+   ],
+   "visual": "<i class=\"ti ti-package\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#0a1414,#102828)",
+   "concepts": [
+    "Part 1: Theoretical Foundations of Tidy Data",
+    "The Anatomy of Tidy Data",
+    "Why Tidy Data Matters",
+    "Common Manifestations of Untidy Data",
+    "Part 2: Structural Transformation with tidyr",
+    "Transitioning from Wide to Long: pivot_longer()"
+   ],
+   "body": "<h4>Part 1: Theoretical Foundations of Tidy Data</h4>\n<p>Data science workflows rarely begin with clean, ready-to-analyze data. Real-world datasets often arrive in arbitrary, humanreadable layouts designed for printing, manual entry, or legacy reporting databases rather than statistical computation. To bridge the gap between raw data ingestion and analytical modeling, the data science ecosystem relies heavily on the Tidy Data framework, codified by Hadley Wickham.</p>\n<h3>1.1 The Anatomy of Tidy Data</h3>\n<p>A dataset is a collection of values (numbers or strings). Every value belongs to a variable and an observation.</p>\n<ul>\n<li><strong>Variable:</strong> An attribute that measures the same underlying characteristic (e.g., height, temperature, age, income) across multiple entities.</li>\n<li><strong>Observation:</strong> A set of measurements taken under similar conditions (e.g., a specific person at a specific time, a country in a specific year, a meteorological station during a given hour).</li>\n</ul>\n<p>When these elements are mapped onto a rectangular data frame (such as a tibble or data frame in R), tidy data enforces three strict, interdependent criteria:</p>\n<p>Each variable forms a column. If a dataset tracks height, weight, and age, there must be exactly three primary data columns: height, weight, and age.</p>\n<p>Each observation forms a row. If a dataset tracks 50 unique clinical trial participants measured at baseline, there must be exactly 50 rows (assuming one row per participant).</p>\n<p>Each value forms a cell. Every intersection of a row and a column contains a single, atomic value. Cells must not contain nested lists, multiple delimited tokens packed into a single string (unless explicitly parsed), or compound objects that require split operations during calculation.</p>\n<p>+------------------------------------------------------+ TIDY | STRUCTURE |</p>\n<p>+---------------------------------</p>\n<p>----------------------+</p>\n<p>| Observation 1 <code>-&gt;</code> [ Cell ] [ Cell ] [ Cell ] (Vars) | | Observation 2 <code>-&gt;</code> [ Cell ] [ Cell ] [ Cell ] | | Observation 3 <code>-&gt;</code> [ Cell ] [ Cell ] [ Cell ] |</p>\n<p>+---------------------------------</p>\n<p>----------------------+</p>\n<h3>1.2 Why Tidy Data Matters</h3>\n<p>When data adheres to these principles, it forms a consistent contract with your data manipulation and visualization pipelines:</p>\n<ul>\n<li><strong>Vectorized Operations:</strong> Functions in packages like dplyr and ggplot2 assume that columns represent independent variables. This allows operations to occur vector-wise across entire columns without manual looping.</li>\n<li><strong>Grammar of Graphics Harmony:</strong> ggplot2 maps variables directly to visual aesthetics (e.g., aes(x = year, y = gdp, color = country)). If your dataset stores years as column headers and country-years as cell intersections, mapping aesthetics becomes mathematically cumbersome and brittle.</li>\n<li><strong>Minimizing Cognitive Overhead:</strong> Analysts spend up to 80% of their time cleaning data. A universal structural standard eliminates redundant custom-parsing scripts across different data ingestion pipelines.</li>\n</ul>\n<h3>1.3 Common Manifestations of Untidy Data</h3>\n<p>Real-world datasets typically violate tidy principles in five distinct ways:</p>\n<ul>\n<li><strong>Column headers are values, not variable names:</strong> For example, columns named 2021, 2022, and 2023 where the column name is actually the variable year.</li>\n<li><strong>Multiple variables are stored in a single column:</strong> For example, a column named rate containing entries like 120/80 (systolic/diastolic blood pressure) or US_urban (country_setting).</li>\n<li><strong>Variables are stored in both rows and columns:</strong> A layout where structural metadata and numeric measurements are interleaved across matrices.</li>\n</ul>\n<p>Multiple types of observational units are stored in the same table: For instance, a table tracking song charts that simultaneously includes artist metadata (birth date, genre) and weekly chart rankings.</p>\n<p>A single observational unit is stored across multiple tables: Fragmented data schemas that require complex joins or deep structural reshaping before analysis.</p>\n<h4>Part 2: Structural Transformation with tidyr</h4>\n<p>The tidyr package provides the programmatic verbs required to fix structural untidiness. While older R functions like <code>reshape()</code>, <code>stack()</code>, and <code>unstack()</code> existed, tidyr modernizes reshaping through unified, highly readable syntax.</p>\n<h3>2.1 Transitioning from Wide to Long: <code>pivot_longer()</code></h3>\n<p>Datasets are frequently recorded in a wide format to optimize human data entry. For example, tracking a patient's cholesterol levels across four quarterly checkups creates four separate columns (q1, q2, q3, q4).</p>\n<p>To analyze this longitudinally or plot trajectories over time using ggplot2, the data must be transformed into a long format using <code>pivot_longer()</code>.</p>\n<pre><code>library(tidyverse)\n# Create a messy wide dataset\npatient_data_wide &lt;- tibble( patient_id = c(\"P001\", \"P002\", \"P003\"), gender = c(\"F\", \"M\", \"F\"), q1_cholesterol = c(210, 190, 240), q2_cholesterol = c(205, 195, 230), q3_cholesterol = c(198, 185, 225) )\nprint(patient_data_wide)\nTo convert this dataset, we specify which columns to pivot, what to name the new key column (names_to), and what to name the new value column (values_to).</code></pre>\n<pre><code>patient_data_long &lt;- patient_data_wide %&gt;%\n  pivot_longer( cols = starts_with(\"q\"), names_to = \"quarter\", values_to = \"cholesterol_level\" )\nprint(patient_data_long)\nAdvanced Options in pivot_longer()</code></pre>\n<ul>\n<li><strong>names_prefix:</strong> Strips predictable prefixes (e.g., removing q_ or q from column names).</li>\n<li><strong>names_transform / values_transform:</strong> Apply functions (like as.integer or as.factor) directly during the pivoting process.</li>\n<li><strong>names_sep and names_to vectors:</strong> If a column name contains multiple variables encoded together (e.g., bp_q1_male), names_sep allows splitting that single column header into multiple distinct tidy columns simultaneously.</li>\n</ul>\n<pre><code># Example with multi-variable column names\ncomplex_wide &lt;- tibble(\nid = c(1, 2), mean_temp_2022 = c(15, 12), max_temp_2022 = c(25, 22), mean_temp_2023 = c(16, 13), max_temp_2023 = c(26, 23)\n)\ntidy_complex &lt;- complex_wide %&gt;%\n  pivot_longer( cols = -id, names_to = c(\".value\", \"year\"), names_pattern = \"(.*)_temp_(.*)\"\n)\nprint(tidy_complex)</code></pre>\n<h3>2.2 Transitioning from Long to Wide: <code>pivot_wider()</code></h3>\n<p>Conversely, data is sometimes excessively long—such as when multiple clinical metrics (heart rate, temperature, blood pressure) are stored as stacked rows under a single metric_name column, with their measurements in a single metric_value column.</p>\n<pre><code>clinical_long &lt;- tibble( visit_id = c(101, 101, 102, 102), test_name = c(\"heart_rate\", \"temperature\", \"heart_rate\", \"temperature\"),\ntest_result = c(72, 98.6, 80, 99.1)\n)\nprint(clinical_long)</code></pre>\n<p>To reshape this into a wide format where each test has its own dedicated column:</p>\n<pre><code>clinical_wide &lt;- clinical_long %&gt;%\n  pivot_wider(\nnames_from = test_name, values_from = test_result\n)\nprint(clinical_wide)\nHandling Aggregation Conflicts in pivot_wider()</code></pre>\n<p>If multiple rows map to the same cell intersection during <code>pivot_wider()</code>, tidyr throws an error because the resulting cell would require a list or vector. You can resolve this by passing aggregation functions (values_fn) or checking for duplicate identifier keys before pivoting. R</p>\n<p># Example handling duplicates safely duplicated_long <code>&lt;-</code> tibble( patient = c(\"A\", \"A\", \"A\"), visit = c(1, 1, 1), symptom = c(\"fever\", \"fever\", \"cough\"), # Duplicate 'fever' entry</p>\n<p>severity = c(2, 3, 1)</p>\n<p>)</p>\n<p># Using values_fn to aggregate duplicates (e.g., taking the mean) resolved_wide <code>&lt;-</code> duplicated_long <code>%&gt;%</code></p>\n<p>pivot_wider(</p>\n<p>names_from = symptom,</p>\n<p>values_from = severity,</p>\n<p>values_fn = mean )</p>\n<h4>Part 3: Advanced Data Tidying and Implicit Missingness</h4>\n<p>Tidying data frequently exposes structural gaps. Datasets often omit rows where observations did not occur or were never recorded, leading to implicit missing values.</p>\n<h3>3.1 Explicit vs. Implicit Missingness</h3>\n<ul>\n<li><strong>Explicit Missingness (NA):</strong> The row and column exist, but the cell value is explicitly coded as missing (NA).</li>\n<li><strong>Implicit Missingness:</strong> The row itself is completely missing from the dataset. For example, if site #3 recorded no data in February, the row for February at site #3 might be entirely absent rather than present with an NA value.</li>\n</ul>\n<pre><code># Implicit missingness example: Site 2 has no data for Feb\nweather_data &lt;- tibble( site = c(\"Site_1\", \"Site_1\", \"Site_2\"),\nmonth = c(\"Jan\", \"Feb\", \"Jan\"), rainfall = c(45, 30, 50) )</code></pre>\n<h3>3.2 Forcing Completeness with <code>complete()</code> and <code>expand()</code></h3>\n<p>To perform accurate time-series modeling or spatial interpolation, implicit gaps must be made explicit. The <code>complete()</code> function generates all combinations of specified categorical variables and fills missing entries with NA or custom defaults.</p>\n<pre><code>complete_weather &lt;- weather_data %&gt;%\ncomplete(site, month, fill = list(rainfall = 0))\nprint(complete_weather)</code></pre>\n<h3>3.3 Filling Missing Values Down or Up (<code>fill()</code>)</h3>\n<p>In panel datasets or longitudinal tracking sheets, values are frequently left blank in subsequent rows when they repeat from the row above (often for visual formatting in spreadsheets). The <code>fill()</code> function propagates previous non-missing values forward (downward) or backward (upward).</p>\n<pre><code># Spreadsheet-style repeated values\nsurvey_responses &lt;- tibble( region = c(\"North\", NA, NA, \"South\", NA), district = c(\"A\", \"B\", \"C\", \"A\", \"B\"), score = c(85, 90, 78, 92, 88) )\n# Filling missing region values downward\nfixed_survey &lt;- survey_responses %&gt;%\n  fill(region, .direction = \"down\")\nprint(fixed_survey)</code></pre>\n<h3>3.4 Separating and Uniting Compound Columns (<code>separate()</code> and <code>unite()</code>)</h3>\n<p>Tidy data requires each column to represent a single variable. When multiple variables are glued together inside a single column string (e.g., 2023-Q1 or NewYork_USA), <code>separate()</code> splits them.</p>\n<pre><code>raw_demographics &lt;- tibble(\nid = 1:3,\nlocation_code = c(\"NYC_NY\", \"LAX_CA\", \"ORD_IL\") )\ntidy_demographics &lt;- raw_demographics %&gt;%\nseparate(\ncol = location_code, into = c(\"city\", \"state\"), sep = \"_\" )\nprint(tidy_demographics)\nConversely, unite()\nmerges multiple columns into a single string column, which is useful for creating composite keys.</code></pre>\n<pre><code>recombined_demographics &lt;- tidy_demographics %&gt;%\nunite(\ncol = \"full_location\", city, state, sep = \", \"\n)\nprint(recombined_demographics)\nPart 4: String Manipulation and Text Parsing with stringr</code></pre>\n<p>Numerical data requires mathematical transformations, but text data requires string manipulation. The stringr package provides a unified, consistent grammar for pattern matching, string modification, and regex operations in R. All functions begin with the prefix str_ and consistently place the string vector as their first argument,</p>\n<p>making them fully compatible with the <code>%&gt;%</code> pipe operator.</p>\n<h3>4.1 Core Characteristics of stringr</h3>\n<p>Consistent Argument Order: str_function(string, pattern, ...) ensures intuitive piping.</p>\n<p>Vectorization: Every function automatically vectorizes over character vectors, eliminating the need for explicit <code>sapply()</code> or for loops.</p>\n<p>Consistent Error Handling: Functions handle edge cases (like empty strings or missing inputs (NA)) predictably and safely.</p>\n<h3>4.2 Case Conversion and Whitespace Normalization</h3>\n<p>Real-world text strings often suffer from erratic capitalization and stray whitespace introduced by manual form inputs or web scraping. R</p>\n<p>messy_strings <code>&lt;-</code> c(\" New York \", \"los angeles\", \"SAN FRANCISCO \", \"\\tChicago\\n\")</p>\n<p># Normalize whitespace and capitalization</p>\n<p>clean_strings <code>&lt;-</code> messy_strings <code>%&gt;%</code></p>\n<p><code>str_squish()</code> <code>%&gt;%</code> # Removes leading/trailing spaces and collapses internal whitespace</p>\n<p><code>str_to_title()</code> # Converts to Title Case</p>\n<p><code>print(clean_strings)</code> Key functions in this category include:</p>\n<ul>\n<li><strong><code>str_to_lower()</code>:</strong> Converts all characters to lowercase.</li>\n<li><strong><code>str_to_upper()</code>:</strong> Converts all characters to uppercase.</li>\n<li><strong><code>str_to_title()</code>:</strong> Capitalizes the first letter of each word.</li>\n<li><strong><code>str_trim()</code>:</strong> Strips whitespace exclusively from the edges (start and end).</li>\n<li><strong><code>str_squish()</code>:</strong> Strips edge whitespace and replaces interior whitespace sequences with a single space.</li>\n</ul>\n<h3>4.3 Detecting, Locating, and Filtering Strings</h3>\n<p>Before transforming text, you often need to check whether specific patterns exist within your character vectors.</p>\n<ul>\n<li><strong><code>str_detect()</code>:</strong> Returns a logical boolean vector (TRUE or FALSE) indicating whether a pattern matches. Excellent for filtering rows with <code>dplyr::filter()</code>.</li>\n<li><strong><code>str_subset()</code>:</strong> Returns only the elements of the character vector that match the pattern (equivalent to x[str_detect(x, pattern)]).</li>\n<li><strong><code>str_count()</code>:</strong> Counts how many times a pattern appears within each string.</li>\n<li><strong><code>str_locate()</code>:</strong> Returns the starting and ending character positions of the first match.</li>\n</ul>\n<pre><code>feedback_comments &lt;- c(\n\"The product was fantastic and arrived early.\",\n\"Terrible customer service. Completely unsatisfied.\",\n\"It was okay, nothing special.\",\n\"Fantastic quality, highly recommend!\"\n)\n# Filter comments containing positive sentiment keywords\npositive_feedback &lt;- feedback_comments[str_detect(feedb ack_comments, regex(\"fantastic|recommend\", ignore_case = TRUE))]\nprint(positive_feedback)</code></pre>\n<h3>4.4 Extracting Substrings and Pattern Matches</h3>\n<p>When extracting specific segments from structured text (such as invoice numbers, postal codes, or embedded dates), extraction functions are indispensable.</p>\n<p><code>str_sub()</code>: Extracts text based on fixed integer character positions (start and end indexes).</p>\n<p><code>str_extract()</code> / <code>str_extract_all()</code>: Extracts the actual text matching a regular expression pattern.</p>\n<pre><code>invoice_codes &lt;- c(\"INV-9821-US\", \"INV-4412-EU\", \"INV-0039-AP\") # Extract only the numeric ID using regular expressions\nnumeric_ids &lt;- str_extract(invoice_codes, \"\\\\d{4}\")\nprint(numeric_ids)</code></pre>\n<h3>4.5 Replacing and Modifying Strings</h3>\n<p>Cleaning text often requires substituting erroneous characters, masking sensitive data, or reformatting codes.</p>\n<ul>\n<li><strong><code>str_replace()</code>:</strong> Replaces the first occurrence of a pattern in each string.</li>\n<li><strong><code>str_replace_all()</code>:</strong> Replaces all occurrences of a pattern in each string.</li>\n</ul>\n<p><code>str_remove()</code> / <code>str_remove_all()</code>: Convenience wrappers that replace matched patterns with empty strings.</p>\n<pre><code>phone_numbers &lt;- c(\"555-019-2831\", \"555-492-1102\", \"(555) 883-9921\") # Standardize phone formats by removing punctuation characters\nstandardized_phones &lt;- phone_numbers %&gt;%\nstr_remove_all(\"[\\\\-\\\\(\\\\)\\\\s]\")\nprint(standardized_phones)\nPart 5: Comprehensive End-to-End Practical Case Study</code></pre>\n<p>To cement these concepts, let us walk through a comprehensive datacleaning pipeline that combines tidyr structural reshaping, missing value remediation, and stringr text processing.</p>\n<p>Scenario</p>\n<p>Imagine you are a data analyst at a global retail enterprise. You have been handed an unpolished quarterly performance export (raw_sales_export) containing regional sales metrics. The file suffers from the following issues:</p>\n<p>Sales figures are spread across wide month columns (m_jan, m_feb, m_mar).</p>\n<p>Region and store codes are combined into a single messy column (store_code) separated by hyphens, complete with inconsistent capitalization and stray whitespace.</p>\n<p>Revenue figures are stored as currency strings (e.g., \"$1,250.00\") rather than numeric values.</p>\n<p>There are implicit missing gaps and explicit NA entries in customer satisfaction ratings.</p>\n<h4>Step-by-Step Implementation</h4>\n<pre><code>library(tidyverse)\n# 1. Simulate the Messy Raw Dataset\nraw_sales_export &lt;- tibble(\nstore_code = c(\" us-east-01 \", \"US-WEST-02\", \"eu-central-01\", \"EU-NORTH-02 \"),\nmanager_name = c(\"Alice Smith\", \"Bob Jones\", \"Charlie Brown\", \"Diana Prince\"),\nm_jan = c(\"$1,200.50\", \"$950.00\", \"$1,400.00\", NA),\nm_feb = c(\"$1,350.25\", \"$1,100.00\", \"$1,250.00\", \"$800.00\"),\nm_mar = c(\"$1,500.00\", \"$1,250.50\", \"$1,600.00\", \"$920.00\"),\nsatisfaction_score = c(\"4.5 / 5\", \" 3.8 / 5 \", NA, \"4.2 / 5\")\n)\nprint(\"--- RAW DATASET ---\")\nprint(raw_sales_export)\n# 2. Comprehensive Cleaning Pipeline\ntidy_sales_analytics &lt;- raw_sales_export %&gt;%\n# Step A: Clean store code strings and separate into region and store number\nmutate(\nstore_code = str_squish(str_to_lower(store_code) )\n) %&gt;%\n  separate(\ncol = store_code,\ninto = c(\"region\", \"subregion\", \"store_id\"), sep = \"-\" ) %&gt;%\n  # Unite region and subregion back for a clean regional identifier\nunite( col = \"region\",\nregion, subregion, sep = \"_\"\n# ) %&gt;%\n# Step B: Clean satisfaction score by extracting the numeric rating and converting to double\nmutate(\nsatisfaction_score = str_remove(satisfaction_score, \"/ 5\"),\nsatisfaction_score = str_trim(satisfaction_score),\nsatisfaction_score = as.numeric(satisfaction_score)\n) %&gt;%\n# Step C: Reshape wide monthly sales columns to long format\npivot_longer(\ncols = starts_with(\"m_\"),\nnames_to = \"month\", values_to = \"revenue_str\"\n) %&gt;%\n# Step D: Clean monthly sales revenue strings (remove dollar signs and commas) and convert to numeric\nmutate(\nmonth = str_remove(month, \"m_\"), month = str_to_title(month),\nrevenue_str = str_remove_all(revenue_str, \"[\\\\$,]\"),\nrevenue = as.numeric(revenue_str)\n) %&gt;%\nselect(-revenue_str) %&gt;%\n  # Drop intermediate string column\n# Step E: Handle missing values gracefully\nreplace_na(list(revenue = 0.0, satisfaction_score = median(.$satisfaction_score, na.rm = TRUE)))\nprint(\"--- FULLY CLEANED &amp; TIDY DATASET ---\")\nprint(tidy_sales_analytics)\nAnalysis of Pipeline Steps</code></pre>\n<p>String Sanitization (str_squish, str_to_lower): Standardizes chaotic entry variations like \"</p>\n<p>us-east-01 \" into predictable lowercase tokens.</p>\n<p>Structural Splitting (separate, unite): Deconstructs compound identifiers into discrete tidy analytical variables (region, store_id).</p>\n<p>Regex Extraction &amp; Type Casting (str_remove, as.numeric): Strips currency symbols ($), thousands separators (,), and rating denominator labels (/ 5) before casting raw text into mathematically operable floatingpoint vectors.</p>\n<ul>\n<li><strong>Reshaping (pivot_longer):</strong> Converts wide monthly columns into a clean time-series observation schema.</li>\n<li><strong>Missing Value Imputation (replace_na):</strong> Replaces unrecorded revenue values with zero and imputes missing satisfaction scores using the statistical median.</li>\n</ul>\n<h4>Part 6: Summary Checklist for Module Mastery</h4>\n<ul>\n<li>☐ Understand Tidy Rules: Can you verify whether a given dataset violates any of Wickham's three tidy principles?</li>\n<li>☐ Reshape Data Fluently: Can you write <code>pivot_longer()</code> and <code>pivot_wider()</code> statements with custom argument configurations (names_prefix, values_fn)?</li>\n<li>☐ Handle Implicit and Explicit Missingness: Do you know when to apply <code>complete()</code>, <code>fill()</code>, and <code>replace_na()</code>?</li>\n<li>☐ Master Text Processing with stringr: Can you combine regular expressions, case conversion, whitespace normalization, and string extraction in a dplyr pipeline?</li>\n</ul>",
+   "quiz": [
+    {
+     "q": "Which function reshapes data from wide to long?",
+     "o": [
+      "pivot_wider()",
+      "unite()",
+      "pivot_longer()",
+      "separate()"
+     ],
+     "a": 2,
+     "e": "pivot_longer() gathers columns into name/value pairs."
+    },
+    {
+     "q": "Which function reshapes data from long to wide?",
+     "o": [
+      "pivot_longer()",
+      "fill()",
+      "pivot_wider()",
+      "complete()"
+     ],
+     "a": 2,
+     "e": "pivot_wider() spreads names into columns."
+    },
+    {
+     "q": "What does complete() do in tidyr?",
+     "o": [
+      "Deletes missing rows",
+      "Makes implicit missing combinations explicit",
+      "Concatenates strings",
+      "Sorts the data"
+     ],
+     "a": 1,
+     "e": "complete() fills in missing combinations of values."
+    },
+    {
+     "q": "What does fill() do?",
+     "o": [
+      "Creates new rows",
+      "Replaces NA values by carrying neighbouring values down or up",
+      "Removes duplicates",
+      "Splits a column"
+     ],
+     "a": 1,
+     "e": "fill() propagates values down or up over NAs."
+    },
+    {
+     "q": "Which pair splits one column into several and joins several into one?",
+     "o": [
+      "separate() and unite()",
+      "complete() and expand()",
+      "filter() and select()",
+      "pivot_longer() and pivot_wider()"
+     ],
+     "a": 0,
+     "e": "separate() splits compound columns; unite() merges them."
+    },
+    {
+     "q": "Which stringr function trims leading/trailing spaces and collapses internal whitespace?",
+     "o": [
+      "str_detect()",
+      "str_squish()",
+      "str_sub()",
+      "str_to_upper()"
+     ],
+     "a": 1,
+     "e": "str_squish() normalizes whitespace."
+    },
+    {
+     "q": "Which function tests whether a pattern is present in each string?",
+     "o": [
+      "str_length()",
+      "str_replace()",
+      "str_detect()",
+      "str_pad()"
+     ],
+     "a": 2,
+     "e": "str_detect() returns a logical vector."
+    },
+    {
+     "q": "What do stringr functions share by design?",
+     "o": [
+      "They modify strings in place",
+      "They require base R loops",
+      "They only work on factors",
+      "They all begin with str_ and take the string as the first argument"
+     ],
+     "a": 3,
+     "e": "Consistent str_ prefix and string-first arguments make them pipe-friendly."
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "free": false,
+   "icon": "<i class=\"ti ti-chart-dots\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Intermediate",
+   "title": "Data Visualization with ggplot2",
+   "excerpt": "Data visualization is frequently taught as a collection of disjointed charting templates— memorizing how to call a bar chart function, a scatter plot function, or a pie chart…",
+   "tags": [
+    "Intermediate",
+    "The Core Architecture of ggplot2",
+    "Why the Grammar of Graphics Matters"
+   ],
+   "visual": "<i class=\"ti ti-chart-dots\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#0a0f1a,#101828)",
+   "concepts": [
+    "The Core Architecture of ggplot2",
+    "Why the Grammar of Graphics Matters",
+    "Part 2: Building Foundational Plots",
+    "Scatter Plots (geom_point())",
+    "Key Considerations for Scatter Plots",
+    "Bar Charts (geom_bar() vs. geom_col())"
+   ],
+   "body": ""
+  },
+  {
+   "id": 8,
+   "free": false,
+   "icon": "<i class=\"ti ti-chart-bar\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Intermediate",
+   "title": "EDA & Applied Inferential Statistics",
+   "excerpt": "Part 1: Philosophical and Methodological Foundations of EDA Exploratory Data Analysis (EDA), championed by statistician John Tukey in 1977, represents a paradigm shift in…",
+   "tags": [
+    "Intermediate",
+    "The EDA Workflow Lifecycle",
+    "Part 2: Advanced Descriptive Statistics"
+   ],
+   "visual": "<i class=\"ti ti-chart-bar\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#10080a,#200f12)",
+   "concepts": [
+    "The EDA Workflow Lifecycle",
+    "Part 2: Advanced Descriptive Statistics",
+    "Covariance",
+    "Correlation Coefficients",
+    "Part 4: Rigorous Hypothesis Testing",
+    "Fundamentals of Hypothesis Testing"
+   ],
+   "body": ""
+  },
+  {
+   "id": 9,
+   "free": false,
+   "icon": "<i class=\"ti ti-calendar\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Intermediate",
+   "title": "Dates, Times & Text (lubridate)",
+   "excerpt": "Dealing with dates and times in base R can be notoriously frustrating. Traditional data types (Date, POSIXct, POSIXlt) often trip up analysts due to inconsistencies in formatting,…",
+   "tags": [
+    "Intermediate",
+    "Introduction to Date-Time Data in R",
+    "Why Date-Time Wrangling Matters"
+   ],
+   "visual": "<i class=\"ti ti-calendar\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#1a0a0a,#280f0f)",
+   "concepts": [
+    "Introduction to Date-Time Data in R",
+    "Why Date-Time Wrangling Matters",
+    "Parsing Date-Time Objects",
+    "Basic Parsing Functions",
+    "Code Example: Parsing Various Formats",
+    "Extracting and Modifying Components"
+   ],
+   "body": ""
+  },
+  {
+   "id": 10,
+   "free": false,
+   "icon": "<i class=\"ti ti-robot\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Advanced",
+   "title": "Machine Learning in R (tidymodels)",
+   "excerpt": "Predictive modeling is the mathematical process of learning patterns from historical data to forecast outcomes on unseen future data. While exploratory data analysis and…",
+   "tags": [
+    "Advanced",
+    "Introduction to Predictive Modeling in R",
+    "The Complete Machine Learning Lifecycle"
+   ],
+   "visual": "<i class=\"ti ti-robot\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#1a1a0a,#28280f)",
+   "concepts": [
+    "Introduction to Predictive Modeling in R",
+    "The Complete Machine Learning Lifecycle",
+    "Data Splitting Strategies and Cross-Validation",
+    "Training, Validation, and Testing Sets",
+    "K-Fold Cross-Validation",
+    "Code Example: Building a Preprocessing Recipe"
+   ],
+   "body": ""
+  },
+  {
+   "id": 11,
+   "free": false,
+   "icon": "<i class=\"ti ti-trees\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Advanced",
+   "title": "Tree-Based Models & Tuning",
+   "excerpt": "While linear and logistic regression models serve as invaluable baselines due to their interpretability and computational efficiency, they rely heavily on strict underlying…",
+   "tags": [
+    "Advanced",
+    "Introduction to Advanced NonLinear Modeling",
+    "Decision Trees (rpart)"
+   ],
+   "visual": "<i class=\"ti ti-trees\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#0a1a1a,#0f2828)",
+   "concepts": [
+    "Introduction to Advanced NonLinear Modeling",
+    "Decision Trees (rpart)",
+    "Splitting Criteria and Information Theory",
+    "The Overfitting Trap",
+    "Core Mechanisms of Random Forests",
+    "Advantages and Limitations of Random Forests"
+   ],
+   "body": ""
+  },
+  {
+   "id": 12,
+   "free": false,
+   "icon": "<i class=\"ti ti-file-text\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "level": "Advanced",
+   "title": "Reports with R Markdown & Quarto",
+   "excerpt": "Writing clean data analysis code, training predictive models, and running exploratory queries represent only half of a data scientist's professional responsibilities. The…",
+   "tags": [
+    "Advanced",
+    "The Philosophy of Literate Programming",
+    "Anatomy of a Dynamic Document"
+   ],
+   "visual": "<i class=\"ti ti-file-text\" aria-hidden=\"true\" style=\"font-size:16px;vertical-align:-2px;\"></i>",
+   "bg": "linear-gradient(135deg,#1a0a1a,#280f28)",
+   "concepts": [
+    "The Philosophy of Literate Programming",
+    "Anatomy of a Dynamic Document",
+    "Part 1: The YAML Frontmatter",
+    "Part 2: Markdown Narrative Text",
+    "Part 3: Executable Code Chunks",
+    "Advanced Chunk Options and Output Control"
+   ],
+   "body": ""
+  }
+ ]
+}
