@@ -32,9 +32,9 @@ EMAIL_FROM = "IT Study Hub <login@itstudyhub.dpdns.org>"
 # 1) npx wrangler kv namespace create PREMIUM      (prints an id)
 # 2) paste the id below and remove the leading "# "
 # 3) npx wrangler kv bulk put premium-export/kv-bulk.json --binding PREMIUM --remote
-# [[kv_namespaces]]
-# binding = "PREMIUM"
-# id = "PASTE_ID_HERE"
+[[kv_namespaces]]
+binding = "PREMIUM"
+id = "1a169f1db7b648e08bcd53cdea32debc"
 
 # Optional: Cloudflare's own rate limiter for /api/run (otherwise the Worker uses a simple built-in one).
 # [[unsafe.bindings]]
