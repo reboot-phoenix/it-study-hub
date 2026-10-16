@@ -1,232 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="fonts.css">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="shortcut icon" href="favicon.svg">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Articles, tutorials, and career tips for TIU IT students. Covering Java, C, Python, tech trends, and interview prep.">
-<title>Developer Blog — IT Study Hub</title>
+<link rel="shortcut icon" href="favicon.svg">
+<meta name="theme-color" content="#05050a">
+<title>Blog — IT Study Hub</title>
+<meta name="description" content="Tutorials, career advice and study tips for IT students: how programs run, data structures, algorithms, and how to learn faster.">
 <link rel="canonical" href="https://itstudyhub.dpdns.org/blog">
-<meta property="og:type" content="website">
 <meta property="og:site_name" content="IT Study Hub">
-<meta property="og:title" content="Developer Blog — IT Study Hub">
-<meta property="og:description" content="Articles, tutorials, and career tips for TIU IT students. Covering Java, C, Python, tech trends, and interview prep.">
+<meta property="og:type" content="website">
 <meta property="og:url" content="https://itstudyhub.dpdns.org/blog">
+<meta property="og:title" content="Blog — IT Study Hub">
+<meta property="og:description" content="Tutorials, career advice and study tips for IT students: how programs run, data structures, algorithms, and how to learn faster.">
 <meta property="og:image" content="https://itstudyhub.dpdns.org/team_image.jpeg">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="fonts/dm-sans-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/bebas-neue-v16-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jetbrains-mono-v24-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="global.css">
-<link rel="stylesheet" href="pages.css">
-<style>
-/* Readability pass: long headlines use the body font (Syne ExtraBold is for short logo-style text), even card heights, tidy sidebar */
-.post-title, .feat-title { font-family: var(--ff-body); font-weight: 700; letter-spacing: -0.015em; line-height: 1.25; }
-.post-title { font-size: 19px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.feat-title { font-size: clamp(24px, 3vw, 34px); line-height: 1.2; }
-.cat-btn { justify-content: flex-start; gap: 10px; }
-.cat-btn .cat-count { margin-left: auto; }
-.sidebar { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.16) transparent; }
-.sidebar::-webkit-scrollbar { width: 8px; }
-.sidebar::-webkit-scrollbar-track { background: transparent; }
-.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.16); border-radius: 8px; }
-.sidebar::-webkit-scrollbar-thumb:hover { background: rgba(200,241,53,0.4); }
-/* ── Thumb base ── */
-.post-thumb {
-  display:flex; align-items:center; justify-content:center;
-  flex-direction:column; gap:0; position:relative; overflow:hidden;
-  background: linear-gradient(135deg,#08081a,#111128);
-}
-/* Grid-line overlay on every thumb */
-.post-thumb::before {
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-/* Radial glow behind icon */
-.post-thumb::after {
-  content:''; position:absolute; inset:0; pointer-events:none;
-  border-radius:inherit;
-  background: radial-gradient(ellipse 70% 60% at 50% 55%, var(--thumb-glow,rgba(200,241,53,0.08)), transparent 80%);
-}
-/* Category tints */
-.post-thumb-trend   { --thumb-glow: rgba(200,241,53,0.12);
-  background: linear-gradient(135deg,#080d00,#0e1600,#111a04); }
-.post-thumb-tutorial{ --thumb-glow: rgba(96,165,250,0.12);
-  background: linear-gradient(135deg,#020815,#060e1e,#090f22); }
-.post-thumb-career  { --thumb-glow: rgba(247,183,49,0.12);
-  background: linear-gradient(135deg,#0e0900,#160f00,#1a1200); }
-.post-thumb-tips    { --thumb-glow: rgba(167,139,250,0.12);
-  background: linear-gradient(135deg,#080416,#0d071e,#100922); }
-
-.thumb-icon { display:flex; align-items:center; justify-content:center; position:relative; z-index:1; }
-
-/* ── Card hover lift + border glow ── */
-.post-card {
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease !important;
-}
-.post-card:hover {
-  transform: translateY(-5px) !important;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,241,53,0.18) !important;
-}
-.post-thumb-trend   { border-bottom: 2px solid rgba(200,241,53,0.25); }
-.post-thumb-tutorial{ border-bottom: 2px solid rgba(96,165,250,0.25); }
-.post-thumb-career  { border-bottom: 2px solid rgba(247,183,49,0.25); }
-.post-thumb-tips    { border-bottom: 2px solid rgba(167,139,250,0.25); }
-
-.author-dot-svg { display:flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); flex-shrink:0; }
-.read-badge { display:inline-flex; align-items:center; gap:5px; }
-.feat-icon { display:flex; align-items:center; justify-content:center; }
-.sb-btn { display:inline-flex; align-items:center; gap:8px; justify-content:center; }
-/* Custom cursor — only active on pointer (non-touch) devices */
-@media (pointer: fine) {
-  :where(html.custom-cursor) *, :where(html.custom-cursor) *::before, :where(html.custom-cursor) *::after { cursor: none !important; }
-}
-.cursor {
-  position: fixed; top: 0; left: 0; width: 10px; height: 10px;
-  background: #c8f135; border-radius: 50%; pointer-events: none;
-  z-index: 99999; transform-origin: center; transition: transform 0.15s ease;
-  opacity: 0;
-}
-.cursor-ring {
-  position: fixed; top: 0; left: 0; width: 36px; height: 36px;
-  border: 1.5px solid rgba(200,241,53,0.5); border-radius: 50%;
-  pointer-events: none; z-index: 99998; transition: transform 0.15s ease;
-  opacity: 0;
-}
-.cursor.visible, .cursor-ring.visible { opacity: 1; }
-</style>
+<link rel="stylesheet" href="index-page.css">
+<link rel="stylesheet" href="blog.css">
 </head>
-<body>
-<div class="ambient ambient-1"></div>
-<div class="ambient ambient-2"></div>
 
+<body class="blog">
 <nav>
-  <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
-  <div class="nav-right">
-    <div class="nav-search">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="#6b6b80" stroke-width="1.2"/><path d="M9.5 9.5L12 12" stroke="#6b6b80" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <input type="text" id="searchInput" placeholder="Search articles..." oninput="filterPosts()" aria-label="Search blog articles">
-    </div>
-    <a href="blog.html" class="nav-link nav-active" aria-current="page">Blog</a>
-    <a href="index.html" class="nav-back">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Home
+  <a href="index.html" class="nav-logo"><div class="dot"></div>IT STUDY HUB</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="blog.html" class="nav-active">Blog</a></li>
+    <li><a href="fileshare.html">File Share</a></li>
+    <li><a href="team.html">Community</a></li>
+    <li><a href="premium.html" class="nav-premium-link"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="nav-premium-svg" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Pricing</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  <div class="nav-auth">
+    <a href="index.html" class="btn-exit" aria-label="Exit to home page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      <span class="lbl-long">Exit to Home</span>
     </a>
+    <a href="Login.html" class="btn-nav-login" id="navLoginBtn">
+      <svg viewBox="0 0 14 14" fill="none"><path d="M9 1H12C12.5523 1 13 1.44772 13 2V12C13 12.5523 12.5523 13 12 13H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M6 10L9 7L6 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 7H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Login
+    </a>
+    <div class="user-avatar-btn" id="userAvatarBtn" onclick="toggleDropdown()" style="display:none">
+      <div class="avatar-circle" id="avatarInitial">?</div>
+      <span class="avatar-name" id="avatarName">Student</span>
+      <span class="avatar-chevron">▾</span>
+      <div class="user-dropdown" id="userDropdown">
+        <div class="dd-header"><span class="dd-email" id="ddEmail">—</span><span class="dd-name" id="ddName">—</span></div>
+        <a href="courses.html" class="dd-item">My Courses</a>
+        <a href="profile.html" class="dd-item">Profile</a>
+        <div class="dd-sep"></div>
+        <button class="dd-item danger" onclick="handleLogout()">Sign Out</button>
+      </div>
+    </div>
   </div>
 </nav>
 
-<div class="layout">
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <span class="sidebar-label">Categories</span>
-    <button class="cat-btn active" onclick="filterByCategory('all', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> All Stories <span class="cat-count" id="catCountAll">19</span></button>
-    <button class="cat-btn" onclick="filterByCategory('trend', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.09 12.26A1 1 0 0 0 5 14h6l-2 8 8.91-10.26A1 1 0 0 0 17 10h-6l2-8Z"/></svg> Tech Trends <span class="cat-count">2</span></button>
-    <button class="cat-btn" onclick="filterByCategory('career', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Career Growth <span class="cat-count">3</span></button>
-    <button class="cat-btn" onclick="filterByCategory('tutorial', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Code Tutorials <span class="cat-count">14</span></button>
-    <button class="cat-btn" onclick="filterByCategory('tips', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.62-1.44 4.9-3.56 6.14L15 17H9l.56-1.86A7.001 7.001 0 0 1 5 9a7 7 0 0 1 7-7Z"/><path d="M9 21h6"/></svg> Study Tips <span class="cat-count">4</span></button>
-
-    <span class="sidebar-label" style="margin-top:28px;">Trending Now</span>
-    <div class="trending-card" onclick="openPost(0)">
-      <div class="tc-num">01</div>
-      <div class="tc-title">The Rise of AI in Systems Programming</div>
-      <div class="tc-meta">12 min · Tech Trends</div>
-    </div>
-    <div class="trending-card" onclick="openPost(2)">
-      <div class="tc-num">02</div>
-      <div class="tc-title">How to Ace Your First Tech Interview</div>
-      <div class="tc-meta">8 min · Career</div>
-    </div>
-    <div class="trending-card" onclick="openPost(1)">
-      <div class="tc-num">03</div>
-      <div class="tc-title">Mastering Java Streams for Cleaner Code</div>
-      <div class="tc-meta">5 min · Tutorial</div>
-    </div>
-    <div class="trending-card" onclick="openPost(8)">
-      <div class="tc-num">04</div>
-      <div class="tc-title">How We Built IT Study Hub</div>
-      <div class="tc-meta">10 min · Tech Trends</div>
-    </div>
-    <div class="trending-card" onclick="openPost(7)">
-      <div class="tc-num">05</div>
-      <div class="tc-title">Understanding Big-O Notation</div>
-      <div class="tc-meta">8 min · Tutorial</div>
-    </div>
-
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main">
-    <header class="blog-hero fade-up">
-      <div class="hero-eyebrow">Insights & Articles</div>
-      <h1 class="hero-title">The <em>Developer</em><br>Blog</h1>
-      <div class="hero-stats">
-        <div class="h-stat"><span id="heroArticleCount">19</span> Articles</div>
-        <div class="h-stat"><span>4</span> Categories</div>
-        <div class="h-stat">Latest <span id="latestDate">May 2026</span></div>
-      </div>
-    </header>
-
-    <!-- FEATURED POST -->
-    <div id="featuredSection">
-      <div class="section-label fade-up" class="anim-delay-1">Featured Story</div>
-      <div class="featured-wrap fade-up" class="anim-delay-15" onclick="openPost(0)">
-        <div class="featured-grid">
-          <div class="feat-visual">
-            <div class="feat-grid-lines"></div>
-            <div class="feat-icon" aria-hidden="true"><svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.65)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/><circle cx="9" cy="13" r="1.5" fill="rgba(200,241,53,0.3)"/><circle cx="15" cy="13" r="1.5" fill="rgba(200,241,53,0.3)"/><path d="M12 17v2"/></svg></div>
-          </div>
-          <div class="feat-body">
-            <div class="feat-tag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.09 12.26A1 1 0 0 0 5 14h6l-2 8 8.91-10.26A1 1 0 0 0 17 10h-6l2-8Z"/></svg> Tech Trends <span class="feat-badge">FEATURED</span></div>
-            <h2 class="feat-title">The Rise of AI in Systems Programming</h2>
-            <p class="feat-excerpt">Will LLMs replace C++ developers, or just make them faster? We explore how AI tools like GitHub Copilot and Claude are changing the landscape of low-level code — and what it means for students learning C and C++ today.</p>
-            <div class="feat-footer">
-              <div class="feat-author">
-                <div class="author-dot" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg></div>
-                <span>Dithsa Dutta</span>
-              </div>
-              <span>May 15, 2026</span>
-              <span>12 min read</span>
-              <div class="read-more-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- POSTS GRID -->
-    <section>
-      <div class="section-label fade-up" class="anim-delay-2" id="gridLabel">All Articles</div>
-      <div class="blog-grid" id="blogGrid" class="mt-20">
-        <!-- Injected by JS -->
-      </div>
-      <div class="empty-state" id="emptyState" style="display:none;">
-        <div class="es-icon" aria-hidden="true"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M16 16l4 4"/></svg></div>
-        <p>No articles match your search.</p>
-      </div>
-    </section>
-  </main>
+<div class="nav-mobile-drawer" id="mobileDrawer">
+  <button class="nav-mobile-close" id="drawerClose">✕ Close</button>
+  <a href="index.html">Home</a>
+  <a href="courses.html">Courses</a>
+  <a href="blog.html" class="nav-active">Blog</a>
+  <a href="fileshare.html">File Share</a>
+  <a href="team.html">Community</a>
+  <a href="premium.html" class="nav-premium-link">Pricing</a>
+  <a href="index.html" class="nav-exit-link">← Exit to Home</a>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <div class="toast-icon" id="toastIcon"></div>
-  <div>
-    <div style="font-weight:700;font-size:13px;" id="toastTitle">Done!</div>
-    <div style="font-family:var(--ff-mono);font-size:11px;color:var(--lime);" id="toastSub"></div>
+<main id="main">
+
+<header class="b-hero">
+  <div class="wrap">
+    <p class="eyebrow">The developer blog</p>
+    <h1>Read it. <span class="hl">Build it.</span><br>Get hired.</h1>
+    <p class="lede">Long-form tutorials, career advice and study systems written by students and mentors at IT Study Hub. No fluff, just things you can use this week.</p>
+    <dl class="b-stats">
+      <div><dt>Articles</dt><dd id="statCount">0</dd></div>
+      <div><dt>Topics</dt><dd id="statTopics">0</dd></div>
+      <div><dt>Latest</dt><dd id="statLatest">—</dd></div>
+    </dl>
+    <label class="b-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="search" id="searchInput" placeholder="Search articles, topics or authors" autocomplete="off" aria-label="Search articles">
+    </label>
+  </div>
+</header>
+
+<section class="b-featured" id="featuredSection" aria-label="Featured article">
+  <div class="wrap" id="featuredMount"></div>
+</section>
+
+<div class="b-bar">
+  <div class="wrap">
+    <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+    <span class="b-count" id="resultCount"></span>
   </div>
 </div>
 
-<!-- CURSOR (styled via global.css — hidden on touch devices) -->
-<div class="cursor" id="cur"></div>
-<div class="cursor-ring" id="curR"></div>
+<section class="b-list">
+  <div class="wrap">
+    <div class="b-list-head"><h2 class="display" id="gridLabel">All articles</h2></div>
+    <div class="grid" id="blogGrid"></div>
+    <div class="empty" id="emptyState">
+      <h3 class="display">Nothing found</h3>
+      <p>Try a different word, or clear the filter.</p>
+      <button class="btn btn-ghost" type="button" id="clearBtn">Show all articles</button>
+    </div>
+  </div>
+</section>
+
+<section class="b-finale">
+  <div class="wrap">
+    <h2 class="display">Ready to go <span class="hl">deeper?</span></h2>
+    <p>The first six modules of every course are free. Start with the notes, then test yourself.</p>
+    <div class="actions"><a class="btn btn-lime" href="courses.html">Browse courses</a><a class="btn btn-ghost" href="index.html">Back to home</a></div>
+  </div>
+</section>
+
+</main>
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><span class="dot"></span>IT Study Hub</a>
+      <p>Notes, PDFs and quizzes for IT students. Built at Techno India University, Kolkata.</p>
+    </div>
+    <div class="footer-links" role="navigation" aria-label="Footer">
+      <a href="courses.html">Courses</a>
+      <a href="quiz.html">Skill quiz</a>
+      <a href="blog.html">Blog</a>
+      <a href="fileshare.html">File share</a>
+      <a href="premium.html">Pricing</a>
+      <a href="team.html">Team</a>
+      <a href="support.html">Support</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 IT Study Hub. Built by Dithsa Dutta.</span>
+    <span class="footer-contact"><a href="mailto:contact@itstudyhub.dpdns.org">contact@itstudyhub.dpdns.org</a> <a href="mailto:admin@itstudyhub.dpdns.org">admin@itstudyhub.dpdns.org</a></span>
+    <span class="footer-legal"><a href="privacypolicy.html">Privacy policy</a> <a href="terms.html">Terms of service</a></span>
+  </div>
+</footer>
 
 <script>
-// ══════════════════════════════════════════
-//  ALL 5 BLOG POSTS — edit content here
-// ══════════════════════════════════════════
 const POSTS = [
   {
     id: 0,
@@ -1230,9 +1150,11 @@ printf("Value: %d\\n", *ptr);   // Dereferences ptr to print 95</code></pre>
     category: 'tips',
     catLabel: 'Study Tips',
     author: 'IT Study Hub',
+    authorRole: 'Editorial Team',
     date: 'Jun 20, 2026',
     readTime: '7 min',
     featured: false,
+    tags: ['Gamification', 'Learning', 'Programming', 'Study Tips'],
     content: `
 <h2>Introduction: The Infinite Loop of the Monotonous Tutorial</h2>
 <p>The room was illuminated only by the faint, blue glow of a code editor, casting long, tired shadows across the desk. It was 1:45 AM, and Elena, a junior software developer grinding through her third online curriculum of the week, felt an overwhelming wave of mental fatigue wash over her. Staring at an endless block of dry, academic documentation on asynchronous JavaScript event loops, her eyelids felt heavy. She scrolled down, read another paragraph of abstract theory, opened a practice terminal, typed a few lines of syntax, received a cryptic error message, and sighed.</p>
@@ -1286,9 +1208,11 @@ printf("Value: %d\\n", *ptr);   // Dereferences ptr to print 95</code></pre>
     category: 'tutorial',
     catLabel: 'Tutorial',
     author: 'Dithsa Dutta',
+    authorRole: 'Founder & Lead Architect',
     date: 'Jun 22, 2026',
     readTime: '9 min',
     featured: false,
+    tags: ['Computer Science', 'Programming Basics', 'How It Works'],
     content: `
 <h2>Introduction: The Alchemist's Workshop at 3:00 AM</h2>
 <p>The screen of a developer's laptop glowed with the stark, fluorescent contrast of a dark-mode editor. Outside, rain tapped a steady, hypnotic rhythm against the glass. Inside the terminal, a single command sat waiting: <code>./execute_magic</code>.</p>
@@ -1352,9 +1276,11 @@ printf("Value: %d\\n", *ptr);   // Dereferences ptr to print 95</code></pre>
     category: 'tutorial',
     catLabel: 'Tutorial',
     author: 'Snehanshu Sarkar',
+    authorRole: 'Core Developer',
     date: 'Jun 25, 2026',
     readTime: '8 min',
     featured: false,
+    tags: ['Data Structures', 'Algorithms', 'DSA', 'Problem Solving'],
     content: `
 <h2>Introduction: The Awakening of Array-01</h2>
 <p>The digital clock in the corner of the integrated development environment glowed quietly at 2:14 AM. In the dim, flickering light of the monitor, a young software engineer named Alex stared blankly at a spinning progress wheel. Production had just flatlined.</p>
@@ -1408,9 +1334,11 @@ printf("Value: %d\\n", *ptr);   // Dereferences ptr to print 95</code></pre>
     category: 'tutorial',
     catLabel: 'Tutorial',
     author: 'Argha Paul',
+    authorRole: 'Core Developer',
     date: 'Jun 28, 2026',
     readTime: '9 min',
     featured: false,
+    tags: ['Web Dev', 'Networking', 'DNS', 'HTTP', 'How It Works'],
     content: `
 <h2>Introduction: The Invisible Symphony at Your Fingertips</h2>
 <p>It is a quiet Tuesday morning. You sit down at your desk, sip your coffee, and rest your fingers on the keyboard. With casual intent, you open your web browser, type a simple Uniform Resource Locator into the address bar—say, <code>https://www.example.com/blog/hello-world</code>—and press the Enter key.</p>
@@ -1458,7 +1386,6 @@ printf("Value: %d\\n", *ptr);   // Dereferences ptr to print 95</code></pre>
   }
 ];
 
-// ── Per-post thumbnail SVG icons ──
 const POST_ICONS = {
   0: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/><circle cx="9" cy="13" r="1.5" fill="rgba(200,241,53,0.35)"/><circle cx="15" cy="13" r="1.5" fill="rgba(200,241,53,0.35)"/><path d="M12 17v2"/></svg>`,
   1: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.6)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 19.34A1 1 0 0 0 5 21h14a1 1 0 0 0 .82-1.57C19.33 19 17 16 15 9"/><path d="M12 2C6.5 2 3 6 3 6" opacity=".5"/></svg>`,
@@ -1482,177 +1409,134 @@ const POST_ICONS = {
     default: `<svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.5)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
 };
 
-// ── Per-author SVG avatars (colour-coded) ──
-const AUTHOR_SVG = {
-  'Dithsa Dutta':      `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
-  'Mithila Rani Saha': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(232,180,255,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
-  'Snehanshu Sarkar':  `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
-  'Argha Paul':        `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
-  'IT Study Hub':      `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>`,
-  default:             `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+/* Helpers */
+var AUTHOR_INITIAL=function(n){return (n||'?').trim().charAt(0).toUpperCase();};
+var CLOCK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+const CAT = {
+  trend:    { label: 'Tech Trends' },
+  career:   { label: 'Career Growth' },
+  tutorial: { label: 'Code Tutorials' },
+  tips:     { label: 'Study Tips' }
 };
+const parseDate = d => new Date(d);
+const byNewest = (a, b) => parseDate(b.date) - parseDate(a.date);
+let activeCat = 'all', query = '';
 
-// ── Category color map ──
-const CAT_COLORS = {
-  trend: 'cat-trend',
-  tutorial: 'cat-tutorial',
-  career: 'cat-career',
-  tips: 'cat-tips'
-};
-
-let activeCategory = 'all';
-
-// ── Render all non-featured post cards ──
-function renderCards(posts) {
-  const grid = document.getElementById('blogGrid');
-  const empty = document.getElementById('emptyState');
-  const filtered = posts.filter(p => !p.featured || activeCategory !== 'all');
-
-  if (filtered.length === 0) {
-    grid.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-
-  // Sort newest-first by date
-  const sorted = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date));
-  grid.innerHTML = sorted.map((post, idx) => `
-    <article class="post-card" onclick="openPost(${post.id})" style="animation:fadeUp 0.5s ease ${idx * 0.07}s forwards;opacity:0;">
-      <div class="post-thumb post-thumb-${post.category}">
-        <div class="thumb-icon" aria-hidden="true">${POST_ICONS[post.id] || POST_ICONS.default}</div>
-        <span class="post-cat-tag ${CAT_COLORS[post.category]}">${post.catLabel}</span>
+function thumb(p){ return (POST_ICONS[p.id] || POST_ICONS.default); }
+function cardHTML(p){
+  return `<a class="card" href="blog-post.html?id=${p.id}" aria-label="${esc(p.title)}">
+    <div class="thumb t-${p.category}"><span class="tag cat-${p.category}">${esc(p.catLabel)}</span>${thumb(p)}</div>
+    <div class="card-body">
+      <span class="card-date">${esc(p.date)}</span>
+      <h3 class="card-title">${p.title}</h3>
+      <p class="card-excerpt">${p.excerpt}</p>
+      <div class="card-foot">
+        <span class="who"><span class="avatar" aria-hidden="true">${AUTHOR_INITIAL(p.author)}</span><span>${esc(p.author)}</span></span>
+        <span class="read">${CLOCK}${esc(p.readTime)}</span>
       </div>
-      <div class="post-content">
-        <span class="post-date">${post.date}</span>
-        <h3 class="post-title">${post.title}</h3>
-        <p class="post-excerpt">${post.excerpt}</p>
-      </div>
-      <div class="post-footer">
-        <div class="post-author">
-          <div class="author-dot-svg" aria-hidden="true">${AUTHOR_SVG[post.author] || AUTHOR_SVG.default}</div>
-          <span>${post.author}</span>
-        </div>
-        <span class="read-badge">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          ${post.readTime}
-        </span>
-      </div>
-    </article>
-  `).join('');
-
-  // Re-attach cursor hover after render
-  attachCursorHover();
+    </div>
+  </a>`;
 }
-
-// ── Filter by category ──
-function filterByCategory(cat, btn) {
-  activeCategory = cat;
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-
-  const label = document.getElementById('gridLabel');
-  const featuredSection = document.getElementById('featuredSection');
-
-  if (cat === 'all') {
-    featuredSection.style.display = 'block';
-    label.textContent = 'All Articles';
-    renderCards(POSTS);
-  } else {
-    featuredSection.style.display = 'none';
-    const filtered = POSTS.filter(p => p.category === cat);
-    label.textContent = { trend: 'Tech Trends', tutorial: 'Code Tutorials', career: 'Career Growth', tips: 'Study Tips' }[cat] || 'Articles';
-    renderCards(filtered);
-  }
+function reveal(){
+  const cards = document.querySelectorAll('.card:not(.in)');
+  if (!('IntersectionObserver' in window)) { cards.forEach(c => c.classList.add('in')); return; }
+  const io = new IntersectionObserver((es) => es.forEach(e => {
+    if (e.isIntersecting) { const el = e.target; el.style.transitionDelay = (Math.min([...el.parentNode.children].indexOf(el), 8) % 3 * 70) + 'ms'; el.classList.add('in'); io.unobserve(el); }
+  }), { rootMargin: '0px 0px -40px 0px' });
+  cards.forEach(c => io.observe(c));
 }
-
-// ── Search filter ──
-function filterPosts() {
-  const q = document.getElementById('searchInput').value.toLowerCase().trim();
-  if (!q) { renderCards(POSTS); return; }
-  const results = POSTS.filter(p =>
-    p.title.toLowerCase().includes(q) ||
-    p.excerpt.toLowerCase().includes(q) ||
-    p.catLabel.toLowerCase().includes(q) ||
-    p.author.toLowerCase().includes(q)
-  );
-  document.getElementById('featuredSection').style.display = 'none';
-  document.getElementById('gridLabel').textContent = `Results for "${q}"`;
-  renderCards(results);
+function visible(){
+  const q = query.toLowerCase();
+  return POSTS.filter(p => (activeCat === 'all' || p.category === activeCat) &&
+    (!q || (p.title + ' ' + p.excerpt + ' ' + p.catLabel + ' ' + p.author).toLowerCase().includes(q))).sort(byNewest);
 }
-
-// ── Open post ──
-function openPost(id) {
-  window.location.href = `blog-post.html?id=${id}`;
+function render(){
+  const feat = POSTS.find(p => p.featured);
+  const showFeat = feat && activeCat === 'all' && !query;
+  document.getElementById('featuredSection').style.display = showFeat ? '' : 'none';
+  // featured post moves into the featured block only while it is shown there
+  const list = visible().filter(p => !(showFeat && p.id === feat.id));
+  const grid = document.getElementById('blogGrid'), empty = document.getElementById('emptyState');
+  grid.innerHTML = list.map(cardHTML).join('');
+  empty.style.display = list.length || showFeat ? 'none' : 'block';
+  grid.style.display = list.length ? '' : 'none';
+  const label = query ? `Results for “${query}”` : activeCat === 'all' ? 'All articles' : CAT[activeCat].label;
+  document.getElementById('gridLabel').textContent = label;
+  const total = list.length + (showFeat ? 1 : 0);
+  document.getElementById('resultCount').textContent = total + (total === 1 ? ' article' : ' articles');
+  reveal();
 }
-
-// ── Subscribe ──
-
-// ── Toast ──
-const _TOAST_SVG = {
-  '✅': '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c8f135" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
-  '❌': '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ff5f56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
-  'ℹ️': '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
-};
-function showToast(icon, title, sub) {
-  document.getElementById('toastIcon').innerHTML = _TOAST_SVG[icon] || _TOAST_SVG['ℹ️'];
-  document.getElementById('toastTitle').textContent = title;
-  document.getElementById('toastSub').textContent = sub;
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
+function renderFeatured(){
+  const p = POSTS.find(x => x.featured); if (!p) return;
+  document.getElementById('featuredMount').innerHTML = `
+  <a class="feat" href="blog-post.html?id=${p.id}" aria-label="Featured: ${esc(p.title)}">
+    <div class="feat-body">
+      <div class="tag-row"><span class="tag solid">Featured</span><span class="tag cat-${p.category}">${esc(p.catLabel)}</span></div>
+      <h2 class="feat-title">${p.title}</h2>
+      <p class="feat-excerpt">${p.excerpt}</p>
+      <div class="byline"><span class="who"><span class="avatar" aria-hidden="true">${AUTHOR_INITIAL(p.author)}</span>${esc(p.author)}</span><span class="sep"></span><span>${esc(p.date)}</span><span class="sep"></span><span>${esc(p.readTime)} read</span></div>
+      <span class="btn btn-lime">Read the article <span aria-hidden="true">→</span></span>
+    </div>
+    <div class="feat-art t-${p.category}" aria-hidden="true">${ART_FEAT(p)}</div>
+  </a>`;
 }
+function renderChips(){
+  const counts = { all: POSTS.length };
+  POSTS.forEach(p => counts[p.category] = (counts[p.category] || 0) + 1);
+  const order = ['all', 'tutorial', 'career', 'tips', 'trend'].filter(k => counts[k]);
+  document.getElementById('chips').innerHTML = order.map(k =>
+    `<button class="chip" type="button" data-cat="${k}" aria-pressed="${k === activeCat}">${k === 'all' ? 'All' : CAT[k].label}<span class="n">${counts[k]}</span></button>`).join('');
+  document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => {
+    activeCat = b.dataset.cat;
+    document.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x === b));
+    render();
+  }));
+}
+function ART_FEAT(p){ return (POST_ICONS[p.id] || POST_ICONS.default); }
 
-// ── Cursor (pointer devices only) ──
-const _isPointer = window.matchMedia('(pointer: fine)').matches;
-const cur = document.getElementById('cur');
-const curR = document.getElementById('curR');
-
-if (_isPointer) {
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove', e => {
-    mx=e.clientX; my=e.clientY;
-    cur.classList.add('visible'); curR.classList.add('visible');
+(function init(){
+  document.getElementById('statCount').textContent = POSTS.length;
+  document.getElementById('statTopics').textContent = new Set(POSTS.map(p => p.category)).size;
+  const latest = POSTS.map(p => parseDate(p.date)).sort((a, b) => b - a)[0];
+  if (latest) document.getElementById('statLatest').textContent = latest.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  renderFeatured(); renderChips(); render();
+  const s = document.getElementById('searchInput');
+  s.addEventListener('input', () => { query = s.value.trim(); render(); });
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    query = ''; s.value = ''; activeCat = 'all';
+    document.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x.dataset.cat === 'all'));
+    render();
   });
-  (function anim() {
-    cur.style.left=(mx-5)+'px'; cur.style.top=(my-5)+'px';
-    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-    curR.style.left=(rx-18)+'px'; curR.style.top=(ry-18)+'px';
-    requestAnimationFrame(anim);
-  })();
-}
-
-function attachCursorHover() {
-  if (!_isPointer) return;
-  document.querySelectorAll('a,button,.post-card,.featured-wrap,.trending-card').forEach(el => {
-    el.addEventListener('mouseenter', () => cur.style.transform='scale(2)');
-    el.addEventListener('mouseleave', () => cur.style.transform='scale(1)');
-  });
-}
-
-// ── Init ──
-(function() {
-  // Auto-update counts from POSTS array
-  const total = POSTS.length;
-  const byCategory = {};
-  POSTS.forEach(p => { byCategory[p.category] = (byCategory[p.category] || 0) + 1; });
-  const allEl = document.getElementById('catCountAll');
-  const heroEl = document.getElementById('heroArticleCount');
-  if (allEl) allEl.textContent = total;
-  if (heroEl) heroEl.textContent = total;
-
-  // Set latest date from posts
-  const latest = POSTS.map(p => new Date(p.date)).sort((a,b) => b-a)[0];
-  const el = document.getElementById('latestDate');
-  if (el && latest) el.textContent = latest.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 })();
-renderCards(POSTS);
-attachCursorHover();
 
-// Expose for sidebar trending cards
-window.openPost = openPost;
-window.filterByCategory = filterByCategory;
-window.filterPosts = filterPosts;
+/* Dropdown + signed-in display (display only; real checks happen on the server) */
+function toggleDropdown(){document.getElementById('userDropdown').classList.toggle('open');}
+document.addEventListener('click',function(e){var b=document.getElementById('userAvatarBtn');if(b&&!b.contains(e.target))document.getElementById('userDropdown').classList.remove('open');});
+function updateAuthUI(){
+  var s=null;try{s=JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){}
+  var l=document.getElementById('navLoginBtn'),a=document.getElementById('userAvatarBtn');
+  if(s&&s.name){
+    l.style.display='none';a.style.display='flex';
+    document.getElementById('avatarInitial').textContent=s.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+    document.getElementById('avatarName').textContent=s.name.split(' ')[0];
+    document.getElementById('ddName').textContent=s.name;
+    document.getElementById('ddEmail').textContent=s.email||'';
+  }else{l.style.display='flex';a.style.display='none';}
+}
+function handleLogout(){try{localStorage.removeItem('ish_session');}catch(e){}updateAuthUI();document.getElementById('userDropdown').classList.remove('open');}
+updateAuthUI();
+/* Mobile menu */
+(function(){
+  var h=document.getElementById('navHamburger'),d=document.getElementById('mobileDrawer'),c=document.getElementById('drawerClose');
+  function open(){d.classList.add('open');h.classList.add('open');document.body.style.overflow='hidden';}
+  function close(){d.classList.remove('open');h.classList.remove('open');document.body.style.overflow='';}
+  h.addEventListener('click',function(){d.classList.contains('open')?close():open();});
+  c.addEventListener('click',close);
+  d.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
+})();
+
 </script>
 <script src="ish-cursor-guard.js" defer></script>
 <script src="ish-a11y.js" defer></script>

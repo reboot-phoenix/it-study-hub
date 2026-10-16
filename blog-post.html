@@ -1,67 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="fonts.css">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="shortcut icon" href="favicon.svg">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="favicon.svg">
+<meta name="theme-color" content="#05050a">
 <title>Article — IT Study Hub</title>
-<meta name="description" content="Read articles from the IT Study Hub team on learning to code, placements and building real projects.">
-<link rel="canonical" href="https://itstudyhub.dpdns.org/blog-post">
-<meta property="og:type" content="website">
+<meta name="description" content="Read the full article on IT Study Hub.">
+<link rel="canonical" href="https://itstudyhub.dpdns.org/blog">
 <meta property="og:site_name" content="IT Study Hub">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://itstudyhub.dpdns.org/blog">
 <meta property="og:title" content="Article — IT Study Hub">
-<meta property="og:description" content="Read articles from the IT Study Hub team on learning to code, placements and building real projects.">
-<meta property="og:url" content="https://itstudyhub.dpdns.org/blog-post">
+<meta property="og:description" content="Read the full article on IT Study Hub.">
 <meta property="og:image" content="https://itstudyhub.dpdns.org/team_image.jpeg">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="fonts/dm-sans-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/bebas-neue-v16-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jetbrains-mono-v24-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="global.css">
-<link rel="stylesheet" href="pages.css">
-<style>
-/* Long-form article elements (sub-headings, lists, tables, code) */
-.post-body h3{font-size:21px;font-weight:700;margin:34px 0 12px;line-height:1.3;}
-.post-body h4{font-size:17px;font-weight:700;margin:24px 0 8px;color:var(--lime);}
-.post-body ul,.post-body ol{margin:14px 0 20px 1.3em;padding:0;}
-.post-body li{margin:0 0 10px;line-height:1.7;}
-.post-body li>ul{margin:8px 0 4px 1.2em;}
-.post-body :where(p,li,td) code{font-family:var(--ff-mono,monospace);font-size:.88em;background:rgba(255,255,255,.07);padding:2px 6px;border-radius:4px;}
-.post-body pre{overflow-x:auto;}
-.post-body .table-wrap{overflow-x:auto;margin:22px 0 28px;border:1px solid rgba(255,255,255,.1);border-radius:10px;}
-.post-body table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px;}
-.post-body th,.post-body td{padding:10px 14px;text-align:left;vertical-align:top;border-bottom:1px solid rgba(255,255,255,.08);line-height:1.55;}
-.post-body th{background:rgba(255,255,255,.05);font-family:var(--ff-mono,monospace);font-size:11px;letter-spacing:.6px;text-transform:uppercase;}
-.post-body tr:last-child td{border-bottom:0;}
-</style>
+<link rel="stylesheet" href="index-page.css">
+<link rel="stylesheet" href="blog.css">
 </head>
-<body>
 
-<div class="read-progress" id="readProgress"></div>
-
+<body class="blog">
+<div class="read-progress" id="readProgress" aria-hidden="true"></div>
 <nav>
-  <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
-  <div class="nav-right">
-    <button class="nav-share-btn" onclick="copyLink()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share Article</button>
-    <a href="blog.html" class="nav-back">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      All Articles
+  <a href="index.html" class="nav-logo"><div class="dot"></div>IT STUDY HUB</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="blog.html" class="nav-active">Blog</a></li>
+    <li><a href="fileshare.html">File Share</a></li>
+    <li><a href="team.html">Community</a></li>
+    <li><a href="premium.html" class="nav-premium-link"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="nav-premium-svg" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Pricing</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  <div class="nav-auth">
+    <button class="btn-share" type="button" onclick="copyLink()" aria-label="Copy article link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+      <span class="lbl">Share Article</span>
+    </button>
+    <a href="index.html" class="btn-exit" aria-label="Exit to home page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      <span class="lbl-long">Exit to Home</span>
     </a>
+    <a href="Login.html" class="btn-nav-login" id="navLoginBtn">
+      <svg viewBox="0 0 14 14" fill="none"><path d="M9 1H12C12.5523 1 13 1.44772 13 2V12C13 12.5523 12.5523 13 12 13H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M6 10L9 7L6 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 7H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Login
+    </a>
+    <div class="user-avatar-btn" id="userAvatarBtn" onclick="toggleDropdown()" style="display:none">
+      <div class="avatar-circle" id="avatarInitial">?</div>
+      <span class="avatar-name" id="avatarName">Student</span>
+      <span class="avatar-chevron">▾</span>
+      <div class="user-dropdown" id="userDropdown">
+        <div class="dd-header"><span class="dd-email" id="ddEmail">—</span><span class="dd-name" id="ddName">—</span></div>
+        <a href="courses.html" class="dd-item">My Courses</a>
+        <a href="profile.html" class="dd-item">Profile</a>
+        <div class="dd-sep"></div>
+        <button class="dd-item danger" onclick="handleLogout()">Sign Out</button>
+      </div>
+    </div>
   </div>
 </nav>
 
-<div id="appRoot"></div>
-
-<!-- CURSOR -->
-<div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform 0.15s ease;opacity:0;" id="cur"></div>
-<div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
-
-<!-- TOAST -->
-<div id="toast" style="position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--border-active);border-radius:12px;padding:14px 20px;font-size:13px;z-index:9990;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none;display:flex;align-items:center;gap:10px;">
-  <span id="toastIcon"></span>
-  <span id="toastMsg">Copied!</span>
+<div class="nav-mobile-drawer" id="mobileDrawer">
+  <button class="nav-mobile-close" id="drawerClose">✕ Close</button>
+  <a href="index.html">Home</a>
+  <a href="courses.html">Courses</a>
+  <a href="blog.html" class="nav-active">Blog</a>
+  <a href="fileshare.html">File Share</a>
+  <a href="team.html">Community</a>
+  <a href="premium.html" class="nav-premium-link">Pricing</a>
+  <a href="index.html" class="nav-exit-link">← Exit to Home</a>
 </div>
 
+<main id="appRoot"></main>
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo"><span class="dot"></span>IT Study Hub</a>
+      <p>Notes, PDFs and quizzes for IT students. Built at Techno India University, Kolkata.</p>
+    </div>
+    <div class="footer-links" role="navigation" aria-label="Footer">
+      <a href="courses.html">Courses</a>
+      <a href="quiz.html">Skill quiz</a>
+      <a href="blog.html">Blog</a>
+      <a href="fileshare.html">File share</a>
+      <a href="premium.html">Pricing</a>
+      <a href="team.html">Team</a>
+      <a href="support.html">Support</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 IT Study Hub. Built by Dithsa Dutta.</span>
+    <span class="footer-contact"><a href="mailto:contact@itstudyhub.dpdns.org">contact@itstudyhub.dpdns.org</a> <a href="mailto:admin@itstudyhub.dpdns.org">admin@itstudyhub.dpdns.org</a></span>
+    <span class="footer-legal"><a href="privacypolicy.html">Privacy policy</a> <a href="terms.html">Terms of service</a></span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span id="toastMsg"></span></div>
 <script>
 const POSTS = [
   {
@@ -1302,8 +1342,6 @@ printf("Value: %d\\n", *ptr);   // Dereferences ptr to print 95</code></pre>
   }
 ];
 
-
-// ── Per-post hero SVG art ──
 const POST_ART = {
   0: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/><circle cx="9" cy="13" r="1.5" fill="rgba(200,241,53,0.25)"/><circle cx="15" cy="13" r="1.5" fill="rgba(200,241,53,0.25)"/><path d="M12 17v2"/></svg>`,
   1: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.55)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 19.34A1 1 0 0 0 5 21h14a1 1 0 0 0 .82-1.57C19.33 19 17 16 15 9"/><path d="M12 2C6.5 2 3 6 3 6" opacity=".4"/></svg>`,
@@ -1327,25 +1365,33 @@ const POST_ART = {
   default: `<svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.45)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
 };
 
-// ── Per-author avatars ──
-const AUTHOR_ART = {
-  'Dithsa Dutta':      `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.9)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
-  'Mithila Rani Saha': `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(232,180,255,0.9)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
-  'Snehanshu Sarkar':  `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.9)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
-  'Argha Paul':        `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,0.9)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
-  'IT Study Hub':      `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(247,183,49,0.9)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>`,
-  default:             `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(200,241,53,0.7)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>`,
+/* Helpers */
+var AUTHOR_INITIAL=function(n){return (n||'?').trim().charAt(0).toUpperCase();};
+var CLOCK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+const params = new URLSearchParams(window.location.search);
+const postId = parseInt(params.get('id'), 10);
+const post = POSTS.find(p => p.id === postId);
+const root = document.getElementById('appRoot');
+const ICON = {
+  link:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+  x:     '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+  in:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>',
+  cal:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
 };
 
-// ── Get post ID from URL ──
-const params = new URLSearchParams(window.location.search);
-const postId = parseInt(params.get('id'));
-const post = POSTS.find(p => p.id === postId);
-
-// Search and share previews: give each article its own title, description and canonical address.
-if (post) {
+if (!post) {
+  document.title = 'Article not found — IT Study Hub';
+  root.innerHTML = `<section class="notfound"><div>
+    <p class="eyebrow">Error 404</p>
+    <h1 class="display">Article <span class="hl">not found</span></h1>
+    <p>This article doesn't exist or may have been moved.</p>
+    <div class="actions" style="justify-content:center"><a class="btn btn-lime" href="blog.html">Back to the blog</a><a class="btn btn-ghost" href="index.html">Exit to home</a></div>
+  </div></section>`;
+} else {
   const pageUrl = 'https://itstudyhub.dpdns.org/blog-post?id=' + post.id;
-  const setMeta = (selector, attr, value) => { const el = document.querySelector(selector); if (el) el.setAttribute(attr, value); };
+  const setMeta = (sel, attr, v) => { const el = document.querySelector(sel); if (el) el.setAttribute(attr, v); };
   document.title = post.title + ' — IT Study Hub';
   setMeta('meta[name="description"]', 'content', post.excerpt);
   setMeta('link[rel="canonical"]', 'href', pageUrl);
@@ -1353,190 +1399,173 @@ if (post) {
   setMeta('meta[property="og:description"]', 'content', post.excerpt);
   setMeta('meta[property="og:url"]', 'content', pageUrl);
   setMeta('meta[property="og:type"]', 'content', 'article');
-}
 
-// ── Render ──
-const root = document.getElementById('appRoot');
+  // Related: same category first, then newest; previous/next follow the date order
+  const sorted = [...POSTS].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const idx = sorted.findIndex(p => p.id === post.id);
+  const newer = idx > 0 ? sorted[idx - 1] : null, older = idx < sorted.length - 1 ? sorted[idx + 1] : null;
+  const related = POSTS.filter(p => p.id !== post.id)
+    .sort((a, b) => (b.category === post.category) - (a.category === post.category) || new Date(b.date) - new Date(a.date)).slice(0, 3);
 
-if (!post) {
-  root.innerHTML = `
-    <div class="not-found">
-      <div class="nf-icon" aria-hidden="true"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h9"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="M16 19h6M19 16v6"/></svg></div>
-      <h1 class="nf-title">Article Not Found</h1>
-      <p class="nf-sub">This article doesn't exist or may have been moved.</p>
-      <a href="blog.html" class="btn-lime">← Back to Blog</a>
-    </div>`;
-} else {
-  document.title = `${post.title} — IT Study Hub`;
-
-  // Related posts — 2 random others
-  const related = POSTS.filter(p => p.id !== post.id).sort(() => Math.random()-0.5).slice(0,2);
-
-  // Extract headings for TOC
-  const headings = [...post.content.matchAll(/<h2>(.*?)<\/h2>/g)].map((m,i) => ({
-    text: m[1].replace(/<[^>]*>/g,''),
-    index: i
-  }));
-
-  const tocHTML = headings.length ? headings.map((h,i) => `
-    <a class="toc-item" id="toc-${i}" href="#heading-${i}">
-      <span class="toc-num">0${i+1}</span>
-      <span>${h.text}</span>
-    </a>`).join('') : '<p style="font-size:12px;color:var(--muted)">No sections</p>';
-
-  // Number the headings in content
-  let hIdx = 0;
-  const numberedContent = post.content.replace(/<h2>/g, () => `<h2 id="heading-${hIdx++}">`);
+  // Table of contents from the h2 headings
+  const headings = [...post.content.matchAll(/<h2>(.*?)<\/h2>/g)].map(m => m[1].replace(/<[^>]*>/g, ''));
+  const toc = headings.map((t, i) => `<a href="#heading-${i}" data-i="${i}"><span class="n">${String(i + 1).padStart(2, '0')}</span><span>${t}</span></a>`).join('');
+  let h = 0;
+  const body = post.content.replace(/<h2>/g, () => `<h2 id="heading-${h++}">`);
+  const shareText = encodeURIComponent(post.title + ' — IT Study Hub');
 
   root.innerHTML = `
-  <div class="layout post-layout">
-    <article class="article-wrap">
-      <div class="article-hero">
-        <div class="art-category">${post.catLabel}</div>
-        <h1 class="art-title">${post.title}</h1>
-        <p class="art-excerpt">${post.excerpt}</p>
-        <div class="art-meta">
-          <div class="meta-author">
-            <div class="meta-avatar" aria-hidden="true">${AUTHOR_ART[post.author] || AUTHOR_ART.default}</div>
-            <div>
-              <div class="meta-name">${post.author}</div>
-              <div class="meta-role">${post.authorRole || ''}</div>
-            </div>
-          </div>
-          <div class="meta-divider"></div>
-          <div class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${post.date}</div>
-          <div class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${post.readTime} read</div>
-        </div>
+  <header class="a-head">
+    <div class="wrap">
+      <div class="crumbs" role="navigation" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><a href="blog.html">Blog</a><span>/</span><span class="cur">${esc(post.catLabel)}</span></div>
+      <div class="tag-row"><span class="tag cat-${post.category}">${esc(post.catLabel)}</span></div>
+      <h1 class="a-title">${post.title}</h1>
+      <p class="lede">${post.excerpt}</p>
+      <div class="byline">
+        <span class="who"><span class="avatar" aria-hidden="true">${AUTHOR_INITIAL(post.author)}</span>${esc(post.author)}</span><span class="sep"></span>
+        <span>${ICON.cal}${esc(post.date)}</span><span class="sep"></span>
+        <span>${CLOCK}${esc(post.readTime)} read</span>
       </div>
+    </div>
+  </header>
 
-      <div class="art-visual">
-        <div class="art-visual-grid"></div>
-        <div class="pos-rel-z1" aria-hidden="true">${POST_ART[post.id] || POST_ART.default}</div>
-      </div>
+  <div class="wrap a-layout">
+    <article class="a-main">
+      ${headings.length ? `<details class="m-toc"><summary>In this article</summary><div class="toc">${toc}</div></details>` : ''}
+      <div class="prose">${body}</div>
 
-      <div class="art-body post-body">${numberedContent}</div>
-
-      <div class="art-footer">
-        <div class="art-tags">
-          ${(post.tags || []).map(t => `<span class="art-tag"># ${t}</span>`).join('')}
+      <div class="a-end">
+        <div class="author-card">
+          <span class="avatar" aria-hidden="true">${AUTHOR_INITIAL(post.author)}</span>
+          <div><div class="k">Written by</div><div class="v">${esc(post.author)}</div>${post.authorRole ? `<div class="k">${esc(post.authorRole)}</div>` : ''}</div>
         </div>
-        <div class="related-title">More Articles</div>
-        <div class="related-grid">
-          ${related.map(r => `
-            <a class="related-card" href="blog-post.html?id=${r.id}">
-              <div class="rc-icon" aria-hidden="true">${POST_ART[r.id] || POST_ART.default}</div>
-              <div class="rc-cat">${r.catLabel}</div>
-              <div class="rc-title">${r.title}</div>
-              <div class="rc-meta">${r.readTime} read · ${r.author}</div>
-            </a>`).join('')}
+        ${(post.tags||[]).length ? `<div class="tag-row">${post.tags.map(t => `<span class="tag" style="color:var(--muted2)"># ${esc(t)}</span>`).join('')}</div>` : ''}
+        <div class="a-actions">
+          <button class="btn btn-lime" type="button" onclick="copyLink()">${ICON.link.replace('<svg ', '<svg width="16" height="16" ')} Share this article</button>
+          <a class="btn btn-ghost" href="blog.html">← All articles</a>
+          <a class="btn btn-ghost" href="index.html">Exit to home</a>
+        </div>
+        <div class="pn" role="navigation" aria-label="More articles">
+          ${older ? `<a href="blog-post.html?id=${older.id}"><span class="k">← Older</span><span class="t">${older.title}</span></a>` : '<span></span>'}
+          ${newer ? `<a class="next" href="blog-post.html?id=${newer.id}"><span class="k">Newer →</span><span class="t">${newer.title}</span></a>` : '<span></span>'}
         </div>
       </div>
     </article>
 
-    <aside class="sidebar post-sidebar">
-      <div class="sidebar-card">
-        <span class="sc-label">Reading Progress</span>
-        <div class="progress-widget">
-          <svg class="prog-circle" viewBox="0 0 72 72" style="width:72px;height:72px;margin:16px auto;display:block;">
-            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
-            <circle id="progCircle" cx="36" cy="36" r="30" fill="none" stroke="#c8f135" stroke-width="4"
-              stroke-dasharray="188.5" stroke-dashoffset="188.5" stroke-linecap="round"
-              transform="rotate(-90 36 36)" style="transition:stroke-dashoffset 0.1s"/>
+    <aside class="a-aside" aria-label="Article tools">
+      <div class="panel panel-prog">
+        <span class="panel-label">Reading progress</span>
+        <div class="ring-row">
+          <svg class="ring" viewBox="0 0 72 72" aria-hidden="true">
+            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="4"/>
+            <circle id="progCircle" cx="36" cy="36" r="30" fill="none" stroke="#c8f135" stroke-width="4" stroke-dasharray="188.5" stroke-dashoffset="188.5" stroke-linecap="round" transform="rotate(-90 36 36)"/>
           </svg>
-          <div class="prog-text" id="progPct" style="font-family:var(--ff-display);font-size:24px;font-weight:800;color:var(--lime);text-align:center;">0%</div>
-          <div class="prog-sub" style="font-family:var(--ff-mono);font-size:10px;color:var(--muted);text-align:center;letter-spacing:1px;text-transform:uppercase;margin-top:4px;">${post.readTime} read</div>
+          <div><div class="ring-pct" id="progPct">0%</div><div class="ring-sub">${esc(post.readTime)} read</div></div>
         </div>
       </div>
-
-      ${headings.length ? `
-      <div class="sidebar-card">
-        <span class="sc-label">In This Article</span>
-        ${tocHTML}
-      </div>` : ''}
-
-      <div class="sidebar-card">
-        <span class="sc-label">Share</span>
-        <button class="share-btn copy-btn" onclick="copyLink()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy Link</button>
-        <button class="share-btn" onclick="shareTwitter()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.7 5.3 4.3 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg> Share on X</button>
-        <button class="share-btn" onclick="shareLinkedIn()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> Share on LinkedIn</button>
+      ${headings.length ? `<div class="panel panel-toc"><span class="panel-label">In this article</span><div class="toc" id="toc">${toc}</div></div>` : ''}
+      <div class="panel">
+        <span class="panel-label">Share</span>
+        <div class="share-row">
+          <button class="sbtn" type="button" onclick="copyLink()">${ICON.link} Copy link</button>
+          <a class="sbtn" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(pageUrl)}">${ICON.x} Post on X</a>
+          <a class="sbtn" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}">${ICON.in} Share on LinkedIn</a>
+        </div>
       </div>
-
-      <div class="sidebar-card" style="background:var(--lime-dim);border-color:var(--border-active);">
-        <span class="sc-label" class="color-lime">Enjoyed this?</span>
-        <p style="font-size:13px;color:var(--muted2);line-height:1.6;margin-bottom:14px;">Unlock advanced lessons and all 6 courses with Premium access.</p>
-        <a href="premium.html" style="display:flex;align-items:center;justify-content:center;gap:8px;background:var(--lime);color:#000;text-align:center;padding:10px;border-radius:8px;font-family:var(--ff-mono);font-size:11px;font-weight:700;text-decoration:none;letter-spacing:1px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.09 12.26A1 1 0 0 0 5 14h6l-2 8 8.91-10.26A1 1 0 0 0 17 10h-6l2-8Z"/></svg> GO PREMIUM</a>
+      <div class="panel panel-cta">
+        <span class="panel-label">Enjoyed this?</span>
+        <p>Unlock the advanced lessons and all six courses with Premium.</p>
+        <a class="btn btn-lime" href="premium.html">See pricing</a>
       </div>
     </aside>
-  </div>`;
+  </div>
 
-  // ── Reading progress ──
-  function updateProgress() {
-    const winScroll = document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const pct = height > 0 ? Math.round((winScroll / height) * 100) : 0;
-    document.getElementById('readProgress').style.width = pct + '%';
-    const el = document.getElementById('progPct');
-    const circle = document.getElementById('progCircle');
-    if (el) el.textContent = pct + '%';
-    if (circle) circle.style.strokeDashoffset = 188.5 - (188.5 * pct / 100);
+  <section class="more">
+    <div class="wrap">
+      <h2 class="display">Keep <span class="hl">reading</span></h2>
+      <div class="grid">
+        ${related.map(r => `<a class="card in" href="blog-post.html?id=${r.id}">
+          <div class="thumb t-${r.category}"><span class="tag cat-${r.category}">${esc(r.catLabel)}</span>${ART_SMALL(r)}</div>
+          <div class="card-body"><span class="card-date">${esc(r.date)}</span><h3 class="card-title">${r.title}</h3><p class="card-excerpt">${r.excerpt}</p>
+          <div class="card-foot"><span class="who"><span class="avatar" aria-hidden="true">${AUTHOR_INITIAL(r.author)}</span><span>${esc(r.author)}</span></span><span class="read">${CLOCK}${esc(r.readTime)}</span></div></div>
+        </a>`).join('')}
+      </div>
+    </div>
+  </section>
 
-    // Highlight active TOC item
-    const headingEls = document.querySelectorAll('[id^="heading-"]');
-    let current = 0;
-    headingEls.forEach((el, i) => {
-      if (el.getBoundingClientRect().top < 160) current = i;
-    });
-    document.querySelectorAll('.toc-item').forEach((el,i) => {
-      el.classList.toggle('active', i === current);
-    });
+  <section class="b-finale">
+    <div class="wrap">
+      <h2 class="display">Learn it. <span class="hl">Then build it.</span></h2>
+      <p>Notes, PDFs and quizzes for IT students. The first six modules of every course are free.</p>
+      <div class="actions"><a class="btn btn-lime" href="courses.html">Browse courses</a><a class="btn btn-ghost" href="index.html">Exit to home</a></div>
+    </div>
+  </section>`;
+
+  // Reading progress + active section in the table of contents
+  const bar = document.getElementById('readProgress');
+  const heads = [...document.querySelectorAll('.prose h2[id^="heading-"]')];
+  const links = [...document.querySelectorAll('.toc a')];
+  let ticking = false;
+  function update(){
+    ticking = false;
+    const art = document.querySelector('.a-main');
+    const top = art.getBoundingClientRect().top + window.scrollY;
+    const total = art.offsetHeight - window.innerHeight * .6;
+    const pct = Math.max(0, Math.min(100, Math.round((window.scrollY - top + 80) / Math.max(total, 1) * 100)));
+    bar.style.width = pct + '%';
+    const pp = document.getElementById('progPct'), pc = document.getElementById('progCircle');
+    if (pp) pp.textContent = pct + '%';
+    if (pc) pc.style.strokeDashoffset = 188.5 - 188.5 * pct / 100;
+    let cur = -1;
+    heads.forEach((el, i) => { if (el.getBoundingClientRect().top < 140) cur = i; });
+    links.forEach(a => a.classList.toggle('active', +a.dataset.i === cur));
   }
-  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
 }
+function ART_SMALL(p){ return (POST_ART[p.id] || POST_ART.default); }
 
-// ── Share functions ──
-function copyLink() {
-  navigator.clipboard.writeText(window.location.href).then(() => {
-    showToast('<i class="ti ti-link" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>', 'Link copied to clipboard!');
-  });
-}
-function shareTwitter() {
-  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent((post?.title || '') + ' — IT Study Hub')}&url=${encodeURIComponent(window.location.href)}`;
-  window.open(url, '_blank');
-}
-function shareLinkedIn() {
-  const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
-  window.open(url, '_blank');
-}
-const _TSVG = {
-  '<i class="ti ti-link" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8f135" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
-  '✅': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8f135" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
-};
-function showToast(icon, msg) {
-  document.getElementById('toastIcon').innerHTML = _TSVG[icon] || _TSVG['✅'];
+let toastTimer;
+function showToast(msg){
   document.getElementById('toastMsg').textContent = msg;
-  const t = document.getElementById('toast');
-  t.style.transform='translateY(0)'; t.style.opacity='1';
-  setTimeout(() => { t.style.transform='translateY(80px)'; t.style.opacity='0'; }, 3000);
+  const t = document.getElementById('toast'); t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+function copyLink(){
+  const url = window.location.href;
+  const done = () => showToast('Link copied to clipboard');
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, fallback);
+  else fallback();
+  function fallback(){ const t = document.createElement('textarea'); t.value = url; t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); done(); } catch (e) { showToast('Press Ctrl+C to copy the address bar'); } t.remove(); }
 }
 
-// ── Cursor ──
-const cur = document.getElementById('cur');
-const curR = document.getElementById('curR');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => {
-  mx=e.clientX; my=e.clientY;
-  cur.style.opacity='1'; curR.style.opacity='0.5';
-});
-(function anim() {
-  cur.style.left=(mx-5)+'px'; cur.style.top=(my-5)+'px';
-  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-  curR.style.left=(rx-18)+'px'; curR.style.top=(ry-18)+'px';
-  requestAnimationFrame(anim);
+/* Dropdown + signed-in display (display only; real checks happen on the server) */
+function toggleDropdown(){document.getElementById('userDropdown').classList.toggle('open');}
+document.addEventListener('click',function(e){var b=document.getElementById('userAvatarBtn');if(b&&!b.contains(e.target))document.getElementById('userDropdown').classList.remove('open');});
+function updateAuthUI(){
+  var s=null;try{s=JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){}
+  var l=document.getElementById('navLoginBtn'),a=document.getElementById('userAvatarBtn');
+  if(s&&s.name){
+    l.style.display='none';a.style.display='flex';
+    document.getElementById('avatarInitial').textContent=s.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+    document.getElementById('avatarName').textContent=s.name.split(' ')[0];
+    document.getElementById('ddName').textContent=s.name;
+    document.getElementById('ddEmail').textContent=s.email||'';
+  }else{l.style.display='flex';a.style.display='none';}
+}
+function handleLogout(){try{localStorage.removeItem('ish_session');}catch(e){}updateAuthUI();document.getElementById('userDropdown').classList.remove('open');}
+updateAuthUI();
+/* Mobile menu */
+(function(){
+  var h=document.getElementById('navHamburger'),d=document.getElementById('mobileDrawer'),c=document.getElementById('drawerClose');
+  function open(){d.classList.add('open');h.classList.add('open');document.body.style.overflow='hidden';}
+  function close(){d.classList.remove('open');h.classList.remove('open');document.body.style.overflow='';}
+  h.addEventListener('click',function(){d.classList.contains('open')?close():open();});
+  c.addEventListener('click',close);
+  d.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
 })();
-document.addEventListener('mouseover', e => {
-  if (e.target.matches('a,button,.related-card,.toc-item,.art-tag')) cur.style.transform='scale(2)';
-  else cur.style.transform='scale(1)';
-});
+
 </script>
 <script src="ish-cursor-guard.js" defer></script>
 <script src="ish-a11y.js" defer></script>
