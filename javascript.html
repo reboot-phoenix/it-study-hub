@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-<link rel="stylesheet" href="fonts.css">
   <meta charset="UTF-8">
+<link rel="stylesheet" href="fonts.css">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,10 +19,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="course-page.css">
-<base target="_blank">
-<style id="ish-quiz-css">
-/* ---- additions: converted notes content + quiz gate ---- */
-.course-note{display:flex;gap:10px;align-items:flex-start;max-width:580px;margin:0 0 28px;padding:12px 16px;font-size:13px;line-height:1.6;color:var(--muted2);background:rgba(200,241,53,.04);border:1px solid rgba(200,241,53,.2);border-radius:10px}
+<style id="course-extra">
 :where(.art-body) h3{font-size:1.25rem;margin:1.8em 0 .6em}
 :where(.art-body) h4{font-size:1.05rem;margin:1.5em 0 .5em}
 :where(.art-body) ul{margin:.6em 0 1.2em 1.3em;padding:0}
@@ -37,48 +34,11 @@
 .doc-table{border-collapse:collapse;width:100%;min-width:480px;font-size:.92rem}
 .doc-table th,.doc-table td{border:1px solid rgba(255,255,255,.14);padding:9px 12px;text-align:left;vertical-align:top}
 .doc-table th{background:rgba(200,241,53,.08)}
-
-/* sequential lock */
-.mod-card.seq-locked{opacity:.55;cursor:not-allowed}
-.mod-card .seq-note{margin-top:10px;font-size:.78rem;opacity:.9;display:flex;gap:6px;align-items:center}
-.sb-btn.seq-locked{opacity:.5}
 .nlc.nlc-locked{opacity:.55}
-
-/* quiz */
-.quiz-box{margin:2.2em 0 1.6em;padding:22px;border-radius:14px;border:1px solid rgba(200,241,53,.35);background:rgba(200,241,53,.04)}
-.qz-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;margin-bottom:6px}
-.qz-title{font-size:1.25rem;font-weight:700}
-.qz-sub{font-size:.88rem;opacity:.8}
-.qz-q{border:0;margin:20px 0 0;padding:0;min-width:0}
-.qz-qt{font-weight:600;line-height:1.55;margin-bottom:10px;padding:0}
-.qz-qt code,.qz-opt code{font-size:.92em;padding:1px 6px;border-radius:5px;background:rgba(255,255,255,.08)}
-.qz-opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;margin:7px 0;border:1px solid rgba(255,255,255,.14);border-radius:10px;cursor:pointer;line-height:1.5}
-.qz-opt:hover{background:rgba(255,255,255,.05)}
-.qz-opt input{margin-top:4px;accent-color:#c8f135;flex:none}
-.qz-opt.sel{border-color:#c8f135;background:rgba(200,241,53,.09)}
-.qz-opt.bad{border-color:#f87171;background:rgba(248,113,113,.1)}
-.qz-opt.good{border-color:#4ade80;background:rgba(74,222,128,.1)}
-.qz-foot{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:22px}
-.qz-count{font-size:.9rem;opacity:.85}
-.qz-btn{font:inherit;font-weight:600;padding:10px 20px;border-radius:9px;border:1px solid rgba(255,255,255,.25);background:transparent;color:inherit;cursor:pointer}
-.qz-btn.primary{background:#c8f135;border-color:#c8f135;color:#0a0a0a}
-.qz-btn:disabled{opacity:.4;cursor:not-allowed}
-.qz-score{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin:8px 0 6px}
-.qz-big{font-size:2.4rem;font-weight:800;line-height:1}
-.qz-pill{padding:5px 14px;border-radius:999px;font-weight:700;font-size:.85rem}
-.qz-pill.pass{background:rgba(74,222,128,.18);color:#4ade80}
-.qz-pill.fail{background:rgba(248,113,113,.18);color:#f87171}
-.qz-msg{margin:6px 0 4px;line-height:1.6}
-.qz-rev{margin:14px 0 0;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.12);line-height:1.55}
-.qz-rev.ok{border-color:rgba(74,222,128,.5)}
-.qz-rev.no{border-color:rgba(248,113,113,.5)}
-.qz-rev .qz-tag{font-weight:700;margin-right:6px}
-.qz-rev .qz-exp{margin-top:6px;font-size:.92rem;opacity:.9}
 @media (max-width:600px){.quiz-box{padding:16px}.qz-big{font-size:2rem}}
-
 </style>
 </head>
-<body>
+<body class="course-javascript">
 <div class="read-progress" id="readProgress"></div>
 
 <nav>
@@ -112,17 +72,17 @@
     </div>
   </div>
 
-  <div class="fade-up" class="anim-delay-15">
+  <div class="fade-up anim-delay-15">
     <div class="sec-label">Free Modules</div>
     <div class="modules-grid" id="freeGrid"></div>
   </div>
 
-  <div class="fade-up" class="anim-delay-2">
+  <div class="fade-up anim-delay-2">
     <div class="sec-label">Premium Modules</div>
     <div class="modules-grid" id="premiumGrid"></div>
   </div>
 
-  <div class="fade-up" class="anim-delay-25">
+  <div class="fade-up anim-delay-25">
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
       <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" target="_blank" class="mat-item">
@@ -191,1026 +151,58 @@
 
 <script>
 function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){return null;}}
-function isPremium(){ return window.__ishPremium === true; } // set by premium-content.js from /api/access
+function isPremium(){ return typeof window.ishHasCourse === 'function' && window.ishHasCourse('javascript'); } // set by premium-content.js from /api/access (Starter plans open only their two chosen courses)
 function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_js_done')||'[]');}catch(e){return[];}}
-function saveCompleted(a){try{localStorage.setItem('ish_js_done',JSON.stringify(a));}catch(e){}}
-function getQuizStore(){try{var o=JSON.parse(localStorage.getItem('ish_js_quiz')||'{}');return (o&&typeof o==='object')?o:{};}catch(e){return {};}}
-function saveQuizStore(o){try{localStorage.setItem('ish_js_quiz',JSON.stringify(o));}catch(e){}}
+function saveCompleted(a){localStorage.setItem('ish_js_done',JSON.stringify(a));}
+// Module quizzes: 8 questions, 75% (6/8) to pass. Passing unlocks the next module.
+const QUIZ_KEY='ish_js_quiz', PASS_RATIO=0.75;
+function getQuiz(){try{return JSON.parse(localStorage.getItem(QUIZ_KEY)||'{}')||{};}catch(e){return {};}}
+function saveQuiz(q){try{localStorage.setItem(QUIZ_KEY,JSON.stringify(q));}catch(e){}}
+function quizPassed(id){const q=getQuiz()[id];return !!(q&&q.passed);}
+function isUnlocked(id){return id<=1||quizPassed(id-1);}
+// Signed-in users: the server keeps the pass record (users/{uid}.moduleQuiz), so it follows the account
+// and cannot be unlocked by editing localStorage. Signed-out visitors keep the browser-only version.
+let serverSynced = false;
+async function ishApi(path, opts) {
+  try { const { apiFetch } = await import('/auth.js'); return await apiFetch(path, opts); }
+  catch (e) { return { ok: false, status: 0 }; }
+}
+async function syncQuizProgress() {
+  const res = await ishApi('/api/module-progress?course=javascript');
+  if (!res.ok) return;                                  // signed out or offline: stay with the local record
+  let data; try { data = await res.json(); } catch (e) { return; }
+  const next = {};
+  Object.keys(data.best || {}).forEach(k => {
+    const pct = data.best[k];
+    next[k] = { best: Math.round(pct * 8 / 100), passed: pct >= (data.pass || 75) };
+  });
+  saveQuiz(next); serverSynced = true;
+  completed = Object.keys(next).filter(k => next[k].passed).map(Number);
+  saveCompleted(completed);
+  if (MODS.length) { if (currentId && !isUnlocked(currentId)) goBack(); else renderIndex(); if (currentId) { renderQuiz(); renderSidebar(); } }
+}
+const qEsc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-const QUIZ_LEN = 8, PASS_PCT = 75, PASS_MARK = Math.ceil(QUIZ_LEN * PASS_PCT / 100); // 6 of 8
-
-// Lessons live in /data/javascript.json (free modules in full, premium modules as cards only).
-// A premium module's text is fetched from the Worker when a paying user opens it.
 let MODS = [];
 
-// Quiz bank: option 0 is the correct answer; options are shuffled every attempt.
-const QUIZ = {
- "1": [
-  {
-   "q": "Who designed JavaScript in 1995, and how long did the first version take?",
-   "o": [
-    "Brendan Eich, in just 10 days at Netscape",
-    "Ryan Dahl, in 10 days at Google",
-    "Brendan Eich, in 10 months at Mozilla",
-    "Ryan Dahl, in 10 weeks at Netscape"
-   ],
-   "e": "JavaScript was designed in 1995 by Brendan Eich in 10 days while working at Netscape. Ryan Dahl introduced Node.js in 2009."
-  },
-  {
-   "q": "Which browser and JavaScript engine pairing is correct?",
-   "o": [
-    "Firefox uses SpiderMonkey",
-    "Safari uses V8",
-    "Chrome uses JavaScriptCore",
-    "Firefox uses V8"
-   ],
-   "e": "Chrome uses V8, Firefox uses SpiderMonkey, and Safari uses JavaScriptCore."
-  },
-  {
-   "q": "In the browser the global object is `window`. What is it in Node.js?",
-   "o": [
-    "`global`",
-    "`document`",
-    "`process`",
-    "`self`"
-   ],
-   "e": "The module's comparison table lists `window` for the browser and `global` for Node.js."
-  },
-  {
-   "q": "Which VS Code extension launches a local development server that reloads the browser whenever you change your files?",
-   "o": [
-    "Live Server",
-    "Prettier - Code Formatter",
-    "ESLint",
-    "GitLens"
-   ],
-   "e": "Live Server provides a local HTTP server with live reload. Prettier formats, ESLint analyses code, and GitLens extends Git."
-  },
-  {
-   "q": "Which browser DevTools tab lets you set breakpoints and step through code line by line?",
-   "o": [
-    "Sources / Debugger",
-    "Elements",
-    "Network",
-    "Console"
-   ],
-   "e": "The Sources / Debugger tab is where you set execution breakpoints, step through code and inspect scopes and call stacks."
-  },
-  {
-   "q": "What does placing `\"use strict\";` at the top of a script do?",
-   "o": [
-    "Catches common blunders, such as assigning to undeclared variables, by throwing visible errors",
-    "Makes the script run faster by skipping type checks",
-    "Forces the browser to ignore all comments",
-    "Automatically adds missing semicolons to every statement"
-   ],
-   "e": "Strict mode throws errors for bad syntax such as accidentally assigning values to undeclared variables, and disables risky features."
-  },
-  {
-   "q": "What does the module recommend about semicolons, given that JavaScript has Automatic Semicolon Insertion (ASI)?",
-   "o": [
-    "Explicitly include semicolons at the end of statements",
-    "Never use semicolons because ASI always works",
-    "Use semicolons only inside functions",
-    "Use semicolons only in files run with Node.js"
-   ],
-   "e": "Relying on ASI can lead to subtle, hard-to-debug parsing bugs, so best practice is to include semicolons explicitly."
-  },
-  {
-   "q": "Which terminal command runs a standalone file named `app.js` with Node.js?",
-   "o": [
-    "`node app.js`",
-    "`run app.js`",
-    "`js app.js`",
-    "`npm app.js`"
-   ],
-   "e": "The module runs the script with `node app.js`, with no browser needed."
-  }
- ],
- "2": [
-  {
-   "q": "Which keyword should be your default for a variable whose reference should not be reassigned?",
-   "o": [
-    "`const`",
-    "`let`",
-    "`var`",
-    "`static`"
-   ],
-   "e": "`const` should be your default choice; use `let` only when reassignment is required."
-  },
-  {
-   "q": "What happens when you run `const userRoles = [\"viewer\"]; userRoles.push(\"administrator\");`?",
-   "o": [
-    "It works, because the array contents can still be mutated",
-    "It throws a TypeError because the variable is const",
-    "It throws a ReferenceError",
-    "It silently ignores the push"
-   ],
-   "e": "`const` stops the identifier being reassigned, but it does not make arrays or objects immutable."
-  },
-  {
-   "q": "Why is `var` considered obsolete in modern JavaScript?",
-   "o": [
-    "It is function-scoped (not block-scoped) and hoisted as `undefined`",
-    "It cannot hold numbers",
-    "It is slower than `let` in every browser",
-    "It can only be used inside functions"
-   ],
-   "e": "`var` ignores block boundaries and is hoisted with the value `undefined`, which leads to hard-to-diagnose bugs."
-  },
-  {
-   "q": "How many primitive data types does JavaScript have, according to the module?",
-   "o": [
-    "7",
-    "5",
-    "6",
-    "9"
-   ],
-   "e": "The seven primitives are String, Number, Boolean, Undefined, Null, Symbol and BigInt."
-  },
-  {
-   "q": "What is logged by `let userDatabaseProfile; console.log(userDatabaseProfile);`?",
-   "o": [
-    "`undefined`",
-    "`null`",
-    "`0`",
-    "A ReferenceError"
-   ],
-   "e": "A declared variable that has not been given a value holds `undefined`."
-  },
-  {
-   "q": "What does `Symbol(\"id\") === Symbol(\"id\")` evaluate to?",
-   "o": [
-    "`false`, because every symbol is globally unique",
-    "`true`, because the descriptions match",
-    "`undefined`",
-    "A TypeError"
-   ],
-   "e": "Each call to `Symbol()` creates a unique, immutable value, even with the same description."
-  },
-  {
-   "q": "Which expression is `true` only because of implicit type coercion?",
-   "o": [
-    "`0 == \"0\"`",
-    "`25 === 25`",
-    "`21 !== 25`",
-    "`true === true`"
-   ],
-   "e": "Loose equality (`==`) coerces types before comparing; strict equality (`===`) does not. The module mandates strict operators."
-  },
-  {
-   "q": "What is the value of `activeTheme` in `let userConfigTheme = null; let activeTheme = userConfigTheme ?? \"dark-mode\";`?",
-   "o": [
-    "`\"dark-mode\"`",
-    "`null`",
-    "`undefined`",
-    "`false`"
-   ],
-   "e": "The nullish coalescing operator `??` returns its right-hand side when the left side is `null` or `undefined`."
-  }
- ],
- "3": [
-  {
-   "q": "Which loop guarantees that its body runs at least once?",
-   "o": [
-    "`do...while`",
-    "`while`",
-    "`for`",
-    "`for...of`"
-   ],
-   "e": "In `do...while` the condition is checked after the code block executes."
-  },
-  {
-   "q": "What prevents fall-through in a `switch` statement?",
-   "o": [
-    "A `break` statement at the end of each case",
-    "A `continue` statement",
-    "Using `else` after each case",
-    "Wrapping each case in parentheses"
-   ],
-   "e": "Without `break`, execution continues into the following cases regardless of whether they match."
-  },
-  {
-   "q": "Which of these values is truthy?",
-   "o": [
-    "`[]` (an empty array)",
-    "`0n`",
-    "`NaN`",
-    "`\"\"` (an empty string)"
-   ],
-   "e": "Empty arrays and objects, and strings containing whitespace, are truthy. `0n`, `NaN` and `\"\"` are falsy."
-  },
-  {
-   "q": "What does `continue` do inside a loop?",
-   "o": [
-    "Skips the rest of the current iteration and jumps ahead to the next cycle",
-    "Terminates the loop entirely",
-    "Restarts the loop from the first iteration",
-    "Pauses the loop until a condition is true"
-   ],
-   "e": "`continue` aborts the remainder of the current iteration; `break` is the statement that ends the loop."
-  },
-  {
-   "q": "When does the module recommend `switch` over a chain of `if...else if`?",
-   "o": [
-    "When matching a single expression against many discrete values",
-    "When checking numeric ranges",
-    "When combining many unrelated boolean conditions",
-    "Only when there are exactly two cases"
-   ],
-   "e": "`switch` suits discrete matching values and uses strict equality; `if / else if / else` is better for ranges and complex conditions."
-  },
-  {
-   "q": "In the status-code example, why do `case 401:` and `case 403:` share one block?",
-   "o": [
-    "There is no `break` after `case 401:`, so it falls through into the 403 block",
-    "JavaScript merges consecutive numbers automatically",
-    "`case 403:` is ignored",
-    "Both cases are only matched if the code equals 404"
-   ],
-   "e": "Grouping cases is done by deliberately omitting `break` so execution falls through to the shared block."
-  },
-  {
-   "q": "When is a `while` loop preferred over a `for` loop?",
-   "o": [
-    "When the number of iterations is not known beforehand, such as polling until a state is reached",
-    "When you always know the exact count in advance",
-    "When you need to loop over object keys only",
-    "When you want the body to run at least once"
-   ],
-   "e": "`for` is ideal when iterations are known in advance; `while` fits unknown counts."
-  },
-  {
-   "q": "What is printed by `for (let i = 0; i < 6; i++) { if (i === 3) break; console.log(i); }`?",
-   "o": [
-    "0, 1, 2",
-    "0, 1, 2, 3",
-    "0, 1, 2, 4, 5",
-    "3, 4, 5"
-   ],
-   "e": "`break` exits the loop entirely when `i` reaches 3, so only 0, 1 and 2 are logged."
-  }
- ],
- "4": [
-  {
-   "q": "Which kind of function can be called before it appears in the code?",
-   "o": [
-    "A function declaration, because it is fully hoisted",
-    "A function expression assigned with `const`",
-    "An arrow function",
-    "None, all functions must be defined first"
-   ],
-   "e": "Function declarations are completely hoisted; function expressions and arrow functions are not."
-  },
-  {
-   "q": "What happens if you invoke a function expression before the line that defines it?",
-   "o": [
-    "It throws an error, because function expressions are not hoisted like declarations",
-    "It works exactly like a declaration",
-    "It returns `undefined` silently",
-    "It is hoisted and runs with default values"
-   ],
-   "e": "Assignment of a function expression happens at runtime, so calling it earlier throws an error."
-  },
-  {
-   "q": "How does `this` behave in an arrow function?",
-   "o": [
-    "It is inherited lexically from the surrounding enclosing scope",
-    "It always points to the global object",
-    "It points to the function itself",
-    "It is `undefined` in all cases"
-   ],
-   "e": "Arrow functions do not create their own dynamic `this`; they inherit it from the enclosing scope."
-  },
-  {
-   "q": "When can an arrow function use an implicit return?",
-   "o": [
-    "When the body is a single expression, so the braces and `return` can be omitted",
-    "Only when it has no parameters",
-    "Only when it is declared with `let`",
-    "Never, `return` is always required"
-   ],
-   "e": "e.g. `const squareNumber = n => n * n;` returns the value without braces or `return`."
-  },
-  {
-   "q": "What does a rest parameter such as `...additionalMetadata` do?",
-   "o": [
-    "Collects an indefinite number of arguments into an array",
-    "Spreads an array into separate arguments",
-    "Sets a default value for the last parameter",
-    "Makes the function wait before returning"
-   ],
-   "e": "Rest parameters let a function accept a variable number of arguments as a real array."
-  },
-  {
-   "q": "What does a function return if it finishes without hitting a `return` statement?",
-   "o": [
-    "`undefined`",
-    "`null`",
-    "`0`",
-    "An empty object"
-   ],
-   "e": "A function without an executed `return` implicitly returns `undefined`."
-  },
-  {
-   "q": "How does the scope chain resolve a variable that is not found in the current scope?",
-   "o": [
-    "It moves outward through enclosing scopes, and throws a ReferenceError if it is never found",
-    "It searches inner scopes of other functions",
-    "It creates the variable as a global",
-    "It returns `undefined`"
-   ],
-   "e": "Lookup goes from the innermost scope outward to the global scope; if nothing is found, a ReferenceError is thrown."
-  },
-  {
-   "q": "Which declaration ignores block boundaries and leaks out of an `if` block?",
-   "o": [
-    "`var`",
-    "`let`",
-    "`const`",
-    "All three behave the same"
-   ],
-   "e": "`let` and `const` are block-scoped; `var` leaks into the enclosing function or global scope."
-  }
- ],
- "5": [
-  {
-   "q": "What is the index of the first element of a JavaScript array?",
-   "o": [
-    "0",
-    "1",
-    "-1",
-    "It depends on the array's length"
-   ],
-   "e": "JavaScript arrays are zero-indexed."
-  },
-  {
-   "q": "Which array method removes the last element and returns it?",
-   "o": [
-    "`pop()`",
-    "`shift()`",
-    "`unshift()`",
-    "`push()`"
-   ],
-   "e": "`pop()` removes and returns the last element; `shift()` removes the first element."
-  },
-  {
-   "q": "Which method is used mainly for side effects and does not return a new array?",
-   "o": [
-    "`forEach()`",
-    "`map()`",
-    "`filter()`",
-    "`reduce()`"
-   ],
-   "e": "`forEach()` runs a callback for each element and returns nothing useful; `map()` and `filter()` return new arrays."
-  },
-  {
-   "q": "What does `map()` produce?",
-   "o": [
-    "A brand-new array containing the results of calling the callback on every element",
-    "A single accumulated value",
-    "Only the first element that passes a test",
-    "The original array, modified in place"
-   ],
-   "e": "`map()` creates a new array populated with the callback's results."
-  },
-  {
-   "q": "What does `filter()` return?",
-   "o": [
-    "A new array with only the elements that pass the callback's boolean test",
-    "The first element that passes the test",
-    "A single number",
-    "`true` if any element passes"
-   ],
-   "e": "`filter()` creates a shallow copy of a portion of the array, containing only elements that pass the test."
-  },
-  {
-   "q": "What is the purpose of `reduce()`?",
-   "o": [
-    "To accumulate all elements into a single output value",
-    "To remove duplicate values",
-    "To reverse the array",
-    "To create a copy of the array"
-   ],
-   "e": "`reduce()` passes the result of each callback call to the next element, ending in one accumulated value."
-  },
-  {
-   "q": "What does `find()` return when no element matches the test?",
-   "o": [
-    "`undefined`",
-    "`null`",
-    "`-1`",
-    "An empty array"
-   ],
-   "e": "`find()` returns the first matching element, or `undefined` if there is none."
-  },
-  {
-   "q": "What does `const { cpuLoad: processorLoad, memoryUsage } = systemMetrics;` do?",
-   "o": [
-    "Creates variables `processorLoad` (from `cpuLoad`) and `memoryUsage`",
-    "Creates variables named `cpuLoad` and `memoryUsage` only",
-    "Copies `systemMetrics` into `processorLoad`",
-    "Throws an error because renaming is not allowed"
-   ],
-   "e": "Destructuring with aliasing unpacks `cpuLoad` into a local variable named `processorLoad`."
-  }
- ],
- "6": [
-  {
-   "q": "What is a callback function?",
-   "o": [
-    "A function passed as an argument into another function to be executed later",
-    "A function that calls itself",
-    "A function that returns a number",
-    "A function declared inside a loop"
-   ],
-   "e": "Callbacks are the bedrock of asynchronous programming, event handling and array transformations."
-  },
-  {
-   "q": "Which of these makes a function a higher-order function?",
-   "o": [
-    "It accepts functions as arguments, or returns a new function",
-    "It has more than three parameters",
-    "It is declared with the `function` keyword",
-    "It never returns a value"
-   ],
-   "e": "A HOF accepts one or more functions as arguments and/or returns a function."
-  },
-  {
-   "q": "With `createPasswordValidator(14)` creating `validateEnterpriseAdmin`, what does `validateEnterpriseAdmin(\"secPass12\")` return?",
-   "o": [
-    "`false`, because the password is shorter than 14 characters",
-    "`true`, because it is a string",
-    "`undefined`",
-    "It throws a TypeError"
-   ],
-   "e": "\"secPass12\" has fewer than 14 characters, so the validator returns `false`."
-  },
-  {
-   "q": "What is a closure?",
-   "o": [
-    "An inner function that keeps access to its outer scope's variables even after the outer function has finished",
-    "A function that cannot access any outside variable",
-    "A block closed by curly braces",
-    "A function that runs only once"
-   ],
-   "e": "Closures preserve referenced variables in memory inside a hidden internal structure attached to the function."
-  },
-  {
-   "q": "Which professional use case do closures enable according to the module?",
-   "o": [
-    "Data privacy and encapsulation, emulating private variables",
-    "Making global variables writable everywhere",
-    "Speeding up all loops",
-    "Replacing `if` statements"
-   ],
-   "e": "Closures emulate private variables and methods, and also support state persistence and currying."
-  },
-  {
-   "q": "In `createSecureTokenManager()`, why does `console.log(activeAuthToken)` from the global scope fail?",
-   "o": [
-    "The variable is private inside the closure, so it throws a ReferenceError outside",
-    "Because `activeAuthToken` is a reserved keyword",
-    "Because tokens cannot be logged",
-    "Because it was set to `null`"
-   ],
-   "e": "The variable only exists inside the closure scope; it is not defined in the global scope."
-  },
-  {
-   "q": "What does currying and partial application do?",
-   "o": [
-    "Pre-fills function arguments for specialized execution contexts",
-    "Deletes unused arguments",
-    "Converts a function into a loop",
-    "Prevents a function from being called twice"
-   ],
-   "e": "The module lists \"Pre-filling function arguments for specialized execution contexts\" as a closure use case."
-  },
-  {
-   "q": "Why are `map`, `filter` and `reduce` called built-in higher-order functions?",
-   "o": [
-    "Because they accept callback functions as arguments",
-    "Because they return functions",
-    "Because they only work on nested arrays",
-    "Because they are asynchronous"
-   ],
-   "e": "They take functions as arguments, which satisfies the HOF criteria."
-  }
- ],
- "7": [
-  {
-   "q": "What does `document.querySelector(selector)` return when nothing matches?",
-   "o": [
-    "`null`",
-    "An empty NodeList",
-    "`undefined`",
-    "It throws an error"
-   ],
-   "e": "`querySelector` returns the first matching element, or `null`. `querySelectorAll` returns an empty NodeList."
-  },
-  {
-   "q": "How do `querySelectorAll` and `getElementsByClassName` differ?",
-   "o": [
-    "`querySelectorAll` returns a static NodeList, while `getElementsByClassName` returns a live HTMLCollection",
-    "Both return live collections",
-    "`querySelectorAll` returns a single element",
-    "`getElementsByClassName` returns a static NodeList"
-   ],
-   "e": "A NodeList from `querySelectorAll` does not update when the DOM changes; an HTMLCollection does."
-  },
-  {
-   "q": "Why should untrusted user input never be passed to `innerHTML`?",
-   "o": [
-    "It opens the app to Cross-Site Scripting (XSS) attacks",
-    "It makes the page slower to render",
-    "It removes existing event listeners from the page",
-    "It converts all text to uppercase"
-   ],
-   "e": "`textContent` treats strings strictly as text and is safe; `innerHTML` parses HTML and can inject scripts."
-  },
-  {
-   "q": "What does `element.closest(selector)` do?",
-   "o": [
-    "Walks up from the element through its ancestors to find the first node matching the selector",
-    "Finds the nearest sibling that matches",
-    "Finds all children that match",
-    "Closes the element and removes it"
-   ],
-   "e": "`closest()` checks the element and its ancestors, returning `null` if none match. It is very useful in event delegation."
-  },
-  {
-   "q": "What does `classList.toggle('hidden')` do?",
-   "o": [
-    "Adds the class if it is missing and removes it if it is present",
-    "Always adds the class",
-    "Always removes the class",
-    "Replaces every class on the element"
-   ],
-   "e": "`toggle` flips the presence of the class."
-  },
-  {
-   "q": "In an event handler, what is `event.currentTarget`?",
-   "o": [
-    "The element whose listener is currently being executed",
-    "The deepest element that originated the event",
-    "The window object",
-    "The previous element that handled the event"
-   ],
-   "e": "`event.target` is the deepest element that triggered the event; `currentTarget` is where the running listener is attached."
-  },
-  {
-   "q": "What are the main benefits of event delegation?",
-   "o": [
-    "One listener on a parent saves memory and also works for children added later",
-    "It stops events from bubbling",
-    "It makes events fire during the capturing phase only",
-    "It prevents the default browser behavior"
-   ],
-   "e": "Events bubble up to the parent, so a single listener can handle many existing and future children."
-  },
-  {
-   "q": "What is the order of the three phases of event propagation?",
-   "o": [
-    "Capturing, then target, then bubbling",
-    "Bubbling, then target, then capturing",
-    "Target, then capturing, then bubbling",
-    "Capturing, then bubbling, then target"
-   ],
-   "e": "The event travels down to the target (capturing), fires on the target, then bubbles back up."
-  }
- ],
- "8": [
-  {
-   "q": "What does \"single-threaded\" mean for JavaScript?",
-   "o": [
-    "The engine has one call stack and executes one instruction at a time",
-    "It can never run asynchronous code",
-    "It can only run in one browser tab",
-    "It cannot use timers"
-   ],
-   "e": "Time-consuming work is offloaded to the runtime environment (browser or Node.js), keeping the single call stack free."
-  },
-  {
-   "q": "Which tasks go into the microtask queue?",
-   "o": [
-    "Promise callbacks (`.then()`, `.catch()`, `.finally()`) and `queueMicrotask()`",
-    "`setTimeout` and `setInterval` callbacks",
-    "DOM rendering events",
-    "File I/O callbacks only"
-   ],
-   "e": "Microtasks have higher priority and run right after the current script, before macrotasks such as `setTimeout`."
-  },
-  {
-   "q": "What is the Event Loop's job?",
-   "o": [
-    "To watch the call stack and queues, moving tasks onto the stack when it is empty",
-    "To run all code in parallel threads",
-    "To compile JavaScript to machine code",
-    "To block the UI until promises finish"
-   ],
-   "e": "When the stack is empty it takes tasks from the microtask queue first, then from the macrotask queue."
-  },
-  {
-   "q": "What are the three states of a Promise?",
-   "o": [
-    "Pending, fulfilled and rejected",
-    "Waiting, running and done",
-    "Open, closed and locked",
-    "Created, started and stopped"
-   ],
-   "e": "Once a promise moves from pending to fulfilled or rejected it is settled, and its state is immutable."
-  },
-  {
-   "q": "What does `Promise.all([p1, p2, p3])` do if one of the promises rejects?",
-   "o": [
-    "The whole aggregate promise immediately rejects (fail-fast)",
-    "It waits for the others and then fulfills anyway",
-    "It ignores the rejection",
-    "It retries the failed promise"
-   ],
-   "e": "`Promise.all` fulfills only if all input promises fulfill."
-  },
-  {
-   "q": "Which combinator waits for all promises to settle and returns an array of status descriptor objects?",
-   "o": [
-    "`Promise.allSettled`",
-    "`Promise.race`",
-    "`Promise.any`",
-    "`Promise.all`"
-   ],
-   "e": "`allSettled` reports each outcome; `race` settles with the first to settle; `any` fulfills with the first to fulfill."
-  },
-  {
-   "q": "What does an `async` function always return?",
-   "o": [
-    "A Promise",
-    "The raw returned value",
-    "`undefined`",
-    "A callback"
-   ],
-   "e": "Non-promise return values are wrapped in an automatically resolved promise."
-  },
-  {
-   "q": "Where can the `await` keyword be used?",
-   "o": [
-    "Only inside an `async` function",
-    "Anywhere in any function",
-    "Only inside `try` blocks",
-    "Only at the end of a `.then()` chain"
-   ],
-   "e": "`await` pauses the async function until the promise settles, while yielding control to the event loop."
-  }
- ],
- "9": [
-  {
-   "q": "What is the difference between spread and rest?",
-   "o": [
-    "Spread unpacks a collection into elements, while rest packs elements into a collection",
-    "Spread packs elements, rest unpacks them",
-    "They are the same, just different names",
-    "Spread works only on objects, rest only on arrays"
-   ],
-   "e": "Both use `...`, and context decides which one it is."
-  },
-  {
-   "q": "What is true about copying with spread, e.g. `const copy = [...original];`?",
-   "o": [
-    "It makes a shallow copy, so nested objects still reference their original memory",
-    "It makes a deep copy of every nested object",
-    "`copy === original` evaluates to `true`",
-    "It only works for arrays"
-   ],
-   "e": "Spread performs a shallow copy; the arrays are different references but nested values are shared."
-  },
-  {
-   "q": "What does `metadata` contain in `const { id, empName, ...metadata } = employee;`?",
-   "o": [
-    "All remaining properties of `employee` except `id` and `empName`",
-    "Only the `id` and `empName` properties",
-    "A copy of the entire `employee` object",
-    "The values as an array of strings"
-   ],
-   "e": "Rest syntax in destructuring captures the remaining fields."
-  },
-  {
-   "q": "Which features do template literals provide?",
-   "o": [
-    "String interpolation with `${}`, multi-line strings, and tagged templates",
-    "Only string concatenation with `+`",
-    "Automatic translation of strings",
-    "Type checking of variables"
-   ],
-   "e": "Template literals use backticks instead of single or double quotes."
-  },
-  {
-   "q": "What does the property shorthand `{ host, port, protocol }` mean?",
-   "o": [
-    "The same as `{ host: host, port: port, protocol: protocol }`",
-    "An object with three unnamed values",
-    "An array of three variables",
-    "A destructuring assignment"
-   ],
-   "e": "When property names match local variable names, you can omit the colon and the value."
-  },
-  {
-   "q": "What are computed property names used for?",
-   "o": [
-    "Evaluating an expression inside `[]` in an object literal to create a dynamic key",
-    "Calculating the object's size",
-    "Making properties read-only",
-    "Sorting the keys alphabetically"
-   ],
-   "e": "In the module's example, a prefix variable and an id variable combine inside square brackets to create the dynamic key user_42."
-  },
-  {
-   "q": "How do default exports differ from named exports?",
-   "o": [
-    "A file can have only one default export, and it is imported without curly braces under any local name",
-    "A file can have many default exports",
-    "Default exports must be imported with curly braces",
-    "Default exports cannot be functions or classes"
-   ],
-   "e": "Named exports need their exact names inside `{}`."
-  },
-  {
-   "q": "What must you add to a script tag to use ES6 modules in the browser?",
-   "o": [
-    "`type=\"module\"`",
-    "`async=\"true\"`",
-    "`language=\"es6\"`",
-    "`defer=\"module\"`"
-   ],
-   "e": "Modules run in strict mode, have their own top-level scope, are deferred by default, and need a local server rather than `file://`."
-  }
- ],
- "10": [
-  {
-   "q": "Why can a SyntaxError not be caught by `try...catch` in the same file?",
-   "o": [
-    "It occurs in the parse phase, before any code is executed",
-    "Because `try...catch` only works with async code",
-    "Because it is thrown only at the end of the script",
-    "Because it is not an Error object"
-   ],
-   "e": "The engine cannot interpret the source code at all, so execution never starts."
-  },
-  {
-   "q": "Which error is thrown by `response.data.profile.username` when `response.data` is `null`?",
-   "o": [
-    "TypeError",
-    "SyntaxError",
-    "RangeError",
-    "ReferenceError"
-   ],
-   "e": "A TypeError occurs when an operation is performed on a value of the wrong type, such as reading properties of `null`."
-  },
-  {
-   "q": "Which situation typically throws a RangeError?",
-   "o": [
-    "Creating an array with an invalid length, such as `new Array(-5)`",
-    "Using an undeclared variable",
-    "Missing a closing brace",
-    "Reading a property of `undefined`"
-   ],
-   "e": "RangeError is thrown when a numeric value falls outside an allowed range, such as invalid array lengths or exceeding the call stack."
-  },
-  {
-   "q": "What do `console.table()` and `console.time()` / `console.timeEnd()` do?",
-   "o": [
-    "Display data as a table, and measure how long a block of code takes",
-    "Create HTML tables and set timers",
-    "Log errors with stack traces and warnings",
-    "Delete console history and pause scripts"
-   ],
-   "e": "These are advanced console methods for readable output and performance measurement."
-  },
-  {
-   "q": "What does the `debugger;` statement do?",
-   "o": [
-    "Pauses execution at that line if the browser's developer tools are open",
-    "Fixes bugs automatically",
-    "Deletes all `console.log` statements",
-    "Throws an error"
-   ],
-   "e": "It hardcodes a breakpoint directly into the source code."
-  },
-  {
-   "q": "When does the `finally` block run in a `try...catch...finally` statement?",
-   "o": [
-    "Always, as guaranteed cleanup whether or not an error occurred",
-    "Only if an error was thrown",
-    "Only if no error was thrown",
-    "Only if the `catch` block returns"
-   ],
-   "e": "`finally` is the place for guaranteed cleanup or logging execution."
-  },
-  {
-   "q": "How do you create a custom, domain-specific error type?",
-   "o": [
-    "Extend the built-in Error class, e.g. `class ValidationError extends Error`",
-    "Call `Error.create()`",
-    "Assign a string to `Error.name`",
-    "Overwrite the global `Error`"
-   ],
-   "e": "Custom classes let you use `error instanceof ValidationError` for conditional handling."
-  },
-  {
-   "q": "Which Jest matcher performs a deep equality check across object properties and array elements?",
-   "o": [
-    "`toEqual`",
-    "`toBe`",
-    "`toBeNull`",
-    "`toBeTruthy`"
-   ],
-   "e": "`toBe` uses `Object.is` and is best for primitives."
-  }
- ],
- "11": [
-  {
-   "q": "What does `fetch()` return?",
-   "o": [
-    "A Promise that resolves to a Response object",
-    "The parsed JSON data directly",
-    "A callback function",
-    "An XMLHttpRequest object"
-   ],
-   "e": "You then call `response.json()` to parse the body."
-  },
-  {
-   "q": "What happens with `fetch()` when the server responds with a 404 or 500 status?",
-   "o": [
-    "The promise does not reject; you must check `response.ok` or `response.status`",
-    "The promise always rejects",
-    "It automatically retries the request",
-    "It returns `null`"
-   ],
-   "e": "fetch only rejects on network failures, so HTTP errors must be handled explicitly."
-  },
-  {
-   "q": "How do you send a POST request with JSON data using `fetch()`?",
-   "o": [
-    "Pass an options object with `method`, `headers` and a serialized `body` (e.g. `JSON.stringify(data)`)",
-    "Call `fetch.post(url, data)`",
-    "Append the data to `localStorage`",
-    "Pass the object directly as the only argument"
-   ],
-   "e": "The second argument to `fetch()` is a configuration object."
-  },
-  {
-   "q": "Which is a valid rule of JSON syntax?",
-   "o": [
-    "All property keys must be in double quotes",
-    "Single-quoted keys are allowed",
-    "Trailing commas are allowed",
-    "Functions and `undefined` can be stored"
-   ],
-   "e": "JSON forbids trailing commas, single quotes and unquoted keys."
-  },
-  {
-   "q": "What do `JSON.stringify()` and `JSON.parse()` do?",
-   "o": [
-    "`stringify` converts an object to a JSON string, `parse` converts a JSON string back to an object",
-    "`stringify` parses a string, `parse` creates a string",
-    "Both convert objects to arrays",
-    "Both only work on arrays"
-   ],
-   "e": "They serialize data for transmission or storage and rebuild native objects on receipt."
-  },
-  {
-   "q": "How does `sessionStorage` differ from `localStorage`?",
-   "o": [
-    "`sessionStorage` persists only for the duration of the tab session and is isolated to that tab",
-    "`sessionStorage` is shared across all tabs forever",
-    "`sessionStorage` has no size limit",
-    "`sessionStorage` can store objects directly"
-   ],
-   "e": "`localStorage` persists until cleared and is shared across tabs of the same origin."
-  },
-  {
-   "q": "What gets stored if you pass a plain object directly to `localStorage.setItem()`?",
-   "o": [
-    "The string \"[object Object]\"",
-    "A deep copy of the object",
-    "The object, stored as JSON automatically",
-    "Nothing, it throws an error"
-   ],
-   "e": "Web storage accepts only strings, so pair it with `JSON.stringify()` and `JSON.parse()`."
-  },
-  {
-   "q": "Why should you not store raw passwords or credit card details in web storage?",
-   "o": [
-    "Any JavaScript on the page can read it, so XSS vulnerabilities could expose it",
-    "Web storage is deleted every minute",
-    "Browsers forbid strings longer than ten characters",
-    "It would exceed the 5MB limit"
-   ],
-   "e": "Data in `localStorage` and `sessionStorage` is accessible via any JavaScript running on the page."
-  }
- ],
- "12": [
-  {
-   "q": "What does KISS (Keep It Simple, Stupid) advise?",
-   "o": [
-    "Avoid premature optimization and unnecessary abstractions; write straightforward code first",
-    "Add design patterns before writing any code",
-    "Always optimize before you measure",
-    "Write the shortest possible code, even if unreadable"
-   ],
-   "e": "KISS says to solve the problem clearly before introducing design patterns."
-  },
-  {
-   "q": "What does YAGNI (You Aren't Gonna Need It) mean?",
-   "o": [
-    "Do not build features or wrappers for hypothetical future requirements until they are needed",
-    "Always build extra features just in case",
-    "Never write tests",
-    "Never reuse code"
-   ],
-   "e": "YAGNI keeps scope focused on what is actively needed."
-  },
-  {
-   "q": "Which naming convention does the module recommend for constants and environment variables?",
-   "o": [
-    "UPPER_SNAKE_CASE, e.g. `MAX_RETRY_ATTEMPTS`",
-    "camelCase, e.g. `maxRetryAttempts`",
-    "PascalCase, e.g. `MaxRetryAttempts`",
-    "kebab-case, e.g. `max-retry-attempts`"
-   ],
-   "e": "PascalCase is for React components, classes and constructor functions."
-  },
-  {
-   "q": "How should boolean variables be named?",
-   "o": [
-    "So they read like questions, e.g. `isLoading` or `hasPermission`",
-    "With a single letter like `b`",
-    "Always starting with `get`",
-    "In UPPER_SNAKE_CASE"
-   ],
-   "e": "Function names should begin with verbs, and boolean variables should read like questions."
-  },
-  {
-   "q": "What does the module advise when defining the MVP for your capstone?",
-   "o": [
-    "Cut about 50% of the nice-to-have features and focus on the core user journey",
-    "Build every feature before launch",
-    "Skip planning and start coding immediately",
-    "Design the interface only after the backend is finished"
-   ],
-   "e": "Do not open your code editor immediately; plan meticulously first."
-  },
-  {
-   "q": "What is server state (e.g. TanStack React Query or SWR) best used for?",
-   "o": [
-    "Managing asynchronous data fetched from APIs, with caching, refetching and loading/error states",
-    "UI-only toggles such as modal visibility",
-    "Storing a form's temporary input values",
-    "Replacing the build tool"
-   ],
-   "e": "Local state (`useState`, `useReducer`) is for UI-only toggles and transient values."
-  },
-  {
-   "q": "What is tree-shaking?",
-   "o": [
-    "Automatically eliminating unused exported code from the final production bundle",
-    "Splitting a bundle into lazily loaded chunks",
-    "Compressing images",
-    "Renaming files in a folder tree"
-   ],
-   "e": "Code splitting is the technique that lazy-loads components and routes with dynamic imports."
-  },
-  {
-   "q": "In a Vite project, which prefix exposes an environment variable to client code?",
-   "o": [
-    "`VITE_`",
-    "`PUBLIC_`",
-    "`SECRET_`",
-    "`ENV_`"
-   ],
-   "e": "Variables without the prefix stay server-side, and all `.env` files should be listed in `.gitignore`."
-  }
- ]
-};
-
 let currentId = null;
-let quizStore = getQuizStore();
-// A module counts as completed only when its quiz was passed.
-let completed = Object.keys(quizStore).filter(k => quizStore[k] && quizStore[k].passed).map(Number);
-let quizState = {};
-
-function hasPassed(id){ return !!(quizStore[id] && quizStore[id].passed); }
-function seqUnlocked(id){ return id <= 1 || hasPassed(id - 1); }
-function premLocked(m){ return !m.free && !isPremium(); }
+let completed = Object.keys(getQuiz()).filter(k=>quizPassed(+k)).map(Number);   // a module counts as done only once its quiz is passed
+saveCompleted(completed);
+const TOTAL_FREE = 6;
 
 // RENDER INDEX
+// Lessons and quizzes live in /data/r.json: free modules in full, premium modules as cards only.
+// A premium module's text (and quiz) is fetched from the Worker when a paying user opens it.
 const COURSE_KEY = 'javascript';
 async function loadCourseData() {
   const grids = ['freeGrid', 'premiumGrid'].map((id) => document.getElementById(id));
   grids.forEach((g) => { if (g) g.innerHTML = '<p style="opacity:.7;padding:12px 0">Loading lessons…</p>'; });
   try {
-    const res = await fetch('/data/' + COURSE_KEY + '.json', { cache: 'no-cache' });
+    const res = await fetch('/data/' + COURSE_KEY + '.json', { cache: 'no-cache' });   // revalidates; a cached copy costs a tiny 304
     if (!res.ok) throw new Error('HTTP ' + res.status);
     MODS = (await res.json()).mods;
     renderIndex();
+    syncQuizProgress();
   } catch (e) {
     if (grids[0]) grids[0].innerHTML = '<p style="padding:12px 0">Could not load the lessons. Check your connection and <button onclick="loadCourseData()" style="text-decoration:underline;background:none;border:0;color:inherit;font:inherit;cursor:pointer">try again</button>.</p>';
     if (grids[1]) grids[1].innerHTML = '';
@@ -1228,70 +220,64 @@ function renderIndex() {
 
 function renderCard(m) {
   const done = completed.includes(m.id);
-  const pl = premLocked(m);
-  const sl = !pl && !seqUnlocked(m.id);
-  const locked = pl || sl;
-  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}${sl?' seq-locked':''}`;
+  const locked = !m.free && !isPremium();
+  const gated = !locked && !isUnlocked(m.id);
+  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}${gated?' gated':''}`;
   const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
-  const click = pl ? `onclick="window.location.href='premium.html'"` : sl ? `onclick="lockedToast(${m.id})"` : `onclick="openLesson(${m.id})"`;
-  const note = sl ? `<div class="seq-note"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Pass the Module ${m.id-1} quiz (75%) to unlock</div>` : '';
+  const click = locked ? `onclick="ishLocked('javascript')"` : gated ? `onclick="gateToast(${m.id})"` : `onclick="openLesson(${m.id})"`;
   return `<div class="${cls}" ${click}>
     <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
     <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
     <div class="mod-title">${m.title}</div>
     <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
-    ${note}
+    ${gated?`<div class="mod-gate">🔒 Pass Module ${String(m.id-1).padStart(2,'0')} quiz to unlock</div>`:''}
     <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">→</span></div>
   </div>`;
 }
 
 function updateProgress() {
   const freeDone = completed.filter(id => MODS.find(m=>m.id===id&&m.free)).length;
-  const pct = Math.round((freeDone/6)*100);
+  const pct = Math.round((freeDone/TOTAL_FREE)*100);
   document.getElementById('progFill').style.width = pct+'%';
   document.getElementById('progPct').textContent = pct+'%';
-  document.getElementById('progLabel').textContent = `${freeDone} of 6 free modules completed`;
-}
-
-function lockedToast(id){
-  showToast(`<i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Pass the Module ${id-1} quiz with at least ${PASS_PCT}% (${PASS_MARK}/${QUIZ_LEN}) to unlock Module ${id}`);
+  document.getElementById('progLabel').textContent = `${freeDone} of ${TOTAL_FREE} free modules completed`;
 }
 
 async function openLesson(id) {
   const m = MODS.find(x=>x.id===id);
   if (!m) return;
-  if (!premLocked(m) && !seqUnlocked(id)) {
-    lockedToast(id);
-    if (currentId) scrollToQuiz();
-    return;
-  }
+  if (!isUnlocked(id)) { gateToast(id); return; }
+  quizAttempt = null;
   if (!m.free && !m.body) {
     const r = await window.loadPremiumLesson('javascript', id);
-    if (!r.ok) { window.location.href='premium.html'; return; }
+    if (!r.ok) { window.ishLessonDenied(r, 'javascript'); return; }
     Object.assign(m, r.data);
   }
   currentId = id;
-  if (quizState[id] && quizState[id].done) delete quizState[id];
   document.getElementById('indexPage').style.display = 'none';
   document.getElementById('lessonPage').style.display = 'block';
   window.scrollTo(0,0);
   document.getElementById('lesCrumb').textContent = m.title;
 
-  const isLocked = premLocked(m);
-  const nextOpen = hasPassed(id);
+  const done = completed.includes(id);
+  const mb = document.getElementById('markBtn');
+  mb.textContent = done ? '✓ Completed' : '✓ Pass Quiz to Finish';
+  mb.classList.toggle('done-btn', done);
+  document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
+  document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
 
-  const html = isLocked
+  const html = !m.free && !isPremium()
     ? `<div class="premium-lock"><div class="section-emoji"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
        <div class="section-heading-display">Premium Module</div>
-       <div class="section-sub-muted">Sign in as admin to unlock all advanced content.</div>
-       <button class="lock-btn" onclick="window.location.href='premium.html'">Unlock Premium</button></div>`
+       <div class="section-sub-muted">Upgrade your plan to unlock all advanced content.</div>
+       <button class="lock-btn" onclick="ishLocked('javascript')">Unlock Premium</button></div>`
     : `<div class="les-cat ${!m.free?'prem':''}">Module ${String(id).padStart(2,'0')} · ${m.level} · ${m.free?'Free':'Premium'}</div>
-       <h1 class="les-title">${m.fullTitle||m.title}</h1>
+       <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
-         <span class="meta-item"><i class="ti ti-book" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> JavaScript</span>
-         <span class="meta-item">⏱ ~${m.read||10} min read</span>
-         <span class="meta-item"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> ${m.level}</span>
+         <span class="meta-item"><i class="ti ti-brand-javascript" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> JavaScript</span>
+         <span class="meta-item">⏱ ~${m.rt||m.read||10} min read</span>
+         <span class="meta-item"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> ${m.level}</span>
        </div>
        <div class="les-visual" style="background:${m.bg};">
          <div class="les-visual-grid"></div>
@@ -1302,18 +288,17 @@ async function openLesson(id) {
          <div class="concepts-title">Key Concepts Covered</div>
          <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
        </div>
-       <section class="quiz-box" id="quizBox" aria-label="Module ${id} quiz"></section>
+       <div class="mq" id="mqBox"></div>
        <div class="les-footer">
          <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
          <div class="nav-lessons">
            ${id>1?`<div class="nlc" onclick="openLesson(${id-1})"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
-           ${id<MODS.length?`<div class="nlc${nextOpen?'':' nlc-locked'}" onclick="openLesson(${id+1})" class="text-right"><div class="nlc-dir">Next ${nextOpen?'→':'<i class="ti ti-lock" aria-hidden="true" style="font-size:14px;vertical-align:-2px;"></i>'}</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
+           ${id<MODS.length?`<div class="nlc" onclick="openLesson(${id+1})" class="text-right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
          </div>
        </div>`;
 
   document.getElementById('lessonContent').innerHTML = html;
-  if (!isLocked) renderQuiz(id);
-  refreshChrome();
+  renderQuiz();
   renderSidebar();
 
   // Scroll progress
@@ -1324,182 +309,131 @@ async function openLesson(id) {
   };
 }
 
-function refreshChrome() {
-  const id = currentId;
-  if (!id) return;
-  const m = MODS.find(x=>x.id===id);
-  const done = hasPassed(id);
-  const mb = document.getElementById('markBtn');
-  mb.textContent = done ? '✓ Completed' : (premLocked(m) ? '✓ Mark Done' : 'Take Quiz ↓');
-  mb.classList.toggle('done-btn', done);
-  document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
-  document.getElementById('nextBtn').style.opacity = (id < MODS.length && done) ? '1' : '0.3';
-}
-
 function renderSidebar() {
   const freeDone = completed.filter(id=>MODS.find(m=>m.id===id&&m.free)).length;
-  const pct = Math.round((freeDone/6)*100);
+  const pct = Math.round((freeDone/TOTAL_FREE)*100);
   document.getElementById('sbProgFill').style.width = pct+'%';
-  document.getElementById('sbProgLabel').textContent = `${freeDone} / 6 free`;
+  document.getElementById('sbProgLabel').textContent = `${freeDone} / ${TOTAL_FREE} free`;
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
-    const done=completed.includes(m.id), active=m.id===currentId, pl=premLocked(m), sl=!pl&&!seqUnlocked(m.id), locked=pl||sl;
-    const act = pl ? `window.location.href='premium.html'` : sl ? `lockedToast(${m.id})` : `openLesson(${m.id})`;
-    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}${sl?' seq-locked':''}" onclick="${act}">
+    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium(), gated=!locked&&!isUnlocked(m.id);
+
+    // PREMIUM REDIRECT LOGIC in sidebar
+    const click = locked ? `ishLocked('javascript')` : gated ? `gateToast(${m.id})` : `openLesson(${m.id})`;
+
+    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${click}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
-      ${locked?'<span style="font-size:10px;opacity:0.5;"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
+      ${locked||gated?'<span style="font-size:10px;opacity:0.5;color:var(--gold);"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
     </button>`;
   }).join('');
 }
 
-// ---------------- QUIZ ----------------
-function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
-function qEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function qFmt(s){ return qEsc(s).replace(/`([^`]+)`/g,'<code>$1</code>'); }
-function startQuiz(id){
-  const qs = QUIZ[id];
-  quizState[id] = { order: qs.map(()=>shuffle([0,1,2,3])), picked: qs.map(()=>-1), done:false, score:0 };
-}
-function scrollToQuiz(){
-  const b = document.getElementById('quizBox');
-  if (b) b.scrollIntoView({behavior:'smooth', block:'start'});
+function goBack(){
+  quizAttempt=null;
+  document.getElementById('lessonPage').style.display='none';
+  document.getElementById('indexPage').style.display='block';
+  renderIndex();
+  window.scrollTo(0,0);
 }
 
-function renderQuiz(id){
-  const box = document.getElementById('quizBox');
-  if (!box) return;
-  const qs = QUIZ[id];
-  if (!qs) { box.innerHTML=''; return; }
-  let s = quizState[id];
-  if (!s) {
-    if (hasPassed(id)) { box.innerHTML = summaryHtml(id); return; }
-    startQuiz(id); s = quizState[id];
+function prevLesson() {
+  if(currentId>1) {
+    const m = MODS.find(x=>x.id===currentId-1);
+    if(m.free) openLesson(currentId-1);
+    else ishLocked('javascript');
   }
-  box.innerHTML = s.done ? resultHtml(id) : formHtml(id);
 }
 
-function quizHead(id, sub){
-  return `<div class="qz-head"><div class="qz-title">Module ${id} Quiz</div><div class="qz-sub">${sub}</div></div>`;
-}
-
-function formHtml(id){
-  const qs = QUIZ[id], s = quizState[id];
-  const answered = s.picked.filter(x=>x>=0).length;
-  const body = qs.map((q,i)=>{
-    const opts = s.order[i].map((oi,p)=>{
-      const sel = s.picked[i]===oi;
-      return `<label class="qz-opt${sel?' sel':''}"><input type="radio" name="qz${id}_${i}" value="${oi}" ${sel?'checked':''} onchange="pickAnswer(${id},${i},${oi})"><span>${qFmt(q.o[oi])}</span></label>`;
-    }).join('');
-    return `<fieldset class="qz-q"><legend class="qz-qt">${i+1}. ${qFmt(q.q)}</legend>${opts}</fieldset>`;
-  }).join('');
-  return quizHead(id, `${QUIZ_LEN} questions · pass mark ${PASS_PCT}% (${PASS_MARK}/${QUIZ_LEN}) · required to unlock ${id<MODS.length?'Module '+(id+1):'course completion'}`)
-    + `<p class="qz-msg">Answer every question, then submit. Review the module above if you need to.</p>`
-    + body
-    + `<div class="qz-foot"><button class="qz-btn primary" id="qzSubmit" onclick="submitQuiz(${id})" ${answered<qs.length?'disabled':''}>Submit Quiz</button><span class="qz-count" id="qzCount" aria-live="polite">${answered} of ${qs.length} answered</span></div>`;
-}
-
-function pickAnswer(id,i,oi){
-  const s = quizState[id]; if(!s||s.done) return;
-  s.picked[i] = oi;
-  const answered = s.picked.filter(x=>x>=0).length;
-  const c = document.getElementById('qzCount'); if(c) c.textContent = `${answered} of ${QUIZ[id].length} answered`;
-  const b = document.getElementById('qzSubmit'); if(b) b.disabled = answered < QUIZ[id].length;
-  const fs = document.getElementsByName(`qz${id}_${i}`);
-  fs.forEach(r=>{ r.closest('.qz-opt').classList.toggle('sel', r.checked); });
-}
-
-function submitQuiz(id){
-  const s = quizState[id]; const qs = QUIZ[id];
-  if (!s || s.done) return;
-  if (s.picked.some(x=>x<0)) { showToast('Please answer all questions first'); return; }
-  const score = s.picked.filter(x=>x===0).length;
-  s.score = score; s.done = true;
-  const st = quizStore[id] || {};
-  st.attempts = (st.attempts||0) + 1;
-  st.last = score;
-  st.best = Math.max(st.best||0, score);
-  let newlyPassed = false;
-  if (score >= PASS_MARK && !st.passed) { st.passed = true; st.passedAt = Date.now(); newlyPassed = true; }
-  quizStore[id] = st;
-  saveQuizStore(quizStore);
-  if (newlyPassed) {
-    if (!completed.includes(id)) completed.push(id);
-    saveCompleted(completed);
-    showToast('✓ Quiz passed! Module ' + id + ' complete <i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i>');
+function nextLesson() {
+  if(currentId<MODS.length) {
+    if(!quizPassed(currentId)) { gateToast(currentId+1); return; }
+    const m = MODS.find(x=>x.id===currentId+1);
+    if(m.free || isPremium()) openLesson(currentId+1);
+    else ishLocked('javascript');
   }
-  renderQuiz(id);
-  refreshChrome(); renderSidebar();
-  // refresh bottom "Next" card state
-  const nl = document.querySelector('.nlc.nlc-locked');
-  if (nl && hasPassed(id)) { nl.classList.remove('nlc-locked'); const d = nl.querySelector('.nlc-dir'); if (d) d.textContent = 'Next →'; }
-  scrollToQuiz();
+}
+function gateToast(id){
+  showToast('🔒 Pass the Module '+String(id-1).padStart(2,'0')+' quiz (75%+) to unlock this module');
+  if(currentId===id-1){const b=document.getElementById('mqBox'); if(b) b.scrollIntoView({behavior:'smooth',block:'center'});}
 }
 
-function resultHtml(id){
-  const qs = QUIZ[id], s = quizState[id], st = quizStore[id] || {};
-  const pct = Math.round(s.score/qs.length*100);
-  const pass = s.score >= PASS_MARK;
-  let msg;
-  if (pass) {
-    msg = id<MODS.length ? `Well done! Module ${id} is complete and Module ${id+1} is now unlocked.` : 'Well done! You have completed the final module of the course.';
-  } else {
-    msg = `You need at least ${PASS_PCT}% (${PASS_MARK} of ${QUIZ_LEN}) to continue.` + (st.passed ? ' Your earlier pass still counts.' : ' Review the module above and try again.');
-  }
-  const rev = qs.map((q,i)=>{
-    const ok = s.picked[i]===0;
-    const yours = q.o[s.picked[i]];
-    let h = `<div class="qz-rev ${ok?'ok':'no'}"><div><span class="qz-tag" style="color:${ok?'#4ade80':'#f87171'}">${ok?'✓ Correct':'✗ Incorrect'}</span>${i+1}. ${qFmt(q.q)}</div>`;
-    if (ok) h += `<div class="qz-exp">${qFmt(q.o[0])}</div>`;
-    if (ok && pass) h += `<div class="qz-exp">${qFmt(q.e)}</div>`;
-    if (!ok) h += `<div class="qz-exp">Your answer: ${qFmt(yours)}</div>`;
-    return h + '</div>';
-  }).join('');
-  const next = pass && id<MODS.length ? `<button class="qz-btn primary" onclick="openLesson(${id+1})">Continue to Module ${id+1} →</button>` : '';
-  const retry = `<button class="qz-btn" onclick="retryQuiz(${id})">${pass?'Retake Quiz':'Retry Quiz'}</button>`;
-  const review = pass ? '' : `<button class="qz-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">Review Module ↑</button>`;
-  return quizHead(id, `Attempt ${st.attempts||1} · best ${st.best||s.score}/${QUIZ_LEN}`)
-    + `<div class="qz-score" role="status" aria-live="polite"><div class="qz-big">${s.score}/${qs.length}</div><div class="qz-big" style="font-size:1.6rem;opacity:.8">${pct}%</div><span class="qz-pill ${pass?'pass':'fail'}">${pass?'PASSED':'NOT PASSED'}</span></div>`
-    + `<p class="qz-msg">${msg}</p>`
-    + rev
-    + `<div class="qz-foot">${next}${retry}${review}</div>`;
+function markDone() {
+  if(!currentId) return;
+  if(!quizPassed(currentId)){ showToast('Pass the module quiz (6 of 8) to finish this module'); const b=document.getElementById('mqBox'); if(b) b.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  openLesson(currentId);
 }
 
-function summaryHtml(id){
-  const st = quizStore[id] || {};
-  const next = id<MODS.length ? `<button class="qz-btn primary" onclick="openLesson(${id+1})">Continue to Module ${id+1} →</button>` : '';
-  return quizHead(id, `${QUIZ_LEN} questions · pass mark ${PASS_PCT}%`)
-    + `<div class="qz-score"><div class="qz-big">${st.best}/${QUIZ_LEN}</div><span class="qz-pill pass">PASSED</span></div>`
-    + `<p class="qz-msg">You passed this quiz (best score ${st.best}/${QUIZ_LEN}, ${st.attempts||1} attempt${(st.attempts||1)>1?'s':''}). ${id<MODS.length?'Module '+(id+1)+' is unlocked.':'You have completed the course.'}</p>`
-    + `<div class="qz-foot">${next}<button class="qz-btn" onclick="retryQuiz(${id})">Retake Quiz (optional)</button></div>`;
-}
-
-function retryQuiz(id){
-  startQuiz(id);
-  renderQuiz(id);
-  scrollToQuiz();
-}
-
-function goBack(){document.getElementById('lessonPage').style.display='none';document.getElementById('indexPage').style.display='block';renderIndex();window.scrollTo(0,0);}
-function prevLesson(){if(currentId>1)openLesson(currentId-1);}
-function nextLesson(){if(currentId<MODS.length)openLesson(currentId+1);}
-function markDone(){
-  if(!currentId)return;
+/* ── MODULE QUIZ ── */
+let quizAttempt = null;   // {id, order:[[optionIndex...]...], picks:[]}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function renderQuiz(){
+  const box=document.getElementById('mqBox'); if(!box) return;
   const m=MODS.find(x=>x.id===currentId);
-  if(premLocked(m))return;
-  if(hasPassed(currentId)){ showToast('Module already completed'); return; }
-  showToast('Pass the module quiz (' + PASS_PCT + '%+) to complete this module');
-  scrollToQuiz();
+  if(!m||!Array.isArray(m.quiz)||!m.quiz.length){ box.style.display='none'; return; }
+  const need=Math.ceil(m.quiz.length*PASS_RATIO), rec=getQuiz()[currentId];
+  const head=`<div class="mq-head"><div class="mq-title">Module Quiz</div><div class="mq-rule">${m.quiz.length} QUESTIONS · PASS = ${need}/${m.quiz.length} (75%)</div></div>`;
+  if(!quizAttempt||quizAttempt.id!==currentId){
+    if(rec&&rec.passed){
+      box.innerHTML=head+`<div class="mq-result pass"><span class="mq-score">✓ Passed — best ${rec.best}/${m.quiz.length}</span>${currentId<MODS.length?'The next module is unlocked.':'You have completed the course.'}</div>
+        <div class="mq-actions">${currentId<MODS.length?'<button class="mq-btn" onclick="nextLesson()">Next Module →</button>':''}<button class="mq-btn ghost" onclick="startQuiz()">Retake Quiz</button></div>`;
+    } else {
+      box.innerHTML=head+`<div class="mq-sub">Answer all ${m.quiz.length} questions. You need at least ${need} correct to pass and unlock the next module.${rec?` Your best so far: ${rec.best}/${m.quiz.length}.`:''}</div>
+        <div class="mq-actions"><button class="mq-btn" onclick="startQuiz()">Start Quiz</button></div>`;
+    }
+    return;
+  }
+  const a=quizAttempt;
+  box.innerHTML=head+`<div class="mq-sub">Choose one answer for each question, then submit.</div>`+m.quiz.map((q,qi)=>`<div class="mq-q"><div class="mq-qtext"><span class="mq-qnum">Q${qi+1}</span>${qEsc(q.q)}</div>`+
+    a.order[qi].map(oi=>`<label class="mq-opt${a.picks[qi]===oi?' sel':''}"><input type="radio" name="mq${qi}" ${a.picks[qi]===oi?'checked':''} onchange="pickAnswer(${qi},${oi})"><span>${qEsc(q.o[oi])}</span></label>`).join('')+`</div>`).join('')+
+    `<div class="mq-actions"><button class="mq-btn" onclick="submitQuiz()">Submit Answers</button></div>`;
 }
-function showToast(msg){const t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+function startQuiz(){
+  const m=MODS.find(x=>x.id===currentId); if(!m||!m.quiz) return;
+  quizAttempt={id:currentId,order:m.quiz.map(q=>shuffle(q.o.map((_,i)=>i))),picks:m.quiz.map(()=>null)};
+  renderQuiz();
+  document.getElementById('mqBox').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function pickAnswer(qi,oi){ if(!quizAttempt) return; quizAttempt.picks[qi]=oi; renderQuiz(); }
+function submitQuiz(){
+  const m=MODS.find(x=>x.id===currentId), a=quizAttempt; if(!m||!a) return;
+  if(a.picks.some(p=>p===null)){ showToast('Answer every question before submitting'); return; }
+  const total=m.quiz.length, need=Math.ceil(total*PASS_RATIO);
+  const score=m.quiz.reduce((n,q,i)=>n+(a.picks[i]===q.a?1:0),0), passed=score>=need;
+  const store=getQuiz(), prev=store[currentId]||{best:0,passed:false};
+  store[currentId]={best:Math.max(prev.best||0,score),passed:prev.passed||passed};
+  saveQuiz(store);
+  if(passed&&!completed.includes(currentId)){ completed.push(currentId); saveCompleted(completed); }
+  ishApi('/api/module-quiz',{method:'POST',body:{course:'javascript',module:currentId,score,total}}).then(r=>{ if(r&&r.status===403) syncQuizProgress(); });
+  const box=document.getElementById('mqBox');
+  const review=m.quiz.map((q,qi)=>`<div class="mq-q"><div class="mq-qtext"><span class="mq-qnum">Q${qi+1}</span>${qEsc(q.q)}</div>`+
+    q.o.map((t,oi)=>`<div class="mq-opt${oi===q.a?' right':(a.picks[qi]===oi?' wrong':'')}"><span>${oi===q.a?'✓ ':(a.picks[qi]===oi?'✗ ':'')}${qEsc(t)}</span></div>`).join('')+
+    `<div class="mq-exp">${qEsc(q.e||'')}</div></div>`).join('');
+  const verdict=passed
+    ? `<div class="mq-result pass"><span class="mq-score">✓ ${score}/${total} — Passed</span>${currentId<MODS.length?'Module '+String(currentId+1).padStart(2,'0')+' is now unlocked.':'Course complete — well done!'}</div>`
+    : `<div class="mq-result fail"><span class="mq-score">${score}/${total} — Not yet</span>You need ${need}/${total} (75%) to continue. Review the lesson above and try again.</div>`;
+  box.innerHTML=`<div class="mq-head"><div class="mq-title">Quiz Results</div><div class="mq-rule">PASS = ${need}/${total} (75%)</div></div>`+verdict+review+
+    `<div class="mq-actions">${passed&&currentId<MODS.length?'<button class="mq-btn" onclick="quizAttempt=null;nextLesson()">Next Module →</button>':''}<button class="mq-btn ghost" onclick="startQuiz()">${passed?'Retake Quiz':'Retake Quiz'}</button></div>`;
+  quizAttempt=null;
+  const mb=document.getElementById('markBtn'); mb.textContent=quizPassed(currentId)?'✓ Completed':'✓ Pass Quiz to Finish'; mb.classList.toggle('done-btn',quizPassed(currentId));
+  if(passed) showToast('✓ Quiz passed — module complete!');
+  renderSidebar();
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
 
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
 
 // Cursor
 const cur=document.getElementById('cur'),curR=document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 (function anim(){cur.style.left=(mx-5)+'px';cur.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=(rx-18)+'px';curR.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
-document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
-document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
+document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
+document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
 </script>
 <script src="premium-content.js"></script>
 <script src="ish-cursor-guard.js" defer></script>

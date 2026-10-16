@@ -19,61 +19,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="course-page.css">
-<base target="_blank">
-<style>
-/* ── XP & Quiz Styles ─────────────────────────────── */
-.xp-bar-wrap{background:rgba(255,255,255,0.06);border-radius:8px;padding:12px 16px;margin-bottom:12px;border:1px solid rgba(200,241,53,0.15);}
-.xp-label{font-size:11px;color:#c8f135;font-family:var(--ff-mono,monospace);letter-spacing:.08em;margin-bottom:6px;}
-.xp-track{height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;}
-.xp-fill{height:100%;background:linear-gradient(90deg,#c8f135,#a8d020);border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1);}
-.xp-nums{display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:rgba(255,255,255,0.4);font-family:var(--ff-mono,monospace);}
-.xp-burst{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(10,10,12,0.95);border:1px solid #c8f135;border-radius:16px;padding:24px 40px;text-align:center;z-index:9999;animation:burstIn .4s ease;pointer-events:none;}
-.xp-burst-pts{font-family:var(--ff-display,'Syne'),sans-serif;font-size:48px;font-weight:800;color:#c8f135;line-height:1;}
-.xp-burst-txt{color:rgba(255,255,255,0.7);font-size:14px;margin-top:6px;}
+<style id="course-extra">
 @keyframes burstIn{from{opacity:0;transform:translate(-50%,-50%) scale(.7);}to{opacity:1;transform:translate(-50%,-50%) scale(1);}}
-.quiz-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:8000;overflow-y:auto;padding:40px 20px;}
-.quiz-overlay.active{display:flex;align-items:flex-start;justify-content:center;}
-.quiz-box{background:#0f1012;border:1px solid rgba(200,241,53,0.2);border-radius:20px;max-width:680px;width:100%;padding:36px;margin:auto;}
-.quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
-.quiz-title{font-family:var(--ff-display,'Syne'),sans-serif;font-size:22px;font-weight:700;color:#fff;}
-.quiz-subtitle{font-size:13px;color:#c8f135;margin-top:2px;}
-.quiz-progress-text{font-size:12px;color:rgba(255,255,255,0.4);font-family:monospace;}
-.quiz-q-num{font-size:11px;color:#c8f135;letter-spacing:.1em;margin-bottom:8px;font-family:monospace;}
-.quiz-question{font-size:16px;color:#fff;line-height:1.6;margin-bottom:20px;font-weight:500;}
-.quiz-options{display:flex;flex-direction:column;gap:10px;}
-.quiz-opt{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 18px;cursor:pointer;color:rgba(255,255,255,0.85);font-size:14px;text-align:left;transition:all .2s;font-family:inherit;}
-.quiz-opt:hover:not(:disabled){background:rgba(200,241,53,0.08);border-color:rgba(200,241,53,0.35);color:#fff;}
-.quiz-opt.selected{background:rgba(200,241,53,0.1);border-color:#c8f135;color:#c8f135;}
-.quiz-opt.correct{background:rgba(50,200,80,0.15);border-color:#32c850;color:#32c850;pointer-events:none;}
-.quiz-opt.wrong{background:rgba(240,60,60,0.12);border-color:#f03c3c;color:#f03c3c;pointer-events:none;}
-.quiz-opt.reveal-correct{background:rgba(50,200,80,0.08);border-color:#32c850;color:#32c850;pointer-events:none;}
-.quiz-feedback{margin-top:14px;padding:12px 16px;border-radius:8px;font-size:13px;display:none;}
-.quiz-feedback.correct{background:rgba(50,200,80,0.1);border:1px solid rgba(50,200,80,0.3);color:#32c850;display:block;}
-.quiz-feedback.wrong{background:rgba(240,60,60,0.1);border:1px solid rgba(240,60,60,0.3);color:#f06060;display:block;}
-.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;}
-.quiz-btn{background:#c8f135;color:#0a0a0c;border:none;border-radius:8px;padding:11px 24px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;transition:opacity .2s;}
-.quiz-btn:disabled{opacity:.35;cursor:not-allowed;}
-.quiz-btn.secondary{background:rgba(255,255,255,0.08);color:#fff;}
-.quiz-result{text-align:center;padding:20px 0;}
-.quiz-result-score{font-family:var(--ff-display,'Syne'),sans-serif;font-size:56px;font-weight:800;line-height:1;}
-.quiz-result-score.pass{color:#c8f135;}
-.quiz-result-score.fail{color:#f06060;}
-.quiz-result-msg{font-size:16px;color:rgba(255,255,255,0.7);margin:12px 0 6px;}
-.quiz-result-sub{font-size:13px;color:rgba(255,255,255,0.4);}
-.quiz-result-xp{font-size:22px;color:#c8f135;font-weight:700;margin-top:16px;}
-.quiz-result-btns{display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;}
-.quiz-gate{background:rgba(200,241,53,0.04);border:1px solid rgba(200,241,53,0.2);border-radius:16px;padding:28px;margin-top:32px;text-align:center;}
-.quiz-gate-icon{font-size:40px;margin-bottom:12px;}
-.quiz-gate-title{font-family:var(--ff-display,'Syne'),sans-serif;font-size:20px;font-weight:700;color:#c8f135;margin-bottom:8px;}
-.quiz-gate-desc{font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:20px;}
-.quiz-gate-btn{background:#c8f135;color:#0a0a0c;border:none;border-radius:8px;padding:12px 28px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;}
-.quiz-gate-btn:hover{opacity:.9;}
-.quiz-passed-badge{background:rgba(50,200,80,0.1);border:1px solid rgba(50,200,80,0.3);border-radius:10px;padding:12px 20px;display:inline-flex;align-items:center;gap:10px;color:#32c850;font-size:14px;font-weight:600;}
-.sb-xp{background:rgba(200,241,53,0.06);border-radius:8px;padding:10px 12px;margin-bottom:8px;}
-.sb-xp-label{font-size:10px;color:#c8f135;font-family:monospace;margin-bottom:4px;}
-.sb-xp-val{font-size:20px;font-weight:700;color:#c8f135;font-family:var(--ff-display,'Syne'),sans-serif;}
-
-/* Module body: tables, rules, formatted content */
 .art-body hr{border:none;border-top:1px solid rgba(255,255,255,0.08);margin:32px 0;}
 .art-body .table-wrap{overflow-x:auto;margin:20px 0;}
 .art-body .comparison-table{width:100%;border-collapse:collapse;font-size:13px;}
@@ -87,14 +34,14 @@
 .art-body ul ul,.art-body ol ul{margin:8px 0 4px;}
 </style>
 </head>
-<body>
+<body class="course-java">
 <div class="read-progress" id="readProgress"></div>
 
 <nav>
   <a href="index.html" class="nav-logo">IT <span>STUDY</span> HUB</a>
   <div class="nav-right">
-    <a href="courses.html" class="nav-back"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Courses</a>
-    <a href="index.html" class="nav-back"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Home</a>
+    <a href="courses.html" class="nav-back">← Courses</a>
+    <a href="index.html" class="nav-back">← Home</a>
   </div>
 </nav>
 
@@ -107,17 +54,13 @@
       <span class="chip chip-lime"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> Java</span>
       <span class="chip chip-lime">6 Free Modules</span>
       <span class="chip chip-gold">6 Premium Modules</span>
+      <span class="chip chip-lime">8-Question Quiz per Module</span>
       <span class="chip chip-lime">Real PDF Notes</span>
-      <span class="chip chip-lime"><i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> XP System</span>
     </div>
   </div>
 
   <div class="progress-card fade-up" class="anim-delay-1">
-    <div class="xp-bar-wrap">
-      <div class="xp-label"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> TOTAL XP EARNED</div>
-      <div class="xp-track"><div class="xp-fill" id="totalXpFill" style="width:0%"></div></div>
-      <div class="xp-nums"><span id="totalXpVal">0 XP</span><span id="totalXpMax">— / 0 XP</span></div>
-    </div>
+    
     <div class="prog-pct" id="progPct">0%</div>
     <div class="prog-bar-wrap">
       <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
@@ -125,17 +68,17 @@
     </div>
   </div>
 
-  <div class="fade-up" class="anim-delay-15">
+  <div class="fade-up anim-delay-15">
     <div class="sec-label">Free Modules</div>
     <div class="modules-grid" id="freeGrid"></div>
   </div>
 
-  <div class="fade-up" class="anim-delay-2">
+  <div class="fade-up anim-delay-2">
     <div class="sec-label">Premium Modules</div>
     <div class="modules-grid" id="premiumGrid"></div>
   </div>
 
-  <div class="fade-up" class="anim-delay-25">
+  <div class="fade-up anim-delay-25">
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
       <a href="https://www.sanfoundry.com/java-interview-questions-answers/" target="_blank" class="mat-item">
@@ -151,20 +94,16 @@
   <div class="lesson-topbar">
     <div class="les-breadcrumb">OOPs in Java <span>/</span> <span id="lesCrumb">—</span></div>
     <div class="les-nav-btns">
-      <button class="lnav-btn" onclick="goBack()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
-      <button class="lnav-btn" id="prevBtn" onclick="prevLesson()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Prev</button>
-      <button class="lnav-btn" id="markBtn" onclick="markDone()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Mark Done</button>
-      <button class="lnav-btn" id="nextBtn" onclick="nextLesson()">Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      <button class="lnav-btn" onclick="goBack()">← Back</button>
+      <button class="lnav-btn" id="prevBtn" onclick="prevLesson()">← Prev</button>
+      <button class="lnav-btn" id="markBtn" onclick="markDone()">✓ Mark Done</button>
+      <button class="lnav-btn" id="nextBtn" onclick="nextLesson()">Next →</button>
     </div>
   </div>
   <div class="lesson-layout">
     <div class="lesson-article" id="lessonContent"></div>
     <aside class="lesson-sidebar">
       <div class="sb-card">
-        <div class="sb-xp">
-          <div class="sb-xp-label"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> YOUR XP</div>
-          <div class="sb-xp-val" id="sbXp">0</div>
-        </div>
         <div class="sb-label">Progress</div>
         <div class="prog-bar-track" class="mb-8"><div class="prog-bar-fill" id="sbProgFill" style="width:0%"></div></div>
         <div class="prog-label" id="sbProgLabel">0 / 6 free</div>
@@ -177,13 +116,6 @@
   </div>
 </div>
 
-<div class="quiz-overlay" id="quizOverlay">
-  <div class="quiz-box" id="quizBox"></div>
-</div>
-<div class="xp-burst" id="xpBurst" style="display:none;">
-  <div class="xp-burst-pts" id="xpBurstPts">+10</div>
-  <div class="xp-burst-txt">XP earned!</div>
-</div>
 <div class="toast" id="toast"></div>
 <div style="width:10px;height:10px;background:#c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform 0.15s ease;" id="cur"></div>
 <div style="width:36px;height:36px;border:1px solid #c8f135;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;opacity:0.5;transition:all 0.2s ease;" id="curR"></div>
@@ -193,35 +125,44 @@ function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')|
 function isPremium(){ return typeof window.ishHasCourse === 'function' && window.ishHasCourse('java'); } // set by premium-content.js from /api/access (Starter plans open only their two chosen courses)
 function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_java_done')||'[]');}catch(e){return[];}}
 function saveCompleted(a){localStorage.setItem('ish_java_done',JSON.stringify(a));}
-function getXP(){return parseInt(localStorage.getItem('ish_java_xp')||'0',10);}
-function addXP(pts){const x=getXP()+pts;localStorage.setItem('ish_java_xp',x);showXpBurst(pts);updateXPUI();}
-function getQuizPassed(){try{return JSON.parse(localStorage.getItem('ish_java_quiz_passed')||'[]');}catch(e){return[];}}
-function setQuizPassed(a){localStorage.setItem('ish_java_quiz_passed',JSON.stringify(a));}
-function isQuizPassed(id){return getQuizPassed().includes(id);}
-function markQuizPassed(id){const a=getQuizPassed();if(!a.includes(id)){a.push(id);setQuizPassed(a);}}
-function hasQuiz(m){return !!(m&&m.quiz&&m.quiz.length);}
-function maxXP(){return MODS.reduce((t,m)=>t+(hasQuiz(m)?m.quiz.reduce((x,q)=>x+q.xp,0):(m.quizXp||0)),0);}   // premium quizzes are not loaded until opened; quizXp (from the data file) counts them
-function updateXPUI(){
-  const xp=getXP(), maxXp=maxXP()||1;
-  document.querySelectorAll('#totalXpFill').forEach(el=>el.style.width=Math.min(100,(xp/maxXp)*100)+'%');
-  document.querySelectorAll('#totalXpVal').forEach(el=>el.textContent=xp+' XP');
-  document.querySelectorAll('#totalXpMax').forEach(el=>el.textContent=xp+' / '+maxXp+' XP');
-  document.querySelectorAll('#sbXp').forEach(el=>el.textContent=xp);
+// Module quizzes: 8 questions, 75% (6/8) to pass. Passing unlocks the next module.
+const QUIZ_KEY='ish_java_quiz', PASS_RATIO=0.75;
+function getQuiz(){try{return JSON.parse(localStorage.getItem(QUIZ_KEY)||'{}')||{};}catch(e){return {};}}
+function saveQuiz(q){try{localStorage.setItem(QUIZ_KEY,JSON.stringify(q));}catch(e){}}
+function quizPassed(id){const q=getQuiz()[id];return !!(q&&q.passed);}
+function isUnlocked(id){return id<=1||quizPassed(id-1);}
+// Signed-in users: the server keeps the pass record (users/{uid}.moduleQuiz), so it follows the account
+// and cannot be unlocked by editing localStorage. Signed-out visitors keep the browser-only version.
+let serverSynced = false;
+async function ishApi(path, opts) {
+  try { const { apiFetch } = await import('/auth.js'); return await apiFetch(path, opts); }
+  catch (e) { return { ok: false, status: 0 }; }
 }
-function showXpBurst(pts){
-  const b=document.getElementById('xpBurst');
-  document.getElementById('xpBurstPts').textContent='+'+pts;
-  b.style.display='block';
-  setTimeout(()=>b.style.display='none',2000);
+async function syncQuizProgress() {
+  const res = await ishApi('/api/module-progress?course=java');
+  if (!res.ok) return;                                  // signed out or offline: stay with the local record
+  let data; try { data = await res.json(); } catch (e) { return; }
+  const next = {};
+  Object.keys(data.best || {}).forEach(k => {
+    const pct = data.best[k];
+    next[k] = { best: Math.round(pct * 8 / 100), passed: pct >= (data.pass || 75) };
+  });
+  saveQuiz(next); serverSynced = true;
+  completed = Object.keys(next).filter(k => next[k].passed).map(Number);
+  saveCompleted(completed);
+  if (MODS.length) { if (currentId && !isUnlocked(currentId)) goBack(); else renderIndex(); if (currentId) { renderQuiz(); renderSidebar(); } }
 }
+const qEsc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 let MODS = [];
 
 let currentId = null;
-let completed = getCompleted();
+let completed = Object.keys(getQuiz()).filter(k=>quizPassed(+k)).map(Number);   // a module counts as done only once its quiz is passed
+saveCompleted(completed);
+const TOTAL_FREE = 6;
 
 // RENDER INDEX
-// Lessons and quizzes live in /data/java.json: free modules in full, premium modules as cards only.
+// Lessons and quizzes live in /data/r.json: free modules in full, premium modules as cards only.
 // A premium module's text (and quiz) is fetched from the Worker when a paying user opens it.
 const COURSE_KEY = 'java';
 async function loadCourseData() {
@@ -232,6 +173,7 @@ async function loadCourseData() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     MODS = (await res.json()).mods;
     renderIndex();
+    syncQuizProgress();
   } catch (e) {
     if (grids[0]) grids[0].innerHTML = '<p style="padding:12px 0">Could not load the lessons. Check your connection and <button onclick="loadCourseData()" style="text-decoration:underline;background:none;border:0;color:inherit;font:inherit;cursor:pointer">try again</button>.</p>';
     if (grids[1]) grids[1].innerHTML = '';
@@ -250,30 +192,33 @@ function renderIndex() {
 function renderCard(m) {
   const done = completed.includes(m.id);
   const locked = !m.free && !isPremium();
-  const cls = 'mod-card' + (!m.free?' premium-card':'') + (done?' done-card':'') + (locked?' locked':'');
-  const badge = done ? '<span class="mod-badge badge-done"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> PREMIUM</span>';
-  const click = locked ? 'onclick="ishLocked(\'java\')"' : 'onclick="openLesson(' + m.id + ')"';
-  return '<div class="' + cls + '" ' + click + '>'
-    + '<div class="mod-top"><div class="mod-icon">' + m.icon + '</div>' + badge + '</div>'
-    + '<div class="mod-num">Module ' + String(m.id).padStart(2,'0') + '</div>'
-    + '<div class="mod-title">' + m.title + '</div>'
-    + '<div class="mod-desc">' + m.excerpt.substring(0,90) + '...</div>'
-    + '<div class="mod-footer"><span class="mod-level">' + m.level + '</span>' + (isQuizPassed(m.id) ? '<span style="color:#32c850;font-size:11px;">✓ Quiz Passed</span>' : '') + '<span class="mod-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span></div>'
-    + '</div>';
+  const gated = !locked && !isUnlocked(m.id);
+  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}${gated?' gated':''}`;
+  const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
+  const click = locked ? `onclick="ishLocked('java')"` : gated ? `onclick="gateToast(${m.id})"` : `onclick="openLesson(${m.id})"`;
+  return `<div class="${cls}" ${click}>
+    <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
+    <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
+    <div class="mod-title">${m.title}</div>
+    <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
+    ${gated?`<div class="mod-gate">🔒 Pass Module ${String(m.id-1).padStart(2,'0')} quiz to unlock</div>`:''}
+    <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">→</span></div>
+  </div>`;
 }
 
 function updateProgress() {
   const freeDone = completed.filter(id => MODS.find(m=>m.id===id&&m.free)).length;
-  const pct = Math.round((freeDone/6)*100);
+  const pct = Math.round((freeDone/TOTAL_FREE)*100);
   document.getElementById('progFill').style.width = pct+'%';
   document.getElementById('progPct').textContent = pct+'%';
-  document.getElementById('progLabel').textContent = freeDone + ' of 6 free modules completed';
-  updateXPUI();
+  document.getElementById('progLabel').textContent = `${freeDone} of ${TOTAL_FREE} free modules completed`;
 }
 
 async function openLesson(id) {
   const m = MODS.find(x=>x.id===id);
   if (!m) return;
+  if (!isUnlocked(id)) { gateToast(id); return; }
+  quizAttempt = null;
   if (!m.free && !m.body) {
     const r = await window.loadPremiumLesson('java', id);
     if (!r.ok) { window.ishLessonDenied(r, 'java'); return; }
@@ -287,40 +232,47 @@ async function openLesson(id) {
 
   const done = completed.includes(id);
   const mb = document.getElementById('markBtn');
-  mb.innerHTML = done ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Completed' : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Mark Done';
+  mb.textContent = done ? '✓ Completed' : '✓ Pass Quiz to Finish';
   mb.classList.toggle('done-btn', done);
   document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
 
-  let html;
-  if (!m.free && !isPremium()) {
-    html = '<div class="premium-lock"><div class="section-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><div class="section-heading-display">Premium Module</div><div class="section-sub-muted">Sign in as admin to unlock all advanced content.</div><button class="lock-btn" onclick="ishLocked(\'java\')">Unlock Premium</button></div>';
-  } else {
-    const prevMod = MODS.find(x=>x.id===id-1);
-    const nextMod = MODS.find(x=>x.id===id+1);
-    const prevNav = id > 1 ? '<div class="nlc" onclick="openLesson(' + (id-1) + ')"><div class="nlc-dir"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Previous</div><div class="nlc-title">' + (prevMod ? prevMod.title : '') + '</div></div>' : '<div></div>';
-    const nextNav = id < MODS.length ? '<div class="nlc" onclick="' + (canGoNext(id) ? 'openLesson(' + (id+1) + ')' : 'showToast(\'Pass the module quiz with 75%+ to unlock the next module!\')') + '" class="text-right"><div class="nlc-dir">Next <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div><div class="nlc-title">' + (nextMod ? nextMod.title : '') + '</div></div>' : '<div></div>';
-
-    html = '<div class="les-cat ' + (!m.free?'prem':'') + '">Module ' + String(id).padStart(2,'0') + ' · ' + m.level + ' · ' + (m.free?'Free':'Premium') + '</div>'
-      + '<h1 class="les-title">' + m.title + '</h1>'
-      + '<p class="les-excerpt">' + m.excerpt + '</p>'
-      + '<div class="les-meta">'
-      + '<span class="meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Java OOP</span>'
-      + '<span class="meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~' + Math.max(5, Math.round(m.body.replace(/<[^>]+>/g,' ').split(/\s+/).length/200)) + ' min read</span>'
-      + '<span class="meta-item"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> ' + m.level + '</span>'
-      + (hasQuiz(m) ? '<span class="meta-item"><i class="ti ti-bolt" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> ' + (m.quiz.length*10) + ' XP Available</span>' : '')
-      + '</div>'
-      + '<div class="les-visual" style="background:' + m.bg + ';"><div class="les-visual-grid"></div><span class="pos-rel-z1">' + m.visual + '</span></div>'
-      + '<div class="art-body">' + m.body + '</div>'
-      + '<div class="concepts-box"><div class="concepts-title">Key Concepts Covered</div><div class="concepts-list">' + m.concepts.map(c=>'<span class="concept-tag">' + c + '</span>').join('') + '</div></div>'
-      + buildQuizGate(id, isQuizPassed(id))
-      + '<div class="les-footer"><div class="les-tags">' + m.tags.map(t=>'<span class="les-tag">' + t + '</span>').join('') + '</div>'
-      + '<div class="nav-lessons">' + prevNav + nextNav + '</div></div>';
-  }
+  const html = !m.free && !isPremium()
+    ? `<div class="premium-lock"><div class="section-emoji"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
+       <div class="section-heading-display">Premium Module</div>
+       <div class="section-sub-muted">Upgrade your plan to unlock all advanced content.</div>
+       <button class="lock-btn" onclick="ishLocked('java')">Unlock Premium</button></div>`
+    : `<div class="les-cat ${!m.free?'prem':''}">Module ${String(id).padStart(2,'0')} · ${m.level} · ${m.free?'Free':'Premium'}</div>
+       <h1 class="les-title">${m.title}</h1>
+       <p class="les-excerpt">${m.excerpt}</p>
+       <div class="les-meta">
+         <span class="meta-item"><i class="ti ti-coffee" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> Java</span>
+         <span class="meta-item">⏱ ~${m.rt||m.read||10} min read</span>
+         <span class="meta-item"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> ${m.level}</span>
+       </div>
+       <div class="les-visual" style="background:${m.bg};">
+         <div class="les-visual-grid"></div>
+         <span class="hero-emoji">${m.visual}</span>
+       </div>
+       <div class="art-body">${m.body}</div>
+       <div class="concepts-box">
+         <div class="concepts-title">Key Concepts Covered</div>
+         <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
+       </div>
+       <div class="mq" id="mqBox"></div>
+       <div class="les-footer">
+         <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
+         <div class="nav-lessons">
+           ${id>1?`<div class="nlc" onclick="openLesson(${id-1})"><div class="nlc-dir">← Previous</div><div class="nlc-title">${MODS.find(x=>x.id===id-1)?.title}</div></div>`:'<div></div>'}
+           ${id<MODS.length?`<div class="nlc" onclick="openLesson(${id+1})" class="text-right"><div class="nlc-dir">Next →</div><div class="nlc-title">${MODS.find(x=>x.id===id+1)?.title}</div></div>`:'<div></div>'}
+         </div>
+       </div>`;
 
   document.getElementById('lessonContent').innerHTML = html;
+  renderQuiz();
   renderSidebar();
 
+  // Scroll progress
   window.onscroll = () => {
     const pct = document.body.scrollHeight - window.innerHeight > 0
       ? (window.scrollY/(document.body.scrollHeight-window.innerHeight))*100 : 0;
@@ -330,136 +282,120 @@ async function openLesson(id) {
 
 function renderSidebar() {
   const freeDone = completed.filter(id=>MODS.find(m=>m.id===id&&m.free)).length;
-  const pct = Math.round((freeDone/6)*100);
+  const pct = Math.round((freeDone/TOTAL_FREE)*100);
   document.getElementById('sbProgFill').style.width = pct+'%';
-  document.getElementById('sbProgLabel').textContent = freeDone + ' / 6 free';
-  updateXPUI();
+  document.getElementById('sbProgLabel').textContent = `${freeDone} / ${TOTAL_FREE} free`;
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
-    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
-    const onclick = locked ? 'ishLocked(\'java\')' : 'openLesson(' + m.id + ')';
-    const checkIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-    const lockIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>';
-    return '<button class="sb-btn' + (active?' active':'') + (done?' done-sb':'') + '" onclick="' + onclick + '">'
-      + '<span class="sb-num">' + (done?checkIcon:m.id) + '</span>'
-      + '<span class="sb-btn-title">' + m.title + '</span>'
-      + (locked?'<span style="font-size:10px;opacity:0.5;">' + lockIcon + '</span>':'')
-      + (isQuizPassed(m.id)?'<span style="font-size:10px;color:#32c850;"><i class="ti ti-bolt" aria-hidden="true"></i></span>':'')
-      + '</button>';
+    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium(), gated=!locked&&!isUnlocked(m.id);
+
+    // PREMIUM REDIRECT LOGIC in sidebar
+    const click = locked ? `ishLocked('java')` : gated ? `gateToast(${m.id})` : `openLesson(${m.id})`;
+
+    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${click}">
+      <span class="sb-num">${done?'✓':m.id}</span>
+      <span class="sb-btn-title">${m.title}</span>
+      ${locked||gated?'<span style="font-size:10px;opacity:0.5;color:var(--gold);"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
+    </button>`;
   }).join('');
 }
 
-function goBack(){document.getElementById('lessonPage').style.display='none';document.getElementById('indexPage').style.display='block';renderIndex();window.scrollTo(0,0);}
-function prevLesson(){if(currentId>1)openLesson(currentId-1);}
-function canGoNext(id){const m=MODS.find(x=>x.id===id);return !hasQuiz(m)||isQuizPassed(id);}
-function nextLesson(){
-  if(currentId<MODS.length){
-    if(canGoNext(currentId)) openLesson(currentId+1);
-    else showToast('Pass the module quiz with 75%+ to unlock the next module!');
-  }
-}
-function markDone(){
-  if(!currentId)return;
-  const m=MODS.find(x=>x.id===currentId);
-  if(!m.free&&!isPremium())return;
-  if(hasQuiz(m)&&!isQuizPassed(currentId)){showToast('Pass the quiz first to mark this module done!');return;}
-  if(!completed.includes(currentId)){completed.push(currentId);saveCompleted(completed);showToast('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Module marked complete!');}
-  openLesson(currentId);
-}
-function showToast(msg){const t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
-
-// ── QUIZ SYSTEM ──────────────────────────────────────────────
-let quizState = { modId:null, questions:[], current:0, answers:[], score:0 };
-
-function buildQuizGate(modId, quizPassed) {
-  const m = MODS.find(x=>x.id===modId);
-  if (!hasQuiz(m)) return '';
-  if (quizPassed) {
-    return '<div class="quiz-gate"><div class="quiz-gate-icon"><i class="ti ti-trophy" aria-hidden="true"></i></div>'
-      + '<div class="quiz-gate-title">Module Quiz — Passed!</div>'
-      + '<div style="margin-bottom:12px;"><span class="quiz-passed-badge">✓ Score ≥ 75% · Next Module Unlocked</span></div>'
-      + '<button class="quiz-gate-btn" onclick="startQuiz(' + modId + ')">Retake Quiz for More XP</button></div>';
-  }
-  return '<div class="quiz-gate"><div class="quiz-gate-icon"><i class="ti ti-target" aria-hidden="true"></i></div>'
-    + '<div class="quiz-gate-title">Module Quiz Required</div>'
-    + '<div class="quiz-gate-desc">Score 75% or higher to unlock the next module.<br>Each correct answer earns XP points!</div>'
-    + '<button class="quiz-gate-btn" onclick="startQuiz(' + modId + ')">Start Quiz — ' + m.quiz.length + ' Questions · ' + (m.quiz.length*10) + ' XP</button></div>';
-}
-
-function startQuiz(modId) {
-  const m = MODS.find(x=>x.id===modId);
-  if (!hasQuiz(m)) return;
-  quizState = { modId, questions: m.quiz, current: 0, answers: new Array(m.quiz.length).fill(-1), score: 0 };
-  document.getElementById('quizOverlay').classList.add('active');
-  renderQuizQuestion();
+function goBack(){
+  quizAttempt=null;
+  document.getElementById('lessonPage').style.display='none';
+  document.getElementById('indexPage').style.display='block';
+  renderIndex();
   window.scrollTo(0,0);
 }
 
-function renderQuizQuestion() {
-  const qs = quizState.questions, i = quizState.current, q = qs[i];
-  const total = qs.length, sel = quizState.answers[i];
-  const optHTML = q.opts.map((opt,idx) => {
-    let cls = 'quiz-opt';
-    if (sel !== -1) {
-      if (idx === q.ans) cls += ' reveal-correct';
-      if (idx === sel && idx !== q.ans) cls += ' wrong';
-      if (idx === sel && idx === q.ans) cls = 'quiz-opt correct';
-    }
-    return '<button class="' + cls + '" onclick="selectAnswer(' + idx + ')" ' + (sel!==-1?'disabled':'') + '>' + String.fromCharCode(65+idx) + '. ' + opt + '</button>';
-  }).join('');
-  const fb = sel !== -1
-    ? '<div class="quiz-feedback ' + (sel===q.ans?'correct':'wrong') + '">' + (sel===q.ans?'✓ Correct!':'✗ Incorrect.') + ' ' + q.exp + '</div>' : '';
-  const btn = sel !== -1
-    ? (i < total-1 ? '<button class="quiz-btn" onclick="nextQuizQ()">Next Question →</button>' : '<button class="quiz-btn" onclick="showQuizResult()">See Results</button>')
-    : '<button class="quiz-btn" disabled>Select an answer</button>';
-  document.getElementById('quizBox').innerHTML =
-    '<div class="quiz-header"><div><div class="quiz-title">Module ' + String(quizState.modId).padStart(2,'0') + ' Quiz</div>'
-    + '<div class="quiz-subtitle">Score ≥ 75% to unlock next module</div></div>'
-    + '<div class="quiz-progress-text">Q' + (i+1) + ' / ' + total + '</div></div>'
-    + '<div class="quiz-q-num">QUESTION ' + (i+1) + ' OF ' + total + '</div>'
-    + '<div class="quiz-question">' + q.q + '</div>'
-    + '<div class="quiz-options">' + optHTML + '</div>' + fb
-    + '<div class="quiz-nav"><span style="font-size:12px;color:#c8f135;">+' + q.xp + ' XP for correct answer</span>' + btn + '</div>';
-}
-
-function selectAnswer(optIdx) {
-  if (quizState.answers[quizState.current] !== -1) return;
-  quizState.answers[quizState.current] = optIdx;
-  const q = quizState.questions[quizState.current];
-  if (optIdx === q.ans) { quizState.score++; addXP(q.xp); }
-  renderQuizQuestion();
-}
-
-function nextQuizQ() {
-  if (quizState.current < quizState.questions.length-1) { quizState.current++; renderQuizQuestion(); }
-}
-
-function showQuizResult() {
-  const total = quizState.questions.length, score = quizState.score;
-  const pct = Math.round((score/total)*100), pass = pct >= 75, modId = quizState.modId;
-  if (pass) {
-    markQuizPassed(modId);
-    if (!completed.includes(modId)) { completed.push(modId); saveCompleted(completed); }
+function prevLesson() {
+  if(currentId>1) {
+    const m = MODS.find(x=>x.id===currentId-1);
+    if(m.free) openLesson(currentId-1);
+    else ishLocked('java');
   }
-  const xpEarned = quizState.questions.reduce((t,q,i)=> quizState.answers[i]===q.ans ? t+q.xp : t, 0);
-  document.getElementById('quizBox').innerHTML =
-    '<div class="quiz-result"><div class="quiz-result-score ' + (pass?'pass':'fail') + '">' + pct + '%</div>'
-    + '<div class="quiz-result-msg">' + (pass ? 'Excellent! You passed!' : 'Not quite — need 75% to proceed.') + '</div>'
-    + '<div class="quiz-result-sub">' + score + ' / ' + total + ' correct answers</div>'
-    + (xpEarned>0 ? '<div class="quiz-result-xp">+' + xpEarned + ' XP Earned This Attempt</div>' : '')
-    + (pass ? '<div style="margin-top:12px;"><span class="quiz-passed-badge">✓ Next Module Unlocked!</span></div>' : '')
-    + '<div class="quiz-result-btns"><button class="quiz-btn secondary" onclick="retryQuiz()">↺ Retry Quiz</button>'
-    + '<button class="quiz-btn" onclick="closeQuiz()">← Back to Lesson</button>'
-    + (pass && modId < MODS.length ? '<button class="quiz-btn" onclick="closeQuizAndNext()">Next Module →</button>' : '')
-    + '</div></div>';
-  updateXPUI(); renderSidebar();
 }
 
-function retryQuiz() { startQuiz(quizState.modId); }
-function closeQuiz() { document.getElementById('quizOverlay').classList.remove('active'); openLesson(quizState.modId); }
-function closeQuizAndNext() {
-  const nextId = quizState.modId + 1;
-  document.getElementById('quizOverlay').classList.remove('active');
-  if (nextId <= MODS.length) openLesson(nextId);
+function nextLesson() {
+  if(currentId<MODS.length) {
+    if(!quizPassed(currentId)) { gateToast(currentId+1); return; }
+    const m = MODS.find(x=>x.id===currentId+1);
+    if(m.free || isPremium()) openLesson(currentId+1);
+    else ishLocked('java');
+  }
+}
+function gateToast(id){
+  showToast('🔒 Pass the Module '+String(id-1).padStart(2,'0')+' quiz (75%+) to unlock this module');
+  if(currentId===id-1){const b=document.getElementById('mqBox'); if(b) b.scrollIntoView({behavior:'smooth',block:'center'});}
+}
+
+function markDone() {
+  if(!currentId) return;
+  if(!quizPassed(currentId)){ showToast('Pass the module quiz (6 of 8) to finish this module'); const b=document.getElementById('mqBox'); if(b) b.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  openLesson(currentId);
+}
+
+/* ── MODULE QUIZ ── */
+let quizAttempt = null;   // {id, order:[[optionIndex...]...], picks:[]}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function renderQuiz(){
+  const box=document.getElementById('mqBox'); if(!box) return;
+  const m=MODS.find(x=>x.id===currentId);
+  if(!m||!Array.isArray(m.quiz)||!m.quiz.length){ box.style.display='none'; return; }
+  const need=Math.ceil(m.quiz.length*PASS_RATIO), rec=getQuiz()[currentId];
+  const head=`<div class="mq-head"><div class="mq-title">Module Quiz</div><div class="mq-rule">${m.quiz.length} QUESTIONS · PASS = ${need}/${m.quiz.length} (75%)</div></div>`;
+  if(!quizAttempt||quizAttempt.id!==currentId){
+    if(rec&&rec.passed){
+      box.innerHTML=head+`<div class="mq-result pass"><span class="mq-score">✓ Passed — best ${rec.best}/${m.quiz.length}</span>${currentId<MODS.length?'The next module is unlocked.':'You have completed the course.'}</div>
+        <div class="mq-actions">${currentId<MODS.length?'<button class="mq-btn" onclick="nextLesson()">Next Module →</button>':''}<button class="mq-btn ghost" onclick="startQuiz()">Retake Quiz</button></div>`;
+    } else {
+      box.innerHTML=head+`<div class="mq-sub">Answer all ${m.quiz.length} questions. You need at least ${need} correct to pass and unlock the next module.${rec?` Your best so far: ${rec.best}/${m.quiz.length}.`:''}</div>
+        <div class="mq-actions"><button class="mq-btn" onclick="startQuiz()">Start Quiz</button></div>`;
+    }
+    return;
+  }
+  const a=quizAttempt;
+  box.innerHTML=head+`<div class="mq-sub">Choose one answer for each question, then submit.</div>`+m.quiz.map((q,qi)=>`<div class="mq-q"><div class="mq-qtext"><span class="mq-qnum">Q${qi+1}</span>${qEsc(q.q)}</div>`+
+    a.order[qi].map(oi=>`<label class="mq-opt${a.picks[qi]===oi?' sel':''}"><input type="radio" name="mq${qi}" ${a.picks[qi]===oi?'checked':''} onchange="pickAnswer(${qi},${oi})"><span>${qEsc(q.o[oi])}</span></label>`).join('')+`</div>`).join('')+
+    `<div class="mq-actions"><button class="mq-btn" onclick="submitQuiz()">Submit Answers</button></div>`;
+}
+function startQuiz(){
+  const m=MODS.find(x=>x.id===currentId); if(!m||!m.quiz) return;
+  quizAttempt={id:currentId,order:m.quiz.map(q=>shuffle(q.o.map((_,i)=>i))),picks:m.quiz.map(()=>null)};
+  renderQuiz();
+  document.getElementById('mqBox').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function pickAnswer(qi,oi){ if(!quizAttempt) return; quizAttempt.picks[qi]=oi; renderQuiz(); }
+function submitQuiz(){
+  const m=MODS.find(x=>x.id===currentId), a=quizAttempt; if(!m||!a) return;
+  if(a.picks.some(p=>p===null)){ showToast('Answer every question before submitting'); return; }
+  const total=m.quiz.length, need=Math.ceil(total*PASS_RATIO);
+  const score=m.quiz.reduce((n,q,i)=>n+(a.picks[i]===q.a?1:0),0), passed=score>=need;
+  const store=getQuiz(), prev=store[currentId]||{best:0,passed:false};
+  store[currentId]={best:Math.max(prev.best||0,score),passed:prev.passed||passed};
+  saveQuiz(store);
+  if(passed&&!completed.includes(currentId)){ completed.push(currentId); saveCompleted(completed); }
+  ishApi('/api/module-quiz',{method:'POST',body:{course:'java',module:currentId,score,total}}).then(r=>{ if(r&&r.status===403) syncQuizProgress(); });
+  const box=document.getElementById('mqBox');
+  const review=m.quiz.map((q,qi)=>`<div class="mq-q"><div class="mq-qtext"><span class="mq-qnum">Q${qi+1}</span>${qEsc(q.q)}</div>`+
+    q.o.map((t,oi)=>`<div class="mq-opt${oi===q.a?' right':(a.picks[qi]===oi?' wrong':'')}"><span>${oi===q.a?'✓ ':(a.picks[qi]===oi?'✗ ':'')}${qEsc(t)}</span></div>`).join('')+
+    `<div class="mq-exp">${qEsc(q.e||'')}</div></div>`).join('');
+  const verdict=passed
+    ? `<div class="mq-result pass"><span class="mq-score">✓ ${score}/${total} — Passed</span>${currentId<MODS.length?'Module '+String(currentId+1).padStart(2,'0')+' is now unlocked.':'Course complete — well done!'}</div>`
+    : `<div class="mq-result fail"><span class="mq-score">${score}/${total} — Not yet</span>You need ${need}/${total} (75%) to continue. Review the lesson above and try again.</div>`;
+  box.innerHTML=`<div class="mq-head"><div class="mq-title">Quiz Results</div><div class="mq-rule">PASS = ${need}/${total} (75%)</div></div>`+verdict+review+
+    `<div class="mq-actions">${passed&&currentId<MODS.length?'<button class="mq-btn" onclick="quizAttempt=null;nextLesson()">Next Module →</button>':''}<button class="mq-btn ghost" onclick="startQuiz()">${passed?'Retake Quiz':'Retake Quiz'}</button></div>`;
+  quizAttempt=null;
+  const mb=document.getElementById('markBtn'); mb.textContent=quizPassed(currentId)?'✓ Completed':'✓ Pass Quiz to Finish'; mb.classList.toggle('done-btn',quizPassed(currentId));
+  if(passed) showToast('✓ Quiz passed — module complete!');
+  renderSidebar();
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
 }
 
 // Cursor
@@ -467,8 +403,8 @@ const cur=document.getElementById('cur'),curR=document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 (function anim(){cur.style.left=(mx-5)+'px';cur.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=(rx-18)+'px';curR.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
-document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
-document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
+document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
+document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
 </script>
 <script src="premium-content.js"></script>
 <script src="ish-cursor-guard.js" defer></script>

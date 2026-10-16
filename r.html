@@ -19,7 +19,6 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="course-page.css">
-<base target="_blank">
 </head>
 <body class="course-r">
 <div class="read-progress" id="readProgress"></div>
@@ -121,6 +120,27 @@ function getQuiz(){try{return JSON.parse(localStorage.getItem(QUIZ_KEY)||'{}')||
 function saveQuiz(q){try{localStorage.setItem(QUIZ_KEY,JSON.stringify(q));}catch(e){}}
 function quizPassed(id){const q=getQuiz()[id];return !!(q&&q.passed);}
 function isUnlocked(id){return id<=1||quizPassed(id-1);}
+// Signed-in users: the server keeps the pass record (users/{uid}.moduleQuiz), so it follows the account
+// and cannot be unlocked by editing localStorage. Signed-out visitors keep the browser-only version.
+let serverSynced = false;
+async function ishApi(path, opts) {
+  try { const { apiFetch } = await import('/auth.js'); return await apiFetch(path, opts); }
+  catch (e) { return { ok: false, status: 0 }; }
+}
+async function syncQuizProgress() {
+  const res = await ishApi('/api/module-progress?course=r');
+  if (!res.ok) return;                                  // signed out or offline: stay with the local record
+  let data; try { data = await res.json(); } catch (e) { return; }
+  const next = {};
+  Object.keys(data.best || {}).forEach(k => {
+    const pct = data.best[k];
+    next[k] = { best: Math.round(pct * 8 / 100), passed: pct >= (data.pass || 75) };
+  });
+  saveQuiz(next); serverSynced = true;
+  completed = Object.keys(next).filter(k => next[k].passed).map(Number);
+  saveCompleted(completed);
+  if (MODS.length) { if (currentId && !isUnlocked(currentId)) goBack(); else renderIndex(); if (currentId) { renderQuiz(); renderSidebar(); } }
+}
 const qEsc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 let MODS = [];
@@ -142,6 +162,7 @@ async function loadCourseData() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     MODS = (await res.json()).mods;
     renderIndex();
+    syncQuizProgress();
   } catch (e) {
     if (grids[0]) grids[0].innerHTML = '<p style="padding:12px 0">Could not load the lessons. Check your connection and <button onclick="loadCourseData()" style="text-decoration:underline;background:none;border:0;color:inherit;font:inherit;cursor:pointer">try again</button>.</p>';
     if (grids[1]) grids[1].innerHTML = '';
@@ -342,6 +363,7 @@ function submitQuiz(){
   store[currentId]={best:Math.max(prev.best||0,score),passed:prev.passed||passed};
   saveQuiz(store);
   if(passed&&!completed.includes(currentId)){ completed.push(currentId); saveCompleted(completed); }
+  ishApi('/api/module-quiz',{method:'POST',body:{course:'r',module:currentId,score,total}}).then(r=>{ if(r&&r.status===403) syncQuizProgress(); });
   const box=document.getElementById('mqBox');
   const review=m.quiz.map((q,qi)=>`<div class="mq-q"><div class="mq-qtext"><span class="mq-qnum">Q${qi+1}</span>${qEsc(q.q)}</div>`+
     q.o.map((t,oi)=>`<div class="mq-opt${oi===q.a?' right':(a.picks[qi]===oi?' wrong':'')}"><span>${oi===q.a?'✓ ':(a.picks[qi]===oi?'✗ ':'')}${qEsc(t)}</span></div>`).join('')+

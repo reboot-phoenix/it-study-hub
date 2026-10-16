@@ -7,20 +7,46 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OOPs in C++ — IT Study Hub</title>
-<meta name="description" content="Learn OOP in C++ free: pointers, memory management, the STL and the four pillars of object-oriented programming, with notes, PDFs and quizzes.">
-<link rel="canonical" href="https://itstudyhub.dpdns.org/c++">
+<title>C Programming — IT Study Hub</title>
+<meta name="description" content="Learn C programming free: 12 modules from variables and loops to pointers, recursion and systems programming, with notes, quizzes and a built-in code runner.">
+<link rel="canonical" href="https://itstudyhub.dpdns.org/c">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="IT Study Hub">
-<meta property="og:title" content="OOPs in C++ — IT Study Hub">
-<meta property="og:description" content="Learn OOP in C++ free: pointers, memory management, the STL and the four pillars of object-oriented programming, with notes, PDFs and quizzes.">
-<meta property="og:url" content="https://itstudyhub.dpdns.org/c++">
+<meta property="og:title" content="C Programming — IT Study Hub">
+<meta property="og:description" content="Learn C programming free: 12 modules from variables and loops to pointers, recursion and systems programming, with notes, quizzes and a built-in code runner.">
+<meta property="og:url" content="https://itstudyhub.dpdns.org/c">
 <meta property="og:image" content="https://itstudyhub.dpdns.org/team_image.jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="course-page.css">
+<style id="course-extra">
+@keyframes burstIn{from{opacity:0;transform:translate(-50%,-50%) scale(.7);}to{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+.theory-box{background:rgba(200,241,53,0.04);border-left:3px solid #c8f135;border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;font-size:14px;color:rgba(255,255,255,0.8);line-height:1.7;}
+.theory-box strong{color:#c8f135;}
+.warning-box{background:rgba(240,60,60,0.06);border-left:3px solid #f03c3c;border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;font-size:14px;color:rgba(255,255,255,0.8);line-height:1.7;}
+.warning-box strong{color:#f06060;}
+.info-box{background:rgba(80,160,255,0.06);border-left:3px solid #50a0ff;border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;font-size:14px;color:rgba(255,255,255,0.8);line-height:1.7;}
+.info-box strong{color:#80c0ff;}
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:20px 0;}
+.concept-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;font-size:13px;color:rgba(255,255,255,0.75);line-height:1.5;}
+.concept-card strong{display:block;color:#c8f135;margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;}
+.timeline{display:flex;flex-direction:column;gap:0;margin:20px 0;}
+.timeline-item{display:flex;gap:16px;padding:12px 0;border-left:2px solid rgba(200,241,53,0.2);padding-left:20px;position:relative;}
+.timeline-item::before{content:'';position:absolute;left:-5px;top:18px;width:8px;height:8px;border-radius:50%;background:#c8f135;}
+.timeline-year{font-size:11px;color:#c8f135;font-family:monospace;white-space:nowrap;padding-top:2px;min-width:60px;}
+.timeline-content{font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;}
+.comparison-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13px;}
+.comparison-table th{background:rgba(200,241,53,0.1);color:#c8f135;padding:10px 14px;text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;}
+.comparison-table td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.8);}
+.comparison-table tr:hover td{background:rgba(255,255,255,0.02);}
+.flow-diagram{background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px;margin:20px 0;font-family:var(--ff-mono,monospace);font-size:13px;color:rgba(255,255,255,0.7);overflow-x:auto;}
+.flow-arrow{color:#c8f135;}
+.key-point{display:flex;gap:12px;align-items:flex-start;margin:12px 0;}
+.key-point-icon{font-size:16px;flex-shrink:0;margin-top:2px;}
+.key-point-text{font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;}
+</style>
 </head>
-<body>
+<body class="course-c">
 <div class="read-progress" id="readProgress"></div>
 
 <nav>
@@ -33,18 +59,21 @@
 
 <div id="indexPage">
   <div class="fade-up">
-    <div class="course-eyebrow">Subject 05 · IT Study Hub</div>
-    <h1 class="course-title">OOPs in <em>C++</em></h1>
-    <p class="course-desc">Master the foundation of high-performance software. From pointers and memory management to the STL and the 4 pillars of OOP — everything you need.</p>
+    <div class="course-eyebrow">Subject 01 · IT Study Hub</div>
+    <h1 class="course-title">C <em>Programming</em></h1>
+    <p class="course-desc">Master the language that built the modern world. From variables and loops to pointers, recursion, and systems programming — 12 modules of rigorous academic content with deep theory, interactive quizzes, and XP rewards. Written by Mithila Rani Saha & Dithsa Dutta.</p>
     <div class="course-chips">
-      <span class="chip chip-lime"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> C++</span>
+      <span class="chip chip-lime"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> C Language</span>
       <span class="chip chip-lime">6 Free Modules</span>
       <span class="chip chip-gold">6 Premium Modules</span>
+      <span class="chip chip-lime">8-Question Quiz per Module</span>
       <span class="chip chip-lime">Real PDF Notes</span>
+      <span class="chip chip-lime"><i class="ti ti-books" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> Deep Theory</span>
     </div>
   </div>
 
   <div class="progress-card fade-up" class="anim-delay-1">
+    
     <div class="prog-pct" id="progPct">0%</div>
     <div class="prog-bar-wrap">
       <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
@@ -52,31 +81,32 @@
     </div>
   </div>
 
-  <div class="fade-up" class="anim-delay-15">
+  <div class="fade-up anim-delay-15">
     <div class="sec-label">Free Modules</div>
     <div class="modules-grid" id="freeGrid"></div>
   </div>
 
-  <div class="fade-up" class="anim-delay-2">
+  <div class="fade-up anim-delay-2">
     <div class="sec-label">Premium Modules</div>
     <div class="modules-grid" id="premiumGrid"></div>
   </div>
 
-  <div class="fade-up" class="anim-delay-25">
+  <div class="fade-up anim-delay-25">
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
-      <a href="https://www.sanfoundry.com/cpp-programming-questions-answers/" target="_blank" class="mat-item">
+      <a href="https://www.sanfoundry.com/c-programming-questions-answers/" target="_blank" class="mat-item">
         <div class="mat-icon"><i class="ti ti-target" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
-        <div class="mat-info"><div class="mat-title">Placement Quiz — C++ OOP</div><div class="mat-desc">1000+ MCQs · Free</div></div>
+        <div class="mat-info"><div class="mat-title">Placement Quiz — C Programming</div><div class="mat-desc">1000+ MCQs · Free</div></div>
         <span class="mat-action">→ Start</span>
       </a>
     </div>
   </div>
 </div>
 
+<!-- LESSON PAGE -->
 <div id="lessonPage">
   <div class="lesson-topbar">
-    <div class="les-breadcrumb">OOPs in C++ <span>/</span> <span id="lesCrumb">—</span></div>
+    <div class="les-breadcrumb">C Programming <span>/</span> <span id="lesCrumb">—</span></div>
     <div class="les-nav-btns">
       <button class="lnav-btn" onclick="goBack()">← Back</button>
       <button class="lnav-btn" id="prevBtn" onclick="prevLesson()">← Prev</button>
@@ -106,19 +136,49 @@
 
 <script>
 function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')||'null');}catch(e){return null;}}
-function isPremium(){ return typeof window.ishHasCourse === 'function' && window.ishHasCourse('cpp'); } // set by premium-content.js from /api/access (Starter plans open only their two chosen courses)
-function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_cpp_done')||'[]');}catch(e){return[];}}
-function saveCompleted(a){localStorage.setItem('ish_cpp_done',JSON.stringify(a));}
+function isPremium(){ return typeof window.ishHasCourse === 'function' && window.ishHasCourse('c'); } // set by premium-content.js from /api/access (Starter plans open only their two chosen courses)
+function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_c_done')||'[]');}catch(e){return[];}}
+function saveCompleted(a){localStorage.setItem('ish_c_done',JSON.stringify(a));}
+// Module quizzes: 8 questions, 75% (6/8) to pass. Passing unlocks the next module.
+const QUIZ_KEY='ish_c_quiz', PASS_RATIO=0.75;
+function getQuiz(){try{return JSON.parse(localStorage.getItem(QUIZ_KEY)||'{}')||{};}catch(e){return {};}}
+function saveQuiz(q){try{localStorage.setItem(QUIZ_KEY,JSON.stringify(q));}catch(e){}}
+function quizPassed(id){const q=getQuiz()[id];return !!(q&&q.passed);}
+function isUnlocked(id){return id<=1||quizPassed(id-1);}
+// Signed-in users: the server keeps the pass record (users/{uid}.moduleQuiz), so it follows the account
+// and cannot be unlocked by editing localStorage. Signed-out visitors keep the browser-only version.
+let serverSynced = false;
+async function ishApi(path, opts) {
+  try { const { apiFetch } = await import('/auth.js'); return await apiFetch(path, opts); }
+  catch (e) { return { ok: false, status: 0 }; }
+}
+async function syncQuizProgress() {
+  const res = await ishApi('/api/module-progress?course=c');
+  if (!res.ok) return;                                  // signed out or offline: stay with the local record
+  let data; try { data = await res.json(); } catch (e) { return; }
+  const next = {};
+  Object.keys(data.best || {}).forEach(k => {
+    const pct = data.best[k];
+    next[k] = { best: Math.round(pct * 8 / 100), passed: pct >= (data.pass || 75) };
+  });
+  saveQuiz(next); serverSynced = true;
+  completed = Object.keys(next).filter(k => next[k].passed).map(Number);
+  saveCompleted(completed);
+  if (MODS.length) { if (currentId && !isUnlocked(currentId)) goBack(); else renderIndex(); if (currentId) { renderQuiz(); renderSidebar(); } }
+}
+const qEsc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 let MODS = [];
 
 let currentId = null;
-let completed = getCompleted();
+let completed = Object.keys(getQuiz()).filter(k=>quizPassed(+k)).map(Number);   // a module counts as done only once its quiz is passed
+saveCompleted(completed);
+const TOTAL_FREE = 6;
 
 // RENDER INDEX
-// Lessons and quizzes live in /data/cpp.json: free modules in full, premium modules as cards only.
+// Lessons and quizzes live in /data/r.json: free modules in full, premium modules as cards only.
 // A premium module's text (and quiz) is fetched from the Worker when a paying user opens it.
-const COURSE_KEY = 'cpp';
+const COURSE_KEY = 'c';
 async function loadCourseData() {
   const grids = ['freeGrid', 'premiumGrid'].map((id) => document.getElementById(id));
   grids.forEach((g) => { if (g) g.innerHTML = '<p style="opacity:.7;padding:12px 0">Loading lessons…</p>'; });
@@ -127,6 +187,7 @@ async function loadCourseData() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     MODS = (await res.json()).mods;
     renderIndex();
+    syncQuizProgress();
   } catch (e) {
     if (grids[0]) grids[0].innerHTML = '<p style="padding:12px 0">Could not load the lessons. Check your connection and <button onclick="loadCourseData()" style="text-decoration:underline;background:none;border:0;color:inherit;font:inherit;cursor:pointer">try again</button>.</p>';
     if (grids[1]) grids[1].innerHTML = '';
@@ -145,32 +206,36 @@ function renderIndex() {
 function renderCard(m) {
   const done = completed.includes(m.id);
   const locked = !m.free && !isPremium();
-  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}`;
+  const gated = !locked && !isUnlocked(m.id);
+  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}${gated?' gated':''}`;
   const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
-  const click = locked ? `onclick="ishLocked('cpp')"` : `onclick="openLesson(${m.id})"`;
+  const click = locked ? `onclick="ishLocked('c')"` : gated ? `onclick="gateToast(${m.id})"` : `onclick="openLesson(${m.id})"`;
   return `<div class="${cls}" ${click}>
     <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
     <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
     <div class="mod-title">${m.title}</div>
     <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
+    ${gated?`<div class="mod-gate">🔒 Pass Module ${String(m.id-1).padStart(2,'0')} quiz to unlock</div>`:''}
     <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">→</span></div>
   </div>`;
 }
 
 function updateProgress() {
   const freeDone = completed.filter(id => MODS.find(m=>m.id===id&&m.free)).length;
-  const pct = Math.round((freeDone/6)*100);
+  const pct = Math.round((freeDone/TOTAL_FREE)*100);
   document.getElementById('progFill').style.width = pct+'%';
   document.getElementById('progPct').textContent = pct+'%';
-  document.getElementById('progLabel').textContent = `${freeDone} of 6 free modules completed`;
+  document.getElementById('progLabel').textContent = `${freeDone} of ${TOTAL_FREE} free modules completed`;
 }
 
 async function openLesson(id) {
   const m = MODS.find(x=>x.id===id);
   if (!m) return;
+  if (!isUnlocked(id)) { gateToast(id); return; }
+  quizAttempt = null;
   if (!m.free && !m.body) {
-    const r = await window.loadPremiumLesson('cpp', id);
-    if (!r.ok) { window.ishLessonDenied(r, 'cpp'); return; }
+    const r = await window.loadPremiumLesson('c', id);
+    if (!r.ok) { window.ishLessonDenied(r, 'c'); return; }
     Object.assign(m, r.data);
   }
   currentId = id;
@@ -181,7 +246,7 @@ async function openLesson(id) {
 
   const done = completed.includes(id);
   const mb = document.getElementById('markBtn');
-  mb.textContent = done ? '✓ Completed' : '✓ Mark Done';
+  mb.textContent = done ? '✓ Completed' : '✓ Pass Quiz to Finish';
   mb.classList.toggle('done-btn', done);
   document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
@@ -189,14 +254,14 @@ async function openLesson(id) {
   const html = !m.free && !isPremium()
     ? `<div class="premium-lock"><div class="section-emoji"><i class="ti ti-star-filled" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
        <div class="section-heading-display">Premium Module</div>
-       <div class="section-sub-muted">Sign in as admin to unlock all advanced content.</div>
-       <button class="lock-btn" onclick="ishLocked('cpp')">Unlock Premium</button></div>`
+       <div class="section-sub-muted">Upgrade your plan to unlock all advanced content.</div>
+       <button class="lock-btn" onclick="ishLocked('c')">Unlock Premium</button></div>`
     : `<div class="les-cat ${!m.free?'prem':''}">Module ${String(id).padStart(2,'0')} · ${m.level} · ${m.free?'Free':'Premium'}</div>
        <h1 class="les-title">${m.title}</h1>
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
-         <span class="meta-item"><i class="ti ti-book" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i> C++ OOP</span>
-         <span class="meta-item">⏱ ~10 min read</span>
+         <span class="meta-item"><i class="ti ti-code" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> C Programming</span>
+         <span class="meta-item">⏱ ~${m.rt||m.read||10} min read</span>
          <span class="meta-item"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> ${m.level}</span>
        </div>
        <div class="les-visual" style="background:${m.bg};">
@@ -208,6 +273,7 @@ async function openLesson(id) {
          <div class="concepts-title">Key Concepts Covered</div>
          <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
        </div>
+       <div class="mq" id="mqBox"></div>
        <div class="les-footer">
          <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
          <div class="nav-lessons">
@@ -217,6 +283,7 @@ async function openLesson(id) {
        </div>`;
 
   document.getElementById('lessonContent').innerHTML = html;
+  renderQuiz();
   renderSidebar();
 
   // Scroll progress
@@ -229,38 +296,129 @@ async function openLesson(id) {
 
 function renderSidebar() {
   const freeDone = completed.filter(id=>MODS.find(m=>m.id===id&&m.free)).length;
-  const pct = Math.round((freeDone/6)*100);
+  const pct = Math.round((freeDone/TOTAL_FREE)*100);
   document.getElementById('sbProgFill').style.width = pct+'%';
-  document.getElementById('sbProgLabel').textContent = `${freeDone} / 6 free`;
+  document.getElementById('sbProgLabel').textContent = `${freeDone} / ${TOTAL_FREE} free`;
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
-    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
-    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${locked?`ishLocked('cpp')`:`openLesson(${m.id})`}">
+    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium(), gated=!locked&&!isUnlocked(m.id);
+
+    // PREMIUM REDIRECT LOGIC in sidebar
+    const click = locked ? `ishLocked('c')` : gated ? `gateToast(${m.id})` : `openLesson(${m.id})`;
+
+    return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${click}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
-      ${locked?'<span style="font-size:10px;opacity:0.5;"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
+      ${locked||gated?'<span style="font-size:10px;opacity:0.5;color:var(--gold);"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
     </button>`;
   }).join('');
 }
 
-function goBack(){document.getElementById('lessonPage').style.display='none';document.getElementById('indexPage').style.display='block';renderIndex();window.scrollTo(0,0);}
-function prevLesson(){if(currentId>1)openLesson(currentId-1);}
-function nextLesson(){if(currentId<MODS.length)openLesson(currentId+1);}
-function markDone(){
-  if(!currentId)return;
-  const m=MODS.find(x=>x.id===currentId);
-  if(!m.free&&!isPremium())return;
-  if(!completed.includes(currentId)){completed.push(currentId);saveCompleted(completed);showToast('✓ Module marked complete! <i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i>');}
+function goBack(){
+  quizAttempt=null;
+  document.getElementById('lessonPage').style.display='none';
+  document.getElementById('indexPage').style.display='block';
+  renderIndex();
+  window.scrollTo(0,0);
+}
+
+function prevLesson() {
+  if(currentId>1) {
+    const m = MODS.find(x=>x.id===currentId-1);
+    if(m.free) openLesson(currentId-1);
+    else ishLocked('c');
+  }
+}
+
+function nextLesson() {
+  if(currentId<MODS.length) {
+    if(!quizPassed(currentId)) { gateToast(currentId+1); return; }
+    const m = MODS.find(x=>x.id===currentId+1);
+    if(m.free || isPremium()) openLesson(currentId+1);
+    else ishLocked('c');
+  }
+}
+function gateToast(id){
+  showToast('🔒 Pass the Module '+String(id-1).padStart(2,'0')+' quiz (75%+) to unlock this module');
+  if(currentId===id-1){const b=document.getElementById('mqBox'); if(b) b.scrollIntoView({behavior:'smooth',block:'center'});}
+}
+
+function markDone() {
+  if(!currentId) return;
+  if(!quizPassed(currentId)){ showToast('Pass the module quiz (6 of 8) to finish this module'); const b=document.getElementById('mqBox'); if(b) b.scrollIntoView({behavior:'smooth',block:'center'}); return; }
   openLesson(currentId);
 }
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+/* ── MODULE QUIZ ── */
+let quizAttempt = null;   // {id, order:[[optionIndex...]...], picks:[]}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function renderQuiz(){
+  const box=document.getElementById('mqBox'); if(!box) return;
+  const m=MODS.find(x=>x.id===currentId);
+  if(!m||!Array.isArray(m.quiz)||!m.quiz.length){ box.style.display='none'; return; }
+  const need=Math.ceil(m.quiz.length*PASS_RATIO), rec=getQuiz()[currentId];
+  const head=`<div class="mq-head"><div class="mq-title">Module Quiz</div><div class="mq-rule">${m.quiz.length} QUESTIONS · PASS = ${need}/${m.quiz.length} (75%)</div></div>`;
+  if(!quizAttempt||quizAttempt.id!==currentId){
+    if(rec&&rec.passed){
+      box.innerHTML=head+`<div class="mq-result pass"><span class="mq-score">✓ Passed — best ${rec.best}/${m.quiz.length}</span>${currentId<MODS.length?'The next module is unlocked.':'You have completed the course.'}</div>
+        <div class="mq-actions">${currentId<MODS.length?'<button class="mq-btn" onclick="nextLesson()">Next Module →</button>':''}<button class="mq-btn ghost" onclick="startQuiz()">Retake Quiz</button></div>`;
+    } else {
+      box.innerHTML=head+`<div class="mq-sub">Answer all ${m.quiz.length} questions. You need at least ${need} correct to pass and unlock the next module.${rec?` Your best so far: ${rec.best}/${m.quiz.length}.`:''}</div>
+        <div class="mq-actions"><button class="mq-btn" onclick="startQuiz()">Start Quiz</button></div>`;
+    }
+    return;
+  }
+  const a=quizAttempt;
+  box.innerHTML=head+`<div class="mq-sub">Choose one answer for each question, then submit.</div>`+m.quiz.map((q,qi)=>`<div class="mq-q"><div class="mq-qtext"><span class="mq-qnum">Q${qi+1}</span>${qEsc(q.q)}</div>`+
+    a.order[qi].map(oi=>`<label class="mq-opt${a.picks[qi]===oi?' sel':''}"><input type="radio" name="mq${qi}" ${a.picks[qi]===oi?'checked':''} onchange="pickAnswer(${qi},${oi})"><span>${qEsc(q.o[oi])}</span></label>`).join('')+`</div>`).join('')+
+    `<div class="mq-actions"><button class="mq-btn" onclick="submitQuiz()">Submit Answers</button></div>`;
+}
+function startQuiz(){
+  const m=MODS.find(x=>x.id===currentId); if(!m||!m.quiz) return;
+  quizAttempt={id:currentId,order:m.quiz.map(q=>shuffle(q.o.map((_,i)=>i))),picks:m.quiz.map(()=>null)};
+  renderQuiz();
+  document.getElementById('mqBox').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function pickAnswer(qi,oi){ if(!quizAttempt) return; quizAttempt.picks[qi]=oi; renderQuiz(); }
+function submitQuiz(){
+  const m=MODS.find(x=>x.id===currentId), a=quizAttempt; if(!m||!a) return;
+  if(a.picks.some(p=>p===null)){ showToast('Answer every question before submitting'); return; }
+  const total=m.quiz.length, need=Math.ceil(total*PASS_RATIO);
+  const score=m.quiz.reduce((n,q,i)=>n+(a.picks[i]===q.a?1:0),0), passed=score>=need;
+  const store=getQuiz(), prev=store[currentId]||{best:0,passed:false};
+  store[currentId]={best:Math.max(prev.best||0,score),passed:prev.passed||passed};
+  saveQuiz(store);
+  if(passed&&!completed.includes(currentId)){ completed.push(currentId); saveCompleted(completed); }
+  ishApi('/api/module-quiz',{method:'POST',body:{course:'c',module:currentId,score,total}}).then(r=>{ if(r&&r.status===403) syncQuizProgress(); });
+  const box=document.getElementById('mqBox');
+  const review=m.quiz.map((q,qi)=>`<div class="mq-q"><div class="mq-qtext"><span class="mq-qnum">Q${qi+1}</span>${qEsc(q.q)}</div>`+
+    q.o.map((t,oi)=>`<div class="mq-opt${oi===q.a?' right':(a.picks[qi]===oi?' wrong':'')}"><span>${oi===q.a?'✓ ':(a.picks[qi]===oi?'✗ ':'')}${qEsc(t)}</span></div>`).join('')+
+    `<div class="mq-exp">${qEsc(q.e||'')}</div></div>`).join('');
+  const verdict=passed
+    ? `<div class="mq-result pass"><span class="mq-score">✓ ${score}/${total} — Passed</span>${currentId<MODS.length?'Module '+String(currentId+1).padStart(2,'0')+' is now unlocked.':'Course complete — well done!'}</div>`
+    : `<div class="mq-result fail"><span class="mq-score">${score}/${total} — Not yet</span>You need ${need}/${total} (75%) to continue. Review the lesson above and try again.</div>`;
+  box.innerHTML=`<div class="mq-head"><div class="mq-title">Quiz Results</div><div class="mq-rule">PASS = ${need}/${total} (75%)</div></div>`+verdict+review+
+    `<div class="mq-actions">${passed&&currentId<MODS.length?'<button class="mq-btn" onclick="quizAttempt=null;nextLesson()">Next Module →</button>':''}<button class="mq-btn ghost" onclick="startQuiz()">${passed?'Retake Quiz':'Retake Quiz'}</button></div>`;
+  quizAttempt=null;
+  const mb=document.getElementById('markBtn'); mb.textContent=quizPassed(currentId)?'✓ Completed':'✓ Pass Quiz to Finish'; mb.classList.toggle('done-btn',quizPassed(currentId));
+  if(passed) showToast('✓ Quiz passed — module complete!');
+  renderSidebar();
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
 
 // Cursor
 const cur=document.getElementById('cur'),curR=document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 (function anim(){cur.style.left=(mx-5)+'px';cur.style.top=(my-5)+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=(rx-18)+'px';curR.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
-document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
-document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick]')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
+document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';}});
+document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,[onclick],.mat-item')){cur.style.transform='scale(1)';curR.style.transform='scale(1)';}});
 </script>
 <script src="premium-content.js"></script>
 <script src="ish-cursor-guard.js" defer></script>

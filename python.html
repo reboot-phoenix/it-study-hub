@@ -19,8 +19,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="global.css">
 <link rel="stylesheet" href="course-page.css">
-<style>
-/* ===== Added: rich-content + quiz styles ===== */
+<style id="course-extra">
 .art-body h2{margin-top:2.2em}
 .art-body h3{margin-top:1.6em}
 .art-body h4{margin:1.4em 0 .5em;font-size:1rem;letter-spacing:.02em;color:var(--lime,#c8f135)}
@@ -33,35 +32,9 @@
 .art-body th,.art-body td{padding:.6em .8em;text-align:left;border-bottom:1px solid rgba(255,255,255,.08);vertical-align:top}
 .art-body th{background:rgba(200,241,53,.08);color:var(--lime,#c8f135);font-weight:600;white-space:nowrap}
 .art-body tr:last-child td{border-bottom:0}
-.quiz-box{margin:2.5em 0 1.5em;padding:1.6em;border:1px solid rgba(200,241,53,.28);border-radius:14px;background:rgba(200,241,53,.035)}
-.quiz-head{display:flex;justify-content:space-between;gap:1em;flex-wrap:wrap;align-items:flex-start;margin-bottom:1.2em}
-.quiz-title{font-size:1.25rem;font-weight:700}
-.quiz-sub{font-size:.85rem;opacity:.7;margin-top:.25em}
-.quiz-best{font-size:.78rem;padding:.35em .8em;border-radius:99px;border:1px solid rgba(255,255,255,.15);opacity:.85}
-.quiz-best.passed{border-color:var(--lime,#c8f135);color:var(--lime,#c8f135);opacity:1}
-.q-card{padding:1em 0;border-top:1px solid rgba(255,255,255,.08)}
-.q-text{font-weight:600;margin-bottom:.7em;line-height:1.5}
-.q-num{display:inline-block;min-width:1.7em;height:1.7em;line-height:1.7em;text-align:center;margin-right:.6em;border-radius:50%;background:rgba(200,241,53,.15);color:var(--lime,#c8f135);font-size:.78rem}
-.q-opt{display:flex;align-items:center;gap:.7em;padding:.6em .85em;margin:.35em 0;border:1px solid rgba(255,255,255,.12);border-radius:9px;cursor:pointer;font-size:.92rem;transition:.15s}
-.q-opt:hover{border-color:rgba(200,241,53,.5);background:rgba(200,241,53,.05)}
-.q-opt input{position:absolute;opacity:0;pointer-events:none}
-.q-dot{flex:0 0 14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.35)}
-.q-opt:has(input:checked){border-color:var(--lime,#c8f135);background:rgba(200,241,53,.09)}
-.q-opt:has(input:checked) .q-dot{background:var(--lime,#c8f135);border-color:var(--lime,#c8f135)}
-.q-opt.ok{border-color:#3ddc84!important;background:rgba(61,220,132,.13)!important;cursor:default}
-.q-opt.bad{border-color:#ff5d5d!important;background:rgba(255,93,93,.12)!important;cursor:default}
-.quiz-actions{display:flex;gap:.8em;align-items:center;flex-wrap:wrap;margin-top:1.1em}
-.quiz-btn{padding:.7em 1.5em;border-radius:9px;border:1px solid var(--lime,#c8f135);background:var(--lime,#c8f135);color:#0a0a0a;font-weight:700;cursor:pointer;font-family:inherit}
-.quiz-btn.ghost{background:transparent;color:var(--lime,#c8f135)}
-.quiz-count{font-size:.82rem;opacity:.65}
-.quiz-result{margin-top:1.2em;padding:1.2em;border-radius:12px;border:1px solid}
-.quiz-result.pass{border-color:#3ddc84;background:rgba(61,220,132,.08)}
-.quiz-result.fail{border-color:#ff5d5d;background:rgba(255,93,93,.08)}
-.qr-score{font-size:1.8rem;font-weight:800}.qr-score span{font-size:1rem;opacity:.7;font-weight:500}
-.qr-msg{margin-top:.3em}
 </style>
 </head>
-<body>
+<body class="course-python">
 <div class="read-progress" id="readProgress"></div>
 
 <nav>
@@ -95,17 +68,17 @@
     </div>
   </div>
 
-  <div class="fade-up" class="anim-delay-15">
+  <div class="fade-up anim-delay-15">
     <div class="sec-label">Free Modules</div>
     <div class="modules-grid" id="freeGrid"></div>
   </div>
 
-  <div class="fade-up" class="anim-delay-2">
+  <div class="fade-up anim-delay-2">
     <div class="sec-label">Premium Modules</div>
     <div class="modules-grid" id="premiumGrid"></div>
   </div>
 
-  <div class="fade-up" class="anim-delay-25">
+  <div class="fade-up anim-delay-25">
     <div class="sec-label">Study Materials</div>
     <div class="mat-grid">
       <a href="https://www.sanfoundry.com/python-questions-answers/" target="_blank" class="mat-item">
@@ -162,15 +135,44 @@ function getSession(){try{return JSON.parse(localStorage.getItem('ish_session')|
 function isPremium(){ return typeof window.ishHasCourse === 'function' && window.ishHasCourse('python'); } // set by premium-content.js from /api/access (Starter plans open only their two chosen courses)
 function getCompleted(){try{return JSON.parse(localStorage.getItem('ish_python_done')||'[]');}catch(e){return[];}}
 function saveCompleted(a){localStorage.setItem('ish_python_done',JSON.stringify(a));}
+// Module quizzes: 8 questions, 75% (6/8) to pass. Passing unlocks the next module.
+const QUIZ_KEY='ish_python_quiz', PASS_RATIO=0.75;
+function getQuiz(){try{return JSON.parse(localStorage.getItem(QUIZ_KEY)||'{}')||{};}catch(e){return {};}}
+function saveQuiz(q){try{localStorage.setItem(QUIZ_KEY,JSON.stringify(q));}catch(e){}}
+function quizPassed(id){const q=getQuiz()[id];return !!(q&&q.passed);}
+function isUnlocked(id){return id<=1||quizPassed(id-1);}
+// Signed-in users: the server keeps the pass record (users/{uid}.moduleQuiz), so it follows the account
+// and cannot be unlocked by editing localStorage. Signed-out visitors keep the browser-only version.
+let serverSynced = false;
+async function ishApi(path, opts) {
+  try { const { apiFetch } = await import('/auth.js'); return await apiFetch(path, opts); }
+  catch (e) { return { ok: false, status: 0 }; }
+}
+async function syncQuizProgress() {
+  const res = await ishApi('/api/module-progress?course=python');
+  if (!res.ok) return;                                  // signed out or offline: stay with the local record
+  let data; try { data = await res.json(); } catch (e) { return; }
+  const next = {};
+  Object.keys(data.best || {}).forEach(k => {
+    const pct = data.best[k];
+    next[k] = { best: Math.round(pct * 8 / 100), passed: pct >= (data.pass || 75) };
+  });
+  saveQuiz(next); serverSynced = true;
+  completed = Object.keys(next).filter(k => next[k].passed).map(Number);
+  saveCompleted(completed);
+  if (MODS.length) { if (currentId && !isUnlocked(currentId)) goBack(); else renderIndex(); if (currentId) { renderQuiz(); renderSidebar(); } }
+}
+const qEsc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 let MODS = [];
 
 let currentId = null;
-let completed = getCompleted();
+let completed = Object.keys(getQuiz()).filter(k=>quizPassed(+k)).map(Number);   // a module counts as done only once its quiz is passed
+saveCompleted(completed);
 const TOTAL_FREE = 6;
 
 // RENDER INDEX
-// Lessons and quizzes live in /data/python.json: free modules in full, premium modules as cards only.
+// Lessons and quizzes live in /data/r.json: free modules in full, premium modules as cards only.
 // A premium module's text (and quiz) is fetched from the Worker when a paying user opens it.
 const COURSE_KEY = 'python';
 async function loadCourseData() {
@@ -181,6 +183,7 @@ async function loadCourseData() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     MODS = (await res.json()).mods;
     renderIndex();
+    syncQuizProgress();
   } catch (e) {
     if (grids[0]) grids[0].innerHTML = '<p style="padding:12px 0">Could not load the lessons. Check your connection and <button onclick="loadCourseData()" style="text-decoration:underline;background:none;border:0;color:inherit;font:inherit;cursor:pointer">try again</button>.</p>';
     if (grids[1]) grids[1].innerHTML = '';
@@ -199,14 +202,16 @@ function renderIndex() {
 function renderCard(m) {
   const done = completed.includes(m.id);
   const locked = !m.free && !isPremium();
-  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}`;
+  const gated = !locked && !isUnlocked(m.id);
+  const cls = `mod-card${!m.free?' premium-card':''}${done?' done-card':''}${locked?' locked':''}${gated?' gated':''}`;
   const badge = done ? '<span class="mod-badge badge-done">✓ Done</span>' : m.free ? '<span class="mod-badge badge-free">FREE</span>' : '<span class="mod-badge badge-premium">★ PREMIUM</span>';
-  const click = locked ? `onclick="ishLocked('python')"` : `onclick="openLesson(${m.id})"`;
+  const click = locked ? `onclick="ishLocked('python')"` : gated ? `onclick="gateToast(${m.id})"` : `onclick="openLesson(${m.id})"`;
   return `<div class="${cls}" ${click}>
     <div class="mod-top"><div class="mod-icon">${m.icon}</div>${badge}</div>
     <div class="mod-num">Module ${String(m.id).padStart(2,'0')}</div>
     <div class="mod-title">${m.title}</div>
     <div class="mod-desc">${m.excerpt.substring(0,90)}...</div>
+    ${gated?`<div class="mod-gate">🔒 Pass Module ${String(m.id-1).padStart(2,'0')} quiz to unlock</div>`:''}
     <div class="mod-footer"><span class="mod-level">${m.level}</span><span class="mod-arrow">→</span></div>
   </div>`;
 }
@@ -222,6 +227,8 @@ function updateProgress() {
 async function openLesson(id) {
   const m = MODS.find(x=>x.id===id);
   if (!m) return;
+  if (!isUnlocked(id)) { gateToast(id); return; }
+  quizAttempt = null;
   if (!m.free && !m.body) {
     const r = await window.loadPremiumLesson('python', id);
     if (!r.ok) { window.ishLessonDenied(r, 'python'); return; }
@@ -235,7 +242,7 @@ async function openLesson(id) {
 
   const done = completed.includes(id);
   const mb = document.getElementById('markBtn');
-  mb.textContent = done ? '✓ Completed' : '✓ Mark Done';
+  mb.textContent = done ? '✓ Completed' : '✓ Pass Quiz to Finish';
   mb.classList.toggle('done-btn', done);
   document.getElementById('prevBtn').style.opacity = id > 1 ? '1' : '0.3';
   document.getElementById('nextBtn').style.opacity = id < MODS.length ? '1' : '0.3';
@@ -250,7 +257,7 @@ async function openLesson(id) {
        <p class="les-excerpt">${m.excerpt}</p>
        <div class="les-meta">
          <span class="meta-item"><i class="ti ti-brand-python" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> Python</span>
-         <span class="meta-item">⏱ ~${m.rt} min read</span>
+         <span class="meta-item">⏱ ~${m.rt||m.read||10} min read</span>
          <span class="meta-item"><i class="ti ti-settings-2" aria-hidden="true" style="font-size:18px;vertical-align:-2px;"></i> ${m.level}</span>
        </div>
        <div class="les-visual" style="background:${m.bg};">
@@ -262,7 +269,7 @@ async function openLesson(id) {
          <div class="concepts-title">Key Concepts Covered</div>
          <div class="concepts-list">${m.concepts.map(c=>`<span class="concept-tag">${c}</span>`).join('')}</div>
        </div>
-       <div id="quizBox"></div>
+       <div class="mq" id="mqBox"></div>
        <div class="les-footer">
          <div class="les-tags">${m.tags.map(t=>`<span class="les-tag">${t}</span>`).join('')}</div>
          <div class="nav-lessons">
@@ -272,7 +279,7 @@ async function openLesson(id) {
        </div>`;
 
   document.getElementById('lessonContent').innerHTML = html;
-  if (m.free || isPremium()) renderQuiz(id);
+  renderQuiz();
   renderSidebar();
 
   // Scroll progress
@@ -289,20 +296,21 @@ function renderSidebar() {
   document.getElementById('sbProgFill').style.width = pct+'%';
   document.getElementById('sbProgLabel').textContent = `${freeDone} / ${TOTAL_FREE} free`;
   document.getElementById('sbModList').innerHTML = MODS.map(m=>{
-    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium();
-    
+    const done=completed.includes(m.id), active=m.id===currentId, locked=!m.free&&!isPremium(), gated=!locked&&!isUnlocked(m.id);
+
     // PREMIUM REDIRECT LOGIC in sidebar
-    const click = locked ? `ishLocked('python')` : `openLesson(${m.id})`;
-    
+    const click = locked ? `ishLocked('python')` : gated ? `gateToast(${m.id})` : `openLesson(${m.id})`;
+
     return `<button class="sb-btn${active?' active':''}${done?' done-sb':''}" onclick="${click}">
       <span class="sb-num">${done?'✓':m.id}</span>
       <span class="sb-btn-title">${m.title}</span>
-      ${locked?'<span style="font-size:10px;opacity:0.5;color:var(--gold);"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
+      ${locked||gated?'<span style="font-size:10px;opacity:0.5;color:var(--gold);"><i class="ti ti-lock" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></span>':''}
     </button>`;
   }).join('');
 }
 
 function goBack(){
+  quizAttempt=null;
   document.getElementById('lessonPage').style.display='none';
   document.getElementById('indexPage').style.display='block';
   renderIndex();
@@ -319,88 +327,78 @@ function prevLesson() {
 
 function nextLesson() {
   if(currentId<MODS.length) {
+    if(!quizPassed(currentId)) { gateToast(currentId+1); return; }
     const m = MODS.find(x=>x.id===currentId+1);
-    if(m.free) openLesson(currentId+1);
+    if(m.free || isPremium()) openLesson(currentId+1);
     else ishLocked('python');
   }
+}
+function gateToast(id){
+  showToast('🔒 Pass the Module '+String(id-1).padStart(2,'0')+' quiz (75%+) to unlock this module');
+  if(currentId===id-1){const b=document.getElementById('mqBox'); if(b) b.scrollIntoView({behavior:'smooth',block:'center'});}
 }
 
 function markDone() {
   if(!currentId) return;
-  const m = MODS.find(x=>x.id===currentId);
-  if(!m.free&&!isPremium()) return;
-  if(!quizPassed(currentId) && !completed.includes(currentId)){
-    showToast('Pass the module quiz (75%+) to complete this module');
-    const qb=document.getElementById('quizBox'); if(qb) qb.scrollIntoView({behavior:'smooth'});
-    return;
-  }
+  if(!quizPassed(currentId)){ showToast('Pass the module quiz (6 of 8) to finish this module'); const b=document.getElementById('mqBox'); if(b) b.scrollIntoView({behavior:'smooth',block:'center'}); return; }
   openLesson(currentId);
 }
 
-// ===== QUIZ ENGINE (8 MCQs per module · pass mark 75%) =====
-const QUIZ_PASS_PCT = 75;
-function getQuizStore(){try{return JSON.parse(localStorage.getItem('ish_python_quiz')||'{}');}catch(e){return {};}}
-function saveQuizStore(o){try{localStorage.setItem('ish_python_quiz',JSON.stringify(o));}catch(e){}}
-function quizPassed(id){const q=getQuizStore()[id];return !!(q&&q.passed);}
-function qEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function qShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-let qState=null;
-
-function renderQuiz(id){
-  const m=MODS.find(x=>x.id===id), box=document.getElementById('quizBox');
-  if(!m||!box) return;
-  const total=m.quiz.length, need=Math.ceil(total*QUIZ_PASS_PCT/100);
-  const saved=getQuizStore()[id];
-  qState={id,total,need,pick:{},locked:false,items:m.quiz.map(([q,o])=>({q,opts:qShuffle(o.map((t,i)=>({t,ok:i===0})))}))};
-  box.innerHTML=`<div class="quiz-box">
-    <div class="quiz-head">
-      <div><div class="quiz-title"><i class="ti ti-target" aria-hidden="true"></i> Module ${String(id).padStart(2,'0')} Quiz</div>
-      <div class="quiz-sub">${total} multiple-choice questions · pass mark ${QUIZ_PASS_PCT}% (${need} / ${total} correct)</div></div>
-      <div class="quiz-best${saved&&saved.passed?' passed':''}">${saved?('Best: '+saved.best+' / '+total+(saved.passed?' · ✓ Passed':'')):'Not attempted'}</div>
-    </div>
-    ${qState.items.map((it,qi)=>`<div class="q-card" id="qc${qi}">
-      <div class="q-text"><span class="q-num">${qi+1}</span>${qEsc(it.q)}</div>
-      ${it.opts.map((o,k)=>`<label class="q-opt" id="qo${qi}_${k}"><input type="radio" name="q${qi}" onchange="pickAns(${qi},${k})"><span class="q-dot"></span><span>${qEsc(o.t)}</span></label>`).join('')}
-    </div>`).join('')}
-    <div class="quiz-actions"><button class="quiz-btn" id="quizSubmit" onclick="submitQuiz()">Submit Quiz</button><span class="quiz-count" id="quizCount">0 / ${total} answered</span></div>
-    <div id="quizResult"></div>
-  </div>`;
+/* ── MODULE QUIZ ── */
+let quizAttempt = null;   // {id, order:[[optionIndex...]...], picks:[]}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function renderQuiz(){
+  const box=document.getElementById('mqBox'); if(!box) return;
+  const m=MODS.find(x=>x.id===currentId);
+  if(!m||!Array.isArray(m.quiz)||!m.quiz.length){ box.style.display='none'; return; }
+  const need=Math.ceil(m.quiz.length*PASS_RATIO), rec=getQuiz()[currentId];
+  const head=`<div class="mq-head"><div class="mq-title">Module Quiz</div><div class="mq-rule">${m.quiz.length} QUESTIONS · PASS = ${need}/${m.quiz.length} (75%)</div></div>`;
+  if(!quizAttempt||quizAttempt.id!==currentId){
+    if(rec&&rec.passed){
+      box.innerHTML=head+`<div class="mq-result pass"><span class="mq-score">✓ Passed — best ${rec.best}/${m.quiz.length}</span>${currentId<MODS.length?'The next module is unlocked.':'You have completed the course.'}</div>
+        <div class="mq-actions">${currentId<MODS.length?'<button class="mq-btn" onclick="nextLesson()">Next Module →</button>':''}<button class="mq-btn ghost" onclick="startQuiz()">Retake Quiz</button></div>`;
+    } else {
+      box.innerHTML=head+`<div class="mq-sub">Answer all ${m.quiz.length} questions. You need at least ${need} correct to pass and unlock the next module.${rec?` Your best so far: ${rec.best}/${m.quiz.length}.`:''}</div>
+        <div class="mq-actions"><button class="mq-btn" onclick="startQuiz()">Start Quiz</button></div>`;
+    }
+    return;
+  }
+  const a=quizAttempt;
+  box.innerHTML=head+`<div class="mq-sub">Choose one answer for each question, then submit.</div>`+m.quiz.map((q,qi)=>`<div class="mq-q"><div class="mq-qtext"><span class="mq-qnum">Q${qi+1}</span>${qEsc(q.q)}</div>`+
+    a.order[qi].map(oi=>`<label class="mq-opt${a.picks[qi]===oi?' sel':''}"><input type="radio" name="mq${qi}" ${a.picks[qi]===oi?'checked':''} onchange="pickAnswer(${qi},${oi})"><span>${qEsc(q.o[oi])}</span></label>`).join('')+`</div>`).join('')+
+    `<div class="mq-actions"><button class="mq-btn" onclick="submitQuiz()">Submit Answers</button></div>`;
 }
-function pickAns(qi,k){
-  if(!qState||qState.locked) return;
-  qState.pick[qi]=k;
-  document.getElementById('quizCount').textContent=Object.keys(qState.pick).length+' / '+qState.total+' answered';
+function startQuiz(){
+  const m=MODS.find(x=>x.id===currentId); if(!m||!m.quiz) return;
+  quizAttempt={id:currentId,order:m.quiz.map(q=>shuffle(q.o.map((_,i)=>i))),picks:m.quiz.map(()=>null)};
+  renderQuiz();
+  document.getElementById('mqBox').scrollIntoView({behavior:'smooth',block:'start'});
 }
+function pickAnswer(qi,oi){ if(!quizAttempt) return; quizAttempt.picks[qi]=oi; renderQuiz(); }
 function submitQuiz(){
-  if(!qState||qState.locked) return;
-  const {id,total,need,items,pick}=qState;
-  for(let i=0;i<total;i++){ if(pick[i]===undefined){ showToast('Answer all '+total+' questions first'); document.getElementById('qc'+i).scrollIntoView({behavior:'smooth',block:'center'}); return; } }
-  qState.locked=true;
-  let score=0;
-  items.forEach((it,qi)=>{
-    it.opts.forEach((o,k)=>{
-      const el=document.getElementById('qo'+qi+'_'+k); el.querySelector('input').disabled=true;
-      if(o.ok) el.classList.add('ok'); else if(pick[qi]===k) el.classList.add('bad');
-    });
-    if(it.opts[pick[qi]].ok) score++;
-  });
-  const pct=Math.round(score/total*100), pass=score>=need;
-  const store=getQuizStore(), prev=store[id]||{best:0,passed:false};
-  store[id]={best:Math.max(prev.best,score),passed:prev.passed||pass}; saveQuizStore(store);
-  if(pass && !completed.includes(id)){ completed.push(id); saveCompleted(completed); }
-  const hasNext=id<MODS.length, nm=MODS.find(x=>x.id===id+1);
-  document.getElementById('quizSubmit').style.display='none';
-  document.getElementById('quizResult').innerHTML=`<div class="quiz-result ${pass?'pass':'fail'}">
-    <div class="qr-score">${score} / ${total} <span>(${pct}%)</span></div>
-    <div class="qr-msg">${pass?'✓ Passed! Module '+String(id).padStart(2,'0')+' is now marked complete.':'✗ Not passed — you need '+QUIZ_PASS_PCT+'% ('+need+' / '+total+'). Review the module and try again.'}</div>
-    <div class="quiz-actions">
-      <button class="quiz-btn ghost" onclick="renderQuiz(${id});document.getElementById('quizBox').scrollIntoView({behavior:'smooth'})">↻ Retry Quiz</button>
-      ${pass&&hasNext?`<button class="quiz-btn" onclick="${nm.free||isPremium()?'openLesson('+(id+1)+')':'ishLocked(\'python\')'}">Next Module →</button>`:''}
-    </div></div>`;
-  document.getElementById('quizResult').scrollIntoView({behavior:'smooth',block:'center'});
-  const mb=document.getElementById('markBtn'); if(pass&&mb){mb.textContent='✓ Completed';mb.classList.add('done-btn');}
-  if(pass) showToast('✓ Quiz passed — module complete!');
+  const m=MODS.find(x=>x.id===currentId), a=quizAttempt; if(!m||!a) return;
+  if(a.picks.some(p=>p===null)){ showToast('Answer every question before submitting'); return; }
+  const total=m.quiz.length, need=Math.ceil(total*PASS_RATIO);
+  const score=m.quiz.reduce((n,q,i)=>n+(a.picks[i]===q.a?1:0),0), passed=score>=need;
+  const store=getQuiz(), prev=store[currentId]||{best:0,passed:false};
+  store[currentId]={best:Math.max(prev.best||0,score),passed:prev.passed||passed};
+  saveQuiz(store);
+  if(passed&&!completed.includes(currentId)){ completed.push(currentId); saveCompleted(completed); }
+  ishApi('/api/module-quiz',{method:'POST',body:{course:'python',module:currentId,score,total}}).then(r=>{ if(r&&r.status===403) syncQuizProgress(); });
+  const box=document.getElementById('mqBox');
+  const review=m.quiz.map((q,qi)=>`<div class="mq-q"><div class="mq-qtext"><span class="mq-qnum">Q${qi+1}</span>${qEsc(q.q)}</div>`+
+    q.o.map((t,oi)=>`<div class="mq-opt${oi===q.a?' right':(a.picks[qi]===oi?' wrong':'')}"><span>${oi===q.a?'✓ ':(a.picks[qi]===oi?'✗ ':'')}${qEsc(t)}</span></div>`).join('')+
+    `<div class="mq-exp">${qEsc(q.e||'')}</div></div>`).join('');
+  const verdict=passed
+    ? `<div class="mq-result pass"><span class="mq-score">✓ ${score}/${total} — Passed</span>${currentId<MODS.length?'Module '+String(currentId+1).padStart(2,'0')+' is now unlocked.':'Course complete — well done!'}</div>`
+    : `<div class="mq-result fail"><span class="mq-score">${score}/${total} — Not yet</span>You need ${need}/${total} (75%) to continue. Review the lesson above and try again.</div>`;
+  box.innerHTML=`<div class="mq-head"><div class="mq-title">Quiz Results</div><div class="mq-rule">PASS = ${need}/${total} (75%)</div></div>`+verdict+review+
+    `<div class="mq-actions">${passed&&currentId<MODS.length?'<button class="mq-btn" onclick="quizAttempt=null;nextLesson()">Next Module →</button>':''}<button class="mq-btn ghost" onclick="startQuiz()">${passed?'Retake Quiz':'Retake Quiz'}</button></div>`;
+  quizAttempt=null;
+  const mb=document.getElementById('markBtn'); mb.textContent=quizPassed(currentId)?'✓ Completed':'✓ Pass Quiz to Finish'; mb.classList.toggle('done-btn',quizPassed(currentId));
+  if(passed) showToast('✓ Quiz passed — module complete!');
   renderSidebar();
+  box.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function showToast(msg){

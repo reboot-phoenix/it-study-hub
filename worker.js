@@ -9,6 +9,8 @@
 //   GET  /api/pdf?f=<file>      premium PDF (only for users with an active plan)
 //   POST /api/starter-courses   a Starter buyer picks their two courses (once)
 //   POST /api/award-xp          the only way XP changes: quiz results and practice solves
+//   GET  /api/module-progress?course=  which module quizzes the signed-in user has passed (75%+)
+//   POST /api/module-quiz       records a module quiz result; a module needs the previous module's quiz passed
 //   GET  /api/setup-check       owner-only checklist: which secrets and permissions are working (header X-Setup-Key = OTP_SECRET)
 //   POST /api/otp/request       emails a 6-digit sign-in code (Turnstile-checked, rate-limited)
 //   POST /api/otp/verify        checks the code and returns a Firebase custom token for that email's account
@@ -388,6 +390,71 @@ async function awardXpRoute(request, env) {
     return json(await awardXp(env, uid, planPractice(body.problemId)));
   }
   throw new HttpError(400, "Unknown award type");
+}
+
+
+/* ───────────────────────── Module quizzes (pass mark unlocks the next module) ───────────────────────── */
+// users/{uid}.moduleQuiz = { r1: 88, r2: 75, ... } is the best percent per module. Browsers cannot write it
+// (it is not in clientFields in firestore.rules), so the pass record belongs to the server.
+// Like /api/award-xp, the score itself is reported by the page; what the server adds is the order:
+// module N is only recorded once module N-1 is passed, and premium lessons check it too.
+const MODULE_QUIZ_COURSES = new Set(["r", "c", "java", "python", "javascript"]);   // C++ joins once its notes and quizzes exist
+const MODULE_PASS_PERCENT = 75;
+const moduleKey = (course, n) => `${course}${n}`;
+const passedPercent = (fields, course, n) => numOf(mapEntry(fields, "moduleQuiz", moduleKey(course, n))) ?? null;
+const hasPassed = (fields, course, n) => (passedPercent(fields, course, n) ?? -1) >= MODULE_PASS_PERCENT;
+
+async function readUserFields(env, uid) {
+  const res = await fsFetch(env, `users/${encodeURIComponent(uid)}`);
+  if (res.status === 404) return { fields: {}, doc: null };
+  if (!res.ok) throw new Error("Firestore read failed: " + res.status);
+  const doc = await res.json();
+  return { fields: doc.fields || {}, doc };
+}
+
+async function moduleProgressRoute(request, env) {
+  const uid = await requireUser(request);
+  const course = new URL(request.url).searchParams.get("course") || "";
+  if (!MODULE_QUIZ_COURSES.has(course)) throw new HttpError(400, "Bad course");
+  const { fields } = await readUserFields(env, uid);
+  const best = {};
+  for (let n = 1; n <= 99; n++) { const p = passedPercent(fields, course, n); if (p !== null) best[n] = p; }
+  return json({ course, pass: MODULE_PASS_PERCENT, best });
+}
+
+async function moduleQuizRoute(request, env) {
+  const uid = await requireUser(request);
+  const body = await readJson(request);
+  const { course, module: n, score, total } = body;
+  if (!MODULE_QUIZ_COURSES.has(course) || !Number.isInteger(n) || n < 1 || n > 99
+      || !Number.isInteger(score) || !Number.isInteger(total) || total < 1 || total > 50 || score < 0 || score > total) {
+    throw new HttpError(400, "Bad quiz result");
+  }
+  const pct = Math.round((score / total) * 100);
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const res = await fsFetch(env, `users/${encodeURIComponent(uid)}`);
+    if (res.status === 404) throw new HttpError(404, "Open your profile once first");
+    if (!res.ok) throw new Error("Firestore read failed: " + res.status);
+    const doc = await res.json();
+    const fields = doc.fields || {};
+    if (n > 1 && !hasPassed(fields, course, n - 1)) {
+      const e = new HttpError(403, `Pass the Module ${n - 1} quiz first`);
+      e.extra = { code: "quiz_locked", needs: n - 1 };
+      throw e;
+    }
+    const before = passedPercent(fields, course, n);
+    const best = Math.max(before ?? 0, pct);
+    const out = { course, module: n, percent: pct, best, passed: best >= MODULE_PASS_PERCENT, thisAttemptPassed: pct >= MODULE_PASS_PERCENT };
+    if (before !== null && best === before) return json(out);   // not a new best: nothing to write
+    const key = moduleKey(course, n);
+    const patch = await fsFetch(env, `users/${encodeURIComponent(uid)}`,
+      { method: "PATCH", body: JSON.stringify({ fields: { moduleQuiz: { mapValue: { fields: { [key]: intVal(best) } } } } }) },
+      `?updateMask.fieldPaths=${encodeURIComponent("moduleQuiz." + key)}&currentDocument.updateTime=${encodeURIComponent(doc.updateTime)}`);
+    if (patch.ok) return json(out);
+    const text = await patch.text();
+    if (!/FAILED_PRECONDITION|ABORTED/.test(text)) throw new Error("Firestore module quiz update failed: " + patch.status + " " + text);
+  }
+  throw new HttpError(409, "Busy, please try again");
 }
 
 /* ───────────────────────── Run student code ───────────────────────── */
@@ -928,6 +995,17 @@ async function lessonRoute(request, env) {
   if (!a.premium) throw new HttpError(403, "Premium plan required");
   requireCourse(a, course);
 
+  // Module quizzes gate the course in order: a module's text is only served once the previous module's quiz is passed.
+  if (MODULE_QUIZ_COURSES.has(course) && Number(id) > 1) {
+    const uid = await requireUser(request);
+    const { fields } = await readUserFields(env, uid);
+    if (!hasPassed(fields, course, Number(id) - 1)) {
+      const e = new HttpError(403, `Pass the Module ${Number(id) - 1} quiz first`);
+      e.extra = { code: "quiz_locked", needs: Number(id) - 1 };
+      throw e;
+    }
+  }
+
   const [lesson, quiz] = await Promise.all([
     store.get(`lesson:${course}:${Number(id)}`, "text"),
     store.get(`quiz:${course}:${Number(id)}`, "text"),
@@ -1054,6 +1132,8 @@ const ROUTES = {
   "GET /api/lesson": lessonRoute,
   "GET /api/pdf": pdfRoute,
   "POST /api/award-xp": awardXpRoute,
+  "GET /api/module-progress": moduleProgressRoute,
+  "POST /api/module-quiz": moduleQuizRoute,
   "GET /api/setup-status": setupStatusRoute,
   "GET /api/setup-check": setupCheckRoute,
   "POST /api/otp/request": otpRequestRoute,

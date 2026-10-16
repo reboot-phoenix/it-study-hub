@@ -43,6 +43,9 @@ const env = {
   },
 };
 env.PREMIUM.store.set("lesson:java:7", JSON.stringify({ body: "SECRET JAVA 7" }));
+env.PREMIUM.store.set("lesson:cpp:7", JSON.stringify({ body: "CPP 7 (not gated yet)" }));
+env.PREMIUM.store.set("lesson:r:7", JSON.stringify({ body: "SECRET R 7" }));
+env.PREMIUM.store.set("quiz:r:7", JSON.stringify([{ q: "?", o: ["a", "b"], a: 0, e: "" }]));
 env.PREMIUM.store.set("pdf:BCA-421 JAVA-97-131.pdf", "%PDF-secret");
 let users, payments, orders, ledger, orderSeq, lastFsAuth, lb, listPageSize = 300;
 let judge0Calls = [];
@@ -341,7 +344,7 @@ const past = new Date(Date.now() - 86400000).toISOString();
 
 await test("/api/access: signed-out is rejected, free user is not premium", async () => {
   assert.equal((await get("/api/access")).status, 401);
-  assert.deepEqual(await (await get("/api/access", "alice")).json(), { premium: false, plan: "" });
+  assert.deepEqual(await (await get("/api/access", "alice")).json(), { premium: false, plan: "", courses: [], mayChoose: false, expiresAt: null });
 });
 await test("/api/access: active plan and admins are premium, expired plans are not", async () => {
   users.alice = { plan: "pro", planExpiresAt: future };
@@ -370,14 +373,14 @@ await test("/api/lesson: locked for signed-out and free users, no content leaks"
   assert.ok(!(await res.text()).includes("SECRET"));
 });
 await test("/api/lesson: paid user gets the lesson, with no-store caching", async () => {
-  users.alice = { plan: "basic", planExpiresAt: future };
+  users.alice = { plan: "pro", planExpiresAt: future, moduleQuiz: { java6: 75 } };   // Module 7 opens once Module 6's quiz is passed
   const res = await get("/api/lesson?course=java&id=7", "alice");
   assert.equal(res.status, 200);
   assert.deepEqual(await res.json(), { body: "SECRET JAVA 7" });
   assert.match(res.headers.get("Cache-Control"), /no-store/);
 });
 await test("/api/lesson: bad input and missing lessons", async () => {
-  users.alice = { plan: "pro" };
+  users.alice = { plan: "pro", moduleQuiz: { java98: 80 } };
   assert.equal((await get("/api/lesson?course=../x&id=7", "alice")).status, 400);
   assert.equal((await get("/api/lesson?course=java&id=7abc", "alice")).status, 400);
   assert.equal((await get("/api/lesson?course=java&id=99", "alice")).status, 404);
@@ -405,6 +408,67 @@ await test("premium routes fail clearly (503) when the KV store is not bound yet
   env.PREMIUM = saved;
 });
 
+
+
+console.log("module quizzes");
+const mq = async (uid, body) => worker.fetch(new Request("https://x.test/api/module-quiz", { method: "POST", headers: { "Content-Type": "application/json", ...(uid ? await authed(uid) : {}) }, body: JSON.stringify(body) }), env);
+const mprog = async (uid) => worker.fetch(new Request("https://x.test/api/module-progress?course=r", { headers: uid ? await authed(uid) : {} }), env);
+await test("module quiz: signed-out and malformed requests are refused", async () => {
+  assert.equal((await mq(null, { course: "r", module: 1, score: 8, total: 8 })).status, 401);
+  assert.equal((await mprog(null)).status, 401);
+  for (const bad of [{ course: "ruby", module: 1, score: 8, total: 8 }, { course: "r", module: 0, score: 8, total: 8 }, { course: "r", module: 1, score: 9, total: 8 }, { course: "r", module: 1, score: -1, total: 8 }, { course: "r", module: 1, score: "8", total: 8 }, { course: "r", module: 1, score: 1, total: 0 }]) {
+    assert.equal((await mq("alice", bad)).status, 400, JSON.stringify(bad));
+  }
+});
+await test("module quiz: modules must be passed in order, and 6/8 is the pass mark", async () => {
+  users.alice = { plan: "pro" };
+  const locked = await mq("alice", { course: "r", module: 2, score: 8, total: 8 });
+  assert.equal(locked.status, 403); assert.equal((await locked.json()).code, "quiz_locked");
+  const fail = await (await mq("alice", { course: "r", module: 1, score: 5, total: 8 })).json();
+  assert.equal(fail.passed, false); assert.equal(users.alice.moduleQuiz.r1, 63);
+  assert.equal((await mq("alice", { course: "r", module: 2, score: 8, total: 8 })).status, 403, "a failed quiz does not unlock the next module");
+  const pass = await (await mq("alice", { course: "r", module: 1, score: 6, total: 8 })).json();
+  assert.equal(pass.passed, true); assert.equal(users.alice.moduleQuiz.r1, 75);
+  assert.equal((await mq("alice", { course: "r", module: 2, score: 7, total: 8 })).status, 200);
+});
+await test("module quiz: the best score never goes down", async () => {
+  users.alice = { moduleQuiz: { r1: 100 } };
+  const res = await (await mq("alice", { course: "r", module: 1, score: 1, total: 8 })).json();
+  assert.equal(res.best, 100); assert.equal(res.passed, true); assert.equal(users.alice.moduleQuiz.r1, 100);
+});
+await test("module quiz: every gated course records passes under its own key", async () => {
+  users.alice = { plan: "pro" };
+  for (const c of ["c", "java", "python", "javascript"]) {
+    assert.equal((await mq("alice", { course: c, module: 1, score: 7, total: 8 })).status, 200, c);
+    assert.equal(users.alice.moduleQuiz[c + "1"], 88, c);
+  }
+  assert.equal((await mq("alice", { course: "cpp", module: 1, score: 8, total: 8 })).status, 400, "C++ is not enabled yet");
+});
+await test("module progress lists what the user has passed", async () => {
+  users.alice = { moduleQuiz: { r1: 88, r2: 50 } };
+  const data = await (await mprog("alice")).json();
+  assert.deepEqual(data.best, { 1: 88, 2: 50 }); assert.equal(data.pass, 75);
+});
+await test("premium R lessons are withheld until the previous module's quiz is passed", async () => {
+  users.alice = { plan: "pro" };
+  const locked = await get("/api/lesson?course=r&id=7", "alice");
+  assert.equal(locked.status, 403); assert.equal((await locked.json()).code, "quiz_locked");
+  assert.ok(!JSON.stringify(await (await get("/api/lesson?course=r&id=7", "alice")).text()).includes("SECRET R 7"));
+  users.alice = { plan: "pro", moduleQuiz: { r6: 75 } };
+  const ok = await get("/api/lesson?course=r&id=7", "alice");
+  assert.equal(ok.status, 200); assert.match(await ok.text(), /SECRET R 7/);
+  users.alice = { plan: "pro" };
+  assert.equal((await get("/api/lesson?course=cpp&id=7", "alice")).status, 200, "C++ has no module quizzes yet, so it is not gated");
+  const java = await get("/api/lesson?course=java&id=7", "alice");
+  assert.equal(java.status, 403); assert.equal((await java.json()).code, "quiz_locked");   // C, Java, Python and JavaScript are gated the same way
+  for (const c of ["c", "python", "javascript"]) {
+    env.PREMIUM.store.set(`lesson:${c}:7`, JSON.stringify({ body: "X" }));
+    assert.equal((await get(`/api/lesson?course=${c}&id=7`, "alice")).status, 403, c);
+    users.alice = { plan: "pro", moduleQuiz: { [c + "6"]: 80 } };
+    assert.equal((await get(`/api/lesson?course=${c}&id=7`, "alice")).status, 200, c);
+    users.alice = { plan: "pro" };
+  }
+});
 
 console.log("award-xp");
 import fs from "node:fs";

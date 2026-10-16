@@ -14,7 +14,7 @@ service cloud.firestore {
     // (payment webhook, XP endpoint) or by an admin in the console.
     //   plan, planActivatedAt, planExpiresAt, razorpayPaymentId, razorpayOrderId,
     //   role (the admin switch), email, joinedAt,
-    //   xp, earnedXPKeys, quizBest, quizPerfect, quizImprove
+    //   xp, earnedXPKeys, quizBest, quizPerfect, quizImprove, moduleQuiz (module quiz passes)
 
     // Fields a user may write on their own document.
     function clientFields() {
