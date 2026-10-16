@@ -5,7 +5,7 @@ import fs from "node:fs";
 let passed = 0;
 const test = (name, fn) => { fn(); passed++; console.log("  ok  " + name); };
 const pages = fs.readdirSync(".").filter((f) => f.endsWith(".html")).map((f) => f.slice(0, -5)).sort();
-const PRIVATE = new Set(["admin", "global", "Login", "profile", "404"]);
+const PRIVATE = new Set(["admin", "global", "Login", "profile", "404", "thank-you"]);
 const read = (n) => fs.readFileSync(n + ".html", "utf8");
 const BASE = "https://itstudyhub.dpdns.org";
 
@@ -44,7 +44,9 @@ const xml = fs.readFileSync("sitemap.xml", "utf8");
 const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 test("the sitemap lists every public page exactly once, nothing missing and nothing private", () => {
   assert.equal(new Set(locs).size, locs.length, "duplicate entries");
-  const expected = pages.filter((p) => !PRIVATE.has(p) && p !== "blog-post").map((p) => (p === "index" ? BASE + "/" : `${BASE}/${p}`));
+  // pages that _redirects sends elsewhere (e.g. the switched-off practice panel) are not real destinations, so they stay out of the sitemap
+  const redirected = new Set(fs.readFileSync("_redirects", "utf8").split("\n").filter((l) => l.trim() && !l.startsWith("#")).map((l) => l.trim().split(/\s+/)[0].replace(/^\//, "").replace(/\.html$/, "")));
+  const expected = pages.filter((p) => !PRIVATE.has(p) && !redirected.has(p) && p !== "blog-post").map((p) => (p === "index" ? BASE + "/" : `${BASE}/${p}`));
   for (const u of expected) assert.ok(locs.includes(u), "missing " + u);
   for (const u of locs.filter((l) => !l.includes("blog-post?id="))) assert.ok(expected.includes(u), "lists a page that does not exist or is private: " + u);
 });

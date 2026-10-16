@@ -6,6 +6,10 @@
 <link rel="stylesheet" href="fonts.css">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#05050a">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Course notes, PDFs and quizzes for IT students: C, Java, Python, C++, R and JavaScript. The first six modules of every course are free.">
 <meta name="keywords" content="IT Study Hub, programming courses, learn to code, C Java Python C++ R JavaScript, course notes, PDF notes, skill quiz, IT students">
@@ -238,6 +242,23 @@
 
 </main>
 
+<div class="sticky-cta" id="stickyCta" aria-hidden="true">
+  <a href="courses.html" class="btn btn-lime" id="stickyCtaBtn" tabindex="-1">Start learning</a>
+</div>
+<script>
+/* Mobile-only sticky button: appears once the hero button has scrolled out of view, and mirrors its label/link. */
+(function () {
+  var hero = document.getElementById('heroAuthBtn'), bar = document.getElementById('stickyCta'), btn = document.getElementById('stickyCtaBtn');
+  if (!hero || !bar || !btn) return;
+  function sync() { btn.textContent = hero.textContent; btn.setAttribute('href', hero.getAttribute('href') || 'courses.html'); }
+  sync();
+  new MutationObserver(sync).observe(hero, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ['href'] });
+  function show(on) { bar.classList.toggle('show', on); bar.setAttribute('aria-hidden', on ? 'false' : 'true'); btn.tabIndex = on ? 0 : -1; }
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { show(!e[0].isIntersecting); }, { threshold: 0 }).observe(hero);
+  else window.addEventListener('scroll', function () { show(window.scrollY > 500); }, { passive: true });
+})();
+</script>
+
 <footer>
   <div class="footer-main">
     <div class="footer-brand">
@@ -257,7 +278,7 @@
   <div class="footer-bottom">
     <span>&copy; 2026 IT Study Hub. Built by Dithsa Dutta.</span>
     <span class="footer-contact"><a href="mailto:contact@itstudyhub.dpdns.org">contact@itstudyhub.dpdns.org</a> <a href="mailto:admin@itstudyhub.dpdns.org">admin@itstudyhub.dpdns.org</a></span>
-    <span class="footer-legal"><a href="privacypolicy.html">Privacy policy</a> <a href="terms.html">Terms of service</a></span>
+    <span class="footer-legal"><a href="privacypolicy.html">Privacy policy</a> <a href="terms.html">Terms of service</a> <a href="refunds.html">Refund policy</a> <a href="#" onclick="if(window.ishOpenConsent){ishOpenConsent();}return false;">Cookie settings</a></span>
   </div>
 </footer>
 
@@ -320,5 +341,6 @@ drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawe
 <script src="home.js" defer></script>
 <script src="ish-cursor-guard.js" defer></script>
 <script src="ish-a11y.js" defer></script>
+<script src="ish-consent.js" defer></script>
 </body>
 </html>

@@ -6,6 +6,10 @@
 <link rel="stylesheet" href="fonts.css">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="shortcut icon" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#05050a">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Privacy Policy — IT Study Hub</title>
 <meta name="description" content="How IT Study Hub collects, uses and protects your data: what we store, who can see it and how to ask for it to be removed.">
@@ -59,6 +63,10 @@
       <div class="lb-num">04</div>
       <span class="fs-13">Third Parties</span>
     </a>
+    <a href="#section-5" class="toc-btn">
+      <div class="lb-num">05</div>
+      <span class="fs-13">Your Rights</span>
+    </a>
   </aside>
 
   <main class="main">
@@ -106,7 +114,7 @@
       <div class="policy-card">
         <h2 class="pc-title">Cookies & Tracking</h2>
         <div class="pc-body">
-          We use <strong>local storage</strong> and cookies to remember your progress (like the "Mark as Complete" status) and keep you logged in. These are essential for the platform's core functionality. You can disable cookies in your browser settings, but some features of the IT Study Hub may stop working.
+          We use <strong>local storage</strong> and cookies to keep you signed in and to remember your progress (like completed modules and quiz passes). These are essential for the platform to work. When you first visit, a notice lets you choose whether we may also run privacy-friendly analytics (Cloudflare Web Analytics, which sets no cookies and is not used for advertising). You can change your choice at any time with the "Cookie settings" link in the footer of the homepage. You can also disable cookies in your browser settings, but some features of IT Study Hub may stop working.
         </div>
       </div>
     </div>
@@ -116,13 +124,23 @@
       <div class="policy-card">
         <h2 class="pc-title">Third-Party Services</h2>
         <div class="pc-body">
-          We may use third-party analytics (like Google Analytics) to understand platform traffic and secure payment processors for premium upgrades. These services have their own privacy policies and we encourage you to review them.
+          We rely on a few trusted services to run the site: Google Firebase (sign-in and account data), Cloudflare (hosting, security and optional analytics), Razorpay (payments; we never see or store your card details) and an email provider that delivers sign-in codes. These services have their own privacy policies and we encourage you to review them.
+        </div>
+      </div>
+    </div>
+
+    <div id="section-5" class="policy-section fade-up">
+      <div class="section-label">Section 05</div>
+      <div class="policy-card">
+        <h2 class="pc-title">Your Rights &amp; Contact</h2>
+        <div class="pc-body">
+          You can ask us to show you the personal data we hold about you, correct it, or delete your account and its data, and you can withdraw your consent for optional analytics at any time. We keep your data only as long as your account exists or as needed for payment records. Email <a href="mailto:admin@itstudyhub.dpdns.org" style="color:#c8f135;">admin@itstudyhub.dpdns.org</a> for any of these requests or for a privacy complaint. For refunds, see our <a href="refunds.html" style="color:#c8f135;">Refund &amp; Cancellation Policy</a>. IT Study Hub is not directed at children under 13.
         </div>
       </div>
     </div>
 
     <footer class="legal-footer fade-up" style="animation-delay:0.5s;">
-      <p>Last Updated: May 2026 · IT Study Hub Legal Team</p>
+      <p>Last Updated: October 2026 · IT Study Hub Legal Team</p>
     </footer>
   </main>
 </div>
@@ -179,5 +197,6 @@ document.querySelectorAll('a,button').forEach(el=>{
 </script>
 <script src="ish-cursor-guard.js" defer></script>
 <script src="ish-a11y.js" defer></script>
+<script src="ish-consent.js" defer></script>
 </body>
 </html>

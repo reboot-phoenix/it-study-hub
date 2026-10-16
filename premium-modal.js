@@ -372,7 +372,7 @@ function pmShowSuccess(planName, planId) {
       <div style="font-size:56px; margin-bottom:20px;"><i class="ti ti-confetti" aria-hidden="true" style="font-size:16px;vertical-align:-2px;"></i></div>
       <h2 style="font-family:'Bebas Neue','Syne',sans-serif; font-size:36px; color:#c8f135; margin-bottom:12px;">WELCOME TO ${planName.toUpperCase()}!</h2>
       <p style="color:#9090a8; font-size:14px; margin-bottom:28px;">Your premium access is now active. All locked content is unlocked.</p>
-      <button class="pm-btn pm-btn-lime" style="max-width:240px;margin:0 auto;" onclick="window.closePremiumModal(); location.reload();">START LEARNING →</button>
+      <button class="pm-btn pm-btn-lime" style="max-width:240px;margin:0 auto;" onclick="window.location.href='thank-you.html?plan=' + encodeURIComponent('${planName}');">START LEARNING →</button>
     </div>`;
   hidePremiumCTAs(planId);
 }

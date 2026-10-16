@@ -509,3 +509,16 @@ footer { border-top: 1px solid var(--border, rgba(255,255,255,0.08)); background
   .footer-main, .footer-bottom { padding-left: 20px; padding-right: 20px; }
 }
 @media (max-height: 640px) and (min-width: 901px) { .run-head p { display: none; } .readout { display: none; } }
+
+
+/* ── Sticky mobile CTA (phones only; shown once the hero button is out of view) ── */
+.sticky-cta { display: none; }
+@media (max-width: 720px) {
+  .sticky-cta { display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 90;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); background: rgba(5,5,10,.94);
+    border-top: 1px solid rgba(200,241,53,.25); transform: translateY(110%); transition: transform .25s ease; }
+  .sticky-cta.show { transform: translateY(0); }
+  .sticky-cta .btn { display: block; width: 100%; text-align: center; }
+  body.home { padding-bottom: 72px; }
+}
+@media (prefers-reduced-motion: reduce) { .sticky-cta { transition: none; } }
