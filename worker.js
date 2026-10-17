@@ -956,14 +956,21 @@ export async function getAccess(request, env) {
   const expiresMs = expiresAt ? Date.parse(expiresAt) : null;
   const planActive = !!PLANS[plan] && (expiresMs === null || expiresMs > Date.now());
   const admin = f.role?.stringValue === "admin";   // the one and only admin switch; set in the Firebase console or with scripts/grant-admin.mjs
+  // Email is server-trusted: Firestore rules only allow it at profile creation when it matches
+  // the signed-in Firebase token, and do not allow clients to change it afterwards.
+  const email = (f.email?.stringValue || "").trim().toLowerCase();
+  const education = email.endsWith("@technoindiaeducation.com");
   const limit = planActive ? PLANS[plan].courses : undefined;
   let courses = [...COURSES], mayChoose = false;
-  if (!admin && planActive && limit) {
+  if (education) {
+    // Educational accounts receive all courses without a paid plan or expiry.
+    courses = [...COURSES];
+  } else if (!admin && planActive && limit) {
     const picked = (f.starterCourses?.arrayValue?.values || []).map((v) => v.stringValue).filter((c) => COURSES.has(c));
     courses = [...new Set(picked)].slice(0, limit);
     mayChoose = courses.length < limit;
   } else if (!admin && !planActive) courses = [];
-  return { uid, plan, admin, premium: planActive || admin, courses, mayChoose, expiresAt: planActive && !admin ? expiresAt : null };
+  return { uid, plan, admin, premium: planActive || admin || education, courses, mayChoose, expiresAt: planActive && !admin && !education ? expiresAt : null };
 }
 
 function requireStore(env) {
