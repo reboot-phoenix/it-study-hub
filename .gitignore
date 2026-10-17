@@ -5,3 +5,4 @@ premium-export/
 service-account*.json
 *.pem
 node_modules/
+.wrangler/
