@@ -8,13 +8,13 @@
 <link rel="shortcut icon" href="favicon.svg">
 <meta name="theme-color" content="#05050a">
 <title>Article — IT Study Hub</title>
-<meta name="description" content="Read the full article on IT Study Hub.">
-<link rel="canonical" href="https://itstudyhub.dpdns.org/blog">
+<meta name="description" content="Explore programming tutorials, technology guides, and practical IT articles on IT Study Hub.">
+<link rel="canonical" href="https://itstudyhub.dpdns.org/blog-post">
 <meta property="og:site_name" content="IT Study Hub">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://itstudyhub.dpdns.org/blog">
 <meta property="og:title" content="Article — IT Study Hub">
-<meta property="og:description" content="Read the full article on IT Study Hub.">
+<meta property="og:description" content="Explore programming tutorials, technology guides, and practical IT articles on IT Study Hub.">
 <meta property="og:image" content="https://itstudyhub.dpdns.org/team_image.jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/dm-sans-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
@@ -1554,7 +1554,15 @@ function updateAuthUI(){
     document.getElementById('ddEmail').textContent=s.email||'';
   }else{l.style.display='flex';a.style.display='none';}
 }
-function handleLogout(){try{localStorage.removeItem('ish_session');}catch(e){}updateAuthUI();document.getElementById('userDropdown').classList.remove('open');}
+async function handleLogout(){
+  document.getElementById('userDropdown').classList.remove('open');
+  try {
+    const { signOutEverywhere } = await import('/auth.js');
+    await signOutEverywhere({ redirect: 'index.html' });
+  } catch (e) {
+    console.error('Sign out failed:', e);
+  }
+}
 updateAuthUI();
 /* Mobile menu */
 (function(){

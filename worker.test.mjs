@@ -619,6 +619,27 @@ await test("matches the email regardless of capitalisation", async () => {
   users.sam = { email: "sam@tiu.edu" };
   assert.equal((await setRole({ email: "Sam@TIU.edu", token: "tok" })).uid, "sam");
 });
+await test("matches an email stored with mixed capitalisation", async () => {
+  users.sam = { email: "Sam@TIU.edu" };
+  const out = await setRole({ email: "sam@tiu.edu", token: "tok" });
+  assert.deepEqual(out, { uid: "sam", role: "admin" });
+  assert.equal(users.sam.role, "admin");
+});
+
+await test("finds a matching user on a later Firestore page", async () => {
+  users = {
+    first: { email: "first@tiu.edu" },
+    second: { email: "second@tiu.edu" },
+    target: { email: "Target@TIU.edu" }
+  };
+  listPageSize = 2;
+  const out = await setRole({ email: "target@tiu.edu", token: "tok" });
+  assert.deepEqual(out, { uid: "target", role: "admin" });
+  assert.equal(users.target.role, "admin");
+  assert.equal(users.first.role, undefined);
+  assert.equal(users.second.role, undefined);
+});
+
 await test("revoke removes the role, and removes the powers", async () => {
   users.sam = { email: "sam@tiu.edu", role: "admin" };
   await setRole({ email: "sam@tiu.edu", revoke: true, token: "tok" });

@@ -118,12 +118,17 @@ await test("the Firebase project config exists in firebase.js and nowhere else",
   const holders = files.filter((f) => /AIzaSy|firebaseConfig\s*=|initializeApp\(/.test(fs.readFileSync(root + f, "utf8")));
   assert.deepEqual(holders, ["firebase.js"]);
 });
-await test("every page that signs people in gets its Firebase app from /firebase.js", async () => {
-  for (const f of ["Login", "admin", "courses", "global", "practice-panel", "profile", "quiz", "c", "premium"]) {
+await test("pages use shared Firebase and auth modules where needed", async () => {
+  for (const f of ["Login", "admin", "courses", "global", "practice-panel", "profile", "quiz", "premium"]) {
     const html = fs.readFileSync(root + f + ".html", "utf8");
     assert.match(html, /from ["']\/firebase\.js["']/, f + " imports firebase.js");
     assert.match(html, /from ["']\/auth\.js["']/, f + " imports auth.js");
   }
+
+  // c.html delegates authenticated API calls to the shared auth helper.
+  const c = fs.readFileSync(root + "c.html", "utf8");
+  assert.match(c, /import\(["']\/auth\.js["']\)/, "c.html dynamically imports auth.js");
+  assert.match(c, /apiFetch/, "c.html uses the shared API helper");
 });
 await test("no page or helper keeps its own copy of sign-out or token code", async () => {
   for (const f of files) {

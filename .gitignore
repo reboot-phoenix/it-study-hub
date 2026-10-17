@@ -9,3 +9,7 @@ node_modules/
 
 # Private premium lesson exports
 /kv-*.json
+
+# Local backup files — never commit
+premium-modal.js.bak
+scripts/grant-admin.mjs.bak

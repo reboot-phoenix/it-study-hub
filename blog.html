@@ -1525,7 +1525,15 @@ function updateAuthUI(){
     document.getElementById('ddEmail').textContent=s.email||'';
   }else{l.style.display='flex';a.style.display='none';}
 }
-function handleLogout(){try{localStorage.removeItem('ish_session');}catch(e){}updateAuthUI();document.getElementById('userDropdown').classList.remove('open');}
+async function handleLogout(){
+  document.getElementById('userDropdown').classList.remove('open');
+  try {
+    const { signOutEverywhere } = await import('/auth.js');
+    await signOutEverywhere({ redirect: 'index.html' });
+  } catch (e) {
+    console.error('Sign out failed:', e);
+  }
+}
 updateAuthUI();
 /* Mobile menu */
 (function(){

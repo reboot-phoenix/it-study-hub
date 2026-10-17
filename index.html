@@ -311,10 +311,14 @@ function updateAuthUI() {
     avatarBtn.style.display = 'none';
   }
 }
-function handleLogout() {
-  localStorage.removeItem('ish_session');
-  updateAuthUI();
+async function handleLogout() {
   document.getElementById('userDropdown').classList.remove('open');
+  try {
+    const { signOutEverywhere } = await import('/auth.js');
+    await signOutEverywhere({ redirect: 'index.html' });
+  } catch (e) {
+    console.error('Sign out failed:', e);
+  }
 }
 updateAuthUI();
 
