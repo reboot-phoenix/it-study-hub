@@ -942,15 +942,19 @@ const COURSES = new Set(["java", "c", "cpp", "r", "javascript", "python"]);
 // Who is asking is proven by their Firebase ID token (verified above). What plan they have is read with
 // the Worker's own service account, so this keeps working even if Firestore App Check enforcement is on
 // (a request made with only the user's token would carry no App Check token and be refused).
-// Premium = an active (not expired) paid plan, or an admin.
+// Premium = an active (not expired) paid plan, an admin, or an institution account inside its free EDU_MONTHS window.
 // Courses: Pro, Elite and admins can open all six. Starter opens the two courses stored in users/{uid}.starterCourses
 // (written only by /api/starter-courses below). `mayChoose` is true while a Starter plan has no choice yet.
+// Free access for institution email addresses: exact suffix match (never a substring), for a limited time.
+const EDU_EMAIL_SUFFIX = "@technoindiaeducation.com";
+const EDU_MONTHS = 6;
 export async function getAccess(request, env) {
   const uid = await requireUser(request);
   const res = await fsFetch(env, `users/${encodeURIComponent(uid)}`);
   if (res.status === 404) return { uid, plan: "", premium: false, admin: false, courses: [], mayChoose: false, expiresAt: null };
   if (!res.ok) throw new Error("Firestore read failed: " + res.status);
-  const f = (await res.json()).fields || {};
+  const doc = await res.json();
+  const f = doc.fields || {};
   const plan = f.plan?.stringValue || "";
   const expiresAt = f.planExpiresAt?.timestampValue || null;
   const expiresMs = expiresAt ? Date.parse(expiresAt) : null;
@@ -959,18 +963,30 @@ export async function getAccess(request, env) {
   // Email is server-trusted: Firestore rules only allow it at profile creation when it matches
   // the signed-in Firebase token, and do not allow clients to change it afterwards.
   const email = (f.email?.stringValue || "").trim().toLowerCase();
-  const education = email.endsWith("@technoindiaeducation.com");
+  // Institution accounts get EDU_MONTHS of free access counted from when their profile was created.
+  // The start date is Firestore's own createTime (set by the server; no client can write or change it).
+  // If it is missing or unreadable the free access is withheld, never extended.
+  const eduDomain = email.endsWith(EDU_EMAIL_SUFFIX);
+  let eduEnds = null;
+  if (eduDomain) {
+    const start = Date.parse(doc.createTime || "");
+    if (Number.isFinite(start)) { const d = new Date(start); d.setUTCMonth(d.getUTCMonth() + EDU_MONTHS); eduEnds = d.toISOString(); }
+  }
+  const education = eduDomain && eduEnds !== null && Date.parse(eduEnds) > Date.now();
   const limit = planActive ? PLANS[plan].courses : undefined;
   let courses = [...COURSES], mayChoose = false;
   if (education) {
-    // Educational accounts receive all courses without a paid plan or expiry.
+    // Active institution accounts can open all courses without a paid plan.
     courses = [...COURSES];
   } else if (!admin && planActive && limit) {
     const picked = (f.starterCourses?.arrayValue?.values || []).map((v) => v.stringValue).filter((c) => COURSES.has(c));
     courses = [...new Set(picked)].slice(0, limit);
     mayChoose = courses.length < limit;
   } else if (!admin && !planActive) courses = [];
-  return { uid, plan, admin, premium: planActive || admin || education, courses, mayChoose, expiresAt: planActive && !admin && !education ? expiresAt : null };
+  // Which end date the page should show: a paid plan's own expiry, unless the free institution window runs longer.
+  let shownExpiry = planActive && !admin ? expiresAt : null;
+  if (education && !admin && (!planActive || (expiresMs !== null && expiresMs < Date.parse(eduEnds)))) shownExpiry = eduEnds;
+  return { uid, plan, admin, premium: planActive || admin || education, courses, mayChoose, expiresAt: shownExpiry };
 }
 
 function requireStore(env) {

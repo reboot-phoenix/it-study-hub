@@ -195,7 +195,8 @@ globalThis.fetch = async (input, init = {}) => {
         if (!users[id]) return J({}, 404);
         const fields = {};
         for (const [k, v] of Object.entries(users[id])) if (!k.startsWith("__") && v !== undefined) fields[k] = toTyped(k, v);
-        return J({ fields, updateTime: String(users[id].__v || 1) });
+        const createTime = users[id].__created === "none" ? undefined : (users[id].__created || new Date().toISOString());
+        return J({ fields, updateTime: String(users[id].__v || 1), ...(createTime ? { createTime } : {}) });
       }
       if (method === "PATCH") {
         if (u.searchParams.get("currentDocument.exists") === "true" && !users[id]) return J({}, 404);
@@ -362,20 +363,55 @@ await test("/api/access: active plan and admins are premium, expired plans are n
   users.bob = { plan: "gold" };                          // made-up plan names grant nothing
   assert.equal((await (await get("/api/access", "bob")).json()).premium, false);
 });
-await test("/api/access: institution-domain accounts get permanent premium and all courses", async () => {
-  users.alice = { plan: "", email: "student@technoindiaeducation.com" };
-  const data = await (await get("/api/access", "alice")).json();
+const ALL_COURSES = ["c", "cpp", "java", "javascript", "python", "r"];
+const monthsAgo = (m, extraDays = 0) => { const d = new Date(); d.setUTCMonth(d.getUTCMonth() - m); d.setUTCDate(d.getUTCDate() - extraDays); return d.toISOString(); };
+const plusMonths = (iso, m) => { const d = new Date(iso); d.setUTCMonth(d.getUTCMonth() + m); return d.toISOString(); };
+const accessOf = async (uid = "alice") => (await get("/api/access", uid)).json();
+await test("/api/access: institution-domain accounts get all courses for 6 months from profile creation", async () => {
+  const created = new Date().toISOString();
+  users.alice = { plan: "", email: "student@technoindiaeducation.com", __created: created };
+  const data = await accessOf();
   assert.equal(data.premium, true);
-  assert.deepEqual(data.courses.sort(), ["c", "cpp", "java", "javascript", "python", "r"]);
-  assert.equal(data.expiresAt, null);
+  assert.deepEqual(data.courses.sort(), ALL_COURSES);
+  assert.equal(data.expiresAt, plusMonths(created, 6), "the page is told when the free access ends");
 
   users.alice = { plan: "", email: "STUDENT@TECHNOINDIAEDUCATION.COM" };
-  assert.equal((await (await get("/api/access", "alice")).json()).premium, true, "domain matching is case-insensitive");
+  assert.equal((await accessOf()).premium, true, "domain matching is case-insensitive");
 
   users.alice = { plan: "", email: "student@nottechnoindiaeducation.com" };
-  assert.equal((await (await get("/api/access", "alice")).json()).premium, false, "a lookalike domain does not qualify");
+  assert.equal((await accessOf()).premium, false, "a lookalike domain does not qualify");
+  users.alice = { plan: "", email: "student@technoindiaeducation.com.evil.com" };
+  assert.equal((await accessOf()).premium, false, "a trailing lookalike does not qualify");
+  users.alice = { plan: "", email: "student@mail.technoindiaeducation.com" };
+  assert.equal((await accessOf()).premium, false, "only the exact domain qualifies");
   users.alice = { plan: "", email: "student@gmail.com" };
-  assert.equal((await (await get("/api/access", "alice")).json()).premium, false);
+  assert.equal((await accessOf()).premium, false);
+});
+await test("/api/access: the institution window is exactly 6 months and then closes", async () => {
+  users.alice = { plan: "", email: "student@technoindiaeducation.com", __created: monthsAgo(5, 20) };
+  assert.equal((await accessOf()).premium, true, "5 months 20 days in: still free");
+  users.alice = { plan: "", email: "student@technoindiaeducation.com", __created: monthsAgo(6, 1) };
+  const expired = await accessOf();
+  assert.equal(expired.premium, false, "just past 6 months: closed");
+  assert.deepEqual(expired.courses, []); assert.equal(expired.expiresAt, null);
+  users.alice = { plan: "", email: "student@technoindiaeducation.com", __created: monthsAgo(9) };
+  assert.equal((await accessOf()).premium, false, "long past 6 months: closed");
+});
+await test("/api/access: an institution profile with no readable creation time gets no free access", async () => {
+  users.alice = { plan: "", email: "student@technoindiaeducation.com", __created: "none" };
+  assert.equal((await accessOf()).premium, false);
+});
+await test("/api/access: a paid plan keeps working after the institution window ends, and the longer end date is shown", async () => {
+  users.alice = { plan: "pro", planExpiresAt: future, email: "student@technoindiaeducation.com", __created: monthsAgo(8) };
+  const paid = await accessOf();
+  assert.equal(paid.premium, true); assert.deepEqual(paid.courses.sort(), ALL_COURSES); assert.equal(paid.expiresAt, future);
+  const created = new Date().toISOString();
+  users.alice = { plan: "basic", planExpiresAt: plusMonths(created, 12), starterCourses: ["c", "java"], email: "student@technoindiaeducation.com", __created: created };
+  const both = await accessOf();
+  assert.deepEqual(both.courses.sort(), ALL_COURSES, "during the free window all courses open");
+  assert.equal(both.expiresAt, plusMonths(created, 12), "the Starter plan outlasts the free window, so its date is shown");
+  users.alice = { plan: "basic", planExpiresAt: plusMonths(created, 12), starterCourses: ["c", "java"], email: "student@technoindiaeducation.com", __created: monthsAgo(7) };
+  assert.deepEqual((await accessOf()).courses.sort(), ["c", "java"], "after the window, only what the plan includes");
 });
 await test("/api/access reads the profile with the service account, so Firestore App Check enforcement cannot break it", async () => {
   await get("/api/access", "alice");
