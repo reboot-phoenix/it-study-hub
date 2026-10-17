@@ -362,6 +362,21 @@ await test("/api/access: active plan and admins are premium, expired plans are n
   users.bob = { plan: "gold" };                          // made-up plan names grant nothing
   assert.equal((await (await get("/api/access", "bob")).json()).premium, false);
 });
+await test("/api/access: institution-domain accounts get permanent premium and all courses", async () => {
+  users.alice = { plan: "", email: "student@technoindiaeducation.com" };
+  const data = await (await get("/api/access", "alice")).json();
+  assert.equal(data.premium, true);
+  assert.deepEqual(data.courses.sort(), ["c", "cpp", "java", "javascript", "python", "r"]);
+  assert.equal(data.expiresAt, null);
+
+  users.alice = { plan: "", email: "STUDENT@TECHNOINDIAEDUCATION.COM" };
+  assert.equal((await (await get("/api/access", "alice")).json()).premium, true, "domain matching is case-insensitive");
+
+  users.alice = { plan: "", email: "student@nottechnoindiaeducation.com" };
+  assert.equal((await (await get("/api/access", "alice")).json()).premium, false, "a lookalike domain does not qualify");
+  users.alice = { plan: "", email: "student@gmail.com" };
+  assert.equal((await (await get("/api/access", "alice")).json()).premium, false);
+});
 await test("/api/access reads the profile with the service account, so Firestore App Check enforcement cannot break it", async () => {
   await get("/api/access", "alice");
   assert.equal(lastFsAuth, "Bearer tok");
