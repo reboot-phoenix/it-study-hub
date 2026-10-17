@@ -315,11 +315,12 @@ function getCurrentUser(auth) {
 // ── Public API ──
 window.openPremiumModal = async function(courseName) {
 
+  const { app } = await import('/firebase.js');
   const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
   const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
 
-  // Use pre-initialized instances from premium.html if available
-  const auth = window._fbAuth || getAuth(window._fbApp);
+  // Reuse pre-initialized instances when available; otherwise use the shared app.
+  const auth = window._fbAuth || getAuth(app);
 
   // Wait for Firebase to finish restoring session (currentUser is null until then)
   const user = await getCurrentUser(auth);
@@ -331,7 +332,7 @@ window.openPremiumModal = async function(courseName) {
     return;
   }
 
-  const db = window._fbDb || getFirestore(window._fbApp);
+  const db = window._fbDb || getFirestore(app);
   const snap = await getDoc(doc(db, 'users', user.uid));
   const data = snap.exists() ? snap.data() : {};
 
@@ -415,8 +416,9 @@ window.handlePremiumPurchase = async function(btn, planId, amount, planName) {
       });
     }
 
+    const { app } = await import('/firebase.js');
     const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
-    const auth = window._fbAuth || getAuth(window._fbApp);
+    const auth = window._fbAuth || getAuth(app);
     const user = auth.currentUser;
     if (!user) { alert('Please sign in first.'); reset(); return; }
 
@@ -509,14 +511,15 @@ async function checkAndHidePremiumCTAs() {
     const session = JSON.parse(localStorage.getItem('ish_session') || 'null');
     if (!session) return; // not logged in — nothing to do
 
+    const { app } = await import('/firebase.js');
     const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js');
     const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js');
 
-    const auth = window._fbAuth || getAuth(window._fbApp);
+    const auth = window._fbAuth || getAuth(app);
     const user = await getCurrentUser(auth);
     if (!user) return;
 
-    const db = window._fbDb || getFirestore(window._fbApp);
+    const db = window._fbDb || getFirestore(app);
     const snap = await getDoc(doc(db, 'users', user.uid));
     if (!snap.exists()) return;
 
