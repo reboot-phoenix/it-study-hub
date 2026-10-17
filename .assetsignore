@@ -11,3 +11,7 @@ wrangler.toml
 package-lock.json
 .dev.vars*
 .assetsignore
+
+# Exclude KV exports from public static assets
+kv-*.json
+**/kv-*.json
